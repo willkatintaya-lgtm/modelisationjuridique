@@ -1,0 +1,589 @@
+<title>Boussole des amendements</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+/* Layout: a drafting desk. Left, the amendment under the pen with its extracted parameters.
+   Right, the field of positions that moves as you type: a 1-D map, then the cards. */
+:root{
+  --bg:#f3f4f6; --surface:#ffffff; --surface-2:#e9ebef;
+  --ink:#1c2230; --muted:#5d6675; --line:#d4d8df; --line-strong:#aeb5c0;
+  --accent:#0b5d8a; --accent-soft:#dcebf5; --mine:#8a5a00; --mine-soft:#fbefd2;
+  --good:#1e7f4f; --good-soft:#d9f0e3; --ok:#2b6cb0; --ok-soft:#dbe8f7;
+  --warn:#b4650d; --warn-soft:#fbe9d2; --bad:#b3261e; --bad-soft:#f8dcd9;
+  --f-ui:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-legal:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --radius:6px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15181e; --surface:#1e222a; --surface-2:#272c36;
+    --ink:#e7eaef; --muted:#9aa3b2; --line:#343a46; --line-strong:#4b5365;
+    --accent:#6cb4e2; --accent-soft:#1d3447; --mine:#e0b45c; --mine-soft:#3a3020;
+    --good:#5cc08a; --good-soft:#1f3a2c; --ok:#7fb0ea; --ok-soft:#1f3047;
+    --warn:#e3a35a; --warn-soft:#3f2e1c; --bad:#ef7f78; --bad-soft:#44241f;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15181e; --surface:#1e222a; --surface-2:#272c36;
+  --ink:#e7eaef; --muted:#9aa3b2; --line:#343a46; --line-strong:#4b5365;
+  --accent:#6cb4e2; --accent-soft:#1d3447; --mine:#e0b45c; --mine-soft:#3a3020;
+  --good:#5cc08a; --good-soft:#1f3a2c; --ok:#7fb0ea; --ok-soft:#1f3047;
+  --warn:#e3a35a; --warn-soft:#3f2e1c; --bad:#ef7f78; --bad-soft:#44241f;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-ui);font-size:14px;line-height:1.45;margin:0}
+.wrap{max-width:1280px;margin:0 auto;padding-block:20px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{margin:0;text-wrap:balance;font-weight:600}
+h1{font-size:22px;letter-spacing:-.01em}
+h2{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.topbar{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between;margin-bottom:16px}
+.topbar p{margin:4px 0 0;color:var(--muted);max-width:62ch}
+.fictif{font-size:11px;border:1px dashed var(--line-strong);color:var(--muted);padding:3px 8px;border-radius:999px;white-space:nowrap}
+
+.article{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px 16px;margin-bottom:16px;display:grid;gap:4px}
+.article .legal{font-family:var(--f-legal);font-size:15px;line-height:1.5;max-width:78ch}
+.article .legal mark{background:var(--accent-soft);color:inherit;padding:0 2px;border-radius:2px}
+
+.grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:16px;align-items:start}
+@media (max-width:900px){.grid{grid-template-columns:1fr}}
+.col{display:grid;gap:16px;min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;min-width:0}
+.panel-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+
+/* editor */
+.editor-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--surface-2);color:var(--ink);letter-spacing:.02em}
+.badge .dot{width:8px;height:8px;border-radius:50%;background:var(--g,var(--muted));flex:none}
+.numero{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.lead-in{font-family:var(--f-legal);font-style:italic;color:var(--muted);font-size:14px;margin:0 0 6px}
+textarea#draft{width:100%;min-height:150px;resize:vertical;font-family:var(--f-legal);font-size:16px;line-height:1.55;color:var(--ink);
+  background:var(--bg);border:1px solid var(--line-strong);border-radius:var(--radius);padding:12px 14px}
+textarea#draft:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{display:inline-flex;gap:6px;align-items:baseline;border:1px solid var(--line);border-radius:4px;padding:3px 8px;font-size:12px;background:var(--surface)}
+.chip b{font-family:var(--f-mono);font-weight:500}
+.chip.changed{border-color:var(--mine);background:var(--mine-soft)}
+.chip .lab{color:var(--muted)}
+.tries{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+button{font:inherit;cursor:pointer}
+.try{border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);border-radius:4px;padding:4px 9px;font-size:12px}
+.try:hover{background:var(--surface-2)}
+.try:focus-visible,.btn:focus-visible,.toggle input:focus-visible+span{outline:2px solid var(--accent);outline-offset:2px}
+
+/* impact log */
+.impact{display:grid;gap:6px}
+.impact-empty{color:var(--muted);font-size:13px}
+.imp{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;font-size:13px;padding:6px 0;border-top:1px solid var(--line)}
+.imp:first-child{border-top:0}
+.imp .what{font-family:var(--f-mono);font-size:12px;color:var(--ink);white-space:nowrap}
+.imp .fx{display:flex;flex-wrap:wrap;gap:4px 10px}
+.fx span{white-space:nowrap}
+.up{color:var(--good)} .down{color:var(--bad)}
+.arrow{font-family:var(--f-mono)}
+
+/* map */
+.map{position:relative;height:96px;margin:8px 0 2px}
+.map .axis{position:absolute;left:0;right:0;top:50px;height:2px;background:var(--line-strong)}
+.map .tick{position:absolute;top:74px;font-size:11px;color:var(--muted);white-space:nowrap}
+.map .tick.r{transform:translateX(-100%)}
+.map .pin{position:absolute;top:44px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:3px;
+  transition:left .45s cubic-bezier(.2,.7,.2,1)}
+.map .pin.alt{flex-direction:column-reverse;top:28px}
+.map .pin .pd{width:12px;height:12px;border-radius:50%;background:var(--g);border:2px solid var(--surface);box-shadow:0 0 0 1px var(--line-strong);flex:none}
+.map .pin .pl{font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.02em;line-height:1.2}
+.map .pin.me{top:2px;z-index:3;gap:2px}
+.map .pin.me .pd{width:16px;height:16px;background:var(--mine);box-shadow:0 0 0 2px var(--mine)}
+.map .pin.me .pl{color:var(--mine);font-size:11px}
+.map .pin.me::after{content:"";width:2px;height:16px;background:var(--mine);display:block}
+@media (prefers-reduced-motion:reduce){.map .pin,.bar i,.flash{transition:none!important;animation:none!important}}
+
+/* cards */
+.cards{display:grid;gap:8px}
+.card{display:grid;grid-template-columns:1fr;gap:6px;border:1px solid var(--line);border-radius:var(--radius);padding:10px 12px;background:var(--surface);
+  transition:border-color .3s}
+.card.mine-ref{background:var(--mine-soft);border-color:transparent}
+.card-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.card-top .who{display:flex;align-items:center;gap:8px;min-width:0;flex:1}
+.card-top .who .nm{font-weight:600;font-size:13px}
+.rel{font-size:11px;font-weight:600;padding:2px 7px;border-radius:4px;letter-spacing:.03em;text-transform:uppercase}
+.rel.r0{background:var(--good-soft);color:var(--good)} .rel.r1{background:var(--ok-soft);color:var(--ok)}
+.rel.r2{background:var(--warn-soft);color:var(--warn)} .rel.r3{background:var(--bad-soft);color:var(--bad)}
+.rel.dup{background:var(--surface-2);color:var(--ink);border:1px dashed var(--line-strong)}
+.gauge{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+.bar{height:8px;background:var(--surface-2);border-radius:4px;overflow:hidden;position:relative}
+.bar i{display:block;height:100%;border-radius:4px;background:var(--c,var(--accent));transition:width .45s cubic-bezier(.2,.7,.2,1),background .3s}
+.pct{font-family:var(--f-mono);font-size:12px;min-width:7ch;text-align:right;font-variant-numeric:tabular-nums}
+.flash{font-family:var(--f-mono);font-size:11px;font-weight:500;opacity:0;transition:opacity .3s}
+.flash.on{opacity:1}
+.axes{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.ax{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--muted);padding:1px 6px;border-radius:3px;border:1px solid transparent}
+.ax i{width:7px;height:7px;border-radius:50%;background:var(--line-strong);display:inline-block}
+.ax.d1 i{background:var(--ok)} .ax.d2 i{background:var(--warn)} .ax.d3 i{background:var(--bad)}
+.ax.d2,.ax.d3{color:var(--ink);border-color:var(--line)}
+details.txt summary{cursor:pointer;color:var(--muted);font-size:12px;list-style:none;display:inline-flex;gap:6px;align-items:center}
+details.txt summary::before{content:"▸";font-size:10px} details.txt[open] summary::before{content:"▾"}
+details.txt .legal{font-family:var(--f-legal);font-size:14px;line-height:1.5;margin:6px 0 0;max-width:72ch;color:var(--ink)}
+.claude-line{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--ink);padding-top:6px;border-top:1px dashed var(--line);margin-top:2px}
+.claude-line.stale{opacity:.55}
+.claude-line .rel{flex:none;margin-top:1px}
+.claude-line .why{min-width:0}
+.sub{font-size:12px;color:var(--muted)}
+
+/* claude controls */
+.claude-ctl{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:4px;padding:6px 12px;font-weight:600;font-size:13px}
+.btn[disabled]{opacity:.55;cursor:default}
+.btn.secondary{background:transparent;color:var(--accent)}
+.toggle{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);cursor:pointer;user-select:none}
+.toggle input{position:absolute;opacity:0;width:1px;height:1px}
+.toggle span.sw{width:30px;height:16px;border-radius:999px;background:var(--line-strong);position:relative;display:inline-block;flex:none}
+.toggle span.sw::after{content:"";position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:var(--surface);transition:left .2s}
+.toggle input:checked+span.sw{background:var(--accent)} .toggle input:checked+span.sw::after{left:16px}
+.status{font-size:12px;color:var(--muted);font-family:var(--f-mono)}
+.status.err{color:var(--bad)}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:8px}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.legend i{width:10px;height:10px;border-radius:2px;display:inline-block}
+.foot{margin-top:24px;color:var(--muted);font-size:12px;max-width:80ch}
+.foot code{font-family:var(--f-mono);font-size:11px}
+</style>
+
+<div class="wrap">
+  <header class="topbar">
+    <div>
+      <div class="eyebrow">Prototype · rédaction d'amendement</div>
+      <h1>Boussole des amendements</h1>
+      <p>Modifiez le texte à gauche. À droite, la carte des positions se recalcule à chaque frappe : vos versions antérieures, la ligne de votre groupe, et les amendements concurrents déposés sur le même alinéa.</p>
+    </div>
+    <span class="fictif">Jeu de données fictif — groupes et textes inventés</span>
+  </header>
+
+  <section class="article" aria-label="Texte visé">
+    <div class="eyebrow">Projet de loi portant diverses mesures pour l'accès au logement · Article 4, alinéa 2</div>
+    <p class="legal" id="articleText"></p>
+  </section>
+
+  <div class="grid">
+    <div class="col">
+      <section class="panel" aria-labelledby="h-draft">
+        <div class="panel-h">
+          <h2 id="h-draft">Votre amendement</h2>
+          <span class="numero">AMANR5L17PO0001 · brouillon v3</span>
+        </div>
+        <div class="editor-meta">
+          <span class="badge" style="--g:#c07a00"><i class="dot"></i>Progrès républicain</span>
+          <span class="sub">Déposé par vous · article 4</span>
+        </div>
+        <p class="lead-in">Rédiger ainsi l'alinéa 2 :</p>
+        <textarea id="draft" spellcheck="false" aria-label="Texte de l'amendement"></textarea>
+        <div class="chips" id="chips" aria-live="polite"></div>
+        <div class="tries" id="tries"></div>
+      </section>
+
+      <section class="panel" aria-labelledby="h-impact">
+        <div class="panel-h">
+          <h2 id="h-impact">Incidences de la dernière modification</h2>
+          <span class="sub" id="impactWhen"></span>
+        </div>
+        <div class="impact" id="impact"><div class="impact-empty">Modifiez un chiffre, un verbe ou ajoutez une condition : ce qui bouge s'affiche ici.</div></div>
+      </section>
+
+      <section class="panel" aria-labelledby="h-claude">
+        <div class="panel-h">
+          <h2 id="h-claude">Lecture fine par Claude</h2>
+          <span class="status" id="claudeStatus">—</span>
+        </div>
+        <div class="claude-ctl">
+          <button class="btn" id="askBtn" type="button">Qualifier les relations</button>
+          <button class="btn secondary" id="stopBtn" type="button" hidden>Arrêter</button>
+          <label class="toggle"><input type="checkbox" id="autoChk"><span class="sw"></span>Relancer 2 s après chaque pause de frappe</label>
+        </div>
+        <p class="sub" style="margin:8px 0 0">Les règles ci-contre ne voient que les paramètres prévus (chiffres, modalité, conditions). Claude lit le sens : convergent, compatible, contradictoire, redondant, orthogonal — avec une phrase qui nomme ce qui sépare.</p>
+      </section>
+    </div>
+
+    <div class="col">
+      <section class="panel" aria-labelledby="h-map">
+        <div class="panel-h">
+          <h2 id="h-map">Espace des positions · axe de rigueur</h2>
+          <span class="sub">Taux, échéance, seuil, obligation, sanction, conditions — pondérés</span>
+        </div>
+        <div class="map" id="map"></div>
+      </section>
+
+      <section class="panel" aria-labelledby="h-mine">
+        <div class="panel-h">
+          <h2 id="h-mine">Cohérence avec vos propres positions</h2>
+          <span class="sub" id="mineSummary"></span>
+        </div>
+        <div class="cards" id="mineCards"></div>
+      </section>
+
+      <section class="panel" aria-labelledby="h-others">
+        <div class="panel-h">
+          <h2 id="h-others">Amendements concurrents sur l'alinéa 2</h2>
+          <span class="sub" id="othersSummary"></span>
+        </div>
+        <div class="cards" id="otherCards"></div>
+        <div class="legend">
+          <span><i style="background:var(--good)"></i>convergent &lt; 0,15</span>
+          <span><i style="background:var(--ok)"></i>proche &lt; 0,35</span>
+          <span><i style="background:var(--warn)"></i>éloigné &lt; 0,60</span>
+          <span><i style="background:var(--bad)"></i>opposé</span>
+          <span>· distance pondérée sur 6 axes, 0 = identique</span>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <p class="foot">Projection par règles : <code>taux</code> (%), <code>échéance</code> (année), <code>seuil</code> (habitants, échelle log), <code>obligation</code> (doivent / s'efforcent / peuvent), <code>sanction</code> (automatique / facultative / après mise en demeure / aucune), <code>conditions</code> (sous réserve, sauf, exemptions…). Le même squelette s'applique à tout objet édité face à un référentiel de positions : il suffit de changer l'extracteur et le référentiel.</p>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- Données (fictives) ---------- */
+const GROUPS = {
+  PR:  {name:"Progrès républicain", color:"#c07a00", mine:true},
+  SOL: {name:"Solidarité et logement", color:"#d13a30"},
+  ECO: {name:"Écologie urbaine", color:"#2a9d63"},
+  UT:  {name:"Union des territoires", color:"#3b82d6"},
+  LL:  {name:"Libertés locales", color:"#e0671d"},
+  RC:  {name:"Rassemblement des communes", color:"#7c5cd6"},
+  GOUV:{name:"Gouvernement", color:"#7a8494"}
+};
+
+const ARTICLE = "Les communes de plus de 3 500 habitants doivent compter au moins 25 % de logements sociaux parmi les résidences principales d'ici 2030. En cas de manquement, le préfet peut prononcer un prélèvement sur les ressources fiscales de la commune.";
+
+const DRAFT_INITIAL = "Les communes de plus de 3 500 habitants doivent compter au moins 25 % de logements sociaux parmi les résidences principales d'ici 2030. En cas de manquement, le préfet peut prononcer un prélèvement sur les ressources fiscales de la commune.";
+
+const MINE = [
+  {id:"ligne", kind:"ligne", label:"Ligne du groupe", sub:"Motion de congrès, mars 2026",
+   text:"25 % de logements sociaux dans toutes les communes de plus de 3 500 habitants d'ici 2030, avec un prélèvement automatique en cas de manquement.",
+   params:{taux:25, echeance:2030, seuil:3500, obligation:1, sanction:1, cond:0}},
+  {id:"v1", kind:"version", label:"Votre version 1", sub:"lun. 3 nov., 10:12",
+   text:"Les communes de plus de 3 500 habitants doivent compter au moins 30 % de logements sociaux parmi les résidences principales d'ici 2028. En cas de manquement, le préfet prononce un prélèvement sur les ressources fiscales de la commune, majoré de 25 %."},
+  {id:"v2", kind:"version", label:"Votre version 2", sub:"mar. 4 nov., 18:40",
+   text:"Les communes de plus de 3 500 habitants doivent compter au moins 25 % de logements sociaux parmi les résidences principales d'ici 2030. En cas de manquement, le préfet prononce un prélèvement sur les ressources fiscales de la commune."}
+];
+
+const OTHERS = [
+  {id:"n212", group:"SOL", num:"n° 212",
+   text:"Les communes de plus de 1 500 habitants doivent compter au moins 30 % de logements sociaux parmi les résidences principales d'ici 2028. En cas de manquement, le préfet prononce un prélèvement sur les ressources fiscales de la commune, majoré de 50 %."},
+  {id:"n87", group:"ECO", num:"n° 87",
+   text:"Les communes de plus de 3 500 habitants doivent compter au moins 30 % de logements sociaux parmi les résidences principales d'ici 2030, dont un tiers de logements très sociaux. En cas de manquement, le préfet prononce un prélèvement sur les ressources fiscales de la commune."},
+  {id:"n340", group:"UT", num:"n° 340",
+   text:"Les communes de plus de 5 000 habitants doivent compter au moins 20 % de logements sociaux parmi les résidences principales d'ici 2035, sous réserve de la disponibilité foncière constatée par le préfet. En cas de manquement, le préfet peut prononcer un prélèvement sur les ressources fiscales de la commune, après mise en demeure."},
+  {id:"n15", group:"LL", num:"n° 15",
+   text:"Les communes de plus de 3 500 habitants s'efforcent d'atteindre un objectif indicatif de 20 % de logements sociaux parmi les résidences principales d'ici 2035. Aucun prélèvement ne peut être prononcé à ce titre."},
+  {id:"n402", group:"RC", num:"n° 402",
+   text:"Les communes de plus de 10 000 habitants doivent compter au moins 25 % de logements sociaux parmi les résidences principales d'ici 2030. Les communes rurales en sont exemptées. En cas de manquement, le préfet peut prononcer un prélèvement sur les ressources fiscales de la commune, sauf si celle-ci justifie de l'absence de demande locale."},
+  {id:"n198", group:"PR", num:"n° 198", note:"collègue de votre groupe",
+   text:"Les communes de plus de 3 500 habitants doivent compter au moins 25 % de logements sociaux parmi les résidences principales d'ici 2032. En cas de manquement, le préfet peut prononcer un prélèvement sur les ressources fiscales de la commune, après mise en demeure restée sans effet pendant six mois."},
+  {id:"n455", group:"GOUV", num:"n° 455",
+   text:"Les communes de plus de 3 500 habitants doivent compter au moins 25 % de logements sociaux parmi les résidences principales d'ici 2030. En cas de manquement, le préfet peut prononcer un prélèvement sur les ressources fiscales de la commune, après avis de la commission départementale de l'habitat."}
+];
+
+const TRIES = [
+  {label:"Passer à 30 %", fn:t=>t.replace(/\d{1,2}(?:[,.]\d)?\s*%/, "30 %")},
+  {label:"Reporter à 2035", fn:t=>t.replace(/\b20[2-5]\d\b/, "2035")},
+  {label:"« doivent » → « s'efforcent de »", fn:t=>t.replace(/doivent compter/, "s'efforcent de compter")},
+  {label:"Ajouter « sous réserve de la disponibilité foncière »", fn:t=>/sous réserve/.test(t)?t:t.replace(/d'ici (20\d\d)\./, "d'ici $1, sous réserve de la disponibilité foncière.")},
+  {label:"Rendre la sanction automatique", fn:t=>t.replace(/le préfet peut prononcer/, "le préfet prononce")},
+  {label:"Supprimer la sanction", fn:t=>t.replace(/\s*En cas de manquement[^.]*\./, " Aucun prélèvement ne peut être prononcé à ce titre.")},
+  {label:"Réinitialiser", fn:()=>DRAFT_INITIAL}
+];
+
+/* ---------- Moteur de projection par règles ---------- */
+const AXES = [
+  {k:"taux", label:"Taux", w:.25, fmt:v=>v==null?"—":v.toLocaleString("fr-FR")+" %"},
+  {k:"echeance", label:"Échéance", w:.10, fmt:v=>v==null?"—":String(v)},
+  {k:"seuil", label:"Seuil", w:.10, fmt:v=>v==null?"—":v.toLocaleString("fr-FR")+" hab."},
+  {k:"obligation", label:"Obligation", w:.25, fmt:v=>v>=.9?"ferme":v>=.4?"d'effort":v>0?"facultative":"absente"},
+  {k:"sanction", label:"Sanction", w:.20, fmt:v=>v>=.9?"automatique":v>=.55?"facultative":v>0?"différée":"aucune"},
+  {k:"cond", label:"Conditions", w:.10, fmt:v=>v===0?"aucune":v<.4?"une":v<.7?"deux":"trois +"}
+];
+
+function norm(s){ return s.toLowerCase().replace(/[’‘]/g,"'").replace(/ /g," ").replace(/\s+/g," "); }
+function sentences(t){ return t.split(/(?<=\.)\s+/).filter(Boolean); }
+
+function extract(raw){
+  const t = norm(raw);
+  const p = {taux:null, echeance:null, seuil:null, obligation:0, sanction:0, cond:0};
+  const mt = t.match(/(\d{1,2}(?:[,.]\d)?)\s*(?:%|pour cent)/);
+  if(mt) p.taux = parseFloat(mt[1].replace(",","."));
+  const my = t.match(/\b(20[2-5]\d)\b/);
+  if(my) p.echeance = parseInt(my[1],10);
+  const ms = t.match(/(?:plus de|au moins|supérieure? à|excédant)\s*(\d[\d ]{2,7})\s*habitants/);
+  if(ms) p.seuil = parseInt(ms[1].replace(/ /g,""),10);
+
+  const ss = sentences(t);
+  const obl = ss.find(s=>/logements sociaux/.test(s)) || ss[0] || "";
+  if(/s'efforcent|s'efforce|veillent|sont invitées|objectif indicatif|tendent/.test(obl)) p.obligation = .45;
+  else if(/\b(peuvent|peut)\b/.test(obl)) p.obligation = .3;
+  else if(/\b(doivent|doit|sont tenues?|est tenue?|comptent|compte|atteignent|atteint)\b/.test(obl)) p.obligation = 1;
+  else p.obligation = obl ? .15 : 0;
+
+  const san = ss.filter(s=>/prélèvement|sanction|pénalité|amende/.test(s)).join(" ");
+  if(!san || /aucun prélèvement|ne peut être prononcé|supprim/.test(san)) p.sanction = 0;
+  else {
+    let v = .5;
+    if(/peut prononcer|peut être prononcé|peut faire l'objet/.test(san)) v = .6;
+    else if(/prononce\b|est prononcé|de plein droit|automatique|doit prononcer/.test(san)) v = 1;
+    if(/majoré/.test(san)) v += .15;
+    if(/après mise en demeure/.test(san)) v -= .2;
+    if(/après avis/.test(san)) v -= .1;
+    if(/sauf si|sauf lorsque|sous réserve/.test(san)) v -= .15;
+    p.sanction = Math.max(.1, Math.min(1, v));
+  }
+  const condRe = /sous réserve|à (?:la )?condition|sauf (?:si|lorsque|pour)|dès lors que|à l'exception|exempt|exonér|après avis|après mise en demeure|le cas échéant|ne s'applique pas/g;
+  const n = (t.match(condRe)||[]).length;
+  p.cond = Math.min(1, n/3);
+  return p;
+}
+
+function axisDiff(k,a,b){
+  if(a==null && b==null) return 0;
+  if(a==null || b==null) return .6;
+  // Échelles de saturation : 10 points de taux, 6 ans, un facteur 3 sur le seuil,
+  // ou un cran complet de modalité (ferme → d'effort) comptent comme un écart maximal.
+  if(k==="taux") return Math.min(1, Math.abs(a-b)/10);
+  if(k==="echeance") return Math.min(1, Math.abs(a-b)/6);
+  if(k==="seuil") return Math.min(1, Math.abs(Math.log10(a/b))/.5);
+  if(k==="obligation"||k==="sanction") return Math.min(1, Math.abs(a-b)/.6);
+  return Math.min(1, Math.abs(a-b));
+}
+function compare(pa,pb){
+  let d=0; const axes={};
+  for(const ax of AXES){ const diff=axisDiff(ax.k,pa[ax.k],pb[ax.k]); axes[ax.k]=diff; d+=ax.w*diff; }
+  return {d, axes};
+}
+function rigueur(p){
+  const taux = p.taux==null?.5:Math.min(1,p.taux/40);
+  const ech = p.echeance==null?.5:Math.min(1,Math.max(0,(2040-p.echeance)/14));
+  const seuil = p.seuil==null?.5:Math.min(1,Math.max(0,1-Math.log10(Math.max(1000,p.seuil)/1000)));
+  return taux*.25 + ech*.15 + seuil*.15 + p.obligation*.2 + p.sanction*.15 + (1-p.cond)*.1;
+}
+function tokens(t){ return new Set(norm(t).replace(/[^\p{L}\p{N} ]/gu," ").split(" ").filter(w=>w.length>2)); }
+function jaccard(a,b){ const A=tokens(a),B=tokens(b); let i=0; for(const w of A) if(B.has(w)) i++; return i/(A.size+B.size-i); }
+
+function relOf(d){ return d<.15?{c:"r0",t:"convergent"}:d<.35?{c:"r1",t:"proche"}:d<.6?{c:"r2",t:"éloigné"}:{c:"r3",t:"opposé"}; }
+const fmtD = d => d.toFixed(2).replace(".",",");
+const fmtDelta = x => (x>0?"+":"−")+Math.abs(x).toFixed(2).replace(".",",");
+
+/* ---------- État ---------- */
+const $ = s=>document.querySelector(s);
+const draft = $("#draft");
+draft.value = DRAFT_INITIAL;
+$("#articleText").innerHTML = ARTICLE.replace(/(3 500 habitants|25 %|2030|doivent|peut prononcer)/g,"<mark>$1</mark>");
+
+const REFS = [...MINE.map(m=>({...m, mine:true})), ...OTHERS.map(o=>({...o, mine:false}))];
+for(const r of REFS){ if(!r.params) r.params = extract(r.text); }
+
+let prevParams = null, prevDist = null;
+let baseline = null, burstTimer = null;
+let claudeRes = null, claudeStale = false, claudeCalls = 0;
+
+/* ---------- Rendu ---------- */
+function render(fromEdit){
+  const text = draft.value;
+  const p = extract(text);
+  const dist = {};
+  for(const r of REFS) dist[r.id] = compare(p, r.params);
+
+  if(fromEdit && claudeRes && !claudeStale){ claudeStale = true; setStatus("lecture précédente — texte modifié depuis"); }
+
+  renderChips(p);
+  renderMap(p);
+  renderCards(p, dist, text);
+
+  prevParams = p; prevDist = dist;
+}
+
+function renderChips(p){
+  const el = $("#chips");
+  el.innerHTML = AXES.map(ax=>{
+    const changed = prevParams && prevParams[ax.k]!==p[ax.k];
+    return `<span class="chip${changed?" changed":""}" title="${ax.label} — poids ${ax.w}"><span class="lab">${ax.label}</span><b>${ax.fmt(p[ax.k])}</b></span>`;
+  }).join("");
+}
+
+function renderMap(p){
+  const el = $("#map");
+  const items = REFS.filter(r=>r.kind!=="version").map(r=>({id:r.id, x:rigueur(r.params), color:r.mine?GROUPS.PR.color:GROUPS[r.group].color, label:r.mine?"ligne":r.num.replace("n° ","")}));
+  const me = rigueur(p);
+  // stack labels: alternate rows for pins that are close
+  items.sort((a,b)=>a.x-b.x);
+  let html = `<div class="axis"></div><span class="tick l" style="left:0">souple</span><span class="tick r" style="left:100%">rigoureux</span>`;
+  let lastX=-1, row=0;
+  for(const it of items){
+    row = (it.x-lastX)<.06 ? (row+1)%2 : 0; lastX=it.x;
+    html += `<div class="pin${row?" alt":""}" style="left:${(it.x*100).toFixed(1)}%;--g:${it.color}" title="${it.id}"><i class="pd"></i><span class="pl">${it.label}</span></div>`;
+  }
+  html += `<div class="pin me" style="left:${(me*100).toFixed(1)}%"><span class="pl">vous</span><i class="pd"></i></div>`;
+  el.innerHTML = html;
+}
+
+function axesHtml(cmp, p, r){
+  return AXES.map(ax=>{
+    const d = cmp.axes[ax.k]; const cls = d<.05?"d0":d<.3?"d1":d<.6?"d2":"d3";
+    return `<span class="ax ${cls}" title="${ax.label} : vous ${ax.fmt(p[ax.k])} · eux ${ax.fmt(r.params[ax.k])}"><i></i>${ax.label}</span>`;
+  }).join("");
+}
+
+function cardHtml(r, cmp, p, text){
+  const rel = relOf(cmp.d);
+  const dup = !r.mine && jaccard(text, r.text) > .82 && cmp.d < .12;
+  const g = r.mine ? GROUPS.PR : GROUPS[r.group];
+  const prev = prevDist && prevDist[r.id] ? cmp.d - prevDist[r.id].d : 0;
+  const flash = Math.abs(prev) >= .01 ? `<span class="flash on ${prev<0?"up":"down"}" data-id="${r.id}">${prev<0?"se rapproche":"s'éloigne"} ${fmtDelta(prev)}</span>` : `<span class="flash" data-id="${r.id}"></span>`;
+  const who = r.mine && r.kind
+    ? `<span class="badge" style="--g:${g.color}"><i class="dot"></i>${r.label}</span><span class="sub">${r.sub}</span>`
+    : `<span class="badge" style="--g:${g.color}"><i class="dot"></i>${g.name}</span><span class="numero">${r.num}</span>${r.note?`<span class="sub">· ${r.note}</span>`:""}`;
+  const cl = claudeRes && claudeRes[r.id];
+  const claudeLine = cl ? `<div class="claude-line${claudeStale?" stale":""}"><span class="rel ${relClass(cl.relation)}">${cl.relation}</span><span class="why">${escapeHtml(cl.pourquoi||"")}${typeof cl.proximite==="number"?` <span class="sub">· proximité ${cl.proximite.toFixed(2).replace(".",",")}</span>`:""}</span></div>` : "";
+  const col = rel.c==="r0"?"var(--good)":rel.c==="r1"?"var(--ok)":rel.c==="r2"?"var(--warn)":"var(--bad)";
+  return `<article class="card${r.mine&&r.kind?" mine-ref":""}" data-id="${r.id}">
+    <div class="card-top"><div class="who">${who}</div>${dup?`<span class="rel dup">quasi-redondant</span>`:""}<span class="rel ${rel.c}">${rel.t}</span></div>
+    <div class="gauge"><div class="bar"><i style="width:${((1-cmp.d)*100).toFixed(1)}%;--c:${col}"></i></div><span class="pct">d = ${fmtD(cmp.d)}</span></div>
+    <div class="axes">${axesHtml(cmp,p,r)}${flash}</div>
+    <details class="txt"><summary>Texte</summary><p class="legal">${escapeHtml(r.text)}</p></details>
+    ${claudeLine}
+  </article>`;
+}
+
+function renderCards(p, dist, text){
+  const mine = REFS.filter(r=>r.mine && r.kind);
+  $("#mineCards").innerHTML = mine.map(r=>cardHtml(r, dist[r.id], p, text)).join("");
+  const dl = dist["ligne"].d;
+  $("#mineSummary").textContent = dl<.15 ? "Dans la ligne du groupe" : dl<.35 ? "Écart modéré avec la ligne du groupe" : "Écart marqué avec la ligne du groupe";
+
+  const others = REFS.filter(r=>!r.mine || !r.kind).sort((a,b)=>dist[a.id].d-dist[b.id].d);
+  $("#otherCards").innerHTML = others.map(r=>cardHtml(r, dist[r.id], p, text)).join("");
+  const conv = others.filter(r=>dist[r.id].d<.15).length, opp = others.filter(r=>dist[r.id].d>=.6).length;
+  $("#othersSummary").textContent = `${conv} convergent${conv>1?"s":""} · ${opp} opposé${opp>1?"s":""} · ${others.length} au total`;
+  // fade flashes
+  setTimeout(()=>document.querySelectorAll(".flash.on").forEach(e=>e.classList.remove("on")), 2600);
+}
+
+function relClass(rel){
+  rel = String(rel||"").toLowerCase();
+  if(rel.startsWith("conver")||rel.startsWith("redond")) return "r0";
+  if(rel.startsWith("compat")) return "r1";
+  if(rel.startsWith("orthog")) return "r2";
+  if(rel.startsWith("contra")) return "r3";
+  return "r2";
+}
+function escapeHtml(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+/* ---------- Journal d'incidences (regroupe une rafale de frappe) ---------- */
+function onInput(){
+  if(!baseline) baseline = {params:prevParams, dist:prevDist};
+  render(true);
+  clearTimeout(burstTimer);
+  burstTimer = setTimeout(flushImpact, 650);
+  if(autoOn()) scheduleAuto();
+}
+function flushImpact(){
+  if(!baseline || !baseline.params){ baseline=null; return; }
+  const p = prevParams, b = baseline.params;
+  const changes = AXES.filter(ax=>b[ax.k]!==p[ax.k]).map(ax=>`${ax.label} ${ax.fmt(b[ax.k])} → ${ax.fmt(p[ax.k])}`);
+  const fx = REFS.map(r=>({r, delta: prevDist[r.id].d - baseline.dist[r.id].d})).filter(x=>Math.abs(x.delta)>=.01).sort((a,b)=>Math.abs(b.delta)-Math.abs(a.delta));
+  const el = $("#impact");
+  if(!changes.length && !fx.length){ el.innerHTML = `<div class="impact-empty">Modification de forme : aucun paramètre ni aucune distance n'a bougé selon les règles. Claude peut y lire une nuance.</div>`; }
+  else {
+    const nm = r => r.mine&&r.kind ? r.label : `${GROUPS[r.group].name} ${r.num}`;
+    el.innerHTML = `<div class="imp"><span class="what">${changes.length?changes.map(escapeHtml).join("<br>"):"(forme)"}</span>
+      <div class="fx">${fx.length?fx.map(x=>`<span class="${x.delta<0?"up":"down"}"><span class="arrow">${x.delta<0?"↓":"↑"}</span> ${escapeHtml(nm(x.r))} ${fmtDelta(x.delta)}</span>`).join(""):"<span class=\"sub\">aucune distance modifiée</span>"}</div></div>`;
+  }
+  $("#impactWhen").textContent = new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  baseline = null;
+}
+
+/* ---------- Essais rapides ---------- */
+$("#tries").innerHTML = TRIES.map((t,i)=>`<button class="try" type="button" data-i="${i}">${t.label}</button>`).join("");
+$("#tries").addEventListener("click", e=>{
+  const b = e.target.closest("button[data-i]"); if(!b) return;
+  const nv = TRIES[+b.dataset.i].fn(draft.value);
+  if(nv!==draft.value){ draft.value = nv; onInput(); }
+});
+draft.addEventListener("input", onInput);
+
+/* ---------- Claude (capability sample) ---------- */
+let sample = null, ctl = null, autoTimer = null;
+const askBtn = $("#askBtn"), stopBtn = $("#stopBtn"), autoChk = $("#autoChk");
+function setStatus(t, err){ const s=$("#claudeStatus"); s.textContent=t; s.classList.toggle("err",!!err); }
+function autoOn(){ return !!sample && autoChk.checked; }
+try{ autoChk.checked = localStorage.getItem("boussole.auto")==="1"; }catch(e){}
+autoChk.addEventListener("change", ()=>{ try{ localStorage.setItem("boussole.auto", autoChk.checked?"1":"0"); }catch(e){} if(autoChk.checked && claudeStale) scheduleAuto(); });
+function scheduleAuto(){ clearTimeout(autoTimer); autoTimer = setTimeout(()=>{ if(autoOn()) ask(); }, 2000); }
+
+function buildPrompt(text){
+  const items = REFS.filter(r=>r.id!=="v1"&&r.id!=="v2").map(r=>`[${r.id}] ${r.mine?"Ligne de mon propre groupe (programme)":GROUPS[r.group].name+", amendement "+r.num} : ${r.text}`);
+  return `Tu es un assistant légistique à l'Assemblée nationale. Voici le BROUILLON d'un amendement réécrivant un alinéa, puis des textes de référence : la ligne du groupe de l'auteur et des amendements concurrents déposés par d'autres groupes sur le même alinéa.
+
+Pour CHAQUE référence, qualifie la relation du brouillon avec elle par un seul mot parmi : "convergent" (même orientation, écarts mineurs), "compatible" (conciliables, un sous-amendement ou une fusion est envisageable), "contradictoire" (orientations incompatibles, ne peuvent coexister), "redondant" (quasi identiques), "orthogonal" (portent sur des aspects différents). Donne une proximité de 0 (opposé) à 1 (identique). Ajoute une phrase de 25 mots maximum qui nomme concrètement ce qui rapproche ou sépare (chiffres, verbes, conditions), en français.
+
+Réponds uniquement avec un tableau JSON, sans autre texte : [{"id":"n212","relation":"contradictoire","proximite":0.3,"pourquoi":"..."}]
+
+BROUILLON :
+${text}
+
+RÉFÉRENCES :
+${items.join("\n")}`;
+}
+
+async function ask(){
+  if(!sample) return;
+  if(ctl) ctl.abort();
+  ctl = new AbortController();
+  const myCtl = ctl;
+  askBtn.disabled = true; stopBtn.hidden = false;
+  setStatus("Claude lit…");
+  const text = draft.value;
+  try{
+    const arr = await sample.json(buildPrompt(text), {modelTier:"quick", signal: myCtl.signal});
+    if(myCtl.signal.aborted) return;
+    const map = {};
+    if(Array.isArray(arr)) for(const it of arr){ if(it && it.id) map[String(it.id)] = {relation:String(it.relation||"").toLowerCase(), proximite: typeof it.proximite==="number"?Math.max(0,Math.min(1,it.proximite)):null, pourquoi:String(it.pourquoi||"")}; }
+    claudeRes = map; claudeStale = (draft.value!==text); claudeCalls++;
+    render(); // re-render cards with Claude lines
+    if(!claudeStale) setStatus(`lecture à jour · ${new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"})}`);
+    else if(autoOn()) scheduleAuto();
+  }catch(e){
+    const code = e && e.code;
+    if(code==="cancelled"){ if(ctl===myCtl) setStatus("arrêté"); }
+    else if(code==="not_granted"||code==="sampling_disabled"||code==="not_declared"||code==="capability_disabled"||code==="capability_removed"){ sample=null; hideClaude("Claude n'est pas disponible pour cette page ici."); }
+    else if(code==="rate_limited"){ setStatus("trop d'appels — réessayez dans un instant", true); }
+    else if(code==="invalid_json"){ setStatus("réponse illisible — réessayez", true); }
+    else { setStatus("échec de la lecture — réessayez", true); }
+  }finally{
+    if(ctl===myCtl){ askBtn.disabled = !sample; stopBtn.hidden = true; }
+  }
+}
+function hideClaude(msg){
+  askBtn.disabled = true; autoChk.disabled = true; stopBtn.hidden = true;
+  setStatus(msg || "indisponible dans cet affichage");
+}
+askBtn.addEventListener("click", ask);
+stopBtn.addEventListener("click", ()=>{ if(ctl) ctl.abort(); });
+
+askBtn.disabled = true; setStatus("connexion…");
+(async ()=>{
+  try{
+    const s = window.claude && typeof window.claude.use==="function" ? await window.claude.use("sample") : null;
+    if(s){ sample = s; askBtn.disabled = false; setStatus("prêt — appuie sur le bouton (ta première demande déclenche une autorisation)"); }
+    else hideClaude("Claude indisponible ici — les règles continuent de fonctionner.");
+  }catch(e){ hideClaude("Claude indisponible ici — les règles continuent de fonctionner."); }
+})();
+
+/* ---------- Démarrage ---------- */
+render(false);
+})();
+</script>
