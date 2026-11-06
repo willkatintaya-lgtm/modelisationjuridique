@@ -20,24 +20,24 @@ Interface pour rédiger un amendement parlementaire et voir, autour de lui, l'ar
 - Les groupes politiques sont fictifs : ne pas attribuer de positions à des partis réels.
 
 ## Interactions en place
-Trois gestes, même sens à chaque échelle (c'est la symétrie voulue, ne pas la casser) :
-- **Haut / bas = parcourir mon texte** : l'unité voisine, au même niveau.
-- **Gauche = la même unité chez les autres groupes**, en pile. Droite ramène la mienne.
-- **Clic / pincer = changer d'échelle.** Dézoomer remonte d'un cran : passage → groupes → alinéa → texte d'origine. Zoomer (ou cliquer un surlignage) redescend.
+Trois gestes, même sens partout (c'est la symétrie voulue, ne pas la casser) :
+- **Haut / bas = parcourir** ce qu'on a sous les yeux (une pile, ou une liste qui défile).
+- **Gauche / droite = changer de volet.** Les volets s'enchaînent : `tout l'article ← le mien → la pile des autres → comparer (bibliothèque)`. Glisser vers la gauche avance d'un volet vers la droite, et inversement.
+- **Clic / pincer = changer d'échelle, un cran à la fois** : texte d'origine ⇄ alinéa ⇄ passage. Dézoomer remonte (passage → alinéa → origine), zoomer ou cliquer un surlignage redescend. Même échelle dans tous les volets (sauf l'article, qui est toujours entier).
 
-| | Échelle **alinéa** (départ) | Échelle **passage** (clic sur un surlignage) |
-|---|---|---|
-| Au centre | mon amendement sur l'alinéa, passages surlignés en léger | le passage seul, isolé, en grand |
-| Haut / bas | alinéa 2 → 3 → … → 6 | passage suivant du même alinéa |
-| Gauche | pile des amendements des autres groupes sur cet alinéa | pile des rédactions de ce passage chez les autres (mots qui diffèrent de la mienne surlignés) ; versions identiques mises à part (« 6 groupes gardent la vôtre ») ; « Supprime ce point » si le groupe le retire |
-| Dézoomer | l'alinéa d'origine au-dessus de ma feuille, écarts en direct | petits carrés papier, un par groupe (le mien, le texte d'origine, chaque amendement) ; on en coche, « Sélectionner » les met côte à côte |
+| | **Alinéa** (départ) | **Passage** (clic sur un surlignage) | **Origine** (dézoom depuis l'alinéa) |
+|---|---|---|---|
+| Le mien | pile de mes amendements, alinéas 2 → 6 ; passages surlignés en léger | pile des passages de l'alinéa, isolés en grand | l'alinéa de la commission au-dessus de ma feuille, écarts en direct ; haut/bas change d'alinéa |
+| Les autres | pile de leurs amendements sur cet alinéa | pile de leurs rédactions de ce passage (mots qui diffèrent de la mienne surlignés ; identiques mises à part, « 6 groupes gardent la vôtre » ; « Supprime ce point ») | la commission au-dessus de leur feuille, leur écart en direct |
+| Comparer | bibliothèque de toutes les rédactions de l'alinéa (commission, la mienne, chaque amendement) | idem pour le passage | (traité comme l'alinéa) |
 
-Détails :
-- **La pile** (« tambour ») sert partout : défilement continu (deux doigts, glisser au doigt ou à la souris, flèches, repères à gauche) puis calage ; la feuille du dessus bascule en arrière (`rotateX` sur son bord bas), la suivante attend inclinée en dessous. Un petit geste suffit ; élastique aux extrémités. Classe `Drum` dans `index.html`.
-- **Passages** : chaque alinéa déclare ses `points` (règle qui retrouve le passage dans n'importe quelle rédaction : la mienne, celles des autres, l'origine). Surlignage léger (fond doré pâle + filet), plus marqué au survol, pour ne pas saturer quand il y en a beaucoup. Un clic sur un surlignage attend 260 ms pour laisser place au double-clic d'édition. Cliquer un surlignage dans l'amendement d'un autre groupe ouvre le passage côté autres, sur sa rédaction.
-- **Édition** : double-clic sur mon texte (alinéa) → édition en place (Valider / Annuler, Ctrl+Entrée, Échap) ; les surlignages suivent la frappe. En vue « texte d'origine », un simple clic suffit et ma feuille montre les écarts mot à mot (plus longue sous-suite commune, guillemets « » ignorés) : **barré** dans l'original = supprimé, **surligné** dans le mien = ajouté.
-- **Échap** = revenir d'un cran (côte à côte → carrés → passage → alinéa ; origine → alinéa ; autres → les miens).
-- Pincer : `wheel` + `ctrlKey` (Chrome, Edge, Firefox), `gesture*` (Safari), deux doigts au tactile ; un cran par geste. Poignée du haut = même chose au clic. Pavé tactile à deux doigts : sens verrouillé au début du geste ; horizontal cumulé (seuil 90) = changer de volet.
+- **Tout l'article** (volet de gauche) : ma version consolidée, alinéa par alinéa, en corrections apparentes contre une référence choisie par puces : le texte de la commission (défaut) ou la version d'un groupe (ses amendements appliqués ; sans amendement de sa part, la commission). Barré = dans la référence et pas chez moi, surligné = chez moi et pas dans la référence. Clic sur un alinéa → j'y vais. Défilement natif.
+- **Comparer** : bibliothèque au centre (défilement natif) ; un clic coche une rédaction, la bibliothèque glisse à gauche et la sélection apparaît à droite **en petit format**, surlignant l'écart avec la commission. La sélection survit au changement d'échelle (cocher deux groupes à l'alinéa, zoomer : on voit leurs deux rédactions du passage). Elle est remise à zéro quand on change d'alinéa. Sur mobile, la sélection passe en bandeau horizontal sous la bibliothèque.
+- **La pile** (« tambour ») : défilement continu (deux doigts, glisser au doigt ou à la souris, flèches, repères à gauche) puis calage ; la feuille du dessus bascule en arrière (`rotateX` sur son bord bas), la suivante attend inclinée en dessous. Un petit geste suffit ; élastique aux extrémités. Classe `Drum` dans `index.html`. Au dézoom et en édition, les voisines s'estompent.
+- **Passages** : chaque alinéa déclare ses `points` (règle qui retrouve le passage dans n'importe quelle rédaction). Surlignage léger (fond doré pâle + filet), plus marqué au survol. Le texte de la commission n'est jamais surligné en bloc. Un clic sur un surlignage attend 260 ms pour laisser place au double-clic d'édition. Zoomer (pincer) au-dessus d'un surlignage entre dans ce passage-là ; sinon le dernier visité.
+- **Édition** : double-clic sur mon texte (alinéa) → édition en place (Valider / Annuler, Ctrl+Entrée, Échap) ; les surlignages suivent la frappe. En vue origine, un simple clic suffit et ma feuille montre les écarts mot à mot (plus longue sous-suite commune, guillemets « » ignorés).
+- **Échap** revient d'un cran : bibliothèque → pile des autres ; article → le mien ; puis l'échelle vers l'alinéa ; puis la pile des autres → le mien.
+- Poignées : en haut l'échelle (clic = un cran), sur les côtés les volets voisins. Pincer : `wheel` + `ctrlKey` (Chrome, Edge, Firefox), `gesture*` (Safari), deux doigts au tactile ; un cran par geste. Pavé tactile à deux doigts : sens verrouillé au début du geste ; horizontal cumulé (seuil 90) = volet voisin ; dans une liste qui défile, le vertical lui revient.
 
 ## Flux cible (scènes, à construire dans l'ordre)
 1. Accueil : mon amendement. ✔
