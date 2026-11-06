@@ -10,6 +10,7 @@
   --f-ui:"IBM Plex Sans",system-ui,sans-serif; --f-legal:"Source Serif 4",Georgia,serif;
   --gutter-l:max(16px,env(safe-area-inset-left,0px)); --gutter-r:max(16px,env(safe-area-inset-right,0px));
   --ease:cubic-bezier(.2,.8,.2,1);
+  --ins:#1d4f91; --del:#a8452f;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -34,8 +35,13 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);overf
 /* marques : les passages (surlignage léger, cliquable) ; les écarts (ajouté surligné / supprimé barré) */
 .paper mark.pt{color:inherit;background:rgba(217,181,106,.17);box-shadow:inset 0 -2px 0 rgba(217,181,106,.75);border-radius:2px;cursor:pointer;transition:background .2s;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .paper mark.pt:hover{background:rgba(217,181,106,.4)}
-.paper ins{color:inherit;text-decoration:none;background:rgba(217,181,106,.5);border-radius:2px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
-.paper del{text-decoration:line-through 2px #a8452f;color:#7d7466;background:rgba(168,69,47,.08);border-radius:2px}
+/* écart avec la commission, toujours porté sur la feuille du groupe (la commission reste vierge) : ajout = souligné, gras, encre bleue ; suppression = barré, encore lisible */
+.paper ins{color:var(--ins);font-weight:600;text-decoration:underline 1.5px;text-underline-offset:3px;background:none}
+.paper del{color:#7d7466;text-decoration:line-through 1.5px var(--del);background:none}
+.paper ins[data-h],.paper del[data-h]{cursor:zoom-in;border-radius:2px;transition:background .2s}
+.paper ins[data-h]:hover,.paper del[data-h]:hover{background:rgba(29,79,145,.09)}
+/* écart avec ma rédaction (pile des autres, au passage) : simple surlignage, à retravailler */
+.paper mark.dif{color:inherit;background:rgba(217,181,106,.4);border-radius:2px}
 
 /* --- quatre volets côte à côte : article · le mien · les autres · comparer --- */
 .center{position:absolute;inset:0}
@@ -53,6 +59,7 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);overf
 .layer.shallow{transform:scale(1.18)}
 .layer.on{opacity:1;visibility:visible;pointer-events:auto;transform:none;transition:opacity .4s,transform .5s var(--ease),visibility 0s}
 .layer-pt{padding-top:84px}
+.pane:not(.on) .layer.on{visibility:inherit;pointer-events:none} /* un volet masqué ne doit rien capter, même par sa couche active */
 
 /* --- la pile : un tambour de feuilles --- */
 .drum{position:relative;width:100%;flex:none;perspective:1600px}
@@ -66,7 +73,6 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);overf
 .sheet .body{overflow:auto;min-height:0}
 .face.al.cur .body{cursor:text}
 .ptxt{font:400 clamp(26px,3.6vw,38px)/1.3 var(--f-legal);margin:8px 0 6px;max-width:none}
-.ptxt ins{background:rgba(217,181,106,.4)}
 .sheet .foot{display:flex;justify-content:flex-end;gap:12px;align-items:center;min-height:30px}
 .sheet .foot span{margin-right:auto;font-size:11.5px;color:#8a8070}
 .sheet .foot .count{margin-right:0;font-size:11px;letter-spacing:.08em;color:var(--paper-muted);white-space:nowrap}
@@ -81,6 +87,9 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);overf
 .ed .mirror,.sheet textarea{font:inherit;letter-spacing:inherit;white-space:pre-wrap;overflow-wrap:break-word;word-break:normal;margin:0;padding:0;border:0}
 .ed .mirror{position:absolute;inset:0;color:transparent;pointer-events:none;overflow:hidden}
 .ed .mirror mark,.ed .mirror ins{color:transparent}
+.ed .mirror ins{font-weight:inherit;text-decoration:underline 2px var(--ins);text-underline-offset:3px}
+.delpt{position:relative}
+.delpt::after{content:"";position:absolute;left:-1px;top:.2em;height:1.1em;width:2px;border-radius:1px;background:var(--del)}
 .sheet textarea{position:relative;color:inherit;background:transparent;resize:none;width:100%;min-height:3em;display:block;overflow:hidden;caret-color:var(--paper-ink)}
 .sheet textarea:focus{outline:none}
 
@@ -104,7 +113,7 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);overf
 .chip i{width:8px;height:8px;border-radius:50%;background:var(--g)}
 .chip:hover,.chip:focus-visible{color:var(--fg);outline:none;border-color:#4a5062}
 .chip[aria-pressed=true]{color:var(--fg);border-color:var(--accent);background:rgba(217,181,106,.12)}
-.art-scroll{width:min(880px,100%);flex:1;min-height:0;overflow-y:auto;touch-action:pan-y;padding:16px 4px 28px}
+.art-scroll{width:min(880px,100%);flex:1;min-height:0;overflow-y:auto;touch-action:pan-y;padding:24px 4px 44px}
 .art{padding:30px 40px 28px}
 .art h2{font:600 24px var(--f-legal);margin:8px 0 4px}
 .art .legend{font:400 12px/1.5 var(--f-ui);color:var(--paper-muted);margin:0 0 14px}
@@ -120,7 +129,7 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);overf
 /* --- volet de droite : la bibliothèque des rédactions, et la sélection en petit à côté --- */
 .lib-wrap{width:100%;max-width:1120px;flex:1;min-height:0;display:flex;justify-content:center;gap:28px}
 .lib-col{width:min(640px,100%);min-height:0;display:flex;flex-direction:column;transition:width .45s var(--ease)}
-.lib-list{flex:1;min-height:0;overflow-y:auto;touch-action:pan-y;display:grid;align-content:start;gap:14px;padding:16px 12px 40px}
+.lib-list{flex:1;min-height:0;overflow-y:auto;touch-action:pan-y;display:grid;align-content:start;gap:14px;padding:24px 12px 44px}
 .lib-item{display:grid;gap:8px;padding:20px 24px 16px;cursor:pointer;outline-width:10px;outline-offset:-10px;box-shadow:0 14px 34px rgba(0,0,0,.5), 0 0 0 1px rgba(217,181,106,.2);transition:box-shadow .2s,transform .2s}
 .lib-item:hover{transform:translateX(3px)}
 .lib-item.on{box-shadow:0 14px 34px rgba(0,0,0,.5), 0 0 0 2px var(--accent)}
@@ -136,7 +145,7 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);overf
 .lnk{background:none;border:0;padding:0;color:var(--muted);font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .lnk:hover,.lnk:focus-visible{color:var(--fg);outline:none}
 .sel-note{flex:none;margin:0 4px 10px;font-size:11.5px;color:var(--muted)}
-.sel-list{flex:1;min-height:0;overflow-y:auto;touch-action:pan-y;display:grid;align-content:start;gap:10px;padding:2px 4px 30px}
+.sel-list{flex:1;min-height:0;overflow-y:auto;touch-action:pan-y;display:grid;align-content:start;gap:10px;padding:20px 4px 40px}
 .sel-card{display:grid;gap:6px;padding:12px 14px;outline-width:5px;outline-offset:-5px;box-shadow:0 8px 20px rgba(0,0,0,.45)}
 .sel-head{display:flex;align-items:center;gap:7px;font:500 10.5px var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--paper-muted)}
 .sel-head i{width:7px;height:7px;border-radius:50%;background:var(--g);flex:none}
@@ -145,6 +154,31 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);overf
 .sel-head .x{flex:none;border:0;background:none;color:var(--paper-muted);font:400 17px/1 var(--f-ui);cursor:pointer;padding:0 2px}
 .sel-head .x:hover,.sel-head .x:focus-visible{color:var(--paper-ink);outline:none}
 .sel-text{font:400 13.5px/1.45 var(--f-legal);margin:0}
+
+/* --- listes : défilement natif, sans barre, bords fondus --- */
+.art-scroll,.lib-list,.sel-list,.refs,.sheet .body,.orig .body{scrollbar-width:none;-ms-overflow-style:none}
+.art-scroll::-webkit-scrollbar,.lib-list::-webkit-scrollbar,.sel-list::-webkit-scrollbar,.refs::-webkit-scrollbar,.sheet .body::-webkit-scrollbar,.orig .body::-webkit-scrollbar{display:none}
+.art-scroll,.lib-list,.sel-list{scroll-behavior:smooth;overscroll-behavior:contain;
+  -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 18px,#000 calc(100% - 40px),transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 18px,#000 calc(100% - 40px),transparent 100%)}
+
+/* --- loupe : une modification et la commission, côte à côte --- */
+.loupe{position:absolute;inset:0;z-index:30;display:grid;place-items:center;padding:24px var(--gutter-r) 24px var(--gutter-l);background:rgba(6,8,12,.74);backdrop-filter:blur(3px);
+  opacity:0;visibility:hidden;transition:opacity .25s,visibility 0s linear .25s}
+.loupe.on{opacity:1;visibility:visible;transition:opacity .25s,visibility 0s}
+.loupe-in{width:min(1000px,100%);display:grid;gap:18px;justify-items:center;transform:scale(.94);transition:transform .35s var(--ease)}
+.loupe.on .loupe-in{transform:none}
+.loupe-title{margin:0;text-align:center;color:var(--muted);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+.loupe-title b{color:var(--fg);font-weight:500}
+.loupe-cols{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.lc .group-badge{white-space:normal}
+.btn{font:500 13px var(--f-ui);letter-spacing:.04em;color:var(--fg);background:rgba(11,13,18,.75);border:1px solid var(--accent);border-radius:999px;padding:9px 20px;cursor:pointer;backdrop-filter:blur(6px)}
+.btn:hover,.btn:focus-visible{background:rgba(217,181,106,.16);outline:none}
+.lc{display:grid;align-content:start;gap:12px;padding:24px 26px 22px}
+.lc .head{flex-wrap:wrap}
+.lc p{font:400 clamp(17px,2.4vw,27px)/1.45 var(--f-legal);margin:0}
+.lc .ctx{color:var(--paper-muted)}
+.sel-note ins{color:#9fc1ef;font-weight:600;text-decoration:underline;text-underline-offset:2px}
+.sel-note del{color:var(--muted);text-decoration:line-through #c8664f}
 
 /* --- repères de la pile, à gauche --- */
 .rail{position:absolute;left:max(5px,env(safe-area-inset-left,0px));top:68%;transform:translateY(-50%);z-index:9;display:grid;gap:12px;transition:opacity .3s}
@@ -176,9 +210,11 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);overf
   .sel-col{width:100%;height:0;flex:none;transition:height .45s var(--ease),opacity .3s}
   .pane-lib.has-sel .sel-col{width:100%;height:36%}
   .sel-title{margin-top:4px}
-  .sel-list{display:flex;overflow-x:auto;overflow-y:hidden;touch-action:pan-x;align-items:stretch;padding-bottom:6px}
+  .sel-list{display:flex;overflow-x:auto;overflow-y:hidden;touch-action:pan-x;align-items:stretch;padding:2px 4px 6px}
   .sel-card{flex:0 0 72%;overflow:auto;align-content:start}
   .lib-item{padding:16px 18px 14px}
+  .sel-list{-webkit-mask-image:none;mask-image:none}
+  .lc{padding:16px 14px 14px;outline-width:8px;outline-offset:-8px}.loupe-cols{gap:10px}
 }
 @media (prefers-reduced-motion:reduce){.pane,.layer,.zoomer,.orig-wrap,.orig,.sheet,.handle,.rail,.lib-col,.sel-col{transition:none}}
 </style>
@@ -231,7 +267,7 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);overf
         <div class="lib-col"><div class="lib-list" id="libList" role="group" aria-label="Bibliothèque des rédactions"></div></div>
         <aside class="sel-col" aria-label="Sélection">
           <p class="sel-title"><span id="selCount"></span><button type="button" class="lnk" id="selClear">tout retirer</button></p>
-          <p class="sel-note">surligné : écart avec le texte de la commission</p>
+          <p class="sel-note">Par rapport à la commission : <ins>ajouté</ins> · <del>supprimé</del> · cliquer pour zoomer</p>
           <div class="sel-list" id="selList"></div>
         </aside>
       </div>
@@ -245,6 +281,14 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);overf
   <button class="handle right" id="hRight" type="button"></button>
 
   <span class="hint" id="hint"></span>
+
+  <div class="loupe" id="loupe" role="dialog" aria-modal="true" aria-labelledby="loupeTitle" aria-hidden="true">
+    <div class="loupe-in">
+      <p class="loupe-title" id="loupeTitle"></p>
+      <div class="loupe-cols" id="loupeCols"></div>
+      <button class="btn" type="button" id="loupeClose">Fermer</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -393,8 +437,16 @@ function versions(i,k){ // les rédactions des autres pour ce passage ; celles i
 }
 
 const strip=t=>t.replace(/^«\s*|\s*»$/g,"");
-// corrections apparentes dans un seul texte : ce que la référence a et pas moi (barré), ce que j'ai et pas elle (surligné)
-function inlineDiff(ref,mine){
+// corrections apparentes, portées sur la rédaction du groupe : ce que la référence a et pas elle (barré), ce qu'elle ajoute (souligné, gras).
+// Avec meta, chaque zone de modification devient cliquable et ouvre la loupe.
+const HUNKS=new Map(); let hunkSeq=0;
+function ctxWords(op,dir){ // quelques mots de contexte autour d'une modification, sans franchir la fin de phrase
+  if(!op||op.type!=="eq") return "";
+  const parts=op.text.split(/(\s+)/);
+  if(dir<0){ let t=parts.slice(-11).join(""); const m=t.match(/[\s\S]*[.;:]\s+/); if(m) return t.slice(m[0].length); return (parts.length>11?"… ":"")+t; }
+  let t=parts.slice(0,11).join(""); const m=t.match(/^[\s\S]*?[.;:]/); if(m) return m[0]; return t+(parts.length>11?" …":"");
+}
+function inlineDiff(ref,mine,meta){
   const units=s=>{ const u=[]; let lead=""; for(const t of tokenize(s)){ if(isWs(t)){ if(u.length) u[u.length-1].ws+=t; else lead+=t; } else if(!isQuote(t)) u.push({w:t,ws:""}); } return u; };
   const A=units(ref), B=units(mine);
   const [ka,kb]=lcsKeep(A.map(x=>norm(x.w)), B.map(x=>norm(x.w)));
@@ -406,12 +458,39 @@ function inlineDiff(ref,mine){
     else if(i<A.length&&j<B.length){ push("eq",B[j].w+B[j].ws); i++; j++; }
     else break;
   }
+  const hid=[];
+  if(meta) for(let k=0;k<ops.length;){
+    if(ops[k].type==="eq"){ k++; continue; }
+    let e=k; while(e+1<ops.length&&ops[e+1].type!=="eq") e++;
+    const id=++hunkSeq; HUNKS.set(id,{meta,before:ctxWords(ops[k-1],-1),after:ctxWords(ops[e+1],1),seg:ops.slice(k,e+1)});
+    if(HUNKS.size>800) HUNKS.delete(HUNKS.keys().next().value);
+    for(let x=k;x<=e;x++) hid[x]=id; k=e+1;
+  }
+  return renderOps(ops,hid);
+}
+function renderOps(ops,hid){
   return ops.map((o,k)=>{
     if(o.type==="eq") return esc(o.text);
     const m=o.text.match(/^([\s\S]*?)(\s*)$/), glue=o.type==="del"&&!m[2]&&ops[k+1]&&ops[k+1].type==="ins"?"\u2009":""; // « 2028 2030 » plutôt que « 20282030 »
-    return `<${o.type}>${esc(m[1])}</${o.type}>${m[2]}${glue}`;
+    return `<${o.type}${hid&&hid[k]?` data-h="${hid[k]}" title="Comparer avec ${esc(HUNKS.get(hid[k]).meta.refLabel.toLowerCase())}"`:""}>${esc(m[1])}</${o.type}>${m[2]}${glue}`;
   }).join("");
 }
+// sur une feuille entre guillemets, on garde les guillemets autour des corrections
+function diffSheet(ref,text,meta){ const q=/^\s*«/.test(text), html=inlineDiff(ref,strip(text),meta); return q?`« ${html} »`:html; }
+// pendant la frappe, le calque miroir doit garder exactement le texte saisi : ajouts soulignés seulement, suppressions en repère fin
+function liveHTML(ref,mine){
+  const A=tokenize(ref).filter(t=>!isWs(t)&&!isQuote(t)), tb=tokenize(mine), ib=[];
+  tb.forEach((t,k)=>{ if(!isWs(t)&&!isQuote(t)) ib.push(k); });
+  const [ka,kb]=lcsKeep(A.map(norm), ib.map(k=>norm(tb[k]))), keepB={}; ib.forEach((k,x)=>keepB[k]=kb[x]);
+  let i=0, out="";
+  const flush=()=>{ const d=[]; while(i<A.length&&!ka[i]){ d.push(A[i]); i++; } return d.length?`<span class="delpt" title="supprimé : ${esc(d.join(" "))}"></span>`:""; };
+  tb.forEach((t,k)=>{ if(keepB[k]===undefined){ out+=esc(t); return; } out+=flush(); if(keepB[k]){ i++; out+=esc(t); } else out+=`<ins>${esc(t)}</ins>`; });
+  return out+flush();
+}
+const difMarks=(a,b)=>compare(a,b).mineHTML.replace(/<ins>/g,'<mark class="dif">').replace(/<\/ins>/g,"</mark>");
+const COMMISSION={refLabel:"Texte de la commission",refColor:"#6b6457"};
+const myMeta=a=>({...COMMISSION,label:"Votre amendement",color:GROUPS[ME].color,where:`alinéa ${a.n}`});
+const otMeta=(a,o)=>({...COMMISSION,label:`${GROUPS[o.g].name} · n° ${o.num}`,color:GROUPS[o.g].color,where:`alinéa ${a.n}`});
 
 /* ---------- La pile : un tambour de feuilles ---------- */
 // pos est continu : on fait défiler petit à petit, puis ça se cale. La feuille du dessus bascule en arrière (pivot sur son bord bas),
@@ -490,18 +569,18 @@ function alFace(i){
 function paintAl(i){
   const f=dAl.faces[i]; if(!f||f.classList.contains("editing")) return;
   const a=AMEND[i], t=MINE[i].texte, origin=S.mode==="origin";
-  f.querySelector(".txt").innerHTML= origin ? compare(a.texte,t).mineHTML : pointMarks(a,t);
-  f.querySelector(".foot").innerHTML=`<span>${origin?"Cliquer sur le texte pour le modifier : les écarts s'affichent en direct":"Cliquer sur un surlignage pour l'isoler · double-clic pour modifier"}</span>`;
+  f.querySelector(".txt").innerHTML= origin ? diffSheet(a.texte,t,myMeta(a)) : pointMarks(a,t);
+  f.querySelector(".foot").innerHTML=`<span>${origin?"Cliquer une modification pour la comparer · ailleurs pour modifier le texte":"Cliquer sur un surlignage pour l'isoler · double-clic pour modifier"}</span>`;
 }
-function legendFor(d,who){
-  return d.same ? `${who} reprend cet alinéa à l'identique.`
-    : [d.del?`<del>barré</del> : ce que ${who.toLowerCase()} supprime`:"", d.ins?`<ins>surligné</ins> dans la feuille : ce qu'il ajoute`:""].filter(Boolean).join(" · ");
+function legendFor(d,who,where){
+  return d.same ? `${who} reprend cet alinéa à l'identique.` : `Les modifications sont portées sur ${where} : <ins>ajouté</ins> · <del>supprimé</del> · cliquer l'une d'elles pour la comparer.`;
 }
+// le texte de la commission reste vierge : seule la légende change
 function paintOrig(text){
   const a=AMEND[curAl()], d=compare(a.texte,text);
   $("#origHead").textContent=`${ARTICLE.num} · alinéa ${a.n}`;
-  $("#origText").innerHTML=d.origHTML;
-  $("#origLegend").innerHTML= d.same ? "Votre amendement reprend cet alinéa à l'identique. Modifiez votre texte : les écarts apparaissent ici en direct." : legendFor(d,"Votre amendement");
+  $("#origText").textContent=a.texte;
+  $("#origLegend").innerHTML= d.same ? "Votre amendement reprend cet alinéa à l'identique. Modifiez votre texte : les modifications s'inscrivent sur votre feuille, en direct." : legendFor(d,"Votre amendement","votre feuille");
 }
 function buildPt(k){
   const i=curAl(), a=AMEND[i]; S.pts=findPoints(a,MINE[i].texte);
@@ -518,15 +597,16 @@ function buildOt(focus){
   if(S.mode==="passage"){
     const p=curPt(), v=versions(i,p.k), n=v.list.length;
     $("#otTitle").innerHTML=`${esc(p.label)} · alinéa ${a.n} · <b>${n}</b> ${plural(n,"autre rédaction","autres rédactions")}`+(v.same.length>2?` · ${v.same.length} groupes gardent la vôtre`:v.same.length?` · ${plural(v.same.length,"garde","gardent")} la vôtre : ${v.same.map(o=>esc(GROUPS[o.g].name)+(o.g===ME?` (n° ${o.num})`:"")).join(", ")}`:"");
-    const html=v.list.map(({o,p:t},j)=>`<section class="sheet paper face passage" data-num="${o.num}"><div class="head">${badge(o)}<span>N° ${o.num}</span></div><div class="body"><p class="ptxt${t==null?" none":""}">${t==null?"Supprime ce point":compare(v.mine,t).mineHTML}</p></div><div class="foot"><span class="tag"><i></i><b>${esc(p.label)}</b> rédaction ${j+1} sur ${n}</span></div></section>`);
+    const html=v.list.map(({o,p:t},j)=>`<section class="sheet paper face passage" data-num="${o.num}"><div class="head">${badge(o)}<span>N° ${o.num}</span></div><div class="body"><p class="ptxt${t==null?" none":""}">${t==null?"Supprime ce point":difMarks(v.mine,t)}</p></div><div class="foot"><span class="tag"><i></i><b>${esc(p.label)}</b> rédaction ${j+1} sur ${n}</span></div></section>`);
     dOt.set(html.length?html:[`<section class="sheet paper face passage"><div class="body"><p class="ptxt none">Tous les groupes gardent votre rédaction.</p></div></section>`], Math.max(0,v.list.findIndex(x=>x.o.num===focus)));
   } else {
     const os=othersOf(i), n=os.length, origin=S.mode==="origin";
     $("#otTitle").innerHTML=`${ARTICLE.num}, alinéa ${a.n} · <b>${n}</b> ${plural(n,"amendement","amendements")} d'autres groupes`+(origin?" · écart avec le texte de la commission":"");
     dOt.set(os.map((o,j)=>{
-      const lead=o.mode==="supprimer"?"Supprimer cet alinéa.":o.mode==="completer"?`Compléter l'alinéa ${a.n} par la phrase suivante :`:`Rédiger ainsi l'alinéa ${a.n} :`;
-      const body= o.mode==="supprimer" ? `<span class="none">L'alinéa ${a.n} serait supprimé.</span>`
-        : !origin ? pointMarks(a,o.texte) : o.mode==="completer" ? `<ins>${esc(o.texte)}</ins>` : compare(a.texte,o.texte).mineHTML;
+      // au dézoom, chaque feuille montre l'alinéa tel que l'amendement le rédige, corrections apparentes comprises
+      const lead= o.mode==="supprimer" ? "Supprimer cet alinéa." : origin ? `L'alinéa ${a.n} tel que le rédige cet amendement :` : o.mode==="completer" ? `Compléter l'alinéa ${a.n} par la phrase suivante :` : `Rédiger ainsi l'alinéa ${a.n} :`;
+      const body= origin ? (o.mode==="supprimer" ? `« ${inlineDiff(a.texte,"",otMeta(a,o))} »` : diffSheet(a.texte, o.mode==="completer"?`« ${a.texte} ${strip(o.texte)} »`:o.texte, otMeta(a,o)))
+        : o.mode==="supprimer" ? `<span class="none">L'alinéa ${a.n} serait supprimé.</span>` : pointMarks(a,o.texte);
       return `<section class="sheet paper face other" data-num="${o.num}"><div class="head">${badge(o)}<span>N° ${o.num}${o.note?` · ${esc(o.note)}`:""}</span></div><p class="lead">${esc(lead)}</p><div class="body"><p class="txt">${body}</p></div><div class="foot"><span>Objet : ${esc(o.titre)}</span><span class="count">${j+1} / ${n}</span></div></section>`;
     }), Math.max(0,os.findIndex(o=>o.num===focus)));
   }
@@ -537,11 +617,10 @@ function paintOrigOt(){
   if(S.mode!=="origin"||S.pane!==1) return;
   const a=AMEND[curAl()], o=othersOf(curAl()).find(x=>x.num===curOtNum()); if(!o) return;
   $("#origOtHead").textContent=`${ARTICLE.num} · alinéa ${a.n}`;
-  let text, legend;
-  if(o.mode==="supprimer"){ text=`<del>${esc(a.texte)}</del>`; legend="Cet amendement supprime l'alinéa."; }
-  else if(o.mode==="completer"){ text=esc(a.texte); legend="Cet amendement garde l'alinéa et le complète : la phrase ajoutée est surlignée dans sa feuille."; }
-  else { const d=compare(a.texte,o.texte); text=d.origHTML; legend=legendFor(d,"Cet amendement"); }
-  $("#origOtText").innerHTML=text; $("#origOtLegend").innerHTML=legend;
+  const legend= o.mode==="supprimer" ? "Cet amendement supprime l'alinéa : il apparaît barré sur sa feuille."
+    : o.mode==="completer" ? "Cet amendement garde l'alinéa et ajoute une phrase, soulignée sur sa feuille · cliquer pour la comparer."
+    : legendFor(compare(a.texte,o.texte),"Cet amendement","sa feuille");
+  $("#origOtText").textContent=a.texte; $("#origOtLegend").innerHTML=legend;
 }
 
 /* ---------- Tout l'article ---------- */
@@ -556,12 +635,13 @@ function renderArticle(){
   $("#artTitle").innerHTML=`${ARTICLE.num} en entier · <b>votre version</b>`;
   $("#refs").innerHTML=`<span class="refs-lbl">Écarts avec</span>`+[["orig","#6b6457","Texte de la commission"],...refGroups().map(g=>[g,GROUPS[g].color,GROUPS[g].name+(g===ME?" (collègues)":"")])]
     .map(([id,c,l])=>`<button type="button" class="chip" data-ref="${id}" aria-pressed="${id===ref}" style="--g:${c}"><i></i>${esc(l)}</button>`).join("");
-  const legend= ref==="orig" ? "<del>barré</del> : texte de la commission que vous retirez · <ins>surligné</ins> : ce que vous ajoutez · cliquer un alinéa pour y aller"
-    : `<del>barré</del> : rédaction de ${esc(gname)} absente de la vôtre · <ins>surligné</ins> : propre à votre texte · sans amendement de ce groupe, la référence reste le texte de la commission`;
+  const legend= ref==="orig" ? "Vos modifications par rapport au texte de la commission : <ins>ajouté</ins> · <del>supprimé</del> · cliquer une modification pour la comparer, un alinéa pour y aller"
+    : `Par rapport à la version de ${esc(gname)} : <ins>propre à votre texte</ins> · <del>chez eux, pas chez vous</del> · sans amendement de ce groupe, la référence reste le texte de la commission`;
+  const hMeta=a=>({refLabel:ref==="orig"?"Texte de la commission":`Version de ${gname}`,refColor:ref==="orig"?"#6b6457":GROUPS[ref].color,label:"Votre version",color:GROUPS[ME].color,where:`alinéa ${a.n}`});
   const rows=ARTICLE.alineas.map(a=>{
     if(a.chapeau) return `<li><span class="n">${a.n}</span><div>${esc(a.texte)}</div></li>`;
     const i=AMEND.indexOf(a), mine=strip(MINE[i].texte), G=groupAl(a,ref), n=othersOf(i).length;
-    const body= G.o&&G.o.mode==="supprimer" ? esc(mine) : inlineDiff(G.text,mine);
+    const body= G.o&&G.o.mode==="supprimer" ? esc(mine) : inlineDiff(G.text,mine,hMeta(a));
     const meta= ref==="orig" ? `${n} ${plural(n,"amendement","amendements")} d'autres groupes`
       : !G.o ? `pas d'amendement de ce groupe : comparé au texte de la commission`
       : G.o.mode==="supprimer" ? `ce groupe supprime l'alinéa (n° ${G.o.num})` : `amendement n° ${G.o.num} · ${esc(G.o.titre)}`;
@@ -589,10 +669,11 @@ function renderLib(){
   renderSel();
 }
 function renderSel(){
-  const E=S.libE, sel=[...S.libSel].map(id=>E.find(e=>e.id===id)).filter(Boolean), ref=E[0].text||"", gone=S.mode==="passage"?"Supprime ce point":"Supprime l'alinéa";
+  const E=S.libE, sel=[...S.libSel].map(id=>E.find(e=>e.id===id)).filter(Boolean), ref=E[0].text||"", gone=S.mode==="passage"?"supprime ce point":"supprime l'alinéa";
+  const a=AMEND[curAl()], p=S.mode==="passage"?curPt():null, meta=e=>({...COMMISSION,label:e.label+(e.id==="mine"?"":` · ${e.sub}`),color:e.color,where:p?`${p.label.toLowerCase()}, alinéa ${a.n}`:`alinéa ${a.n}`});
   $("#pLib").classList.toggle("has-sel",sel.length>0);
   $("#selCount").innerHTML=`<b>${sel.length}</b> ${plural(sel.length,"rédaction comparée","rédactions comparées")}`;
-  $("#selList").innerHTML=sel.map(e=>`<div class="sel-card paper"><div class="sel-head"><i style="--g:${e.color}"></i><b>${esc(e.label)}</b><span>${esc(e.sub)}</span><button type="button" class="x" data-x="${esc(e.id)}" aria-label="Retirer ${esc(e.label)} de la comparaison">×</button></div><p class="sel-text${e.text==null?" none":""}">${e.text==null?gone:e.id==="orig"?esc(e.text):compare(ref,e.text).mineHTML}</p></div>`).join("");
+  $("#selList").innerHTML=sel.map(e=>`<div class="sel-card paper"><div class="sel-head"><i style="--g:${e.color}"></i><b>${esc(e.label)}</b><span>${esc(e.sub)}</span><button type="button" class="x" data-x="${esc(e.id)}" aria-label="Retirer ${esc(e.label)} de la comparaison">×</button></div><p class="sel-text">${e.id==="orig"?esc(e.text||""):e.text==null?`${inlineDiff(ref,"",meta(e))} <span class="none">(${gone})</span>`:inlineDiff(ref,e.text,meta(e))}</p></div>`).join("");
 }
 function toggleLib(id){
   S.libSel.has(id)?S.libSel.delete(id):S.libSel.add(id);
@@ -665,12 +746,12 @@ function chrome(){
   setHandle(hLeft, P===-1 ? null : (P===0?`<b>Tout</b> l'article`:P===1?(atP?`<b>Ma</b> rédaction`:`<b>Mon</b> amendement`):`<b>La</b> pile`)+chev);
   setHandle(hRight, P===2 ? null : (P===-1?`<b>Mon</b> amendement`:P===0?`<b>${nOt}</b> ${atP?plural(nOt,"autre rédaction","autres rédactions"):plural(nOt,"autre amendement","autres amendements")}`:`<b>Comparer</b> côte à côte`)+chev);
   $("#hint").innerHTML=
-      P===-1 ? "<b>Défiler</b> : tout l'article · <b>clic sur un alinéa</b> : y aller · <b>vers la gauche</b> : votre amendement"
+      P===-1 ? "<b>Défiler</b> : tout l'article · <b>clic sur une modification</b> : la comparer · <b>clic sur un alinéa</b> : y aller · <b>vers la gauche</b> : votre amendement"
     : P===2 ? `<b>Défiler</b> : les rédactions · <b>clic</b> : comparer · <b>${atP?"pincer":"écarter"}</b> : ${atP?"l'alinéa":"un passage"} · <b>vers la droite</b> : la pile`
-    : P===1 ? (m==="origin" ? "<b>Haut / bas</b> : les amendements · <b>écarter les doigts</b> ou <b>Échap</b> : revenir"
+    : P===1 ? (m==="origin" ? "<b>Haut / bas</b> : les amendements · <b>clic sur une modification</b> : la comparer · <b>écarter les doigts</b> ou <b>Échap</b> : revenir"
              : atP ? "<b>Haut / bas</b> : les autres rédactions · <b>pincer</b> : l'alinéa · <b>gauche</b> : comparer · <b>droite</b> : la vôtre"
              : "<b>Haut / bas</b> : les amendements · <b>pincer</b> : leur écart à l'origine · <b>gauche</b> : comparer · <b>droite</b> : le vôtre")
-    : m==="origin" ? "<b>Haut / bas</b> : les alinéas · <b>clic sur votre texte</b> : modifier · <b>écarter les doigts</b> ou <b>Échap</b> : revenir"
+    : m==="origin" ? "<b>Haut / bas</b> : les alinéas · <b>clic sur une modification</b> : la comparer · <b>ailleurs</b> : modifier · <b>Échap</b> : revenir"
     : atP ? "<b>Haut / bas</b> : les autres passages · <b>gauche</b> : ce passage chez les autres · <b>pincer</b> : l'alinéa"
     : "<b>Haut / bas</b> : les alinéas · <b>clic sur un surlignage</b> : l'isoler · <b>pincer</b> : le texte d'origine · <b>gauche</b> : les autres · <b>droite</b> : tout l'article";
   const d=verticalDrum();
@@ -693,7 +774,7 @@ function fit(){ const ta=$("#edText"); if(!ta) return; ta.style.height="auto"; t
 function onEdit(){
   const ta=$("#edText"); if(!ta) return;
   const a=AMEND[S.edit], text=ta.value;
-  $("#edMirror").innerHTML=(S.mode==="origin"?compare(a.texte,text).mineHTML:pointMarks(a,text))+(text.endsWith("\n")?" ":"");
+  $("#edMirror").innerHTML=(S.mode==="origin"?liveHTML(a.texte,text):pointMarks(a,text))+(text.endsWith("\n")?" ":"");
   paintOrig(text); fit(); dAl.layout();
 }
 function openEditor(e){
@@ -726,7 +807,7 @@ $("#drumAl").addEventListener("click", e=>{
   const i=+f.dataset.i;
   if(i!==dAl.cur){ if(S.edit<0) dAl.to(i); return; }
   if(S.edit>=0) return;
-  if(S.mode==="origin"){ if(e.target.closest(".body")) openEditor(e); return; }
+  if(S.mode==="origin"){ const h=e.target.closest("[data-h]"); if(h) openLoupe(h.dataset.h); else if(e.target.closest(".body")) openEditor(e); return; }
   const mk=e.target.closest("mark.pt");
   if(mk){ clearTimeout(clickTimer); const k=mk.dataset.k; clickTimer=setTimeout(()=>enterPassage(k),260); } // laisse la place au double-clic
 });
@@ -735,13 +816,31 @@ $("#drumPt").addEventListener("click", e=>{ const f=e.target.closest(".face"); i
 $("#drumOt").addEventListener("click", e=>{
   const f=e.target.closest(".face"); if(!f) return;
   if(+f.dataset.i!==dOt.cur){ dOt.to(+f.dataset.i); return; }
+  const h=e.target.closest("[data-h]"); if(h){ openLoupe(h.dataset.h); return; }
   const mk=e.target.closest("mark.pt"); if(mk&&S.mode==="alinea") enterPassage(mk.dataset.k,f.dataset.num);
 });
-$("#art").addEventListener("click", e=>{ const li=e.target.closest("li[data-i]"); if(!li) return; if(S.mode==="passage") setMode("alinea"); dAl.to(+li.dataset.i); setPane(0); });
+$("#art").addEventListener("click", e=>{ const h=e.target.closest("[data-h]"); if(h){ openLoupe(h.dataset.h); return; } const li=e.target.closest("li[data-i]"); if(!li) return; if(S.mode==="passage") setMode("alinea"); dAl.to(+li.dataset.i); setPane(0); });
 $("#refs").addEventListener("click", e=>{ const c=e.target.closest(".chip"); if(!c) return; S.ref=c.dataset.ref; const sc=$("#refs").scrollLeft; renderArticle(); $("#refs").scrollLeft=sc; });
 $("#libList").addEventListener("click", e=>{ const it=e.target.closest(".lib-item"); if(it) toggleLib(it.dataset.id); });
 $("#libList").addEventListener("keydown", e=>{ const it=e.target.closest(".lib-item"); if(it&&(e.key==="Enter"||e.key===" ")){ e.preventDefault(); e.stopPropagation(); toggleLib(it.dataset.id); } });
-$("#selList").addEventListener("click", e=>{ const x=e.target.closest("[data-x]"); if(x) toggleLib(x.dataset.x); });
+$("#selList").addEventListener("click", e=>{ const x=e.target.closest("[data-x]"); if(x){ toggleLib(x.dataset.x); return; } const h=e.target.closest("[data-h]"); if(h) openLoupe(h.dataset.h); });
+
+/* ---------- Loupe : une zone de modification et la commission, côte à côte ---------- */
+const loupe=$("#loupe");
+function openLoupe(id){
+  const h=HUNKS.get(+id); if(!h) return;
+  const ctx=t=>t?`<span class="ctx">${esc(t)}</span>`:"";
+  const refPart=h.seg.filter(o=>o.type==="del").map(o=>o.text).join("");
+  const left=ctx(h.before)+esc(refPart)+ctx(h.after), right=ctx(h.before)+renderOps(h.seg)+ctx(h.after);
+  const card=(color,label,body,empty)=>`<section class="lc paper"><div class="head"><span class="group-badge" style="--g:${color}"><i></i>${esc(label)}</span></div><p${empty?' class="none"':""}>${body}</p></section>`;
+  $("#loupeTitle").innerHTML=`Modification · <b>${esc(h.meta.where||"")}</b>`;
+  $("#loupeCols").innerHTML=card(h.meta.refColor,h.meta.refLabel,left.trim()?left:"(rien à cet endroit)",!left.trim())+card(h.meta.color,h.meta.label,right);
+  loupe.classList.add("on"); loupe.setAttribute("aria-hidden","false"); $("#loupeClose").focus({preventScroll:true});
+}
+function closeLoupe(){ loupe.classList.remove("on"); loupe.setAttribute("aria-hidden","true"); }
+const loupeOpen=()=>loupe.classList.contains("on");
+$("#loupeClose").addEventListener("click", closeLoupe);
+loupe.addEventListener("click", e=>{ if(e.target===loupe) closeLoupe(); });
 $("#selClear").addEventListener("click", ()=>{ S.libSel=new Set(); renderLib(); chrome(); });
 rail.addEventListener("click", e=>{ const b=e.target.closest("button"), d=verticalDrum(); if(b&&d) d.to(+b.dataset.i); });
 hTop.addEventListener("click", ()=>zoomStep(S.pane===2 ? (S.mode==="passage"?-1:1) : (S.mode==="origin"?1:-1)));
@@ -749,6 +848,7 @@ hLeft.addEventListener("click", ()=>setPane(S.pane-1));
 hRight.addEventListener("click", ()=>setPane(S.pane+1));
 window.addEventListener("resize", ()=>{ fit(); dAl.layout(); dPt.layout(); dOt.layout(); });
 window.addEventListener("keydown", e=>{
+  if(loupeOpen()){ if(e.key==="Escape"){ e.preventDefault(); closeLoupe(); } return; }
   if(S.edit>=0||e.ctrlKey||e.metaKey||e.altKey) return;
   if(e.key==="Escape"){ back(); return; }
   if(e.target.closest&&e.target.closest("button,.lib-item")&&(e.key===" "||e.key==="Enter")) return;
@@ -772,7 +872,7 @@ stage.addEventListener("pointerdown", e=>{
   touches.set(e.pointerId,{x:e.clientX,y:e.clientY});
   if(touches.size===2){ if(g&&g.axis==="v"&&g.drum) g.drum.snap(g.start,0); g=null; const mk=e.target.closest("mark.pt"); pinch={d0:dist()||1,done:false,k:mk?mk.dataset.k:null}; return; }
   if(touches.size>1) return;
-  if(e.target.closest(".handle,.rail,button,textarea,.refs")) return;
+  if(e.target.closest(".handle,.rail,button,textarea,.refs,.loupe")) return;
   if(S.edit>=0&&e.target.closest(".face.editing")) return;
   g={id:e.pointerId,x:e.clientX,y:e.clientY,axis:null,ly:e.clientY,lt:performance.now(),v:0};
 });
@@ -808,6 +908,7 @@ let zw=null, zwT=0, wg=null, wgT=0;
 const scrollsY=el=>el&&el.scrollHeight>el.clientHeight+1, scrollsX=el=>el&&el.scrollWidth>el.clientWidth+1;
 stage.addEventListener("wheel", e=>{
   const kf=e.deltaMode===1?16:e.deltaMode===2?innerHeight:1, dx=e.deltaX*kf, dy=e.deltaY*kf;
+  if(loupeOpen()){ e.preventDefault(); return; }
   if(e.ctrlKey){
     e.preventDefault();
     if(!zw){ const mk=e.target.closest("mark.pt"); zw={acc:0,done:false,k:mk?mk.dataset.k:null}; }
