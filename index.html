@@ -2,13 +2,14 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
-/* Scène 2D : une feuille au centre dans un espace sombre. Haut/bas fait défiler les idées principales de mon texte ;
-   dézoomer fait apparaître l'alinéa d'origine ; les autres amendements remplacent la feuille, dans la même matière papier. */
+/* Scène 2D : des feuilles dans un espace sombre. Trois gestes, même sens à chaque échelle :
+   haut/bas = parcourir mon texte ; gauche = la même unité chez les autres groupes ; clic/pincer = changer d'échelle. */
 :root{
   --bg:#0b0d12; --bg-2:#11141b; --fg:#e8e6df; --muted:#8a8f9b; --accent:#d9b56a; --accent-soft:rgba(217,181,106,.28); --line:#232733; --line-2:#2f3443;
   --paper:#f4f1e9; --paper-2:#e9e4d8; --paper-ink:#1d1a16; --paper-muted:#6b6457; --paper-line:#c9bfa6; --paper-frame:#ece7db;
   --f-ui:"IBM Plex Sans",system-ui,sans-serif; --f-legal:"Source Serif 4",Georgia,serif;
   --gutter-l:max(16px,env(safe-area-inset-left,0px)); --gutter-r:max(16px,env(safe-area-inset-right,0px));
+  --ease:cubic-bezier(.2,.8,.2,1);
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -25,35 +26,49 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);overf
 .paper .lead{font:italic 400 15px var(--f-legal);color:var(--paper-muted);margin:4px 0 0}
 .paper .body{font:400 clamp(17px,2.2vw,23px)/1.5 var(--f-legal);max-width:68ch}
 .paper .body p{margin:0}
-.group-badge{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+.paper .none{font-style:italic;color:var(--paper-muted)}
+.group-badge{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;min-width:0}
 .group-badge i{width:8px;height:8px;border-radius:50%;background:var(--g);display:inline-block;flex:none}
+.group-badge .name{font:600 clamp(17px,1.9vw,21px)/1.2 var(--f-legal);color:var(--paper-ink);letter-spacing:0;text-transform:none;white-space:normal}
 
-/* marques sur le papier : l'idée en cours (surlignée) ; les écarts avec l'origine (ajouté surligné / supprimé barré) */
-.paper mark.idea,.paper ins{color:inherit;text-decoration:none;background:rgba(217,181,106,.5);border-radius:2px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
-.paper mark.idea{box-shadow:0 0 0 2px rgba(217,181,106,.5)}
+/* marques : les passages (surlignage léger, cliquable) ; les écarts (ajouté surligné / supprimé barré) */
+.paper mark.pt{color:inherit;background:rgba(217,181,106,.17);box-shadow:inset 0 -2px 0 rgba(217,181,106,.75);border-radius:2px;cursor:pointer;transition:background .2s;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.paper mark.pt:hover{background:rgba(217,181,106,.4)}
+.paper ins{color:inherit;text-decoration:none;background:rgba(217,181,106,.5);border-radius:2px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .paper del{text-decoration:line-through 2px #a8452f;color:#7d7466;background:rgba(168,69,47,.08);border-radius:2px}
 
-/* --- deux volets au centre : ma feuille / les autres --- */
+/* --- deux volets : le mien / les autres --- */
 .center{position:absolute;inset:0}
-.pane{position:absolute;inset:0;padding:72px var(--gutter-r) 56px var(--gutter-l);transition:transform .5s cubic-bezier(.2,.8,.2,1),opacity .4s}
-.pane-mine{display:flex;flex-direction:column;align-items:center;justify-content:center}
-.pane-others{transform:translateX(60%);opacity:0;pointer-events:none;display:grid;justify-content:center;grid-template-columns:min(880px,100%)}
+.pane{position:absolute;inset:0;transition:transform .5s var(--ease),opacity .4s}
+.pane-others{padding:84px var(--gutter-r) 56px var(--gutter-l);transform:translateX(60%);opacity:0;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center}
 #stage.others .pane-mine{transform:translateX(-50%);opacity:0;pointer-events:none}
 #stage.others .pane-others{transform:none;opacity:1;pointer-events:auto}
-.zoomer{width:100%;display:flex;flex-direction:column;align-items:center;transform-origin:50% 50%}
 
-/* --- ma feuille : un tambour de faces, même texte, une idée surlignée par face --- */
+/* --- échelles empilées dans mon volet : alinéa (0) · groupes (0,5) · passage (1) --- */
+.layer{position:absolute;inset:0;padding:72px var(--gutter-r) 56px var(--gutter-l);display:flex;flex-direction:column;align-items:center;justify-content:center;
+  opacity:0;visibility:hidden;pointer-events:none;transform:scale(.86);transition:opacity .4s,transform .5s var(--ease),visibility 0s linear .5s}
+.layer.shallow{transform:scale(1.18)}
+.layer.on{opacity:1;visibility:visible;pointer-events:auto;transform:none;transition:opacity .4s,transform .5s var(--ease),visibility 0s}
+.layer-pt,.layer-sq{padding-top:84px}
+.pile-title{position:absolute;top:44px;left:var(--gutter-l);right:var(--gutter-r);z-index:2;margin:0;text-align:center;color:var(--muted);font-size:11px;letter-spacing:.12em;text-transform:uppercase;line-height:1.6;pointer-events:none}
+.pile-title b{color:var(--fg);font-weight:500}
+
+/* --- la pile : un tambour de feuilles --- */
 .drum{position:relative;width:100%;flex:none;perspective:1600px}
 .sheet{display:grid;grid-template-rows:auto auto minmax(0,1fr) auto;gap:10px;padding:34px 40px 26px;transition:box-shadow .35s}
-.face{position:absolute;top:0;left:0;right:0;margin:0 auto;width:min(880px,100%);max-height:calc(100vh - 150px);max-height:calc(100dvh - 150px);
+.face{position:absolute;top:0;left:0;right:0;margin:0 auto;width:min(880px,100%);max-height:calc(100vh - 160px);max-height:calc(100dvh - 160px);
   touch-action:none;user-select:none;-webkit-user-select:none;will-change:transform,opacity}
+.face.passage{width:min(680px,100%);grid-template-rows:auto minmax(0,1fr) auto}
 .face:not(.cur){cursor:pointer}
 .face.editing{user-select:text;-webkit-user-select:text}
 .sheet.editing{box-shadow:0 30px 80px rgba(0,0,0,.65), 0 0 0 2px var(--accent)}
 .sheet .body{overflow:auto;min-height:0}
-.face.cur .body{cursor:text}
-.sheet .foot{display:flex;justify-content:flex-end;gap:8px;align-items:center;min-height:30px}
+.face.al.cur .body{cursor:text}
+.ptxt{font:400 clamp(26px,3.6vw,38px)/1.3 var(--f-legal);margin:8px 0 6px;max-width:none}
+.ptxt ins{background:rgba(217,181,106,.4)}
+.sheet .foot{display:flex;justify-content:flex-end;gap:12px;align-items:center;min-height:30px}
 .sheet .foot span{margin-right:auto;font-size:11.5px;color:#8a8070}
+.sheet .foot .count{margin-right:0;font-size:11px;letter-spacing:.08em;color:var(--paper-muted);white-space:nowrap}
 .sheet .foot .tag{display:inline-flex;align-items:center;gap:8px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-muted)}
 .sheet .foot .tag b{color:var(--paper-ink);font-weight:600}
 .sheet .foot .tag i{width:8px;height:8px;border-radius:2px;background:var(--accent);flex:none}
@@ -68,43 +83,49 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);overf
 .sheet textarea{position:relative;color:inherit;background:transparent;resize:none;width:100%;min-height:3em;display:block;overflow:hidden;caret-color:var(--paper-ink)}
 .sheet textarea:focus{outline:none}
 
-/* repères du tambour, à gauche */
-.rail{position:absolute;left:max(5px,env(safe-area-inset-left,0px));top:50%;transform:translateY(-50%);z-index:9;display:grid;gap:12px;transition:opacity .3s}
-.rail button{position:relative;width:8px;height:8px;padding:0;border-radius:50%;border:1px solid #4a5062;background:transparent;cursor:pointer}
-.rail button:first-child{border-radius:1px}
-.rail button::after{content:"";position:absolute;inset:-7px}
-.rail button.on{background:var(--accent);border-color:var(--accent)}
-.rail button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-#stage.others .rail,#stage.zoomed .rail,#stage.editing .rail{opacity:0;pointer-events:none}
-
-/* --- dézoom : l'alinéa d'origine, seul, au-dessus de ma feuille --- */
-.orig-wrap{width:100%;flex:none;display:grid;grid-template-rows:0fr}
+/* --- dézoom sur un alinéa : son texte d'origine, au-dessus de ma feuille --- */
+.zoomer{width:100%;display:flex;flex-direction:column;align-items:center;transform-origin:50% 50%;transition:transform .45s var(--ease)}
+#stage[data-mode=origin] .zoomer{transform:scale(.9)}
+.orig-wrap{width:100%;flex:none;display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s var(--ease)}
+#stage[data-mode=origin] .orig-wrap{grid-template-rows:1fr}
 .orig-clip{min-height:0;overflow:hidden;margin:0 -40px;padding:0 40px 24px}
-.orig{width:min(880px,100%);margin:0 auto;display:grid;gap:10px;padding:24px 32px 18px;opacity:0;
+.orig{width:min(880px,100%);margin:0 auto;display:grid;gap:10px;padding:24px 32px 18px;opacity:0;transform:translateY(-28px);transition:opacity .35s,transform .45s var(--ease);
   box-shadow:0 14px 34px rgba(0,0,0,.55), 0 0 0 1px rgba(217,181,106,.25)}
+#stage[data-mode=origin] .orig{opacity:1;transform:none}
 .orig .body{font:400 clamp(16px,1.9vw,20px)/1.5 var(--f-legal);max-width:none;max-height:28vh;overflow:auto;touch-action:pan-y;padding:4px 10px 4px 14px;background:rgba(217,181,106,.16);box-shadow:inset 4px 0 0 var(--accent);border-radius:2px}
 .orig .legend{font:400 12px/1.45 var(--f-ui);color:var(--paper-muted);margin:0}
 .orig .legend ins,.orig .legend del{padding:0 3px}
 
-/* --- les autres : colonne de boîtes papier, défilement avec inertie --- */
-.scroller{position:relative;overflow:hidden;cursor:grab;touch-action:none;min-width:0}
-.scroller.grabbing{cursor:grabbing}
-.list{position:absolute;left:0;right:0;top:0;padding:4px 0 40px;display:grid;gap:18px;will-change:transform}
-.list .title{color:var(--muted);font-size:11px;letter-spacing:.12em;text-transform:uppercase;text-align:center;margin-bottom:4px}
-.box{padding:22px 28px 20px;display:grid;gap:10px;transition:outline-color .25s}
-.box .head{padding-bottom:0;border-bottom:0}
-.box.open .head{padding-bottom:8px;border-bottom:1px solid var(--paper-line)}
-.box .name{font:600 clamp(18px,2vw,22px)/1.2 var(--f-legal);color:var(--paper-ink);letter-spacing:0;text-transform:none}
-.box .num{font-size:11px;letter-spacing:.1em;color:var(--paper-muted)}
-.box .more{width:34px;height:34px;border-radius:50%;border:1px solid #a89c80;background:transparent;color:#4a4336;font:400 22px/1 var(--f-legal);cursor:pointer;display:grid;place-items:center;flex:none;transition:background .2s,color .2s,transform .3s}
-.box .more:hover{background:#2a2620;color:var(--paper)}
-.box .more:focus-visible{outline:2px solid #2a2620;outline-offset:2px}
-.box.open .more{transform:rotate(45deg)}
-.box .detail{display:none;grid-template-rows:auto auto;gap:10px}
-.box.open .detail{display:grid}
-.box .detail .meta{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--paper-muted);margin-top:6px}
-.box .objet{font:italic 400 15px var(--f-legal);color:var(--paper-muted);margin:0}
-.box.open .objet{display:none}
+/* --- dézoom sur un passage : les groupes en petits carrés, puis côte à côte --- */
+.squares,.compare{width:min(1080px,100%);display:grid;gap:20px;justify-items:center}
+.compare{display:none}
+.layer-sq.comparing .squares{display:none}
+.layer-sq.comparing .compare{display:grid}
+.tiles{width:min(760px,100%);display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:14px}
+.tile{position:relative;aspect-ratio:1;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;gap:8px;text-align:left;padding:18px 16px 14px;cursor:pointer;
+  font:600 15px/1.25 var(--f-legal);outline-width:8px;outline-offset:-8px;box-shadow:0 16px 36px rgba(0,0,0,.55), 0 0 0 1px rgba(217,181,106,.2);transition:box-shadow .2s,transform .2s}
+.tile:hover{transform:translateY(-2px)}
+.tile .dot{width:9px;height:9px;border-radius:50%;background:var(--g)}
+.tile small{font:400 10.5px var(--f-ui);letter-spacing:.08em;text-transform:uppercase;color:var(--paper-muted)}
+.tile[aria-pressed=true]{box-shadow:0 16px 36px rgba(0,0,0,.55), 0 0 0 3px var(--accent)}
+.tile[aria-pressed=true]::after{content:"✓";position:absolute;top:10px;right:12px;font:600 13px var(--f-ui);color:#8a6a28}
+.tile:focus-visible{box-shadow:0 0 0 3px var(--fg)}
+.cols{width:100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;max-height:calc(100dvh - 230px);overflow:auto;touch-action:pan-y;padding:16px 6px}
+.col{display:grid;align-content:start;gap:10px;padding:22px 22px 16px;outline-width:10px;outline-offset:-10px;box-shadow:0 16px 36px rgba(0,0,0,.55), 0 0 0 1px rgba(217,181,106,.2)}
+.col .head{flex-wrap:wrap}
+.col .ptxt{font-size:clamp(20px,2.1vw,25px);margin:4px 0}
+.col .note{font:400 11.5px var(--f-ui);color:#8a8070;margin:0}
+.btn{font:500 13px var(--f-ui);letter-spacing:.04em;color:var(--fg);background:rgba(11,13,18,.75);border:1px solid var(--accent);border-radius:999px;padding:9px 20px;cursor:pointer;backdrop-filter:blur(6px)}
+.btn:hover,.btn:focus-visible{background:rgba(217,181,106,.16);outline:none}
+.btn:disabled{opacity:.45;cursor:default;border-color:var(--line-2);background:rgba(11,13,18,.75)}
+
+/* --- repères de la pile, à gauche --- */
+.rail{position:absolute;left:max(5px,env(safe-area-inset-left,0px));top:50%;transform:translateY(-50%);z-index:9;display:grid;gap:12px;transition:opacity .3s}
+.rail button{position:relative;width:8px;height:8px;padding:0;border-radius:50%;border:1px solid #4a5062;background:transparent;cursor:pointer}
+.rail button::after{content:"";position:absolute;inset:-7px}
+.rail button.on{background:var(--accent);border-color:var(--accent)}
+.rail button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.rail:empty,#stage.editing .rail{opacity:0;pointer-events:none}
 
 /* --- poignées --- */
 .handle{position:absolute;z-index:10;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
@@ -115,46 +136,64 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);overf
 .handle.right{right:max(0px,env(safe-area-inset-right,0px));top:50%;transform:rotate(-90deg) translate(50%,-100%);transform-origin:right top;border-right:0;border-radius:10px 10px 0 0;padding:9px 16px 8px}
 .handle .chev{font-size:10px;transition:transform .3s}
 #stage.others .handle.right .chev{transform:rotate(180deg)}
-.handle .alt{display:none} #stage.others .handle .alt{display:inline} #stage.others .handle .def{display:none}
 .handle .zg{font-size:14px;line-height:1}
-.handle .zg::before{content:"⊖"} #stage.zoomed .handle .zg::before{content:"⊕"}
+#stage.others .handle.top,#stage[data-mode=squares] .handle.right{opacity:0;pointer-events:none}
 
 .hint{position:absolute;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:4;font-size:12.5px;color:var(--muted);background:rgba(11,13,18,.6);border:1px solid var(--line);border-radius:999px;padding:6px 14px;backdrop-filter:blur(6px);white-space:nowrap;pointer-events:none}
 .hint b{color:var(--fg);font-weight:500}
 @media (max-width:640px){
   .hint{font-size:11px;padding:5px 10px;white-space:normal;text-align:center;width:max-content;max-width:calc(100vw - 32px);border-radius:12px}
-  .sheet{padding:24px 20px 18px}.orig{padding:18px 20px 14px}.orig-clip{padding-bottom:16px}.box{padding:18px 18px 16px}
+  .sheet{padding:24px 20px 18px}.orig{padding:18px 20px 14px}.orig-clip{padding-bottom:16px}
+  .tiles{grid-template-columns:repeat(3,1fr);gap:10px}.tile{padding:12px 10px 10px;font-size:13px}
 }
-@media (prefers-reduced-motion:reduce){.pane,.sheet,.handle,.rail,.box .more{transition:none}}
+@media (prefers-reduced-motion:reduce){.pane,.layer,.zoomer,.orig-wrap,.orig,.sheet,.handle,.rail,.tile{transition:none}}
 </style>
 
-<div id="stage">
+<div id="stage" data-mode="alinea">
   <div class="center">
     <div class="pane pane-mine">
-      <div class="zoomer" id="zoomer">
-        <div class="orig-wrap" id="origWrap" aria-hidden="true">
-          <div class="orig-clip">
-            <section class="orig paper" id="orig" aria-label="Texte d'origine : article 4, alinéa 2">
-              <div class="head"><span>Texte de la commission</span><span>Article 4 · alinéa 2</span></div>
-              <div class="body"><p id="origText"></p></div>
-              <p class="legend" id="origLegend"></p>
-            </section>
+      <div class="layer layer-al" id="lAl">
+        <div class="zoomer">
+          <div class="orig-wrap" id="origWrap" aria-hidden="true">
+            <div class="orig-clip">
+              <section class="orig paper" id="orig" aria-label="Texte d'origine de l'alinéa">
+                <div class="head"><span>Texte de la commission</span><span id="origHead"></span></div>
+                <div class="body"><p id="origText"></p></div>
+                <p class="legend" id="origLegend"></p>
+              </section>
+            </div>
           </div>
+          <div class="drum" id="drumAl" aria-label="Vos amendements, alinéa par alinéa"></div>
         </div>
-        <div class="drum" id="drum" aria-label="Votre amendement"></div>
+      </div>
+      <div class="layer layer-sq" id="lSq">
+        <p class="pile-title" id="sqTitle"></p>
+        <div class="squares">
+          <div class="tiles" id="tiles" role="group" aria-label="Groupes à comparer"></div>
+          <button class="btn" type="button" id="btnSelect" disabled>Sélectionner</button>
+        </div>
+        <div class="compare">
+          <div class="cols" id="cols"></div>
+          <button class="btn" type="button" id="btnBack">← Changer la sélection</button>
+        </div>
+      </div>
+      <div class="layer layer-pt" id="lPt">
+        <p class="pile-title" id="ptTitle"></p>
+        <div class="drum" id="drumPt" aria-label="Votre rédaction, passage par passage"></div>
       </div>
     </div>
-    <div class="pane pane-others" aria-label="Amendements des autres groupes">
-      <div class="scroller" id="scroller"><div class="list" id="list"></div></div>
+    <div class="pane pane-others" aria-label="Les autres groupes">
+      <p class="pile-title" id="otTitle"></p>
+      <div class="drum" id="drumOt"></div>
     </div>
   </div>
 
-  <nav class="rail" id="rail" aria-label="Idées principales de votre amendement"></nav>
+  <nav class="rail" id="rail" aria-label="Position dans la pile"></nav>
 
-  <button class="handle top" id="hTop" type="button" aria-controls="origWrap" aria-pressed="false"><b>Article 4</b> texte d'origine <span class="zg" aria-hidden="true"></span></button>
-  <button class="handle right" id="hRight" type="button" aria-pressed="false"><span class="def"><b id="nOthers">10</b> autres amendements</span><span class="alt"><b>Mon</b> amendement</span> <span class="chev">▲</span></button>
+  <button class="handle top" id="hTop" type="button" aria-controls="origWrap"></button>
+  <button class="handle right" id="hRight" type="button" aria-pressed="false"></button>
 
-  <span class="hint"><b>Deux doigts haut / bas</b> : les idées · <b>pincer</b> : le texte d'origine · <b>vers la gauche</b> : les autres · <b>double-clic</b> : modifier</span>
+  <span class="hint" id="hint"></span>
 </div>
 
 <script>
@@ -166,44 +205,87 @@ const GROUPS = {
   UT:{name:"Union des territoires", color:"#3b82d6"}, LL:{name:"Libertés locales", color:"#e0671d"}, RC:{name:"Rassemblement des communes", color:"#7c5cd6"},
   GOUV:{name:"Gouvernement", color:"#9aa3b2"}, DC:{name:"Démocratie communale", color:"#2bb3b1"}, AR:{name:"Avenir rural", color:"#8fae3a"}, CP:{name:"Centre et progrès", color:"#d8699a"}
 };
-const AMENDEMENT = { groupe:"PR", numero:"N° 1 (brouillon)", article:"Article 4, alinéa 2", leadIn:"Rédiger ainsi l'alinéa 2 :",
-  texte:"« Les communes de plus de 3 500 habitants doivent compter au moins 25 % de logements sociaux parmi les résidences principales d'ici 2030. En cas de manquement, le préfet peut prononcer un prélèvement sur les ressources fiscales de la commune. »" };
-const ARTICLE = { titre:"Projet de loi portant diverses mesures pour l'accès au logement", num:"Article 4", vise:1,
-  alineas:[
-    "Le chapitre II du titre préliminaire du livre III du code de la construction et de l'habitation est ainsi modifié :",
-    "Les communes de plus de 3 500 habitants doivent compter au moins 25 % de logements sociaux parmi les résidences principales d'ici 2030. En cas de manquement, le préfet peut prononcer un prélèvement sur les ressources fiscales de la commune.",
-    "Le prélèvement mentionné à l'alinéa précédent est affecté au fonds national des aides à la pierre.",
-    "Un décret en Conseil d'État précise les modalités d'application du présent article."
-  ] };
-// Idées principales repérées dans le texte (règles reprises de l'archive v0). Elles servent à surligner, jamais à noter.
-const IDEAS = [
-  {k:"seuil",    label:"Seuil",    re:/(?:plus de|au moins|supérieure? à|excédant)\s+\d[\d\s]*?\s*habitants/i},
-  {k:"taux",     label:"Taux",     re:/\d{1,2}(?:[,.]\d+)?\s*(?:%|pour cent)(?:\s+de\s+logements(?:\s+(?:très\s+)?sociaux)?)?/i},
-  {k:"echeance", label:"Échéance", re:/(?:(?:d['’]ici|avant|au plus tard en|à l['’]horizon)\s+)?\b20[2-9]\d\b/i},
-  {k:"sanction", label:"Sanction", re:/prélèvement(?:\s+sur\s+les\s+ressources\s+fiscales(?:\s+de\s+(?:la\s+commune|l['’]établissement))?)?/i}
-];
-const OTHERS = [
-  {g:"SOL", num:"212", titre:"Relever le taux à 30 % et avancer l'échéance à 2028", lead:"Rédiger ainsi l'alinéa 2 :", texte:"« Les communes de plus de 1 500 habitants doivent compter au moins 30 % de logements sociaux parmi les résidences principales d'ici 2028. En cas de manquement, le préfet prononce un prélèvement sur les ressources fiscales de la commune, majoré de 50 %. »"},
-  {g:"ECO", num:"87", titre:"Porter le taux à 30 % dont un tiers de logements très sociaux", lead:"Rédiger ainsi l'alinéa 2 :", texte:"« Les communes de plus de 3 500 habitants doivent compter au moins 30 % de logements sociaux parmi les résidences principales d'ici 2030, dont un tiers de logements très sociaux. En cas de manquement, le préfet prononce un prélèvement sur les ressources fiscales de la commune. »"},
-  {g:"UT", num:"340", titre:"Ramener le taux à 20 % sous réserve de la disponibilité foncière", lead:"Rédiger ainsi l'alinéa 2 :", texte:"« Les communes de plus de 5 000 habitants doivent compter au moins 20 % de logements sociaux parmi les résidences principales d'ici 2035, sous réserve de la disponibilité foncière constatée par le préfet. En cas de manquement, le préfet peut prononcer un prélèvement sur les ressources fiscales de la commune, après mise en demeure. »"},
-  {g:"LL", num:"15", titre:"Transformer l'obligation en objectif indicatif et supprimer le prélèvement", lead:"Rédiger ainsi l'alinéa 2 :", texte:"« Les communes de plus de 3 500 habitants s'efforcent d'atteindre un objectif indicatif de 20 % de logements sociaux parmi les résidences principales d'ici 2035. Aucun prélèvement ne peut être prononcé à ce titre. »"},
-  {g:"RC", num:"402", titre:"Exempter les communes rurales et relever le seuil à 10 000 habitants", lead:"Rédiger ainsi l'alinéa 2 :", texte:"« Les communes de plus de 10 000 habitants doivent compter au moins 25 % de logements sociaux parmi les résidences principales d'ici 2030. Les communes rurales en sont exemptées. En cas de manquement, le préfet peut prononcer un prélèvement sur les ressources fiscales de la commune, sauf si celle-ci justifie de l'absence de demande locale. »"},
-  {g:"PR", num:"198", titre:"Reporter l'échéance à 2032 et prévoir une mise en demeure préalable", lead:"Rédiger ainsi l'alinéa 2 :", texte:"« Les communes de plus de 3 500 habitants doivent compter au moins 25 % de logements sociaux parmi les résidences principales d'ici 2032. En cas de manquement, le préfet peut prononcer un prélèvement sur les ressources fiscales de la commune, après mise en demeure restée sans effet pendant six mois. »", note:"collègue de votre groupe"},
-  {g:"GOUV", num:"455", titre:"Soumettre le prélèvement à l'avis de la commission départementale de l'habitat", lead:"Rédiger ainsi l'alinéa 2 :", texte:"« Les communes de plus de 3 500 habitants doivent compter au moins 25 % de logements sociaux parmi les résidences principales d'ici 2030. En cas de manquement, le préfet peut prononcer un prélèvement sur les ressources fiscales de la commune, après avis de la commission départementale de l'habitat. »"},
-  {g:"DC", num:"263", titre:"Apprécier le taux à l'échelle de l'intercommunalité", lead:"Rédiger ainsi l'alinéa 2 :", texte:"« Les établissements publics de coopération intercommunale de plus de 20 000 habitants doivent compter au moins 25 % de logements sociaux parmi les résidences principales d'ici 2030, répartis entre leurs communes membres. En cas de manquement, le préfet peut prononcer un prélèvement sur les ressources fiscales de l'établissement. »"},
-  {g:"AR", num:"119", titre:"Relever le seuil à 7 000 habitants et exclure les communes de montagne", lead:"Rédiger ainsi l'alinéa 2 :", texte:"« Les communes de plus de 7 000 habitants doivent compter au moins 25 % de logements sociaux parmi les résidences principales d'ici 2030. Les communes classées en zone de montagne en sont exclues. En cas de manquement, le préfet peut prononcer un prélèvement sur les ressources fiscales de la commune. »"},
-  {g:"CP", num:"377", titre:"Moduler le prélèvement selon l'effort de construction constaté", lead:"Compléter l'alinéa 2 par la phrase suivante :", texte:"« Le montant du prélèvement est réduit de moitié lorsque la commune justifie d'un rythme annuel de construction de logements sociaux supérieur à la moyenne départementale. »"}
-];
+const ME = "PR";
+// Chaque alinéa porte ses passages : une règle qui les retrouve dans n'importe quelle rédaction (la mienne, celle des autres).
+const ARTICLE = { titre:"Projet de loi portant diverses mesures pour l'accès au logement", num:"Article 4", alineas:[
+  {n:1, chapeau:true, texte:"Le chapitre II du titre préliminaire du livre III du code de la construction et de l'habitation est ainsi modifié :"},
+  {n:2, texte:"Les communes de plus de 3 500 habitants doivent compter au moins 25 % de logements sociaux parmi les résidences principales d'ici 2030. En cas de manquement, le préfet peut prononcer un prélèvement sur les ressources fiscales de la commune.",
+   points:[
+    {k:"seuil",    label:"Seuil",    re:/(?:plus de|au moins|supérieure? à|excédant)\s+\d[\d\s]*?\s*habitants/i},
+    {k:"taux",     label:"Taux",     re:/(?:(?:au moins|au plus|objectif indicatif de)\s+)?\d{1,2}(?:[,.]\d+)?\s*(?:%|pour cent)\s+de\s+logements(?:\s+(?:très\s+)?sociaux)?/i},
+    {k:"echeance", label:"Échéance", re:/(?:(?:d['’]ici|avant|au plus tard en|à l['’]horizon)\s+)?\b20[2-9]\d\b/i},
+    {k:"sanction", label:"Sanction", re:/(?:le préfet\s+)?(?:peut\s+)?prononcer?\s+un\s+prélèvement\s+sur\s+les\s+ressources\s+fiscales\s+de\s+(?:la\s+commune|l['’]établissement)(?:,\s*(?:majoré|après|sauf)[^.]*)?/i}]},
+  {n:3, texte:"Le prélèvement mentionné à l'alinéa précédent est plafonné à 5 % des dépenses réelles de fonctionnement de la commune et affecté au fonds national des aides à la pierre.",
+   points:[
+    {k:"plafond",     label:"Plafond",     re:/plafonné\s+à\s+\d{1,2}(?:[,.]\d+)?\s*%\s+des\s+dépenses\s+réelles\s+de\s+fonctionnement(?:\s+de\s+la\s+commune)?/i},
+    {k:"affectation", label:"Affectation", re:/affecté\s+(?:au|à\s+la|à\s+l['’]|aux)\s*[^.;]+/i}]},
+  {n:4, texte:"Les communes nouvellement soumises à l'obligation disposent d'un délai de trois ans pour adopter un programme local de l'habitat compatible avec cet objectif.",
+   points:[
+    {k:"delai",      label:"Délai",      re:/délai\s+de\s+(?:\d+|[a-zé]+)\s+(?:ans?|mois)/i},
+    {k:"instrument", label:"Instrument", re:/(?:adopter|signer|élaborer)\s+[^.;]+/i}]},
+  {n:5, texte:"Le préfet peut, après avis du comité régional de l'habitat, exempter les communes dont plus de la moitié du territoire urbanisé est inconstructible.",
+   points:[
+    {k:"procedure", label:"Procédure", re:/après\s+avis\s+(?:conforme\s+)?d(?:u|e\s+la|es)\s+[^,]+/i},
+    {k:"exemption", label:"Exemption", re:/exempter\s+[^.;]+/i}]},
+  {n:6, texte:"Les logements locatifs intermédiaires sont décomptés comme logements sociaux dans la limite de 10 % de l'objectif.",
+   points:[
+    {k:"decompte", label:"Logements décomptés", re:/Les\s+logements\s+[^.;]*?(?=\s+(?:sont|est)\s+décomptés)/i},
+    {k:"limite",   label:"Plafond",             re:/dans\s+la\s+limite\s+de\s+\d{1,2}(?:[,.]\d+)?\s*%\s+de\s+l['’]objectif/i}]}
+]};
+// Amendements des autres groupes, par alinéa. mode : rediger (par défaut) · completer · supprimer.
+const OTHERS = {
+  2:[
+    {g:"SOL", num:"212", titre:"Relever le taux à 30 % et avancer l'échéance à 2028", texte:"« Les communes de plus de 1 500 habitants doivent compter au moins 30 % de logements sociaux parmi les résidences principales d'ici 2028. En cas de manquement, le préfet prononce un prélèvement sur les ressources fiscales de la commune, majoré de 50 %. »"},
+    {g:"ECO", num:"87", titre:"Porter le taux à 30 % dont un tiers de logements très sociaux", texte:"« Les communes de plus de 3 500 habitants doivent compter au moins 30 % de logements sociaux parmi les résidences principales d'ici 2030, dont un tiers de logements très sociaux. En cas de manquement, le préfet prononce un prélèvement sur les ressources fiscales de la commune. »"},
+    {g:"UT", num:"340", titre:"Ramener le taux à 20 % sous réserve de la disponibilité foncière", texte:"« Les communes de plus de 5 000 habitants doivent compter au moins 20 % de logements sociaux parmi les résidences principales d'ici 2035, sous réserve de la disponibilité foncière constatée par le préfet. En cas de manquement, le préfet peut prononcer un prélèvement sur les ressources fiscales de la commune, après mise en demeure. »"},
+    {g:"LL", num:"15", titre:"Transformer l'obligation en objectif indicatif et supprimer le prélèvement", texte:"« Les communes de plus de 3 500 habitants s'efforcent d'atteindre un objectif indicatif de 20 % de logements sociaux parmi les résidences principales d'ici 2035. Aucun prélèvement ne peut être prononcé à ce titre. »"},
+    {g:"RC", num:"402", titre:"Exempter les communes rurales et relever le seuil à 10 000 habitants", texte:"« Les communes de plus de 10 000 habitants doivent compter au moins 25 % de logements sociaux parmi les résidences principales d'ici 2030. Les communes rurales en sont exemptées. En cas de manquement, le préfet peut prononcer un prélèvement sur les ressources fiscales de la commune, sauf si celle-ci justifie de l'absence de demande locale. »"},
+    {g:"PR", num:"198", note:"collègue de votre groupe", titre:"Reporter l'échéance à 2032 et prévoir une mise en demeure préalable", texte:"« Les communes de plus de 3 500 habitants doivent compter au moins 25 % de logements sociaux parmi les résidences principales d'ici 2032. En cas de manquement, le préfet peut prononcer un prélèvement sur les ressources fiscales de la commune, après mise en demeure restée sans effet pendant six mois. »"},
+    {g:"GOUV", num:"455", titre:"Soumettre le prélèvement à l'avis de la commission départementale de l'habitat", texte:"« Les communes de plus de 3 500 habitants doivent compter au moins 25 % de logements sociaux parmi les résidences principales d'ici 2030. En cas de manquement, le préfet peut prononcer un prélèvement sur les ressources fiscales de la commune, après avis de la commission départementale de l'habitat. »"},
+    {g:"DC", num:"263", titre:"Apprécier le taux à l'échelle de l'intercommunalité", texte:"« Les établissements publics de coopération intercommunale de plus de 20 000 habitants doivent compter au moins 25 % de logements sociaux parmi les résidences principales d'ici 2030, répartis entre leurs communes membres. En cas de manquement, le préfet peut prononcer un prélèvement sur les ressources fiscales de l'établissement. »"},
+    {g:"AR", num:"119", titre:"Relever le seuil à 7 000 habitants et exclure les communes de montagne", texte:"« Les communes de plus de 7 000 habitants doivent compter au moins 25 % de logements sociaux parmi les résidences principales d'ici 2030. Les communes classées en zone de montagne en sont exclues. En cas de manquement, le préfet peut prononcer un prélèvement sur les ressources fiscales de la commune. »"},
+    {g:"CP", num:"377", mode:"completer", titre:"Moduler le prélèvement selon l'effort de construction constaté", texte:"« Le montant du prélèvement est réduit de moitié lorsque la commune justifie d'un rythme annuel de construction de logements sociaux supérieur à la moyenne départementale. »"}
+  ],
+  3:[
+    {g:"SOL", num:"213", titre:"Doubler le plafond du prélèvement", texte:"« Le prélèvement mentionné à l'alinéa précédent est plafonné à 10 % des dépenses réelles de fonctionnement de la commune et affecté au fonds national des aides à la pierre. »"},
+    {g:"UT", num:"341", titre:"Abaisser le plafond et affecter le prélèvement au foncier régional", texte:"« Le prélèvement mentionné à l'alinéa précédent est plafonné à 3 % des dépenses réelles de fonctionnement de la commune et affecté à l'établissement public foncier de la région. »"},
+    {g:"ECO", num:"88", titre:"Flécher le prélèvement vers les logements très sociaux du département", texte:"« Le prélèvement mentionné à l'alinéa précédent est plafonné à 5 % des dépenses réelles de fonctionnement de la commune et affecté au financement de logements très sociaux dans le département. »"},
+    {g:"LL", num:"16", mode:"supprimer", titre:"Supprimer le plafonnement et l'affectation du prélèvement"},
+    {g:"RC", num:"403", titre:"Limiter le prélèvement à 2 % des dépenses de fonctionnement", texte:"« Le prélèvement mentionné à l'alinéa précédent est plafonné à 2 % des dépenses réelles de fonctionnement de la commune et affecté au fonds national des aides à la pierre. »"}
+  ],
+  4:[
+    {g:"PR", num:"199", note:"collègue de votre groupe", titre:"Porter le délai à cinq ans", texte:"« Les communes nouvellement soumises à l'obligation disposent d'un délai de cinq ans pour adopter un programme local de l'habitat compatible avec cet objectif. »"},
+    {g:"SOL", num:"214", titre:"Réduire le délai à deux ans et prévoir la carence", texte:"« Les communes nouvellement soumises à l'obligation disposent d'un délai de deux ans pour adopter un programme local de l'habitat compatible avec cet objectif, sous peine de carence constatée par le préfet. »"},
+    {g:"DC", num:"264", titre:"Confier le programme à l'intercommunalité", texte:"« Les communes nouvellement soumises à l'obligation disposent d'un délai de trois ans pour adopter un programme local de l'habitat intercommunal compatible avec cet objectif. »"},
+    {g:"GOUV", num:"456", titre:"Remplacer le programme local par un contrat de mixité sociale", texte:"« Les communes nouvellement soumises à l'obligation disposent d'un délai de trois ans pour signer avec l'État un contrat de mixité sociale. »"},
+    {g:"AR", num:"121", titre:"Porter le délai à quatre ans", texte:"« Les communes nouvellement soumises à l'obligation disposent d'un délai de quatre ans pour adopter un programme local de l'habitat compatible avec cet objectif. »"}
+  ],
+  5:[
+    {g:"RC", num:"404", titre:"Étendre l'exemption aux communes rurales", texte:"« Le préfet peut, après avis du comité régional de l'habitat, exempter les communes dont plus du tiers du territoire urbanisé est inconstructible ainsi que les communes rurales. »"},
+    {g:"ECO", num:"89", mode:"supprimer", titre:"Supprimer toute possibilité d'exemption"},
+    {g:"UT", num:"342", titre:"Confier l'avis à la commission départementale de l'habitat", texte:"« Le préfet peut, après avis conforme de la commission départementale de l'habitat, exempter les communes dont plus de la moitié du territoire urbanisé est inconstructible. »"},
+    {g:"AR", num:"120", titre:"Exempter aussi les communes de montagne", texte:"« Le préfet peut, après avis du comité régional de l'habitat, exempter les communes dont plus de la moitié du territoire urbanisé est inconstructible ou classé en zone de montagne. »"},
+    {g:"SOL", num:"215", titre:"Limiter l'exemption à trois ans et exiger un avis conforme", texte:"« Le préfet peut, après avis conforme du comité régional de l'habitat, exempter pour trois ans au plus les communes dont plus de la moitié du territoire urbanisé est inconstructible. »"}
+  ],
+  6:[
+    {g:"LL", num:"17", titre:"Décompter aussi l'accession sociale, jusqu'à 30 % de l'objectif", texte:"« Les logements locatifs intermédiaires et les logements en accession sociale à la propriété sont décomptés comme logements sociaux dans la limite de 30 % de l'objectif. »"},
+    {g:"SOL", num:"216", mode:"supprimer", titre:"Ne pas décompter les logements intermédiaires"},
+    {g:"CP", num:"378", titre:"Ajouter le bail réel solidaire, jusqu'à 15 % de l'objectif", texte:"« Les logements locatifs intermédiaires et les logements en bail réel solidaire sont décomptés comme logements sociaux dans la limite de 15 % de l'objectif. »"},
+    {g:"GOUV", num:"457", titre:"Limiter le décompte à six ans", texte:"« Les logements locatifs intermédiaires sont décomptés comme logements sociaux dans la limite de 10 % de l'objectif, pour une durée de six ans. »"}
+  ]
+};
+const AMEND = ARTICLE.alineas.filter(a=>!a.chapeau);
+const MINE = AMEND.map((a,i)=>({numero:`N° ${i+1} (brouillon)`, texte:`« ${a.texte} »`}));
 
 const $=s=>document.querySelector(s);
 const stage=$("#stage");
 const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+const plural=(n,s,p)=>n>1?(p||s+"s"):s;
 
-/* ---------- Écart mot à mot entre l'alinéa d'origine et mon texte ---------- */
-// Les guillemets « » qui encadrent la rédaction proposée ne comptent pas comme un écart.
-const ORIG=ARTICLE.alineas[ARTICLE.vise];
+/* ---------- Écart mot à mot entre deux rédactions ---------- */
+// Les guillemets « » qui encadrent une rédaction proposée ne comptent pas comme un écart.
 const isWs=t=>/^\s+$/.test(t), isQuote=t=>t==="«"||t==="»";
 const norm=t=>t.replace(/’/g,"'").toLowerCase();
 function tokenize(s){ return s.match(/\s+|[\p{L}\p{N}'’%]+|[^\s\p{L}\p{N}'’%]/gu)||[]; }
@@ -229,121 +311,241 @@ function marked(tokens,keep,tag){ // regroupe les mots modifiés contigus dans u
 }
 function compare(orig,mine){
   const ta=tokenize(orig), tb=tokenize(mine), ia=[], ib=[];
-  ta.forEach((t,k)=>{ if(!isWs(t)) ia.push(k); });
+  ta.forEach((t,k)=>{ if(!isWs(t)&&!isQuote(t)) ia.push(k); });
   tb.forEach((t,k)=>{ if(!isWs(t)&&!isQuote(t)) ib.push(k); });
   const [ka,kb]=lcsKeep(ia.map(k=>norm(ta[k])), ib.map(k=>norm(tb[k])));
   const keepA=[], keepB=[]; ia.forEach((k,x)=>keepA[k]=ka[x]); ib.forEach((k,x)=>keepB[k]=kb[x]);
   return { origHTML:marked(ta,keepA,"del"), mineHTML:marked(tb,keepB,"ins"), same:ka.every(Boolean)&&kb.every(Boolean), del:ka.some(v=>!v), ins:kb.some(v=>!v) };
 }
 
-/* ---------- Idées principales ---------- */
-const labelOf=k=>(IDEAS.find(I=>I.k===k)||{label:""}).label;
-function findIdeas(text){
+/* ---------- Passages ---------- */
+function findPoints(a,text){
   const out=[];
-  for(const I of IDEAS){ const m=I.re.exec(text); if(m) out.push({k:I.k,start:m.index,end:m.index+m[0].length}); }
-  out.sort((a,b)=>a.start-b.start);
+  for(const P of a.points){ const m=P.re.exec(text); if(m) out.push({k:P.k,label:P.label,start:m.index,end:m.index+m[0].length,text:m[0]}); }
+  out.sort((x,y)=>x.start-y.start);
   return out.filter((x,i,arr)=>!i||x.start>=arr[i-1].end);
 }
+const passageOf=(a,k,text)=>{ const p=findPoints(a,text).find(x=>x.k===k); return p?p.text:null; };
+const labelOf=(a,k)=>(a.points.find(P=>P.k===k)||{label:""}).label;
+const pnorm=s=>s.replace(/’/g,"'").replace(/\s+/g," ").trim().toLowerCase();
+function effText(a,o){ if(o.mode==="supprimer") return ""; if(o.mode==="completer") return a.texte+" "+o.texte.replace(/^«\s*|\s*»$/g,""); return o.texte; }
+function pointMarks(a,text){
+  let out="", i=0;
+  for(const p of findPoints(a,text)){ out+=esc(text.slice(i,p.start))+`<mark class="pt" data-k="${p.k}" title="${esc(p.label)} : cliquer pour isoler">${esc(p.text)}</mark>`; i=p.end; }
+  return out+esc(text.slice(i));
+}
+const othersOf=i=>OTHERS[AMEND[i].n]||[];
+function versions(i,k){ // les rédactions des autres pour ce passage ; celles identiques à la mienne sont mises à part
+  const a=AMEND[i], mine=passageOf(a,k,MINE[i].texte)||"", list=[], same=[];
+  for(const o of othersOf(i)){ const p=o.mode==="supprimer"?null:passageOf(a,k,effText(a,o)); if(p!=null&&pnorm(p)===pnorm(mine)) same.push(o); else list.push({o,p}); }
+  return {mine,list,same};
+}
 
-/* ---------- Ma feuille : un tambour de faces ---------- */
-// Face 0 = le texte seul ; face n = le même texte, n-ième idée surlignée. pos est continu : on fait défiler petit à petit, puis ça se cale.
-const drum=$("#drum"), zoomer=$("#zoomer"), origWrap=$("#origWrap"), orig=$("#orig"), rail=$("#rail"), hTop=$("#hTop"), hRight=$("#hRight");
+/* ---------- La pile : un tambour de feuilles ---------- */
+// pos est continu : on fait défiler petit à petit, puis ça se cale. La feuille du dessus bascule en arrière (pivot sur son bord bas),
+// celle du dessous attend, inclinée (pivot sur son bord haut).
 const GAP=24, TILT=62;
-let faces=[], keys=[], pos=0, raw=0, z=0, editing=false, edIdx=-1;
-const cur=()=>clamp(Math.round(pos),0,Math.max(0,faces.length-1));
-const zoomed=()=>z>=.5;
-const others=()=>stage.classList.contains("others");
-const stepPx=()=>(faces[cur()]?faces[cur()].offsetHeight:300)+GAP;
-const ro=new ResizeObserver(()=>layout());
+class Drum{
+  constructor(el,onMove){ this.el=el; this.faces=[]; this.pos=0; this.raw=0; this.raf=0; this.fraf=0; this.dim=1; this.last=-1; this.onMove=onMove||(()=>{}); this.ro=new ResizeObserver(()=>this.layout()); }
+  get n(){ return this.faces.length; }
+  get cur(){ return clamp(Math.round(this.pos),0,Math.max(0,this.n-1)); }
+  set(html,idx){
+    cancelAnimationFrame(this.raf);
+    this.el.innerHTML=html.join(""); this.faces=[...this.el.children]; this.faces.forEach((f,i)=>f.dataset.i=i);
+    this.pos=this.raw=clamp(idx||0,0,Math.max(0,this.n-1)); this.last=-1;
+    this.ro.disconnect(); this.faces.forEach(f=>this.ro.observe(f));
+    this.layout();
+  }
+  step(){ const f=this.faces[this.cur]; return (f?f.offsetHeight:300)+GAP; }
+  layout(){
+    if(!this.n){ this.el.style.height="0px"; return; }
+    const c=this.cur, H=this.faces[c].offsetHeight;
+    this.el.style.height=H+"px";
+    this.faces.forEach((f,i)=>{
+      const d=i-this.pos, ad=Math.abs(d);
+      f.style.transformOrigin= d<0 ? "50% 100%" : "50% 0%";
+      f.style.transform=`translateY(${(d*(H+GAP)).toFixed(1)}px) rotateX(${(-clamp(d,-1,1)*TILT).toFixed(2)}deg)`;
+      let op= ad<=1 ? 1-.55*ad : Math.max(0,.45*(2-ad));
+      if(i!==c) op*=this.dim;
+      f.style.opacity=op.toFixed(3);
+      f.style.visibility= op<.02 ? "hidden" : "";
+      f.style.zIndex=String(100-Math.round(ad*10));
+      f.classList.toggle("cur",i===c); f.setAttribute("aria-hidden",String(i!==c));
+    });
+    if(c!==this.last){ this.last=c; this.onMove(c); }
+  }
+  to(t){
+    t=clamp(t,0,Math.max(0,this.n-1)); cancelAnimationFrame(this.raf); this.raw=t;
+    if(reduced){ this.pos=t; this.layout(); return; }
+    const tick=()=>{ this.pos+=(t-this.pos)*.2; if(Math.abs(t-this.pos)<.002){ this.pos=t; this.layout(); return; } this.layout(); this.raf=requestAnimationFrame(tick); };
+    this.raf=requestAnimationFrame(tick);
+  }
+  fade(t){
+    cancelAnimationFrame(this.fraf);
+    if(reduced){ this.dim=t; this.layout(); return; }
+    const tick=()=>{ this.dim+=(t-this.dim)*.22; if(Math.abs(t-this.dim)<.01){ this.dim=t; this.layout(); return; } this.layout(); this.fraf=requestAnimationFrame(tick); };
+    this.fraf=requestAnimationFrame(tick);
+  }
+  begin(){ cancelAnimationFrame(this.raf); this.raw=this.pos; return this.cur; }
+  rubber(v){ const m=this.n-1; return v<0 ? v*.3 : v>m ? m+(v-m)*.3 : v; }
+  move(px){ this.raw+=px/this.step(); this.pos=this.rubber(this.raw); this.layout(); }
+  dragTo(from,px){ this.raw=from+px/this.step(); this.pos=this.rubber(this.raw); this.layout(); }
+  snap(start,v){ // un petit mouvement suffit à passer à la feuille suivante ; un geste ample peut en sauter plusieurs
+    v=v||0; const moved=this.pos-start; let t=start;
+    if(Math.abs(moved)>.12||Math.abs(v)>1.2){ const proj=Math.round(this.pos+v*.12); t= moved+v*.1>0 ? Math.max(start+1,proj) : Math.min(start-1,proj); }
+    this.to(t);
+  }
+}
 
-function build(keepKey){
-  keys=[null,...findIdeas(AMENDEMENT.texte).map(x=>x.k)];
-  const G=GROUPS[AMENDEMENT.groupe], n=keys.length-1;
-  const head=`<div class="head"><span class="group-badge" style="--g:${G.color}"><i></i>${esc(G.name)}</span><span>${esc(AMENDEMENT.numero+" · "+AMENDEMENT.article)}</span></div><p class="lead">${esc(AMENDEMENT.leadIn)}</p>`;
-  drum.innerHTML=keys.map((k,i)=>`<section class="sheet paper face" data-i="${i}" aria-label="${i?`Idée ${i} sur ${n} : ${esc(labelOf(k))}`:"Texte de votre amendement"}">${head}<div class="body"><p class="txt"></p></div><div class="foot"></div></section>`).join("");
-  faces=[...drum.children];
-  rail.innerHTML=keys.map((k,i)=>{ const t=i?labelOf(k):"Texte entier"; return `<button type="button" data-i="${i}" aria-label="${esc(t)}" title="${esc(t)}"></button>`; }).join("");
-  pos=raw=keepKey==null?0:Math.max(0,keys.indexOf(keepKey));
-  faces.forEach((_,i)=>paint(i));
-  ro.disconnect(); faces.forEach(f=>ro.observe(f));
-  layout();
+/* ---------- État ---------- */
+// mode : alinea · origin (alinéa dézoomé) · passage · squares (passage dézoomé) ; side : mine · others
+const S={ mode:"alinea", side:"mine", pts:[], lastPt:{}, sel:new Set(["mine"]), items:[], compare:false, edit:-1 };
+const dAl=new Drum($("#drumAl"),()=>onAlMove()), dPt=new Drum($("#drumPt"),()=>onPtMove()), dOt=new Drum($("#drumOt"),()=>chrome());
+const hTop=$("#hTop"), hRight=$("#hRight"), rail=$("#rail");
+const curAl=()=>dAl.cur, curPt=()=>S.pts[dPt.cur]||null;
+function verticalDrum(){ if(S.edit>=0) return null; if(S.side==="others") return dOt; if(S.mode==="alinea") return dAl; if(S.mode==="passage") return dPt; return null; }
+
+/* ---------- Feuilles ---------- */
+const myBadge=()=>`<span class="group-badge" style="--g:${GROUPS[ME].color}"><i></i>${esc(GROUPS[ME].name)}</span>`;
+const badge=o=>`<span class="group-badge" style="--g:${GROUPS[o.g].color}"><i></i><span class="name">${esc(GROUPS[o.g].name)}</span></span>`;
+function alFace(i){
+  const a=AMEND[i];
+  return `<section class="sheet paper face al" aria-label="Votre amendement sur l'alinéa ${a.n}"><div class="head">${myBadge()}<span>${esc(MINE[i].numero)} · ${ARTICLE.num}, alinéa ${a.n}</span></div><p class="lead">Rédiger ainsi l'alinéa ${a.n} :</p><div class="body"><p class="txt"></p></div><div class="foot"></div></section>`;
 }
-function marksFor(i,text){
-  if(zoomed()) return compare(ORIG,text).mineHTML;
-  const k=keys[i], id=k&&findIdeas(text).find(x=>x.k===k);
-  if(!id) return esc(text);
-  return esc(text.slice(0,id.start))+`<mark class="idea">${esc(text.slice(id.start,id.end))}</mark>`+esc(text.slice(id.end));
-}
-function footHTML(i){
-  if(zoomed()) return `<span>Cliquer sur le texte pour le modifier : les écarts s'affichent en direct</span>`;
-  if(!keys[i]) return `<span>Double-cliquer sur le texte pour le modifier</span>`;
-  return `<span class="tag"><i></i><b>${esc(labelOf(keys[i]))}</b> idée ${i} sur ${keys.length-1}</span>`;
-}
-function paint(i){
-  const f=faces[i]; if(!f||f.classList.contains("editing")) return;
-  f.querySelector(".txt").innerHTML=marksFor(i,AMENDEMENT.texte);
-  f.querySelector(".foot").innerHTML=footHTML(i);
+function paintAl(i){
+  const f=dAl.faces[i]; if(!f||f.classList.contains("editing")) return;
+  const a=AMEND[i], t=MINE[i].texte, origin=S.mode==="origin"&&i===curAl();
+  f.querySelector(".txt").innerHTML= origin ? compare(a.texte,t).mineHTML : pointMarks(a,t);
+  f.querySelector(".foot").innerHTML=`<span>${origin?"Cliquer sur le texte pour le modifier : les écarts s'affichent en direct":"Cliquer sur un surlignage pour l'isoler · double-clic pour modifier"}</span>`;
 }
 function paintOrig(text){
-  const d=compare(ORIG,text);
+  const a=AMEND[curAl()], d=compare(a.texte,text);
+  $("#origHead").textContent=`${ARTICLE.num} · alinéa ${a.n}`;
   $("#origText").innerHTML=d.origHTML;
   $("#origLegend").innerHTML= d.same ? "Votre amendement reprend cet alinéa à l'identique. Modifiez votre texte : les écarts apparaissent ici en direct."
     : [d.del?`<del>barré</del> : ce que votre amendement supprime`:"", d.ins?`<ins>surligné</ins> dans votre texte : ce qu'il ajoute`:""].filter(Boolean).join(" · ");
 }
-// la face du dessus bascule en arrière (pivot sur son bord bas), celle du dessous attend, inclinée (pivot sur son bord haut)
-function layout(){
-  if(!faces.length) return;
-  const c=cur(), H=faces[c].offsetHeight;
-  drum.style.height=H+"px";
-  faces.forEach((f,i)=>{
-    const d=i-pos, ad=Math.abs(d);
-    f.style.transformOrigin= d<0 ? "50% 100%" : "50% 0%";
-    f.style.transform=`translateY(${(d*(H+GAP)).toFixed(1)}px) rotateX(${(-clamp(d,-1,1)*TILT).toFixed(2)}deg)`;
-    let op= ad<=1 ? 1-.55*ad : Math.max(0,.45*(2-ad));
-    if(i!==c) op*= editing ? 0 : 1-z;
-    f.style.opacity=op.toFixed(3);
-    f.style.visibility= op<.02 ? "hidden" : "";
-    f.style.zIndex=String(100-Math.round(ad*10));
-    f.classList.toggle("cur",i===c); f.setAttribute("aria-hidden",String(i!==c));
-  });
-  [...rail.children].forEach((b,i)=>{ b.classList.toggle("on",i===c); b.setAttribute("aria-current",i===c?"true":"false"); });
+function buildPt(k){
+  const i=curAl(), a=AMEND[i]; S.pts=findPoints(a,MINE[i].texte);
+  $("#ptTitle").innerHTML=`${ARTICLE.num}, alinéa ${a.n} · <b>votre rédaction</b>, passage par passage`;
+  dPt.set(S.pts.map((p,j)=>`<section class="sheet paper face passage" aria-label="${esc(p.label)}"><div class="head">${myBadge()}<span>Alinéa ${a.n}</span></div><div class="body"><p class="ptxt">${esc(p.text)}</p></div><div class="foot"><span class="tag"><i></i><b>${esc(p.label)}</b> passage ${j+1} sur ${S.pts.length}</span></div></section>`),
+    Math.max(0,S.pts.findIndex(p=>p.k===k)));
 }
-let pRaf=0;
-function animPos(t){
-  cancelAnimationFrame(pRaf); raw=t;
-  if(reduced){ pos=t; layout(); return; }
-  const tick=()=>{ pos+=(t-pos)*.2; if(Math.abs(t-pos)<.002){ pos=t; layout(); return; } layout(); pRaf=requestAnimationFrame(tick); };
-  pRaf=requestAnimationFrame(tick);
+// la pile des autres : leurs amendements sur l'alinéa, ou leurs rédactions du passage ; renvoie false si l'amendement visé n'y figure pas
+function buildOt(focus){
+  const i=curAl(), a=AMEND[i];
+  if(S.mode==="passage"){
+    const p=curPt(), v=versions(i,p.k), n=v.list.length;
+    $("#otTitle").innerHTML=`${esc(p.label)} · alinéa ${a.n} · <b>${n}</b> ${plural(n,"autre rédaction","autres rédactions")}`+(v.same.length>2?` · ${v.same.length} groupes gardent la vôtre`:v.same.length?` · ${plural(v.same.length,"garde","gardent")} la vôtre : ${v.same.map(o=>esc(GROUPS[o.g].name)+(o.g===ME?` (n° ${o.num})`:"")).join(", ")}`:"");
+    const html=v.list.map(({o,p:t},j)=>`<section class="sheet paper face passage" data-num="${o.num}"><div class="head">${badge(o)}<span>N° ${o.num}</span></div><div class="body"><p class="ptxt${t==null?" none":""}">${t==null?"Supprime ce point":compare(v.mine,t).mineHTML}</p></div><div class="foot"><span class="tag"><i></i><b>${esc(p.label)}</b> rédaction ${j+1} sur ${n}</span></div></section>`);
+    const idx=focus==null?0:v.list.findIndex(x=>x.o.num===focus);
+    dOt.set(html.length?html:[`<section class="sheet paper face passage"><div class="body"><p class="ptxt none">Tous les groupes gardent votre rédaction.</p></div></section>`], Math.max(0,idx));
+    return focus==null||idx>=0;
+  }
+  const os=othersOf(i), n=os.length;
+  $("#otTitle").innerHTML=`${ARTICLE.num}, alinéa ${a.n} · <b>${n}</b> ${plural(n,"amendement","amendements")} d'autres groupes`;
+  dOt.set(os.map((o,j)=>{
+    const lead=o.mode==="supprimer"?"Supprimer cet alinéa.":o.mode==="completer"?`Compléter l'alinéa ${a.n} par la phrase suivante :`:`Rédiger ainsi l'alinéa ${a.n} :`;
+    const body=o.mode==="supprimer"?`<span class="none">L'alinéa ${a.n} serait supprimé.</span>`:pointMarks(a,o.texte);
+    return `<section class="sheet paper face other" data-num="${o.num}"><div class="head">${badge(o)}<span>N° ${o.num}${o.note?` · ${esc(o.note)}`:""}</span></div><p class="lead">${esc(lead)}</p><div class="body"><p class="txt">${body}</p></div><div class="foot"><span>Objet : ${esc(o.titre)}</span><span class="count">${j+1} / ${n}</span></div></section>`;
+  }), 0);
+  return true;
 }
-function rubber(v){ const m=faces.length-1; return v<0 ? v*.3 : v>m ? m+(v-m)*.3 : v; }
-function snapPos(start,v){ // un petit mouvement suffit à passer à l'idée suivante ; un geste ample peut en sauter plusieurs
-  const moved=pos-start; let t=start;
-  if(Math.abs(moved)>.12||Math.abs(v)>1.2){ const proj=Math.round(pos+v*.12); t= moved+v*.1>0 ? Math.max(start+1,proj) : Math.min(start-1,proj); }
-  animPos(clamp(t,0,faces.length-1));
+function buildSquares(){
+  const i=curAl(), a=AMEND[i], p=curPt();
+  const orig={id:"orig",color:"#6b6457",label:"Texte d'origine",sub:"commission",text:passageOf(a,p.k,a.texte)};
+  S.items=[orig,{id:"mine",color:GROUPS[ME].color,label:GROUPS[ME].name,sub:"vous",text:passageOf(a,p.k,MINE[i].texte)},
+    ...othersOf(i).map(o=>({id:o.num,color:GROUPS[o.g].color,label:GROUPS[o.g].name,sub:`N° ${o.num}`,text:o.mode==="supprimer"?null:passageOf(a,p.k,effText(a,o))}))];
+  S.sel=new Set(["mine"]); S.compare=false; $("#lSq").classList.remove("comparing");
+  $("#sqTitle").innerHTML=`<b>${esc(p.label)}</b> · alinéa ${a.n} · choisissez les groupes à mettre côte à côte`;
+  $("#tiles").innerHTML=S.items.map(it=>`<button type="button" class="tile paper" data-id="${esc(it.id)}" aria-pressed="${S.sel.has(it.id)}"><span class="dot" style="--g:${it.color}"></span><span>${esc(it.label)}</span><small>${esc(it.sub)}</small></button>`).join("");
+  syncSelect();
+}
+function syncSelect(){ const n=S.sel.size, b=$("#btnSelect"); b.disabled=n<2; b.textContent=n<2?"Sélectionner (au moins deux)":`Sélectionner (${n})`; }
+function setCompare(on){
+  S.compare=on; $("#lSq").classList.toggle("comparing",on);
+  const p=curPt(), a=AMEND[curAl()];
+  $("#sqTitle").innerHTML=`<b>${esc(p.label)}</b> · alinéa ${a.n} · `+(on?`${S.sel.size} rédactions côte à côte`:"choisissez les groupes à mettre côte à côte");
+  if(on){
+    const orig=S.items[0].text||"", mine=S.items[1].text;
+    $("#cols").innerHTML=S.items.filter(it=>S.sel.has(it.id)).map(it=>{
+      const body= it.text==null ? `<p class="ptxt none">Supprime ce point</p>` : `<p class="ptxt">${it.id==="orig"?esc(it.text):compare(orig,it.text).mineHTML}</p>`;
+      const note= it.id==="orig"?"Texte de la commission" : it.id==="mine"?"Votre rédaction" : it.text!=null&&mine!=null&&pnorm(it.text)===pnorm(mine)?"Même rédaction que vous":"";
+      return `<section class="col paper"><div class="head"><span class="group-badge" style="--g:${it.color}"><i></i>${esc(it.label)}</span><span>${esc(it.sub)}</span></div>${body}${note?`<p class="note">${note}</p>`:""}</section>`;
+    }).join("");
+    $("#cols").scrollTop=0;
+  }
+  chrome();
 }
 
-/* ---------- Dézoom : l'alinéa d'origine ---------- */
-function setZ(v){
-  const was=zoomed(); z=clamp(v,0,1);
-  origWrap.style.gridTemplateRows=z.toFixed(3)+"fr";
-  orig.style.opacity=z.toFixed(3);
-  orig.style.transform=`translateY(${(-28*(1-z)).toFixed(1)}px)`;
-  zoomer.style.transform=`scale(${(1-.1*z).toFixed(4)})`;
-  if(zoomed()!==was){
-    stage.classList.toggle("zoomed",zoomed()); origWrap.setAttribute("aria-hidden",String(!zoomed())); hTop.setAttribute("aria-pressed",String(zoomed()));
-    faces.forEach((_,i)=>paint(i)); if(editing) onEdit();
-  }
-  layout();
+/* ---------- Échelles et volets ---------- */
+const LAYERS=[[$("#lAl"),0,["alinea","origin"]],[$("#lSq"),.5,["squares"]],[$("#lPt"),1,["passage"]]];
+function setMode(m,focus){
+  if(S.edit>=0&&m!=="alinea"&&m!=="origin") closeEditor(false);
+  S.mode=m; stage.dataset.mode=m;
+  const depth=LAYERS.find(L=>L[2].includes(m))[1];
+  for(const [el,dp,modes] of LAYERS){ const on=modes.includes(m); el.classList.toggle("on",on); el.classList.toggle("shallow",!on&&dp<depth); el.setAttribute("aria-hidden",String(!on)); }
+  $("#origWrap").setAttribute("aria-hidden",String(m!=="origin"));
+  dAl.fade(m==="origin"||S.edit>=0?0:1);
+  AMEND.forEach((_,i)=>paintAl(i));
+  if(m==="origin"&&S.edit<0) paintOrig(MINE[curAl()].texte);
+  if(S.edit>=0) onEdit();
+  if(S.side==="others"&&!buildOt(focus)) setSide("mine");
+  chrome();
 }
-let zRaf=0;
-function animZ(t){
-  cancelAnimationFrame(zRaf);
-  if(Math.abs(pos-cur())>.001) animPos(cur());
-  if(reduced){ setZ(t); return; }
-  const tick=()=>{ const n=z+(t-z)*.2; if(Math.abs(t-n)<.004){ setZ(t); return; } setZ(n); zRaf=requestAnimationFrame(tick); };
-  zRaf=requestAnimationFrame(tick);
+function setSide(s){
+  if(s===S.side) return;
+  if(s==="others"){
+    if(S.mode==="squares") return;
+    if(S.edit>=0) closeEditor(false);
+    if(S.mode==="origin") setMode("alinea");
+    S.side="others"; buildOt();
+  } else S.side="mine";
+  stage.classList.toggle("others",S.side==="others"); hRight.setAttribute("aria-pressed",String(S.side==="others"));
+  chrome();
 }
-function snapZ(z0){ animZ(z0<.5 ? (z>.2?1:0) : (z<.8?0:1)); }
+function enterPassage(k,focus){
+  const i=curAl(); if(!findPoints(AMEND[i],MINE[i].texte).length) return;
+  if(S.edit>=0) closeEditor(false);
+  buildPt(k); setMode("passage",focus);
+}
+// dézoomer remonte d'un cran : passage → groupes → alinéa → texte d'origine ; zoomer redescend
+function zoomStep(dir,k){
+  if(S.side==="others") return;
+  const m=S.mode;
+  if(dir<0){ if(m==="alinea") setMode("origin"); else if(m==="passage"){ buildSquares(); setMode("squares"); } else if(m==="squares") setMode("alinea"); }
+  else { if(m==="origin") setMode("alinea"); else if(m==="alinea"&&S.edit<0) enterPassage(k||S.lastPt[curAl()]); else if(m==="squares") setMode("passage"); }
+}
+function back(){
+  if(S.side==="others"){ setSide("mine"); return; }
+  if(S.mode==="origin") setMode("alinea");
+  else if(S.mode==="squares"){ if(S.compare) setCompare(false); else setMode("passage"); }
+  else if(S.mode==="passage") setMode("alinea");
+}
+function onAlMove(){ if(S.mode==="origin") paintOrig(MINE[curAl()].texte); chrome(); }
+function onPtMove(){ const p=curPt(); if(p) S.lastPt[curAl()]=p.k; chrome(); }
+
+/* ---------- Poignées, aide, repères ---------- */
+function chrome(){
+  const i=curAl(), a=AMEND[i], m=S.mode, p=curPt(), oth=S.side==="others";
+  hTop.innerHTML= m==="alinea" ? `<b>Alinéa ${a.n}</b> texte d'origine <span class="zg">⊖</span>`
+    : m==="origin" ? `<b>Alinéa ${a.n}</b> revenir <span class="zg">⊕</span>`
+    : m==="passage" ? `<b>${esc(p?p.label:"")}</b> tous les groupes <span class="zg">⊖</span>`
+    : `<b>Alinéa ${a.n}</b> alinéa entier <span class="zg">⊖</span>`;
+  hTop.setAttribute("aria-pressed",String(m==="origin"||m==="squares"));
+  const atPassage=m==="passage"&&p, n= atPassage ? versions(i,p.k).list.length : othersOf(i).length;
+  hRight.innerHTML= oth ? `<b>${atPassage?"Ma":"Mon"}</b> ${atPassage?"rédaction":"amendement"} <span class="chev">▲</span>`
+    : `<b>${n}</b> ${atPassage?plural(n,"autre rédaction","autres rédactions"):plural(n,"autre amendement","autres amendements")} <span class="chev">▲</span>`;
+  $("#hint").innerHTML= oth ? (atPassage ? "<b>Haut / bas</b> : les autres rédactions · <b>vers la droite</b> : la vôtre" : "<b>Haut / bas</b> : les amendements · <b>clic sur un surlignage</b> : l'isoler · <b>vers la droite</b> : le vôtre")
+    : m==="alinea" ? "<b>Haut / bas</b> : les alinéas · <b>clic sur un surlignage</b> : l'isoler · <b>pincer</b> : le texte d'origine · <b>vers la gauche</b> : les autres"
+    : m==="origin" ? "<b>Écarter les doigts</b> ou <b>Échap</b> : revenir · <b>clic sur votre texte</b> : modifier"
+    : m==="passage" ? "<b>Haut / bas</b> : les autres passages · <b>vers la gauche</b> : ce passage chez les autres · <b>pincer</b> : tous les groupes · <b>Échap</b> : l'alinéa"
+    : S.compare ? "<b>Échap</b> : changer la sélection · <b>pincer</b> : l'alinéa entier" : "<b>Choisissez des groupes</b>, puis « Sélectionner » · <b>pincer</b> : l'alinéa entier · <b>Échap</b> : le passage";
+  const d=verticalDrum();
+  if(!d||d.n<2){ rail.innerHTML=""; return; }
+  const labels= d===dAl ? AMEND.map(x=>`Alinéa ${x.n}`) : d===dPt ? S.pts.map(x=>x.label) : d.faces.map(f=>{ const o=othersOf(i).find(o=>o.num===f.dataset.num); return o?`${GROUPS[o.g].name}, n° ${o.num}`:""; });
+  rail.innerHTML=labels.map((l,j)=>`<button type="button" data-i="${j}" class="${j===d.cur?"on":""}" aria-label="${esc(l)}" title="${esc(l)}"${j===d.cur?' aria-current="true"':""}></button>`).join("");
+}
 
 /* ---------- Édition en place ---------- */
 // position du curseur dans le texte affiché, à l'endroit du clic
@@ -358,185 +560,156 @@ function caretOffset(e,root){
 function fit(){ const ta=$("#edText"); if(!ta) return; ta.style.height="auto"; ta.style.height=ta.scrollHeight+"px"; }
 function onEdit(){
   const ta=$("#edText"); if(!ta) return;
-  const text=ta.value;
-  $("#edMirror").innerHTML=marksFor(edIdx,text)+(text.endsWith("\n")?" ":"");
-  paintOrig(text); fit(); layout();
+  const a=AMEND[S.edit], text=ta.value;
+  $("#edMirror").innerHTML=(S.mode==="origin"?compare(a.texte,text).mineHTML:pointMarks(a,text))+(text.endsWith("\n")?" ":"");
+  paintOrig(text); fit(); dAl.layout();
 }
 function openEditor(e){
-  if(editing||others()) return;
-  const c=cur(); if(Math.abs(pos-c)>.05) return;
-  const f=faces[c], off=e?caretOffset(e,f.querySelector(".txt")):null;
-  editing=true; edIdx=c; stage.classList.add("editing"); f.classList.add("editing");
+  if(S.edit>=0||S.side==="others"||(S.mode!=="alinea"&&S.mode!=="origin")) return;
+  const c=curAl(); if(Math.abs(dAl.pos-c)>.05) return;
+  const f=dAl.faces[c], off=e?caretOffset(e,f.querySelector(".txt")):null;
+  S.edit=c; stage.classList.add("editing"); f.classList.add("editing"); dAl.fade(0);
   f.querySelector(".body").innerHTML=`<div class="ed"><div class="mirror" id="edMirror" aria-hidden="true"></div><textarea id="edText" aria-label="Texte de l'amendement" spellcheck="false" rows="1"></textarea></div>`;
   f.querySelector(".foot").innerHTML=`<span>Échap pour annuler · Ctrl+Entrée pour valider</span><button type="button" data-act="cancel">Annuler</button><button type="button" class="primary" data-act="ok">Valider</button>`;
-  const ta=$("#edText"); ta.value=AMENDEMENT.texte;
-  ta.addEventListener("keydown", e=>{ if(e.key==="Escape"){e.preventDefault();e.stopPropagation();closeEditor(false);} if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)){e.preventDefault();closeEditor(true);} });
+  const ta=$("#edText"); ta.value=MINE[c].texte;
+  ta.addEventListener("keydown", e=>{ if(e.key==="Escape"){e.preventDefault();e.stopPropagation();closeEditor(false);} if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)){e.preventDefault();e.stopPropagation();closeEditor(true);} });
   ta.addEventListener("input", onEdit);
-  onEdit();
+  onEdit(); chrome();
   ta.focus({preventScroll:true}); const p=off==null?ta.value.length:off; ta.setSelectionRange(p,p);
 }
 function closeEditor(commit){
-  if(!editing) return;
-  const v=$("#edText").value.trim(), key=keys[edIdx];
-  editing=false; edIdx=-1; stage.classList.remove("editing");
-  if(commit&&v) AMENDEMENT.texte=v;
-  build(key); paintOrig(AMENDEMENT.texte); // les idées peuvent avoir bougé : on reste sur la même si elle existe encore
+  if(S.edit<0) return;
+  const i=S.edit, f=dAl.faces[i], v=$("#edText").value.trim();
+  if(commit&&v) MINE[i].texte=v;
+  S.edit=-1; stage.classList.remove("editing"); f.classList.remove("editing");
+  f.querySelector(".body").innerHTML=`<p class="txt"></p>`;
+  paintAl(i); paintOrig(MINE[i].texte); dAl.fade(S.mode==="origin"?0:1); chrome();
 }
-drum.addEventListener("click", e=>{
+
+/* ---------- Clics ---------- */
+let clickTimer=0;
+$("#drumAl").addEventListener("click", e=>{
   const f=e.target.closest(".face"); if(!f) return;
   const act=e.target.closest("button[data-act]"); if(act){ closeEditor(act.dataset.act==="ok"); return; }
   const i=+f.dataset.i;
-  if(i!==cur()){ if(!editing) animPos(i); return; }
-  if(zoomed()&&e.target.closest(".body")) openEditor(e); // face au texte d'origine, un simple clic suffit
+  if(i!==dAl.cur){ if(S.edit<0) dAl.to(i); return; }
+  if(S.edit>=0) return;
+  if(S.mode==="origin"){ if(e.target.closest(".body")) openEditor(e); return; }
+  const mk=e.target.closest("mark.pt");
+  if(mk){ clearTimeout(clickTimer); const k=mk.dataset.k; clickTimer=setTimeout(()=>enterPassage(k),260); } // laisse la place au double-clic
 });
-drum.addEventListener("dblclick", e=>{ const f=e.target.closest(".face"); if(f&&+f.dataset.i===cur()&&e.target.closest(".body")) openEditor(e); });
-rail.addEventListener("click", e=>{ const b=e.target.closest("button"); if(b&&!editing) animPos(+b.dataset.i); });
-
-/* ---------- Les autres : boîtes papier ---------- */
-const list=$("#list"), scroller=$("#scroller");
-$("#nOthers").textContent=String(OTHERS.length);
-list.innerHTML=`<div class="title">Article 4, alinéa 2 · ${OTHERS.length} autres amendements</div>`+OTHERS.map((o,i)=>{ const G=GROUPS[o.g]; return `<section class="box paper" data-i="${i}" aria-label="${esc(G.name)}, amendement ${o.num}">
-  <div class="head"><span class="group-badge" style="--g:${G.color}"><i></i><span class="name">${esc(G.name)}</span></span><span class="num">N° ${o.num}${o.note?` · ${esc(o.note)}`:""}</span><button class="more" type="button" aria-expanded="false" aria-label="Afficher l'amendement">+</button></div>
-  <p class="objet">${esc(o.titre)}</p>
-  <div class="detail"><p class="lead">${esc(o.lead)}</p><div class="body"><p>${esc(o.texte)}</p></div><div class="meta">${esc(o.titre)}</div></div>
-</section>`; }).join("");
-
-let y=0, vy=0, drag=null, raf=null, lastT=0;
-function maxY(){ return Math.max(0, list.offsetHeight - scroller.clientHeight); }
-function setY(v){ y=Math.max(-40, Math.min(maxY()+40, v)); list.style.transform=`translateY(${-y}px)`; }
-function settle(){
-  cancelAnimationFrame(raf);
-  const step=()=>{
-    const m=maxY();
-    if(y<0){ vy=0; setY(y+(0-y)*.2); if(Math.abs(y)<.5) setY(0); else raf=requestAnimationFrame(step); return; }
-    if(y>m){ vy=0; setY(y+(m-y)*.2); if(Math.abs(y-m)<.5) setY(m); else raf=requestAnimationFrame(step); return; }
-    if(Math.abs(vy)>.2){ setY(y+vy); vy*=.94; raf=requestAnimationFrame(step); }
-  };
-  raf=requestAnimationFrame(step);
-}
-scroller.addEventListener("pointerdown", e=>{ cancelAnimationFrame(raf); drag={y:e.clientY,x:e.clientX,startY:y,moved:false,box:e.target.closest(".box"),more:!!e.target.closest(".more")}; vy=0; lastT=performance.now(); scroller.setPointerCapture(e.pointerId); });
-scroller.addEventListener("pointermove", e=>{
-  if(!drag) return;
-  const dy=e.clientY-drag.y, dx=e.clientX-drag.x;
-  if(!drag.moved && Math.abs(dy)+Math.abs(dx)>5) drag.moved=true;
-  if(!drag.moved) return;
-  if(Math.abs(dx)>Math.abs(dy)*1.6 && dx>70){ drag=null; scroller.classList.remove("grabbing"); setOthers(false); return; }
-  scroller.classList.add("grabbing");
-  const now=performance.now(), prev=y; setY(drag.startY-dy);
-  vy=(y-prev)/Math.max(1,(now-lastT))*16; lastT=now;
+$("#drumAl").addEventListener("dblclick", e=>{ clearTimeout(clickTimer); const f=e.target.closest(".face"); if(f&&+f.dataset.i===dAl.cur&&e.target.closest(".body")) openEditor(e); });
+$("#drumPt").addEventListener("click", e=>{ const f=e.target.closest(".face"); if(f&&+f.dataset.i!==dPt.cur) dPt.to(+f.dataset.i); });
+$("#drumOt").addEventListener("click", e=>{
+  const f=e.target.closest(".face"); if(!f) return;
+  if(+f.dataset.i!==dOt.cur){ dOt.to(+f.dataset.i); return; }
+  const mk=e.target.closest("mark.pt"); if(mk&&S.mode==="alinea") enterPassage(mk.dataset.k,f.dataset.num);
 });
-function endDrag(){
-  if(!drag) return; const d=drag; drag=null; scroller.classList.remove("grabbing");
-  if(d.moved){ settle(); return; }
-  if(d.box && d.more) toggleBox(d.box);
-}
-scroller.addEventListener("pointerup", endDrag); scroller.addEventListener("pointercancel", ()=>{ drag=null; scroller.classList.remove("grabbing"); settle(); });
-scroller.addEventListener("wheel", e=>{
-  if(e.ctrlKey) return; // pincer : laissé à la scène
-  if(Math.abs(e.deltaX)>Math.abs(e.deltaY)) return; // horizontal : laissé au geste de la scène
-  e.preventDefault(); cancelAnimationFrame(raf); vy=0; setY(y+e.deltaY); settle();
-}, {passive:false});
-scroller.addEventListener("keydown", e=>{ const b=e.target.closest(".box"); if(b && e.target.classList.contains("more") && (e.key==="Enter"||e.key===" ")){ e.preventDefault(); toggleBox(b); } });
-function toggleBox(box){
-  const open=!box.classList.contains("open");
-  box.classList.toggle("open",open); const m=box.querySelector(".more"); m.setAttribute("aria-expanded",String(open)); m.setAttribute("aria-label", open?"Replier l'amendement":"Afficher l'amendement");
-  requestAnimationFrame(()=>{ const top=box.offsetTop, bottom=top+box.offsetHeight, vh=scroller.clientHeight; if(bottom-y>vh) setY(Math.min(bottom-vh+16, top-16)); settle(); });
-}
-window.addEventListener("resize", ()=>{ setY(y); settle(); fit(); layout(); });
-
-/* ---------- Volets ---------- */
-function setOthers(on){ if(on && editing) closeEditor(false); stage.classList.toggle("others",on); hRight.setAttribute("aria-pressed",String(on)); if(on){ animZ(0); setY(y); } }
-hTop.addEventListener("click", ()=>animZ(zoomed()?0:1));
-hRight.addEventListener("click", ()=>setOthers(!others()));
+$("#tiles").addEventListener("click", e=>{
+  const t=e.target.closest(".tile"); if(!t) return;
+  const id=t.dataset.id; S.sel.has(id)?S.sel.delete(id):S.sel.add(id);
+  t.setAttribute("aria-pressed",String(S.sel.has(id))); syncSelect();
+});
+$("#btnSelect").addEventListener("click", ()=>setCompare(true));
+$("#btnBack").addEventListener("click", ()=>setCompare(false));
+rail.addEventListener("click", e=>{ const b=e.target.closest("button"), d=verticalDrum(); if(b&&d) d.to(+b.dataset.i); });
+hTop.addEventListener("click", ()=>zoomStep(S.mode==="origin"?1:-1));
+hRight.addEventListener("click", ()=>setSide(S.side==="others"?"mine":"others"));
+window.addEventListener("resize", ()=>{ fit(); dAl.layout(); dPt.layout(); dOt.layout(); });
 window.addEventListener("keydown", e=>{
-  if(editing) return;
-  if(e.key==="Escape"){ if(zoomed()) animZ(0); else setOthers(false); return; }
-  if(others()||zoomed()||e.target.closest("button")&&e.key===" ") return;
-  const m=faces.length-1;
-  if(e.key==="ArrowDown"||e.key==="PageDown"){ e.preventDefault(); animPos(clamp(cur()+1,0,m)); }
-  else if(e.key==="ArrowUp"||e.key==="PageUp"){ e.preventDefault(); animPos(clamp(cur()-1,0,m)); }
+  if(S.edit>=0||e.ctrlKey||e.metaKey||e.altKey) return;
+  if(e.key==="Escape"){ back(); return; }
+  if(e.target.closest&&e.target.closest("button")&&(e.key===" "||e.key==="Enter")) return;
+  const d=verticalDrum();
+  if((e.key==="ArrowDown"||e.key==="PageDown")&&d){ e.preventDefault(); d.to(d.cur+1); }
+  else if((e.key==="ArrowUp"||e.key==="PageUp")&&d){ e.preventDefault(); d.to(d.cur-1); }
+  else if(e.key==="ArrowRight") setSide("others");
+  else if(e.key==="ArrowLeft") setSide("mine");
+  else if(e.key==="Enter"&&S.side==="mine") zoomStep(1);
+  else if(e.key==="-") zoomStep(-1);
+  else if(e.key==="+"||e.key==="=") zoomStep(1);
 });
 
 /* ---------- Gestes : doigt ou souris ---------- */
-// un doigt : vertical = défiler les idées, horizontal = les autres ; deux doigts qui se rapprochent = dézoomer
-const pts=new Map(); let g=null, pinch=null, suppressClick=false;
+// un doigt : vertical = la pile en cours, horizontal = les autres ; deux doigts qui se rapprochent = dézoomer, qui s'écartent = zoomer
+const touches=new Map(); let g=null, pinch=null, suppressClick=false;
+const dist=()=>{ const [a,b]=[...touches.values()]; return Math.hypot(a.x-b.x,a.y-b.y); };
 stage.addEventListener("pointerdown", e=>{
   suppressClick=false;
-  pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
-  if(pts.size===2&&!others()){
-    if(g&&g.axis==="v") snapPos(g.start,0);
-    g=null; const [a,b]=[...pts.values()]; pinch={d0:Math.hypot(a.x-b.x,a.y-b.y)||1,z0:z}; cancelAnimationFrame(zRaf); return;
-  }
-  if(pts.size>1) return;
-  if(e.target.closest(".handle,.scroller,.rail,button,textarea,.orig")) return;
-  if(editing&&e.target.closest(".face.editing")) return;
-  g={id:e.pointerId,x:e.clientX,y:e.clientY,axis:null,start:Math.round(pos),startPos:pos,ly:e.clientY,lt:performance.now(),v:0};
+  touches.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(touches.size===2){ if(g&&g.axis==="v") g.drum.snap(g.start,0); g=null; const mk=e.target.closest("mark.pt"); pinch={d0:dist()||1,done:false,k:mk?mk.dataset.k:null}; return; }
+  if(touches.size>1) return;
+  if(e.target.closest(".handle,.rail,button,textarea,.orig .body,.cols")) return;
+  if(S.edit>=0&&e.target.closest(".face.editing")) return;
+  g={id:e.pointerId,x:e.clientX,y:e.clientY,axis:null,ly:e.clientY,lt:performance.now(),v:0};
 });
 stage.addEventListener("pointermove", e=>{
-  const p=pts.get(e.pointerId); if(p){ p.x=e.clientX; p.y=e.clientY; }
-  if(pinch){ if(pts.size>=2){ const [a,b]=[...pts.values()]; setZ(pinch.z0+(1-Math.hypot(a.x-b.x,a.y-b.y)/pinch.d0)*2.2); } return; }
+  const t=touches.get(e.pointerId); if(t){ t.x=e.clientX; t.y=e.clientY; }
+  if(pinch){ if(touches.size>=2&&!pinch.done){ const r=dist()/pinch.d0; if(r<.78){ pinch.done=true; zoomStep(-1); } else if(r>1.28){ pinch.done=true; zoomStep(1,pinch.k); } } return; }
   if(!g||e.pointerId!==g.id) return;
   const dx=e.clientX-g.x, dy=e.clientY-g.y;
   if(!g.axis){
     if(Math.abs(dx)+Math.abs(dy)<8) return;
     g.axis=Math.abs(dy)>Math.abs(dx)?"v":"h"; suppressClick=true;
-    if(g.axis==="v"){ if(others()||zoomed()||editing){ g=null; return; } cancelAnimationFrame(pRaf); g.startPos=pos; g.start=cur(); }
+    if(g.axis==="v"){ g.drum=verticalDrum(); if(!g.drum){ g=null; return; } g.start=g.drum.begin(); g.from=g.drum.pos; }
     try{ stage.setPointerCapture(e.pointerId); }catch(_){}
   }
-  if(g.axis==="h"){ if(dx<-50){ setOthers(true); g=null; } else if(dx>50){ setOthers(false); g=null; } return; }
-  const now=performance.now(), sp=stepPx();
-  raw=g.startPos-dy/sp; pos=rubber(raw); layout();
+  if(g.axis==="h"){ if(dx<-50){ setSide("others"); g=null; } else if(dx>50){ setSide("mine"); g=null; } return; }
+  const now=performance.now(), sp=g.drum.step();
+  g.drum.dragTo(g.from,-dy);
   const dt=Math.max(1,now-g.lt); g.v=.7*g.v+.3*(-(e.clientY-g.ly)/sp)/(dt/1000); g.ly=e.clientY; g.lt=now;
 });
 function pointerEnd(e){
-  pts.delete(e.pointerId);
-  if(pinch){ if(pts.size<2){ snapZ(pinch.z0); pinch=null; } return; }
-  if(g&&e.pointerId===g.id){ if(g.axis==="v") snapPos(g.start,g.v); g=null; }
+  touches.delete(e.pointerId);
+  if(pinch){ if(touches.size<2) pinch=null; return; }
+  if(g&&e.pointerId===g.id){ if(g.axis==="v") g.drum.snap(g.start,g.v); g=null; }
 }
 stage.addEventListener("pointerup",pointerEnd); stage.addEventListener("pointercancel",pointerEnd);
 stage.addEventListener("click", e=>{ if(suppressClick){ suppressClick=false; e.stopPropagation(); e.preventDefault(); } }, true);
 
 /* ---------- Gestes : pavé tactile ---------- */
-// Pincer arrive en « wheel » avec ctrlKey (Chrome, Edge, Firefox) ou en gesture* (Safari). Deux doigts : le sens est verrouillé au début du geste.
+// Pincer arrive en « wheel » avec ctrlKey (Chrome, Edge, Firefox) ou en gesture* (Safari) : un cran par geste.
+// Deux doigts : le sens est verrouillé au début du geste.
 let zw=null, zwT=0, wg=null, wgT=0;
 stage.addEventListener("wheel", e=>{
-  const k=e.deltaMode===1?16:e.deltaMode===2?innerHeight:1, dx=e.deltaX*k, dy=e.deltaY*k;
+  const kf=e.deltaMode===1?16:e.deltaMode===2?innerHeight:1, dx=e.deltaX*kf, dy=e.deltaY*kf;
   if(e.ctrlKey){
-    e.preventDefault(); if(others()) return;
-    if(!zw){ zw={z0:z}; cancelAnimationFrame(zRaf); if(Math.abs(pos-cur())>.001) animPos(cur()); }
-    setZ(z+dy*.012);
-    clearTimeout(zwT); zwT=setTimeout(()=>{ snapZ(zw.z0); zw=null; },160);
+    e.preventDefault();
+    if(!zw){ const mk=e.target.closest("mark.pt"); zw={acc:0,done:false,k:mk?mk.dataset.k:null}; }
+    zw.acc+=dy;
+    if(!zw.done){ if(zw.acc>24){ zw.done=true; zoomStep(-1); } else if(zw.acc<-24){ zw.done=true; zoomStep(1,zw.k); } }
+    clearTimeout(zwT); zwT=setTimeout(()=>{ zw=null; },220);
     return;
   }
   if(e.target.closest("textarea")) return;
-  const vertical=Math.abs(dy)>=Math.abs(dx), inOrig=e.target.closest(".orig .body");
-  if(e.target.closest(".scroller")&&vertical) return;
-  if(inOrig&&vertical&&inOrig.scrollHeight>inOrig.clientHeight) return;
+  const vertical=Math.abs(dy)>=Math.abs(dx), sc=e.target.closest(".orig .body,.cols");
+  if(sc&&vertical&&sc.scrollHeight>sc.clientHeight) return;
   e.preventDefault();
-  if(!wg) wg={ax:0,ay:0,axis:null,start:cur(),done:false};
+  if(!wg) wg={ax:0,ay:0,axis:null,done:false,h:0};
   clearTimeout(wgT); wgT=setTimeout(endWheel,150);
   let ddx=dx, ddy=dy;
   if(!wg.axis){
     wg.ax+=dx; wg.ay+=dy;
     if(Math.abs(wg.ax)+Math.abs(wg.ay)<6) return;
     wg.axis=Math.abs(wg.ax)>Math.abs(wg.ay)?"h":"v"; ddx=wg.ax; ddy=wg.ay;
-    if(wg.axis==="v"){ cancelAnimationFrame(pRaf); raw=pos; wg.start=cur(); }
+    if(wg.axis==="v"){ wg.drum=verticalDrum(); if(wg.drum) wg.start=wg.drum.begin(); }
   }
   if(wg.axis==="h"){
-    if(wg.done) return; wg.ax2=(wg.ax2||0)+ddx;
-    if(wg.ax2>90){ setOthers(true); wg.done=true; } else if(wg.ax2<-90){ setOthers(false); wg.done=true; }
+    if(wg.done) return; wg.h+=ddx;
+    if(wg.h>90){ setSide("others"); wg.done=true; } else if(wg.h<-90){ setSide("mine"); wg.done=true; }
     return;
   }
-  if(others()||zoomed()||editing) return;
-  raw+=ddy/stepPx(); pos=rubber(raw); layout();
+  if(wg.drum) wg.drum.move(ddy);
 }, {passive:false});
-function endWheel(){ if(wg&&wg.axis==="v"&&!others()&&!zoomed()&&!editing) snapPos(wg.start,0); wg=null; }
+function endWheel(){ if(wg&&wg.axis==="v"&&wg.drum) wg.drum.snap(wg.start,0); wg=null; }
 let sg=null;
-stage.addEventListener("gesturestart", e=>{ e.preventDefault(); if(pinch||others()) return; sg={z0:z}; cancelAnimationFrame(zRaf); });
-stage.addEventListener("gesturechange", e=>{ e.preventDefault(); if(sg&&!pinch) setZ(sg.z0+(1-e.scale)*2.2); });
-stage.addEventListener("gestureend", e=>{ e.preventDefault(); if(sg){ snapZ(sg.z0); sg=null; } });
+stage.addEventListener("gesturestart", e=>{ e.preventDefault(); sg=pinch?null:{done:false}; });
+stage.addEventListener("gesturechange", e=>{ e.preventDefault(); if(!sg||sg.done) return; if(e.scale<.85){ sg.done=true; zoomStep(-1); } else if(e.scale>1.18){ sg.done=true; zoomStep(1); } });
+stage.addEventListener("gestureend", e=>{ e.preventDefault(); sg=null; });
 
-build(null); paintOrig(AMENDEMENT.texte); setZ(0);
-if(document.fonts&&document.fonts.ready) document.fonts.ready.then(layout);
+/* ---------- Départ ---------- */
+dAl.set(AMEND.map((_,i)=>alFace(i)),0);
+setMode("alinea");
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>{ dAl.layout(); dPt.layout(); dOt.layout(); });
 })();
 </script>

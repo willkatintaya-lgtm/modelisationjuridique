@@ -6,7 +6,7 @@ Interface pour rédiger un amendement parlementaire et voir, autour de lui, l'ar
 - `index.html` : page unique, vanilla JS/CSS, aucune dépendance. C'est la version de référence (2D interactive).
 - `archive/v0-tableau-de-bord.html` : première tentative (jauges, score global). Rejetée, gardée pour mémoire.
 - Une version 3D (three.js, plaque dans l'espace) a existé et a été abandonnée : « trop loufoque pour rien ». Ne pas y revenir sans demande explicite.
-- Données fictives : groupes et textes inventés, article 4 d'un projet de loi logement, 10 amendements concurrents.
+- Données fictives : groupes et textes inventés ; article 4 d'un projet de loi logement, un chapeau (alinéa 1, hors pile) et 5 alinéas de fond (2 à 6), chacun avec 4 à 10 amendements d'autres groupes (`OTHERS`, par numéro d'alinéa ; modes rédiger / compléter / supprimer).
 
 ## Direction artistique (ne pas dévier)
 - Espace sombre (`#0b0d12`), grille discrète estompée, poussière implicite ; accent doré `#d9b56a`.
@@ -20,13 +20,24 @@ Interface pour rédiger un amendement parlementaire et voir, autour de lui, l'ar
 - Les groupes politiques sont fictifs : ne pas attribuer de positions à des partis réels.
 
 ## Interactions en place
-- Feuille centrale = mon amendement ; double-clic sur le texte → édition en place (Valider / Annuler, Ctrl+Entrée, Échap).
-- **Haut / bas = les idées principales de mon texte** (pas les autres amendements, pas l'article). Ma feuille est un tambour de faces : face 0 = le texte seul ; face n = le même texte avec la n-ième idée surlignée (ex. « plus de 3 500 habitants », « 25 % de logements sociaux », « d'ici 2030 », « prélèvement sur les ressources fiscales de la commune »), étiquette « Seuil · idée 1 sur 4 » en pied. Défilement continu (deux doigts, glisser au doigt/à la souris, flèches, repères à gauche) puis calage : la face qui part en haut bascule en arrière (`rotateX` sur son bord bas), la suivante attend inclinée en dessous. Un petit geste suffit pour passer d'une idée ; élastique aux extrémités.
-- Les idées sont repérées par les règles de l'archive (seuil, taux, échéance, sanction ; `IDEAS` dans `index.html`), dans l'ordre du texte, recalculées après chaque modification : on reste sur la même idée si elle existe encore. En édition sur une face, le surlignage suit la frappe.
-- **Dézoomer = le texte d'origine** (pincer sur le pavé tactile → `wheel` + `ctrlKey` ; `gesture*` sous Safari ; deux doigts qui se rapprochent sur écran tactile ; ou poignée « Article 4 ⊖ »). Seul l'alinéa visé apparaît, en feuille surlignée au-dessus de ma feuille, la scène rapetisse légèrement ; le geste est suivi en continu puis se cale. Zoomer, la poignée ou Échap le renvoie. En dézoom, haut/bas ne fait rien et ma feuille montre les écarts au lieu de l'idée.
-- Comparaison en direct (en dézoom) : écart mot à mot (plus longue sous-suite commune, guillemets « » ignorés). Dans l'original, **barré** = ce que mon amendement supprime ; dans ma feuille, **surligné doré** = ce qu'il ajoute. Un simple clic sur mon texte ouvre l'édition au point cliqué ; les marques se recalculent à chaque frappe (calque miroir sous une zone de saisie transparente).
-- Droite : glisser vers la gauche → ma feuille sort, colonne de boîtes papier (groupe, numéro, objet, « + ») avec défilement à inertie ; « + » déplie l'amendement en feuille complète. Glisser vers la droite ramène ma feuille.
-- Pavé tactile : le sens du geste à deux doigts est verrouillé à son début ; horizontal = `wheel` cumulés (seuil 90) valent un glisser, vertical = défilement continu des idées ; sens « naturel » supposé.
+Trois gestes, même sens à chaque échelle (c'est la symétrie voulue, ne pas la casser) :
+- **Haut / bas = parcourir mon texte** : l'unité voisine, au même niveau.
+- **Gauche = la même unité chez les autres groupes**, en pile. Droite ramène la mienne.
+- **Clic / pincer = changer d'échelle.** Dézoomer remonte d'un cran : passage → groupes → alinéa → texte d'origine. Zoomer (ou cliquer un surlignage) redescend.
+
+| | Échelle **alinéa** (départ) | Échelle **passage** (clic sur un surlignage) |
+|---|---|---|
+| Au centre | mon amendement sur l'alinéa, passages surlignés en léger | le passage seul, isolé, en grand |
+| Haut / bas | alinéa 2 → 3 → … → 6 | passage suivant du même alinéa |
+| Gauche | pile des amendements des autres groupes sur cet alinéa | pile des rédactions de ce passage chez les autres (mots qui diffèrent de la mienne surlignés) ; versions identiques mises à part (« 6 groupes gardent la vôtre ») ; « Supprime ce point » si le groupe le retire |
+| Dézoomer | l'alinéa d'origine au-dessus de ma feuille, écarts en direct | petits carrés papier, un par groupe (le mien, le texte d'origine, chaque amendement) ; on en coche, « Sélectionner » les met côte à côte |
+
+Détails :
+- **La pile** (« tambour ») sert partout : défilement continu (deux doigts, glisser au doigt ou à la souris, flèches, repères à gauche) puis calage ; la feuille du dessus bascule en arrière (`rotateX` sur son bord bas), la suivante attend inclinée en dessous. Un petit geste suffit ; élastique aux extrémités. Classe `Drum` dans `index.html`.
+- **Passages** : chaque alinéa déclare ses `points` (règle qui retrouve le passage dans n'importe quelle rédaction : la mienne, celles des autres, l'origine). Surlignage léger (fond doré pâle + filet), plus marqué au survol, pour ne pas saturer quand il y en a beaucoup. Un clic sur un surlignage attend 260 ms pour laisser place au double-clic d'édition. Cliquer un surlignage dans l'amendement d'un autre groupe ouvre le passage côté autres, sur sa rédaction.
+- **Édition** : double-clic sur mon texte (alinéa) → édition en place (Valider / Annuler, Ctrl+Entrée, Échap) ; les surlignages suivent la frappe. En vue « texte d'origine », un simple clic suffit et ma feuille montre les écarts mot à mot (plus longue sous-suite commune, guillemets « » ignorés) : **barré** dans l'original = supprimé, **surligné** dans le mien = ajouté.
+- **Échap** = revenir d'un cran (côte à côte → carrés → passage → alinéa ; origine → alinéa ; autres → les miens).
+- Pincer : `wheel` + `ctrlKey` (Chrome, Edge, Firefox), `gesture*` (Safari), deux doigts au tactile ; un cran par geste. Poignée du haut = même chose au clic. Pavé tactile à deux doigts : sens verrouillé au début du geste ; horizontal cumulé (seuil 90) = changer de volet.
 
 ## Flux cible (scènes, à construire dans l'ordre)
 1. Accueil : mon amendement. ✔
