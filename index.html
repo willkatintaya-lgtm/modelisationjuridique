@@ -3,7 +3,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
 /* Scène 2D : des feuilles dans un espace sombre. Trois gestes, même sens partout :
-   haut/bas = parcourir ; gauche/droite = changer de volet (article ← le mien → les autres → comparer) ; clic/pincer = changer d'échelle. */
+   haut/bas = parcourir ; gauche/droite = volet voisin (comparer des articles ← les articles ← le mien → les autres → comparer) ;
+   clic/pincer = changer d'échelle. */
 :root{
   --bg:#0b0d12; --bg-2:#11141b; --fg:#e8e6df; --muted:#8a8f9b; --accent:#d9b56a; --accent-soft:rgba(217,181,106,.28); --line:#232733; --line-2:#2f3443;
   --paper:#f4f1e9; --paper-2:#e9e4d8; --paper-ink:#1d1a16; --paper-muted:#6b6457; --paper-line:#c9bfa6; --paper-frame:#ece7db;
@@ -23,42 +24,40 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);overf
 /* --- matière papier, partagée par toutes les feuilles --- */
 .paper{background:linear-gradient(135deg,var(--paper),var(--paper-2));color:var(--paper-ink);border:1px solid var(--paper-line);outline:14px solid var(--paper-frame);outline-offset:-14px;
   box-shadow:0 30px 80px rgba(0,0,0,.65), 0 0 0 1px rgba(217,181,106,.25)}
-.paper .head{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-muted);border-bottom:1px solid var(--paper-line);padding-bottom:8px}
+.paper .head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px 12px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-muted);border-bottom:1px solid var(--paper-line);padding-bottom:8px}
 .paper .lead{font:italic 400 15px var(--f-legal);color:var(--paper-muted);margin:4px 0 0}
 .paper .body{font:400 clamp(17px,2.2vw,23px)/1.5 var(--f-legal);max-width:68ch}
 .paper .body p{margin:0}
 .paper .none{font-style:italic;color:var(--paper-muted)}
-.group-badge{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;min-width:0}
+.group-badge{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
 .group-badge i{width:8px;height:8px;border-radius:50%;background:var(--g);display:inline-block;flex:none}
 .group-badge .name{font:600 clamp(17px,1.9vw,21px)/1.2 var(--f-legal);color:var(--paper-ink);letter-spacing:0;text-transform:none;white-space:normal}
 
-/* marques : les passages (surlignage léger, cliquable) ; les écarts (ajouté surligné / supprimé barré) */
-.paper mark.pt{color:inherit;background:rgba(217,181,106,.17);box-shadow:inset 0 -2px 0 rgba(217,181,106,.75);border-radius:2px;cursor:pointer;transition:background .2s;-webkit-box-decoration-break:clone;box-decoration-break:clone}
-.paper mark.pt:hover{background:rgba(217,181,106,.4)}
-/* écart avec la commission, toujours porté sur la feuille du groupe (la commission reste vierge) : ajout = souligné, gras, encre bleue ; suppression = barré, encore lisible */
+/* unités de sens : un simple filet doré, cliquable (le fond n'apparaît qu'au survol) */
+.paper mark.pt{color:inherit;background:none;box-shadow:inset 0 -1.5px 0 rgba(217,181,106,.95);cursor:pointer;transition:background .2s;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.paper mark.pt:hover{background:rgba(217,181,106,.24)}
+/* écart avec la commission, toujours porté sur la rédaction du groupe (la commission reste vierge) : ajout = souligné, gras, encre bleue ; suppression = barré, encore lisible */
 .paper ins{color:var(--ins);font-weight:600;text-decoration:underline 1.5px;text-underline-offset:3px;background:none}
 .paper del{color:#7d7466;text-decoration:line-through 1.5px var(--del);background:none}
 .paper ins[data-h],.paper del[data-h]{cursor:zoom-in;border-radius:2px;transition:background .2s}
 .paper ins[data-h]:hover,.paper del[data-h]:hover{background:rgba(29,79,145,.09)}
-/* écart avec ma rédaction (pile des autres, au passage) : simple surlignage, à retravailler */
-.paper mark.dif{color:inherit;background:rgba(217,181,106,.4);border-radius:2px}
 
-/* --- quatre volets côte à côte : article · le mien · les autres · comparer --- */
+/* --- cinq volets côte à côte --- */
 .center{position:absolute;inset:0}
 .pane{position:absolute;inset:0;transform:translateX(calc(var(--rel,0) * 55%));opacity:0;visibility:hidden;pointer-events:none;
   transition:transform .5s var(--ease),opacity .4s,visibility 0s linear .5s}
 .pane.on{opacity:1;visibility:visible;pointer-events:auto;transition:transform .5s var(--ease),opacity .4s,visibility 0s}
 .pane-others{padding:84px var(--gutter-r) 56px var(--gutter-l);display:flex;flex-direction:column;align-items:center;justify-content:center}
-.pane-article,.pane-lib{padding:76px var(--gutter-r) 64px var(--gutter-l);display:flex;flex-direction:column;align-items:center}
+.pane-cmp{padding:76px var(--gutter-r) 60px var(--gutter-l);display:flex;flex-direction:column;align-items:center}
 .pile-title{position:absolute;top:44px;left:var(--gutter-l);right:var(--gutter-r);z-index:2;margin:0;text-align:center;color:var(--muted);font-size:11px;letter-spacing:.12em;text-transform:uppercase;line-height:1.6;pointer-events:none}
 .pile-title b{color:var(--fg);font-weight:500}
 
-/* --- échelles dans mon volet : alinéa (0) · passage (1) --- */
+/* --- échelles empilées dans un volet --- */
 .layer{position:absolute;inset:0;padding:72px var(--gutter-r) 56px var(--gutter-l);display:flex;flex-direction:column;align-items:center;justify-content:center;
   opacity:0;visibility:hidden;pointer-events:none;transform:scale(.86);transition:opacity .4s,transform .5s var(--ease),visibility 0s linear .5s}
 .layer.shallow{transform:scale(1.18)}
 .layer.on{opacity:1;visibility:visible;pointer-events:auto;transform:none;transition:opacity .4s,transform .5s var(--ease),visibility 0s}
-.layer-pt{padding-top:84px}
+.layer-pt,.layer-duo{padding-top:84px}
 .pane:not(.on) .layer.on{visibility:inherit;pointer-events:none} /* un volet masqué ne doit rien capter, même par sa couche active */
 
 /* --- la pile : un tambour de feuilles --- */
@@ -67,6 +66,7 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);overf
 .face{position:absolute;top:0;left:0;right:0;margin:0 auto;width:min(880px,100%);max-height:calc(100vh - 160px);max-height:calc(100dvh - 160px);
   touch-action:none;user-select:none;-webkit-user-select:none;will-change:transform,opacity}
 .face.passage{width:min(680px,100%);grid-template-rows:auto minmax(0,1fr) auto}
+.face.artf{grid-template-rows:auto minmax(0,1fr) auto;padding:28px 34px 20px}
 .face:not(.cur){cursor:pointer}
 .face.editing{user-select:text;-webkit-user-select:text}
 .sheet.editing{box-shadow:0 30px 80px rgba(0,0,0,.65), 0 0 0 2px var(--accent)}
@@ -82,6 +82,14 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);overf
 .sheet button{font:500 13px var(--f-ui);border-radius:4px;padding:6px 14px;cursor:pointer;border:1px solid #a89c80;background:transparent;color:#4a4336}
 .sheet button.primary{background:#2a2620;color:var(--paper);border-color:#2a2620}
 .sheet button:focus-visible{outline:2px solid #2a2620;outline-offset:2px}
+/* une proposition et les groupes qui la portent */
+.cluster .body{max-width:none}
+.who{display:flex;flex-wrap:wrap;gap:6px 8px;margin-top:14px}
+.who-i{display:inline-flex;align-items:center;gap:6px;font:500 12px var(--f-ui);color:var(--paper-ink);background:rgba(255,255,255,.45);border:1px solid var(--paper-line);border-radius:999px;padding:4px 10px;white-space:nowrap}
+.who-i i{width:7px;height:7px;border-radius:50%;background:var(--g)}
+.who-i small{color:var(--paper-muted);font-size:10.5px}
+button.who-i{cursor:pointer}
+button.who-i:hover,button.who-i:focus-visible{border-color:#8a7a55;outline:none;background:rgba(255,255,255,.75)}
 /* éditeur : une zone de saisie transparente posée sur un calque qui porte les marques */
 .ed{position:relative}
 .ed .mirror,.sheet textarea{font:inherit;letter-spacing:inherit;white-space:pre-wrap;overflow-wrap:break-word;word-break:normal;margin:0;padding:0;border:0}
@@ -106,59 +114,87 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);overf
 .orig .legend{font:400 12px/1.45 var(--f-ui);color:var(--paper-muted);margin:0}
 .orig .legend ins,.orig .legend del{padding:0 3px}
 
-/* --- volet de gauche : tout l'article, en corrections apparentes contre une référence --- */
-.refs{width:min(880px,100%);flex:none;display:flex;align-items:center;gap:8px;overflow-x:auto;padding:2px 2px 12px;touch-action:pan-x;scrollbar-width:thin}
-.refs-lbl{flex:none;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-right:4px}
-.chip{flex:none;display:inline-flex;align-items:center;gap:7px;font:500 12px var(--f-ui);color:var(--muted);background:rgba(11,13,18,.7);border:1px solid var(--line-2);border-radius:999px;padding:6px 12px;cursor:pointer;white-space:nowrap}
-.chip i{width:8px;height:8px;border-radius:50%;background:var(--g)}
-.chip:hover,.chip:focus-visible{color:var(--fg);outline:none;border-color:#4a5062}
-.chip[aria-pressed=true]{color:var(--fg);border-color:var(--accent);background:rgba(217,181,106,.12)}
-.art-scroll{width:min(880px,100%);flex:1;min-height:0;overflow-y:auto;touch-action:pan-y;padding:24px 4px 44px}
-.art{padding:30px 40px 28px}
-.art h2{font:600 24px var(--f-legal);margin:8px 0 4px}
-.art .legend{font:400 12px/1.5 var(--f-ui);color:var(--paper-muted);margin:0 0 14px}
-.art .legend ins,.art .legend del{padding:0 3px}
-.art ol{list-style:none;margin:0;padding:0;display:grid;gap:4px}
-.art li{display:grid;grid-template-columns:26px 1fr;gap:2px 12px;padding:9px 10px;border-radius:3px;font:400 clamp(16px,1.7vw,18px)/1.55 var(--f-legal)}
-.art li .n{font:400 12px var(--f-ui);color:var(--paper-muted);padding-top:5px}
-.art li .meta{grid-column:2;font:400 11.5px var(--f-ui);color:#8a8070}
-.art li[data-i]{cursor:pointer;transition:background .2s}
-.art li[data-i]:hover{background:rgba(217,181,106,.1)}
-.art li.here{box-shadow:inset 3px 0 0 var(--accent)}
+/* --- index des unités de sens de l'alinéa --- */
+.units{position:absolute;z-index:6;left:46px;top:50%;transform:translateY(-50%);width:150px;display:grid;gap:6px;transition:opacity .3s}
+.units.hide{opacity:0;pointer-events:none}
+.units-t{margin:0 0 4px;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.units button{display:grid;gap:1px;text-align:left;font:500 13px var(--f-ui);color:var(--fg);background:rgba(11,13,18,.6);border:1px solid var(--line-2);border-left:2px solid var(--accent);border-radius:4px;padding:7px 10px;cursor:pointer;backdrop-filter:blur(6px)}
+.units button small{font:400 11px var(--f-ui);color:var(--muted)}
+.units button:hover,.units button:focus-visible{border-color:var(--accent);outline:none;background:rgba(217,181,106,.1)}
+@media (max-width:1199px){
+  .units{left:var(--gutter-l);right:var(--gutter-r);top:40px;transform:none;width:auto;display:flex;align-items:center;gap:6px;overflow-x:auto;touch-action:pan-x;scrollbar-width:none}
+  .units::-webkit-scrollbar{display:none}
+  .units-t{margin:0 4px 0 0;flex:none}
+  .units button{flex:none;display:flex;gap:6px;align-items:baseline;padding:5px 9px;font-size:12px}
+}
 
-/* --- volet de droite : la bibliothèque des rédactions, et la sélection en petit à côté --- */
-.lib-wrap{width:100%;max-width:1120px;flex:1;min-height:0;display:flex;justify-content:center;gap:28px}
-.lib-col{width:min(640px,100%);min-height:0;display:flex;flex-direction:column;transition:width .45s var(--ease)}
+/* --- les articles en entier --- */
+.art-ol{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.art-ol li{display:grid;grid-template-columns:24px 1fr;gap:2px 12px;padding:8px 8px 8px 10px;border-radius:3px;font:400 clamp(15px,1.6vw,17px)/1.55 var(--f-legal)}
+.art-ol li .n{font:400 12px var(--f-ui);color:var(--paper-muted);padding-top:4px}
+.art-ol li .meta{grid-column:2;font:400 11.5px var(--f-ui);color:#8a8070}
+.art-ol li.mod{box-shadow:inset 3px 0 0 var(--accent)}
+.art-ol li[data-i]{cursor:pointer;transition:background .2s}
+.art-ol li[data-i]:hover{background:rgba(217,181,106,.1)}
+.art-body{max-width:none!important;padding-right:4px}
+.art-h{font:600 22px var(--f-legal);margin:4px 0 10px}
+
+/* --- face à face et comparaison éclatée : colonnes papier dont les lignes s'alignent --- */
+.burst-scroll{width:min(1180px,100%);flex:1;min-height:0;overflow:auto;padding:22px 10px 40px}
+.burst-grid{display:grid;grid-template-columns:repeat(var(--k),minmax(0,1fr));gap:0 18px;align-items:start}
+.bcol{display:grid;grid-template-rows:subgrid;padding:22px 24px 14px;outline-width:10px;outline-offset:-10px;box-shadow:0 16px 40px rgba(0,0,0,.55), 0 0 0 1px rgba(217,181,106,.2)}
+.bcol .head{align-self:end;margin-bottom:4px;flex-wrap:wrap}
+.bcol.ref{box-shadow:0 16px 40px rgba(0,0,0,.55), 0 0 0 1px rgba(217,181,106,.45)}
+.cell{display:grid;grid-template-columns:22px 1fr;gap:10px;padding:10px 0;border-top:1px solid rgba(201,191,166,.55);font:400 clamp(14.5px,1.35vw,16.5px)/1.55 var(--f-legal)}
+.cell:nth-child(2){border-top:0}
+.cell .n{font:400 11.5px var(--f-ui);color:var(--paper-muted);padding-top:3px}
+.cell.one{grid-template-columns:1fr;font-size:clamp(17px,1.9vw,22px)}
+.cell .meta{display:block;margin-top:4px;font:400 11px var(--f-ui);color:#8a8070}
+.layer-duo .burst-scroll{touch-action:none}
+
+/* --- comparer : une bibliothèque qui défile, un coffre, puis l'éclatement --- */
+.cmp-wrap{width:100%;max-width:1160px;flex:1;min-height:0;display:flex;justify-content:center;gap:26px}
+.lib-col{width:min(620px,100%);min-height:0;display:flex;flex-direction:column}
+.pane-cmpL .lib-col{width:min(420px,40%)}
 .lib-list{flex:1;min-height:0;overflow-y:auto;touch-action:pan-y;display:grid;align-content:start;gap:14px;padding:24px 12px 44px}
-.lib-item{display:grid;gap:8px;padding:20px 24px 16px;cursor:pointer;outline-width:10px;outline-offset:-10px;box-shadow:0 14px 34px rgba(0,0,0,.5), 0 0 0 1px rgba(217,181,106,.2);transition:box-shadow .2s,transform .2s}
+.lib-item{display:grid;gap:8px;padding:20px 24px 16px;cursor:pointer;outline-width:10px;outline-offset:-10px;box-shadow:0 14px 34px rgba(0,0,0,.5), 0 0 0 1px rgba(217,181,106,.2);transition:box-shadow .2s,transform .2s,opacity .2s}
 .lib-item:hover{transform:translateX(3px)}
 .lib-item.on{box-shadow:0 14px 34px rgba(0,0,0,.5), 0 0 0 2px var(--accent)}
+.lib-item.full:not(.on){opacity:.55}
 .lib-item:focus-visible{box-shadow:0 0 0 3px var(--fg)}
 .lib-item .head .in{color:#8a6a28;font-weight:600}
 .lib-text{font:400 clamp(16px,1.6vw,18px)/1.5 var(--f-legal);margin:0}
 .lib-objet{font:italic 400 13.5px var(--f-legal);color:var(--paper-muted);margin:0}
-.sel-col{width:0;min-width:0;opacity:0;overflow:hidden;display:flex;flex-direction:column;transition:width .45s var(--ease),opacity .3s}
-.pane-lib.has-sel .lib-col{width:min(600px,58%)}
-.pane-lib.has-sel .sel-col{width:min(380px,40%);opacity:1}
-.sel-title{flex:none;margin:16px 4px 4px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;gap:10px;align-items:baseline;justify-content:space-between;white-space:nowrap}
-.sel-title b{color:var(--fg);font-weight:500}
-.lnk{background:none;border:0;padding:0;color:var(--muted);font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
-.lnk:hover,.lnk:focus-visible{color:var(--fg);outline:none}
-.sel-note{flex:none;margin:0 4px 10px;font-size:11.5px;color:var(--muted)}
-.sel-list{flex:1;min-height:0;overflow-y:auto;touch-action:pan-y;display:grid;align-content:start;gap:10px;padding:20px 4px 40px}
-.sel-card{display:grid;gap:6px;padding:12px 14px;outline-width:5px;outline-offset:-5px;box-shadow:0 8px 20px rgba(0,0,0,.45)}
-.sel-head{display:flex;align-items:center;gap:7px;font:500 10.5px var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--paper-muted)}
-.sel-head i{width:7px;height:7px;border-radius:50%;background:var(--g);flex:none}
-.sel-head b{color:var(--paper-ink);font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.sel-head span{margin-left:auto;white-space:nowrap}
-.sel-head .x{flex:none;border:0;background:none;color:var(--paper-muted);font:400 17px/1 var(--f-ui);cursor:pointer;padding:0 2px}
-.sel-head .x:hover,.sel-head .x:focus-visible{color:var(--paper-ink);outline:none}
-.sel-text{font:400 13.5px/1.45 var(--f-legal);margin:0}
+.lib-objets{margin:0;padding:0;list-style:none;display:grid;gap:3px;font:400 13px/1.4 var(--f-legal);color:var(--paper-muted)}
+.lib-objets b{font:500 11px var(--f-ui);color:var(--paper-ink);margin-right:6px}
+.coffre-col{width:min(260px,30%);display:flex;flex-direction:column;justify-content:center}
+.coffre{display:grid;gap:12px;padding:16px;border:1px dashed #3d4354;border-radius:10px;background:rgba(11,13,18,.55);backdrop-filter:blur(6px);transition:border-color .2s}
+.coffre.flash{animation:flash .5s}
+@keyframes flash{0%,100%{border-color:#3d4354}40%{border-color:var(--del)}}
+.coffre-t{margin:0;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.coffre-t b{color:var(--fg);font-weight:500}
+.pastilles{display:flex;flex-wrap:wrap;gap:8px}
+.pastille{display:inline-flex;align-items:center;gap:7px;font:500 12px var(--f-ui);color:var(--fg);background:#1a1e28;border:1px solid var(--line-2);border-radius:999px;padding:5px 6px 5px 10px;animation:drop .35s var(--ease)}
+@keyframes drop{from{transform:translateY(-8px) scale(.8);opacity:0}to{transform:none;opacity:1}}
+.pastille i{width:8px;height:8px;border-radius:50%;background:var(--g)}
+.pastille button{border:0;background:none;color:var(--muted);font:400 15px/1 var(--f-ui);cursor:pointer;padding:0 3px}
+.pastille button:hover{color:var(--fg)}
+.coffre-vide{font-size:12px;color:var(--muted);line-height:1.45}
+.pane-cmpL .coffre{margin:22px 12px 0}
+.main-art{width:min(640px,60%);min-height:0;overflow-y:auto;padding:24px 8px 44px}
+.main-art .art{padding:26px 32px 24px}
+.burst{display:none;width:100%;flex:1;min-height:0;flex-direction:column;align-items:center;gap:12px}
+.pane-cmp.bursting .cmp-wrap{display:none}
+.pane-cmp.bursting .burst{display:flex}
+.burst .btn{flex:none}
+.btn{font:500 13px var(--f-ui);letter-spacing:.04em;color:var(--fg);background:rgba(11,13,18,.75);border:1px solid var(--accent);border-radius:999px;padding:9px 20px;cursor:pointer;backdrop-filter:blur(6px)}
+.btn:hover,.btn:focus-visible{background:rgba(217,181,106,.16);outline:none}
+.btn:disabled{opacity:.45;cursor:default;border-color:var(--line-2);background:rgba(11,13,18,.75)}
 
 /* --- listes : défilement natif, sans barre, bords fondus --- */
-.art-scroll,.lib-list,.sel-list,.refs,.sheet .body,.orig .body{scrollbar-width:none;-ms-overflow-style:none}
-.art-scroll::-webkit-scrollbar,.lib-list::-webkit-scrollbar,.sel-list::-webkit-scrollbar,.refs::-webkit-scrollbar,.sheet .body::-webkit-scrollbar,.orig .body::-webkit-scrollbar{display:none}
-.art-scroll,.lib-list,.sel-list{scroll-behavior:smooth;overscroll-behavior:contain;
+.lib-list,.main-art,.burst-scroll,.sheet .body,.orig .body{scrollbar-width:none;-ms-overflow-style:none}
+.lib-list::-webkit-scrollbar,.main-art::-webkit-scrollbar,.burst-scroll::-webkit-scrollbar,.sheet .body::-webkit-scrollbar,.orig .body::-webkit-scrollbar{display:none}
+.lib-list,.main-art,.burst-scroll{scroll-behavior:smooth;overscroll-behavior:contain;
   -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 18px,#000 calc(100% - 40px),transparent 100%);mask-image:linear-gradient(to bottom,transparent 0,#000 18px,#000 calc(100% - 40px),transparent 100%)}
 
 /* --- loupe : une modification et la commission, côte à côte --- */
@@ -170,15 +206,11 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);overf
 .loupe-title{margin:0;text-align:center;color:var(--muted);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
 .loupe-title b{color:var(--fg);font-weight:500}
 .loupe-cols{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
-.lc .group-badge{white-space:normal}
-.btn{font:500 13px var(--f-ui);letter-spacing:.04em;color:var(--fg);background:rgba(11,13,18,.75);border:1px solid var(--accent);border-radius:999px;padding:9px 20px;cursor:pointer;backdrop-filter:blur(6px)}
-.btn:hover,.btn:focus-visible{background:rgba(217,181,106,.16);outline:none}
 .lc{display:grid;align-content:start;gap:12px;padding:24px 26px 22px}
 .lc .head{flex-wrap:wrap}
+.lc .group-badge{white-space:normal}
 .lc p{font:400 clamp(17px,2.4vw,27px)/1.45 var(--f-legal);margin:0}
 .lc .ctx{color:var(--paper-muted)}
-.sel-note ins{color:#9fc1ef;font-weight:600;text-decoration:underline;text-underline-offset:2px}
-.sel-note del{color:var(--muted);text-decoration:line-through #c8664f}
 
 /* --- repères de la pile, à gauche --- */
 .rail{position:absolute;left:max(5px,env(safe-area-inset-left,0px));top:68%;transform:translateY(-50%);z-index:9;display:grid;gap:12px;transition:opacity .3s}
@@ -204,30 +236,43 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);overf
 .hint b{color:var(--fg);font-weight:500}
 @media (max-width:760px){
   .hint{font-size:11px;padding:5px 10px;white-space:normal;text-align:center;width:max-content;max-width:calc(100vw - 32px);border-radius:12px}
-  .sheet{padding:24px 20px 18px}.orig{padding:18px 20px 14px}.orig-clip{padding-bottom:16px}.art{padding:22px 18px}.art li{padding:8px 4px;grid-template-columns:20px 1fr}
-  .lib-wrap{flex-direction:column;gap:6px}
-  .lib-col,.pane-lib.has-sel .lib-col{width:100%;flex:1}
-  .sel-col{width:100%;height:0;flex:none;transition:height .45s var(--ease),opacity .3s}
-  .pane-lib.has-sel .sel-col{width:100%;height:36%}
-  .sel-title{margin-top:4px}
-  .sel-list{display:flex;overflow-x:auto;overflow-y:hidden;touch-action:pan-x;align-items:stretch;padding:2px 4px 6px}
-  .sel-card{flex:0 0 72%;overflow:auto;align-content:start}
+  .sheet{padding:24px 20px 18px}.face.artf{padding:20px 18px 14px}.orig{padding:18px 20px 14px}.orig-clip{padding-bottom:16px}
+  .art-ol li{padding:7px 2px 7px 6px;grid-template-columns:18px 1fr;gap:2px 8px}
+  .cmp-wrap{flex-direction:column;gap:8px}
+  .lib-col,.pane-cmpL .lib-col{width:100%;flex:1}
+  .main-art{display:none}
+  .coffre-col{width:100%;flex:none}
+  .coffre{grid-template-columns:1fr auto;align-items:center;padding:10px 12px;gap:8px}
+  .coffre .pastilles{grid-column:1 / -1;order:3}
+  .pane-cmpL .coffre{margin:8px 0 0}
   .lib-item{padding:16px 18px 14px}
-  .sel-list{-webkit-mask-image:none;mask-image:none}
+  .burst-scroll{overflow-x:auto;scroll-snap-type:x mandatory;touch-action:pan-x pan-y;padding:16px 4px 30px}
+  .burst-grid{grid-template-columns:repeat(var(--k),minmax(250px,82vw))}
+  .bcol{scroll-snap-align:center;padding:18px 16px 12px}
+  .layer-duo .burst-scroll{touch-action:pan-x}
   .lc{padding:16px 14px 14px;outline-width:8px;outline-offset:-8px}.loupe-cols{gap:10px}
 }
-@media (prefers-reduced-motion:reduce){.pane,.layer,.zoomer,.orig-wrap,.orig,.sheet,.handle,.rail,.lib-col,.sel-col{transition:none}}
+@media (prefers-reduced-motion:reduce){.pane,.layer,.zoomer,.orig-wrap,.orig,.sheet,.handle,.rail,.lib-item,.pastille{transition:none;animation:none}}
 </style>
 
 <div id="stage" data-mode="alinea" data-pane="mine">
   <div class="center">
-    <div class="pane pane-article" id="pArticle" aria-label="Tout l'article">
-      <p class="pile-title" id="artTitle"></p>
-      <div class="refs" id="refs" role="group" aria-label="Référence de comparaison"></div>
-      <div class="art-scroll"><article class="art paper" id="art"></article></div>
+    <div class="pane pane-cmp pane-cmpL" id="pCmpL" aria-label="Comparer des articles">
+      <p class="pile-title" id="cmpLTitle"></p>
+      <div class="cmp-wrap">
+        <div class="lib-col"><div class="coffre" id="coffreL"></div><div class="lib-list" id="libL" role="group" aria-label="Les versions de l'article"></div></div>
+        <div class="main-art"><article class="art paper" id="mainArt"></article></div>
+      </div>
+      <div class="burst" id="burstL"></div>
+    </div>
+    <div class="pane pane-arts" id="pArts" aria-label="Les articles en entier">
+      <p class="pile-title" id="arTitle"></p>
+      <div class="layer layer-ar on" id="lAr"><div class="drum" id="drumAr"></div></div>
+      <div class="layer layer-duo" id="lDuo"><div class="burst-scroll" id="duo"></div></div>
     </div>
     <div class="pane pane-mine on" id="pMine" aria-label="Vos amendements">
-      <div class="layer layer-al" id="lAl">
+      <nav class="units hide" id="units" aria-label="Unités de sens de l'alinéa"></nav>
+      <div class="layer layer-al on" id="lAl">
         <div class="zoomer">
           <div class="orig-wrap" aria-hidden="true">
             <div class="orig-clip">
@@ -243,7 +288,7 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);overf
       </div>
       <div class="layer layer-pt" id="lPt">
         <p class="pile-title" id="ptTitle"></p>
-        <div class="drum" id="drumPt" aria-label="Votre rédaction, passage par passage"></div>
+        <div class="drum" id="drumPt" aria-label="Votre rédaction, unité par unité"></div>
       </div>
     </div>
     <div class="pane pane-others" id="pOthers" aria-label="Les autres groupes">
@@ -261,16 +306,13 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);overf
         <div class="drum" id="drumOt"></div>
       </div>
     </div>
-    <div class="pane pane-lib" id="pLib" aria-label="Comparer les rédactions">
+    <div class="pane pane-cmp pane-cmpR" id="pLib" aria-label="Comparer les rédactions">
       <p class="pile-title" id="libTitle"></p>
-      <div class="lib-wrap" id="libWrap">
-        <div class="lib-col"><div class="lib-list" id="libList" role="group" aria-label="Bibliothèque des rédactions"></div></div>
-        <aside class="sel-col" aria-label="Sélection">
-          <p class="sel-title"><span id="selCount"></span><button type="button" class="lnk" id="selClear">tout retirer</button></p>
-          <p class="sel-note">Par rapport à la commission : <ins>ajouté</ins> · <del>supprimé</del> · cliquer pour zoomer</p>
-          <div class="sel-list" id="selList"></div>
-        </aside>
+      <div class="cmp-wrap">
+        <div class="lib-col"><div class="lib-list" id="libR" role="group" aria-label="Bibliothèque des rédactions"></div></div>
+        <aside class="coffre-col"><div class="coffre" id="coffreR"></div></aside>
       </div>
+      <div class="burst" id="burstR"></div>
     </div>
   </div>
 
@@ -537,6 +579,7 @@ class Drum{
     const tick=()=>{ this.dim+=(t-this.dim)*.22; if(Math.abs(t-this.dim)<.01){ this.dim=t; this.layout(); return; } this.layout(); this.fraf=requestAnimationFrame(tick); };
     this.fraf=requestAnimationFrame(tick);
   }
+  jump(t){ cancelAnimationFrame(this.raf); this.pos=this.raw=clamp(t,0,Math.max(0,this.n-1)); this.layout(); }
   begin(){ cancelAnimationFrame(this.raf); this.raw=this.pos; return this.cur; }
   rubber(v){ const m=this.n-1; return v<0 ? v*.3 : v>m ? m+(v-m)*.3 : v; }
   move(px){ this.raw+=px/this.step(); this.pos=this.rubber(this.raw); this.layout(); }
@@ -549,15 +592,21 @@ class Drum{
 }
 
 /* ---------- État ---------- */
-// pane : -1 article · 0 le mien · 1 les autres (pile) · 2 comparer (bibliothèque) ; mode (échelle) : origin < alinea < passage
-const S={ pane:0, mode:"alinea", pts:[], lastPt:{}, edit:-1, ref:"orig", libSel:new Set(), libAl:-1, libE:[] };
-const PANE_NAME={"-1":"article","0":"mine","1":"others","2":"lib"}, PANE_EL={"-1":$("#pArticle"),"0":$("#pMine"),"1":$("#pOthers"),"2":$("#pLib")};
+// pane : -2 comparer des articles · -1 les articles · 0 le mien · 1 les autres · 2 comparer des rédactions
+// mode (échelle) : origin < alinea < passage ; les articles ne connaissent que alinea (la pile) et origin (face à face)
+const S={ pane:0, mode:"alinea", pts:[], lastPt:{}, edit:-1, selR:[], selRAl:-1, burstR:false, selL:[], burstL:false };
+const PANE_EL={"-2":$("#pCmpL"),"-1":$("#pArts"),"0":$("#pMine"),"1":$("#pOthers"),"2":$("#pLib")};
+const PANE_NAME={"-2":"cmpL","-1":"arts","0":"mine","1":"others","2":"lib"};
 const DEPTH={origin:-1,alinea:0,passage:1};
-const dAl=new Drum($("#drumAl"),()=>onAlMove()), dPt=new Drum($("#drumPt"),()=>onPtMove()), dOt=new Drum($("#drumOt"),()=>{ paintOrigOt(); chrome(); });
+const dAl=new Drum($("#drumAl"),()=>onAlMove()), dPt=new Drum($("#drumPt"),()=>onPtMove()), dOt=new Drum($("#drumOt"),()=>{ paintOrigOt(); chrome(); }), dAr=new Drum($("#drumAr"),()=>onArMove());
 const hTop=$("#hTop"), hLeft=$("#hLeft"), hRight=$("#hRight"), rail=$("#rail");
-const curAl=()=>dAl.cur, curPt=()=>S.pts[dPt.cur]||null, curOtNum=()=>{ const f=dOt.faces[dOt.cur]; return f?f.dataset.num:undefined; };
-function verticalDrum(){ if(S.edit>=0) return null; if(S.pane===1) return dOt; if(S.pane===0) return S.mode==="passage"?dPt:dAl; return null; }
-const pop=(el,dir)=>{ if(!reduced&&el.animate) el.animate([{opacity:0,transform:`scale(${dir>0?.9:1.1})`},{opacity:1,transform:"none"}],{duration:380,easing:"cubic-bezier(.2,.8,.2,1)"}); };
+const curAl=()=>dAl.cur, curPt=()=>S.pts[dPt.cur]||null;
+const curOtNum=()=>{ const f=dOt.faces[dOt.cur]; if(!f) return undefined; return f.dataset.num||(f.dataset.ids||"").split(" ").find(id=>/^\d/.test(id)); };
+function verticalDrum(){ if(S.edit>=0) return null; if(S.pane===1) return dOt; if(S.pane===-1) return dAr; if(S.pane===0) return S.mode==="passage"?dPt:dAl; return null; }
+const pop=(el,dir)=>{ if(!reduced&&el&&el.animate) el.animate([{opacity:0,transform:`scale(${dir>0?.92:1.08})`},{opacity:1,transform:"none"}],{duration:380,easing:"cubic-bezier(.2,.8,.2,1)"}); };
+const canScroll=(el,d)=>el&&(d>0?el.scrollTop+el.clientHeight<el.scrollHeight-1:el.scrollTop>0);
+// dans les articles, le texte défile d'abord ; arrivé au bout, on passe à la version suivante
+const nestedEl=()=> S.pane!==-1 ? null : S.mode==="origin" ? $("#duo") : (dAr.faces[dAr.cur]||{querySelector:()=>null}).querySelector(".art-body");
 
 /* ---------- Mes feuilles ---------- */
 const myBadge=()=>`<span class="group-badge" style="--g:${GROUPS[ME].color}"><i></i>${esc(GROUPS[ME].name)}</span>`;
@@ -570,7 +619,7 @@ function paintAl(i){
   const f=dAl.faces[i]; if(!f||f.classList.contains("editing")) return;
   const a=AMEND[i], t=MINE[i].texte, origin=S.mode==="origin";
   f.querySelector(".txt").innerHTML= origin ? diffSheet(a.texte,t,myMeta(a)) : pointMarks(a,t);
-  f.querySelector(".foot").innerHTML=`<span>${origin?"Cliquer une modification pour la comparer · ailleurs pour modifier le texte":"Cliquer sur un surlignage pour l'isoler · double-clic pour modifier"}</span>`;
+  f.querySelector(".foot").innerHTML=`<span>${origin?"Cliquer une modification pour la comparer · ailleurs pour modifier le texte":"Cliquer une unité de sens pour l'isoler · double-clic pour modifier"}</span>`;
 }
 function legendFor(d,who,where){
   return d.same ? `${who} reprend cet alinéa à l'identique.` : `Les modifications sont portées sur ${where} : <ins>ajouté</ins> · <del>supprimé</del> · cliquer l'une d'elles pour la comparer.`;
@@ -584,24 +633,47 @@ function paintOrig(text){
 }
 function buildPt(k){
   const i=curAl(), a=AMEND[i]; S.pts=findPoints(a,MINE[i].texte);
-  $("#ptTitle").innerHTML=`${ARTICLE.num}, alinéa ${a.n} · <b>votre rédaction</b>, passage par passage`;
-  dPt.set(S.pts.map((p,j)=>`<section class="sheet paper face passage" aria-label="${esc(p.label)}"><div class="head">${myBadge()}<span>Alinéa ${a.n}</span></div><div class="body"><p class="ptxt">${esc(p.text)}</p></div><div class="foot"><span class="tag"><i></i><b>${esc(p.label)}</b> passage ${j+1} sur ${S.pts.length}</span></div></section>`),
+  $("#ptTitle").innerHTML=`${ARTICLE.num}, alinéa ${a.n} · <b>votre rédaction</b>, unité par unité`;
+  dPt.set(S.pts.map((p,j)=>`<section class="sheet paper face passage" aria-label="${esc(p.label)}"><div class="head">${myBadge()}<span>Alinéa ${a.n}</span></div><div class="body"><p class="ptxt">${esc(p.text)}</p></div><div class="foot"><span class="tag"><i></i><b>${esc(p.label)}</b> unité ${j+1} sur ${S.pts.length}</span></div></section>`),
     Math.max(0,S.pts.findIndex(p=>p.k===k)));
 }
+// index des unités de sens : un clic ouvre le regroupement des propositions de tous les groupes
+function renderUnits(){
+  const el=$("#units"), show=S.pane===0&&S.mode==="alinea"&&S.edit<0;
+  el.classList.toggle("hide",!show); el.setAttribute("aria-hidden",String(!show));
+  if(!show) return;
+  const i=curAl(), pts=findPoints(AMEND[i],MINE[i].texte);
+  el.innerHTML=`<p class="units-t">Unités de sens</p>`+pts.map(p=>{ const n=clusters(i,p.k).length; return `<button type="button" data-k="${p.k}" title="Voir toutes les propositions sur ce point"><span>${esc(p.label)}</span><small>${n} ${plural(n,"proposition","propositions")}</small></button>`; }).join("");
+}
 
-/* ---------- La pile des autres ---------- */
-// leurs amendements sur l'alinéa (avec, au dézoom, leur écart à l'origine), ou leurs rédactions du passage
+/* ---------- Les autres ---------- */
+// au niveau d'une unité de sens, une feuille par proposition distincte, avec les groupes qui la portent
+function clusters(i,k){
+  const a=AMEND[i];
+  const items=[{id:"orig",label:"Texte de la commission",color:"#6b6457",text:passageOf(a,k,a.texte)},
+    {id:"mine",label:`Vous (${GROUPS[ME].name})`,color:GROUPS[ME].color,text:passageOf(a,k,MINE[i].texte)},
+    ...othersOf(i).map(o=>({id:o.num,num:o.num,label:GROUPS[o.g].name,color:GROUPS[o.g].color,text:o.mode==="supprimer"?null:passageOf(a,k,effText(a,o))}))];
+  const map=new Map();
+  for(const it of items){ const key=it.text==null?"∅":pnorm(it.text); if(!map.has(key)) map.set(key,{text:it.text,items:[]}); map.get(key).items.push(it); }
+  return [...map.values()].sort((x,y)=>y.items.length-x.items.length);
+}
 function buildOt(focus){
   if(focus===undefined) focus=curOtNum();
   const i=curAl(), a=AMEND[i];
   if(S.mode==="passage"){
-    const p=curPt(), v=versions(i,p.k), n=v.list.length;
-    $("#otTitle").innerHTML=`${esc(p.label)} · alinéa ${a.n} · <b>${n}</b> ${plural(n,"autre rédaction","autres rédactions")}`+(v.same.length>2?` · ${v.same.length} groupes gardent la vôtre`:v.same.length?` · ${plural(v.same.length,"garde","gardent")} la vôtre : ${v.same.map(o=>esc(GROUPS[o.g].name)+(o.g===ME?` (n° ${o.num})`:"")).join(", ")}`:"");
-    const html=v.list.map(({o,p:t},j)=>`<section class="sheet paper face passage" data-num="${o.num}"><div class="head">${badge(o)}<span>N° ${o.num}</span></div><div class="body"><p class="ptxt${t==null?" none":""}">${t==null?"Supprime ce point":difMarks(v.mine,t)}</p></div><div class="foot"><span class="tag"><i></i><b>${esc(p.label)}</b> rédaction ${j+1} sur ${n}</span></div></section>`);
-    dOt.set(html.length?html:[`<section class="sheet paper face passage"><div class="body"><p class="ptxt none">Tous les groupes gardent votre rédaction.</p></div></section>`], Math.max(0,v.list.findIndex(x=>x.o.num===focus)));
+    const p=curPt(), C=clusters(i,p.k), ref=passageOf(a,p.k,a.texte)||"", total=C.reduce((s,c)=>s+c.items.length,0);
+    $("#otTitle").innerHTML=`${esc(p.label)} · alinéa ${a.n} · <b>${C.length}</b> ${plural(C.length,"proposition","propositions")} pour ${total} rédactions`;
+    dOt.set(C.map((c,j)=>{
+      const isOrig=c.items.some(x=>x.id==="orig"), groups=c.items.filter(x=>x.id!=="orig");
+      const meta={...COMMISSION,label:groups.map(x=>x.label).join(", ")||"Texte de la commission",color:(groups[0]||c.items[0]).color,where:`${p.label.toLowerCase()}, alinéa ${a.n}`};
+      const txt= c.text==null ? `${inlineDiff(ref,"",meta)} <span class="none">(supprime ce point)</span>` : isOrig ? esc(c.text) : inlineDiff(ref,c.text,meta);
+      const who=c.items.map(x=>x.id==="orig" ? `<span class="who-i" style="--g:${x.color}"><i></i>${esc(x.label)}</span>`
+        : `<button type="button" class="who-i" data-goto="${esc(x.id)}" style="--g:${x.color}" title="Voir ${x.id==="mine"?"votre rédaction":"cet amendement"}"><i></i>${esc(x.label)}${x.num?` <small>n° ${x.num}</small>`:""}</button>`).join("");
+      return `<section class="sheet paper face passage cluster" data-ids="${c.items.map(x=>x.id).join(" ")}"><div class="head"><span>${esc(p.label)} · proposition ${j+1} sur ${C.length}</span><span>${isOrig?"rédaction de la commission":"modifie la commission"}</span></div><div class="body"><p class="ptxt">${txt}</p><div class="who">${who}</div></div><div class="foot"><span>${groups.length} ${plural(groups.length,"rédaction","rédactions")} de groupe${isOrig?" · identique à la commission":""}</span><span class="count">${j+1} / ${C.length}</span></div></section>`;
+    }), Math.max(0,C.findIndex(c=>c.items.some(x=>x.id===focus))));
   } else {
     const os=othersOf(i), n=os.length, origin=S.mode==="origin";
-    $("#otTitle").innerHTML=`${ARTICLE.num}, alinéa ${a.n} · <b>${n}</b> ${plural(n,"amendement","amendements")} d'autres groupes`+(origin?" · écart avec le texte de la commission":"");
+    $("#otTitle").innerHTML=`${ARTICLE.num}, alinéa ${a.n} · <b>${n}</b> ${plural(n,"amendement","amendements")} d'autres groupes`+(origin?" · face à la commission":"");
     dOt.set(os.map((o,j)=>{
       // au dézoom, chaque feuille montre l'alinéa tel que l'amendement le rédige, corrections apparentes comprises
       const lead= o.mode==="supprimer" ? "Supprimer cet alinéa." : origin ? `L'alinéa ${a.n} tel que le rédige cet amendement :` : o.mode==="completer" ? `Compléter l'alinéa ${a.n} par la phrase suivante :` : `Rédiger ainsi l'alinéa ${a.n} :`;
@@ -623,73 +695,130 @@ function paintOrigOt(){
   $("#origOtText").textContent=a.texte; $("#origOtLegend").innerHTML=legend;
 }
 
-/* ---------- Tout l'article ---------- */
+/* ---------- Les articles en entier ---------- */
+// une pile : ma version, puis celle de chaque groupe (ses amendements appliqués au texte de la commission)
 function refGroups(){ const gs=[]; for(const n of Object.keys(OTHERS)) for(const o of OTHERS[n]) if(!gs.includes(o.g)) gs.push(o.g); return gs; }
-function groupAl(a,g){ // la version d'un groupe pour cet alinéa : son amendement s'il en a un, sinon le texte de la commission
-  if(g==="orig") return {text:a.texte,o:null};
+function groupAl(a,g){
   const o=(OTHERS[a.n]||[]).find(x=>x.g===g); if(!o) return {text:a.texte,o:null};
   return {text:o.mode==="supprimer"?"":o.mode==="completer"?a.texte+" "+strip(o.texte):strip(o.texte),o};
 }
-function renderArticle(){
-  const ref=S.ref, gname=ref==="orig"?"":GROUPS[ref].name+(ref===ME?" (vos collègues)":"");
-  $("#artTitle").innerHTML=`${ARTICLE.num} en entier · <b>votre version</b>`;
-  $("#refs").innerHTML=`<span class="refs-lbl">Écarts avec</span>`+[["orig","#6b6457","Texte de la commission"],...refGroups().map(g=>[g,GROUPS[g].color,GROUPS[g].name+(g===ME?" (collègues)":"")])]
-    .map(([id,c,l])=>`<button type="button" class="chip" data-ref="${id}" aria-pressed="${id===ref}" style="--g:${c}"><i></i>${esc(l)}</button>`).join("");
-  const legend= ref==="orig" ? "Vos modifications par rapport au texte de la commission : <ins>ajouté</ins> · <del>supprimé</del> · cliquer une modification pour la comparer, un alinéa pour y aller"
-    : `Par rapport à la version de ${esc(gname)} : <ins>propre à votre texte</ins> · <del>chez eux, pas chez vous</del> · sans amendement de ce groupe, la référence reste le texte de la commission`;
-  const hMeta=a=>({refLabel:ref==="orig"?"Texte de la commission":`Version de ${gname}`,refColor:ref==="orig"?"#6b6457":GROUPS[ref].color,label:"Votre version",color:GROUPS[ME].color,where:`alinéa ${a.n}`});
+const ARTS=["mine",...refGroups()];
+const artLabel=id=>id==="mine"?"Votre version":GROUPS[id].name+(id===ME?" (vos collègues)":"");
+const artShort=id=>id==="mine"?"Vous":GROUPS[id].name+(id===ME?" (collègues)":"");
+const artColor=id=>GROUPS[id==="mine"?ME:id].color;
+function artVersion(id,a,i){
+  if(id==="mine"){ const t=strip(MINE[i].texte); return {text:t,o:null,mod:pnorm(t)!==pnorm(a.texte)}; }
+  const G=groupAl(a,id); return {...G,mod:!!G.o};
+}
+const artMods=id=>AMEND.map((a,i)=>({a,i,v:artVersion(id,a,i)})).filter(x=>x.v.mod);
+function artFace(id,j){
   const rows=ARTICLE.alineas.map(a=>{
     if(a.chapeau) return `<li><span class="n">${a.n}</span><div>${esc(a.texte)}</div></li>`;
-    const i=AMEND.indexOf(a), mine=strip(MINE[i].texte), G=groupAl(a,ref), n=othersOf(i).length;
-    const body= G.o&&G.o.mode==="supprimer" ? esc(mine) : inlineDiff(G.text,mine,hMeta(a));
-    const meta= ref==="orig" ? `${n} ${plural(n,"amendement","amendements")} d'autres groupes`
-      : !G.o ? `pas d'amendement de ce groupe : comparé au texte de la commission`
-      : G.o.mode==="supprimer" ? `ce groupe supprime l'alinéa (n° ${G.o.num})` : `amendement n° ${G.o.num} · ${esc(G.o.titre)}`;
-    return `<li data-i="${i}" class="${i===curAl()?"here":""}" title="Aller à l'alinéa ${a.n}"><span class="n">${a.n}</span><div>${body}</div><span class="meta">${meta}</span></li>`;
+    const i=AMEND.indexOf(a), v=artVersion(id,a,i);
+    const body= v.o&&v.o.mode==="supprimer" ? `<span class="none">Alinéa supprimé.</span>` : esc(v.text);
+    const meta= v.o ? `amendement n° ${v.o.num} · ${esc(v.o.titre)}` : id==="mine"&&v.mod ? `votre amendement ${esc(MINE[i].numero)}` : "";
+    return `<li data-i="${i}" class="${v.mod?"mod":""}" title="${v.mod?"Voir cet amendement":"Aller à cet alinéa"}"><span class="n">${a.n}</span><div>${body}</div>${meta?`<span class="meta">${meta}</span>`:""}</li>`;
   }).join("");
-  $("#art").innerHTML=`<div class="head"><span>${esc(ARTICLE.titre)}</span><span>Votre version</span></div><h2>${ARTICLE.num}</h2><p class="legend">${legend}</p><ol>${rows}</ol>`;
+  const nm=artMods(id).length;
+  return `<section class="sheet paper face artf" data-id="${id}" aria-label="${esc(artLabel(id))}"><div class="head"><span class="group-badge" style="--g:${artColor(id)}"><i></i><span class="name">${esc(artLabel(id))}</span></span><span>${ARTICLE.num} · ${nm} ${plural(nm,"alinéa modifié","alinéas modifiés")}</span></div><div class="body art-body"><ol class="art-ol">${rows}</ol></div><div class="foot"><span>Filet doré : alinéa modifié · cliquer un alinéa pour y aller</span><span class="count">${j+1} / ${ARTS.length}</span></div></section>`;
+}
+function buildAr(){ dAr.set(ARTS.map((id,j)=>artFace(id,j)),dAr.n?dAr.cur:0); $("#arTitle").innerHTML=`${ARTICLE.num} en entier · <b>${ARTS.length}</b> versions`; if(S.mode==="origin") renderDuo(); }
+// colonnes papier côte à côte, lignes alignées alinéa par alinéa (sous-grille)
+function burstHTML(cols,rows){
+  return `<div class="burst-grid" style="--k:${cols.length}">`+cols.map(c=>`<section class="bcol paper${c.ref?" ref":""}" style="grid-row:1 / span ${rows.length+1}"><div class="head"><span class="group-badge" style="--g:${c.color}"><i></i>${esc(c.label)}</span><span>${esc(c.sub||"")}</span></div>${c.cells.map((h,r)=>`<div class="cell${rows[r]==null?" one":""}">${rows[r]==null?"":`<span class="n">${rows[r]}</span>`}<div>${h}</div></div>`).join("")}</section>`).join("")+`</div>`;
+}
+const COMMISSION_COL=cells=>({label:"Texte de la commission",color:"#6b6457",sub:"référence",ref:true,cells});
+function artCells(id){ // une version de l'article, alinéa par alinéa, en corrections apparentes face à la commission
+  return ARTICLE.alineas.map(a=>{
+    if(a.chapeau) return esc(a.texte);
+    const i=AMEND.indexOf(a), v=artVersion(id,a,i), meta={...COMMISSION,label:artLabel(id),color:artColor(id),where:`alinéa ${a.n}`};
+    const html= v.o&&v.o.mode==="supprimer" ? inlineDiff(a.texte,"",meta) : inlineDiff(a.texte,v.text,meta);
+    const note= v.o ? `<span class="meta">n° ${v.o.num}${v.o.mode==="supprimer"?" · supprime l'alinéa":""}</span>` : "";
+    return html+note;
+  });
+}
+function renderDuo(){
+  const id=ARTS[dAr.cur], rows=ARTICLE.alineas.map(a=>a.n);
+  $("#duo").innerHTML=burstHTML([COMMISSION_COL(ARTICLE.alineas.map(a=>esc(a.texte))),{label:artLabel(id),color:artColor(id),sub:`${dAr.cur+1} / ${ARTS.length}`,cells:artCells(id)}],rows);
+  $("#duo").scrollTop=0;
+  $("#arTitle").innerHTML=`${ARTICLE.num} · <b>${esc(artLabel(id))}</b> face à la commission`;
 }
 
-/* ---------- Comparer : bibliothèque et sélection ---------- */
-// La bibliothèque défile au centre ; ce qu'on y choisit s'affiche à droite, en petit. La sélection survit au changement d'échelle.
-function libEntries(){
+/* ---------- Comparer : bibliothèque, coffre, éclatement ---------- */
+// Les deux côtés ont la même mécanique : un clic dépose une rédaction dans le coffre (deux au plus),
+// « Comparer » les éclate en colonnes autour du texte de la commission.
+function rEntries(){
   const i=curAl(), a=AMEND[i], p=S.mode==="passage"?curPt():null, at=t=>p?passageOf(a,p.k,t):t;
-  return [
-    {id:"orig",color:"#6b6457",label:"Texte de la commission",sub:"origine",text:at(a.texte)},
-    {id:"mine",color:GROUPS[ME].color,label:GROUPS[ME].name,sub:"vous",text:at(strip(MINE[i].texte))},
-    ...othersOf(i).map(o=>({id:o.num,color:GROUPS[o.g].color,label:GROUPS[o.g].name,sub:`N° ${o.num}`,objet:o.titre,
-      text:o.mode==="supprimer"?null:p?passageOf(a,p.k,effText(a,o)):o.mode==="completer"?a.texte+" "+strip(o.texte):strip(o.texte)}))
-  ];
+  return [{id:"mine",color:GROUPS[ME].color,label:GROUPS[ME].name,short:"Vous",sub:"vous",text:at(strip(MINE[i].texte))},
+    ...othersOf(i).map(o=>({id:o.num,color:GROUPS[o.g].color,label:GROUPS[o.g].name,short:GROUPS[o.g].name,sub:`N° ${o.num}`,objet:o.titre,
+      text:o.mode==="supprimer"?null:p?passageOf(a,p.k,effText(a,o)):o.mode==="completer"?a.texte+" "+strip(o.texte):strip(o.texte)}))];
 }
-function renderLib(){
-  if(S.libAl!==curAl()){ S.libAl=curAl(); S.libSel=new Set(); }
-  const a=AMEND[curAl()], p=S.mode==="passage"?curPt():null, E=S.libE=libEntries(), gone=p?"Supprime ce point":"Supprime l'alinéa";
-  $("#libTitle").innerHTML=`${p?`<b>${esc(p.label)}</b> · `:""}alinéa ${a.n} · <b>${E.length}</b> rédactions · cliquez pour comparer`;
-  $("#libList").innerHTML=E.map(e=>{ const on=S.libSel.has(e.id); return `<article class="lib-item paper${on?" on":""}" data-id="${esc(e.id)}" tabindex="0" role="checkbox" aria-checked="${on}"><div class="head"><span class="group-badge" style="--g:${e.color}"><i></i><span class="name">${esc(e.label)}</span></span><span>${esc(e.sub)}${on?` · <b class="in">✓ comparé</b>`:""}</span></div><p class="lib-text${e.text==null?" none":""}">${e.text==null?gone:esc(e.text)}</p>${e.objet&&!p?`<p class="lib-objet">Objet : ${esc(e.objet)}</p>`:""}</article>`; }).join("");
-  renderSel();
+const lEntries=()=>ARTS.map(id=>({id,color:artColor(id),label:artLabel(id),short:artShort(id),sub:`${artMods(id).length} ${plural(artMods(id).length,"alinéa modifié","alinéas modifiés")}`,mods:artMods(id)}));
+function coffreHTML(sel,E){
+  return `<p class="coffre-t">À comparer avec la commission · <b>${sel.length}</b>/2</p><div class="pastilles">${sel.length?sel.map(id=>{ const e=E.find(x=>x.id===id); return e?`<span class="pastille" style="--g:${e.color}"><i></i>${esc(e.short)}<button type="button" data-x="${esc(id)}" aria-label="Retirer ${esc(e.short)}">×</button></span>`:""; }).join(""):`<span class="coffre-vide">Cliquez une rédaction pour la déposer ici (deux au plus).</span>`}</div><button type="button" class="btn" data-cmp ${sel.length?"":"disabled"}>Comparer</button>`;
 }
-function renderSel(){
-  const E=S.libE, sel=[...S.libSel].map(id=>E.find(e=>e.id===id)).filter(Boolean), ref=E[0].text||"", gone=S.mode==="passage"?"supprime ce point":"supprime l'alinéa";
-  const a=AMEND[curAl()], p=S.mode==="passage"?curPt():null, meta=e=>({...COMMISSION,label:e.label+(e.id==="mine"?"":` · ${e.sub}`),color:e.color,where:p?`${p.label.toLowerCase()}, alinéa ${a.n}`:`alinéa ${a.n}`});
-  $("#pLib").classList.toggle("has-sel",sel.length>0);
-  $("#selCount").innerHTML=`<b>${sel.length}</b> ${plural(sel.length,"rédaction comparée","rédactions comparées")}`;
-  $("#selList").innerHTML=sel.map(e=>`<div class="sel-card paper"><div class="sel-head"><i style="--g:${e.color}"></i><b>${esc(e.label)}</b><span>${esc(e.sub)}</span><button type="button" class="x" data-x="${esc(e.id)}" aria-label="Retirer ${esc(e.label)} de la comparaison">×</button></div><p class="sel-text">${e.id==="orig"?esc(e.text||""):e.text==null?`${inlineDiff(ref,"",meta(e))} <span class="none">(${gone})</span>`:inlineDiff(ref,e.text,meta(e))}</p></div>`).join("");
+function renderCmp(side){
+  const L=side==="L";
+  if(!L&&S.selRAl!==curAl()){ S.selRAl=curAl(); S.selR=[]; S.burstR=false; }
+  const sel=L?S.selL:S.selR, E=L?lEntries():rEntries(), full=sel.length>=2, pane=L?$("#pCmpL"):$("#pLib");
+  const i=curAl(), a=AMEND[i], p=!L&&S.mode==="passage"?curPt():null;
+  if(L){
+    $("#cmpLTitle").innerHTML=`${ARTICLE.num} en entier · <b>comparer</b> jusqu'à deux versions avec la commission`;
+    $("#libL").innerHTML=E.map(e=>{ const on=sel.includes(e.id); return `<article class="lib-item paper${on?" on":""}${full?" full":""}" data-id="${esc(e.id)}" tabindex="0" role="checkbox" aria-checked="${on}"><div class="head"><span class="group-badge" style="--g:${e.color}"><i></i><span class="name">${esc(e.label)}</span></span><span>${esc(e.sub)}${on?` · <b class="in">✓ dans le coffre</b>`:""}</span></div><ul class="lib-objets">${e.mods.map(m=>`<li><b>al. ${m.a.n}</b>${esc(m.v.o?m.v.o.titre:"votre rédaction")}</li>`).join("")||`<li>reprend le texte de la commission</li>`}</ul></article>`; }).join("");
+    $("#mainArt").innerHTML=`<div class="head"><span>Texte de la commission</span><span>référence</span></div><h2 class="art-h">${ARTICLE.num}</h2><ol class="art-ol">${ARTICLE.alineas.map(x=>`<li><span class="n">${x.n}</span><div>${esc(x.texte)}</div></li>`).join("")}</ol>`;
+  } else {
+    const gone=p?"supprime ce point":"supprime l'alinéa";
+    $("#libTitle").innerHTML=`${p?`<b>${esc(p.label)}</b> · `:""}alinéa ${a.n} · <b>${E.length}</b> rédactions · déposez-en deux au plus dans le coffre`;
+    $("#libR").innerHTML=E.map(e=>{ const on=sel.includes(e.id); return `<article class="lib-item paper${on?" on":""}${full?" full":""}" data-id="${esc(e.id)}" tabindex="0" role="checkbox" aria-checked="${on}"><div class="head"><span class="group-badge" style="--g:${e.color}"><i></i><span class="name">${esc(e.label)}</span></span><span>${esc(e.sub)}${on?` · <b class="in">✓ dans le coffre</b>`:""}</span></div><p class="lib-text${e.text==null?" none":""}">${e.text==null?gone[0].toUpperCase()+gone.slice(1):esc(e.text)}</p>${e.objet&&!p?`<p class="lib-objet">Objet : ${esc(e.objet)}</p>`:""}</article>`; }).join("");
+  }
+  $(L?"#coffreL":"#coffreR").innerHTML=coffreHTML(sel,E);
+  pane.classList.toggle("bursting",L?S.burstL:S.burstR);
+  if(L?S.burstL:S.burstR) renderBurst(side);
 }
-function toggleLib(id){
-  S.libSel.has(id)?S.libSel.delete(id):S.libSel.add(id);
-  const it=$(`#libList .lib-item[data-id="${CSS.escape(id)}"]`), on=S.libSel.has(id), e=S.libE.find(x=>x.id===id);
-  if(it){ it.classList.toggle("on",on); it.setAttribute("aria-checked",String(on)); it.querySelector(".head > span:last-child").innerHTML=esc(e.sub)+(on?` · <b class="in">✓ comparé</b>`:""); }
-  renderSel(); chrome();
+function renderBurst(side){
+  const L=side==="L", sel=L?S.selL:S.selR, E=L?lEntries():rEntries(), picked=sel.map(id=>E.find(e=>e.id===id)).filter(Boolean);
+  let rows, refCells, cellsOf, title;
+  if(L){
+    rows=ARTICLE.alineas.map(a=>a.n); refCells=ARTICLE.alineas.map(a=>esc(a.texte)); cellsOf=e=>artCells(e.id);
+    title=`${ARTICLE.num} · `;
+  } else {
+    const a=AMEND[curAl()], p=S.mode==="passage"?curPt():null, ref=(p?passageOf(a,p.k,a.texte):a.texte)||"", where=p?`${p.label.toLowerCase()}, alinéa ${a.n}`:`alinéa ${a.n}`;
+    rows=[null]; refCells=[esc(ref)];
+    cellsOf=e=>{ const meta={...COMMISSION,label:e.label,color:e.color,where}; return [e.text==null?`${inlineDiff(ref,"",meta)} <span class="none">(${p?"supprime ce point":"supprime l'alinéa"})</span>`:inlineDiff(ref,e.text,meta)]; };
+    title=`${p?`<b>${esc(p.label)}</b> · `:""}alinéa ${a.n} · `;
+  }
+  // la commission au centre, une rédaction de chaque côté
+  const col=e=>({label:e.label,color:e.color,sub:e.sub,cells:cellsOf(e)}), cols=[COMMISSION_COL(refCells)];
+  if(picked[0]) cols.unshift(col(picked[0]));
+  if(picked[1]) cols.push(col(picked[1]));
+  $(L?"#burstL":"#burstR").innerHTML=`<div class="burst-scroll">${burstHTML(cols,rows)}</div><button type="button" class="btn" data-back>← Revenir à la bibliothèque</button>`;
+  $(L?"#cmpLTitle":"#libTitle").innerHTML=title+`<b>${picked.map(e=>esc(e.short)).join("</b> et <b>")}</b> face à la commission`;
+}
+function toggleSel(side,id){
+  const arr=side==="L"?S.selL:S.selR, k=arr.indexOf(id);
+  if(k>=0) arr.splice(k,1);
+  else if(arr.length>=2){ const c=$(side==="L"?"#coffreL":"#coffreR"); c.classList.remove("flash"); void c.offsetWidth; c.classList.add("flash"); return; }
+  else arr.push(id);
+  if(!arr.length){ if(side==="L") S.burstL=false; else S.burstR=false; }
+  renderCmp(side); chrome();
+}
+function setBurst(side,on){
+  if(side==="L") S.burstL=on; else S.burstR=on;
+  renderCmp(side); if(on) pop($(side==="L"?"#burstL":"#burstR"),-1);
+  chrome();
 }
 
 /* ---------- Échelles et volets ---------- */
-const LAYERS=[[$("#lAl"),0,["alinea","origin"]],[$("#lPt"),1,["passage"]]];
+const LAYERS=[[$("#lAl"),0,["alinea","origin"]],[$("#lPt"),1,["passage"]]], AR_LAYERS=[[$("#lDuo"),-1,["origin"]],[$("#lAr"),0,["alinea","passage"]]];
+function toggleLayers(list,m){
+  const depth=list.find(L=>L[2].includes(m))[1];
+  for(const [el,dp,modes] of list){ const on=modes.includes(m); el.classList.toggle("on",on); el.classList.toggle("shallow",!on&&dp<depth); el.setAttribute("aria-hidden",String(!on)); }
+}
 function setMode(m,o){
   o=o||{};
   if(S.edit>=0&&m==="passage") closeEditor(false);
   const prev=S.mode; S.mode=m; stage.dataset.mode=m;
-  const depth=LAYERS.find(L=>L[2].includes(m))[1];
-  for(const [el,dp,modes] of LAYERS){ const on=modes.includes(m); el.classList.toggle("on",on); el.classList.toggle("shallow",!on&&dp<depth); el.setAttribute("aria-hidden",String(!on)); }
+  toggleLayers(LAYERS,m); toggleLayers(AR_LAYERS,m);
   document.querySelectorAll(".orig-wrap").forEach(w=>w.setAttribute("aria-hidden",String(m!=="origin")));
   dAl.fade(m==="origin"||S.edit>=0?0:1);
   AMEND.forEach((_,i)=>paintAl(i));
@@ -697,18 +826,20 @@ function setMode(m,o){
   if(S.edit>=0) onEdit();
   const scaleJump=(m==="passage")!==(prev==="passage"), dir=DEPTH[m]-DEPTH[prev];
   if(S.pane===1){ buildOt(o.focus); if(scaleJump) pop($("#otZoomer"),dir); }
-  if(S.pane===2){ renderLib(); if(scaleJump) pop($("#libWrap"),dir); }
+  if(S.pane===2){ renderCmp("R"); if(scaleJump) pop($(S.burstR?"#burstR":"#pLib .cmp-wrap"),dir); }
+  if(S.pane===-1){ if(m==="origin") renderDuo(); else $("#arTitle").innerHTML=`${ARTICLE.num} en entier · <b>${ARTS.length}</b> versions`; }
   chrome();
 }
-function setPane(p){
-  p=clamp(p,-1,2);
-  if(p===S.pane||(p===2&&S.pane!==1)) return;
+function setPane(p,focus){
+  p=clamp(p,-2,2);
+  if(p===S.pane||(p===2&&S.pane!==1)||(p===-2&&S.pane!==-1)) return;
   if(S.edit>=0) closeEditor(false);
   S.pane=p; stage.dataset.pane=PANE_NAME[p];
   for(const [k,el] of Object.entries(PANE_EL)){ const rel=+k-p; el.style.setProperty("--rel",rel); el.classList.toggle("on",rel===0); el.setAttribute("aria-hidden",String(rel!==0)); }
-  if(p===-1) renderArticle();
-  if(p===1) buildOt();
-  if(p===2){ if(S.mode==="origin"){ setMode("alinea"); return; } renderLib(); }
+  if(p===-2) renderCmp("L");
+  if(p===-1) buildAr();
+  if(p===1) buildOt(focus);
+  if(p===2){ if(S.mode==="origin"){ setMode("alinea"); return; } renderCmp("R"); }
   chrome();
 }
 function enterPassage(k,focus){
@@ -716,47 +847,54 @@ function enterPassage(k,focus){
   if(S.edit>=0) closeEditor(false);
   buildPt(k); setMode("passage",{focus});
 }
-// zoomer descend d'un cran (origine → alinéa → passage), dézoomer remonte d'un cran (passage → alinéa → origine)
+function openRegroup(k){ if(S.edit>=0) return; buildPt(k); setMode("passage"); setPane(1); }
+// zoomer descend d'un cran (origine → alinéa → unité), dézoomer remonte d'un cran (unité → alinéa → origine)
 function zoomStep(dir,k){
-  if(S.pane===-1) return;
+  if(S.pane===-2) return;
   const m=S.mode;
+  if(S.pane===-1){ if(dir<0&&m!=="origin") setMode("origin"); else if(dir>0&&m==="origin") setMode("alinea"); return; }
   if(dir<0){ if(m==="passage") setMode("alinea"); else if(m==="alinea"&&S.pane!==2) setMode("origin"); }
   else { if(m==="origin") setMode("alinea"); else if(m==="alinea"&&S.edit<0) enterPassage(k||S.lastPt[curAl()]); }
 }
-// Échap revient d'un cran : la bibliothèque ou l'article vers leur voisin, puis l'échelle, puis le volet
+// Échap revient d'un cran : l'éclatement vers le coffre, la bibliothèque vers sa pile, puis l'échelle, puis le volet
 function back(){
-  if(S.pane===2){ setPane(1); return; }
-  if(S.pane===-1){ setPane(0); return; }
+  if(S.pane===-2){ if(S.burstL) setBurst("L",false); else setPane(-1); return; }
+  if(S.pane===2){ if(S.burstR) setBurst("R",false); else setPane(1); return; }
   if(S.mode!=="alinea"){ setMode("alinea"); return; }
-  if(S.pane===1) setPane(0);
+  if(S.pane!==0) setPane(0);
 }
 function onAlMove(){ if(S.mode==="origin"){ AMEND.forEach((_,i)=>paintAl(i)); paintOrig(MINE[curAl()].texte); } chrome(); }
 function onPtMove(){ const p=curPt(); if(p) S.lastPt[curAl()]=p.k; chrome(); }
+function onArMove(){ if(S.mode==="origin"&&S.pane===-1){ renderDuo(); pop($("#duo"),1); } chrome(); }
 
 /* ---------- Poignées, aide, repères ---------- */
 function setHandle(h,html){ h.classList.toggle("hide",html==null); h.setAttribute("aria-hidden",String(html==null)); h.tabIndex=html==null?-1:0; if(html!=null) h.innerHTML=html; }
 function chrome(){
-  const P=S.pane, i=curAl(), a=AMEND[i], m=S.mode, p=curPt(), atP=m==="passage"&&!!p;
-  setHandle(hTop, P===-1 ? null
-    : P===2 ? (atP?`<b>${esc(p.label)}</b> revenir à l'alinéa <span class="zg">⊖</span>`:`<b>Alinéa ${a.n}</b> passage par passage <span class="zg">⊕</span>`)
+  const P=S.pane, i=curAl(), a=AMEND[i], m=S.mode, p=curPt(), atP=m==="passage"&&!!p, chev=` <span class="chev">▲</span>`;
+  setHandle(hTop, P===-2 ? null
+    : P===-1 ? (m==="origin"?`<b>${ARTICLE.num}</b> revenir à la pile <span class="zg">⊕</span>`:`<b>${ARTICLE.num}</b> face à la commission <span class="zg">⊖</span>`)
+    : P===2 ? (atP?`<b>${esc(p.label)}</b> revenir à l'alinéa <span class="zg">⊖</span>`:`<b>Alinéa ${a.n}</b> unité par unité <span class="zg">⊕</span>`)
     : m==="alinea" ? `<b>Alinéa ${a.n}</b> texte d'origine <span class="zg">⊖</span>`
     : m==="origin" ? `<b>Alinéa ${a.n}</b> revenir <span class="zg">⊕</span>`
     : `<b>${esc(p?p.label:"")}</b> revenir à l'alinéa <span class="zg">⊖</span>`);
-  const nOt= atP ? versions(i,p.k).list.length : othersOf(i).length, chev=` <span class="chev">▲</span>`;
-  setHandle(hLeft, P===-1 ? null : (P===0?`<b>Tout</b> l'article`:P===1?(atP?`<b>Ma</b> rédaction`:`<b>Mon</b> amendement`):`<b>La</b> pile`)+chev);
-  setHandle(hRight, P===2 ? null : (P===-1?`<b>Mon</b> amendement`:P===0?`<b>${nOt}</b> ${atP?plural(nOt,"autre rédaction","autres rédactions"):plural(nOt,"autre amendement","autres amendements")}`:`<b>Comparer</b> côte à côte`)+chev);
+  const nOt= atP ? clusters(i,p.k).length : othersOf(i).length;
+  setHandle(hLeft, P===-2 ? null : (P===-1?`<b>Comparer</b> des articles`:P===0?`<b>Les</b> articles`:P===1?(atP?`<b>Ma</b> rédaction`:`<b>Mon</b> amendement`):(atP?`<b>Les</b> propositions`:`<b>La</b> pile`))+chev);
+  setHandle(hRight, P===2 ? null : (P===-2?`<b>Les</b> articles`:P===-1?`<b>Mon</b> amendement`:P===0?(atP?`<b>${nOt}</b> ${plural(nOt,"proposition","propositions")}`:`<b>${nOt}</b> ${plural(nOt,"autre amendement","autres amendements")}`):`<b>Comparer</b> côte à côte`)+chev);
   $("#hint").innerHTML=
-      P===-1 ? "<b>Défiler</b> : tout l'article · <b>clic sur une modification</b> : la comparer · <b>clic sur un alinéa</b> : y aller · <b>vers la gauche</b> : votre amendement"
-    : P===2 ? `<b>Défiler</b> : les rédactions · <b>clic</b> : comparer · <b>${atP?"pincer":"écarter"}</b> : ${atP?"l'alinéa":"un passage"} · <b>vers la droite</b> : la pile`
+      P===-2 ? (S.burstL?"<b>Défiler</b> : l'article · <b>clic sur une modification</b> : la comparer · <b>Échap</b> : revenir à la bibliothèque":"<b>Clic</b> : déposer une version dans le coffre (deux au plus) · <b>Comparer</b> : les mettre côte à côte · <b>vers la gauche</b> : les articles")
+    : P===-1 ? (m==="origin"?"<b>Défiler</b> : l'article, puis la version suivante · <b>clic sur une modification</b> : la comparer · <b>écarter les doigts</b> : revenir":"<b>Défiler</b> : l'article, puis la version suivante · <b>pincer</b> : face à la commission · <b>droite</b> : comparer · <b>gauche</b> : votre amendement")
+    : P===2 ? (S.burstR?"<b>Clic sur une modification</b> : la comparer · <b>Échap</b> : revenir à la bibliothèque":`<b>Clic</b> : déposer dans le coffre (deux au plus) · <b>Comparer</b> : côte à côte · <b>${atP?"pincer":"écarter"}</b> : ${atP?"l'alinéa":"une unité"} · <b>droite</b> : la pile`)
     : P===1 ? (m==="origin" ? "<b>Haut / bas</b> : les amendements · <b>clic sur une modification</b> : la comparer · <b>écarter les doigts</b> ou <b>Échap</b> : revenir"
-             : atP ? "<b>Haut / bas</b> : les autres rédactions · <b>pincer</b> : l'alinéa · <b>gauche</b> : comparer · <b>droite</b> : la vôtre"
-             : "<b>Haut / bas</b> : les amendements · <b>pincer</b> : leur écart à l'origine · <b>gauche</b> : comparer · <b>droite</b> : le vôtre")
+             : atP ? "<b>Haut / bas</b> : les propositions · <b>clic sur un groupe</b> : son amendement · <b>pincer</b> : l'alinéa · <b>gauche</b> : comparer"
+             : "<b>Haut / bas</b> : les amendements · <b>pincer</b> : face à la commission · <b>gauche</b> : comparer · <b>droite</b> : le vôtre")
     : m==="origin" ? "<b>Haut / bas</b> : les alinéas · <b>clic sur une modification</b> : la comparer · <b>ailleurs</b> : modifier · <b>Échap</b> : revenir"
-    : atP ? "<b>Haut / bas</b> : les autres passages · <b>gauche</b> : ce passage chez les autres · <b>pincer</b> : l'alinéa"
-    : "<b>Haut / bas</b> : les alinéas · <b>clic sur un surlignage</b> : l'isoler · <b>pincer</b> : le texte d'origine · <b>gauche</b> : les autres · <b>droite</b> : tout l'article";
+    : atP ? "<b>Haut / bas</b> : les autres unités · <b>gauche</b> : toutes les propositions · <b>pincer</b> : l'alinéa"
+    : "<b>Haut / bas</b> : les alinéas · <b>clic sur une unité</b> : l'isoler · <b>pincer</b> : le texte d'origine · <b>gauche</b> : les autres · <b>droite</b> : les articles";
+  renderUnits();
   const d=verticalDrum();
   if(!d||d.n<2){ rail.innerHTML=""; return; }
-  const labels= d===dAl ? AMEND.map(x=>`Alinéa ${x.n}`) : d===dPt ? S.pts.map(x=>x.label) : d.faces.map(f=>{ const o=othersOf(i).find(o=>o.num===f.dataset.num); return o?`${GROUPS[o.g].name}, n° ${o.num}`:""; });
+  const labels= d===dAl ? AMEND.map(x=>`Alinéa ${x.n}`) : d===dPt ? S.pts.map(x=>x.label) : d===dAr ? ARTS.map(artLabel)
+    : d.faces.map((f,j)=>{ if(f.dataset.ids) return `Proposition ${j+1}`; const o=othersOf(i).find(o=>o.num===f.dataset.num); return o?`${GROUPS[o.g].name}, n° ${o.num}`:""; });
   rail.innerHTML=labels.map((l,j)=>`<button type="button" data-i="${j}" class="${j===d.cur?"on":""}" aria-label="${esc(l)}" title="${esc(l)}"${j===d.cur?' aria-current="true"':""}></button>`).join("");
 }
 
@@ -799,32 +937,6 @@ function closeEditor(commit){
   paintAl(i); paintOrig(MINE[i].texte); dAl.fade(S.mode==="origin"?0:1); chrome();
 }
 
-/* ---------- Clics ---------- */
-let clickTimer=0;
-$("#drumAl").addEventListener("click", e=>{
-  const f=e.target.closest(".face"); if(!f) return;
-  const act=e.target.closest("button[data-act]"); if(act){ closeEditor(act.dataset.act==="ok"); return; }
-  const i=+f.dataset.i;
-  if(i!==dAl.cur){ if(S.edit<0) dAl.to(i); return; }
-  if(S.edit>=0) return;
-  if(S.mode==="origin"){ const h=e.target.closest("[data-h]"); if(h) openLoupe(h.dataset.h); else if(e.target.closest(".body")) openEditor(e); return; }
-  const mk=e.target.closest("mark.pt");
-  if(mk){ clearTimeout(clickTimer); const k=mk.dataset.k; clickTimer=setTimeout(()=>enterPassage(k),260); } // laisse la place au double-clic
-});
-$("#drumAl").addEventListener("dblclick", e=>{ clearTimeout(clickTimer); const f=e.target.closest(".face"); if(f&&+f.dataset.i===dAl.cur&&e.target.closest(".body")) openEditor(e); });
-$("#drumPt").addEventListener("click", e=>{ const f=e.target.closest(".face"); if(f&&+f.dataset.i!==dPt.cur) dPt.to(+f.dataset.i); });
-$("#drumOt").addEventListener("click", e=>{
-  const f=e.target.closest(".face"); if(!f) return;
-  if(+f.dataset.i!==dOt.cur){ dOt.to(+f.dataset.i); return; }
-  const h=e.target.closest("[data-h]"); if(h){ openLoupe(h.dataset.h); return; }
-  const mk=e.target.closest("mark.pt"); if(mk&&S.mode==="alinea") enterPassage(mk.dataset.k,f.dataset.num);
-});
-$("#art").addEventListener("click", e=>{ const h=e.target.closest("[data-h]"); if(h){ openLoupe(h.dataset.h); return; } const li=e.target.closest("li[data-i]"); if(!li) return; if(S.mode==="passage") setMode("alinea"); dAl.to(+li.dataset.i); setPane(0); });
-$("#refs").addEventListener("click", e=>{ const c=e.target.closest(".chip"); if(!c) return; S.ref=c.dataset.ref; const sc=$("#refs").scrollLeft; renderArticle(); $("#refs").scrollLeft=sc; });
-$("#libList").addEventListener("click", e=>{ const it=e.target.closest(".lib-item"); if(it) toggleLib(it.dataset.id); });
-$("#libList").addEventListener("keydown", e=>{ const it=e.target.closest(".lib-item"); if(it&&(e.key==="Enter"||e.key===" ")){ e.preventDefault(); e.stopPropagation(); toggleLib(it.dataset.id); } });
-$("#selList").addEventListener("click", e=>{ const x=e.target.closest("[data-x]"); if(x){ toggleLib(x.dataset.x); return; } const h=e.target.closest("[data-h]"); if(h) openLoupe(h.dataset.h); });
-
 /* ---------- Loupe : une zone de modification et la commission, côte à côte ---------- */
 const loupe=$("#loupe");
 function openLoupe(id){
@@ -841,12 +953,57 @@ function closeLoupe(){ loupe.classList.remove("on"); loupe.setAttribute("aria-hi
 const loupeOpen=()=>loupe.classList.contains("on");
 $("#loupeClose").addEventListener("click", closeLoupe);
 loupe.addEventListener("click", e=>{ if(e.target===loupe) closeLoupe(); });
-$("#selClear").addEventListener("click", ()=>{ S.libSel=new Set(); renderLib(); chrome(); });
+
+/* ---------- Clics ---------- */
+let clickTimer=0;
+const hunkClick=e=>{ const h=e.target.closest("[data-h]"); if(h){ openLoupe(h.dataset.h); return true; } return false; };
+$("#drumAl").addEventListener("click", e=>{
+  const f=e.target.closest(".face"); if(!f) return;
+  const act=e.target.closest("button[data-act]"); if(act){ closeEditor(act.dataset.act==="ok"); return; }
+  const i=+f.dataset.i;
+  if(i!==dAl.cur){ if(S.edit<0) dAl.to(i); return; }
+  if(S.edit>=0) return;
+  if(S.mode==="origin"){ if(!hunkClick(e)&&e.target.closest(".body")) openEditor(e); return; }
+  const mk=e.target.closest("mark.pt");
+  if(mk){ clearTimeout(clickTimer); const k=mk.dataset.k; clickTimer=setTimeout(()=>enterPassage(k),260); } // laisse la place au double-clic
+});
+$("#drumAl").addEventListener("dblclick", e=>{ clearTimeout(clickTimer); const f=e.target.closest(".face"); if(f&&+f.dataset.i===dAl.cur&&e.target.closest(".body")) openEditor(e); });
+$("#drumPt").addEventListener("click", e=>{ const f=e.target.closest(".face"); if(f&&+f.dataset.i!==dPt.cur) dPt.to(+f.dataset.i); });
+$("#drumOt").addEventListener("click", e=>{
+  const f=e.target.closest(".face"); if(!f) return;
+  if(+f.dataset.i!==dOt.cur){ dOt.to(+f.dataset.i); return; }
+  const go=e.target.closest("[data-goto]");
+  if(go){ const id=go.dataset.goto; if(id==="mine") setPane(0); else setMode("alinea",{focus:id}); return; }
+  if(hunkClick(e)) return;
+  const mk=e.target.closest("mark.pt"); if(mk&&S.mode==="alinea") enterPassage(mk.dataset.k,f.dataset.num);
+});
+$("#drumAr").addEventListener("click", e=>{
+  const f=e.target.closest(".face"); if(!f) return;
+  if(+f.dataset.i!==dAr.cur){ dAr.to(+f.dataset.i); return; }
+  const li=e.target.closest("li[data-i]"); if(!li) return;
+  const i=+li.dataset.i, id=f.dataset.id, v=artVersion(id,AMEND[i],i);
+  if(S.mode==="passage") setMode("alinea");
+  dAl.jump(i);
+  if(id!=="mine"&&v.o) setPane(1,v.o.num); else setPane(0);
+});
+$("#duo").addEventListener("click", hunkClick);
+$("#units").addEventListener("click", e=>{ const b=e.target.closest("button[data-k]"); if(b) openRegroup(b.dataset.k); });
+for(const side of ["L","R"]){
+  const pane=side==="L"?$("#pCmpL"):$("#pLib");
+  pane.addEventListener("click", e=>{
+    if(hunkClick(e)) return;
+    const x=e.target.closest("[data-x]"); if(x){ toggleSel(side,x.dataset.x); return; }
+    if(e.target.closest("[data-cmp]")){ setBurst(side,true); return; }
+    if(e.target.closest("[data-back]")){ setBurst(side,false); return; }
+    const it=e.target.closest(".lib-item"); if(it) toggleSel(side,it.dataset.id);
+  });
+  pane.addEventListener("keydown", e=>{ const it=e.target.closest(".lib-item"); if(it&&(e.key==="Enter"||e.key===" ")){ e.preventDefault(); e.stopPropagation(); toggleSel(side,it.dataset.id); } });
+}
 rail.addEventListener("click", e=>{ const b=e.target.closest("button"), d=verticalDrum(); if(b&&d) d.to(+b.dataset.i); });
 hTop.addEventListener("click", ()=>zoomStep(S.pane===2 ? (S.mode==="passage"?-1:1) : (S.mode==="origin"?1:-1)));
 hLeft.addEventListener("click", ()=>setPane(S.pane-1));
 hRight.addEventListener("click", ()=>setPane(S.pane+1));
-window.addEventListener("resize", ()=>{ fit(); dAl.layout(); dPt.layout(); dOt.layout(); });
+window.addEventListener("resize", ()=>{ fit(); dAl.layout(); dPt.layout(); dOt.layout(); dAr.layout(); });
 window.addEventListener("keydown", e=>{
   if(loupeOpen()){ if(e.key==="Escape"){ e.preventDefault(); closeLoupe(); } return; }
   if(S.edit>=0||e.ctrlKey||e.metaKey||e.altKey) return;
@@ -863,7 +1020,7 @@ window.addEventListener("keydown", e=>{
 });
 
 /* ---------- Gestes : doigt ou souris ---------- */
-// un doigt : vertical = la pile en cours (ailleurs, défilement natif), horizontal = volet voisin ;
+// un doigt : vertical = la pile en cours (dans un article, le texte d'abord), horizontal = volet voisin ;
 // deux doigts qui se rapprochent = dézoomer, qui s'écartent = zoomer
 const touches=new Map(); let g=null, pinch=null, suppressClick=false;
 const dist=()=>{ const [a,b]=[...touches.values()]; return Math.hypot(a.x-b.x,a.y-b.y); };
@@ -872,7 +1029,7 @@ stage.addEventListener("pointerdown", e=>{
   touches.set(e.pointerId,{x:e.clientX,y:e.clientY});
   if(touches.size===2){ if(g&&g.axis==="v"&&g.drum) g.drum.snap(g.start,0); g=null; const mk=e.target.closest("mark.pt"); pinch={d0:dist()||1,done:false,k:mk?mk.dataset.k:null}; return; }
   if(touches.size>1) return;
-  if(e.target.closest(".handle,.rail,button,textarea,.refs,.loupe")) return;
+  if(e.target.closest(".handle,.rail,button,textarea,.units,.loupe")) return;
   if(S.edit>=0&&e.target.closest(".face.editing")) return;
   g={id:e.pointerId,x:e.clientX,y:e.clientY,axis:null,ly:e.clientY,lt:performance.now(),v:0};
 });
@@ -884,11 +1041,16 @@ stage.addEventListener("pointermove", e=>{
   if(!g.axis){
     if(Math.abs(dx)+Math.abs(dy)<8) return;
     g.axis=Math.abs(dy)>Math.abs(dx)?"v":"h";
-    if(g.axis==="v"){ g.drum=verticalDrum(); if(!g.drum){ g=null; return; } g.start=g.drum.begin(); g.from=g.drum.pos; }
+    if(g.axis==="v"){
+      const el=nestedEl();
+      if(el&&canScroll(el,-dy)){ g.scrollEl=el; g.scroll0=el.scrollTop+dy; }
+      else { g.drum=verticalDrum(); if(!g.drum){ g=null; return; } g.start=g.drum.begin(); g.from=g.drum.pos; }
+    }
     suppressClick=true;
     try{ stage.setPointerCapture(e.pointerId); }catch(_){}
   }
   if(g.axis==="h"){ if(dx<-50){ setPane(S.pane+1); g=null; } else if(dx>50){ setPane(S.pane-1); g=null; } return; }
+  if(g.scrollEl){ g.scrollEl.style.scrollBehavior="auto"; g.scrollEl.scrollTop=g.scroll0-dy; return; }
   const now=performance.now(), sp=g.drum.step();
   g.drum.dragTo(g.from,-dy);
   const dt=Math.max(1,now-g.lt); g.v=.7*g.v+.3*(-(e.clientY-g.ly)/sp)/(dt/1000); g.ly=e.clientY; g.lt=now;
@@ -896,14 +1058,15 @@ stage.addEventListener("pointermove", e=>{
 function pointerEnd(e){
   touches.delete(e.pointerId);
   if(pinch){ if(touches.size<2) pinch=null; return; }
-  if(g&&e.pointerId===g.id){ if(g.axis==="v") g.drum.snap(g.start,g.v); g=null; }
+  if(g&&e.pointerId===g.id){ if(g.scrollEl) g.scrollEl.style.scrollBehavior=""; else if(g.axis==="v") g.drum.snap(g.start,g.v); g=null; }
 }
 stage.addEventListener("pointerup",pointerEnd); stage.addEventListener("pointercancel",pointerEnd);
 stage.addEventListener("click", e=>{ if(suppressClick){ suppressClick=false; e.stopPropagation(); e.preventDefault(); } }, true);
 
 /* ---------- Gestes : pavé tactile ---------- */
 // Pincer arrive en « wheel » avec ctrlKey (Chrome, Edge, Firefox) ou en gesture* (Safari) : un cran par geste.
-// Deux doigts : le sens est verrouillé au début du geste ; dans une liste qui défile, le vertical lui revient.
+// Deux doigts : le sens est verrouillé au début du geste ; une liste qui défile garde son défilement ;
+// dans un article, un geste commencé dans le texte reste dans le texte, le suivant passe à la version voisine.
 let zw=null, zwT=0, wg=null, wgT=0;
 const scrollsY=el=>el&&el.scrollHeight>el.clientHeight+1, scrollsX=el=>el&&el.scrollWidth>el.clientWidth+1;
 stage.addEventListener("wheel", e=>{
@@ -919,8 +1082,17 @@ stage.addEventListener("wheel", e=>{
   }
   if(e.target.closest("textarea")) return;
   const vertical=Math.abs(dy)>=Math.abs(dx);
-  if(vertical&&!(wg&&wg.axis==="h")&&scrollsY(e.target.closest(".orig .body,.lib-list,.sel-list,.art-scroll"))) return;
-  if(!vertical&&!(wg&&wg.axis==="v")&&scrollsX(e.target.closest(".refs,.sel-list"))) return;
+  if(vertical&&!(wg&&wg.axis==="h")&&scrollsY(e.target.closest(".orig .body,.lib-list,.main-art,.pane-cmp .burst-scroll"))) return;
+  if(!vertical&&!(wg&&wg.axis==="v")&&scrollsX(e.target.closest(".units,.burst-scroll"))) return;
+  if(vertical&&(!wg||wg.native)){ // le texte d'un article défile avant que la pile ne tourne
+    const el=nestedEl();
+    if(el&&(wg&&wg.native||canScroll(el,dy))){
+      if(!wg) wg={axis:"v",native:true};
+      clearTimeout(wgT); wgT=setTimeout(endWheel,150);
+      if(!canScroll(el,dy)) e.preventDefault();
+      return;
+    }
+  }
   e.preventDefault();
   if(!wg) wg={ax:0,ay:0,axis:null,done:false,h:0};
   clearTimeout(wgT); wgT=setTimeout(endWheel,150);
@@ -938,7 +1110,7 @@ stage.addEventListener("wheel", e=>{
   }
   if(wg.drum) wg.drum.move(ddy);
 }, {passive:false});
-function endWheel(){ if(wg&&wg.axis==="v"&&wg.drum) wg.drum.snap(wg.start,0); wg=null; }
+function endWheel(){ if(wg&&!wg.native&&wg.axis==="v"&&wg.drum) wg.drum.snap(wg.start,0); wg=null; }
 let sg=null;
 stage.addEventListener("gesturestart", e=>{ e.preventDefault(); sg=pinch?null:{done:false}; });
 stage.addEventListener("gesturechange", e=>{ e.preventDefault(); if(!sg||sg.done) return; if(e.scale<.85){ sg.done=true; zoomStep(-1); } else if(e.scale>1.18){ sg.done=true; zoomStep(1); } });
@@ -948,6 +1120,6 @@ stage.addEventListener("gestureend", e=>{ e.preventDefault(); sg=null; });
 for(const [k,el] of Object.entries(PANE_EL)) el.style.setProperty("--rel",+k);
 dAl.set(AMEND.map((_,i)=>alFace(i)),0);
 setMode("alinea");
-if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>{ dAl.layout(); dPt.layout(); dOt.layout(); });
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>{ dAl.layout(); dPt.layout(); dOt.layout(); dAr.layout(); });
 })();
 </script>
