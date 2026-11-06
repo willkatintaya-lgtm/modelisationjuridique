@@ -21,7 +21,8 @@ Interface pour rédiger un amendement parlementaire et voir, autour de lui, l'ar
 
 ## Interactions en place
 - Feuille centrale = mon amendement ; double-clic sur le texte → édition en place (Valider / Annuler, Ctrl+Entrée, Échap).
-- Haut : l'article de base descend (glisser vers le bas, deux doigts vers le bas sur pavé tactile, ou poignée « Article 4 ») ; alinéa visé surligné, termes concernés soulignés.
+- Haut : glisser vers le bas (deux doigts vers le bas sur pavé tactile, ou poignée « Article 4 ») fait descendre **seulement l'alinéa visé**, en feuille papier surlignée, posée au-dessus de ma feuille : on voit à la fois le texte d'origine et mon amendement. L'article entier n'est plus affiché. Glisser vers le haut, la poignée ou Échap le renvoie.
+- Comparaison en direct : écart mot à mot (plus longue sous-suite commune, guillemets « » ignorés). Dans l'original, **barré** = ce que mon amendement supprime ; dans ma feuille, **surligné doré** = ce qu'il ajoute. Face à l'original, un simple clic sur mon texte ouvre l'édition au point cliqué, et les marques se recalculent à chaque frappe (calque miroir sous une zone de saisie transparente). Valider/Annuler inchangés ; les marques disparaissent quand l'original remonte.
 - Droite : glisser vers la gauche → ma feuille sort, colonne de boîtes papier (groupe, numéro, objet, « + ») avec défilement à inertie ; « + » déplie l'amendement en feuille complète. Glisser vers la droite ramène ma feuille.
 - Pavé tactile : les événements `wheel` cumulés (seuil 90) valent un glisser ; sens « naturel » supposé.
 

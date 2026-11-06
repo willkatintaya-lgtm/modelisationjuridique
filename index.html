@@ -30,16 +30,25 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);overf
 /* --- deux volets au centre : ma feuille / les autres --- */
 .center{position:absolute;inset:0}
 .pane{position:absolute;inset:0;padding:72px var(--gutter-r) 56px var(--gutter-l);transition:transform .5s cubic-bezier(.2,.8,.2,1),opacity .4s}
-.pane-mine{display:grid;place-items:center}
+.pane-mine{display:flex;flex-direction:column;align-items:center;justify-content:center}
 .pane-others{transform:translateX(60%);opacity:0;pointer-events:none;display:grid;justify-content:center;grid-template-columns:min(880px,100%)}
 #stage.others .pane-mine{transform:translateX(-50%);opacity:0;pointer-events:none}
 #stage.others .pane-others{transform:none;opacity:1;pointer-events:auto}
 
-.sheet{width:min(880px,100%);max-height:100%;display:grid;grid-template-rows:auto auto minmax(0,1fr) auto;gap:10px;padding:34px 40px 26px;transition:box-shadow .35s}
+.sheet{width:min(880px,100%);max-height:100%;flex:0 1 auto;min-height:0;display:grid;grid-template-rows:auto auto minmax(0,1fr) auto;gap:10px;padding:34px 40px 26px;transition:box-shadow .35s}
 .sheet.editing{box-shadow:0 30px 80px rgba(0,0,0,.65), 0 0 0 2px var(--accent)}
 .sheet .body{overflow:auto;min-height:0;cursor:text}
-.sheet textarea{font:inherit;color:inherit;background:transparent;border:0;resize:none;width:100%;height:100%;min-height:160px;padding:0;display:block}
+/* éditeur : une zone de saisie transparente posée sur un calque qui porte les surlignages */
+.ed{position:relative}
+.ed .mirror,.sheet textarea{font:inherit;letter-spacing:inherit;white-space:pre-wrap;overflow-wrap:break-word;word-break:normal;margin:0;padding:0;border:0}
+.ed .mirror{position:absolute;inset:0;color:transparent;pointer-events:none;overflow:hidden}
+.sheet textarea{position:relative;color:inherit;background:transparent;resize:none;width:100%;min-height:3em;display:block;overflow:hidden;caret-color:var(--paper-ink)}
 .sheet textarea:focus{outline:none}
+
+/* marques d'écart : ce que l'amendement ajoute (surligné) / supprime (barré) */
+.paper ins{text-decoration:none;background:rgba(217,181,106,.5);border-radius:2px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.paper del{text-decoration:line-through 2px #a8452f;color:#7d7466;background:rgba(168,69,47,.08);border-radius:2px}
+.ed .mirror ins{color:transparent}
 .sheet .foot{display:flex;justify-content:flex-end;gap:8px;align-items:center;min-height:30px}
 .sheet .foot span{margin-right:auto;font-size:11.5px;color:#8a8070}
 .sheet button{font:500 13px var(--f-ui);border-radius:4px;padding:6px 14px;cursor:pointer;border:1px solid #a89c80;background:transparent;color:#4a4336}
@@ -67,45 +76,45 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);overf
 .box.open .objet{display:none}
 
 /* --- poignées --- */
-.handle{position:absolute;z-index:10;display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+.handle{position:absolute;z-index:10;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
   background:rgba(11,13,18,.7);border:1px solid var(--line-2);backdrop-filter:blur(6px);cursor:pointer;user-select:none;transition:color .2s,border-color .2s,opacity .3s}
 .handle:hover,.handle:focus-visible{color:var(--fg);border-color:var(--accent);outline:none}
 .handle b{color:var(--accent);font-weight:600}
 .handle.top{top:env(safe-area-inset-top,0px);left:50%;transform:translateX(-50%);border-top:0;border-radius:0 0 10px 10px;padding:9px 16px 8px}
 .handle.right{right:max(0px,env(safe-area-inset-right,0px));top:50%;transform:rotate(-90deg) translate(50%,-100%);transform-origin:right top;border-right:0;border-radius:10px 10px 0 0;padding:9px 16px 8px}
-#stage.top-open .handle.top{opacity:0;pointer-events:none}
 .handle .chev{font-size:10px;transition:transform .3s}
-#stage.others .handle.right .chev{transform:rotate(180deg)}
+#stage.top-open .handle.top .chev,#stage.others .handle.right .chev{transform:rotate(180deg)}
 .handle .alt{display:none} #stage.others .handle .alt{display:inline} #stage.others .handle .def{display:none}
 
-/* --- tiroir du haut : l'article --- */
-.drawer-top{position:absolute;left:0;right:0;top:0;height:min(78vh,760px);z-index:8;transform:translateY(-100%);transition:transform .45s cubic-bezier(.2,.8,.2,1);
-  display:grid;justify-content:center;align-content:start;padding:calc(env(safe-area-inset-top,0px) + 18px) var(--gutter-r) 18px var(--gutter-l);
-  background:linear-gradient(180deg,rgba(11,13,18,.97),rgba(11,13,18,.9));border-bottom:1px solid var(--line-2);box-shadow:0 20px 60px rgba(0,0,0,.6)}
-.drawer-top.open{transform:none}
-.article{width:min(900px,calc(100vw - 32px));max-height:calc(min(78vh,760px) - 60px);overflow:auto;padding:30px 40px 34px}
-.article .head{flex-wrap:wrap;margin-bottom:14px}
-.article h2{font:600 24px var(--f-legal);margin:0 0 10px}
-.article ol{list-style:none;margin:0;padding:0;display:grid;gap:10px}
-.article li{display:grid;grid-template-columns:28px 1fr;gap:10px;font:400 17px/1.5 var(--f-legal);padding:6px 10px;border-radius:3px;max-width:76ch}
-.article li .n{font:400 12px var(--f-ui);color:var(--paper-muted);padding-top:5px}
-.article li.vise{background:var(--accent-soft);box-shadow:inset 4px 0 0 var(--accent)}
-.article li.vise mark{background:transparent;color:inherit;font-weight:600;text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:3px}
-.article .cap{font:400 12px var(--f-ui);color:var(--paper-muted);margin:12px 0 0}
-.drawer-top .close{justify-self:center;margin-top:10px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:none;border:0;cursor:pointer}
-.drawer-top .close:hover{color:var(--fg)}
-.scrim{position:absolute;inset:0;z-index:7;background:rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:opacity .4s}
-#stage.top-open .scrim{opacity:1;pointer-events:auto}
+/* --- en haut : l'alinéa d'origine, seul, posé au-dessus de ma feuille --- */
+.orig-wrap{width:100%;flex:none;display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s cubic-bezier(.2,.8,.2,1)}
+#stage.top-open .orig-wrap{grid-template-rows:1fr}
+.orig-clip{min-height:0;overflow:hidden;margin:0 -40px;padding:0 40px 24px}
+.orig{width:min(880px,100%);margin:0 auto;display:grid;gap:10px;padding:24px 32px 18px;opacity:0;transform:translateY(-28px);transition:opacity .35s,transform .45s cubic-bezier(.2,.8,.2,1);
+  box-shadow:0 14px 34px rgba(0,0,0,.55), 0 0 0 1px rgba(217,181,106,.25)}
+#stage.top-open .orig{opacity:1;transform:none}
+.orig .body{font:400 clamp(16px,1.9vw,20px)/1.5 var(--f-legal);max-width:none;max-height:28vh;overflow:auto;padding:4px 10px 4px 14px;background:rgba(217,181,106,.16);box-shadow:inset 4px 0 0 var(--accent);border-radius:2px}
+.orig .legend{font:400 12px/1.45 var(--f-ui);color:var(--paper-muted);margin:0}
+.orig .legend ins,.orig .legend del{padding:0 3px}
 
 .hint{position:absolute;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:4;font-size:12.5px;color:var(--muted);background:rgba(11,13,18,.6);border:1px solid var(--line);border-radius:999px;padding:6px 14px;backdrop-filter:blur(6px);white-space:nowrap;pointer-events:none}
 .hint b{color:var(--fg);font-weight:500}
-@media (max-width:640px){.hint{font-size:11px;padding:5px 10px}.sheet{padding:24px 20px 18px}.article{padding:22px 20px}.box{padding:18px 18px 16px}}
-@media (prefers-reduced-motion:reduce){.drawer-top,.pane,.sheet,.scrim,.handle,.box .more{transition:none}}
+@media (max-width:640px){.hint{font-size:11px;padding:5px 10px}.sheet{padding:24px 20px 18px}.orig{padding:18px 20px 14px}.orig-clip{padding-bottom:16px}.box{padding:18px 18px 16px}}
+@media (prefers-reduced-motion:reduce){.orig-wrap,.orig,.pane,.sheet,.handle,.box .more{transition:none}}
 </style>
 
 <div id="stage">
   <div class="center">
     <div class="pane pane-mine">
+      <div class="orig-wrap" id="origWrap" aria-hidden="true">
+        <div class="orig-clip">
+          <section class="orig paper" id="orig" aria-label="Texte d'origine : article 4, alinéa 2">
+            <div class="head"><span>Texte de la commission</span><span>Article 4 · alinéa 2</span></div>
+            <div class="body"><p id="origText"></p></div>
+            <p class="legend" id="origLegend"></p>
+          </section>
+        </div>
+      </div>
       <section class="sheet paper" id="sheet" aria-label="Votre amendement">
         <div class="head"><span class="group-badge" style="--g:#c07a00"><i></i>Progrès républicain</span><span id="shNum"></span></div>
         <p class="lead" id="shLead"></p>
@@ -118,17 +127,10 @@ body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-ui);overf
     </div>
   </div>
 
-  <button class="handle top" id="hTop" type="button" aria-controls="drawerTop" aria-expanded="false"><b>Article 4</b> texte de base <span class="chev">▼</span></button>
+  <button class="handle top" id="hTop" type="button" aria-controls="origWrap" aria-expanded="false"><b>Article 4</b> alinéa 2 d'origine <span class="chev">▼</span></button>
   <button class="handle right" id="hRight" type="button" aria-pressed="false"><span class="def"><b id="nOthers">10</b> autres amendements</span><span class="alt"><b>Mon</b> amendement</span> <span class="chev">▲</span></button>
 
-  <div class="scrim" id="scrim"></div>
-
-  <aside class="drawer-top" id="drawerTop" aria-label="Article de base">
-    <article class="article paper" id="article"></article>
-    <button class="close" type="button" id="closeTop">Refermer ▲</button>
-  </aside>
-
-  <span class="hint"><b>Deux doigts vers le bas</b> : l'article · <b>vers la gauche</b> : les autres · <b>double-clic</b> : modifier</span>
+  <span class="hint"><b>Deux doigts vers le bas</b> : le texte d'origine · <b>vers la gauche</b> : les autres · <b>double-clic</b> : modifier</span>
 </div>
 
 <script>
@@ -148,8 +150,7 @@ const ARTICLE = { titre:"Projet de loi portant diverses mesures pour l'accès au
     "Les communes de plus de 3 500 habitants doivent compter au moins 25 % de logements sociaux parmi les résidences principales d'ici 2030. En cas de manquement, le préfet peut prononcer un prélèvement sur les ressources fiscales de la commune.",
     "Le prélèvement mentionné à l'alinéa précédent est affecté au fonds national des aides à la pierre.",
     "Un décret en Conseil d'État précise les modalités d'application du présent article."
-  ],
-  concerne:["3 500 habitants","doivent","25 %","2030","peut prononcer"] };
+  ] };
 const OTHERS = [
   {g:"SOL", num:"212", titre:"Relever le taux à 30 % et avancer l'échéance à 2028", lead:"Rédiger ainsi l'alinéa 2 :", texte:"« Les communes de plus de 1 500 habitants doivent compter au moins 30 % de logements sociaux parmi les résidences principales d'ici 2028. En cas de manquement, le préfet prononce un prélèvement sur les ressources fiscales de la commune, majoré de 50 %. »"},
   {g:"ECO", num:"87", titre:"Porter le taux à 30 % dont un tiers de logements très sociaux", lead:"Rédiger ainsi l'alinéa 2 :", texte:"« Les communes de plus de 3 500 habitants doivent compter au moins 30 % de logements sociaux parmi les résidences principales d'ici 2030, dont un tiers de logements très sociaux. En cas de manquement, le préfet prononce un prélèvement sur les ressources fiscales de la commune. »"},
@@ -167,40 +168,90 @@ const $=s=>document.querySelector(s);
 const stage=$("#stage");
 function esc(s){ return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
 
+/* ---------- Écart mot à mot entre l'alinéa d'origine et mon texte ---------- */
+// Les guillemets « » qui encadrent la rédaction proposée ne comptent pas comme un écart.
+const ORIG=ARTICLE.alineas[ARTICLE.vise];
+const isWs=t=>/^\s+$/.test(t), isQuote=t=>t==="«"||t==="»";
+const norm=t=>t.replace(/’/g,"'").toLowerCase();
+function tokenize(s){ return s.match(/\s+|[\p{L}\p{N}'’%]+|[^\s\p{L}\p{N}'’%]/gu)||[]; }
+function lcsKeep(a,b){ // pour chaque mot, true s'il appartient à la plus longue sous-suite commune
+  const n=a.length, m=b.length, ka=new Array(n).fill(false), kb=new Array(m).fill(false);
+  if(n*m>4e6) return [ka,kb];
+  const L=Array.from({length:n+1},()=>new Uint16Array(m+1));
+  for(let i=n-1;i>=0;i--) for(let j=m-1;j>=0;j--) L[i][j]= a[i]===b[j] ? L[i+1][j+1]+1 : Math.max(L[i+1][j],L[i][j+1]);
+  let i=0, j=0;
+  while(i<n&&j<m){ if(a[i]===b[j]){ ka[i]=kb[j]=true; i++; j++; } else if(L[i+1][j]>=L[i][j+1]) i++; else j++; }
+  return [ka,kb];
+}
+function marked(tokens,keep,tag){ // regroupe les mots modifiés contigus dans une seule balise
+  let out="", open=false;
+  const nextWord=k=>{ for(let x=k+1;x<tokens.length;x++) if(!isWs(tokens[x])) return x; return -1; };
+  tokens.forEach((t,k)=>{
+    if(isWs(t)){ if(open){ const nx=nextWord(k); if(nx<0||keep[nx]!==false){ out+=`</${tag}>`; open=false; } } out+=esc(t); return; }
+    const changed=keep[k]===false;
+    if(changed&&!open){ out+=`<${tag}>`; open=true; } else if(!changed&&open){ out+=`</${tag}>`; open=false; }
+    out+=esc(t);
+  });
+  return open? out+`</${tag}>` : out;
+}
+function compare(orig,mine){
+  const ta=tokenize(orig), tb=tokenize(mine), ia=[], ib=[];
+  ta.forEach((t,k)=>{ if(!isWs(t)) ia.push(k); });
+  tb.forEach((t,k)=>{ if(!isWs(t)&&!isQuote(t)) ib.push(k); });
+  const [ka,kb]=lcsKeep(ia.map(k=>norm(ta[k])), ib.map(k=>norm(tb[k])));
+  const keepA=[], keepB=[]; ia.forEach((k,x)=>keepA[k]=ka[x]); ib.forEach((k,x)=>keepB[k]=kb[x]);
+  return { origHTML:marked(ta,keepA,"del"), mineHTML:marked(tb,keepB,"ins"), same:ka.every(Boolean)&&kb.every(Boolean), del:ka.some(v=>!v), ins:kb.some(v=>!v) };
+}
+
 /* ---------- Ma feuille ---------- */
 $("#shNum").textContent=AMENDEMENT.numero+" · "+AMENDEMENT.article;
 $("#shLead").textContent=AMENDEMENT.leadIn;
 $("#shText").textContent=AMENDEMENT.texte;
 const sheet=$("#sheet"), body=$("#shBody"), foot=$("#shFoot");
+const topOpen=()=>stage.classList.contains("top-open");
 let editing=false;
-function openEditor(){
-  if(editing) return; editing=true; sheet.classList.add("editing");
-  body.innerHTML=`<textarea id="edText" aria-label="Texte de l'amendement" spellcheck="false"></textarea>`;
-  const ta=$("#edText"); ta.value=AMENDEMENT.texte; ta.focus();
+function footIdle(){ foot.innerHTML=`<span>${topOpen()?"Cliquer sur le texte pour le modifier : les écarts s'affichent en direct":"Double-cliquer sur le texte pour le modifier"}</span>`; }
+// position du curseur dans le texte affiché, à l'endroit du clic
+function caretOffset(e,root){
+  let r=null;
+  if(document.caretPositionFromPoint){ const p=document.caretPositionFromPoint(e.clientX,e.clientY); if(p){ r=document.createRange(); r.setStart(p.offsetNode,p.offset); } }
+  else if(document.caretRangeFromPoint){ r=document.caretRangeFromPoint(e.clientX,e.clientY); }
+  if(!r||!root||!root.contains(r.startContainer)) return null;
+  const pre=document.createRange(); pre.selectNodeContents(root); pre.setEnd(r.startContainer,r.startOffset);
+  return pre.toString().length;
+}
+function fit(){ const ta=$("#edText"); if(!ta) return; ta.style.height="auto"; ta.style.height=ta.scrollHeight+"px"; }
+function refresh(){
+  const ta=editing?$("#edText"):null, text=ta?ta.value:AMENDEMENT.texte, d=compare(ORIG,text), on=topOpen();
+  $("#origText").innerHTML=d.origHTML;
+  $("#origLegend").innerHTML= d.same ? "Votre amendement reprend cet alinéa à l'identique. Modifiez votre texte : les écarts apparaissent ici en direct."
+    : [d.del?`<del>barré</del> : ce que votre amendement supprime`:"", d.ins?`<ins>surligné</ins> dans votre texte : ce qu'il ajoute`:""].filter(Boolean).join(" · ");
+  if(ta){ $("#edMirror").innerHTML=(on?d.mineHTML:esc(text))+(text.endsWith("\n")?" ":""); fit(); }
+  else $("#shText").innerHTML= on? d.mineHTML : esc(text);
+}
+function openEditor(e){
+  if(editing) return;
+  const off=e?caretOffset(e,$("#shText")):null;
+  editing=true; sheet.classList.add("editing");
+  body.innerHTML=`<div class="ed"><div class="mirror" id="edMirror" aria-hidden="true"></div><textarea id="edText" aria-label="Texte de l'amendement" spellcheck="false" rows="1"></textarea></div>`;
+  const ta=$("#edText"); ta.value=AMENDEMENT.texte;
   foot.innerHTML=`<span>Échap pour annuler · Ctrl+Entrée pour valider</span><button type="button" id="edCancel">Annuler</button><button type="button" class="primary" id="edOk">Valider</button>`;
   $("#edCancel").onclick=()=>closeEditor(false); $("#edOk").onclick=()=>closeEditor(true);
-  ta.addEventListener("keydown", e=>{ if(e.key==="Escape"){e.preventDefault();closeEditor(false);} if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)){e.preventDefault();closeEditor(true);} });
+  ta.addEventListener("keydown", e=>{ if(e.key==="Escape"){e.preventDefault();e.stopPropagation();closeEditor(false);} if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)){e.preventDefault();closeEditor(true);} });
+  ta.addEventListener("input", refresh);
+  refresh();
+  ta.focus({preventScroll:true}); const p=off==null?ta.value.length:off; ta.setSelectionRange(p,p);
 }
 function closeEditor(commit){
   if(!editing) return;
   if(commit){ const v=$("#edText").value.trim(); if(v) AMENDEMENT.texte=v; }
   editing=false; sheet.classList.remove("editing");
-  body.innerHTML=`<p id="shText"></p>`; $("#shText").textContent=AMENDEMENT.texte;
-  foot.innerHTML=`<span>Double-cliquer sur le texte pour le modifier</span>`;
+  body.innerHTML=`<p id="shText"></p>`;
+  footIdle(); refresh();
 }
 body.addEventListener("dblclick", openEditor);
-
-/* ---------- Article (tiroir du haut) ---------- */
-(function renderArticle(){
-  const al=ARTICLE.alineas.map((t,i)=>{
-    let h=esc(t);
-    if(i===ARTICLE.vise){ for(const c of ARTICLE.concerne){ h=h.replace(esc(c), `<mark>${esc(c)}</mark>`); } }
-    return `<li class="${i===ARTICLE.vise?"vise":""}"><span class="n">${i+1}</span><span>${h}</span></li>`;
-  }).join("");
-  $("#article").innerHTML=`<div class="head"><span>Assemblée nationale · texte de la commission</span><span>${esc(ARTICLE.titre)}</span></div>
-    <h2>${esc(ARTICLE.num)}</h2><ol>${al}</ol>
-    <p class="cap">Alinéa 2 visé par votre amendement · en souligné, les termes sur lesquels portent les amendements déposés.</p>`;
-})();
+body.addEventListener("click", e=>{ if(topOpen()) openEditor(e); }); // face au texte d'origine, un simple clic suffit
+refresh();
 
 /* ---------- Les autres : boîtes papier ---------- */
 const list=$("#list"), scroller=$("#scroller");
@@ -251,22 +302,25 @@ function toggleBox(box){
   box.classList.toggle("open",open); const m=box.querySelector(".more"); m.setAttribute("aria-expanded",String(open)); m.setAttribute("aria-label", open?"Replier l'amendement":"Afficher l'amendement");
   requestAnimationFrame(()=>{ const top=box.offsetTop, bottom=top+box.offsetHeight, vh=scroller.clientHeight; if(bottom-y>vh) setY(Math.min(bottom-vh+16, top-16)); settle(); });
 }
-window.addEventListener("resize", ()=>{ setY(y); settle(); });
+window.addEventListener("resize", ()=>{ setY(y); settle(); fit(); });
 
-/* ---------- Volets et tiroir ---------- */
-const dTop=$("#drawerTop"), hTop=$("#hTop"), hRight=$("#hRight");
-function setTop(on){ dTop.classList.toggle("open",on); stage.classList.toggle("top-open",on); hTop.setAttribute("aria-expanded",String(on)); }
+/* ---------- Volets : texte d'origine en haut, les autres à droite ---------- */
+const origWrap=$("#origWrap"), orig=$("#orig"), hTop=$("#hTop"), hRight=$("#hRight");
+function setTop(on){
+  if(on===topOpen()) return;
+  stage.classList.toggle("top-open",on); origWrap.setAttribute("aria-hidden",String(!on)); hTop.setAttribute("aria-expanded",String(on));
+  if(!editing) footIdle();
+  refresh();
+}
 function setOthers(on){ if(on && editing) closeEditor(false); stage.classList.toggle("others",on); hRight.setAttribute("aria-pressed",String(on)); if(on){ setTop(false); setY(y); } }
-hTop.addEventListener("click", ()=>setTop(!dTop.classList.contains("open")));
+hTop.addEventListener("click", ()=>setTop(!topOpen()));
 hRight.addEventListener("click", ()=>setOthers(!stage.classList.contains("others")));
-$("#closeTop").addEventListener("click", ()=>setTop(false));
-$("#scrim").addEventListener("click", ()=>setTop(false));
-window.addEventListener("keydown", e=>{ if(e.key==="Escape" && !editing){ if(dTop.classList.contains("open")) setTop(false); else setOthers(false); } });
+window.addEventListener("keydown", e=>{ if(e.key==="Escape" && !editing){ if(topOpen()) setTop(false); else setOthers(false); } });
 
 // glisser à la souris ou au doigt depuis la scène
 let g=null;
 stage.addEventListener("pointerdown", e=>{
-  if(e.target.closest(".sheet,.drawer-top,.handle,.scroller")) return;
+  if(e.target.closest(".sheet,.orig,.handle,.scroller")) return;
   g={x:e.clientX,y:e.clientY};
 });
 stage.addEventListener("pointermove", e=>{
@@ -276,17 +330,18 @@ stage.addEventListener("pointermove", e=>{
   else { if(dx<-50){ setOthers(true); g=null; } else if(dx>50){ setOthers(false); g=null; } }
 });
 stage.addEventListener("pointerup", ()=>{ g=null; }); stage.addEventListener("pointercancel", ()=>{ g=null; });
+// sur le texte d'origine, glisser vers le haut le renvoie
 let gt=null;
-dTop.addEventListener("pointerdown", e=>{ gt={y:e.clientY}; });
-dTop.addEventListener("pointermove", e=>{ if(gt && gt.y-e.clientY>70){ setTop(false); gt=null; } });
-dTop.addEventListener("pointerup", ()=>{ gt=null; });
+orig.addEventListener("pointerdown", e=>{ gt={y:e.clientY}; });
+orig.addEventListener("pointermove", e=>{ if(gt && gt.y-e.clientY>60){ setTop(false); gt=null; } });
+orig.addEventListener("pointerup", ()=>{ gt=null; }); orig.addEventListener("pointercancel", ()=>{ gt=null; });
 
 // pavé tactile : le défilement à deux doigts vaut un glisser
 let wx=0, wy=0, wTimer=null;
 stage.addEventListener("wheel", e=>{
-  const inList=e.target.closest(".scroller"), inArt=e.target.closest(".article"), inTa=e.target.closest("textarea");
+  const inList=e.target.closest(".scroller"), inTa=e.target.closest("textarea"), inOrig=e.target.closest(".orig .body");
   if(inTa) return;
-  if(inArt && Math.abs(e.deltaY)>=Math.abs(e.deltaX)) return;
+  if(inOrig && inOrig.scrollHeight>inOrig.clientHeight && Math.abs(e.deltaY)>=Math.abs(e.deltaX)) return;
   if(inList && Math.abs(e.deltaY)>=Math.abs(e.deltaX)) return;
   e.preventDefault();
   wx+=e.deltaX; wy+=e.deltaY;
