@@ -69,3 +69,21 @@ Les directions D1 à D13 sont autonomes, dépendances indiquées. Celles que je 
 - D3 (concurrence) : la pile des autres devient vraie.
 
 Celles qui se coupent le plus facilement sans dommage pour le reste : D11 (négociation augmentée), D13 (rôles), et la sous-option « applaudissements » de D5.
+
+---
+
+## Décision de l'utilisateur (8 nov. 2026)
+
+**Toutes les recommandations sont retenues.**
+
+| § | Décision |
+|---|---|
+| 1 | Règle reformulée : « la référence reste vierge ; par défaut, la commission ». |
+| 2 | Le bord bas sert au choix du rangement. |
+| 3 | Charpente α (les rangements), calques réservés aux marques légères. |
+| 4 | Interface du député de groupe ; Gouvernement et commission deviennent des acteurs institutionnels ; seule la visibilité est gardée de D13. |
+| 5 | Le calculé est dit en texte dans l'en-tête ; le provisoire est posé sur calque ; pas d'encre nouvelle. |
+| 6 | Passage à l'article 4 réel du logement, avec D4 (le code tel qu'il deviendrait). |
+| 7 | Direct : décision à prendre avant le 12 nov. ; à défaut, travail en différé après la séance. |
+| 8 | L1 à L4 retenus, L2 dans sa variante conservatrice si le dézoom actuel plaît. |
+| 9 | Toutes les directions sont construites, chacune derrière un interrupteur ; l'élimination se fait à l'œil. |
