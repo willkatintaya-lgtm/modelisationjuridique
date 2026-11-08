@@ -62,4 +62,4 @@ Une seule interface ou plusieurs ? Voici des découpages possibles, chacun cohé
 ## Ce qui reste à faire après cette étape
 
 - Compléter ce catalogue sous l'œil de l'utilisateur : pistes manquantes, situations mal couvertes.
-- Puis, **étape 2** : confronter chaque piste et chaque dispositif à la maquette actuelle (ce qu'elle a déjà, ce qui s'y greffe, ce qui la contredit). Le brouillon prématuré de `etape-2-brouillon/` servira de point de départ.
+- Puis, **étape 2** : confronter chaque piste et chaque dispositif à la maquette actuelle. Fait : voir `etape-2/`.

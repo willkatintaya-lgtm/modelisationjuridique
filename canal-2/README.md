@@ -8,7 +8,7 @@ Le corpus de référence est [`0-corpus.md`](0-corpus.md), *Situations de la dis
 
 **Ce que cette étape ne fait pas.** Elle ne regarde pas la maquette actuelle (« Boussole des amendements »). Elle ne confronte rien à sa grammaire, à ses gestes ou à sa direction artistique, et elle ne trie pas. Plusieurs pistes peuvent être incompatibles entre elles : c'est voulu.
 
-**Étape suivante, plus tard.** La confrontation rigoureuse des pistes avec la maquette se fera une fois le catalogue complet. Un premier brouillon, prématuré, est rangé dans [`etape-2-brouillon/`](etape-2-brouillon/) pour cette occasion.
+**Étape 2 (faite après validation du catalogue).** La confrontation de chaque piste avec la maquette est dans [`etape-2/`](etape-2/) : méthode et inventaire de la maquette, grille piste par piste, synthèse. Le brouillon prématuré de la première passe est retiré ; il reste disponible au commit af735d8.
 
 **Méthode.**
 1. Dresser l'inventaire des **registres** dont dispose une interface 2D interactive et dynamique : alignement de textes, frise, graphe, matrice, simulation, alerte, animation, etc. C'est le vocabulaire des réponses possibles.
@@ -22,6 +22,9 @@ Le corpus de référence est [`0-corpus.md`](0-corpus.md), *Situations de la dis
 | [`1-registres.md`](1-registres.md) | Le vocabulaire : registres d'interface et dimensions de variation. |
 | [`2-pistes.md`](2-pistes.md) | Les pistes, situation par situation, dans l'ordre du corpus. |
 | [`3-assemblages.md`](3-assemblages.md) | Dispositifs transversaux et ensembles d'interfaces possibles. |
+| [`etape-2/0-methode-et-inventaire.md`](etape-2/0-methode-et-inventaire.md) | Étape 2 : inventaire de la maquette, verdicts, leviers d'extension. |
+| [`etape-2/1-grille.md`](etape-2/1-grille.md) | Étape 2 : les 258 pistes face à la maquette. |
+| [`etape-2/2-synthese.md`](etape-2/2-synthese.md) | Étape 2 : bilan, socle existant, leviers classés, heurts, décisions. |
 
 ## Conventions
 
