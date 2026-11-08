@@ -3,7 +3,7 @@
 Ce canal croise trois gisements et en tire un modèle d'interface sur papier :
 - la maquette (`index.html`, `CLAUDE.md`, 497ce12) ;
 - le canal 1 (`claude/canal-1-assemblee`, 7e48b00) ;
-- le canal 2 (`claude/canal-2-corpus`, dd3116d ; le canal 2 travaille encore).
+- le canal 2 (`claude/canal-2-corpus`, dd3116d : catalogue et étape 2 « confrontation avec la maquette », dernier état poussé, intégré).
 
 La session de refonte construit ce modèle dans le code.
 
