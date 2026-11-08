@@ -1,0 +1,1098 @@
+[
+ {
+  "alinea": 4,
+  "ancre": "— suppression d’alinéa",
+  "nb_amendements": 11,
+  "groupes": [
+   "ECO",
+   "RC",
+   "RS",
+   "Rapporteur",
+   "SOL",
+   "UT"
+  ],
+  "sorts": {
+   "Adopté": 8,
+   "Non soutenu": 1,
+   "Tombé": 2
+  },
+  "amendements": [
+   "CE205",
+   "CE285",
+   "CE343",
+   "CE351",
+   "CE404",
+   "CE566",
+   "CE731",
+   "CF23",
+   "CF33",
+   "CF36",
+   "CF42"
+  ],
+  "extrait_alinea": "a) À la fin de la seconde phrase du neuvième alinéa, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ;"
+ },
+ {
+  "alinea": 12,
+  "ancre": "— autre",
+  "nb_amendements": 10,
+  "groupes": [
+   "CP",
+   "DC",
+   "NV",
+   "PR",
+   "RS",
+   "Rapporteur"
+  ],
+  "sorts": {
+   "Adopté": 3,
+   "Non soutenu": 2,
+   "Tombé": 2,
+   "Rejeté": 3
+  },
+  "amendements": [
+   "CE123",
+   "CE137",
+   "CE15",
+   "CE248",
+   "CE356",
+   "CE406",
+   "CE481",
+   "CE509",
+   "CE732",
+   "CE737"
+  ],
+  "extrait_alinea": "« j) Pour les logements situés en France que le contribuable acquiert, qui font ou ont fait l’objet de travaux concourant à la production ou à la livraison d’un"
+ },
+ {
+  "alinea": 13,
+  "ancre": "transformation",
+  "nb_amendements": 9,
+  "groupes": [
+   "ECO",
+   "RC",
+   "Rapporteur",
+   "SOL"
+  ],
+  "sorts": {
+   "Adopté": 3,
+   "Tombé": 6
+  },
+  "amendements": [
+   "CE207",
+   "CE292",
+   "CE345",
+   "CE405",
+   "CE409",
+   "CE735",
+   "CF38",
+   "CF43",
+   "CF46"
+  ],
+  "extrait_alinea": "« La déduction prévue au premier alinéa du présent j est applicable aux locaux situés en France que le contribuable acquiert et qui font ou ont fait l’objet de "
+ },
+ {
+  "alinea": "article",
+  "ancre": "∗",
+  "nb_amendements": 6,
+  "groupes": [
+   "RS",
+   "SOL",
+   "UT"
+  ],
+  "sorts": {
+   "Rejeté": 5,
+   "Non soutenu": 1
+  },
+  "amendements": [
+   "CE283",
+   "CE349",
+   "CE559",
+   "CE561",
+   "CF22",
+   "CF34"
+  ],
+  "extrait_alinea": null
+ },
+ {
+  "alinea": 15,
+  "ancre": "— alinéa inséré après",
+  "nb_amendements": 6,
+  "groupes": [
+   "ECO",
+   "Rapporteur",
+   "SOL",
+   "UT"
+  ],
+  "sorts": {
+   "Adopté": 1,
+   "Rejeté": 5
+  },
+  "amendements": [
+   "CE725",
+   "CE726",
+   "CE727",
+   "CE728",
+   "CE729",
+   "CF40"
+  ],
+  "extrait_alinea": "b) À la première phrase du deuxième alinéa, les mots : « de le louer » sont remplacés par les mots : « de louer le logement nu à titre de résidence principale »"
+ },
+ {
+  "alinea": 13,
+  "ancre": "— autre",
+  "nb_amendements": 6,
+  "groupes": [
+   "CP",
+   "RC",
+   "Rapporteur"
+  ],
+  "sorts": {
+   "Rejeté": 4,
+   "Tombé": 2
+  },
+  "amendements": [
+   "CE16",
+   "CE17",
+   "CE18",
+   "CE19",
+   "CE737",
+   "CF37"
+  ],
+  "extrait_alinea": "« La déduction prévue au premier alinéa du présent j est applicable aux locaux situés en France que le contribuable acquiert et qui font ou ont fait l’objet de "
+ },
+ {
+  "alinea": 3,
+  "ancre": "achèvement",
+  "nb_amendements": 5,
+  "groupes": [
+   "DC",
+   "NV",
+   "PR",
+   "Rapporteur"
+  ],
+  "sorts": {
+   "Adopté": 2,
+   "Non soutenu": 1,
+   "Tombé": 2
+  },
+  "amendements": [
+   "CE123",
+   "CE137",
+   "CE248",
+   "CE509",
+   "CE732"
+  ],
+  "extrait_alinea": "1° bis (nouveau) Le i est ainsi modifié :"
+ },
+ {
+  "alinea": 13,
+  "ancre": "— alinéa inséré après",
+  "nb_amendements": 5,
+  "groupes": [
+   "CP",
+   "RC",
+   "SOL"
+  ],
+  "sorts": {
+   "Rejeté": 3,
+   "Non soutenu": 1,
+   "Retiré après publication": 1
+  },
+  "amendements": [
+   "CE128",
+   "CE226",
+   "CE427",
+   "CE430",
+   "CE431"
+  ],
+  "extrait_alinea": "« La déduction prévue au premier alinéa du présent j est applicable aux locaux situés en France que le contribuable acquiert et qui font ou ont fait l’objet de "
+ },
+ {
+  "alinea": 12,
+  "ancre": "199 novovicies",
+  "nb_amendements": 4,
+  "groupes": [
+   "RC",
+   "Rapporteur"
+  ],
+  "sorts": {
+   "Adopté": 3,
+   "Tombé": 1
+  },
+  "amendements": [
+   "CE207",
+   "CE735",
+   "CF38",
+   "CF43"
+  ],
+  "extrait_alinea": "« j) Pour les logements situés en France que le contribuable acquiert, qui font ou ont fait l’objet de travaux concourant à la production ou à la livraison d’un"
+ },
+ {
+  "alinea": 12,
+  "ancre": "article 199 novovicies,",
+  "nb_amendements": 4,
+  "groupes": [
+   "ECO",
+   "Rapporteur",
+   "UT"
+  ],
+  "sorts": {
+   "Tombé": 4
+  },
+  "amendements": [
+   "CE345",
+   "CE409",
+   "CE563",
+   "CF46"
+  ],
+  "extrait_alinea": "« j) Pour les logements situés en France que le contribuable acquiert, qui font ou ont fait l’objet de travaux concourant à la production ou à la livraison d’un"
+ },
+ {
+  "alinea": null,
+  "ancre": "— autre",
+  "nb_amendements": 4,
+  "groupes": [
+   "LL",
+   "SOL",
+   "UT"
+  ],
+  "sorts": {
+   "Rejeté": 2,
+   "Tombé": 1,
+   "Non soutenu": 1
+  },
+  "amendements": [
+   "CE288",
+   "CE570",
+   "CF25",
+   "CF35"
+  ],
+  "extrait_alinea": null
+ },
+ {
+  "alinea": 12,
+  "ancre": "— complément",
+  "nb_amendements": 4,
+  "groupes": [
+   "Rapporteur",
+   "UT"
+  ],
+  "sorts": {
+   "Rejeté": 3,
+   "Adopté": 1
+  },
+  "amendements": [
+   "CE346",
+   "CE690",
+   "CE736",
+   "CF26"
+  ],
+  "extrait_alinea": "« j) Pour les logements situés en France que le contribuable acquiert, qui font ou ont fait l’objet de travaux concourant à la production ou à la livraison d’un"
+ },
+ {
+  "alinea": null,
+  "ancre": "permettent",
+  "nb_amendements": 3,
+  "groupes": [
+   "DC",
+   "NV",
+   "Rapporteur"
+  ],
+  "sorts": {
+   "Adopté": 2,
+   "Non soutenu": 1
+  },
+  "amendements": [
+   "CE123",
+   "CE137",
+   "CE732"
+  ],
+  "extrait_alinea": null
+ },
+ {
+  "alinea": 6,
+  "ancre": "— réécriture d’alinéa",
+  "nb_amendements": 3,
+  "groupes": [
+   "ECO",
+   "Rapporteur"
+  ],
+  "sorts": {
+   "Adopté": 1,
+   "Tombé": 2
+  },
+  "amendements": [
+   "CE344",
+   "CE403",
+   "CF41"
+  ],
+  "extrait_alinea": "c) Après le douzième alinéa, sont insérés trois alinéas ainsi rédigés :"
+ },
+ {
+  "alinea": 7,
+  "ancre": "— suppression d’alinéa",
+  "nb_amendements": 3,
+  "groupes": [
+   "ECO",
+   "Rapporteur"
+  ],
+  "sorts": {
+   "Adopté": 1,
+   "Tombé": 2
+  },
+  "amendements": [
+   "CE344",
+   "CE403",
+   "CF41"
+  ],
+  "extrait_alinea": "« Lorsque la société mentionnée au dixième alinéa du présent i est une société civile de placement immobilier, au sens de l’article L. 214‑114 du code monétaire"
+ },
+ {
+  "alinea": 9,
+  "ancre": "au dixième alinéa du présent i",
+  "nb_amendements": 3,
+  "groupes": [
+   "ECO",
+   "Rapporteur"
+  ],
+  "sorts": {
+   "Adopté": 1,
+   "Tombé": 2
+  },
+  "amendements": [
+   "CE344",
+   "CE403",
+   "CF41"
+  ],
+  "extrait_alinea": "« Par dérogation au dixième alinéa du présent i, la circonstance qu’un logement détenu par une société civile de placement immobilier mentionnée à l’article L. "
+ },
+ {
+  "alinea": 21,
+  "ancre": "— réécriture d’alinéa",
+  "nb_amendements": 3,
+  "groupes": [
+   "ECO",
+   "Rapporteur"
+  ],
+  "sorts": {
+   "Adopté": 1,
+   "Tombé": 2
+  },
+  "amendements": [
+   "CE344",
+   "CE403",
+   "CF41"
+  ],
+  "extrait_alinea": "d bis) (nouveau) Après le onzième alinéa, sont insérés trois alinéas ainsi rédigés :"
+ },
+ {
+  "alinea": 22,
+  "ancre": "— suppression d’alinéa",
+  "nb_amendements": 3,
+  "groupes": [
+   "ECO",
+   "Rapporteur"
+  ],
+  "sorts": {
+   "Adopté": 1,
+   "Tombé": 2
+  },
+  "amendements": [
+   "CE344",
+   "CE403",
+   "CF41"
+  ],
+  "extrait_alinea": "« Lorsque la société mentionnée au douzième alinéa du présent j est une société civile de placement immobilier, au sens de l’article L. 214‑114 du code monétair"
+ },
+ {
+  "alinea": 24,
+  "ancre": "au douzième alinéa du présent j",
+  "nb_amendements": 3,
+  "groupes": [
+   "ECO",
+   "Rapporteur"
+  ],
+  "sorts": {
+   "Adopté": 1,
+   "Tombé": 2
+  },
+  "amendements": [
+   "CE344",
+   "CE403",
+   "CF41"
+  ],
+  "extrait_alinea": "« Par dérogation au douzième alinéa du présent j, la circonstance qu’un logement détenu par une société civile de placement immobilier mentionnée à l’article L."
+ },
+ {
+  "alinea": 12,
+  "ancre": "d",
+  "nb_amendements": 3,
+  "groupes": [
+   "RC",
+   "UT"
+  ],
+  "sorts": {
+   "Rejeté": 3
+  },
+  "amendements": [
+   "CE206",
+   "CF25",
+   "CF37"
+  ],
+  "extrait_alinea": "« j) Pour les logements situés en France que le contribuable acquiert, qui font ou ont fait l’objet de travaux concourant à la production ou à la livraison d’un"
+ },
+ {
+  "alinea": 13,
+  "ancre": "classe d",
+  "nb_amendements": 3,
+  "groupes": [
+   "CP"
+  ],
+  "sorts": {
+   "Tombé": 3
+  },
+  "amendements": [
+   "CE21",
+   "CE22",
+   "CE23"
+  ],
+  "extrait_alinea": "« La déduction prévue au premier alinéa du présent j est applicable aux locaux situés en France que le contribuable acquiert et qui font ou ont fait l’objet de "
+ },
+ {
+  "alinea": 13,
+  "ancre": "classe e",
+  "nb_amendements": 3,
+  "groupes": [
+   "CP"
+  ],
+  "sorts": {
+   "Tombé": 3
+  },
+  "amendements": [
+   "CE24",
+   "CE25",
+   "CE26"
+  ],
+  "extrait_alinea": "« La déduction prévue au premier alinéa du présent j est applicable aux locaux situés en France que le contribuable acquiert et qui font ou ont fait l’objet de "
+ },
+ {
+  "alinea": 17,
+  "ancre": "— autre",
+  "nb_amendements": 2,
+  "groupes": [
+   "Rapporteur",
+   "SOL"
+  ],
+  "sorts": {
+   "Adopté": 2
+  },
+  "amendements": [
+   "CE285",
+   "CE731"
+  ],
+  "extrait_alinea": "c bis) (nouveau) À la fin de la seconde phrase du huitième alinéa, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ;"
+ },
+ {
+  "alinea": 20,
+  "ancre": "— autre",
+  "nb_amendements": 2,
+  "groupes": [
+   "Rapporteur",
+   "SOL"
+  ],
+  "sorts": {
+   "Adopté": 2
+  },
+  "amendements": [
+   "CE285",
+   "CE731"
+  ],
+  "extrait_alinea": "– à la seconde phrase, les mots : « , un parent ou un allié jusqu’au deuxième degré inclus » sont supprimés ;"
+ },
+ {
+  "alinea": 29,
+  "ancre": "— autre",
+  "nb_amendements": 2,
+  "groupes": [
+   "Rapporteur",
+   "SOL"
+  ],
+  "sorts": {
+   "Adopté": 2
+  },
+  "amendements": [
+   "CE285",
+   "CE731"
+  ],
+  "extrait_alinea": "III (nouveau). – La perte de recettes résultant pour l’État de l’inclusion des locations consenties aux parents ou alliés, jusqu’au deuxième degré, dans le disp"
+ },
+ {
+  "alinea": 12,
+  "ancre": "amélioration",
+  "nb_amendements": 2,
+  "groupes": [
+   "UT"
+  ],
+  "sorts": {
+   "Tombé": 1,
+   "Rejeté": 1
+  },
+  "amendements": [
+   "CF24",
+   "CF33"
+  ],
+  "extrait_alinea": "« j) Pour les logements situés en France que le contribuable acquiert, qui font ou ont fait l’objet de travaux concourant à la production ou à la livraison d’un"
+ },
+ {
+  "alinea": null,
+  "ancre": "e",
+  "nb_amendements": 2,
+  "groupes": [
+   "RC"
+  ],
+  "sorts": {
+   "Rejeté": 2
+  },
+  "amendements": [
+   "CE206",
+   "CF37"
+  ],
+  "extrait_alinea": null
+ },
+ {
+  "alinea": 12,
+  "ancre": "199 novovicies,",
+  "nb_amendements": 2,
+  "groupes": [
+   "ECO",
+   "SOL"
+  ],
+  "sorts": {
+   "Tombé": 2
+  },
+  "amendements": [
+   "CE292",
+   "CE405"
+  ],
+  "extrait_alinea": "« j) Pour les logements situés en France que le contribuable acquiert, qui font ou ont fait l’objet de travaux concourant à la production ou à la livraison d’un"
+ },
+ {
+  "alinea": 12,
+  "ancre": "classe d",
+  "nb_amendements": 2,
+  "groupes": [
+   "SOL",
+   "UT"
+  ],
+  "sorts": {
+   "Rejeté": 1,
+   "Tombé": 1
+  },
+  "amendements": [
+   "CE288",
+   "CE570"
+  ],
+  "extrait_alinea": "« j) Pour les logements situés en France que le contribuable acquiert, qui font ou ont fait l’objet de travaux concourant à la production ou à la livraison d’un"
+ },
+ {
+  "alinea": 13,
+  "ancre": "est g",
+  "nb_amendements": 2,
+  "groupes": [
+   "CP"
+  ],
+  "sorts": {
+   "Tombé": 2
+  },
+  "amendements": [
+   "CE25",
+   "CE26"
+  ],
+  "extrait_alinea": "« La déduction prévue au premier alinéa du présent j est applicable aux locaux situés en France que le contribuable acquiert et qui font ou ont fait l’objet de "
+ },
+ {
+  "alinea": 25,
+  "ancre": "acquiert",
+  "nb_amendements": 2,
+  "groupes": [
+   "SOL",
+   "UT"
+  ],
+  "sorts": {
+   "Rejeté": 2
+  },
+  "amendements": [
+   "CE287",
+   "CF28"
+  ],
+  "extrait_alinea": "e) Au dernier alinéa, après les mots : « s’applique », sont insérés les mots : « , dans sa rédaction en vigueur à la date d’acquisition, » ;"
+ },
+ {
+  "alinea": 16,
+  "ancre": "— autre",
+  "nb_amendements": 2,
+  "groupes": [
+   "CP"
+  ],
+  "sorts": {
+   "Rejeté": 2
+  },
+  "amendements": [
+   "CE27",
+   "CE30"
+  ],
+  "extrait_alinea": "c) Au sixième alinéa, le mot : « troisième » est remplacé par le mot : « sixième » ;"
+ },
+ {
+  "alinea": 20,
+  "ancre": "— réécriture d’alinéa",
+  "nb_amendements": 2,
+  "groupes": [
+   "CP",
+   "PR"
+  ],
+  "sorts": {
+   "Tombé": 2
+  },
+  "amendements": [
+   "CE247",
+   "CE32"
+  ],
+  "extrait_alinea": "– à la seconde phrase, les mots : « , un parent ou un allié jusqu’au deuxième degré inclus » sont supprimés ;"
+ },
+ {
+  "alinea": 3,
+  "ancre": "— alinéa inséré après",
+  "nb_amendements": 1,
+  "groupes": [
+   "Rapporteur"
+  ],
+  "sorts": {
+   "Adopté": 1
+  },
+  "amendements": [
+   "CF40"
+  ],
+  "extrait_alinea": "1° bis (nouveau) Le i est ainsi modifié :"
+ },
+ {
+  "alinea": null,
+  "ancre": "— complément",
+  "nb_amendements": 1,
+  "groupes": [
+   "UT"
+  ],
+  "sorts": {
+   "Tombé": 1
+  },
+  "amendements": [
+   "CF33"
+  ],
+  "extrait_alinea": null
+ },
+ {
+  "alinea": 9,
+  "ancre": "— alinéa inséré après",
+  "nb_amendements": 1,
+  "groupes": [
+   "UT"
+  ],
+  "sorts": {
+   "Rejeté": 1
+  },
+  "amendements": [
+   "CF27"
+  ],
+  "extrait_alinea": "« Par dérogation au dixième alinéa du présent i, la circonstance qu’un logement détenu par une société civile de placement immobilier mentionnée à l’article L. "
+ },
+ {
+  "alinea": 15,
+  "ancre": "— complément",
+  "nb_amendements": 1,
+  "groupes": [
+   "UT"
+  ],
+  "sorts": {
+   "Rejeté": 1
+  },
+  "amendements": [
+   "CF27"
+  ],
+  "extrait_alinea": "b) À la première phrase du deuxième alinéa, les mots : « de le louer » sont remplacés par les mots : « de louer le logement nu à titre de résidence principale »"
+ },
+ {
+  "alinea": 4,
+  "ancre": "— réécriture d’alinéa",
+  "nb_amendements": 1,
+  "groupes": [
+   "CP"
+  ],
+  "sorts": {
+   "Tombé": 1
+  },
+  "amendements": [
+   "CE13"
+  ],
+  "extrait_alinea": "a) À la fin de la seconde phrase du neuvième alinéa, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ;"
+ },
+ {
+  "alinea": 5,
+  "ancre": "— réécriture d’alinéa",
+  "nb_amendements": 1,
+  "groupes": [
+   "CP"
+  ],
+  "sorts": {
+   "Tombé": 1
+  },
+  "amendements": [
+   "CE14"
+  ],
+  "extrait_alinea": "b) À la seconde phrase du dixième alinéa, les mots : « , un parent ou un allié jusqu’au deuxième degré inclus » sont supprimés ;"
+ },
+ {
+  "alinea": 6,
+  "ancre": "— suppression d’alinéa",
+  "nb_amendements": 1,
+  "groupes": [
+   "SOL"
+  ],
+  "sorts": {
+   "Adopté": 1
+  },
+  "amendements": [
+   "CE284"
+  ],
+  "extrait_alinea": "c) Après le douzième alinéa, sont insérés trois alinéas ainsi rédigés :"
+ },
+ {
+  "alinea": 11,
+  "ancre": "— suppression d’alinéa",
+  "nb_amendements": 1,
+  "groupes": [
+   "RS"
+  ],
+  "sorts": {
+   "Non soutenu": 1
+  },
+  "amendements": [
+   "CE355"
+  ],
+  "extrait_alinea": "a) Le premier alinéa est remplacé par trois alinéas ainsi rédigés :"
+ },
+ {
+  "alinea": 12,
+  "ancre": "e",
+  "nb_amendements": 1,
+  "groupes": [
+   "UT"
+  ],
+  "sorts": {
+   "Rejeté": 1
+  },
+  "amendements": [
+   "CF29"
+  ],
+  "extrait_alinea": "« j) Pour les logements situés en France que le contribuable acquiert, qui font ou ont fait l’objet de travaux concourant à la production ou à la livraison d’un"
+ },
+ {
+  "alinea": 13,
+  "ancre": "— suppression d’alinéa",
+  "nb_amendements": 1,
+  "groupes": [
+   "SOL"
+  ],
+  "sorts": {
+   "Retiré": 1
+  },
+  "amendements": [
+   "CE289"
+  ],
+  "extrait_alinea": "« La déduction prévue au premier alinéa du présent j est applicable aux locaux situés en France que le contribuable acquiert et qui font ou ont fait l’objet de "
+ },
+ {
+  "alinea": null,
+  "ancre": "199 novovicies,",
+  "nb_amendements": 1,
+  "groupes": [
+   "RC"
+  ],
+  "sorts": {
+   "Rejeté": 1
+  },
+  "amendements": [
+   "CE746"
+  ],
+  "extrait_alinea": null
+ },
+ {
+  "alinea": null,
+  "ancre": "si leur classe initiale était f ou g ou d’une classe sinon,",
+  "nb_amendements": 1,
+  "groupes": [
+   "RC"
+  ],
+  "sorts": {
+   "Rejeté": 1
+  },
+  "amendements": [
+   "CE746"
+  ],
+  "extrait_alinea": null
+ },
+ {
+  "alinea": null,
+  "ancre": "transformation",
+  "nb_amendements": 1,
+  "groupes": [
+   "RC"
+  ],
+  "sorts": {
+   "Rejeté": 1
+  },
+  "amendements": [
+   "CE746"
+  ],
+  "extrait_alinea": null
+ },
+ {
+  "alinea": 12,
+  "ancre": "définis en application",
+  "nb_amendements": 1,
+  "groupes": [
+   "Rapporteur"
+  ],
+  "sorts": {
+   "Adopté": 1
+  },
+  "amendements": [
+   "CE733"
+  ],
+  "extrait_alinea": "« j) Pour les logements situés en France que le contribuable acquiert, qui font ou ont fait l’objet de travaux concourant à la production ou à la livraison d’un"
+ },
+ {
+  "alinea": 12,
+  "ancre": "novovicies,",
+  "nb_amendements": 1,
+  "groupes": [
+   "RC"
+  ],
+  "sorts": {
+   "Non soutenu": 1
+  },
+  "amendements": [
+   "CE480"
+  ],
+  "extrait_alinea": "« j) Pour les logements situés en France que le contribuable acquiert, qui font ou ont fait l’objet de travaux concourant à la production ou à la livraison d’un"
+ },
+ {
+  "alinea": 12,
+  "ancre": "travaux d’amélioration",
+  "nb_amendements": 1,
+  "groupes": [
+   "UT"
+  ],
+  "sorts": {
+   "Tombé": 1
+  },
+  "amendements": [
+   "CE568"
+  ],
+  "extrait_alinea": "« j) Pour les logements situés en France que le contribuable acquiert, qui font ou ont fait l’objet de travaux concourant à la production ou à la livraison d’un"
+ },
+ {
+  "alinea": 12,
+  "ancre": "— alinéa inséré après",
+  "nb_amendements": 1,
+  "groupes": [
+   "DC"
+  ],
+  "sorts": {
+   "Retiré": 1
+  },
+  "amendements": [
+   "CE487"
+  ],
+  "extrait_alinea": "« j) Pour les logements situés en France que le contribuable acquiert, qui font ou ont fait l’objet de travaux concourant à la production ou à la livraison d’un"
+ },
+ {
+  "alinea": 13,
+  "ancre": "d",
+  "nb_amendements": 1,
+  "groupes": [
+   "RC"
+  ],
+  "sorts": {
+   "Rejeté": 1
+  },
+  "amendements": [
+   "CE206"
+  ],
+  "extrait_alinea": "« La déduction prévue au premier alinéa du présent j est applicable aux locaux situés en France que le contribuable acquiert et qui font ou ont fait l’objet de "
+ },
+ {
+  "alinea": 13,
+  "ancre": "e",
+  "nb_amendements": 1,
+  "groupes": [
+   "RC"
+  ],
+  "sorts": {
+   "Rejeté": 1
+  },
+  "amendements": [
+   "CE206"
+  ],
+  "extrait_alinea": "« La déduction prévue au premier alinéa du présent j est applicable aux locaux situés en France que le contribuable acquiert et qui font ou ont fait l’objet de "
+ },
+ {
+  "alinea": 12,
+  "ancre": "« classe e",
+  "nb_amendements": 1,
+  "groupes": [
+   "UT"
+  ],
+  "sorts": {
+   "Rejeté": 1
+  },
+  "amendements": [
+   "CE574"
+  ],
+  "extrait_alinea": "« j) Pour les logements situés en France que le contribuable acquiert, qui font ou ont fait l’objet de travaux concourant à la production ou à la livraison d’un"
+ },
+ {
+  "alinea": 13,
+  "ancre": "énergétique",
+  "nb_amendements": 1,
+  "groupes": [
+   "CP"
+  ],
+  "sorts": {
+   "Rejeté": 1
+  },
+  "amendements": [
+   "CE20"
+  ],
+  "extrait_alinea": "« La déduction prévue au premier alinéa du présent j est applicable aux locaux situés en France que le contribuable acquiert et qui font ou ont fait l’objet de "
+ },
+ {
+  "alinea": 13,
+  "ancre": "et environnementale",
+  "nb_amendements": 1,
+  "groupes": [
+   "CP"
+  ],
+  "sorts": {
+   "Rejeté": 1
+  },
+  "amendements": [
+   "CE20"
+  ],
+  "extrait_alinea": "« La déduction prévue au premier alinéa du présent j est applicable aux locaux situés en France que le contribuable acquiert et qui font ou ont fait l’objet de "
+ },
+ {
+  "alinea": 14,
+  "ancre": "ou du local ou",
+  "nb_amendements": 1,
+  "groupes": [
+   "Rapporteur"
+  ],
+  "sorts": {
+   "Adopté": 1
+  },
+  "amendements": [
+   "CE734"
+  ],
+  "extrait_alinea": "« Lorsque les travaux d’amélioration ou de transformation ont été effectués avant l’acquisition du logement ou du local ou lorsque le bien est acquis dans le ca"
+ },
+ {
+  "alinea": 15,
+  "ancre": "minimale de",
+  "nb_amendements": 1,
+  "groupes": [
+   "CP"
+  ],
+  "sorts": {
+   "Rejeté": 1
+  },
+  "amendements": [
+   "CE28"
+  ],
+  "extrait_alinea": "b) À la première phrase du deuxième alinéa, les mots : « de le louer » sont remplacés par les mots : « de louer le logement nu à titre de résidence principale »"
+ },
+ {
+  "alinea": 15,
+  "ancre": "réserve",
+  "nb_amendements": 1,
+  "groupes": [
+   "CP"
+  ],
+  "sorts": {
+   "Rejeté": 1
+  },
+  "amendements": [
+   "CE27"
+  ],
+  "extrait_alinea": "b) À la première phrase du deuxième alinéa, les mots : « de le louer » sont remplacés par les mots : « de louer le logement nu à titre de résidence principale »"
+ },
+ {
+  "alinea": 15,
+  "ancre": "— autre",
+  "nb_amendements": 1,
+  "groupes": [
+   "CP"
+  ],
+  "sorts": {
+   "Rejeté": 1
+  },
+  "amendements": [
+   "CE29"
+  ],
+  "extrait_alinea": "b) À la première phrase du deuxième alinéa, les mots : « de le louer » sont remplacés par les mots : « de louer le logement nu à titre de résidence principale »"
+ },
+ {
+  "alinea": 17,
+  "ancre": "— réécriture d’alinéa",
+  "nb_amendements": 1,
+  "groupes": [
+   "PR"
+  ],
+  "sorts": {
+   "Tombé": 1
+  },
+  "amendements": [
+   "CE247"
+  ],
+  "extrait_alinea": "c bis) (nouveau) À la fin de la seconde phrase du huitième alinéa, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ;"
+ },
+ {
+  "alinea": 17,
+  "ancre": "et qu’un parent ou allié jusqu’au deuxième degré inclus",
+  "nb_amendements": 1,
+  "groupes": [
+   "CP"
+  ],
+  "sorts": {
+   "Tombé": 1
+  },
+  "amendements": [
+   "CE31"
+  ],
+  "extrait_alinea": "c bis) (nouveau) À la fin de la seconde phrase du huitième alinéa, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ;"
+ },
+ {
+  "alinea": 25,
+  "ancre": "— complément",
+  "nb_amendements": 1,
+  "groupes": [
+   "UT"
+  ],
+  "sorts": {
+   "Rejeté": 1
+  },
+  "amendements": [
+   "CE564"
+  ],
+  "extrait_alinea": "e) Au dernier alinéa, après les mots : « s’applique », sont insérés les mots : « , dans sa rédaction en vigueur à la date d’acquisition, » ;"
+ }
+]
