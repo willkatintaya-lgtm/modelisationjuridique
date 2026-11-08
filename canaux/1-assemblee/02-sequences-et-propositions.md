@@ -15,7 +15,7 @@ Une remarque d'ensemble d'abord. La maquette met en scène **un moment statique*
 - **Logiciel** : une **carte de chaleur du texte** (chaque alinéa coloré par le nombre d'amendements qui le visent, ou par le nombre de groupes) ; une animation du remplissage jour par jour ; le moment où « mon » alinéa devient disputé.
 
 ### A2. La famille de replis
-- **Ce qui se passe** : un auteur dépose une position maximale puis des positions de repli sur le même passage (treize amendements RN sur un même alinéa ; sept EcoS).
+- **Ce qui se passe** : un auteur dépose une position maximale puis des positions de repli sur le même passage (treize amendements CP sur un même alinéa ; sept SOL).
 - **Découpage** : même auteur (ou groupe), même article/alinéa, exposé contenant « repli », ou dispositifs emboîtés (supprimer A B C → supprimer B → supprimer C).
 - **Données** : ◐ regroupement par auteur + position + mot-clé.
 - **Logiciel** : « mon amendement » devient **une échelle de positions** : la feuille du dessus est la version maximale, la pile en dessous ses replis. Le tambour existe déjà : il suffit que la pile du « mien » soit une famille, pas une liste d'alinéas. Prévoir de déposer un repli directement depuis une version (« dupliquer en repli »).
@@ -24,7 +24,7 @@ Une remarque d'ensemble d'abord. La maquette met en scène **un moment statique*
 - **Ce qui se passe** : un même texte est déposé par plusieurs groupes ; un amendement porte jusqu'à 123 cosignataires ; l'exposé cite l'organisation qui l'a « travaillé ».
 - **Découpage** : grappe d'identiques ; réseau de cosignatures ; source citée.
 - **Données** : ★ `discussionIdentique`, `cosignataires` ; ◐ sources (regex sur l'exposé : « travaillé avec », « proposé par »).
-- **Logiciel** : sur une rédaction, afficher **qui d'autre la porte mot pour mot** (le regroupement par proposition de la maquette existe déjà dans les données, sous ce nom) ; un volet « d'où vient ce texte » ; un graphe des coalitions qui ne se voient que par les identiques (RN + rapporteure sur une suppression d'alinéa).
+- **Logiciel** : sur une rédaction, afficher **qui d'autre la porte mot pour mot** (le regroupement par proposition de la maquette existe déjà dans les données, sous ce nom) ; un volet « d'où vient ce texte » ; un graphe des coalitions qui ne se voient que par les identiques (CP + rapporteure sur une suppression d'alinéa).
 
 ### A4. Le filtre d'irrecevabilité
 - **Ce qui se passe** : avant tout débat, une part importante disparaît : cavaliers (art. 45), charge (art. 40), gage, habilitation (art. 38), doublon. 142 cavaliers d'un coup sur le logement.
@@ -87,7 +87,7 @@ Une remarque d'ensemble d'abord. La maquette met en scène **un moment statique*
 - **Logiciel** : une **frise de séance** (une ligne par séance, les amendements en points selon l'heure du sort ; les suspensions en blancs) ; la « tension » d'un épisode (interruptions par minute) en grain du papier.
 
 ### B8. Commission ≠ séance
-- **Ce qui se passe** : en commission, majorités différentes (l'article 3 du logement supprimé par LFI + EcoS), avis pour avis d'une autre commission (finances), texte de la commission qui devient la base de la séance.
+- **Ce qui se passe** : en commission, majorités différentes (l'article 3 du logement supprimé par UT + SOL), avis pour avis d'une autre commission (finances), texte de la commission qui devient la base de la séance.
 - **Données** : ★ amendements (préfixes CE, CF…) ; ★ rapport (débats de commission, en prose) ; ★ texte de commission.
 - **Logiciel** : un volet par lieu d'examen ; montrer un même passage « en commission » puis « en séance », avec ce qui a changé entre les deux.
 
@@ -122,7 +122,7 @@ Une remarque d'ensemble d'abord. La maquette met en scène **un moment statique*
 - **Logiciel** : une couleur ou une matière propre pour les amendements « du banc » ; les séparer des amendements de groupe dans les comptages ; filtrer les rédactionnels.
 
 ### D2. Le groupe et ses députés
-- Dépôts massifs sans adoption (RN : 134 → 0 sur le logement), non soutenus (auteur absent), dissidences au scrutin.
+- Dépôts massifs sans adoption (CP : 134 → 0 sur le logement), non soutenus (auteur absent), dissidences au scrutin.
 - **Logiciel** : une **fiche de groupe sur un dossier** (ce qu'il a déposé, ce qui est passé, sur quoi il s'est allié par identiques, ce qu'il a demandé au scrutin). Pas de score : une liste lisible.
 
 ### D3. Les tiers (organisations)

@@ -6,12 +6,12 @@
   états/sous-états : [(('Discuté', 'Adopté'), 190), (('Discuté', 'Rejeté'), 188), (('Discuté', 'Tombé'), 116), (('Discuté', 'Non soutenu'), 53), (('Discuté', 'Retiré'), 48), (('Irrecevable', 'Cavalier (45)'), 31), (('Retiré', 'Retiré après publication'), 20), (('Irrecevable 40', 'Charge'), 15), (('Irrecevable', 'Sous-amendement (98)'), 2), (('Irrecevable', 'Autre irrecevabilité'), 1), (('Irrecevable 40', 'Gage'), 1)]
   arrivés au vote : 378 (56 %) — adoptés 190
   par type d’auteur (adoptés/total) : {'Rapporteur': '124/142', 'Député': '65/520', 'Gouvernement': '1/3'}
-  par groupe [déposés, adoptés, irrecevables] : {'Rapporteur': [142, 124, 0], 'LFI-NFP': [120, 11, 19], 'ECOS': [119, 20, 7], 'LIOT': [54, 3, 0], 'RN': [49, 1, 9], 'SOC': [43, 10, 1], 'GDR': [33, 6, 1], 'HOR': [32, 9, 1], 'EPR': [29, 1, 0], 'DEM': [13, 3, 2], 'DR': [11, 0, 4], 'NI': [9, 1, 0], 'PO847173': [8, 0, 4], 'Gouvernement': [3, 1, 0]}
+  par groupe [déposés, adoptés, irrecevables] : {'Rapporteur': [142, 124, 0], 'UT': [120, 11, 19], 'SOL': [119, 20, 7], 'DC': [54, 3, 0], 'CP': [49, 1, 9], 'RC': [43, 10, 1], 'RS': [33, 6, 1], 'ECO': [32, 9, 1], 'PR': [29, 1, 0], 'NV': [13, 3, 2], 'LL': [11, 0, 4], 'NI': [9, 1, 0], 'AR': [8, 0, 4], 'Gouvernement': [3, 1, 0]}
   identiques : groupes 54 tailles [(2, 32), (3, 11), (4, 3), (5, 1), (6, 1), (7, 4), (8, 2)] — dont transpartisans 53
-    × 8 ['DEM', 'ECOS', 'EPR', 'GDR', 'LFI-NFP', 'LIOT', 'RN', 'SOC'] [('Adopté', 6), ('Non soutenu', 2)] | Supprimer cet article.
-    × 8 ['ECOS', 'EPR', 'GDR', 'LFI-NFP', 'LIOT', 'NI', 'SOC'] [('Adopté', 5), ('Non soutenu', 3)] | Supprimer cet article.
-    × 7 ['DEM', 'ECOS', 'EPR', 'GDR', 'LFI-NFP', 'LIOT', 'SOC'] [('Rejeté', 5), ('Non soutenu', 2)] | Supprimer cet article.
-    × 7 ['ECOS', 'EPR', 'GDR', 'LFI-NFP', 'LIOT', 'SOC'] [('Adopté', 4), ('Non soutenu', 3)] | Supprimer cet article.
+    × 8 ['NV', 'SOL', 'PR', 'RS', 'UT', 'DC', 'CP', 'RC'] [('Adopté', 6), ('Non soutenu', 2)] | Supprimer cet article.
+    × 8 ['SOL', 'PR', 'RS', 'UT', 'DC', 'NI', 'RC'] [('Adopté', 5), ('Non soutenu', 3)] | Supprimer cet article.
+    × 7 ['NV', 'SOL', 'PR', 'RS', 'UT', 'DC', 'RC'] [('Rejeté', 5), ('Non soutenu', 2)] | Supprimer cet article.
+    × 7 ['SOL', 'PR', 'RS', 'UT', 'DC', 'RC'] [('Adopté', 4), ('Non soutenu', 3)] | Supprimer cet article.
   discussions communes : 40 tailles [(2, 22), (3, 9), (4, 4), (5, 4), (6, 1)] positions Counter({'Premier': 40, 'Dernier': 40, 'Milieu': 33})
   issue des discussions communes : {'sans adopté': 28, 'avec adopté': 12, 'adopté + tombés': 4}
   tombés : dans une discussion commune 19 / 116
@@ -28,7 +28,7 @@
   états/sous-états : [(('Discuté', 'Adopté'), 9)]
   arrivés au vote : 9 (100 %) — adoptés 9
   par type d’auteur (adoptés/total) : {'Député': '2/2', 'Gouvernement': '7/7'}
-  par groupe [déposés, adoptés, irrecevables] : {'Gouvernement': [7, 7, 0], 'SOC': [1, 1, 0], 'EPR': [1, 1, 0]}
+  par groupe [déposés, adoptés, irrecevables] : {'Gouvernement': [7, 7, 0], 'RC': [1, 1, 0], 'PR': [1, 1, 0]}
   identiques : groupes 0 tailles [] — dont transpartisans 0
   discussions communes : 0 tailles [] positions Counter()
   issue des discussions communes : {}
@@ -46,12 +46,12 @@
   états/sous-états : [(('Discuté', 'Rejeté'), 377), (('Discuté', 'Adopté'), 183), (('Irrecevable', 'Cavalier (45)'), 111), (('Discuté', 'Non soutenu'), 91), (('Discuté', 'Tombé'), 68), (('Retiré', 'Retiré après publication'), 66), (('Irrecevable 40', 'Charge'), 37), (('Discuté', 'Retiré'), 24), (('Retiré', 'Retiré avant publication'), 10), (('Irrecevable', 'Doublon'), 10), (('Irrecevable', 'Autre irrecevabilité'), 7), (('Irrecevable', 'Sous-amendement (98)'), 7), (('Irrecevable', 'Satisfait ou inopérant (42)'), 4), (('Irrecevable 40', 'Gage'), 2), (('Irrecevable 40', 'Autres irr LOLF'), 2), (('Irrecevable', 'Ratification traité (53)'), 1), (('Irrecevable', 'Hors-délais'), 1)]
   arrivés au vote : 560 (55 %) — adoptés 183
   par type d’auteur (adoptés/total) : {'Député': '160/956', 'Gouvernement': '23/45'}
-  par groupe [déposés, adoptés, irrecevables] : {'ECOS': [163, 18, 26], 'LFI-NFP': [161, 4, 29], 'EPR': [126, 59, 15], 'DR': [107, 39, 15], 'SOC': [101, 10, 25], 'RN': [84, 6, 10], 'PO847173': [69, 1, 20], 'Gouvernement': [45, 23, 7], 'GDR': [38, 2, 0], 'LIOT': [36, 5, 5], 'HOR': [30, 5, 9], 'DEM': [23, 10, 6], 'NI': [18, 1, 0]}
+  par groupe [déposés, adoptés, irrecevables] : {'SOL': [163, 18, 26], 'UT': [161, 4, 29], 'PR': [126, 59, 15], 'LL': [107, 39, 15], 'RC': [101, 10, 25], 'CP': [84, 6, 10], 'AR': [69, 1, 20], 'Gouvernement': [45, 23, 7], 'RS': [38, 2, 0], 'DC': [36, 5, 5], 'ECO': [30, 5, 9], 'NV': [23, 10, 6], 'NI': [18, 1, 0]}
   identiques : groupes 89 tailles [(2, 50), (3, 20), (4, 11), (5, 4), (6, 4)] — dont transpartisans 81
-    × 6 ['ECOS', 'GDR', 'LFI-NFP', 'LIOT', 'NI', 'SOC'] [('Rejeté', 4), ('Non soutenu', 2)] | Supprimer cet article.
-    × 6 ['ECOS', 'EPR', 'GDR', 'LFI-NFP', 'NI', 'SOC'] [('Rejeté', 3), ('Non soutenu', 3)] | Supprimer cet article.
-    × 6 ['ECOS', 'EPR', 'GDR', 'LFI-NFP', 'NI', 'SOC'] [('Adopté', 6)] | Supprimer cet article.
-    × 6 ['DEM', 'DR', 'EPR', 'PO847173', 'RN'] [('Adopté', 6)] | Rétablir cet article dans la rédaction suivante : « Après le paragraphe 3 de la section 6 
+    × 6 ['SOL', 'RS', 'UT', 'DC', 'NI', 'RC'] [('Rejeté', 4), ('Non soutenu', 2)] | Supprimer cet article.
+    × 6 ['SOL', 'PR', 'RS', 'UT', 'NI', 'RC'] [('Rejeté', 3), ('Non soutenu', 3)] | Supprimer cet article.
+    × 6 ['SOL', 'PR', 'RS', 'UT', 'NI', 'RC'] [('Adopté', 6)] | Supprimer cet article.
+    × 6 ['NV', 'LL', 'PR', 'AR', 'CP'] [('Adopté', 6)] | Rétablir cet article dans la rédaction suivante : « Après le paragraphe 3 de la section 6 
   discussions communes : 39 tailles [(2, 18), (3, 7), (4, 7), (5, 1), (7, 2), (8, 3), (20, 1)] positions Counter({'Milieu': 70, 'Dernier': 39, 'Premier': 39})
   issue des discussions communes : {'avec adopté': 15, 'adopté + tombés': 6, 'sans adopté': 24}
   tombés : dans une discussion commune 15 / 68
@@ -89,12 +89,12 @@
   états/sous-états : [(('Discuté', 'Rejeté'), 197), (('Discuté', 'Tombé'), 169), (('Irrecevable', 'Cavalier (45)'), 142), (('Discuté', 'Adopté'), 70), (('Irrecevable 40', 'Charge'), 53), (('Discuté', 'Retiré'), 32), (('Discuté', 'Non soutenu'), 30), (('Retiré', 'Retiré après publication'), 13), (('Irrecevable 40', 'Gage'), 7), (('Irrecevable', 'Doublon'), 7), (('Irrecevable', "Champ de l'habilitation (38)"), 7), (('Irrecevable', 'Autre irrecevabilité'), 6), (('Irrecevable', 'Injonction (20)'), 3), (('Irrecevable 40', 'Autres irr LOLF'), 2), (('Retiré', 'Retiré avant publication'), 2), (('effacé', None), 2), (('Irrecevable', 'Entonnoir (45)'), 1), (('Irrecevable', 'Sous-amendement (98)'), 1)]
   arrivés au vote : 267 (35 %) — adoptés 70
   par type d’auteur (adoptés/total) : {'Rapporteur': '34/65', 'Député': '36/679'}
-  par groupe [déposés, adoptés, irrecevables] : {'RN': [134, 0, 39], 'LFI-NFP': [89, 3, 14], 'ECOS': [81, 4, 21], 'GDR': [67, 0, 25], 'Rapporteur': [65, 34, 2], 'DEM': [61, 5, 33], 'SOC': [60, 4, 23], 'DR': [54, 5, 14], 'EPR': [53, 4, 20], 'LIOT': [50, 9, 15], 'HOR': [28, 2, 9], None: [2, 0, 0]}
+  par groupe [déposés, adoptés, irrecevables] : {'CP': [134, 0, 39], 'UT': [89, 3, 14], 'SOL': [81, 4, 21], 'RS': [67, 0, 25], 'Rapporteur': [65, 34, 2], 'NV': [61, 5, 33], 'RC': [60, 4, 23], 'LL': [54, 5, 14], 'PR': [53, 4, 20], 'DC': [50, 9, 15], 'ECO': [28, 2, 9], None: [2, 0, 0]}
   identiques : groupes 45 tailles [(2, 22), (3, 13), (4, 5), (5, 2), (6, 1), (7, 2)] — dont transpartisans 44
-    × 7 ['DEM', 'DR', 'EPR', 'LIOT', 'RN', 'Rapporteur'] [('Tombé', 7)] | Supprimer l’alinéa 8.
-    × 7 ['ECOS', 'GDR', 'HOR', 'LFI-NFP', 'Rapporteur', 'SOC'] [('Adopté', 6), ('Non soutenu', 1)] | Supprimer les alinéas 4, 5, 17, 20 et 29.
-    × 6 ['ECOS', 'GDR', 'HOR', 'LFI-NFP', 'LIOT', 'SOC'] [('Tombé', 6)] | À l’alinéa 7, après la seconde occurrence du mot : « dérogations », insérer les mots : « n
-    × 5 ['ECOS', 'HOR', 'LFI-NFP', 'Rapporteur'] [('Rejeté', 5)] | Après l’alinéa 15, insérer l’alinéa suivant : « b bis) À la première phrase du deuxième al
+    × 7 ['NV', 'LL', 'PR', 'DC', 'CP', 'Rapporteur'] [('Tombé', 7)] | Supprimer l’alinéa 8.
+    × 7 ['SOL', 'RS', 'ECO', 'UT', 'Rapporteur', 'RC'] [('Adopté', 6), ('Non soutenu', 1)] | Supprimer les alinéas 4, 5, 17, 20 et 29.
+    × 6 ['SOL', 'RS', 'ECO', 'UT', 'DC', 'RC'] [('Tombé', 6)] | À l’alinéa 7, après la seconde occurrence du mot : « dérogations », insérer les mots : « n
+    × 5 ['SOL', 'ECO', 'UT', 'Rapporteur'] [('Rejeté', 5)] | Après l’alinéa 15, insérer l’alinéa suivant : « b bis) À la première phrase du deuxième al
   discussions communes : 51 tailles [(2, 21), (3, 11), (4, 8), (5, 2), (6, 6), (7, 1), (8, 1), (9, 1)] positions Counter({'Milieu': 75, 'Premier': 51, 'Dernier': 51})
   issue des discussions communes : {'avec adopté': 11, 'adopté + tombés': 7, 'sans adopté': 40}
   tombés : dans une discussion commune 73 / 169
