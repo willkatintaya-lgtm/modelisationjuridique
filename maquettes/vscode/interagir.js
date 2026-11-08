@@ -1,0 +1,17 @@
+const { chromium } = require('playwright');
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1280,height:800}});const errs=[];p.on('pageerror',e=>errs.push(e.message));
+await p.goto('file://'+__dirname+'/../boussole-vscode.html');await p.waitForTimeout(800);
+console.log('marks', await p.locator('#editor mark.pt').count());
+await p.locator('#editor mark.pt').nth(2).click();await p.waitForTimeout(400);await p.screenshot({path:__dirname+'/../captures/vscode-peek.png'});
+await p.locator('.peek-r .row').nth(1).click();await p.waitForTimeout(300);
+await p.keyboard.press('Escape');
+await p.locator('.prob').first().click();await p.waitForTimeout(400);await p.screenshot({path:__dirname+'/../captures/vscode-am.png'});
+await p.locator('[data-draft]').first().click();await p.waitForTimeout(300);
+await p.locator('.lens a[data-cmd=select]').click();await p.waitForTimeout(200);
+await p.locator('.prob').nth(1).click();await p.waitForTimeout(300);
+await p.locator('[data-cmp]').first().click();await p.waitForTimeout(400);await p.screenshot({path:__dirname+'/../captures/vscode-cmp.png'});
+await p.locator('[data-draft]').first().click();await p.waitForTimeout(300);
+await p.locator('.ln.cur .c').dblclick();await p.waitForTimeout(300);await p.locator('#ta').press('End');await p.keyboard.type(' test');await p.waitForTimeout(200);await p.screenshot({path:__dirname+'/../captures/vscode-edit.png'});
+await p.keyboard.press('Escape');
+await p.keyboard.press('F1');await p.keyboard.type('réf');await p.waitForTimeout(300);await p.screenshot({path:__dirname+'/../captures/vscode-palette.png'});
+console.log('errs',errs);await b.close();})();

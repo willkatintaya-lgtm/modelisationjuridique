@@ -1,0 +1,16 @@
+const { chromium } = require('playwright');
+(async()=>{const b=await chromium.launch();const errs=[];
+const p=await b.newPage({viewport:{width:1280,height:800}});p.on('pageerror',e=>errs.push(e.message));
+await p.goto('file://'+__dirname+'/../boussole-affinity.html');await p.waitForTimeout(800);
+await p.evaluate(()=>allerA('dossier'));await p.keyboard.press('p');await p.locator('#canvas [data-art="3"]').click();await p.waitForTimeout(300);
+await p.locator('[data-cmd=prefs]').first().click();await p.locator('[data-uistyle=light]').click();await p.keyboard.press('Escape');await p.waitForTimeout(300);
+await p.screenshot({path:__dirname+'/../captures/affinity-x-clair-d.png'});
+await p.evaluate(()=>{localStorage.clear()});
+const q=await b.newPage({viewport:{width:400,height:800}});q.on('pageerror',e=>errs.push(e.message));
+await q.goto('file://'+__dirname+'/../boussole-affinity.html');await q.waitForTimeout(800);
+await q.locator('[data-cmd=sheet-left]').click();await q.waitForTimeout(300);await q.locator('#left [data-ptab="La:al"]').click();await q.waitForTimeout(300);
+await q.screenshot({path:__dirname+'/../captures/affinity-x-pages-m.png'});
+await q.locator('#left .thumb[data-o="5"]').click();await q.waitForTimeout(300);await q.screenshot({path:__dirname+'/../captures/affinity-x-al5-m.png'});
+await q.evaluate(()=>allerA('dossier'));await q.waitForTimeout(300);await q.screenshot({path:__dirname+'/../captures/affinity-dossier-m.png'});
+await q.evaluate(()=>{localStorage.clear()});
+console.log('errs',errs);await b.close();})();
