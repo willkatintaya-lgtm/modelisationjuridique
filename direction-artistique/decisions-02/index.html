@@ -1,0 +1,259 @@
+<title>Parapheur des décisions n° 02</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Courier+Prime:wght@700&display=swap">
+<style>
+/* Mise en page : un parapheur ; une feuille par décision, la décision en pied de feuille, un bordereau récapitulatif à la fin.
+   Thème unique et assumé : le papier clair proposé dans la note 4. */
+:root{
+  --bureau:#e4e1da; --papier:#fdfcf9; --filet:#e3ded3; --filet-fort:#cfc7b6;
+  --encre:#1a1a1a; --encre-2:#4a453d; --encre-3:#6b6457;
+  --bordeaux:#5b1e25; --or:#a8843f; --stylo:#1f3a93; --vert:#2f6b3e; --surligne:#f4efe2;
+  --f-titre:"EB Garamond",Georgia,serif; --f-texte:"Source Serif 4",Georgia,serif; --f-ui:"IBM Plex Sans",system-ui,sans-serif; --f-num:"Courier Prime","Courier New",monospace;
+  color-scheme:light;
+}
+body{background:var(--bureau);color:var(--encre);font-family:var(--f-ui);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 60px}
+.wrap{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+.cap{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--encre-3)}
+h1{font-family:var(--f-titre);font-weight:500;font-size:clamp(26px,4vw,38px);letter-spacing:.18em;text-transform:uppercase;line-height:1.15;text-wrap:balance}
+.garde{background:var(--bordeaux);color:#f2ead8;padding:34px clamp(20px,4vw,48px);display:flex;flex-direction:column;gap:14px;border:1px solid #b8954f;outline:6px solid var(--bordeaux)}
+.garde h1{color:#e2c27c}
+.garde p{font-family:var(--f-texte);font-size:17px;max-width:62ch;color:#efe6d2}
+.garde .cap{color:#d8c49a}
+.avance{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.jauge{display:flex;gap:4px}.jauge i{width:28px;height:6px;background:#ffffff33}.jauge i.ok{background:#e2c27c}
+.etat{font-size:13px;color:#d8c49a}
+
+.feuille{background:var(--papier);border:1px solid var(--filet-fort);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)}
+.txt{padding:30px clamp(18px,3vw,40px);display:flex;flex-direction:column;gap:14px;border-right:1px solid var(--filet);min-width:0}
+.hd{display:flex;justify-content:space-between;gap:12px}
+.num{font-family:var(--f-num);font-weight:700;color:var(--or);font-size:15px}
+h2{font-family:var(--f-texte);font-weight:600;font-size:24px;line-height:1.25;text-wrap:balance}
+ol.prop{margin:0;padding-left:22px;font-family:var(--f-texte);font-size:16.5px;line-height:1.55;color:var(--encre-2);display:flex;flex-direction:column;gap:8px}
+ol.prop b{color:var(--encre);font-weight:600}
+.src{font-size:12.5px;color:var(--encre-3);line-height:1.5;border-left:2px solid var(--filet-fort);padding-left:10px}
+.vis{padding:20px;display:flex;align-items:flex-start;justify-content:center;background:var(--papier);min-width:0}
+.vis img{display:block;width:100%;height:auto;border:1px solid var(--filet)}
+
+.dec{grid-column:1/-1;border-top:1.5px solid var(--encre);padding:18px clamp(18px,3vw,40px) 22px;display:flex;flex-direction:column;gap:14px;background:#faf8f2}
+.choix{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{font:600 12px var(--f-ui);letter-spacing:.12em;text-transform:uppercase;padding:11px 18px;border:1.5px solid var(--encre);background:var(--papier);color:var(--encre);cursor:pointer;display:inline-flex;align-items:center;gap:10px}
+.btn .bx{width:14px;height:14px;border:1.5px solid currentColor;display:inline-grid;place-items:center;font-size:12px;line-height:1}
+.btn:hover{background:var(--surligne)}
+.btn:focus-visible,.seg button:focus-visible,textarea:focus-visible{outline:2px solid var(--stylo);outline-offset:2px}
+.btn.on.accord{background:var(--vert);border-color:var(--vert);color:#fff}
+.btn.on.modif{background:var(--stylo);border-color:var(--stylo);color:#fff}
+.btn.on .bx::after{content:"✓"}
+.avis{margin-left:auto;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--stylo);border:1.5px solid var(--stylo);padding:5px 10px}
+[hidden]{display:none!important}
+.modif-zone{display:flex;flex-direction:column;gap:12px;padding:14px 16px;border:1px dashed var(--filet-fort);background:var(--papier)}
+.ligne{display:grid;grid-template-columns:minmax(120px,190px) minmax(0,1fr);gap:12px;align-items:center}
+.ligne>span{font-size:13px;font-weight:500}
+.seg{display:flex;flex-wrap:wrap;border:1px solid var(--filet-fort);width:max-content;max-width:100%}
+.seg button{font:500 13px var(--f-ui);padding:7px 12px;background:var(--papier);color:var(--encre-2);border:0;border-right:1px solid var(--filet-fort);cursor:pointer}
+.seg button:last-child{border-right:0}
+.seg button.on{background:var(--encre);color:var(--papier)}
+.seg button.prop::after{content:" ·";color:var(--or)}
+label.lib{font-size:13px;font-weight:500;display:flex;flex-direction:column;gap:6px}
+textarea{font:15px/1.5 var(--f-texte);padding:10px 12px;border:1px solid var(--filet-fort);background:var(--papier);color:var(--encre);resize:vertical;min-height:70px;width:100%}
+.aide{font-size:12px;color:var(--encre-3)}
+.saved{font-size:12px;color:var(--vert);min-height:18px}
+
+.bordereau{background:var(--papier);border:1px solid var(--filet-fort);padding:30px clamp(18px,3vw,40px);display:flex;flex-direction:column;gap:18px}
+.tab{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:14px}
+th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--encre-3);border-bottom:1.5px solid var(--encre);padding:8px 10px}
+td{border-bottom:1px solid var(--filet);padding:12px 10px;vertical-align:top}
+td.n{font-family:var(--f-num);font-weight:700;color:var(--or);width:36px}
+.pill{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;white-space:nowrap}
+.pill.a{background:var(--vert);color:#fff}.pill.m{background:var(--stylo);color:#fff}.pill.z{border:1px solid var(--filet-fort);color:var(--encre-3)}
+.envoi{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.btn.pri{background:var(--bordeaux);border-color:var(--bordeaux);color:#f2ead8}
+.btn.pri:disabled{opacity:.45;cursor:not-allowed}
+.msg{font-size:14px;color:var(--encre-2);max-width:60ch}
+.alerte{background:#fff4e5;border:1px solid #d9a441;padding:12px 16px;font-size:14px}
+
+/* spécimens (degré C : typographie, aplats, filets) */
+.spe{width:100%;display:flex;flex-direction:column;gap:18px;font-family:var(--f-ui)}
+.spe h4{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--encre-3);display:flex;gap:8px;align-items:center}
+.spe h4 .rec{color:var(--stylo);border:1px solid var(--stylo);padding:1px 6px;letter-spacing:.1em}
+.bd{width:100%;border-collapse:collapse;font-size:13px;min-width:0}
+.bd th{font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--encre-3);text-align:left;padding:6px 8px;border-bottom:1.5px solid var(--encre)}
+.bd td{padding:7px 8px;border-bottom:1px solid var(--filet);vertical-align:top;line-height:1.4}
+.bd td.no{font-family:var(--f-num);font-weight:700;font-size:13px;white-space:nowrap;width:62px}
+.bd.cadre{border:1.5px solid var(--encre)}.bd.cadre th,.bd.cadre td{border:1px solid var(--encre)}.bd.cadre th{border-bottom-width:1.5px}
+.bd.nu th{border-bottom:0;padding-bottom:2px}.bd.nu td{border-bottom:0;padding:5px 8px}
+.ms{font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap}
+.gris{color:var(--encre-3)}
+.bd.marge td:first-child{position:relative}
+.bd.marge td[data-st="dotted"]::before{border-left-style:dotted!important;border-left-width:2px!important}.bd.marge td[data-st="dashed"]::before{border-left-style:dashed!important;border-left-width:2px!important}
+.bd.marge tr td:first-child::before{content:"";position:absolute;left:-1px;top:4px;bottom:4px;border-left:var(--m,0) solid var(--encre)}
+.bx2{display:inline-grid;place-items:center;width:13px;height:13px;border:1.2px solid var(--encre);font-size:11px;line-height:1;margin-right:6px;vertical-align:-2px}
+.acc{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.acc>div{border:1px solid var(--filet-fort);padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.acc .t{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--encre-3)}
+.chv{font-size:15px;font-weight:600;letter-spacing:.2em;text-transform:uppercase}
+.chv small{display:block;font-size:10px;font-weight:500;letter-spacing:.18em;color:var(--encre-3);margin-top:2px}
+.onglets{display:flex;gap:4px}.onglets span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:4px 8px}
+.loi{font-family:var(--f-texte);font-size:16px;line-height:1.65;color:var(--encre)}
+.loi ins.a1{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;font-weight:600;color:var(--stylo)}
+.loi ins.a2{text-decoration:none;font-weight:600;color:var(--encre)}
+.loi del.s1{color:#a8452f;text-decoration-color:#a8452f}
+.loi del.s2{color:var(--encre-2);text-decoration-color:var(--encre)}
+.loi .d1{box-shadow:inset 0 -2px 0 var(--or)}
+.loi .d1.w3{box-shadow:inset 0 -3.5px 0 var(--or)}
+.loi .d2{text-decoration:underline dotted var(--encre-2);text-decoration-thickness:1.5px;text-underline-offset:5px}
+.loi sup{font-family:var(--f-num);font-weight:700;font-size:10px;color:var(--encre-3)}
+.ref{background:#f6f3ec;border-left:2px solid var(--filet-fort);padding:10px 14px}
+.lg{font-size:12px;color:var(--encre-3);display:flex;gap:16px;flex-wrap:wrap}
+@media (max-width:820px){.feuille{grid-template-columns:minmax(0,1fr)}.txt{border-right:0}.vis{order:-1;padding:12px}.ligne{grid-template-columns:minmax(0,1fr)}.avis{margin-left:0}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="garde">
+    <div class="cap">Cabinet · direction artistique · parapheur n° 02 · du motif au signe</div>
+    <h1>À la signature</h1>
+    <p>Suite à vos décisions du parapheur 01 (bordereau en base, degré purement graphique, plus de tampon) : quatre décisions sur les signes eux-mêmes. Pour chacune : <b>Accord</b>, ou <b>Je modifie</b> pour corriger la proposition. Vos réponses s'enregistrent au fur et à mesure ; je les lis directement.</p>
+    <div class="avance"><div class="jauge" id="jauge"></div><div class="etat" id="etat">0 décision sur 4</div></div>
+  </header>
+  <div id="alerte"></div>
+  <main id="notes" class="wrap" style="gap:28px"></main>
+  <section class="bordereau" aria-labelledby="bt">
+    <div class="cap">Bordereau de retour</div>
+    <h2 id="bt">Récapitulatif</h2>
+    <div class="tab"><table><thead><tr><th>N°</th><th>Objet</th><th>Votre décision</th></tr></thead><tbody id="recap"></tbody></table></div>
+    <div class="envoi"><button class="btn pri" id="envoyer" disabled>Transmettre au cabinet</button><span class="msg" id="msg">Décidez les quatre notes pour transmettre.</span></div>
+  </section>
+</div>
+
+<script>
+const ROWS = [["CF43", "Après « 199 novovicies », insérer : « représentent au moins 20 % du prix d'acquisition du bien et »", "adopte"], ["CF24", "Après « amélioration », insérer : « représentant au moins 30 % du prix d'acquisition »", "rejete"], ["CF46", "Après « 199 novovicies », insérer : « représentent au moins 10 % du prix d'acquisition du bien et »", "tombe"], ["CE487", "Après l'alinéa 12, insérer un alinéa de dérogation", "retire"], ["CE480", "Après « novovicies », insérer : « comprennent des travaux d'isolation thermique… »", "ns"], ["CE577", "Compléter l'alinéa 12 par une phrase", "attente"]];
+const SORTW = {adopte:"Adopté",rejete:"Rejeté",tombe:"Tombé",retire:"Retiré",ns:"Non soutenu",attente:"En attente"};
+const MARGE = {adopte:"4px",rejete:"1px",tombe:"2px",retire:"2px",ns:"0",attente:"0"};
+const MSTYLE = {tombe:"dotted",retire:"dashed"};
+const tab = (cls, sortCell, n) => `<table class="bd ${cls}"><thead><tr><th>N°</th><th>Désignation</th><th>Sort</th></tr></thead><tbody>${ROWS.slice(0,n||ROWS.length).map(r=>`<tr style="--m:${MARGE[r[2]]}"><td class="no"${MSTYLE[r[2]]?` data-st="${MSTYLE[r[2]]}"`:""}>${r[0]}</td><td>${r[1]}</td><td>${sortCell(r[2])}</td></tr>`).join("")}</tbody></table>`;
+const sA = k => `<span class="ms${k==="adopte"?"":" gris"}">${SORTW[k]}</span>`;
+const sC = k => `<span class="ms${k==="adopte"?"":" gris"}"><span class="bx2">${k==="attente"?"":"✕"}</span>${SORTW[k]}</span>`;
+const REF = "travaux d'amélioration, définis en application du 5° du B du I de l'article 199 novovicies, permettant au logement d'atteindre un niveau de performance énergétique…";
+const NOTES = [
+  {id:"d1", objet:"Le bordereau en base : quel tracé ?",
+   prop:["Le bordereau devient la grammaire de toutes les listes : un en-tête en capitales espacées sur un filet d'encre, des lignes, un numéro de pièce à la machine dans la première colonne.","<b>Proposition : filets horizontaux seulement</b>, sans cadre ni filets verticaux. Le numéro reste à gauche, en Courier Prime."],
+   src:"Butterick, Practical Typography, chapitre « Tables » : retirer les bordures et les filets verticaux, garder l'alignement. Tufte : réduire l'encre qui ne porte pas d'information.",
+   avis:"accord (filets horizontaux)",
+   spe:`<div class="spe"><h4>Cadre complet</h4>${tab("cadre",sA,3)}<h4>Filets horizontaux <span class="rec">proposé</span></h4>${tab("",sA,3)}<h4>Sans filet, alignements seuls</h4>${tab("nu",sA,3)}</div>`,
+   champs:[["trace","Tracé",["Cadre complet","Filets horizontaux","Sans filet"],"Filets horizontaux"],["numero","Numéro de pièce",["À la machine, à gauche","Sans numéro"],"À la machine, à gauche"]]},
+  {id:"d2", objet:"Les sorts sans tampon : comment les dire ?",
+   prop:["Sans matière, le sort se dit par la typographie et les filets.","<b>Proposition : B, la mention et un filet de marge.</b> La mention en capitales espacées, et un filet à gauche de la ligne : épais pour adopté, fin pour rejeté, pointillé pour tombé, tireté pour retiré, aucun pour non soutenu et en attente.","<b>Adopté sans couleur</b> : le filet épais suffit ; l'or reste réservé au parapheur."],
+   src:"Ne pas porter l'information par la seule couleur (WCAG 2.1, critère 1.4.1) : la mention et la forme du filet disent le sort, même en noir et blanc.",
+   avis:"accord (B, sans couleur)",
+   spe:`<div class="spe"><h4>A · Mention seule</h4>${tab("",sA)}<h4>B · Mention et filet de marge <span class="rec">proposé</span></h4>${tab("marge",sA)}<h4>C · Case du bloc de décision</h4>${tab("",sC)}</div>`,
+   champs:[["forme","Forme",["A · mention seule","B · mention + filet","C · case cochée"],"B · mention + filet"],["couleur","Couleur de l'adopté",["Aucune","Vert","Or"],"Aucune"]]},
+  {id:"d3", objet:"Quatre accents : un rôle chacun",
+   prop:["Vous avez gardé quatre objets en accent. Pour que l'accent reste rare, chacun reçoit <b>un seul rôle</b>, ci-contre.","<b>La note</b> : l'en-tête de feuille et la ligne « Objet » soulignée. <b>La table</b> : les noms (groupes, orateurs) en capitales, la fonction dessous. <b>Le parapheur</b> : le bordeaux et l'or, pour le texte que l'on rédige soi-même et le geste de valider. <b>La chemise</b> : les cotes à la machine et les intercalaires de couleur pour séparer des familles."],
+   src:"Une matière, un rôle : un signe qui sert à deux choses cesse d'être lu comme un signal.",
+   avis:"accord",
+   spe:`<div class="acc">
+     <div><div class="t">La note · en-tête et objet</div><div style="display:flex;justify-content:space-between;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--encre-3)"><b style="color:var(--encre)">Commission</b><span>21 septembre</span></div><div class="loi" style="font-size:15px"><u style="text-underline-offset:3px">Objet</u> : article 4, alinéa 12</div></div>
+     <div><div class="t">La table · les noms</div><div class="chv">Union des territoires<small>Groupe · 3 orateurs</small></div></div>
+     <div><div class="t">Le parapheur · bordeaux et or</div><div style="display:flex;align-items:center;gap:10px"><span style="width:14px;height:40px;flex:none;background:var(--bordeaux);clip-path:polygon(0 0,100% 0,100% 100%,50% 82%,0 100%)"></span><div><div style="font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--bordeaux);border-bottom:1.5px solid var(--or);padding-bottom:3px">Ma rédaction</div><div style="font-size:12px;color:var(--encre-3);margin-top:4px">et le bouton de validation</div></div></div></div>
+     <div><div class="t">La chemise · cotes et intercalaires</div><div style="font-family:var(--f-num);font-weight:700;font-size:16px">AN · 1408</div><div class="onglets"><span style="background:#e9d8a8">Texte</span><span style="background:#c9d3b0">Débat</span><span style="background:#e7c3b5">Vote</span></div></div>
+   </div>`,
+   champs:[["note","La note",["En-tête et objet","Retirer"],"En-tête et objet"],["table","La table",["Noms en capitales","Retirer"],"Noms en capitales"],["parapheur","Le parapheur",["Bordeaux et or","Retirer"],"Bordeaux et or"],["chemise","La chemise",["Cotes et intercalaires","Cotes seules","Retirer"],"Cotes et intercalaires"]]},
+  {id:"d4", objet:"Ajouts, suppressions, passages disputés",
+   prop:["La règle du projet reste : la référence vierge, les écarts portés sur la rédaction comparée seule, la suppression visible et barrée.","<b>Proposition : garder les encres du projet.</b> Ajout souligné, gras, à l'encre bleue du stylo ; suppression barrée en rouge ; passage disputé souligné d'un filet d'or, plus épais quand il y a plus de propositions.","Variante sans couleur, proche des tableaux comparatifs des rapports parlementaires : ajout en gras, suppression barrée, tout à l'encre noire."],
+   src:"Règles visuelles de comparaison du projet (CLAUDE.md). Ajout et suppression se distinguent aussi par la forme (soulignement, barre), pas seulement par la couleur (WCAG 1.4.1).",
+   avis:"accord (encres du projet)",
+   spe:`<div class="spe"><h4>Référence, vierge</h4><div class="loi ref">${REF}</div>
+     <h4>Encres du projet <span class="rec">proposé</span></h4><div class="loi">travaux d'amélioration, définis en application du 5° du B du I de l'article <span class="d1 w3">199 novovicies</span>, <ins class="a1">représentent au moins 20 % du prix d'acquisition du bien et</ins> <del class="s1">permettant au logement</del> <ins class="a1">permettent au logement</ins> d'atteindre un niveau de performance énergétique…</div>
+     <h4>Sans couleur (tableau comparatif)</h4><div class="loi">travaux d'amélioration, définis en application du 5° du B du I de l'article <span class="d2">199 novovicies</span>, <ins class="a2">représentent au moins 20 % du prix d'acquisition du bien et</ins> <del class="s2">permettant au logement</del> <ins class="a2">permettent au logement</ins> d'atteindre un niveau de performance énergétique…</div>
+     <div class="lg"><span>ajout : souligné (ou gras seul)</span><span>suppression : barré</span><span>passage disputé : filet sous le texte</span></div></div>`,
+   champs:[["ajout","Ajout",["Bleu, souligné, gras","Gras, encre noire"],"Bleu, souligné, gras"],["suppr","Suppression",["Barré rouge","Barré encre noire"],"Barré rouge"],["dispute","Passage disputé",["Filet d'or","Pointillé d'encre"],"Filet d'or"]]}
+];
+const S = {}; NOTES.forEach(n => S[n.id] = {choix:null, options:Object.fromEntries(n.champs.map(c=>[c[0],c[3]])), note:""});
+let db = null, envoye = false;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function noteHTML(n,i){
+  return `<article class="feuille" id="${n.id}" aria-labelledby="t-${n.id}">
+    <div class="txt">
+      <div class="hd"><span class="cap">Note pour décision</span><span class="num">${i+1} / ${NOTES.length}</span></div>
+      <h2 id="t-${n.id}">${esc(n.objet)}</h2>
+      <ol class="prop">${n.prop.map(p=>`<li>${p}</li>`).join("")}</ol>
+      <div class="src">${esc(n.src)}</div>
+    </div>
+    <div class="vis">${n.spe}</div>
+    <div class="dec">
+      <div class="choix">
+        <button class="btn accord" data-n="${n.id}" data-c="accord"><span class="bx"></span>Accord</button>
+        <button class="btn modif" data-n="${n.id}" data-c="modif"><span class="bx"></span>Je modifie</button>
+        <span class="avis">Avis du cabinet : ${esc(n.avis)}</span>
+      </div>
+      <div class="modif-zone" data-z="${n.id}" hidden>
+        ${n.champs.map(c=>`<div class="ligne"><span>${esc(c[1])}</span><div class="seg" role="group" aria-label="${esc(c[1])}">${c[2].map(o=>`<button data-n="${n.id}" data-k="${c[0]}" data-v="${esc(o)}" class="${o===c[3]?"prop":""}">${esc(o)}</button>`).join("")}</div></div>`).join("")}
+        <div class="aide">Le point doré signale la proposition du cabinet.</div>
+        <label class="lib" for="note-${n.id}">Précisions, en vos mots<textarea id="note-${n.id}" data-n="${n.id}" placeholder="Ce que vous voulez à la place, ou pourquoi."></textarea></label>
+      </div>
+      <div class="saved" data-s="${n.id}"></div>
+    </div>
+  </article>`;
+}
+document.getElementById("notes").innerHTML = NOTES.map(noteHTML).join("");
+
+function paint(){
+  NOTES.forEach(n => {
+    const st = S[n.id], el = document.getElementById(n.id);
+    el.querySelectorAll(".choix .btn").forEach(b => b.classList.toggle("on", b.dataset.c === st.choix));
+    el.querySelector(".modif-zone").hidden = st.choix !== "modif";
+    el.querySelectorAll(".seg button").forEach(b => b.classList.toggle("on", st.options[b.dataset.k] === b.dataset.v));
+    const ta = el.querySelector("textarea"); if (document.activeElement !== ta) ta.value = st.note || "";
+  });
+  const done = NOTES.filter(n => S[n.id].choix).length;
+  document.getElementById("jauge").innerHTML = NOTES.map(n => `<i class="${S[n.id].choix?"ok":""}"></i>`).join("");
+  document.getElementById("etat").textContent = `${done} décision${done>1?"s":""} sur ${NOTES.length}`;
+  document.getElementById("recap").innerHTML = NOTES.map((n,i) => {
+    const st = S[n.id];
+    let d = `<span class="pill z">à décider</span>`;
+    if (st.choix === "accord") d = `<span class="pill a">Accord</span>`;
+    if (st.choix === "modif") { const diff = n.champs.filter(c => st.options[c[0]] !== c[3]).map(c => `${esc(c[1])} : ${esc(st.options[c[0]])}`);
+      d = `<span class="pill m">Modifié</span> ${diff.join(" · ") || "options inchangées"}${st.note ? ` — <i>${esc(st.note)}</i>` : ""}`; }
+    return `<tr><td class="n">${i+1}</td><td>${esc(n.objet)}</td><td>${d}</td></tr>`;
+  }).join("");
+  const b = document.getElementById("envoyer"), m = document.getElementById("msg");
+  b.disabled = done < NOTES.length || envoye;
+  m.textContent = envoye ? "Transmis. Écrivez « c'est transmis » dans la conversation : je lis vos décisions et je prépare la suite."
+    : done < NOTES.length ? `Encore ${NOTES.length-done} note${NOTES.length-done>1?"s":""} à décider avant de transmettre.` : "Tout est décidé. Vous pouvez transmettre.";
+}
+
+const timers = {};
+function save(id){
+  const s = document.querySelector(`[data-s="${id}"]`);
+  if (!db) { s.textContent = ""; return; }
+  clearTimeout(timers[id]);
+  timers[id] = setTimeout(async () => {
+    try { await db.doc("decisions/"+id).set({choix:S[id].choix, options:S[id].options, note:S[id].note, maj:new Date().toISOString()}); s.textContent = "Enregistré"; }
+    catch(e){ s.style.color = "#a8452f"; s.textContent = "Non enregistré : " + (e && e.message || "erreur") + ". Réessayez dans un instant."; }
+  }, 400);
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.c) { S[b.dataset.n].choix = b.dataset.c; paint(); save(b.dataset.n); if (b.dataset.c === "accord") { const nx = b.closest(".feuille").nextElementSibling; if (nx) setTimeout(()=>nx.scrollIntoView({behavior:"smooth",block:"start"}),250); } }
+  else if (b.dataset.k) { S[b.dataset.n].options[b.dataset.k] = b.dataset.v; paint(); save(b.dataset.n); }
+  else if (b.id === "envoyer" && db) { envoye = true; paint(); db.doc("envoi/parapheur-02").set({envoye:true, at:new Date().toISOString()}).catch(()=>{ envoye=false; paint(); document.getElementById("msg").textContent="La transmission a échoué. Réessayez."; }); }
+});
+document.addEventListener("input", e => { if (e.target.tagName === "TEXTAREA") { const id = e.target.dataset.n; S[id].note = e.target.value; paint(); save(id); } });
+paint();
+
+(async () => {
+  const t = setTimeout(() => { if (!db) document.getElementById("alerte").innerHTML = `<div class="alerte">Vos réponses ne peuvent pas être enregistrées dans cette vue. Décidez quand même, puis recopiez le récapitulatif en bas de page dans la conversation.</div>`; }, 10000);
+  try { db = window.claude && await window.claude.use("db"); } catch(e){ db = null; }
+  clearTimeout(t);
+  if (!db) { document.getElementById("alerte").innerHTML = `<div class="alerte">Vos réponses ne peuvent pas être enregistrées dans cette vue. Décidez quand même, puis recopiez le récapitulatif en bas de page dans la conversation.</div>`; return; }
+  document.getElementById("alerte").innerHTML = "";
+  db.collection("decisions").onSnapshot(snap => {
+    snap.docs.forEach(d => { const v = d.data(); if (v && S[d.id]) { S[d.id].choix = v.choix || null; Object.assign(S[d.id].options, v.options || {}); if (document.activeElement?.dataset?.n !== d.id) S[d.id].note = v.note || ""; } });
+    paint();
+  }, () => {});
+  db.doc("envoi/parapheur-02").onSnapshot(s => { envoye = !!(s.exists && s.data()?.envoye); paint(); }, () => {});
+})();
+</script>
