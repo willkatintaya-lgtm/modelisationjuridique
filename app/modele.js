@@ -4,7 +4,7 @@
 
 /* ---------- directions : chacune derrière un interrupteur ---------- */
 const DIRS = [
-  {id:"L1", t:"Comparer devient un geste", d:"Le coffre suit la main dans tous les rangements ; « Comparer » éclate sur place (une | la référence | l'autre). Les volets passent de cinq à trois."},
+  {id:"L1", t:"Comparer devient un geste", d:"Le coffre est le cadre de l'atelier ; ⊕ sur n'importe quelle feuille, de n'importe quel espace, l'y emporte. « Comparer » éclate sur place (une | la référence | l'autre). Les volets passent de cinq à trois."},
   {id:"L2", t:"« Face à » devient une référence", d:"Un clic sur l'en-tête montre ou masque la référence au-dessus de la feuille. Éteint : variante conservatrice, la référence redevient un cran de l'échelle (dézoomer depuis l'alinéa)."},
   {id:"L3", t:"Le dos de la feuille", d:"Chaque feuille a un verso (coin replié en bas à droite, ou touche R) : identité, statut, motif, versions, liens, provenance."},
   {id:"L4", t:"Le repli", d:"Identiques pliés en une feuille, séries en une feuille paramétrée, gages en une ligne, rédactionnels rangés à part, écartés en fin de pile."},
@@ -12,14 +12,14 @@ const DIRS = [
   {id:"D2", t:"Sort et état", d:"Matière par sort (tampon adopté, feuille basculée si tombé, coin plié si retiré, fantôme si irrecevable), pastilles d'avis, pile des écartés."},
   {id:"D3", t:"La concurrence réelle", d:"Discussions communes, trois ordres (texte, dépôt, appel), chutes reliées à leur cause, « et si celle-ci passait ? » sur calque."},
   {id:"D4", t:"Le droit : le code tel qu'il deviendrait", d:"Un cran au-dessus de l'article : l'article 31 du CGI en vigueur, et ce qu'il deviendrait avec chaque version, instruction par instruction."},
-  {id:"D5", t:"La séance (ici : la commission)", d:"Le dérouleur : places dans l'ordre d'appel, liste de vote, paroles au zoom, partition au dézoom."},
+  {id:"D5", t:"La réunion (ici : la commission)", d:"Un espace : la bande de la réunion en cadre, les places dans l'ordre d'appel (liste de vote), les paroles au zoom."},
   {id:"D6", t:"Le direct", d:"Non construit : décision du 8 novembre (pas de direct sur la séance logement pour le moment).", off:true},
-  {id:"D7", t:"La navette", d:"L'histoire : un alinéa d'étape en étape (Sénat → Assemblée), tampons de provenance, grille alinéas × étapes."},
+  {id:"D7", t:"La navette", d:"Dans le dossier : la grille alinéas × étapes, l'article à chaque étape, un alinéa d'étape en étape (Sénat → Assemblée), tampons de provenance."},
   {id:"D8", t:"Acteurs et tiers", d:"La rapporteure et le rapporteur pour avis deviennent des acteurs institutionnels (matière du banc), sources revendiquées dans l'exposé."},
   {id:"D9", t:"L'atelier de rédaction", d:"Plusieurs brouillons, replis, dispositif généré, sas de confirmation (gage, doublon, déjà satisfait, renvois)."},
-  {id:"D10", t:"Thèmes et synthèse", d:"Le rangement des thèmes : déclarés (rapport) ou calculés (mots-clés), synthèse en trois strates, matrice thèmes × groupes."},
+  {id:"D10", t:"Les enjeux", d:"Un espace : les thèmes déclarés (rapport) ou calculés (mots-clés), synthèse en trois strates, matrice thèmes × groupes."},
   {id:"D11", t:"La négociation augmentée", d:"Une question ancrée à un amendement, adressée à son auteur ; un engagement noté. Saisi par vous, dit comme tel."},
-  {id:"D12", t:"Vue d'ensemble : le plan", d:"Le projet de loi en une feuille : chaque article, ses amendements en traits de marge, l'entrée vers l'article 4."},
+  {id:"D12", t:"Vue d'ensemble : le projet de loi", d:"Dans le dossier, le cran le plus large : chaque article, ses amendements en traits de marge, l'entrée vers l'article 4."},
   {id:"D13", t:"Visibilité", d:"Seule part gardée des rôles : privé, partagé avec mon groupe, public."},
 ];
 const DIR = Object.assign(Object.fromEntries(DIRS.map(d => [d.id, !d.off])), store.get("dirs", {}));

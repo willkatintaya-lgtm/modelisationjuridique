@@ -7,9 +7,8 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
-/* Scène 2D : des feuilles dans un espace sombre. Plusieurs interfaces dans un même espace : les mêmes feuilles, rangées
-   autrement (poignée du bas). Dans chaque rangement, trois gestes : haut/bas = parcourir ; gauche/droite = volet voisin ;
-   pincer/clic = échelle, un cran à la fois. */
+/* Quatre espaces (le dossier · l'atelier · les enjeux · la réunion), chacun avec son objet, son moment et son cadre.
+   Dans chaque espace, trois gestes : haut/bas = parcourir ; gauche/droite = volet voisin ; pincer/clic = échelle, un cran. */
 :root{
   --bg:#0b0d12; --bg-2:#11141b; --fg:#e8e6df; --muted:#8a8f9b; --accent:#d9b56a; --accent-soft:rgba(217,181,106,.28); --line:#232733; --line-2:#2f3443;
   --paper:#f4f1e9; --paper-2:#e9e4d8; --paper-ink:#1d1a16; --paper-muted:#6b6457; --paper-line:#c9bfa6; --paper-frame:#ece7db;
@@ -17,7 +16,7 @@
   --gutter-l:max(16px,env(safe-area-inset-left,0px)); --gutter-r:max(16px,env(safe-area-inset-right,0px));
   --ease:cubic-bezier(.2,.8,.2,1);
   --ins:#1d4f91; --del:#a8452f; --stamp:#8c2f22;
-  --top:46px; --bottom:76px;
+  --top:52px; --bottom:40px; --cadre:0px;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -28,12 +27,33 @@ button{font-family:inherit}
 #stage::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:48px 48px;opacity:.25;
   mask-image:radial-gradient(ellipse at 50% 55%, #000 20%, transparent 75%);-webkit-mask-image:radial-gradient(ellipse at 50% 55%, #000 20%, transparent 75%)}
 
-/* --- barre du haut : le dossier, la référence, le coffre, les directions --- */
-#topbar{position:absolute;z-index:20;top:0;left:0;right:0;height:var(--top);display:flex;align-items:center;gap:14px;padding:0 var(--gutter-r) 0 var(--gutter-l);
-  font-size:12px;color:var(--muted);background:linear-gradient(rgba(11,13,18,.92),rgba(11,13,18,.6));border-bottom:1px solid var(--line)}
-#topbar .dossier{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1}
-#topbar .dossier b{color:var(--fg);font-weight:500}
+/* --- barre du haut : les espaces (un vrai déplacement), puis le cadre propre à l'espace courant --- */
+#topbar{position:absolute;z-index:20;top:0;left:0;right:0;height:var(--top);display:flex;align-items:center;gap:14px;padding:env(safe-area-inset-top,0px) var(--gutter-r) 0 var(--gutter-l);
+  font-size:12px;color:var(--muted);background:linear-gradient(rgba(11,13,18,.95),rgba(11,13,18,.7));border-bottom:1px solid var(--line)}
+.lieu{display:flex;align-items:baseline;gap:12px;min-width:0;flex:1}
+#espaces{display:flex;align-items:stretch;gap:2px;flex:none;overflow-x:auto;scrollbar-width:none;touch-action:pan-x}
+#espaces::-webkit-scrollbar{display:none}
+#espaces button{position:relative;font:500 13px var(--f-ui);color:var(--muted);background:none;border:0;padding:6px 11px;cursor:pointer;white-space:nowrap;border-radius:6px}
+#espaces button:hover,#espaces button:focus-visible{color:var(--fg);outline:none;background:rgba(255,255,255,.04)}
+#espaces button.on{color:var(--fg);font:600 13px var(--f-legal);font-size:15px;letter-spacing:.01em}
+#espaces button.on::after{content:"";position:absolute;left:11px;right:11px;bottom:-1px;height:2px;background:var(--accent)}
+#espaces .cof{font:500 10.5px var(--f-ui);color:var(--accent)}
+#espaceObjet{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;font-style:italic;font-family:var(--f-legal);font-size:13px}
+#refInfo{white-space:nowrap}
 #refInfo b{color:var(--accent);font-weight:500}
+/* le cadre de la réunion : la bande des places */
+#cadre{position:absolute;z-index:19;left:0;right:0;top:var(--top);display:none;padding:8px var(--gutter-r) 6px var(--gutter-l);background:rgba(11,13,18,.97);border-bottom:1px solid var(--line);backdrop-filter:blur(6px)}
+#cadre.on{display:block}
+#stage.has-cadre{--cadre:62px}
+.bande-in{display:flex;gap:3px;overflow-x:auto;scrollbar-width:none;touch-action:pan-x;padding-bottom:2px}
+.bande-in::-webkit-scrollbar{display:none}
+.bande-in .seg{flex:0 0 auto;width:calc(var(--w) * .42px + 20px);min-height:26px;padding:3px 4px;font:500 10.5px var(--f-ui);color:#4a4336;text-align:left;background:linear-gradient(135deg,var(--paper),var(--paper-2));border:1px solid var(--paper-line);border-radius:2px;cursor:pointer;opacity:.78}
+.bande-in .seg.ad{background:linear-gradient(135deg,#ead7a7,#dcc387)}
+.bande-in .seg.nv{background:repeating-linear-gradient(-45deg,var(--paper) 0 5px,var(--paper-2) 5px 6px)}
+.bande-in .seg.on{opacity:1;box-shadow:0 0 0 2px var(--accent)}
+.bande-in .seg:hover,.bande-in .seg:focus-visible{opacity:1;outline:none}
+.bande-l{margin:4px 0 0;font-size:10.5px;letter-spacing:.06em;color:var(--muted)}
+.pass{font:500 12px var(--f-ui)!important;border-style:dashed!important}
 .coffre{display:flex;align-items:center;gap:6px;flex:none;border:1px dashed #3d4354;border-radius:999px;padding:3px 4px 3px 10px;transition:border-color .2s}
 .coffre.hide{display:none}
 .coffre.flash{animation:flash .5s}
@@ -51,15 +71,6 @@ button{font-family:inherit}
 .btn.sm{padding:4px 12px;font-size:11.5px}
 .btn:hover,.btn:focus-visible{background:rgba(217,181,106,.16);outline:none}
 .btn:disabled{opacity:.45;cursor:default;border-color:var(--line-2)}
-
-/* --- la poignée du bas : les rangements (plusieurs interfaces, un même espace) --- */
-#rangements{position:absolute;z-index:20;left:50%;bottom:env(safe-area-inset-bottom,0px);transform:translateX(-50%);display:flex;align-items:center;gap:2px;padding:7px 14px 8px;
-  background:rgba(11,13,18,.78);border:1px solid var(--line-2);border-bottom:0;border-radius:12px 12px 0 0;backdrop-filter:blur(6px);max-width:calc(100vw - 24px);overflow-x:auto;scrollbar-width:none;touch-action:pan-x}
-#rangements::-webkit-scrollbar{display:none}
-#rangements button{flex:none;font:500 12px var(--f-ui);letter-spacing:.06em;color:var(--muted);background:none;border:0;border-radius:6px;padding:5px 9px;cursor:pointer;white-space:nowrap}
-#rangements button:hover,#rangements button:focus-visible{color:var(--fg);outline:none;background:rgba(255,255,255,.04)}
-#rangements button.on{color:var(--accent);font-weight:600;letter-spacing:.1em}
-#rangements .dot{color:#3d4354}
 
 /* --- matière papier, partagée par toutes les feuilles --- */
 .paper{background:linear-gradient(135deg,var(--paper),var(--paper-2));color:var(--paper-ink);border:1px solid var(--paper-line);outline:14px solid var(--paper-frame);outline-offset:-14px;
@@ -90,17 +101,17 @@ button{font-family:inherit}
 
 /* --- la vue : un calque par rangement / volet / échelle --- */
 #view{position:absolute;inset:0}
-.layer{position:absolute;inset:0;padding:calc(var(--top) + 48px) var(--gutter-r) calc(var(--bottom) + 34px) var(--gutter-l);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.layer{position:absolute;inset:0;padding:calc(var(--top) + var(--cadre) + 48px) var(--gutter-r) calc(var(--bottom) + 34px) var(--gutter-l);display:flex;flex-direction:column;align-items:center;justify-content:center}
 .layer.leaving{pointer-events:none}
 .layer.has-html{justify-content:flex-start}
-.pile-title{position:absolute;top:calc(var(--top) + 30px);left:var(--gutter-l);right:var(--gutter-r);z-index:2;margin:0;text-align:center;color:var(--muted);font-size:11px;letter-spacing:.12em;text-transform:uppercase;line-height:1.6}
+.pile-title{position:absolute;top:calc(var(--top) + var(--cadre) + 30px);left:var(--gutter-l);right:var(--gutter-r);z-index:2;margin:0;text-align:center;color:var(--muted);font-size:11px;letter-spacing:.12em;text-transform:uppercase;line-height:1.6}
 .pile-title b{color:var(--fg);font-weight:500}
 .ordb{font:500 10.5px var(--f-ui);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:none;border:1px solid var(--line-2);border-radius:999px;padding:1px 8px;cursor:pointer}
 .ordb.on{color:var(--accent);border-color:var(--accent)}
 
 /* --- la pile : un tambour de feuilles --- */
 .drum{position:relative;width:100%;flex:none;perspective:1600px}
-.face{position:absolute;top:0;left:0;right:0;margin:0 auto;width:min(880px,100%);max-height:calc(100dvh - var(--top) - var(--bottom) - 120px);
+.face{position:absolute;top:0;left:0;right:0;margin:0 auto;width:min(880px,100%);max-height:calc(100dvh - var(--top) - var(--cadre) - var(--bottom) - 120px);
   touch-action:none;user-select:none;-webkit-user-select:none;will-change:transform,opacity;display:grid;grid-template-rows:minmax(0,1fr)}
 .recto,.verso{display:grid;grid-template-rows:auto auto minmax(0,1fr) auto;gap:10px;padding:30px 40px 24px;min-height:0;position:relative}
 .verso{grid-template-rows:auto minmax(0,1fr)}
@@ -363,12 +374,12 @@ table.vote tr.s-tombe,table.vote tr.s-ns,table.vote tr.s-irr{opacity:.62}
 .handle:hover,.handle:focus-visible{color:var(--fg);border-color:var(--accent);outline:none}
 .handle b{color:var(--accent);font-weight:600}
 .handle.hide{opacity:0;pointer-events:none}
-.handle.top{top:var(--top);left:50%;transform:translateX(-50%);border-top:0;border-radius:0 0 10px 10px;padding:6px 16px 6px}
+.handle.top{top:calc(var(--top) + var(--cadre));left:50%;transform:translateX(-50%);border-top:0;border-radius:0 0 10px 10px;padding:6px 16px 6px}
 .handle.right{right:max(0px,env(safe-area-inset-right,0px));top:42%;transform:rotate(-90deg) translate(50%,-100%);transform-origin:right top;border-right:0;border-radius:10px 10px 0 0;padding:8px 16px 7px}
 .handle.left{left:max(0px,env(safe-area-inset-left,0px));top:42%;transform:rotate(90deg) translate(-50%,-100%);transform-origin:left top;border-bottom:0;border-radius:10px 10px 0 0;padding:8px 16px 7px}
 .handle .chev{font-size:10px}
 .handle .zg{font-size:14px;line-height:1}
-.hint{position:absolute;left:50%;bottom:calc(46px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:4;font-size:12px;color:var(--muted);background:rgba(11,13,18,.6);border:1px solid var(--line);border-radius:999px;padding:5px 14px;backdrop-filter:blur(6px);white-space:nowrap;pointer-events:none;max-width:calc(100vw - 32px);overflow:hidden;text-overflow:ellipsis}
+.hint{position:absolute;left:50%;bottom:calc(14px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:4;font-size:12px;color:var(--muted);background:rgba(11,13,18,.6);border:1px solid var(--line);border-radius:999px;padding:5px 14px;backdrop-filter:blur(6px);white-space:nowrap;pointer-events:none;max-width:calc(100vw - 32px);overflow:hidden;text-overflow:ellipsis}
 .hint b{color:var(--fg);font-weight:500}
 #stage.editing .rail,#stage.editing .units{opacity:0;pointer-events:none}
 /* éditeur : une zone de saisie transparente posée sur un calque qui porte les marques */
@@ -389,12 +400,16 @@ table.vote tr.s-tombe,table.vote tr.s-ns,table.vote tr.s-irr{opacity:.62}
   .layer:has(+ .units:not(.hide)),#stage:has(.units:not(.hide)) .layer{padding-top:calc(var(--top) + 96px)}
 }
 @media (max-width:760px){
-  :root{--top:44px;--bottom:66px}
+  :root{--top:50px;--bottom:52px}
   #topbar{gap:8px}
-  #topbar .dossier .long,#refInfo{display:none}
+  #espaceObjet,#refInfo{display:none}
+  #espaces button{padding:6px 7px;font-size:12px}
+  #espaces button.on{font-size:13.5px}
+  #stage.has-cadre{--cadre:44px}
+  .bande-l{display:none}
   .coffre .pastille,.tiroir-b{display:none}
   .coffre{padding:3px 4px 3px 9px}
-  .hint{font-size:11px;padding:4px 10px;white-space:normal;text-align:center;width:max-content;border-radius:12px;bottom:calc(42px + env(safe-area-inset-bottom,0px))}
+  .hint{font-size:11px;padding:4px 10px;white-space:normal;text-align:center;width:max-content;border-radius:12px;bottom:calc(10px + env(safe-area-inset-bottom,0px))}
   .recto,.verso{padding:22px 18px 16px}
   .paper .head{font-size:10px}
   .stamp{right:16px;top:40px;font-size:11px}
@@ -408,8 +423,10 @@ table.vote tr.s-tombe,table.vote tr.s-ns,table.vote tr.s-irr{opacity:.62}
   .plan-ol li{grid-template-columns:52px 1fr}
   .strokes{display:none}
   .panel{padding:20px 18px 16px}
-  table.vote td.obj{display:none}
-  table.vote th:nth-child(4){display:none}
+  table.vote td.obj,table.vote td.n,table.vote td.av{display:none}
+  table.vote th:nth-child(1),table.vote th:nth-child(4),table.vote th:nth-child(5){display:none}
+  table.vote td .group-badge .name{font-size:12.5px}
+  table.vote td{padding:6px 4px}
   .layer{padding-left:calc(var(--gutter-l) + 14px);padding-right:calc(var(--gutter-r) + 14px)}
 }
 @media (prefers-reduced-motion:reduce){.layer,.handle,.rail,.pastille,.above,.overlay,.overlay-in{transition:none;animation:none}}
@@ -418,10 +435,12 @@ table.vote tr.s-tombe,table.vote tr.s-ns,table.vote tr.s-irr{opacity:.62}
 <body>
 <div id="stage">
   <header id="topbar">
-    <span class="dossier"><span class="long">Projet de loi logement · </span><b>Article 4</b> <span class="long">· CGI, art. 31 · </span><span id="refInfo"></span></span>
+    <div class="lieu"><nav id="espaces" aria-label="Les espaces"></nav><span id="espaceObjet"></span></div>
+    <span id="refInfo"></span>
     <div class="coffre" id="coffre"></div>
     <button type="button" id="dirBtn" title="Les directions du modèle (touche D)">Directions</button>
   </header>
+  <div id="cadre" aria-label="Cadre de l'espace"></div>
   <div id="view"></div>
   <nav class="units hide" id="side" aria-label="Index"></nav>
   <nav class="rail" id="rail" aria-label="Position dans la pile"></nav>
@@ -429,7 +448,6 @@ table.vote tr.s-tombe,table.vote tr.s-ns,table.vote tr.s-irr{opacity:.62}
   <button class="handle left" id="hLeft" type="button"></button>
   <button class="handle right" id="hRight" type="button"></button>
   <span class="hint" id="hint"></span>
-  <nav id="rangements" aria-label="Rangements"></nav>
   <div id="refmenu" role="menu" aria-hidden="true"></div>
 
   <div class="overlay" id="loupe" role="dialog" aria-modal="true" aria-hidden="true"><div class="overlay-in"><p class="loupe-title" id="loupeTitle"></p><div class="loupe-cols" id="loupeCols"></div><button class="btn" type="button" data-close="loupe">Fermer</button></div></div>
@@ -443,7 +461,7 @@ table.vote tr.s-tombe,table.vote tr.s-ns,table.vote tr.s-irr{opacity:.62}
 <script src="app/base.js"></script>
 <script src="app/modele.js"></script>
 <script src="app/vues.js"></script>
-<script src="app/rangements.js"></script>
+<script src="app/interfaces.js"></script>
 <script src="app/main.js"></script>
 </body>
 </html>

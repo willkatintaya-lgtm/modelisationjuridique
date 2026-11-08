@@ -1,4 +1,4 @@
-/* Boussole — la scène : rendu, transitions, poignées, coffre, éclatement, loupe, édition, sas, directions, gestes. */
+/* Boussole — la scène : espaces et passages, rendu, transitions, poignées, coffre, éclatement, loupe, édition, sas, directions, gestes. */
 "use strict";
 const stage = $("#stage"), view = $("#view");
 const hTop = $("#hTop"), hLeft = $("#hLeft"), hRight = $("#hRight"), rail = $("#rail"), side = $("#side");
@@ -21,7 +21,7 @@ function render(kind){
   refreshAbove(true);
   transition(layer, old, kind, oldSid, oldRect, oldFace);
   renderSide(); chrome();
-  store.set("r", S.r);
+  store.set("espace", S.r);
 }
 function onMove(){ chrome(); }
 function refreshAbove(init){
@@ -40,6 +40,7 @@ function transition(layer, old, kind, oldSid, oldRect, oldFace){
   layer.animate([{opacity: 0, transform: tf[0]}, {opacity: 1, transform: "none"}], E);
   const a = old.animate([{opacity: 1, transform: "none"}, {opacity: 0, transform: tf[1]}], E); a.onfinish = done; setTimeout(done, 600);
   // la feuille courante voyage d'un rangement à l'autre (S6) : un fantôme part de son ancienne place vers la nouvelle
+  if (kind[0] === "r"){ const c = $("#cadre"); if (c.classList.contains("on") && c.animate) c.animate([{opacity: 0, transform: "translateY(-12px)"}, {opacity: 1, transform: "none"}], {duration: 380, easing: "ease-out"}); }
   if (kind[0] === "r" && oldRect && oldFace){
     const nf = curFace(); if (!nf || nf.dataset.sid !== oldSid) return;
     const nr = nf.getBoundingClientRect(); if (!nr.width) return;
@@ -64,12 +65,23 @@ function chrome(){
   $("#hint").innerHTML = S.edit ? "<b>Échap</b> : annuler · <b>Ctrl+Entrée</b> : valider" : (sp.hint || "");
   const d = CUR.drum;
   rail.innerHTML = d && d.n > 1 && d.n <= 24 && !S.edit ? (sp.rail || d.faces.map((_, j) => "Feuille " + (j + 1))).map((l, j) => `<button type="button" data-i="${j}" class="${j === d.cur ? "on" : ""}" aria-label="${esc(l)}" title="${esc(l)}"></button>`).slice(0, 60).join("") : "";
-  const R = RANGEMENTS();
-  $("#rangements").innerHTML = R.map((r, k) => `<button type="button" data-rg="${r.id}" class="${r.id === S.r ? "on" : ""}" title="Rangement : ${esc(r.label)} (touche ${k + 1})">${esc(r.id === S.r ? r.label.toUpperCase() : r.label)}</button>`).join(`<span class="dot">·</span>`);
+  renderEspaces(); renderCadre();
   renderCoffre();
-  $("#refInfo").innerHTML = `référence vierge : <b>${esc(refShort())}</b>`;
+  $("#refInfo").innerHTML = S.r === "atelier" || S.r === "enjeux" ? `face à : <b>${esc(refShort())}</b>` : "";
   stage.classList.toggle("editing", !!S.edit);
   stage.dataset.r = S.r;
+}
+// les espaces : un vrai déplacement, chacun avec son cadre ; le coffre appartient à l'atelier
+function renderEspaces(){
+  const E = ESPACES(), cur = E.find(e => e.id === S.r) || E[0];
+  $("#espaces").innerHTML = E.map((e, k) => `<button type="button" data-sp="${e.id}" class="${e.id === S.r ? "on" : ""}" title="${esc(e.label)} : ${esc(e.q)} (touche ${k + 1})"${e.id === S.r ? ' aria-current="page"' : ""}>${esc(e.label)}${e.id === "atelier" && S.coffre.length && S.r !== "atelier" ? ` <small class="cof">⊕${S.coffre.length}</small>` : ""}</button>`).join("");
+  $("#espaceObjet").textContent = cur ? cur.objet : "";
+}
+function renderCadre(){
+  const c = $("#cadre");
+  if (S.r === "reunion"){ if (!c.dataset.on){ c.innerHTML = bandeHTML(); c.dataset.on = "1"; } else c.querySelectorAll(".seg").forEach(b => b.classList.toggle("on", +b.dataset.place === S.d.place)); c.classList.add("on"); }
+  else { c.classList.remove("on"); c.dataset.on = ""; c.innerHTML = ""; }
+  stage.classList.toggle("has-cadre", S.r === "reunion");
 }
 function renderSide(){
   const sp = CUR.spec || {};
@@ -77,18 +89,18 @@ function renderSide(){
     const o = curAlE(), U = unitsOf(o);
     side.innerHTML = `<p class="units-t">Passages disputés · al. ${o}</p>` + (U.length ? U.map(u => `<button type="button" data-unit="${u.k}" title="Toutes les propositions sur ce passage"><span><i class="w${unitWeight(u.n)}"></i>« ${esc(u.label)} »</span><small>${u.n} ${plural(u.n, "proposition", "propositions")}</small></button>`).join("") : `<span class="units-none">Aucun passage disputé : seuls des alinéas entiers sont visés.</span>`);
     side.classList.remove("hide");
-  } else if (sp.side === "themes"){
+  } else if (sp.side === "enjeux"){
     side.innerHTML = `<p class="units-t">Thèmes</p>` + THEMES.map((t, k) => `<button type="button" data-th="${k}" class="${k === S.t.theme ? "on" : ""}"><span>${esc(t.label)}</span><small>${t.src} · ${t.amendements.length} amendements</small></button>`).join("");
     side.classList.remove("hide");
   } else { side.classList.add("hide"); side.innerHTML = ""; }
 }
 
 /* ---------- navigation ---------- */
-function setScale(sc, kind){ const st = S.r === "ecrire" ? S.e : S.r === "derouleur" ? S.d : S.r === "histoire" ? S.h : S.t; st.scale = sc; render(kind); }
+function setScale(sc, kind){ stOf(S.r).scale = sc; render(kind); }
 function zoomStep(dir, unitK){
   const L = SCALES[S.r](), i = L.indexOf(curScale());
   let j = clamp(i + (dir < 0 ? 1 : -1), 0, L.length - 1);
-  if (S.r === "ecrire" && L[j] === "unite"){
+  if (S.r === "atelier" && L[j] === "unite"){
     if (S.e.volet === -1) return;
     if (!unitsOf(curAlE()).length) return;
     if (unitK != null) S.e.unit = unitK;
@@ -98,53 +110,53 @@ function zoomStep(dir, unitK){
 }
 function sideStep(dir){
   if (S.edit) return;
-  if (S.r === "ecrire"){ const v = clamp(S.e.volet + dir, -1, 1); if (v === S.e.volet) return; S.e.volet = v; if (v === 0) S.e.al = null; if (v === -1 && curScale() === "unite") S.e.scale = "alinea"; render(dir > 0 ? "h+" : "h-"); }
-  else if (S.r === "themes" && curScale() !== "matrice"){ const v = clamp(S.t.volet + dir, -1, 1); if (v === S.t.volet) return; S.t.volet = v; render(dir > 0 ? "h+" : "h-"); }
-  else if (S.r === "histoire" && curScale() === "alinea"){ const l = clamp(S.h.line + dir, 0, LINES.length - 1); if (l === S.h.line) return; S.h.line = l; render(dir > 0 ? "h+" : "h-"); }
+  if (S.r === "atelier"){ const v = clamp(S.e.volet + dir, -1, 1); if (v === S.e.volet) return; S.e.volet = v; if (v === 0) S.e.al = null; if (v === -1 && curScale() === "unite") S.e.scale = "alinea"; render(dir > 0 ? "h+" : "h-"); }
+  else if (S.r === "enjeux" && curScale() !== "matrice"){ const v = clamp(S.t.volet + dir, -1, 1); if (v === S.t.volet) return; S.t.volet = v; render(dir > 0 ? "h+" : "h-"); }
+  else if (S.r === "dossier" && curScale() === "alinea"){ const l = clamp(S.h.line + dir, 0, LINES.length - 1); if (l === S.h.line) return; S.h.line = l; render(dir > 0 ? "h+" : "h-"); }
 }
 function focusOn(sid){
   if (!sid) return;
   const [k, id, x] = sid.split(":");
   const a = k === "a" ? AM[id] : null, m = k === "m" ? MINE.find(y => y.id === id) : null;
   const o = a ? (a.cible.al || (a.spans[0] || {}).al || (a.applique.rows[0] || {}).o || 12) : m ? m.al : k === "e" && x && /^\d+$/.test(x) ? +x : null;
-  if (S.r === "ecrire"){
+  if (S.r === "atelier"){
     if (a){ S.e.volet = 1; S.e.al = o; S.e.otherSid = sid; if (!["alinea", "face", "article"].includes(S.e.scale)) S.e.scale = "alinea"; }
     else if (m){ S.e.volet = 0; S.e.mine = MINE.indexOf(m); S.e.al = null; if (S.e.scale !== "face") S.e.scale = "alinea"; }
     else if (o){ const mm = MINE.findIndex(y => y.al === o); if (mm >= 0){ S.e.volet = 0; S.e.mine = mm; S.e.al = null; } else { S.e.volet = 1; S.e.al = o; } S.e.scale = "alinea"; }
-  } else if (S.r === "derouleur" && a){
+  } else if (S.r === "reunion" && a){
     const P = places(); const i = P.findIndex(p => p.ams.includes(a.id) || a.chuteDans === p.id); S.d.place = i >= 0 ? i : P.length - 1;
-  } else if (S.r === "histoire" && o){
+  } else if (S.r === "dossier" && o && on("D7")){
     if (LINE_OF_T[o] != null) S.h.line = LINE_OF_T[o];
     if (k === "e" && id && HIST_ET().includes(id)) S.h.et = HIST_ET().indexOf(id); else S.h.et = 2;
     S.h.scale = "alinea";
-  } else if (S.r === "themes"){
+  } else if (S.r === "enjeux"){
     if (a){ const ti = THEMES.findIndex(t => t.amendements.includes(a.id)); if (ti >= 0){ S.t.theme = ti; S.t.volet = 1; S.t.scale = "theme"; const L = pileUnits(THEMES[ti].amendements.map(z => AM[z]).filter(z => z && !isEcarte(z)), S.ord); S.t.other = Math.max(0, L.findIndex(u => u.members.includes(a))); } }
     else if (o){ const ti = THEMES.findIndex(t => themeAls(t).includes(o)); if (ti >= 0){ S.t.theme = ti; S.t.volet = 0; S.t.scale = "theme"; S.t.pos = themeAls(THEMES[ti]).indexOf(o); } }
   }
 }
-function setRangement(id, sid){
+// un passage d'un espace à l'autre emporte la feuille courante (ou celle qu'on désigne)
+function setSpace(id, sid){
   if (S.edit) closeEditor(false, true);
-  const R = RANGEMENTS().map(r => r.id); if (!R.includes(id) || id === S.r) return;
-  const dir = R.indexOf(id) > R.indexOf(S.r) ? "r+" : "r-";
+  const E = ESPACES().map(r => r.id); if (!E.includes(id) || id === S.r) return;
+  const dir = E.indexOf(id) > E.indexOf(S.r) ? "r+" : "r-";
   sid = sid || curSid();
   S.r = id; focusOn(sid);
   render(dir);
 }
 function goTo(sid){
   if (!sid) return;
-  if (S.r === "ecrire"){ focusOn(sid); render("z-"); return; }
-  if (S.r === "themes" && curScale() !== "matrice" && sid.startsWith("a:")){ setRangement("ecrire", sid); return; }
-  setRangement("ecrire", sid);
+  if (S.r === "atelier"){ focusOn(sid); render("z-"); return; }
+  setSpace("atelier", sid);
 }
 function back(){
   for (const id of ["refmenu", "tiroir", "loupe", "calque", "sas", "dirs", "burst"]) if ($("#" + id).classList.contains("on")){ closeOverlay(id); return; }
   if (S.edit){ closeEditor(false); return; }
   const f = curFace(); if (f && f.classList.contains("flipped")){ flip(f); return; }
-  const def = {ecrire: "alinea", derouleur: "place", histoire: "alinea", themes: "theme", plan: "plan"}[S.r];
+  const def = DEF_SCALE(S.r);
   const L = SCALES[S.r](), i = L.indexOf(curScale()), j = L.indexOf(def);
   if (i !== j && j >= 0){ setScale(def, i > j ? "z+" : "z-"); return; }
-  if (S.r === "ecrire" && S.e.volet !== 0){ sideStep(S.e.volet > 0 ? -1 : 1); return; }
-  if (S.r === "themes" && S.t.volet !== 0){ sideStep(S.t.volet > 0 ? -1 : 1); return; }
+  if (S.r === "atelier" && S.e.volet !== 0){ sideStep(S.e.volet > 0 ? -1 : 1); return; }
+  if (S.r === "enjeux" && S.t.volet !== 0){ sideStep(S.t.volet > 0 ? -1 : 1); return; }
 }
 
 /* ---------- verso ---------- */
@@ -169,7 +181,7 @@ function resolveSid(sid){
   return null;
 }
 function renderCoffre(){
-  const el = $("#coffre"); if (!on("L1")){ el.innerHTML = ""; el.classList.add("hide"); return; }
+  const el = $("#coffre"); if (!on("L1") || S.r !== "atelier"){ el.innerHTML = ""; el.classList.add("hide"); return; }
   el.classList.remove("hide");
   const items = S.coffre.map(resolveSid).filter(Boolean);
   el.innerHTML = `<span class="coffre-t">coffre <b>${items.length}</b>/2</span>` + items.map(it => `<span class="pastille" style="--g:${it.color}"><i></i>${esc(short(it.short, 18))}<button type="button" data-x="${esc(it.sid)}" aria-label="Retirer">×</button></span>`).join("")
@@ -181,7 +193,7 @@ function toggleCoffre(sid){
   else if (S.coffre.length >= 2){ const c = $("#coffre"); c.classList.remove("flash"); void c.offsetWidth; c.classList.add("flash"); return; }
   else S.coffre.push(sid);
   $$(`[data-coffre]`).forEach(b => b.textContent = S.coffre.includes(b.dataset.coffre) ? "✓" : "⊕");
-  renderCoffre(); renderTiroir();
+  renderCoffre(); renderTiroir(); renderEspaces();
 }
 function tiroirItems(){
   const o = curAlE(), L = [];
@@ -234,7 +246,7 @@ function openDirs(){
 }
 function setDir(id, v){
   DIR[id] = v; DIR.D6 = false; store.set("dirs", DIR);
-  if (!RANGEMENTS().some(r => r.id === S.r)) S.r = "ecrire";
+  if (!ESPACES().some(r => r.id === S.r)) S.r = "atelier";
   if (!on("L1")) S.coffre = [];
   render(null);
 }
@@ -285,7 +297,7 @@ function openSas(id){
     + `<h3 class="sas-h">Confirmer l'amendement ?</h3><p class="lead">C'est la frontière entre écrire et explorer : voici ce qui serait déposé, et ce que l'outil y voit.</p>`
     + vsec("Dispositif", `<p class="disp">${esc(disp.text)}</p>`)
     + vsec("Contrôles", `<ul class="checks">${C.map(c => `<li class="lv-${c.lv}"><b>${c.lv === "ok" ? "✓" : c.lv === "warn" ? "!" : "i"} ${esc(c.t)}</b> ${esc(c.d)}${c.act === "gage" ? ` <button type="button" data-addgage="${m.id}">Ajouter le gage</button>` : ""}${c.go ? ` <button type="button" class="lnk" data-goto="${c.go}">voir</button>` : ""}</li>`).join("")}</ul>`)
-    + `<div class="foot"><span>Simulation : rien n'est transmis à l'Assemblée.</span><button type="button" data-close="sas">Revenir à l'écriture</button><button type="button" class="primary" data-confirm="${m.id}">${m.confirme ? "Retirer la confirmation" : "Confirmer"}</button></div>`;
+    + `<div class="foot"><span>Simulation : rien n'est transmis à l'Assemblée.</span><button type="button" data-close="sas">Revenir à l'écriture</button>${m.confirme && on("D10") ? `<button type="button" class="pass" data-pass="enjeux" data-sid="m:${m.id}">Explorer les enjeux ↗</button>` : ""}<button type="button" class="primary" data-confirm="${m.id}">${m.confirme ? "Retirer la confirmation" : "Confirmer"}</button></div>`;
   openOverlay("sas");
 }
 
@@ -306,7 +318,7 @@ function onEdit(){
   fit(); if (CUR.drum) CUR.drum.layout();
 }
 function openEditor(e, forced){
-  if (S.edit || S.r !== "ecrire" || S.e.volet !== 0 || !["alinea", "face"].includes(curScale())) return;
+  if (S.edit || S.r !== "atelier" || S.e.volet !== 0 || !["alinea", "face"].includes(curScale())) return;
   const f = curFace(); if (!f || !f.dataset.sid || !f.dataset.sid.startsWith("m:")) return;
   if (f.classList.contains("flipped")) return;
   const m = MINE.find(x => "m:" + x.id === f.dataset.sid); if (!m) return;
@@ -343,7 +355,8 @@ stage.addEventListener("click", e => {
   const q = s => t.closest(s);
   let b;
   if ((b = q("[data-close]"))){ closeOverlay(b.dataset.close); return; }
-  if ((b = q("[data-rg]"))){ setRangement(b.dataset.rg); return; }
+  if ((b = q("[data-sp]"))){ setSpace(b.dataset.sp); return; }
+  if ((b = q("[data-pass]"))){ const f0 = b.closest(".face"); ["sas", "calque"].forEach(closeOverlay); setSpace(b.dataset.pass, b.dataset.sid || (f0 && f0.dataset.sid)); return; }
   if ((b = q("[data-x]"))){ toggleCoffre(b.dataset.x); return; }
   if (q("[data-cmp]")){ openBurst(); return; }
   if (q("[data-tiroir]")){ openOverlay("tiroir"); renderTiroir(); return; }
@@ -352,7 +365,7 @@ stage.addEventListener("click", e => {
   if ((b = q("[data-dirall]"))){ const v = b.dataset.dirall === "1"; DIRS.forEach(d => { if (!d.off) DIR[d.id] = v; }); setDir("L1", v); openDirs(); return; }
   if ((b = q("[data-setref]"))){ REF = b.dataset.setref; store.set("ref", REF); closeOverlay("refmenu"); render(null); return; }
   if ((b = q("[data-addgage]"))){ const m = MINE.find(x => x.id === b.dataset.addgage); m.gage = true; saveDrafts(); openSas(m.id); return; }
-  if ((b = q("[data-confirm]"))){ const m = MINE.find(x => x.id === b.dataset.confirm); m.confirme = !m.confirme; if (m.confirme && on("D13")) m.vis = "public"; saveDrafts(); closeOverlay("sas"); render(null); return; }
+  if ((b = q("[data-confirm]"))){ const m = MINE.find(x => x.id === b.dataset.confirm); m.confirme = !m.confirme; if (m.confirme && on("D13")) m.vis = "public"; saveDrafts(); render(null); if (m.confirme && on("D10")) openSas(m.id); else closeOverlay("sas"); return; }
   if ((b = q("[data-goto]"))){ e.stopPropagation(); ["calque", "sas", "burst", "loupe"].forEach(id => closeOverlay(id)); goTo(b.dataset.goto); return; }
   if (t.closest("#loupe") && t === $("#loupe")){ closeOverlay("loupe"); return; }
   for (const id of ["burst", "calque", "sas", "dirs", "tiroir"]) if (t === $("#" + id)){ closeOverlay(id); return; }
@@ -370,7 +383,7 @@ stage.addEventListener("click", e => {
   if ((b = q("[data-theme]"))){ S.t.theme = +b.dataset.theme; S.t.scale = "theme"; S.t.volet = 0; render("z+"); return; }
   if ((b = q("[data-place]"))){ S.d.place = +b.dataset.place; S.d.scale = "place"; render("z+"); return; }
   if ((b = q("td[data-line]"))){ S.h.line = +b.dataset.line; S.h.et = HIST_ET().indexOf(b.dataset.et); S.h.scale = "alinea"; render("z+"); return; }
-  if ((b = q("[data-open]"))){ setRangement("ecrire"); return; }
+  if ((b = q("[data-open]"))){ setSpace("atelier"); return; }
   // la feuille : une voisine se met au centre ; la feuille courante répond à ses commandes
   const f = q(".face");
   if (f && CUR.drum && +f.dataset.i !== CUR.drum.cur){ if (!S.edit) CUR.drum.to(+f.dataset.i); return; }
@@ -379,7 +392,7 @@ stage.addEventListener("click", e => {
   if ((b = q("[data-face]"))){ S.showRef = !S.showRef; store.set("showRef", S.showRef); render(null); return; }
   if ((b = q("[data-refpick]"))){ openRefMenu(b); return; }
   if ((b = q("[data-flip]"))){ flip(b.closest(".face")); return; }
-  if ((b = q("[data-pick]"))){ S.e.otherSid = "a:" + b.dataset.pick; if (S.r === "ecrire") render(null); else goTo(S.e.otherSid); return; }
+  if ((b = q("[data-pick]"))){ S.e.otherSid = "a:" + b.dataset.pick; if (S.r === "atelier") render(null); else goTo(S.e.otherSid); return; }
   if ((b = q("[data-sim]"))){ openCalque(b.dataset.sim); return; }
   if ((b = q("[data-sas]"))){ openSas(b.dataset.sas); return; }
   if ((b = q("[data-repli]"))){ const m0 = MINE.find(x => x.id === b.dataset.repli); const m = newDraft(m0.al, m0.mode, m0.texte, m0.id); S.e.mine = MINE.indexOf(m); render(null); setTimeout(() => openEditor(null), 60); return; }
@@ -388,14 +401,14 @@ stage.addEventListener("click", e => {
   const h = q("[data-h]"); if (h){ openLoupe(h.dataset.h); return; }
   if ((b = q("tr[data-goto]"))){ goTo(b.dataset.goto); return; }
   if ((b = q("li[data-line]"))){ S.h.line = +b.dataset.line; S.h.scale = "alinea"; render("z+"); return; }
-  if ((b = q("li[data-o]")) && S.r === "ecrire" && S.e.volet === -1){
+  if ((b = q("li[data-o]")) && S.r === "atelier" && S.e.volet === -1){
     const o = +b.dataset.o, A = articleVersions()[S.e.art];
     if (A.me){ let m = MINE.find(x => x.al === o); const fresh = !m; if (!m) m = newDraft(o); S.e.volet = 0; S.e.mine = MINE.indexOf(m); S.e.al = null; S.e.scale = "alinea"; render("h+"); if (fresh) setTimeout(() => openEditor(null), 480); }
     else { S.e.volet = 1; S.e.al = o; S.e.scale = "alinea"; const g = A.id.startsWith("g:") ? A.id.slice(2) : null, ins = A.id.startsWith("inst:") ? A.id.slice(5) : null; const a = ALL.find(x => !isEcarte(x) && touchesAl(x, o) && (g ? x.groupe === g && !x.inst : ins ? x.inst === ins : false)); S.e.otherSid = a ? "a:" + a.id : null; render("h+"); }
     return;
   }
   const mk = q("mark.pt");
-  if (mk){ clearTimeout(clickTimer); const k = +mk.dataset.u; clickTimer = setTimeout(() => { S.e.unit = k; if (S.r === "ecrire"){ S.e.scale = "unite"; render("z+"); } }, 260); return; }
+  if (mk){ clearTimeout(clickTimer); const k = +mk.dataset.u; clickTimer = setTimeout(() => { S.e.unit = k; if (S.r === "atelier"){ S.e.scale = "unite"; render("z+"); } }, 260); return; }
   if (showRef() && f && f.dataset.sid && f.dataset.sid.startsWith("m:") && q(".body")) openEditor(e);
 });
 stage.addEventListener("dblclick", e => { clearTimeout(clickTimer); const f = e.target.closest(".face"); if (f && CUR.drum && +f.dataset.i === CUR.drum.cur && e.target.closest(".body")) openEditor(e); });
@@ -420,7 +433,7 @@ window.addEventListener("keydown", e => {
   else if (e.key === "ArrowLeft") sideStep(-1);
   else if (e.key === "Enter" || e.key === "+" || e.key === "=") zoomStep(1);
   else if (e.key === "-") zoomStep(-1);
-  else if (/^[1-5]$/.test(e.key)){ const R = RANGEMENTS(); const r = R[+e.key - 1]; if (r) setRangement(r.id); }
+  else if (/^[1-4]$/.test(e.key)){ const E = ESPACES(); const r = E[+e.key - 1]; if (r) setSpace(r.id); }
   else if (e.key === "r" || e.key === "R") flip(curFace());
   else if (e.key === "d" || e.key === "D") openDirs();
   else if ((e.key === "c" || e.key === "C") && S.coffre.length) openBurst();
@@ -438,7 +451,7 @@ stage.addEventListener("pointerdown", e => {
   if (touches.size > 1) return;
   if (anyOverlay() || e.target.closest(".handle,.rail,button,textarea,input,label,.units,select,summary,#topbar")) return;
   if (S.edit && e.target.closest(".face.editing")) return;
-  g = {id: e.pointerId, x: e.clientX, y: e.clientY, axis: null, ly: e.clientY, lt: performance.now(), v: 0, bottom: !!e.target.closest("#rangements")};
+  g = {id: e.pointerId, x: e.clientX, y: e.clientY, axis: null, ly: e.clientY, lt: performance.now(), v: 0};
 });
 stage.addEventListener("pointermove", e => {
   const t = touches.get(e.pointerId); if (t){ t.x = e.clientX; t.y = e.clientY; }
@@ -459,7 +472,7 @@ stage.addEventListener("pointermove", e => {
   }
   if (g.axis === "h"){
     if (e.target.closest && e.target.closest(".burst-scroll") && innerWidth < 760) { g = null; return; }
-    if (dx < -50){ if (g.bottom) stepRangement(1); else sideStep(1); g = null; } else if (dx > 50){ if (g.bottom) stepRangement(-1); else sideStep(-1); g = null; }
+    if (dx < -50){ sideStep(1); g = null; } else if (dx > 50){ sideStep(-1); g = null; }
     return;
   }
   if (g.scrollEl){ g.scrollEl.style.scrollBehavior = "auto"; g.scrollEl.scrollTop = g.scroll0 - dy; return; }
@@ -467,7 +480,6 @@ stage.addEventListener("pointermove", e => {
   g.drum.dragTo(g.from, -dy);
   const dt = Math.max(1, now - g.lt); g.v = .7 * g.v + .3 * (-(e.clientY - g.ly) / sp) / (dt / 1000); g.ly = e.clientY; g.lt = now;
 });
-function stepRangement(dir){ const R = RANGEMENTS(), i = R.findIndex(r => r.id === S.r), j = clamp(i + dir, 0, R.length - 1); if (i !== j) setRangement(R[j].id); }
 function pointerEnd(e){
   touches.delete(e.pointerId);
   if (pinch){ if (touches.size < 2) pinch = null; return; }
@@ -493,7 +505,7 @@ stage.addEventListener("wheel", e => {
   if (e.target.closest("textarea")) return;
   const vertical = Math.abs(dy) >= Math.abs(dx);
   if (vertical && !(wg && wg.axis === "h") && scrollsY(e.target.closest(".orig .body,.burst-scroll,.units"))) return;
-  if (!vertical && !(wg && wg.axis === "v") && scrollsX(e.target.closest(".units,.burst-scroll,#rangements"))) return;
+  if (!vertical && !(wg && wg.axis === "v") && scrollsX(e.target.closest(".units,.burst-scroll,#espaces,.bande-in"))) return;
   if (vertical && (!wg || wg.native)){
     const el = nestedEl();
     if (el && (wg && wg.native || canScroll(el, dy))){
@@ -532,6 +544,6 @@ stage.addEventListener("scroll", () => { if (stage.scrollTop || stage.scrollLeft
 view.addEventListener("scroll", () => { if (view.scrollTop || view.scrollLeft){ view.scrollTop = 0; view.scrollLeft = 0; } }, true);
 
 /* ---------- départ ---------- */
-if (!RANGEMENTS().some(r => r.id === S.r)) S.r = "ecrire";
+if (!ESPACES().some(r => r.id === S.r)) S.r = "atelier";
 render(null);
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (CUR.drum) CUR.drum.layout(); });

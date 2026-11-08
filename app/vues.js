@@ -1,33 +1,33 @@
-/* Boussole — les feuilles et les rangements. Une feuille est un objet (data-sid) ; un rangement ne fait que la placer.
-   Rangements : le plan · écrire · le dérouleur · l'histoire · les thèmes. */
+/* Boussole — l'état, les espaces et les feuilles. Une feuille est un objet (data-sid) : elle passe d'un espace à l'autre.
+   Quatre espaces, dans l'ordre de la procédure : le dossier · l'atelier · les enjeux · la réunion.
+   Un espace = un objet de travail, un moment, un état commun et son cadre propre ; ses interfaces sont ses volets et ses échelles. */
 "use strict";
 
 /* ---------- état ---------- */
 const S = {
-  r: store.get("r", "ecrire"),
+  r: (v => ["dossier", "atelier", "enjeux", "reunion"].includes(v) ? v : "atelier")(store.get("espace", "atelier")),
   showRef: store.get("showRef", false),
   ord: "texte",
   e: {volet: 0, scale: "alinea", mine: 0, unit: 0, other: 0, art: 0},
   d: {scale: "place", place: 0},
-  h: {scale: "alinea", line: LINE_OF_T[12], et: 2},
+  h: {scale: "plan", line: LINE_OF_T[12], et: 2},
   t: {volet: 0, scale: "theme", theme: 3, pos: 0, other: 0},
   coffre: [], edit: null, flipped: new Set(), showRedac: false,
 };
-const RANGEMENTS = () => [
-  on("D12") && {id: "plan", label: "le plan"},
-  {id: "ecrire", label: "écrire"},
-  on("D5") && {id: "derouleur", label: "le dérouleur"},
-  on("D7") && {id: "histoire", label: "l'histoire"},
-  on("D10") && {id: "themes", label: "les thèmes"},
+// les espaces : leur objet, leur moment, leur question
+const ESPACES = () => [
+  (on("D12") || on("D7")) && {id: "dossier", label: "Le dossier", objet: "le projet de loi, d'étape en étape", q: "Où en est le texte, d'où vient-il ?"},
+  {id: "atelier", label: "L'atelier", objet: "mon amendement, avant le délai", q: "Que dit mon texte face aux autres ?"},
+  on("D10") && {id: "enjeux", label: "Les enjeux", objet: "un enjeu, à travers l'article", q: "Sur un enjeu, qui porte quoi ?"},
+  on("D5") && {id: "reunion", label: "La réunion", objet: "l'examen de l'article, place par place", q: "Comment cela s'est-il décidé ?"},
 ].filter(Boolean);
 const SCALES = {
-  ecrire: () => ["unite", "alinea", ...(on("L2") ? [] : ["face"]), "article", ...(on("D4") ? ["droit"] : [])],
-  derouleur: () => ["verbatim", "place", "partition"],
-  histoire: () => ["alinea", "article", "grille"],
-  themes: () => ["theme", "matrice"],
-  plan: () => ["plan"],
+  atelier: () => ["unite", "alinea", ...(on("L2") ? [] : ["face"]), "article", ...(on("D4") ? ["droit"] : [])],
+  reunion: () => ["verbatim", "place"],
+  dossier: () => [...(on("D7") ? ["alinea", "article", "grille"] : []), ...(on("D12") ? ["plan"] : [])],
+  enjeux: () => ["theme", "matrice"],
 };
-const SCALE_NAME = {unite: "unité de sens", alinea: "alinéa", face: "face à la référence", article: "article", droit: "le code", verbatim: "les paroles", place: "la place", partition: "la réunion", grille: "la grille", theme: "le thème", matrice: "thèmes × groupes", plan: "le plan"};
+const SCALE_NAME = {unite: "unité de sens", alinea: "alinéa", face: "face à la référence", article: "article", droit: "le code", verbatim: "les paroles", place: "la place", partition: "la réunion", grille: "la grille des étapes", theme: "le thème", matrice: "thèmes × groupes", plan: "le projet de loi"};
 const showRef = () => on("L2") ? S.showRef : S.e.scale === "face";
 const curDraft = () => MINE[clamp(S.e.mine, 0, MINE.length - 1)];
 // l'alinéa courant : celui du brouillon au centre, sauf quand on arrive dans le volet des autres depuis un amendement
@@ -44,7 +44,7 @@ function sheet(o){
   return `<section class="sheet paper face ${o.cls || ""}${flipped ? " flipped" : ""}" data-sid="${esc(o.sid)}"${o.label ? ` aria-label="${esc(o.label)}"` : ""}>`
     + `<div class="recto"${flipped ? " hidden" : ""}>${o.stamp || ""}<div class="head">${o.head}</div>${o.lead ? `<p class="lead">${o.lead}</p>` : ""}<div class="body">${o.body}</div><div class="foot">${o.foot || ""}</div></div>`
     + (on("L3") && o.verso ? `<div class="verso"${flipped ? "" : " hidden"}>${o.verso}</div><button type="button" class="fold" data-flip title="Retourner la feuille (R)" aria-label="Retourner la feuille">↺</button>` : "")
-    + (on("L1") && o.coffre ? `<button type="button" class="corner" data-coffre="${esc(o.sid)}" title="Déposer dans le coffre" aria-label="Déposer dans le coffre">${S.coffre.includes(o.sid) ? "✓" : "⊕"}</button>` : "")
+    + (on("L1") && o.coffre ? `<button type="button" class="corner" data-coffre="${esc(o.sid)}" title="${S.r === "atelier" ? "Déposer dans le coffre" : "Emporter dans le coffre de l'atelier"}" aria-label="Déposer dans le coffre">${S.coffre.includes(o.sid) ? "✓" : "⊕"}</button>` : "")
     + `</section>`;
 }
 const vsec = (t, html) => html ? `<section class="vs"><h4>${esc(t)}</h4>${html}</section>` : "";
@@ -84,6 +84,8 @@ function draftSheet(m, i, n){
   const vis = on("D13") ? `<button type="button" class="vis" data-vis="${m.id}" title="Visibilité : cliquer pour changer">${m.vis === "public" ? "◎ public" : m.vis === "partagé" ? "◑ partagé" : "○ privé"}</button>` : "";
   const same = m.mode === "rediger" && sameText(m.texte, TRANSMIS[m.al - 1]);
   const foot = `<span>${same ? "Reprend l'alinéa à l'identique · double-clic pour rédiger" : ref ? "Clic sur une modification : la comparer · ailleurs : modifier" : "Filet doré : un passage disputé · double-clic pour modifier"}</span>`
+    + (on("D7") ? `<button type="button" class="pass" data-pass="dossier" title="L'histoire de cet alinéa, dans le dossier">histoire ↗</button>` : "")
+    + (m.confirme && on("D10") ? `<button type="button" class="pass" data-pass="enjeux" title="Explorer les enjeux de votre amendement">enjeux ↗</button>` : "")
     + (on("D9") ? `<button type="button" data-repli="${m.id}" title="Dupliquer en repli">+ repli</button><button type="button" class="primary" data-sas="${m.id}">${m.confirme ? "Confirmé ✓" : "Confirmer…"}</button>` : "")
     + `<span class="count">${i + 1} / ${n}</span>`;
   const verso = draftVerso(m);
@@ -121,7 +123,8 @@ function amendmentSheet(u, o, i, n, opts){
   const retire = a.retireAuProfit ? `<span class="fil">retiré au profit de <button type="button" class="lnk" data-goto="a:${a.retireAuProfit}">${a.retireAuProfit}</button></span>` : "";
   const q = NOTES[a.id] && on("D11") ? `<span class="qmark" title="question ou engagement saisi par vous">?</span>` : "";
   const sim = on("D3") && !isEcarte(a) && a.sort !== "Adopté" ? `<button type="button" data-sim="${a.id}" title="Simuler sur calque">Et si celle-ci passait ?</button>` : "";
-  const foot = `<span>${esc(objetOf(a) || a.cartouche || "")}</span>${sim}<span class="count">${i + 1} / ${n}</span>`;
+  const pass = on("D5") && a.ordreAppel && S.r !== "reunion" ? `<button type="button" class="pass" data-pass="reunion" title="Sa place dans la réunion">en réunion ↗</button>` : "";
+  const foot = `<span>${esc(objetOf(a) || a.cartouche || "")}</span>${sim}${pass}<span class="count">${i + 1} / ${n}</span>`;
   return sheet({sid: "a:" + a.id, cls: "other " + (a.inst && on("D8") ? "banc " : "") + sortClass(a) + (a.sort === "Tombé" && on("D2") ? " tilt" : ""), label: `${w.name}, ${a.num}`,
     stamp: stampOf(a),
     head: `${badge(w)}<span class="hr">${q}${dcb}${gage}<span>${a.num}${u.members.length > 1 ? ` +${u.members.length - 1}` : ""}</span>${avisRow(a)}${faceCtl()}</span>`,

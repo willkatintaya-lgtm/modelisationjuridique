@@ -1,10 +1,12 @@
-/* Boussole — les cinq rangements. Chacun garde les trois gestes : haut/bas parcourt, gauche/droite change de volet,
-   pincer change d'échelle ; seul ce qu'ils parcourent change. */
+/* Boussole — les interfaces de chaque espace. Partout les trois mêmes gestes : haut/bas parcourt, gauche/droite change
+   de volet, pincer change d'échelle ; seul ce qu'ils parcourent change. */
 "use strict";
 
 const T = s => `<p class="pile-title">${s}</p>`;
 const scaleIdx = () => SCALES[S.r]().indexOf(curScale());
-function curScale(){ const st = S.r === "ecrire" ? S.e : S.r === "derouleur" ? S.d : S.r === "histoire" ? S.h : S.r === "themes" ? S.t : {scale: "plan"}; const L = SCALES[S.r](); if (!L.includes(st.scale)) st.scale = L.includes("alinea") ? "alinea" : L.includes("place") ? "place" : L[0]; return st.scale; }
+const stOf = r => ({atelier: S.e, reunion: S.d, dossier: S.h, enjeux: S.t})[r];
+const DEF_SCALE = r => ({atelier: "alinea", reunion: "place", dossier: on("D12") ? "plan" : "alinea", enjeux: "theme"})[r];
+function curScale(){ const st = stOf(S.r), L = SCALES[S.r](); if (!L.includes(st.scale)) st.scale = L.includes(DEF_SCALE(S.r)) ? DEF_SCALE(S.r) : L[0]; return st.scale; }
 const zg = d => `<span class="zg">${d < 0 ? "⊖" : "⊕"}</span>`;
 function topHandle(){
   const L = SCALES[S.r](), i = L.indexOf(curScale());
@@ -157,25 +159,27 @@ function verbatimSheet(p, i, n){
 function buildDerouleur(){
   const sc = curScale(), P = places(), sp = {};
   S.d.place = clamp(S.d.place, 0, P.length - 1);
-  if (sc === "partition"){
-    const max = Math.max(...P.map(p => p.mots));
-    const seg = P.map((p, i) => {
-      const ams = p.ams.map(id => AM[id]).filter(Boolean), ad = ams.some(a => a.sort === "Adopté");
-      return `<button type="button" class="seg${ad ? " ad" : ""}${p.never ? " nv" : ""}${i === S.d.place ? " on" : ""}" data-place="${i}" style="--w:${Math.max(4, Math.round(100 * Math.sqrt(p.mots / max)))}" title="${esc(p.titre)}"><b>${p.never ? "∅" : p.place}</b><small>${p.never ? ams.length + " non appelés" : p.mots + " mots"}</small></button>`;
-    }).join("");
-    sp.title = T(`Article 4 en commission · <b>la réunion</b> du lundi 21 septembre 2026, 21 h 30 · une case par place, largeur selon les mots prononcés`);
-    sp.html = `<section class="sheet paper bande"><div class="head"><span>Partition de la réunion</span><span>${P.length - 1} places · ${P.reduce((s, p) => s + p.mots, 0)} mots</span></div><div class="segs">${seg}</div><p class="legend">Case dorée : au moins un amendement adopté. Le compte rendu ne donne pas l'heure de chaque prise de parole ; la largeur compte les mots (un seul chiffre, pas un indice).</p></section>`;
+  if (false){
   } else {
     const fn = sc === "verbatim" ? verbatimSheet : placeSheet;
     sp.title = T(sc === "verbatim" ? `Article 4 · <b>les paroles</b>, place par place` : `Article 4 en commission · <b>le dérouleur</b> : les places dans l'ordre d'appel`);
     sp.pile = P.map((p, i) => fn(p, i, P.length)); sp.focus = S.d.place; sp.onMove = i => { S.d.place = i; };
     sp.rail = P.map(p => p.never ? "Jamais appelés" : "Place " + p.place);
   }
-  sp.hint = sc === "partition" ? "<b>Clic sur une case</b> : la place · <b>pincer</b> : revenir au dérouleur" : sc === "verbatim" ? "<b>Haut / bas</b> : les places · <b>défiler</b> : les paroles · <b>pincer</b> : la liste de vote" : "<b>Haut / bas</b> : les places · <b>clic sur une ligne</b> : l'amendement · <b>écarter</b> : la partition · <b>pincer</b> : les paroles";
+  sp.hint = sc === "verbatim" ? "<b>Haut / bas</b> : les places · <b>défiler</b> : les paroles · <b>écarter</b> : la liste de vote · <b>bande du haut</b> : aller à une place" : "<b>Haut / bas</b> : les places · <b>clic sur une ligne</b> : l'amendement, dans l'atelier · <b>pincer</b> : les paroles · <b>bande du haut</b> : aller à une place";
   return sp;
 }
 
-/* ================= R3 · L'HISTOIRE ================= */
+// le cadre de la réunion : la bande, une case par place (largeur selon les mots prononcés), toujours visible
+function bandeHTML(){
+  const P = places(), max = Math.max(...P.map(p => p.mots));
+  return `<div class="bande-in" role="navigation" aria-label="Les places de la réunion">` + P.map((p, i) => {
+    const ams = p.ams.map(id => AM[id]).filter(Boolean), ad = ams.some(a => a.sort === "Adopté");
+    return `<button type="button" class="seg${ad ? " ad" : ""}${p.never ? " nv" : ""}${i === S.d.place ? " on" : ""}" data-place="${i}" style="--w:${Math.max(3, Math.round(100 * Math.sqrt(p.mots / max)))}" title="${esc((p.never ? "" : "Place " + p.place + " · " + p.mots + " mots · ") + p.titre)}">${p.never ? "∅" : p.place}</button>`;
+  }).join("") + `</div><p class="bande-l">La réunion du 21 septembre 2026 · une case par place, largeur selon les mots prononcés · dorée : au moins un adopté</p>`;
+}
+
+/* ================= le dossier : la navette ================= */
 const HIST_ET = () => D.etapes.map(e => e.id);
 function stamp(et, x){
   if (!on("D7") || x == null) return "";
@@ -195,7 +199,7 @@ function histAlSheet(li, et, k, n){
   return sheet({sid: "e:" + et + ":" + (ln.transmis != null ? ln.transmis + 1 : "x" + li), cls: "histf" + (t == null ? " absent" : ""), label: E.label,
     head: `<span class="etb">${esc(E.chambre)}</span><span class="hr">${stamp(et, x)}<span>${esc(E.court)}${x != null ? " · alinéa " + (x + 1) : ""}</span><span class="facea static">face à : <b>${esc(prevLab || "—")}</b></span></span>`,
     lead: esc(E.label) + (E.note ? ` <small>(${esc(E.note)})</small>` : ""), body,
-    foot: `<span>Haut / bas : les étapes · gauche / droite : l'alinéa voisin</span><span class="count">${k + 1} / ${n}</span>`, coffre: ln.transmis != null});
+    foot: `<span>Haut / bas : les étapes · gauche / droite : l'alinéa voisin</span>${ln.transmis != null ? `<button type="button" class="pass" data-pass="atelier" title="Ouvrir cet alinéa dans l'atelier">amender ↗</button>` : ""}<span class="count">${k + 1} / ${n}</span>`, coffre: ln.transmis != null});
 }
 function histArtSheet(et, k, n){
   const ids = HIST_ET(), j = ids.indexOf(et), E = ET[et], prev = j > 0 ? ids[j - 1] : null;
@@ -294,7 +298,7 @@ function buildThemes(){
     sp.pile = als.map((o, k) => themePassageSheet(th, o, k, als.length)); sp.focus = S.t.pos; sp.onMove = i => { S.t.pos = i; };
     sp.rail = als.map(o => "Alinéa " + o);
   }
-  sp.side = sc === "matrice" ? null : "themes";
+  sp.side = sc === "matrice" ? null : "enjeux";
   sp.left = sc === "matrice" ? null : S.t.volet === 0 ? "<b>La</b> synthèse" : S.t.volet === 1 ? "<b>Mon</b> texte" : null;
   sp.right = sc === "matrice" ? null : S.t.volet === -1 ? "<b>Mon</b> texte" : S.t.volet === 0 ? "<b>Les</b> autres" : null;
   sp.hint = sc === "matrice" ? "<b>Clic sur un numéro</b> : l'amendement · <b>clic sur un thème</b> : y aller · <b>pincer</b> : revenir" : "<b>Haut / bas</b> : les alinéas du thème · <b>gauche</b> : la synthèse · <b>droite</b> : les autres · <b>écarter</b> : thèmes × groupes";
@@ -307,14 +311,14 @@ function buildPlan(){
     const n = p.n, ad = (p.amendements["Adopté"] || 0), live = p.num === "4";
     const strokes = `<span class="strokes" aria-hidden="true">${"<i></i>".repeat(Math.min(n, 140))}</span>`;
     const mine = live ? MINE.length : 0;
-    return `<li class="${live ? "live" : "dim"}"${live ? ' data-open="4" tabindex="0" title="Ouvrir l\'article 4"' : ""}><span class="n">Art. ${esc(p.num)}</span><div><b>${esc(short(p.intitule, 140))}</b><span class="meta">${esc(p.statut)}${p.cible ? " · " + esc(short(p.cible, 80)) : ""}</span><span class="meta">${n} ${plural(n, "amendement")} en commission${ad ? ` · ${ad} ${plural(ad, "adopté")}` : ""}${live ? ` · <b class="me">● ${mine} ${plural(mine, "brouillon")} à vous</b> · ouvrir` : " · non chargé dans la maquette"}</span></div>${strokes}</li>`;
+    return `<li class="${live ? "live" : "dim"}"${live ? ' data-open="4" tabindex="0" title="Ouvrir l\'article 4"' : ""}><span class="n">Art. ${esc(p.num)}</span><div><b>${esc(short(p.intitule, 140))}</b><span class="meta">${esc(p.statut)}${p.cible ? " · " + esc(short(p.cible, 80)) : ""}</span><span class="meta">${n} ${plural(n, "amendement")} en commission${ad ? ` · ${ad} ${plural(ad, "adopté")}` : ""}${live ? ` · <b class="me">● ${mine} ${plural(mine, "brouillon")} à vous</b> · ouvrir dans l'atelier ↗` : " · non chargé dans la maquette"}</span></div>${strokes}</li>`;
   }).join("");
   const sp = {};
   sp.title = T(`<b>Le plan</b> · ${esc(D.dossier.titre)}`);
   sp.html = `<div class="burst-scroll"><section class="sheet paper planf"><div class="head"><span>${esc(D.dossier.lecture)}</span><span>${esc(D.dossier.uid)}</span></div>`
     + `<div class="bandeau"><span>✔ ${esc(D.dossier.commission)}</span><span>◷ ${esc(D.dossier.seance)}</span><span>⚑ ${esc(D.dossier.delai)}</span><span class="none">Direct : non activé (décision du 8 novembre)</span></div>`
     + `<ol class="plan-ol">${rows}</ol><p class="legend">Un trait de marge par amendement déposé en commission (épaisseur de marge, pas une couleur de carte).</p></section></div>`;
-  sp.hint = "<b>Clic sur l'article 4</b> : l'ouvrir dans « écrire » · <b>poignée du bas</b> : changer de rangement";
+  sp.hint = on("D7") ? "<b>Clic sur l'article 4</b> : l'ouvrir dans l'atelier · <b>pincer</b> : l'article 4 d'étape en étape" : "<b>Clic sur l'article 4</b> : l'ouvrir dans l'atelier";
   return sp;
 }
-const BUILD = {ecrire: buildEcrire, derouleur: buildDerouleur, histoire: buildHistoire, themes: buildThemes, plan: buildPlan};
+const BUILD = {atelier: buildEcrire, reunion: buildDerouleur, dossier: () => curScale() === "plan" ? buildPlan() : buildHistoire(), enjeux: buildThemes};
