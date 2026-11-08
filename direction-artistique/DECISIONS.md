@@ -16,3 +16,17 @@ Page : https://claude.ai/artifact/PFrgx6rYnY51sW5wcn9Ao1 (privée) · source : `
 - Le bordereau donne la grammaire de base : colonnes, filets, numéros de pièce, cases.
 - Sans tampon ni matière, les sorts (adopté, rejeté, tombé, retiré…) doivent se dire par la typographie et les filets (comme le degré C : « ADOPTÉ » en capitales).
 - Quatre objets en accent pour un accent « rare » : il faudra attribuer à chacun un seul rôle, limité.
+
+## Parapheur n° 02 · du motif au signe (transmis le 8 novembre 2026, 23 h 41 UTC)
+Page : https://claude.ai/artifact/L5iPcjLNYgSz6XABgd4Xb5 (privée) · source : `decisions-02/`.
+
+| N° | Objet | Décision de l'utilisateur |
+|---|---|---|
+| 1 | Tracé du bordereau | **Modifié : cadre complet** (toutes les colonnes tracées). Numéro de pièce à la machine (Courier Prime), à gauche. |
+| 2 | Sorts sans tampon | Accord : **B**, mention en capitales espacées et filet de marge (épais adopté, fin rejeté, pointillé tombé, tireté retiré, aucun pour non soutenu et en attente) ; adopté **sans couleur**. |
+| 3 | Rôle des accents | Accord : note = en-tête et ligne « Objet » ; table = noms en capitales, fonction dessous ; parapheur = bordeaux et or pour ma rédaction et la validation ; chemise = cotes à la machine et intercalaires de couleur. |
+| 4 | Corrections apparentes | **Modifié** : ajout bleu, souligné, gras ; suppression barrée rouge ; **passage disputé en pointillé d'encre** (et non plus en filet d'or). |
+
+### Conséquences
+- L'or n'a plus qu'un seul emploi : le parapheur (ma rédaction, la validation). Le passage disputé passe en pointillé d'encre ; son épaisseur selon le nombre de propositions reste à fixer au parapheur 03.
+- Le cadre complet donne aux listes un aspect de formulaire : à vérifier sur des listes longues (densité) lors de l'essai Figma.
