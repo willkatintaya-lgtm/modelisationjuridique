@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Parapheur des décisions 01</title>
+<link rel="stylesheet" href="../portfolio-01/fonts.css">
+<link rel="stylesheet" href="fonts.css">
+<style>
+/* Parapheur des décisions 01 : une note par décision, 1600 × 1000, rendue en JPEG. */
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#777;font-family:"IBM Plex Sans",sans-serif;color:#1a1a1a}
+.board{width:1600px;height:1000px;position:relative;overflow:hidden;margin:0 0 40px;background:#e4e1da}
+.page{position:absolute;left:48px;top:40px;right:48px;bottom:40px;background:#fdfcf9;box-shadow:0 1px 2px #0002,0 8px 24px #0001;display:grid;grid-template-columns:600px 1fr}
+.txt{padding:44px 48px 0 56px;display:flex;flex-direction:column;border-right:1px solid #e3ded3}
+.hd{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6b6457;line-height:1.7}
+.hd b{color:#1a1a1a;font-weight:600}
+h2{font-family:"EB Garamond",serif;font-weight:500;font-size:22px;letter-spacing:.2em;text-transform:uppercase;margin:34px 0 22px}
+h2 span{border-bottom:1px solid #1a1a1a;padding-bottom:4px}
+.obj{font-family:"Source Serif 4",serif;font-size:26px;line-height:1.3;font-weight:600;margin-bottom:22px}
+.obj small{display:block;font-family:"IBM Plex Sans";font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#6b6457;margin-bottom:6px}
+.p{display:grid;grid-template-columns:28px 1fr;font-family:"Source Serif 4",serif;font-size:17px;line-height:1.5;margin-bottom:14px;color:#2a2622}
+.p>span{font-family:"IBM Plex Sans";font-size:12px;font-weight:600;color:#6b6457;padding-top:4px}
+.p b{font-weight:600;color:#1a1a1a}
+.src{font-family:"IBM Plex Sans";font-size:12px;line-height:1.5;color:#6b6457;margin-top:-6px;margin-bottom:14px;padding-left:28px}
+.dec{margin-top:auto;border-top:1px solid #1a1a1a;padding:16px 0 26px;display:flex;align-items:center;gap:34px;font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+.dec .bx{display:inline-block;width:18px;height:18px;border:1.5px solid #1a1a1a;vertical-align:-4px;margin-right:10px}
+.avis{margin-left:auto;font-size:11px;color:#1f3a93;border:1.5px solid #1f3a93;padding:5px 10px;letter-spacing:.14em}
+.vis{position:relative;padding:44px 48px 30px;display:flex;flex-direction:column}
+.vh{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6b6457;margin-bottom:16px}
+.cap{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#6b6457;margin-top:8px}
+.cap b{color:#1a1a1a;font-weight:600}
+.k{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:3px 7px;margin-left:8px;vertical-align:2px}
+.k.ok{background:#1a1a1a;color:#fdfcf9}.k.acc{border:1.5px solid #8a6416;color:#8a6416}.k.no{border:1.5px solid #9a948a;color:#9a948a;text-decoration:line-through}
+.rec{outline:3px solid #1f3a93;outline-offset:6px}
+.mono{font-family:"Courier Prime",monospace}
+
+/* couverture */
+.desk{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,#3a332e,#1d1916 75%)}
+.leather{position:absolute;left:300px;top:110px;width:1000px;height:700px;border-radius:12px;background:#5b1e25;background-image:radial-gradient(#ffffff08 1px,transparent 1.6px),radial-gradient(#00000022 1px,transparent 1.8px);background-size:5px 5px,7px 7px;
+  box-shadow:inset 0 0 0 20px #5b1e25,inset 0 0 0 21px #b8954f,inset 0 0 0 25px #5b1e25,inset 0 0 0 26px #b8954f80,inset 0 0 80px #00000070,0 30px 60px #0000008c}
+.spine{position:absolute;left:0;top:0;bottom:0;width:56px;border-radius:12px 0 0 12px;background:linear-gradient(90deg,#3d1217,#51191f 60%,#5b1e25)}
+.gilt{font-family:"EB Garamond",serif;font-weight:500;letter-spacing:.32em;text-transform:uppercase;text-align:center;background:linear-gradient(180deg,#e2c27c,#a9843f 60%,#d4b46e);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 1px 0 #2a0b0e)}
+.label{position:absolute;left:380px;right:320px;top:430px;background:#f2ead8;padding:22px 30px;box-shadow:0 2px 6px #0006;font-family:"Courier Prime",monospace;color:#1a1a1a}
+.label .l1{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-family:"IBM Plex Sans";color:#6b6457}
+.label .l2{font-size:26px;font-weight:700;margin:4px 0 10px}
+
+/* visuels */
+.covers{display:grid;grid-template-columns:repeat(3,1fr);gap:22px 18px}
+.covers img{width:100%;height:150px;object-fit:cover;display:block}
+.covers .x img{filter:grayscale(1) opacity(.45)}
+.lv{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;flex:1}
+.lvc{display:flex;flex-direction:column}
+.lvc .scene{flex:none;height:300px;position:relative;overflow:hidden}
+#d2 .lv{flex:none}#d2 .mini{left:14px;right:14px;top:40px;bottom:auto;height:200px;padding:16px 14px}#d2 .row{grid-template-columns:30px 1fr 70px;padding:0 6px}#d2 .row>span{display:block}
+.lvc h4{font-size:14px;font-weight:600;margin-top:12px}.lvc p{font-size:12px;color:#6b6457;line-height:1.5;margin-top:4px}
+.row{display:grid;grid-template-columns:34px 1fr 74px;font-size:12px;align-items:center;height:36px;padding:0 10px}
+.stamp{display:inline-block;font-family:"Courier Prime",monospace;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.grain::after{content:"";position:absolute;inset:0;pointer-events:none;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .55 0'/></filter><rect width='300' height='300' filter='url(%23n)'/></svg>");mix-blend-mode:multiply;opacity:.35}
+.bar{height:8px;background:#00000017;margin:0 0 9px}
+.mini{position:absolute;left:28px;right:28px;top:26px;bottom:26px;padding:22px 24px}
+.dosage{display:flex;height:64px;margin:6px 0 22px}
+.spec{border-top:1px solid #e3ded3;padding:18px 0;display:grid;grid-template-columns:150px 1fr;gap:20px;align-items:baseline}
+.spec .r{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6b6457;line-height:1.5}
+.spec .r b{display:block;color:#1a1a1a;font-weight:600}
+.steps{display:flex;flex-direction:column;gap:0}
+.st{display:grid;grid-template-columns:56px 1fr auto;align-items:center;gap:18px;padding:18px 0;border-top:1px solid #e3ded3}
+.st:last-child{border-bottom:1px solid #e3ded3}
+.st .n{font-family:"Courier Prime";font-weight:700;font-size:30px;color:#8a6416}
+.st h4{font-size:16px;font-weight:600}.st p{font-size:13px;color:#6b6457;margin-top:3px;line-height:1.45}
+.st .w{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6b6457}
+.st.now{background:#f4efe2;margin:0 -16px;padding:18px 16px}
+table.rc{width:100%;border-collapse:collapse;font-size:14px}
+table.rc th{text-align:left;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6b6457;font-weight:600;border-bottom:1.5px solid #1a1a1a;padding:8px 10px}
+table.rc td{border-bottom:1px solid #e3ded3;padding:14px 10px;vertical-align:top;line-height:1.45}
+table.rc td.n{font-family:"Courier Prime";font-weight:700;font-size:18px;color:#8a6416;width:40px}
+table.rc td.b{width:150px;white-space:nowrap}
+table.rc .bx{display:inline-block;width:16px;height:16px;border:1.5px solid #1a1a1a;vertical-align:-3px;margin-right:6px}
+</style>
+</head>
+<body>
+
+<!-- couverture -->
+<section class="board" id="d0"><div class="desk"></div>
+  <div class="leather"><div class="spine"></div>
+    <div class="gilt" style="position:absolute;left:56px;right:0;top:170px;font-size:54px">À la signature</div>
+    <div style="position:absolute;left:400px;right:344px;top:262px;height:1px;background:#b8954f99"></div>
+    <div class="gilt" style="position:absolute;left:56px;right:0;top:282px;font-size:17px;letter-spacing:.5em">Direction artistique</div>
+  </div>
+  <div class="label"><div class="l1">Parapheur n° 01 · 8 novembre</div><div class="l2">Six décisions à prendre</div><div class="l1">Une note par décision · avis du cabinet sur chacune · répondre « accord » ou « refus »</div></div>
+</section>
+
+<!-- 1 · objets -->
+<section class="board" id="d1"><div class="page">
+  <div class="txt">
+    <div class="hd"><span><b>Cabinet · direction artistique</b><br>Parapheur n° 01</span><span>Note 1 / 6</span></div>
+    <h2><span>Note pour décision</span></h2>
+    <div class="obj"><small>Objet</small>Quels objets garder pour la suite ?</div>
+    <div class="p"><span>1.</span><div><b>Garder quatre objets comme socle</b> : la note pour le ministre, le bordereau, les tampons, la table de commission. Ils parlent de la feuille, de la liste, de la décision et de la place.</div></div>
+    <div class="p"><span>2.</span><div><b>Garder le parapheur comme accent seulement</b> : son bordeaux et son or, pas son cuir.</div></div>
+    <div class="p"><span>3.</span><div><b>Écarter la chemise d'archive</b> : le kraft et les intercalaires répètent le bordereau, en plus chargé.</div></div>
+    <div class="src">Principe : une matière par rôle. Moins d'objets, c'est moins de signes concurrents, ce qui répond à la saturation constatée.</div>
+    <div class="dec"><span><i class="bx"></i>Accord</span><span><i class="bx"></i>Refus</span><span class="avis">Avis du cabinet : accord</span></div>
+  </div>
+  <div class="vis"><div class="vh">Les six objets de la planche 01</div>
+    <div class="covers">
+      <div><img src="../portfolio-01/couv-04.jpg"><div class="cap"><b>La note</b><span class="k ok">socle</span></div></div>
+      <div><img src="../portfolio-01/couv-02.jpg"><div class="cap"><b>Le bordereau</b><span class="k ok">socle</span></div></div>
+      <div><img src="../portfolio-01/couv-05.jpg"><div class="cap"><b>Tampons et visas</b><span class="k ok">socle</span></div></div>
+      <div><img src="../portfolio-01/couv-03.jpg"><div class="cap"><b>La table</b><span class="k ok">socle</span></div></div>
+      <div><img src="../portfolio-01/couv-01.jpg"><div class="cap"><b>Le parapheur</b><span class="k acc">accent</span></div></div>
+      <div class="x"><img src="../portfolio-01/couv-06.jpg"><div class="cap"><b>La chemise</b><span class="k no">écartée</span></div></div>
+    </div>
+    <div class="cap" style="margin-top:auto;text-transform:none;letter-spacing:0;font-size:13px">Si refus : dites lesquels ajouter ou retirer ; le reste du parapheur s'ajuste.</div>
+  </div>
+</div></section>
+
+<!-- 2 · réalisme -->
+<section class="board" id="d2"><div class="page">
+  <div class="txt">
+    <div class="hd"><span><b>Cabinet · direction artistique</b><br>Parapheur n° 01</span><span>Note 2 / 6</span></div>
+    <h2><span>Note pour décision</span></h2>
+    <div class="obj"><small>Objet</small>Quel degré de réalisme ?</div>
+    <div class="p"><span>1.</span><div>Trois degrés sont possibles, montrés ci-contre sur le même extrait (une ligne de bordereau et un sort).</div></div>
+    <div class="p"><span>2.</span><div><b>Proposition : B, graphique.</b> Aplats, filets nets, typographie ; pas de grain, d'ombre ni de rotation. <b>Une seule exception de matière : le tampon</b>, réservé aux sorts.</div></div>
+    <div class="src">Pourquoi : le trompe-l'œil ajoute du bruit visuel ; Linear : « Don't compete for attention you haven't earned » ; Figma UI3 : « Center your ideas, not the UI ». La matière gardée pour un seul rôle reste lisible comme signal.</div>
+    <div class="dec"><span><i class="bx"></i>Accord</span><span><i class="bx"></i>Refus</span><span class="avis">Avis du cabinet : accord (B)</span></div>
+  </div>
+  <div class="vis"><div class="vh">Le même extrait, trois degrés</div>
+    <div class="lv">
+      <div class="lvc"><div class="scene grain" style="background:#cfc8b8"><div class="mini" style="background:#fbfaf5;transform:rotate(-1.5deg);box-shadow:0 10px 24px #0004">
+        <div class="row mono" style="border:1.5px solid #1c1c24;font-weight:700;font-size:11px">N°<span>DÉSIGNATION</span><span>SORT</span></div>
+        <div class="row mono" style="border:1px solid #1c1c24;border-top:0">12<span><div class="bar" style="margin:0;width:80%"></div></span><span></span></div>
+        <div class="row mono" style="border:1px solid #1c1c24;border-top:0">13<span><div class="bar" style="margin:0;width:60%"></div></span><span></span></div>
+        <div class="stamp" style="position:absolute;right:20px;top:120px;border:3px solid #2f6b3e;color:#2f6b3e;padding:4px 10px;font-size:20px;transform:rotate(-9deg);opacity:.85">Adopté</div>
+      </div></div><h4>A · Matière</h4><p>Grain, ombre, feuille de travers. Le plus évocateur, le plus chargé.</p></div>
+      <div class="lvc rec"><div class="scene" style="background:#efece6"><div class="mini" style="background:#fdfcf9;border:1px solid #d9d2c4">
+        <div class="row" style="border-bottom:1.5px solid #1a1a1a;font-size:10px;font-weight:600;letter-spacing:.12em;color:#6b6457">N°<span>DÉSIGNATION</span><span>SORT</span></div>
+        <div class="row mono" style="border-bottom:1px solid #e3ded3">12<span><div class="bar" style="margin:0;width:80%"></div></span><span></span></div>
+        <div class="row mono" style="border-bottom:1px solid #e3ded3">13<span><div class="bar" style="margin:0;width:60%"></div></span><span></span></div>
+        <div class="stamp" style="position:absolute;right:20px;top:120px;border:2.5px solid #2f6b3e;color:#2f6b3e;padding:4px 10px;font-size:18px;transform:rotate(-6deg)">Adopté</div>
+      </div></div><h4>B · Graphique, tampon seul en matière</h4><p>Aplats et filets ; seul le sort garde un geste.</p></div>
+      <div class="lvc"><div class="scene" style="background:#efece6"><div class="mini" style="background:#fdfcf9;border:1px solid #d9d2c4">
+        <div class="row" style="border-bottom:1.5px solid #1a1a1a;font-size:10px;font-weight:600;letter-spacing:.12em;color:#6b6457">N°<span>DÉSIGNATION</span><span>SORT</span></div>
+        <div class="row" style="border-bottom:1px solid #e3ded3">12<span><div class="bar" style="margin:0;width:80%"></div></span><span style="font-size:10px;font-weight:600;letter-spacing:.1em;color:#2f6b3e">ADOPTÉ</span></div>
+        <div class="row" style="border-bottom:1px solid #e3ded3">13<span><div class="bar" style="margin:0;width:60%"></div></span><span></span></div>
+      </div></div><h4>C · Purement graphique</h4><p>Typographie seule ; plus aucune trace de geste.</p></div>
+    </div>
+    <div class="cap" style="text-transform:none;letter-spacing:0;font-size:13px;margin-top:18px">Si refus : indiquez A ou C.</div>
+  </div>
+</div></section>
+
+<!-- 3 · dosage feutré / sec -->
+<section class="board" id="d3"><div class="page">
+  <div class="txt">
+    <div class="hd"><span><b>Cabinet · direction artistique</b><br>Parapheur n° 01</span><span>Note 3 / 6</span></div>
+    <h2><span>Note pour décision</span></h2>
+    <div class="obj"><small>Objet</small>Feutré ou sec : quel dosage ?</div>
+    <div class="p"><span>1.</span><div>Les objets tirent dans deux sens : <b>le sec</b> (note, bordereau : papier, grilles, encre noire) et <b>le feutré</b> (parapheur : bordeaux, or).</div></div>
+    <div class="p"><span>2.</span><div><b>Proposition : le sec partout, le feutré en accent rare</b>, autour de neuf dixièmes contre un dixième. Le bordeaux et l'or ne marquent que ce qui est solennel : la signature, la marque propre.</div></div>
+    <div class="src">Pourquoi : une couleur d'accent ne fonctionne que si elle reste rare (règle « 60-30-10 » de la décoration, reprise en design d'interface) ; les systèmes publics (GOV.UK, DSFR) gardent un seul accent fort.</div>
+    <div class="dec"><span><i class="bx"></i>Accord</span><span><i class="bx"></i>Refus</span><span class="avis">Avis du cabinet : accord</span></div>
+  </div>
+  <div class="vis"><div class="vh">Proportions proposées, environ</div>
+    <div class="dosage"><div style="flex:62;background:#fdfcf9;border:1px solid #d9d2c4"></div><div style="flex:20;background:#e4e1da"></div><div style="flex:9;background:#1a1a1a"></div><div style="flex:5;background:#5b1e25"></div><div style="flex:4;background:#b8954f"></div></div>
+    <div class="cap" style="margin:-12px 0 26px">papier · bureau · encre · <b>bordeaux</b> · <b>or</b></div>
+    <div style="height:520px;position:relative;background:#e4e1da">
+      <div style="position:absolute;left:150px;top:34px;right:150px;bottom:0;background:#fdfcf9;border:1px solid #d9d2c4;padding:40px 46px">
+        <div style="position:absolute;right:20px;top:-1px;width:26px;height:150px;background:#5b1e25;clip-path:polygon(0 0,100% 0,100% 100%,50% 88%,0 100%)"></div>
+        <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6b6457;line-height:1.7"><b style="color:#1a1a1a">Cabinet</b><br>N° 01</div>
+        <div style="font-family:'EB Garamond';font-size:22px;letter-spacing:.2em;text-transform:uppercase;text-align:center;margin:34px 0 4px">Note pour décision</div>
+        <div style="width:120px;height:1.5px;background:#b8954f;margin:0 auto 30px"></div>
+        <div class="bar" style="height:10px"></div><div class="bar" style="height:10px"></div><div class="bar" style="height:10px;width:88%"></div><div class="bar" style="height:10px;width:64%"></div>
+        <div class="bar" style="height:10px;margin-top:22px"></div><div class="bar" style="height:10px;width:76%"></div>
+      </div>
+    </div>
+    <div class="cap" style="text-transform:none;letter-spacing:0;font-size:13px;margin-top:14px">Une feuille sèche (papier, encre noire) ; le feutré n'apparaît qu'à deux endroits : le signet bordeaux et le filet d'or. Si refus : plus de feutré, ou aucun.</div>
+  </div>
+</div></section>
+
+<!-- 4 · clair / sombre -->
+<section class="board" id="d4"><div class="page">
+  <div class="txt">
+    <div class="hd"><span><b>Cabinet · direction artistique</b><br>Parapheur n° 01</span><span>Note 4 / 6</span></div>
+    <h2><span>Note pour décision</span></h2>
+    <div class="obj"><small>Objet</small>Clair ou sombre ?</div>
+    <div class="p"><span>1.</span><div>L'ancienne direction du projet était un espace sombre où flottaient des feuilles de papier.</div></div>
+    <div class="p"><span>2.</span><div><b>Proposition : clair</b>, un bureau gris chaud et des feuilles de papier. <b>Le papier ne s'inverse jamais</b>, même si un mode sombre est ajouté plus tard.</div></div>
+    <div class="src">Pourquoi : lecture plus rapide et plus juste en texte sombre sur fond clair, surtout en petits corps (Piepenbrock, Mayr, Buchner, <i>Human Factors</i>, 2014) ; les objets retenus sont tous des papiers clairs.</div>
+    <div class="dec"><span><i class="bx"></i>Accord</span><span><i class="bx"></i>Refus</span><span class="avis">Avis du cabinet : accord (clair)</span></div>
+  </div>
+  <div class="vis"><div class="vh">La même feuille, deux bureaux</div>
+    <div class="lv" style="grid-template-columns:1fr 1fr">
+      <div class="lvc rec"><div class="scene" style="background:#e4e1da"><div class="mini" style="background:#fdfcf9;border:1px solid #d9d2c4;left:44px;right:44px;top:40px;bottom:40px">
+        <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6b6457">Alinéa 12</div>
+        <div style="font-family:'Source Serif 4';font-size:16px;line-height:1.6;margin-top:12px;color:#1d1a16">« j) Pour les logements situés en France que le contribuable acquiert, qui font ou ont fait l'objet de travaux concourant à la production ou à la livraison d'un immeuble neuf…</div>
+      </div></div><h4>Clair</h4><p>Le bureau et la feuille dans la même famille de tons.</p></div>
+      <div class="lvc"><div class="scene" style="background:#0b0d12"><div class="mini" style="background:#f4f1e9;left:44px;right:44px;top:40px;bottom:40px;outline:10px solid #ece7db">
+        <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6b6457">Alinéa 12</div>
+        <div style="font-family:'Source Serif 4';font-size:16px;line-height:1.6;margin-top:12px;color:#1d1a16">« j) Pour les logements situés en France que le contribuable acquiert, qui font ou ont fait l'objet de travaux concourant à la production ou à la livraison d'un immeuble neuf…</div>
+      </div></div><h4>Sombre (ancienne direction)</h4><p>Fort contraste entre le fond et la feuille.</p></div>
+    </div>
+    <div class="cap" style="text-transform:none;letter-spacing:0;font-size:13px;margin-top:18px">Si refus : on garde le bureau sombre de l'ancienne direction, les feuilles restent claires.</div>
+  </div>
+</div></section>
+
+<!-- 5 · typographie -->
+<section class="board" id="d5"><div class="page">
+  <div class="txt">
+    <div class="hd"><span><b>Cabinet · direction artistique</b><br>Parapheur n° 01</span><span>Note 5 / 6</span></div>
+    <h2><span>Note pour décision</span></h2>
+    <div class="obj"><small>Objet</small>Quelles voix typographiques ?</div>
+    <div class="p"><span>1.</span><div><b>Proposition : trois voix, chacune avec un seul rôle</b>, ci-contre. Le texte de loi en romain de lecture ; l'interface en linéale ; les numéros et cotes à la machine. Les en-têtes en capitales espacées, comme sur les chevalets.</div></div>
+    <div class="p"><span>2.</span><div>Les deux premières voix sont celles du projet (continuité). La Garamond des planches reste réservée aux planches : elle est dessinée pour le livre, avec un petit œil, et se lit moins bien à l'écran.</div></div>
+    <div class="src">Sources : Source Serif 4 a des tailles optiques pour l'écran (Adobe, licence libre) ; longueur de ligne de 45 à 75 signes (Bringhurst, <i>The Elements of Typographic Style</i>) ; interligne d'au moins 1,5 (WCAG 2.1, critère 1.4.12).</div>
+    <div class="dec"><span><i class="bx"></i>Accord</span><span><i class="bx"></i>Refus</span><span class="avis">Avis du cabinet : accord</span></div>
+  </div>
+  <div class="vis"><div class="vh">Spécimen</div>
+    <div class="spec"><div class="r"><b>Texte de loi</b>Source Serif 4<br>17 / 27</div><div style="font-family:'Source Serif 4';font-size:17px;line-height:27px;max-width:62ch">« j) Pour les logements situés en France que le contribuable acquiert, qui font ou ont fait l'objet de travaux concourant à la production ou à la livraison d'un immeuble neuf, au sens du 2° du 2 du I de l'article 257 du présent code…</div></div>
+    <div class="spec"><div class="r"><b>Interface</b>IBM Plex Sans<br>13 / 20</div><div style="font-size:13px;line-height:20px;color:#2a2622">Concurrents de l'alinéa 12 · 31 amendements · face au texte transmis par le Sénat</div></div>
+    <div class="spec"><div class="r"><b>Numéros, cotes</b>Courier Prime</div><div class="mono" style="font-size:18px;font-weight:700;letter-spacing:.06em">CE732 · CF33 · al. 12 · pièce 003</div></div>
+    <div class="spec"><div class="r"><b>En-têtes</b>IBM Plex Sans<br>capitales espacées</div><div style="font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase">Liste de vote · place 4</div></div>
+    <div class="cap" style="text-transform:none;letter-spacing:0;font-size:13px;margin-top:auto">Si refus : dites quelle voix changer (par exemple la Garamond pour le texte de loi, ou pas de machine à écrire).</div>
+  </div>
+</div></section>
+
+<!-- 6 · suite -->
+<section class="board" id="d6"><div class="page">
+  <div class="txt">
+    <div class="hd"><span><b>Cabinet · direction artistique</b><br>Parapheur n° 01</span><span>Note 6 / 6</span></div>
+    <h2><span>Note pour décision</span></h2>
+    <div class="obj"><small>Objet</small>Quel calendrier jusqu'à la Vigie ?</div>
+    <div class="p"><span>1.</span><div><b>Proposition : quatre étapes avant de transmettre à la Vigie</b>, ci-contre. Chacune revient vers vous sous la même forme : un parapheur, accord ou refus.</div></div>
+    <div class="p"><span>2.</span><div>La Vigie ne reçoit qu'une direction artistique <b>figée et essayée</b>, avec la consigne écrite : <b>forme uniquement</b>, ni structure ni contenu.</div></div>
+    <div class="src">Pourquoi : huit maquettes appliquant une ambiance encore ouverte donneraient huit interprétations ; un essai unique validé sert d'étalon commun.</div>
+    <div class="dec"><span><i class="bx"></i>Accord</span><span><i class="bx"></i>Refus</span><span class="avis">Avis du cabinet : accord</span></div>
+  </div>
+  <div class="vis"><div class="vh">Le parcours</div>
+    <div class="steps">
+      <div class="st now"><div class="n">01</div><div><h4>Ce parapheur</h4><p>Objets, réalisme, dosage, thème, typographie.</p></div><div class="w">maintenant</div></div>
+      <div class="st"><div class="n">02</div><div><h4>Du motif au signe</h4><p>Planches : ce que devient chaque objet retenu, abstrait (couleurs, filets, motifs), sans interface.</p></div><div class="w">parapheur 02</div></div>
+      <div class="st"><div class="n">03</div><div><h4>La direction artistique figée</h4><p>Palette et rôles, corrections apparentes, sorts, rayons et filets ; document et jetons CSS.</p></div><div class="w">parapheur 03</div></div>
+      <div class="st"><div class="n">04</div><div><h4>L'essai sur la maquette Figma</h4><p>Forme uniquement ; captures avant et après.</p></div><div class="w">parapheur 04</div></div>
+      <div class="st"><div class="n">05</div><div><h4>Transmission à la Vigie</h4><p>Les huit maquettes, structure intacte.</p></div><div class="w">après votre accord</div></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- 7 · bordereau de retour -->
+<section class="board" id="d7"><div class="page" style="grid-template-columns:1fr">
+  <div class="txt" style="border:0;padding-right:56px">
+    <div class="hd"><span><b>Cabinet · direction artistique</b><br>Parapheur n° 01</span><span>Bordereau de retour</span></div>
+    <h2><span>Récapitulatif</span></h2>
+    <table class="rc">
+      <tr><th>N°</th><th>Objet</th><th>Proposition du cabinet</th><th>Avis</th></tr>
+      <tr><td class="n">1</td><td>Objets gardés</td><td>Socle : note, bordereau, tampons, table. Parapheur en accent. Chemise écartée.</td><td class="b"><i class="bx"></i>Accord <i class="bx" style="margin-left:14px"></i>Refus</td></tr>
+      <tr><td class="n">2</td><td>Réalisme</td><td>B : graphique ; seul le tampon garde une matière, pour les sorts.</td><td class="b"><i class="bx"></i>Accord <i class="bx" style="margin-left:14px"></i>Refus</td></tr>
+      <tr><td class="n">3</td><td>Dosage</td><td>Sec partout ; bordeaux et or en accent rare, pour ce qui est solennel.</td><td class="b"><i class="bx"></i>Accord <i class="bx" style="margin-left:14px"></i>Refus</td></tr>
+      <tr><td class="n">4</td><td>Thème</td><td>Clair : bureau gris chaud, feuilles de papier ; le papier ne s'inverse jamais.</td><td class="b"><i class="bx"></i>Accord <i class="bx" style="margin-left:14px"></i>Refus</td></tr>
+      <tr><td class="n">5</td><td>Typographie</td><td>Source Serif 4 (loi) · IBM Plex Sans (interface) · Courier Prime (numéros) · capitales espacées (en-têtes).</td><td class="b"><i class="bx"></i>Accord <i class="bx" style="margin-left:14px"></i>Refus</td></tr>
+      <tr><td class="n">6</td><td>Calendrier</td><td>Motif → signe, DA figée, essai Figma, puis la Vigie.</td><td class="b"><i class="bx"></i>Accord <i class="bx" style="margin-left:14px"></i>Refus</td></tr>
+    </table>
+    <div style="margin-top:28px;font-family:'Source Serif 4';font-size:18px;line-height:1.5">Pour répondre, une ligne suffit : <span class="mono" style="background:#f4efe2;padding:2px 8px">tout accord</span> ou par exemple <span class="mono" style="background:#f4efe2;padding:2px 8px">1 accord, 2 refus : C, 3 accord…</span></div>
+  </div>
+</div></section>
+
+</body>
+</html>
