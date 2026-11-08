@@ -1,0 +1,6028 @@
+{
+ "source": "https://www.govinfo.gov/bulkdata/BILLSTATUS/119/hr/BILLSTATUS-119hr1.xml",
+ "amendements": [
+  {
+   "num": "SAMDT 2851",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Aubrac-Bellec",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2850",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Aubrac-Bellec",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2849",
+   "chambre": "Senate",
+   "parent": "SAMDT 2848",
+   "objet": "To strike a provision relating to delayed implementation of the supplemental nutrition assistance program matching funds requirements.",
+   "auteur": "Marchal-Sabatier",
+   "groupe": "D",
+   "actions": [
+    "Amendment SA 2849 not agreed to in Senate by Yea-Nay Vote. 45 - 55. Record Vote Number: 369.",
+    "Amendment SA 2849 proposed by Senator Klobuchar to Amendment SA 2848. (consideration: CR S4072-4073) To strike a provision relating to delayed implementation of the supplemental nutrition assistance program matching funds requirements.",
+    "Senate amendment proposed (on the floor): Amendment SA 2849 proposed by Senator Klobuchar to Amendment SA 2848.",
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 3
+  },
+  {
+   "num": "SAMDT 2848",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "To improve the bill.",
+   "auteur": "Hamadi-Hamadi",
+   "groupe": "R",
+   "actions": [
+    "Amendment SA 2848 agreed to in Senate by Yea-Nay Vote. 51 - 50. Record Vote Number: 370.",
+    "Ruling of the Chair that the point of order raised by Senator Schumer that page 1 lines 3-5 of amendment SA 2848 violates section 313(b)(1)(A) of the Congressional Budget Act sustained by the Chair and the text is stricken.",
+    "Point of order that page 1, lines 3-5 violate section 313(b)(1)(A) of the Congressional Budget Act raised in Senate with respect to amendment SA 2848.",
+    "Amendment SA 2848 proposed by Senator Graham to Amendment SA 2360. (consideration: CR S4072-4073) To improve the bill."
+   ],
+   "votes_nominaux": 3
+  },
+  {
+   "num": "SAMDT 2847",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "Use of revenues from lease payments from Metropolitan Washington Airports for aviation safety improvements and other purposes.",
+   "auteur": "Carvalho-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Amendment SA 2847 not agreed to in Senate by Yea-Nay Vote. 50 - 50. Record Vote Number: 367.",
+    "Amendment SA 2847 proposed by Senator Warner to Amendment SA 2360. (consideration: CR S4070-4071) Use of revenues from lease payments from Metropolitan Washington Airports for aviation safety improvements and other purposes.",
+    "Senate amendment proposed (on the floor): Amendment SA 2847 proposed by Senator Warner to Amendment SA 2360.",
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 3
+  },
+  {
+   "num": "SAMDT 2846",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Isnard-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2845",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Carvalho-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2844",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Bellec-Navarro",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2843",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2842",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Carvalho-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2841",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2840",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2839",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2838",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2837",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Marchal-Esnault",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2836",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Isnard",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2835",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2834",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2833",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Aubrac-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2832",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Aubrac-Bellec",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2831",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Aubrac-Bellec",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2830",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Aubrac-Bellec",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2829",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Aubrac-Bellec",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2828",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Aubrac-Bellec",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2827",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Aubrac-Bellec",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2826",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Aubrac-Bellec",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2825",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Aubrac-Bellec",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2824",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Aubrac-Bellec",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2823",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Aubrac-Bellec",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2822",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Aubrac-Bellec",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2821",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Aubrac-Bellec",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2820",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2819",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2818",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2817",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "To strike a provision relating to limitations on certain Medicaid payments.",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Amendment SA 2817 not agreed to in Senate by Yea-Nay Vote. 48 - 52. Record Vote Number: 361.",
+    "Amendment SA 2817 proposed by Senator Kim to Amendment SA 2360. (consideration: CR S4065) To strike a provision relating to limitations on certain Medicaid payments.",
+    "Senate amendment proposed (on the floor): Amendment SA 2817 proposed by Senator Kim to Amendment SA 2360.",
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 3
+  },
+  {
+   "num": "SAMDT 2816",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Zeller-Rouvier",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2815",
+   "chambre": "Senate",
+   "parent": "SAMDT 2602",
+   "objet": "",
+   "auteur": "Arnaud-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2814",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "To strike the section relating to support for artificial intelligence.",
+   "auteur": "Arnaud-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Amendment SA 2814 agreed to in Senate by Yea-Nay Vote. 99 - 1. Record Vote Number: 363.",
+    "Amendment SA 2814 proposed by Senator Blackburn to Amendment SA 2360. (consideration: CR S4068) To strike the section relating to support for artificial intelligence.",
+    "Senate amendment proposed (on the floor): Amendment SA 2814 proposed by Senator Blackburn to Amendment SA 2360.",
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 3
+  },
+  {
+   "num": "SAMDT 2813",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Aubrac-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2812",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "To amend the Internal Revenue Code of 1986 to apply a 39.6 percent individual income tax rate, and to provide additional funding and specify eligible providers under the Rural Health Transformation Pr",
+   "auteur": "Aubrac-Aubrac",
+   "groupe": "R",
+   "actions": [
+    "Amendment SA 2812 ruled out of order by the chair.",
+    "Motion to waive section 302(f) of the Congressional Budget Act with respect to amendment SA 2812 rejected, not having achieved 60 votes in the affirmative, in Senate by Yea-Nay Vote. 22 - 78. Record Vote Number: 355.",
+    "Point of order that the amendment violates section 302(f) of the Congressional Budget Act raised in Senate with respect to amendment SA 2812.",
+    "Amendment SA 2812 proposed by Senator Collins to Amendment SA 2360. (consideration: CR S4060-4061) To amend the Internal Revenue Code of 1986 to apply a 39.6 percent individual income tax rate, and to provide additional funding and specify eligible providers under the Rural Health Transformation Program."
+   ],
+   "votes_nominaux": 2
+  },
+  {
+   "num": "SAMDT 2811",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2810",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2809",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2808",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2807",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2806",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Rouvier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2805",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Rouvier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2804",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Isnard",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2803",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Isnard",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2802",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Isnard",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2801",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Isnard",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2800",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Isnard",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2799",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Isnard",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2798",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Isnard",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2797",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Isnard",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2796",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Isnard",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2795",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Isnard",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2794",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Isnard",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2793",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Isnard-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2792",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Ollivier-Ollivier",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2791",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2790",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "To advance the effective date of the eligibility verification requirements from January 1, 2028, to January 1, 2027.",
+   "auteur": "Peyrol-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Amendment SA 2790 agreed to in Senate by Voice Vote.",
+    "Amendment SA 2790 proposed by Senator Kennedy to Amendment SA 2360. (consideration: CR S4069) To advance the effective date of the eligibility verification requirements from January 1, 2028, to January 1, 2027.",
+    "Senate amendment proposed (on the floor): Amendment SA 2790 proposed by Senator Kennedy to Amendment SA 2360.",
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2789",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Willem-Tessier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2788",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Willem-Tessier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2787",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Willem-Tessier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2786",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Willem-Tessier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2785",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2784",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Guérin-Guérin",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2783",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Guérin-Guérin",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2782",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Guérin-Guérin",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2781",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Fournel-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2780",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2779",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2778",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Fournel-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2777",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2776",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2775",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "To amend the Internal Revenue Code of 1986 to provide a deduction for expenses of home educators.",
+   "auteur": "Peyrol-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Amendment SA 2275 ruled out of order by the chair.",
+    "Motion to waive all applicable budgetary discipline with respect to amendment SA 2275 rejected, not having achieved 60 votes in the affirmative, in Senate by Yea-Nay Vote. 54 - 46. Record Vote Number: 356.",
+    "Point of order that the amendment violates section 4106 of H. Con. Res. 71, 115th Congress raised in Senate with respect to amendment SA 2775.",
+    "Amendment SA 2775 proposed by Senator Thune for Senator Kennedy to Amendment SA 2360. (consideration: CR S4061-4062) To amend the Internal Revenue Code of 1986 to provide a deduction for expenses of home educators."
+   ],
+   "votes_nominaux": 2
+  },
+  {
+   "num": "SAMDT 2774",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Peyrol-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2773",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2772",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "To prohibit the use of Defense Production Act of 1950 funds without the approval of Congress.",
+   "auteur": "Peyrol-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Amendment SA 2772 ruled out of order by the chair.",
+    "Motion to waive section 313(b)(1)(a) of the Congressional Budget Act with respect to amendment SA 2772 rejected, not having achieved 60 votes in the affirmative, in Senate by Yea-Nay Vote. 42 - 58. Record Vote Number: 352.",
+    "Point of order that the amendment violates section 313(b)(1)(a) of the Congressional Budget Act raised in Senate with respect to amendment SA 2772.",
+    "Amendment SA 2772 proposed by Senator Kennedy to Amendment SA 2360. (consideration: CR S4056-4057) To prohibit the use of Defense Production Act of 1950 funds without the approval of Congress."
+   ],
+   "votes_nominaux": 2
+  },
+  {
+   "num": "SAMDT 2771",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "To strike the provision to defund Planned Parenthood.",
+   "auteur": "Vallat-Delorme",
+   "groupe": "D",
+   "actions": [
+    "Amendment SA 2771 ruled out of order by the chair.",
+    "Motion to waive section 302(f) of the Congressional Budget Act with respect to amendment SA 2771, not having achieved 60 votes in the affirmative, rejected in Senate by Yea-Nay Vote. 49 - 51. Record Vote Number: 344.",
+    "Point of order that the amendment violates to section 302(f) of the Congressional Budget Act raised in Senate with respect to amendment SA 2771.",
+    "Amendment SA 2771 proposed by Senator Murray to Amendment SA 2360. (consideration: CR S4050-4051)"
+   ],
+   "votes_nominaux": 2
+  },
+  {
+   "num": "SAMDT 2770",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Zeller",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2769",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Kervella-Jouve",
+   "groupe": "I",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2768",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Esnault-Guérin",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2767",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2766",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2765",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2764",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2763",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2762",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2761",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Fournel-Rouvier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2760",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Willem-Jouve",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2759",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Bellec-Navarro",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2758",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Isnard-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2757",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Isnard-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2756",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2755",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2754",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Kervella-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2753",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Navarro-Willem",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2752",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Navarro-Willem",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2751",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Carvalho-Bellec",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2750",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Carvalho-Bellec",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2749",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2748",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2747",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2746",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2745",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "To terminate wind and solar credits.",
+   "auteur": "Peyrol-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Amendment SA 2745 not agreed to in Senate by Yea-Nay Vote. 21 - 79. Record Vote Number: 360.",
+    "Amendment SA 2745 proposed by Senator Lee to Amendment SA 2360. (consideration: CR S4064-4065) To terminate wind and solar credits.",
+    "Senate amendment proposed (on the floor): Amendment SA 2745 proposed by Senator Lee to Amendment SA 2360.",
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 3
+  },
+  {
+   "num": "SAMDT 2744",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Fournel-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2743",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Esnault-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2742",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Guérin",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2741",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2740",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2739",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2738",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2737",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2736",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2735",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2734",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2733",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2732",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2731",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2730",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2729",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2728",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Guérin",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2727",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Guérin",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2726",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Kervella-Jouve",
+   "groupe": "I",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2725",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Isnard-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2724",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2723",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "To permanently extend the limitation on individual deductions for certain state and local taxes.",
+   "auteur": "Peyrol-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Proposed amendment SA 2723 withdrawn in Senate.",
+    "Amendment SA 2723 proposed by Senator Kennedy to Amendment SA 2360. (consideration: CR S4072) To permanently extend the limitation on individual deductions for certain state and local taxes.",
+    "Senate amendment proposed (on the floor): Amendment SA 2723 proposed by Senator Kennedy to Amendment SA 2360.",
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2722",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2721",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Arnaud-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2720",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Arnaud-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2719",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "To modify the provision terminating the residential clean energy credit, and for other purposes.",
+   "auteur": "Arnaud-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Amendment SA 2719 not agreed to in Senate by Yea-Nay Vote. 48 - 52. Record Vote Number: 365.",
+    "Amendment SA 2719 proposed by Senator Hickenlooper to Amendment SA 2360. (consideration: CR S4069) To modify the provision terminating the residential clean energy credit, and for other purposes.",
+    "Senate amendment proposed (on the floor): Amendment SA 2719 proposed by Senator Hickenlooper to Amendment SA 2360.",
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 3
+  },
+  {
+   "num": "SAMDT 2718",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2717",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "To maintain parity for wind and solar facilities under the Internal Revenue Code of 1986.",
+   "auteur": "Marchal-Esnault",
+   "groupe": "D",
+   "actions": [
+    "Amendment SA 2717 not agreed to in Senate by Yea-Nay Vote. 47 - 53. Record Vote Number: 364.",
+    "Amendment SA 2717 proposed by Senator Rosen to Amendment SA 2360. (consideration: CR S4068-4069) To maintain parity for wind and solar facilities under the Internal Revenue Code of 1986.",
+    "Senate amendment proposed (on the floor): Amendment SA 2717 proposed by Senator Rosen to Amendment SA 2360.",
+    "Senate amendment not agreed to: Amendment SA 2717 not agreed to in Senate by Yea-Nay Vote. 47 - 53. Record Vote Number: 364."
+   ],
+   "votes_nominaux": 3
+  },
+  {
+   "num": "SAMDT 2716",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Marchal-Esnault",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2715",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Marchal-Esnault",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2714",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Marchal-Esnault",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2713",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Marchal-Esnault",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2712",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Ollivier",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2711",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2710",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Navarro-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2709",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Aubrac-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2708",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Aubrac-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2707",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Aubrac-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2706",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Bellec-Isnard",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2705",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "To reduce the FMAP for the Medicaid expansion to 80 percent in expansion States that provide State-funded coverage to aliens who are not qualified aliens and who are have been charged with or convicte",
+   "auteur": "Fournel-Rouvier",
+   "groupe": "R",
+   "actions": [
+    "Amendment SA 2705 ruled out of order by the chair.",
+    "Motion to waive section 313(b)(1)(D) of the Congressional Budget Act with respect to amendment SA 2705, not having achieved 60 votes in the affirmative, rejected in Senate by Yea-Nay Vote. 56 - 44. Record Vote Number: 342.",
+    "Point of order that the amendment violates section 313(b)(1)(D) of the Congressional Budget Act raised in Senate with respect to amendment SA 2705.",
+    "Amendment SA 2705 proposed by Senator Cornyn to Amendment SA 2360. (consideration: CR S4048-4049)"
+   ],
+   "votes_nominaux": 2
+  },
+  {
+   "num": "SAMDT 2704",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Zeller-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2703",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Zeller-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2702",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Delorme-Isnard",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2701",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Delorme-Isnard",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2700",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Carvalho-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2699",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Carvalho-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2698",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Carvalho-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2697",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Guérin",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2696",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "To amend the Internal Revenue Code of 1986 to extend the enhanced premium tax credits and increase the individual tax rate for taxpayers with income of $10,000,000.",
+   "auteur": "Marchal-Ollivier",
+   "groupe": "D",
+   "actions": [
+    "Amendment SA 2696 ruled out of order by the chair.",
+    "Motion to waive section 302(f) of the Congressional Budget Act with respect to amendment SA 2696 rejected in Senate by Yea-Nay Vote. 47 - 53. Record Vote Number: 339.",
+    "Point of order that the amendment violates section 302(f) of the Congressional Budget Act raised in Senate with respect to amendment SA 2696.",
+    "Amendment SA 2696 proposed by Senator Ossoff to Amendment SA 2360. (consideration: CR S4046-4047)"
+   ],
+   "votes_nominaux": 2
+  },
+  {
+   "num": "SAMDT 2695",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Peyrol-Kervella",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2694",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Isnard-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2693",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Isnard-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2692",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Vallat-Delorme",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2691",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Vallat-Delorme",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2690",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Vallat-Delorme",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2689",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Vallat-Delorme",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2688",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Vallat-Delorme",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2687",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Vallat-Delorme",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2686",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Vallat-Delorme",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2685",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Vallat-Delorme",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2684",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Vallat-Delorme",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2683",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Vallat-Delorme",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2682",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Vallat-Delorme",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2681",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2680",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2679",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2678",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2677",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2676",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2675",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2674",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2673",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2672",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2671",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2670",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Carvalho-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2669",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2668",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2667",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2666",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2665",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2664",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2663",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2662",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2661",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Carvalho-Kervella",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2660",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Navarro-Isnard",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2659",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Zeller-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2658",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Bellec-Navarro",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2657",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Isnard",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2656",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Isnard",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2655",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Isnard",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2654",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Isnard",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2653",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Isnard",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2652",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Vallat-Kervella",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2651",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Vallat-Kervella",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2650",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Vallat-Kervella",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2649",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Vallat-Kervella",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2648",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Vallat-Kervella",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2647",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Vallat-Kervella",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2646",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Vallat-Kervella",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2645",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Vallat-Kervella",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2644",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Vallat-Kervella",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2643",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Vallat-Kervella",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2642",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Bellec-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2641",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Bellec-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2640",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Bellec-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2639",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Bellec-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2638",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Bellec-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2637",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Bellec-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2636",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Bellec-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2635",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Bellec-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2634",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Bellec-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2633",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Bellec-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2632",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Bellec-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2631",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Bellec-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2630",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Bellec-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2629",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Bellec-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2628",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Bellec-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2627",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Bellec-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2626",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Bellec-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2625",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Bellec-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2624",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Bellec-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2623",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2622",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2621",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2620",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2619",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2618",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2617",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Rouvier-Esnault",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2616",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2615",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2614",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2613",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2612",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2611",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2610",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2609",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2608",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Bellec-Lagarde",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2607",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Bellec-Lagarde",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2606",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Bellec-Lagarde",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2605",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Bellec-Lagarde",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2604",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Bellec-Lagarde",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2603",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Isnard",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2602",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "To improve the section providing support for artificial intelligence under the Broadband Equity, Access, and Deployment Program.",
+   "auteur": "Arnaud-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Proposed amendment SA 2602 withdrawn in Senate.",
+    "Amendment SA 2602 proposed by Senator Cruz for Senator Blackburn to Amendment SA 2360. (consideration: CR S4066-4067) To improve the section providing support for artificial intelligence under the Broadband Equity, Access, and Deployment Program.",
+    "Senate amendment proposed (on the floor): Amendment SA 2602 proposed by Senator Cruz for Senator Blackburn to Amendment SA 2360.",
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2601",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2600",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2599",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Arnaud-Sabatier",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2598",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Arnaud-Sabatier",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2597",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Arnaud-Sabatier",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2596",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Arnaud-Sabatier",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2595",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2594",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2593",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Aubrac-Aubrac",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2592",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Fournel-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2591",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Esnault-Guérin",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2590",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Esnault-Guérin",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2589",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Esnault-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2588",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Esnault-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2587",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Esnault-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2586",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Esnault-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2585",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "To strike the appropriations for the Office of Management and Budget.",
+   "auteur": "Vallat-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Amendment SA 2585 not agreed to in Senate by Yea-Nay Vote. 50 - 50. Record Vote Number: 368.",
+    "Amendment SA 2585 proposed by Senator Van Hollen to Amendment SA 2360. (consideration: CR S4071-4072) To strike the appropriations for the Office of Management and Budget.",
+    "Senate amendment proposed (on the floor): Amendment SA 2585 proposed by Senator Van Hollen to Amendment SA 2360.",
+    "Senate amendment not agreed to: Amendment SA 2585 not agreed to in Senate by Yea-Nay Vote. 50 - 50. Record Vote Number: 368."
+   ],
+   "votes_nominaux": 3
+  },
+  {
+   "num": "SAMDT 2584",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Vallat-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2583",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Lagarde-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2582",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Zeller-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2581",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Guérin",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2580",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Guérin",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2579",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Guérin",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2578",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Guérin",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2577",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Guérin",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2576",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Guérin",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2575",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Guérin",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2574",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Guérin",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2573",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Guérin",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2572",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Isnard",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2571",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Isnard",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2570",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Bellec-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2569",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Vallat-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2568",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Vallat-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2567",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Vallat-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2566",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Vallat-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2565",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Vallat-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2564",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "To repeal amendments that terminate certain clean energy credits, and for other purposes.",
+   "auteur": "Carvalho-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Amendment SA 2564 not agreed to in Senate by Yea-Nay Vote. 49 - 51. Record Vote Number: 366.",
+    "Amendment SA 2564 proposed by Senator Shaheen to Amendment SA 2360. (consideration: CR S4069-4070) To repeal amendments that terminate certain clean energy credits, and for other purposes.",
+    "Senate amendment proposed (on the floor): Amendment SA 2564 proposed by Senator Shaheen to Amendment SA 2360.",
+    "Senate amendment not agreed to: Amendment SA 2564 not agreed to in Senate by Yea-Nay Vote. 49 - 51. Record Vote Number: 366."
+   ],
+   "votes_nominaux": 3
+  },
+  {
+   "num": "SAMDT 2563",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Carvalho-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2562",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Carvalho-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2561",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Carvalho-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2560",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Carvalho-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2559",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Kervella-Jouve",
+   "groupe": "I",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2558",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Kervella-Jouve",
+   "groupe": "I",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2557",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Kervella-Jouve",
+   "groupe": "I",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2556",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Carvalho-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2555",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Carvalho-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2554",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Zeller-Jouve",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2553",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2552",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2551",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2550",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2549",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2548",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2547",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2546",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2545",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2544",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2543",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2542",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2541",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2540",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Marchal-Hamadi",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2539",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Isnard-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2538",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Isnard-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2537",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Isnard-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2536",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Isnard-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2535",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Isnard-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2534",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Isnard-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2533",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Kervella-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2532",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Kervella-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2531",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Kervella-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2530",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Willem-Tessier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2529",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Willem-Tessier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2528",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Willem-Tessier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2527",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Willem-Tessier",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2526",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Carvalho-Bellec",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2525",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2524",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Kervella-Delorme",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2523",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Kervella-Delorme",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2522",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Kervella-Delorme",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2521",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Kervella-Delorme",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2520",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Kervella-Delorme",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2519",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Guérin",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2518",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Isnard",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2517",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Isnard",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2516",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Marchal-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2515",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Marchal-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2514",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Marchal-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2513",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Marchal-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2512",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Marchal-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2511",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Marchal-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2510",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Marchal-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2509",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Marchal-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2508",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Marchal-Peyrol",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2507",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Fournel-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2506",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Fournel-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2505",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Fournel-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2504",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Fournel-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2503",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Fournel-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2502",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Fournel-Aubrac",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2501",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Bellec",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2500",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Lagarde-Fournel",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2499",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Willem-Aubrac",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2498",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2497",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2496",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2495",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2494",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2493",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2492",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2491",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2490",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2489",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2488",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2487",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2486",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2485",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2484",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2483",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2482",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2481",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2480",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2479",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Ollivier",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2478",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2477",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2476",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2475",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2474",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Tessier-Carvalho",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2473",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2472",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2471",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2470",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2469",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2468",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2467",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2466",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2465",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2464",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2463",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2462",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2461",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2460",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2459",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2458",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2457",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2456",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2455",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2454",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2453",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2452",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Zeller",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2451",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Zeller",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2450",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Zeller",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2449",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Zeller",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2448",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Sabatier-Zeller",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2447",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Sabatier-Zeller",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2446",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Sabatier-Zeller",
+   "groupe": "D",
+   "actions": [
+    "Amendment SA 2446 ruled out of order by the chair.",
+    "Motion to waive section 313(b)(1)(D) of the Congressional Budget Act with respect to amendment SA 2446, not having achieved 60 votes in the affirmative, rejected in Senate by Yea-Nay Vote. 47 - 53. Record Vote Number: 343.",
+    "Point of order that the amendment violates section 313(b)(1)(d) of the Congressional Budget Act raised in Senate with respect to amendment SA 2446.",
+    "Amendment SA 2446 proposed by Senator Merkley to Amendment SA 2360. (consideration: CR S4049-4050)"
+   ],
+   "votes_nominaux": 2
+  },
+  {
+   "num": "SAMDT 2445",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2444",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Jouve-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2443",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Kervella-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2442",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Ollivier-Ollivier",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2441",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Ollivier-Ollivier",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2440",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Ollivier-Ollivier",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2439",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Ollivier-Ollivier",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2438",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Ollivier-Ollivier",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2437",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Isnard-Isnard",
+   "groupe": "I",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2436",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Isnard-Isnard",
+   "groupe": "I",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2435",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "To cut the price of prescription drugs under Medicare in half and expand Medicare to cover dental, vision, and hearing.",
+   "auteur": "Isnard-Isnard",
+   "groupe": "I",
+   "actions": [
+    "Amendment SA 2435, under the order of 7/1/2025, not having achieved 60 votes in the affirmative, not agreed to in Senate by Yea-Nay Vote. 47 - 53. Record Vote Number: 362.",
+    "Amendment SA 2435 proposed by Senator Sanders to Amendment SA 2360. (consideration: CR S4066) To cut the price of prescription drugs under Medicare in half and expand Medicare to cover dental, vision, and hearing.",
+    "Senate amendment proposed (on the floor): Amendment SA 2435 proposed by Senator Sanders to Amendment SA 2360.",
+    "Senate amendment not agreed to: Amendment SA 2435, under the order of 7/1/2025, not having achieved 60 votes in the affirmative, not agreed to in Senate by Yea-Nay Vote. 47 - 53. Record Vote Number: 362."
+   ],
+   "votes_nominaux": 3
+  },
+  {
+   "num": "SAMDT 2434",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Marchal-Esnault",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2433",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Marchal-Esnault",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2432",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Marchal-Esnault",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2431",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Marchal-Esnault",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2430",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Marchal-Esnault",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2429",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Marchal-Esnault",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2428",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Marchal-Esnault",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2427",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Marchal-Esnault",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2426",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Marchal-Esnault",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2425",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Marchal-Esnault",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2424",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Marchal-Esnault",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2423",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Marchal-Esnault",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2422",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Kervella-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2421",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Kervella-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2420",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Kervella-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2419",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Kervella-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2418",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Isnard",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2417",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Isnard",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2416",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Peyrol-Isnard",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2415",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Kervella-Vallat",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2414",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Delorme-Jouve",
+   "groupe": "D",
+   "actions": [
+    "Amendment SA 2414 ruled out of order by the chair.",
+    "Motion to waive section 302(f) of the Congressional Budget Act with respect to amendment SA 2414, not having achieved 60 votes in the affirmative, rejected in Senate by Yea-Nay Vote. 47 - 53. Record Vote Number: 341.",
+    "Point of order that the amendment violates section 302(f) of the Congressional Budget Act raised in Senate with respect to amendment SA 2414.",
+    "Amendment SA 2414 proposed by Senator Warren to Amendment SA 2360. (consideration: CR S4047-4048)"
+   ],
+   "votes_nominaux": 2
+  },
+  {
+   "num": "SAMDT 2413",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Zeller-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2412",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Zeller-Rouvier",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2411",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Zeller-Rouvier",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2410",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Zeller-Rouvier",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2409",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Zeller-Rouvier",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2408",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Zeller-Rouvier",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2407",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Zeller-Rouvier",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2406",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Zeller-Rouvier",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2405",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Zeller-Rouvier",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2404",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Zeller-Rouvier",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2403",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Vallat",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2402",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Vallat",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2401",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Arnaud-Sabatier",
+   "groupe": "R",
+   "actions": [
+    "Amendment SA 2401 ruled out of order by the chair.",
+    "Motion to waive section 313(b)(1)(d) of the Congressional Budget Act with respect to amendment SA 2401, not having achieved 60 votes in the affirmative, rejected in Senate by Yea-Nay Vote. 53 - 47. Record Vote Number: 345.",
+    "Point of order that the amendment violates section 313(b)(1)(d) of the Congressional Budget Act raised in Senate with respect to amendment SA 2401.",
+    "Amendment SA 2401 proposed by Senator Blackburn to Amendment SA 2360. (consideration: CR S4051-4052)"
+   ],
+   "votes_nominaux": 2
+  },
+  {
+   "num": "SAMDT 2400",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Delorme-Jouve",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2399",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Delorme-Jouve",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2398",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Delorme-Jouve",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2397",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Delorme-Jouve",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2396",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Delorme-Jouve",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2395",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Delorme-Jouve",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2394",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Delorme-Jouve",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2393",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Delorme-Jouve",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2392",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Delorme-Jouve",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2391",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Delorme-Jouve",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2390",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Lagarde-Fournel",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2389",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Delorme-Jouve",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2388",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Delorme-Jouve",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2387",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Lagarde-Fournel",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2386",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Lagarde-Fournel",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2385",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Lagarde-Fournel",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2384",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Lagarde-Fournel",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2383",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Lagarde-Fournel",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2382",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "To eliminate a program of qualified elementary and secondary education scholarships for public, private, or religious schools.",
+   "auteur": "Lagarde-Fournel",
+   "groupe": "D",
+   "actions": [
+    "Amendment SA 2382 not agreed to in Senate by Yea-Nay Vote. 50 - 50. Record Vote Number: 358.",
+    "Amendment SA 2382 proposed by Senator Hirono to Amendment SA 2360. (consideration: CR S4063) To eliminate a program of qualified elementary and secondary education scholarships for public, private, or religious schools.",
+    "Senate amendment proposed (on the floor): Amendment SA 2382 proposed by Senator Hirono to Amendment SA 2360.",
+    "Senate amendment not agreed to: Amendment SA 2382 not agreed to in Senate by Yea-Nay Vote. 50 - 50. Record Vote Number: 358."
+   ],
+   "votes_nominaux": 3
+  },
+  {
+   "num": "SAMDT 2381",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Lagarde-Fournel",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2380",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Peyrol-Guérin",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2379",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Peyrol-Guérin",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2378",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Peyrol-Guérin",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2377",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Peyrol-Guérin",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2376",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Peyrol-Guérin",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2375",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Bellec-Hamadi",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2374",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Zeller-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2373",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Zeller-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2372",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "To end unemployment payments to jobless millionaires.",
+   "auteur": "Zeller-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Amendment SA 2372 agreed to in Senate by Voice Vote.",
+    "Point of order that the amendment violates section 313(b)(1)(e) of the Congressional Budget Act withdrawn in Senate with respect to amendment SA 2372.",
+    "Point of order that the amendment violates section 313(b)(1)(e) of the Congressional Budget Act raised in Senate with respect to amendment SA 2372.",
+    "Amendment SA 2372 proposed by Senator Ernst to Amendment SA 2360. (consideration: CR S4065-4066) To end unemployment payments to jobless millionaires."
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2371",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Zeller-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2370",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Zeller-Carvalho",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2369",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Bellec",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2368",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Bellec",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2367",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Bellec",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2366",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Bellec",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2365",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Bellec",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2364",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Bellec",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2363",
+   "chambre": "Senate",
+   "parent": "SAMDT 2360",
+   "objet": "",
+   "auteur": "Quintin-Bellec",
+   "groupe": "R",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2362",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Lagarde-Fournel",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2361",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "",
+   "auteur": "Lagarde-Fournel",
+   "groupe": "D",
+   "actions": [
+    "Senate amendment submitted"
+   ],
+   "votes_nominaux": 0
+  },
+  {
+   "num": "SAMDT 2360",
+   "chambre": "Senate",
+   "parent": null,
+   "objet": "In the nature of a substitute.",
+   "auteur": "Hamadi-Hamadi",
+   "groupe": "R",
+   "actions": [
+    "Amendment SA 2360, as amended, agreed to in Senate by Yea-Nay Vote. 51 - 50. Record Vote Number: 371.",
+    "Ruling of the Chair sustained.",
+    "Ruling of the Chair sustained",
+    "Motion by Senator Merkley to appeal the ruling of the Chair that amendment SA 2360 does not violate section 313(b)(1)(B) of the CBA is in order, not agreed to by Yea-Nay Vote. 53 - 47. Record Vote Number: 331."
+   ],
+   "votes_nominaux": 7
+  },
+  {
+   "num": "HAMDT 22",
+   "chambre": "House of Representatives",
+   "parent": null,
+   "objet": "Pursuant to the provisions of H. Res. 436, an amendment in the nature of a substitute consisting of the text of Rules Committee Print 119-3, modified by the amendment printed in House Report 119-113, ",
+   "auteur": null,
+   "groupe": null,
+   "actions": [
+    "On agreeing to the Rules amendment (A001) Agreed to without objection.",
+    "Amendment in the nature of a substitute reported by the House Committee on Rules. (consideration: CR H2235-2357; text: CR H2235-2334)",
+    "House amendment offered/reported by: Amendment in the nature of a substitute reported by the House Committee on Rules.",
+    "House amendment considered as adopted: On agreeing to the Rules amendment (A001) Agreed to without objection."
+   ],
+   "votes_nominaux": 0
+  }
+ ],
+ "groupes_fictifs": {
+  "AR": "Avenir rural",
+  "CP": "Centre et progrès",
+  "DC": "Démocratie communale",
+  "ECO": "Écologie urbaine",
+  "LL": "Libertés locales",
+  "NI": "Non-inscrits",
+  "NV": "Nouvelle voie",
+  "PR": "Progrès républicain",
+  "RC": "Rassemblement des communes",
+  "RS": "Renouveau social",
+  "SOL": "Solidarité et logement",
+  "UT": "Union des territoires",
+  "SA": "Alliance des départements",
+  "SB": "Bastion républicain",
+  "SC": "Concorde sénatoriale",
+  "SD": "Démocratie des terroirs",
+  "SE": "Équilibre et territoires",
+  "SF": "Forces sociales",
+  "SG": "Gauche des communes",
+  "SH": "Horizon vert",
+  "SI": "Indépendants du Sénat"
+ },
+ "nota": [
+  "Groupes et personnes rendus fictifs (scripts/fictionnaliser.py) ; textes, sorts et dates réels."
+ ]
+}

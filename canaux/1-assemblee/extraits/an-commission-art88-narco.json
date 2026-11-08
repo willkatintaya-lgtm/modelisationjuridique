@@ -1,0 +1,1360 @@
+{
+ "donnees": [
+  {
+   "article": "1er",
+   "num": "616",
+   "auteur": "Zeller-Esnault",
+   "groupe": "RC",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 1er",
+   "num": "244",
+   "auteur": "Aubrac-Tessier",
+   "groupe": "RC",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "1er bis",
+   "num": "40",
+   "auteur": "Isnard-Esnault",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "2",
+   "num": "110",
+   "auteur": "Guérin-Kervella",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "2",
+   "num": "122",
+   "auteur": "Arnaud-Sabatier",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "2",
+   "num": "594",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "2",
+   "num": "593",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "2",
+   "num": "595",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "2",
+   "num": "764",
+   "auteur": "Willem-Hamadi",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "2",
+   "num": "596",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "2",
+   "num": "891",
+   "auteur": "Willem-Hamadi",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "2",
+   "num": "597",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "2",
+   "num": "674",
+   "auteur": "Peyrol-Bellec",
+   "groupe": "SOL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "2",
+   "num": "598",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "2",
+   "num": "599",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "2",
+   "num": "600",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "2",
+   "num": "601",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "2",
+   "num": "765",
+   "auteur": "Willem-Hamadi",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "2",
+   "num": "602",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": null,
+   "num": "2",
+   "auteur": "850",
+   "groupe": "Gouvernement",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "2",
+   "num": "603",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "2",
+   "num": "604",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "2",
+   "num": "605",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "3",
+   "num": "825",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "3",
+   "num": "678",
+   "auteur": "Carvalho-Hamadi",
+   "groupe": "SOL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "3",
+   "num": "565",
+   "auteur": "Arnaud-Fournel",
+   "groupe": "SOL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "3",
+   "num": "862",
+   "auteur": "Carvalho-Hamadi",
+   "groupe": "SOL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": null,
+   "num": "3",
+   "auteur": "917",
+   "groupe": "Gouvernement",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "3",
+   "num": "767",
+   "auteur": "Willem-Hamadi",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": null,
+   "num": "3",
+   "auteur": "916",
+   "groupe": "Gouvernement",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "3",
+   "num": "964",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 3",
+   "num": "557",
+   "auteur": "Guérin-Isnard",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 3",
+   "num": "570",
+   "auteur": "Aubrac-Carvalho",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 3",
+   "num": "625",
+   "auteur": "Ollivier-Vallat",
+   "groupe": "NV",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 3",
+   "num": "652",
+   "auteur": "Vallat-Isnard",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 3",
+   "num": "766",
+   "auteur": "Willem-Hamadi",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 3",
+   "num": "818",
+   "auteur": "Isnard-Zeller",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": null,
+   "num": "ap. 3",
+   "auteur": "854",
+   "groupe": "Gouvernement",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "3 bis",
+   "num": "805",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "3 bis",
+   "num": "804",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "3 bis",
+   "num": "803",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 3 bis",
+   "num": "934",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 3 bis",
+   "num": "937",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "4",
+   "num": "681",
+   "auteur": "Arnaud-Fournel",
+   "groupe": "SOL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "4",
+   "num": "802",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 4 bis A",
+   "num": "139",
+   "auteur": "Lagarde-Bellec",
+   "groupe": "AR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": null,
+   "num": "4 bis B",
+   "auteur": "784",
+   "groupe": "Gouvernement",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "4 bis C",
+   "num": "745",
+   "auteur": "Delorme-Marchal",
+   "groupe": "CP",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "6",
+   "num": "203",
+   "auteur": "Rouvier-Kervella",
+   "groupe": "RC",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "6",
+   "num": "224",
+   "auteur": "Rouvier-Kervella",
+   "groupe": "RC",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "6",
+   "num": "225",
+   "auteur": "Rouvier-Kervella",
+   "groupe": "RC",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "7 bis",
+   "num": "587",
+   "auteur": "Marchal-Guérin",
+   "groupe": "NV",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "7 bis",
+   "num": "617",
+   "auteur": "Zeller-Esnault",
+   "groupe": "RC",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "8",
+   "num": "618",
+   "auteur": "Zeller-Esnault",
+   "groupe": "RC",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "8",
+   "num": "619",
+   "auteur": "Zeller-Esnault",
+   "groupe": "RC",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 8 bis",
+   "num": "571",
+   "auteur": "Aubrac-Carvalho",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 8 bis",
+   "num": "204",
+   "auteur": "Rouvier-Kervella",
+   "groupe": "RC",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "9",
+   "num": "586",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "9",
+   "num": "582",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "9",
+   "num": "583",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 9",
+   "num": "584",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 9",
+   "num": "172",
+   "auteur": "Arnaud-Delorme",
+   "groupe": "Députés non inscrits",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": null,
+   "num": "ap. 9",
+   "auteur": "920",
+   "groupe": "Gouvernement",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "10",
+   "num": "450",
+   "auteur": "Sabatier-Rouvier",
+   "groupe": "CP",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 10",
+   "num": "173",
+   "auteur": "Arnaud-Delorme",
+   "groupe": "Députés non inscrits",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "10 bis",
+   "num": "585",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 10 bis",
+   "num": "639",
+   "auteur": "Isnard-Zeller",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 10 bis",
+   "num": "630",
+   "auteur": "Isnard-Zeller",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "10 ter",
+   "num": "581",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 10 ter",
+   "num": "932",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "11",
+   "num": "841",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 11",
+   "num": "842",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "12",
+   "num": "881",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "12",
+   "num": "880",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "12 bis",
+   "num": "559",
+   "auteur": "Guérin-Isnard",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "12 bis",
+   "num": "651",
+   "auteur": "Vallat-Isnard",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "12 bis",
+   "num": "820",
+   "auteur": "Isnard-Zeller",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "12 bis",
+   "num": "848",
+   "auteur": "Willem-Hamadi",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": null,
+   "num": "12 bis",
+   "auteur": "878",
+   "groupe": "Gouvernement",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "12 bis",
+   "num": "55",
+   "auteur": "Aubrac-Peyrol",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "13",
+   "num": "843",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 13",
+   "num": "448",
+   "auteur": "Lagarde-Lagarde",
+   "groupe": "UT",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "14",
+   "num": "690",
+   "auteur": "Sabatier-Guérin",
+   "groupe": "SOL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "14",
+   "num": "806",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "14",
+   "num": "807",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "14",
+   "num": "808",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "14",
+   "num": "809",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "14",
+   "num": "810",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "14 bis",
+   "num": "811",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "14 bis",
+   "num": "822",
+   "auteur": "M. PAUGET Éric",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "15",
+   "num": "876",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "15 bis A",
+   "num": "877",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "15 ter",
+   "num": "769",
+   "auteur": "Willem-Hamadi",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "15 ter",
+   "num": "785",
+   "auteur": "Willem-Rouvier",
+   "groupe": "NV",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "15 ter",
+   "num": "907",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "15 quater",
+   "num": "5",
+   "auteur": "Tessier-Navarro",
+   "groupe": "CP",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "15 quater",
+   "num": "635",
+   "auteur": "Isnard-Zeller",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "15 quater",
+   "num": "770",
+   "auteur": "Willem-Hamadi",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "15 quater",
+   "num": "786",
+   "auteur": "Willem-Rouvier",
+   "groupe": "NV",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "15 quater",
+   "num": "844",
+   "auteur": "Hamadi-Lagarde",
+   "groupe": "AR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "15 quater",
+   "num": "908",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "16",
+   "num": "939",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "17",
+   "num": "343",
+   "auteur": "Arnaud-Fournel",
+   "groupe": "SOL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 17",
+   "num": "695",
+   "auteur": "Arnaud-Fournel",
+   "groupe": "SOL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "18",
+   "num": "515",
+   "auteur": "Marchal-Fournel",
+   "groupe": "RC",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "19",
+   "num": "498",
+   "auteur": "Jouve-Aubrac",
+   "groupe": "UT",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "19",
+   "num": "697",
+   "auteur": "Arnaud-Fournel",
+   "groupe": "SOL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "20",
+   "num": "670",
+   "auteur": "Zeller-Esnault",
+   "groupe": "RC",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "20",
+   "num": "772",
+   "auteur": "Willem-Hamadi",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": null,
+   "num": "21",
+   "auteur": "834",
+   "groupe": "Gouvernement",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": null,
+   "num": "21 ter",
+   "auteur": "915",
+   "groupe": "Gouvernement",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 21 ter",
+   "num": "243",
+   "auteur": "Aubrac-Tessier",
+   "groupe": "RC",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 21 ter",
+   "num": "221",
+   "auteur": "Quintin-Kervella",
+   "groupe": "RC",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "22",
+   "num": "610",
+   "auteur": "Marchal-Guérin",
+   "groupe": "NV",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "22",
+   "num": "821",
+   "auteur": "Isnard-Zeller",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "22",
+   "num": "657",
+   "auteur": "Vallat-Isnard",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "22",
+   "num": "737",
+   "auteur": "Guérin-Isnard",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "22",
+   "num": "614",
+   "auteur": "Marchal-Guérin",
+   "groupe": "NV",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "22",
+   "num": "658",
+   "auteur": "Vallat-Isnard",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "22",
+   "num": "671",
+   "auteur": "Guérin-Isnard",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "22",
+   "num": "879",
+   "auteur": "Lagarde-Sabatier",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": null,
+   "num": "22",
+   "auteur": "959",
+   "groupe": "Gouvernement",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "22",
+   "num": "393",
+   "auteur": "Fournel-Sabatier",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "22",
+   "num": "394",
+   "auteur": "Fournel-Sabatier",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "22",
+   "num": "568",
+   "auteur": "Lagarde-Sabatier",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "22",
+   "num": "615",
+   "auteur": "Marchal-Guérin",
+   "groupe": "NV",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "22",
+   "num": "659",
+   "auteur": "Vallat-Isnard",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "22",
+   "num": "736",
+   "auteur": "Guérin-Isnard",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "22",
+   "num": "743",
+   "auteur": "Rouvier-Marchal",
+   "groupe": "ECO",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": null,
+   "num": "22",
+   "auteur": "942",
+   "groupe": "Gouvernement",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "22",
+   "num": "838",
+   "auteur": "Rouvier-Marchal",
+   "groupe": "ECO",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "22",
+   "num": "845",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "22",
+   "num": "395",
+   "auteur": "Fournel-Sabatier",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "22",
+   "num": "620",
+   "auteur": "Marchal-Guérin",
+   "groupe": "NV",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "22",
+   "num": "956",
+   "auteur": "Isnard-Zeller",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "22",
+   "num": "847",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "22",
+   "num": "861",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": null,
+   "num": "ap. 22",
+   "auteur": "921",
+   "groupe": "Gouvernement",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23",
+   "num": "591",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23",
+   "num": "606",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23",
+   "num": "951",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23",
+   "num": "607",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23",
+   "num": "573",
+   "auteur": "Vallat-Isnard",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23",
+   "num": "815",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23",
+   "num": "346",
+   "auteur": "Arnaud-Fournel",
+   "groupe": "SOL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 bis A",
+   "num": "22",
+   "auteur": "Sabatier-Guérin",
+   "groupe": "SOL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 bis A",
+   "num": "182",
+   "auteur": "Marchal-Fournel",
+   "groupe": "RC",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 bis A",
+   "num": "370",
+   "auteur": "Jouve-Aubrac",
+   "groupe": "UT",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 bis A",
+   "num": "535",
+   "auteur": "Willem-Jouve",
+   "groupe": "Renouveau social",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 bis A",
+   "num": "748",
+   "auteur": "Vallat-Rouvier",
+   "groupe": "Députés non inscrits",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 bis A",
+   "num": "952",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 23 bis",
+   "num": "622",
+   "auteur": "Marchal-Guérin",
+   "groupe": "NV",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 ter",
+   "num": "89",
+   "auteur": "Delorme-Jouve",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 ter",
+   "num": "93",
+   "auteur": "Guérin-Kervella",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 ter",
+   "num": "119",
+   "auteur": "Arnaud-Sabatier",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 ter",
+   "num": "464",
+   "auteur": "Peyrol-Zeller",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 ter",
+   "num": "633",
+   "auteur": "Guérin-Willem",
+   "groupe": "NV",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": null,
+   "num": "23 ter",
+   "auteur": "791",
+   "groupe": "Gouvernement",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 quater",
+   "num": "563",
+   "auteur": "Peyrol-Delorme",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": null,
+   "num": "23 quinquies",
+   "auteur": "740",
+   "groupe": "Gouvernement",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 quinquies",
+   "num": "158",
+   "auteur": "Fournel-Sabatier",
+   "groupe": "DC",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 quinquies",
+   "num": "797",
+   "auteur": "Esnault-Guérin",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 quinquies",
+   "num": "801",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 quinquies",
+   "num": "857",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 quinquies",
+   "num": "608",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 quinquies",
+   "num": "798",
+   "auteur": "Willem-Hamadi",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 quinquies",
+   "num": "812",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 quinquies",
+   "num": "609",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 quinquies",
+   "num": "813",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 quinquies",
+   "num": "799",
+   "auteur": "Esnault-Guérin",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 quinquies",
+   "num": "814",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 quinquies",
+   "num": "167",
+   "auteur": "Isnard-Marchal",
+   "groupe": "DC",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 quinquies",
+   "num": "592",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 quinquies",
+   "num": "166",
+   "auteur": "Guérin-Fournel",
+   "groupe": "DC",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "23 quinquies",
+   "num": "734",
+   "auteur": "Peyrol-Bellec",
+   "groupe": "SOL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "24",
+   "num": "611",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "24",
+   "num": "91",
+   "auteur": "Vallat-Peyrol",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "24",
+   "num": "579",
+   "auteur": "Esnault-Guérin",
+   "groupe": "ECO",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "24",
+   "num": "612",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "24",
+   "num": "94",
+   "auteur": "Vallat-Peyrol",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "24",
+   "num": "580",
+   "auteur": "Esnault-Guérin",
+   "groupe": "ECO",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 24",
+   "num": "955",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 24",
+   "num": "99",
+   "auteur": "Vallat-Peyrol",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 24",
+   "num": "613",
+   "auteur": "Esnault-Guérin",
+   "groupe": "ECO",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 24",
+   "num": "627",
+   "auteur": "Marchal-Tessier",
+   "groupe": "NV",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 24",
+   "num": "638",
+   "auteur": "Isnard-Zeller",
+   "groupe": "LL",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 24",
+   "num": "656",
+   "auteur": "Vallat-Isnard",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 24",
+   "num": "739",
+   "auteur": "Guérin-Isnard",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "ap. 24",
+   "num": "860",
+   "auteur": "Tessier-Ollivier",
+   "groupe": "ECO",
+   "avis_art88": "Accepté"
+  },
+  {
+   "article": "Titre",
+   "num": "1",
+   "auteur": "Lagarde-Arnaud",
+   "groupe": "PR",
+   "avis_art88": "Accepté"
+  }
+ ],
+ "groupes_fictifs": {
+  "AR": "Avenir rural",
+  "CP": "Centre et progrès",
+  "DC": "Démocratie communale",
+  "ECO": "Écologie urbaine",
+  "LL": "Libertés locales",
+  "NI": "Non-inscrits",
+  "NV": "Nouvelle voie",
+  "PR": "Progrès républicain",
+  "RC": "Rassemblement des communes",
+  "RS": "Renouveau social",
+  "SOL": "Solidarité et logement",
+  "UT": "Union des territoires",
+  "SA": "Alliance des départements",
+  "SB": "Bastion républicain",
+  "SC": "Concorde sénatoriale",
+  "SD": "Démocratie des terroirs",
+  "SE": "Équilibre et territoires",
+  "SF": "Forces sociales",
+  "SG": "Gauche des communes",
+  "SH": "Horizon vert",
+  "SI": "Indépendants du Sénat"
+ },
+ "nota": [
+  "Groupes et personnes rendus fictifs (scripts/fictionnaliser.py) ; textes, sorts et dates réels."
+ ]
+}

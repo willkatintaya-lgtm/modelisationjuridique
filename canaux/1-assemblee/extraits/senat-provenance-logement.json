@@ -1,0 +1,4230 @@
+{
+ "total": 322,
+ "etapes": {
+  "dépôt, inchangé": 35,
+  "dépôt, retouché sans amendement nommé": 114,
+  "séance": 98,
+  "commission": 73,
+  "nouveau sans amendement nommé": 2
+ },
+ "seance_par_groupe": {
+  "RC": 24.5,
+  "Commission CAE": 13.0,
+  "REPUBLICAINS": 33.583333333333336,
+  "SE": 1.1666666666666665,
+  "SB": 6.916666666666666,
+  "SF": 2.25,
+  "Gouvernement": 16.25,
+  "SG": 0.3333333333333333
+ },
+ "commission_par_auteur": {
+  "Commission FINC": 0.5,
+  "Commission CAE": 71.83333333333333,
+  "SB": 0.3333333333333333,
+  "SG": 0.3333333333333333
+ },
+ "amendements_distincts": 59,
+ "alineas": [
+  {
+   "guid": "1341e9fc-6d51-4dbe-9230-8e500adac6ef",
+   "article": "Article 1er",
+   "pastille": "1",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "I. – I. – Le titre Ier de la loi n° 2003‑710 du 1er août 2003 d’orientation et de programmation pour la ville et la rénovation urbaine est ainsi modifié :"
+  },
+  {
+   "guid": "d8d24824-ce86-4e66-b94c-67fbee979f28",
+   "article": "Article 1er",
+   "pastille": "2",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "1° 1° Après le chapitre II bis, il est inséré un chapitre II ter ainsi rédigé :"
+  },
+  {
+   "guid": "36e1d776-c3ee-407f-a14f-a3e5196c7123",
+   "article": "Article 1er",
+   "pastille": "3",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "« Chapitre II ter"
+  },
+  {
+   "guid": "c93914a4-af9b-4883-9335-f7a98648fbc0",
+   "article": "Article 1er",
+   "pastille": "4",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "« Troisième programme national de renouvellement urbain"
+  },
+  {
+   "guid": "1bf4bffd-34e9-451b-bf6b-13a7967dbefd",
+   "article": "Article 1er",
+   "pastille": "5",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "« Art. 9‑4. – I. – Le troisième programme national de renouvellement urbain concourt à la reconquête républicaine et à la revitalisation globale des quartiers et des centres urbains les plus fragiles ainsi qu’à la réalisation des objectifs définis à "
+  },
+  {
+   "guid": "44d95684-a892-4755-8393-bda8c73fbceb",
+   "article": "Article 1er",
+   "pastille": "6",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "« Les interventions du troisième programme national de renouvellement urbain sont menées selon les mêmes modalités, poursuivent les mêmes finalités et comprennent les mêmes opérations que celles mentionnées aux trois derniers alinéas du I de l’articl"
+  },
+  {
+   "guid": "8d16b96c-e8e6-4461-a9f6-2b2cb2ef5826",
+   "article": "Article 1er",
+   "pastille": "7",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "311",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Arnaud-Delorme",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Les habitants ainsi que des représentants des associations et des acteurs économiques sont associés à la définition, à la mise en œuvre et à l’évaluation des projets de renouvellement urbain. Chaque projet prévoit la mise en place d’une maison du p"
+  },
+  {
+   "guid": "92526ee9-056a-432a-9b40-f3cb74f9400a",
+   "article": "Article 1er",
+   "pastille": "8",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "« Les conventions de projet de renouvellement urbain précisent notamment les engagements pris par l’ensemble des parties signataires sur chacun des axes interministériels suivants :"
+  },
+  {
+   "guid": "f189064b-84c8-4d7a-8897-9eb4449cb7b4",
+   "article": "Article 1er",
+   "pastille": "9",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "« 1° La sécurité et la reconquête républicaine ;"
+  },
+  {
+   "guid": "ad2ffa6b-7913-4fbd-98d0-f933b3092a32",
+   "article": "Article 1er",
+   "pastille": "10",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "« 2° Les services publics du quotidien ;"
+  },
+  {
+   "guid": "d0bf6bd2-7829-446a-8c90-c5c47a1c3662",
+   "article": "Article 1er",
+   "pastille": "11",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "« 3° La revitalisation économique et l’emploi ;"
+  },
+  {
+   "guid": "d57f43e7-5cfa-4cab-babe-8dd7e8367615",
+   "article": "Article 1er",
+   "pastille": "12",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "« 4° La transition écologique et la résilience climatique ;"
+  },
+  {
+   "guid": "71698c02-dec6-4c4a-b125-33428f41192d",
+   "article": "Article 1er",
+   "pastille": "13",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "« 5° La mixité sociale et le désenclavement ;"
+  },
+  {
+   "guid": "e21aee91-6972-4998-99ff-347076b3ba84",
+   "article": "Article 1er",
+   "pastille": "14",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "« 6° L’éducation, la santé et l’accessibilité universelle."
+  },
+  {
+   "guid": "b37d9f46-f107-4979-87f6-73acdb50bfbf",
+   "article": "Article 1er",
+   "pastille": "15",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-85",
+     "texte": "801",
+     "groupe": "Commission FINC",
+     "auteur": "Carvalho-Zeller",
+     "sort": "Adopté"
+    },
+    {
+     "num": "COM-86",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Le ministre chargé de la politique de la ville détermine, par décret, la liste des quartiers répondant aux critères mentionnés au premier alinéa du présent I, sur proposition du conseil d’administration de l’Agence nationale pour la rénovation urba"
+  },
+  {
+   "guid": "1351a813-3e3d-4874-9014-fbb2ed8c818f",
+   "article": "Article 1er",
+   "pastille": "16",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "« II. – Le programme est placé sous la responsabilité du Premier ministre, qui en assure le pilotage stratégique et veille à la cohérence des engagements de chaque ministère. Les ministres chargés de la ville et du logement coordonnent sa mise en œuv"
+  },
+  {
+   "guid": "0bf27a4f-1ab5-47c9-ae8b-9047b95ff7b3",
+   "article": "Article 1er",
+   "pastille": "17",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "« Art. 9‑5. – Les moyens financiers consacrés à la mise en œuvre du troisième programme national de renouvellement urbain sont fixés à 5 milliards d’euros."
+  },
+  {
+   "guid": "acdcc5fa-b4e6-4e08-9249-f0f23f357b55",
+   "article": "Article 1er",
+   "pastille": "18",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "« Ces moyens proviennent, notamment, des recettes mentionnées à l’article 12."
+  },
+  {
+   "guid": "1a32fe4c-94df-4f06-842a-643738e8bfda",
+   "article": "Article 1er",
+   "pastille": "19",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "« Art. 9‑6. – Les articles 8 et 9 s’appliquent, dans les mêmes conditions, au troisième programme national de renouvellement urbain. » ;"
+  },
+  {
+   "guid": "4738fd2d-d7a7-40db-b369-204c6c5a848c",
+   "article": "Article 1er",
+   "pastille": "20",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "2° 2° Après l’article 10‑4, il est inséré un article 10‑5 ainsi rédigé :"
+  },
+  {
+   "guid": "bc8b116a-b5cb-4dae-a3f8-d1372357a6b9",
+   "article": "Article 1er",
+   "pastille": "21",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "« Art. 10‑5. – L’Agence nationale pour la rénovation urbaine contribue à la réalisation du troisième programme national de renouvellement urbain selon les mêmes modalités que celles définies à l’article 10‑3. » ;"
+  },
+  {
+   "guid": "71954c00-ec19-432e-a464-2998bf4c08a8",
+   "article": "Article 1er",
+   "pastille": "22",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "3° 3° L’article 14‑1 est complété par un alinéa ainsi rédigé :"
+  },
+  {
+   "guid": "8d622356-9df8-4551-87e4-da9a9553a2dc",
+   "article": "Article 1er",
+   "pastille": "23",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "« Le présent article est également applicable au troisième programme national de renouvellement urbain. »"
+  },
+  {
+   "guid": "76b734b7-dadb-4f54-9c15-d8cc9fe2b81c",
+   "article": "Article 1er",
+   "pastille": "24",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "II. – II. – Le code de la construction et de l’habitation est ainsi modifié :"
+  },
+  {
+   "guid": "d88717ef-af75-4926-acd6-e75e5b12ebe0",
+   "article": "Article 1er",
+   "pastille": "25",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "1° 1° À la première phrase du premier alinéa des III de l’article L. 353‑15 et II de l’article L. 442‑6 et à la première phrase des articles L. 472‑1‑8 et L. 481‑3, après le mot : « articles », est insérée la référence : « 9‑4, » ;"
+  },
+  {
+   "guid": "8395cbe3-3059-4f99-8324-6f49dd0f6748",
+   "article": "Article 1er",
+   "pastille": "26",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-1",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "2° 2° Au deuxième alinéa de l’article L. 443‑15‑1‑1, après le mot : « urbaine », sont insérés les mots : « ou figurant dans le décret mentionné au dernier alinéa du I de l’article 9‑4 de la loi n° 2003‑710 du 1er août 2003 précitée, »."
+  },
+  {
+   "guid": "d6df9f3a-d36b-49c6-abed-f4307279f967",
+   "article": "Article 1er",
+   "pastille": "27",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "III. – III. – Au premier alinéa de l’article L. 421‑5‑3 du code de l’urbanisme, les mots : « du nouveau programme national de renouvellement urbain définies à l’article 9‑1 » sont remplacés par les mots : « des programmes nationaux de renouvellement "
+  },
+  {
+   "guid": "79af7204-33b9-4a5d-9131-0fee9e3fdfe6",
+   "article": "Article 2",
+   "pastille": "1",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-6",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "I. – I. – Après l’article L. 152‑6‑9 du code de l’urbanisme, il est inséré un article L. 152‑6‑9‑1 ainsi rédigé :"
+  },
+  {
+   "guid": "7e359174-30e5-4a48-bd4e-4b4324866afe",
+   "article": "Article 2",
+   "pastille": "2",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "297",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Navarro-Zeller",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Art. L. 152‑6‑9‑1. – I. – Lorsque des évolutions démographiques ou des développements économiques tels que l’implantation d’activités nouvelles et la réalisation de projets d’intérêt national, et plus particulièrement l’implantation, l’extension ou"
+  },
+  {
+   "guid": "f7b84c0b-36a0-4d7f-b174-7d537cb79477",
+   "article": "Article 2",
+   "pastille": "3",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "422",
+     "texte": "835",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Lorsque l’autorité compétente est un établissement public de coopération intercommunale, la délimitation et l’instauration du périmètre de développement du logement sont soumises à l’avis conforme des communes dont le territoire est, pour une ou pl"
+  },
+  {
+   "guid": "96842a5c-09b6-4355-9dc5-e7c39d1bdfea",
+   "article": "Article 2",
+   "pastille": "4",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "423",
+     "texte": "835",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Lorsque l’insuffisance de l’offre de logements demeure caractérisée dans le territoire, le périmètre de développement du logement peut, avant l’expiration du délai mentionné au premier alinéa du présent I, être renouvelé pour une durée de cinq ans "
+  },
+  {
+   "guid": "31057bde-a706-431d-a3c2-2c78d19fbfbe",
+   "article": "Article 2",
+   "pastille": "5",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-6",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    },
+    {
+     "num": "COM-71",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« II. – Le périmètre de développement du logement peut être constitué de plusieurs espaces discontinus. Il ne peut couvrir l’intégralité du territoire d’une commune."
+  },
+  {
+   "guid": "11b1ca6f-ff1d-41ec-aa4a-c2ac1bd2737d",
+   "article": "Article 2",
+   "pastille": "6",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "« Les espaces retenus dans ce périmètre sont situés au sein des seules zones urbaines ou à urbaniser du plan local d’urbanisme."
+  },
+  {
+   "guid": "0e5c01bf-2a21-4025-b50c-d06b6b8efd21",
+   "article": "Article 2",
+   "pastille": "7",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-6",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« III. – À l’intérieur du périmètre de développement du logement, 1’autorité compétente pour délivrer les autorisations d’urbanisme peut accorder aux projets soumis à de telles autorisations des dérogations au règlement du plan local d’urbanisme ains"
+  },
+  {
+   "guid": "f1dea0f6-af80-4c62-887b-3d42983ec634",
+   "article": "Article 2",
+   "pastille": "8",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "117",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Esnault-Aubrac",
+     "sort": "Adopté"
+    },
+    {
+     "num": "119",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Carvalho-Esnault",
+     "sort": "Adopté"
+    },
+    {
+     "num": "212",
+     "texte": "835",
+     "groupe": "SE",
+     "auteur": "Fournel-Sabatier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Lorsque les projets bénéficient des dérogations mentionnées au premier alinéa du présent III, le maître d’ouvrage, lorsqu’il est tenu de recourir à un architecte en application de l’article L. 431‑1, charge ce dernier d’une mission complète de maît"
+  },
+  {
+   "guid": "07b05a0a-c9b5-463e-949c-e14ca87198bd",
+   "article": "Article 2",
+   "pastille": "9",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-72",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« IV. – Les logements créés dans le périmètre de développement du logement et ayant bénéficié d’une ou de plusieurs dérogations mentionnées au III sont à usage exclusif de résidence principale, au sens de l’article 2 de la loi n° 89‑462 du 6 juillet "
+  },
+  {
+   "guid": "1f9dec4e-6f65-4a93-a7ca-a5b7b14f8e1e",
+   "article": "Article 2",
+   "pastille": "10",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-6",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Les quatrième et avant‑dernier alinéas de l’article L. 151‑14‑1 et l’article L. 481‑4 du présent code sont applicables à ces logements."
+  },
+  {
+   "guid": "6649a098-8e17-4425-85e8-4b46863dcd64",
+   "article": "Article 2",
+   "pastille": "11",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "423",
+     "texte": "835",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« À l’issue d’un délai de dix ans à compter de la publication de la délibération mentionnée au premier alinéa du I du présent article ou, lorsque le périmètre de développement du logement a été renouvelé, à compter de la publication de la délibératio"
+  },
+  {
+   "guid": "002389fd-2b67-487f-9d5c-b22ba305f1e5",
+   "article": "Article 2",
+   "pastille": "12",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "« V. – Par dérogation aux dispositions du code du patrimoine prévoyant l’accord de l’architecte des Bâtiments de France, les autorisations délivrées le sont sur avis simple de l’architecte des Bâtiments de France."
+  },
+  {
+   "guid": "7ced7d0d-4c20-46c1-8b89-0efa70d7816e",
+   "article": "Article 2",
+   "pastille": "13",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "423",
+     "texte": "835",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« VI. – Les III à V sont applicables aux demandes d’autorisation d’urbanisme déposées à compter de la publication et de la transmission à l’autorité administrative compétente de l’État de la délibération mentionnée au premier alinéa du I ou, le cas é"
+  },
+  {
+   "guid": "28d7fd1b-70b9-4544-be44-896c1d16377e",
+   "article": "Article 2",
+   "pastille": "14",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-6",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    },
+    {
+     "num": "COM-9",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "II. – II (nouveau). – La loi n° 89‑462 du 6 juillet 1989 tendant à améliorer les rapports locatifs et portant modification de la loi n° 86‑1290 du 23 décembre 1986 est ainsi modifiée :"
+  },
+  {
+   "guid": "44fa3e1f-8078-4219-8e86-4a323173337b",
+   "article": "Article 2",
+   "pastille": "15",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-6",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "1° 1° Le g de l’article 4 est ainsi modifié :"
+  },
+  {
+   "guid": "329bf932-6c64-46eb-95c3-74d544c6ceb5",
+   "article": "Article 2",
+   "pastille": "16",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-6",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "a) a) À la première phrase, après le mot : « urbanisme », sont insérés les mots : « ou à celle prévue au IV de l’article L. 152‑6‑9‑1 du même code » ;"
+  },
+  {
+   "guid": "a60e7361-d1aa-4b2c-9a95-88ec37330b96",
+   "article": "Article 2",
+   "pastille": "17",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "422",
+     "texte": "835",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "b) b) À la seconde phrase, les mots : « ce dernier » sont remplacés par les mots : « ces deux derniers » et les mots : « du même » sont remplacés par le mot : « dudit » ;"
+  },
+  {
+   "guid": "f5138d8a-a9d9-44cc-979f-144fd7cd783b",
+   "article": "Article 2",
+   "pastille": "18",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-6",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "2° 2° Au h de l’article 7, après le mot : « urbanisme », sont insérés les mots : « ou à celle prévue au IV de l’article L. 152‑6‑9‑1 du même code »."
+  },
+  {
+   "guid": "72cd135f-f8cd-44a3-8601-4c7a83e3fbe0",
+   "article": "Article 2",
+   "pastille": "19",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-6",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    },
+    {
+     "num": "COM-9",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "III. – III (nouveau) – Après le 3° de l’article L. 632‑2‑1 du code du patrimoine, il est inséré un 4° ainsi rédigé :"
+  },
+  {
+   "guid": "b31c6369-9cc9-4479-a3ca-7bdfa4fa87ee",
+   "article": "Article 2",
+   "pastille": "20",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-6",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« 4° Les travaux ou aménagements effectués au sein d’un périmètre de développement du logement mentionné à l’article L. 152‑6‑9‑1 du code de l’urbanisme. »"
+  },
+  {
+   "guid": "7f5a7030-3929-4e14-997b-340ad3c2fe55",
+   "article": "Article 3",
+   "pastille": "1",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-7",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "Dans les conditions prévues à l’article 38 de la Constitution, le Gouvernement est autorisé à prendre par voie d’ordonnance, dans un délai de douze mois à compter de la publication de la présente loi, toute mesure relevant du domaine de la loi portan"
+  },
+  {
+   "guid": "ccebc0e6-e115-4204-96b2-0d2bb2d6995f",
+   "article": "Article 3",
+   "pastille": "2",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-7",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "1° 1° En réduisant le nombre de procédures et en redéfinissant leur champ d’application ;"
+  },
+  {
+   "guid": "58401e81-bb74-4b29-b164-3476df6f906d",
+   "article": "Article 3",
+   "pastille": "3",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-7",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    },
+    {
+     "num": "COM-9",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "1° bis 1° bis (nouveau) En simplifiant et rationalisant leur régime juridique, notamment s’agissant des formalités qui leur sont imposées ;"
+  },
+  {
+   "guid": "1490e2bd-ac67-480c-8b5f-9706d8c8b592",
+   "article": "Article 3",
+   "pastille": "4",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-7",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "2° 2° En mettant en cohérence les dispositions applicables aux documents, plans, programmes, schémas, opérations et projets concernés ainsi que toute autre disposition, y compris relevant d’autres législations, dont la modification serait également r"
+  },
+  {
+   "guid": "97208371-38b5-4805-b36e-b39c572a5a55",
+   "article": "Article 3",
+   "pastille": "5",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "Un projet de loi de ratification est déposé devant le Parlement dans un délai de trois mois à compter de la publication de l’ordonnance."
+  },
+  {
+   "guid": "28c0fb82-6001-475a-8c0e-850c940262e9",
+   "article": "Article 4",
+   "pastille": "1",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "I. – I. – Le 1° du I de l’article 31 du code général des impôts est ainsi modifié :"
+  },
+  {
+   "guid": "dbc04cb6-a2e5-4cdb-9cec-6b54744e118a",
+   "article": "Article 4",
+   "pastille": "2",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "1° 1° À la dernière phrase du troisième alinéa du g, après les mots : « du j », sont insérés les mots : « , dans sa rédaction antérieure à l’article 110 de la loi n° 2023‑1322 du 29 décembre 2023 de finances pour 2024, » ;"
+  },
+  {
+   "guid": "73ff645e-d137-44a4-aa45-4f0ed7b77f12",
+   "article": "Article 4",
+   "pastille": "3",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "209",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Carvalho-Zeller",
+     "sort": "Adopté"
+    },
+    {
+     "num": "409",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Lagarde-Arnaud",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "1° bis 1° bis (nouveau) Le i est ainsi modifié :"
+  },
+  {
+   "guid": "27b1fe14-a437-4d67-8580-d4d1122069f8",
+   "article": "Article 4",
+   "pastille": "4",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "209",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Carvalho-Zeller",
+     "sort": "Adopté"
+    },
+    {
+     "num": "409",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Lagarde-Arnaud",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "a) a) À la fin de la seconde phrase du neuvième alinéa, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ;"
+  },
+  {
+   "guid": "e04de716-e354-46e2-8568-8bc5faa2ba2a",
+   "article": "Article 4",
+   "pastille": "5",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "209",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Carvalho-Zeller",
+     "sort": "Adopté"
+    },
+    {
+     "num": "409",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Lagarde-Arnaud",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "b) b) À la seconde phrase du dixième alinéa, les mots : « , un parent ou un allié jusqu’au deuxième degré inclus » sont supprimés ;"
+  },
+  {
+   "guid": "eedd432a-8af0-4b07-9e7c-45b508bdbf5b",
+   "article": "Article 4",
+   "pastille": "6",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "14",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "c) c) Après le douzième alinéa, sont insérés trois alinéas ainsi rédigés :"
+  },
+  {
+   "guid": "ebd083a9-8318-44d4-9916-ff825cf0f1c4",
+   "article": "Article 4",
+   "pastille": "7",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "14",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Lorsque la société mentionnée au dixième alinéa du présent i est une société civile de placement immobilier, au sens de l’article L. 214‑114 du code monétaire et financier, l’amortissement est déterminé au niveau de la société, immeuble par immeubl"
+  },
+  {
+   "guid": "2ba68e20-98b3-416a-bdcb-270331b890b2",
+   "article": "Article 4",
+   "pastille": "8",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "14",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Pour l’application du présent i aux sociétés civiles de placement immobilier mentionnées à l’article L. 214‑114 du code monétaire et financier, le bénéfice de cette quote‑part d’amortissement est subordonné à l’engagement de l’associé de conserver "
+  },
+  {
+   "guid": "eb334a50-5e8d-4b0c-a7db-9abeb480bbc2",
+   "article": "Article 4",
+   "pastille": "9",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "14",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Par dérogation au dixième alinéa du présent i, la circonstance qu’un logement détenu par une société civile de placement immobilier mentionnée à l’article L. 214‑114 du code monétaire et financier soit loué à un associé ou à un membre de son foyer "
+  },
+  {
+   "guid": "d3331a1f-ca43-4f61-a900-d2d3597ba385",
+   "article": "Article 4",
+   "pastille": "10",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "2° 2° Le j est ainsi modifié :"
+  },
+  {
+   "guid": "57c5254a-941b-42c6-84fb-41352fbffef8",
+   "article": "Article 4",
+   "pastille": "11",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "a) a) Le premier alinéa est remplacé par trois alinéas ainsi rédigés :"
+  },
+  {
+   "guid": "23704e23-7e8d-4f5d-80c5-5821fe55e4e0",
+   "article": "Article 4",
+   "pastille": "12",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "210",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Carvalho-Zeller",
+     "sort": "Adopté"
+    },
+    {
+     "num": "3",
+     "texte": "835",
+     "groupe": "SB",
+     "auteur": "Bellec-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« j) Pour les logements situés en France que le contribuable acquiert, qui font ou ont fait l’objet de travaux concourant à la production ou à la livraison d’un immeuble neuf, au sens du 2° du 2 du I de l’article 257 du présent code, ou pour lesquels"
+  },
+  {
+   "guid": "04908a0d-20c1-4121-8429-650def8c87fa",
+   "article": "Article 4",
+   "pastille": "13",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "210",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Carvalho-Zeller",
+     "sort": "Adopté"
+    },
+    {
+     "num": "3",
+     "texte": "835",
+     "groupe": "SB",
+     "auteur": "Bellec-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« La déduction prévue au premier alinéa du présent j est applicable aux locaux situés en France que le contribuable acquiert et qui font ou ont fait l’objet de travaux de transformation en logement, lorsque ces locaux étaient, avant les travaux, affe"
+  },
+  {
+   "guid": "902e1294-3d87-47a8-8583-f8b5c00d18d2",
+   "article": "Article 4",
+   "pastille": "14",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "210",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Carvalho-Zeller",
+     "sort": "Adopté"
+    },
+    {
+     "num": "3",
+     "texte": "835",
+     "groupe": "SB",
+     "auteur": "Bellec-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Lorsque les travaux d’amélioration ou de transformation ont été effectués avant l’acquisition du logement ou du local ou lorsque le bien est acquis dans le cadre d’un contrat de vente d’immeuble à rénover défini aux articles L. 262‑1 à L. 262‑11 du"
+  },
+  {
+   "guid": "86dcddf8-f46c-46dc-a6cb-371208f22f91",
+   "article": "Article 4",
+   "pastille": "15",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "b) b) À la première phrase du deuxième alinéa, les mots : « de le louer » sont remplacés par les mots : « de louer le logement nu à titre de résidence principale » ;"
+  },
+  {
+   "guid": "328ae82d-7e7e-4af2-9777-685c9a44f9c2",
+   "article": "Article 4",
+   "pastille": "16",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "c) c) Au sixième alinéa, le mot : « troisième » est remplacé par le mot : « sixième » ;"
+  },
+  {
+   "guid": "b5ebb36c-ab26-425a-a928-1cbe7ef87108",
+   "article": "Article 4",
+   "pastille": "17",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "209",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Carvalho-Zeller",
+     "sort": "Adopté"
+    },
+    {
+     "num": "409",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Lagarde-Arnaud",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "c bis) c bis) (nouveau) À la fin de la seconde phrase du huitième alinéa, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ;"
+  },
+  {
+   "guid": "b1b0ef72-bf1b-4581-93e6-4b405adfd47a",
+   "article": "Article 4",
+   "pastille": "18",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "209",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Carvalho-Zeller",
+     "sort": "Adopté"
+    },
+    {
+     "num": "409",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Lagarde-Arnaud",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "d) d) Le neuvième alinéa est ainsi modifié :"
+  },
+  {
+   "guid": "a132834d-6209-4ce9-bcde-943695e80532",
+   "article": "Article 4",
+   "pastille": "19",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "14",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "– à la première phrase, le mot : « deuxième » est remplacé par le mot : « cinquième » ;"
+  },
+  {
+   "guid": "d3767f26-143b-4181-b682-013b5951d397",
+   "article": "Article 4",
+   "pastille": "20",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "14",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    },
+    {
+     "num": "210",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Carvalho-Zeller",
+     "sort": "Adopté"
+    },
+    {
+     "num": "3",
+     "texte": "835",
+     "groupe": "SB",
+     "auteur": "Bellec-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "– à la seconde phrase, les mots : « , un parent ou un allié jusqu’au deuxième degré inclus » sont supprimés ;"
+  },
+  {
+   "guid": "7c5197c0-c24a-468f-9aef-9e02a5c515a9",
+   "article": "Article 4",
+   "pastille": "21",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "14",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "d bis) d bis) (nouveau) Après le onzième alinéa, sont insérés trois alinéas ainsi rédigés :"
+  },
+  {
+   "guid": "eb3e6dad-7f60-4a63-afaa-6f3e4f74c731",
+   "article": "Article 4",
+   "pastille": "22",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "14",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Lorsque la société mentionnée au douzième alinéa du présent j est une société civile de placement immobilier, au sens de l’article L. 214‑114 du code monétaire et financier, l’amortissement est déterminé au niveau de la société, immeuble par immeub"
+  },
+  {
+   "guid": "427dde4a-06ff-4c76-8b4f-4f02364fa704",
+   "article": "Article 4",
+   "pastille": "23",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "14",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Pour l’application du présent j aux sociétés civiles de placement immobilier mentionnées à l’article L. 214‑114 du code monétaire et financier, le bénéfice de cette quote‑part d’amortissement est subordonné à l’engagement de l’associé de conserver "
+  },
+  {
+   "guid": "86041fbc-2ad4-4e24-9851-077259c9fca9",
+   "article": "Article 4",
+   "pastille": "24",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "14",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Par dérogation au douzième alinéa du présent j, la circonstance qu’un logement détenu par une société civile de placement immobilier mentionnée à l’article L. 214‑114 du code monétaire et financier soit loué à un associé ou à un membre de son foyer"
+  },
+  {
+   "guid": "f67d4f7c-5976-4678-aee2-572f85f340ff",
+   "article": "Article 4",
+   "pastille": "25",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "e) e) Au dernier alinéa, après les mots : « s’applique », sont insérés les mots : « , dans sa rédaction en vigueur à la date d’acquisition, » ;"
+  },
+  {
+   "guid": "57774778-caec-4f41-a8fe-7d0b4dc2bfe0",
+   "article": "Article 4",
+   "pastille": "26",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "3° 3° À la fin du dernier alinéa du l, les mots : « aux j et k » sont remplacés par les mots : « au j, dans sa rédaction antérieure à l’article 110 de la loi n° 2023‑1322 du 29 décembre 2023 de finances pour 2024, et au k » ;"
+  },
+  {
+   "guid": "63ed79fa-e30f-4a57-8a0a-f59adea4ab69",
+   "article": "Article 4",
+   "pastille": "27",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "4° 4° La deuxième phrase du cinquième alinéa du m est complétée par les mots : « , dans sa rédaction antérieure à l’article 110 de la loi n° 2023‑1322 du 29 décembre 2023 de finances pour 2024 »."
+  },
+  {
+   "guid": "69f3d91e-f418-4cb0-b89a-bf5866bc25b5",
+   "article": "Article 4",
+   "pastille": "28",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "II. – II. – Le I du présent article s’applique à compter du lendemain de la publication de la présente loi."
+  },
+  {
+   "guid": "49da4061-0a35-4d82-9add-66f710456b87",
+   "article": "Article 4",
+   "pastille": "29",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "209",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Carvalho-Zeller",
+     "sort": "Adopté"
+    },
+    {
+     "num": "409",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Lagarde-Arnaud",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "III. – III (nouveau). – La perte de recettes résultant pour l’État de l’inclusion des locations consenties aux parents ou alliés, jusqu’au deuxième degré, dans le dispositif « Relance logement » est compensée, à due concurrence, par la création d’une"
+  },
+  {
+   "guid": "54543161-0a7d-48aa-bd2a-085348922a98",
+   "article": "Article 4",
+   "pastille": "30",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "210",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Carvalho-Zeller",
+     "sort": "Adopté"
+    },
+    {
+     "num": "3",
+     "texte": "835",
+     "groupe": "SB",
+     "auteur": "Bellec-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "IV. – IV(nouveau). – La perte de recettes résultant pour l’État de la suppression de la quotité de travaux nécessaires pour bénéficier du dispositif « Relance logement » au profit d’un critère unique de performance énergétique et de la condition obli"
+  },
+  {
+   "guid": "0d848c17-ac6d-4e76-88e5-7fb5e38b737d",
+   "article": "Article 4 bis",
+   "pastille": "1",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "263",
+     "texte": "835",
+     "groupe": "SF",
+     "auteur": "Hamadi-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "Après le 2° du B du I de l’article 1406 bis du code général des impôts, il est inséré un 3° ainsi rédigé :"
+  },
+  {
+   "guid": "41b73c23-319e-45d1-945c-c22841fd148c",
+   "article": "Article 4 bis",
+   "pastille": "2",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "263",
+     "texte": "835",
+     "groupe": "SF",
+     "auteur": "Hamadi-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« 3° Une commune située dans des zones insulaires métropolitaines sans lien permanent avec le continent. »"
+  },
+  {
+   "guid": "0cce4b0f-e4a8-47b2-b74d-96c9ee9514ab",
+   "article": "Article 4 ter",
+   "pastille": "1",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "46",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Delorme-Peyrol",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "I. – I. – Le I de l’article 1406 bis du code général des impôts est complété par un D ainsi rédigé :"
+  },
+  {
+   "guid": "238ba70b-4aa0-4887-90e3-927e081a3451",
+   "article": "Article 4 ter",
+   "pastille": "2",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "46",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Delorme-Peyrol",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« D. – Pour l’application du B du présent I dans les collectivités régies par l’article 73 de la Constitution, la qualification des communes situées en zone caractérisée par un déséquilibre entre l’offre et la demande de logements est appréciée au re"
+  },
+  {
+   "guid": "e82a1d95-0259-4d5e-9eaa-e6c5cfe8fd48",
+   "article": "Article 4 ter",
+   "pastille": "3",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "46",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Delorme-Peyrol",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« 1° Du taux de vacance structurelle du parc de logements ;"
+  },
+  {
+   "guid": "7fa354b4-c771-4ddb-b345-f45c625a879f",
+   "article": "Article 4 ter",
+   "pastille": "4",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "46",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Delorme-Peyrol",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« 2° De la part de logements durablement inoccupés en raison de situations d’indivision successorale ;"
+  },
+  {
+   "guid": "76f9fbe7-cb62-4ac6-9875-5210ffcfa4a0",
+   "article": "Article 4 ter",
+   "pastille": "5",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "46",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Delorme-Peyrol",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« 3° De l’état du parc immobilier et de la proportion de logements dégradés, insalubres ou indignes, impropres à l’habitation ;"
+  },
+  {
+   "guid": "cc45def4-e094-4ee4-9abb-81c0ab590b54",
+   "article": "Article 4 ter",
+   "pastille": "6",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "46",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Delorme-Peyrol",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« 4° Des dynamiques démographiques et des tensions observées sur le marché locatif local."
+  },
+  {
+   "guid": "5106257e-1636-4957-9b9f-4d404a3bd7d7",
+   "article": "Article 4 ter",
+   "pastille": "7",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "46",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Delorme-Peyrol",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Un décret détermine, pour chaque département, une méthodologie d’identification et de détermination des zones d’application de la taxe, fondée sur les données produites par l’Institut national de la statistique et des études économiques et les obse"
+  },
+  {
+   "guid": "dbdd931b-c9ce-4af3-afe8-c3cff75ee938",
+   "article": "Article 4 ter",
+   "pastille": "8",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "46",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Delorme-Peyrol",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "II. – II. – La perte de recettes résultant pour l’État du I du présent article est compensée, à due concurrence, par la création d’une taxe additionnelle à l’accise sur les tabacs prévue au chapitre IV du titre Ier du livre III du code des imposition"
+  },
+  {
+   "guid": "950558c9-8af0-4ec4-a7cf-40112d99582d",
+   "article": "Article 5",
+   "pastille": "1",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "I. – I. – Le code de l’urbanisme est ainsi modifié :"
+  },
+  {
+   "guid": "d783d2f1-f2b5-437e-a489-ab6f0b322e8d",
+   "article": "Article 5",
+   "pastille": "2",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "1° 1° Avant le dernier alinéa de l’article L. 328‑3, il est inséré un alinéa ainsi rédigé :"
+  },
+  {
+   "guid": "3eaa4a61-0e67-4c6b-b315-88a843580bfe",
+   "article": "Article 5",
+   "pastille": "3",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-8",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Dès lors que l’intervention de Paris La Défense sur des ouvrages, espaces publics et services d’intérêt général ne lui appartenant pas ou n’ayant pas fait l’objet d’une convention de mise à disposition est nécessaire pour assurer un entretien et un"
+  },
+  {
+   "guid": "d8521dfe-c302-4d55-a5f8-dea91d06469c",
+   "article": "Article 5",
+   "pastille": "4",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "2° 2° L’article L. 328‑6 est ainsi modifié :"
+  },
+  {
+   "guid": "d3947a8e-1020-43b3-8821-6b7410d61b1a",
+   "article": "Article 5",
+   "pastille": "5",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "a) a) Après la dernière occurrence du mot : « à », la fin du premier alinéa est ainsi rédigée : « créer des filiales et à acquérir ou céder des participations dans des sociétés, groupements ou organismes. » ;"
+  },
+  {
+   "guid": "ae2a6359-4bf9-4c80-9080-bfe6cdb342cd",
+   "article": "Article 5",
+   "pastille": "6",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "b) b) Les deuxième à avant‑dernier alinéas sont supprimés ;"
+  },
+  {
+   "guid": "5741621c-06ca-4ca6-bb93-2e11789bf9a9",
+   "article": "Article 5",
+   "pastille": "7",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "c) c) À la fin du dernier alinéa, les mots : « aux 1° et 2° du présent article » sont remplacés par les mots : « à l’article L. 327‑1 et aux articles L. 1521‑1, L. 1531‑1 et L. 1541‑1 du code général des collectivités territoriales » ;"
+  },
+  {
+   "guid": "13316a57-f21f-49a3-9c18-da37bc8f38b6",
+   "article": "Article 5",
+   "pastille": "8",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "3° 3° À la seconde phrase du dixième alinéa de l’article L. 312‑5 et à la première phrase du second alinéa du II de l’article L. 332‑11‑3, le mot : « quinze » est remplacé par le mot : « vingt » et à l’article L. 332‑11‑4, le mot : « dix » est rempla"
+  },
+  {
+   "guid": "6d729547-c194-4ce9-8315-2456a28fede7",
+   "article": "Article 5",
+   "pastille": "9",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "II. – II. – À titre expérimental et pour une durée de cinq ans à compter de la promulgation de la présente loi, le porteur d’un projet de construction ou de transformation d’une construction existante située dans la limite du territoire couvert par l"
+  },
+  {
+   "guid": "f0d42bed-1ca4-479b-bf9e-030c7f9924d7",
+   "article": "Article 5",
+   "pastille": "10",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "Le certificat de projet indique les régimes, décisions et procédures applicables au projet à la date de cette demande, les conditions de recevabilité et de régularité du dossier, les autorités compétentes pour prendre les décisions ou délivrer les au"
+  },
+  {
+   "guid": "938b6338-6cd9-4001-9515-93b0b075cc88",
+   "article": "Article 5",
+   "pastille": "11",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "Il peut également indiquer les difficultés de nature technique ou juridique identifiées qui seraient susceptibles de faire obstacle à la réalisation du projet."
+  },
+  {
+   "guid": "bcc4862c-8b39-425b-9bf8-20bc4c6c6a03",
+   "article": "Article 5",
+   "pastille": "12",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "Le porteur de projet peut présenter, conjointement à sa demande de certificat de projet, une demande d’examen au cas par cas prévu au IV de l’article L. 122‑1 du code de l’environnement, une demande d’avis prévu à l’article L. 122‑1‑2 du même code, o"
+  },
+  {
+   "guid": "5c7c188d-fc65-413a-b487-30c2847c1d9c",
+   "article": "Article 5",
+   "pastille": "13",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "Ces demandes sont, s’il y a lieu, transmises à l’autorité administrative compétente pour statuer."
+  },
+  {
+   "guid": "bd9d1dff-35ea-463e-a487-7682ec863962",
+   "article": "Article 5",
+   "pastille": "14",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-73",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "Lorsqu’une demande d’autorisation porte sur un projet de construction ou de transformation d’une construction existante et qu’elle est déposée dans un délai de trois ans à compter de la délivrance du certificat de projet, elle est instruite conformém"
+  },
+  {
+   "guid": "1d2f4e3e-ebc8-4525-ae3e-7a2ce5c2f286",
+   "article": "Article 5",
+   "pastille": "15",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-73",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "Le bénéficiaire d’un certificat de projet peut, à tout moment, renoncer au bénéfice des dispositions du sixième alinéa du présent II, pour l’ensemble des procédures restant à mettre en œuvre et des décisions restant à prendre, nécessaires à la réalis"
+  },
+  {
+   "guid": "90477810-4869-4509-b6a5-9f593ee6430f",
+   "article": "Article 5",
+   "pastille": "16",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "Les modalités d’application du présent II, notamment les conditions dans lesquelles le dossier de demande de certificat de projet est présenté au représentant de l’État dans le département, sont définies par décret en Conseil d’État."
+  },
+  {
+   "guid": "7cda211b-ca8a-42ea-97e0-b8a1ebaa5747",
+   "article": "Article 5",
+   "pastille": "17",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "Six mois avant le terme de la période d’expérimentation, le Gouvernement remet au Parlement un rapport évaluant la mise en œuvre du présent II."
+  },
+  {
+   "guid": "669746e4-f070-4f52-b3dd-f4eb5ecc1c43",
+   "article": "Article 6",
+   "pastille": "1",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "I. – I. – La loi n° 89‑462 du 6 juillet 1989 tendant à améliorer les rapports locatifs et portant modification de la loi n° 86‑1290 du 23 décembre 1986 est ainsi modifiée :"
+  },
+  {
+   "guid": "7d478c78-1afb-4480-9e94-61f269861075",
+   "article": "Article 6",
+   "pastille": "2",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-5",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "1° A 1° A (nouveau) À l’article 2, au 1°, après le mot : « alinéa », sont insérés les mots : « du I » et, au 3°, après le mot : « alinéas », sont insérés les mots : « du I » ;"
+  },
+  {
+   "guid": "33df1605-0054-4769-bff2-fe00afcbb5e4",
+   "article": "Article 6",
+   "pastille": "3",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "1° 1° L’article 6 est ainsi modifié :"
+  },
+  {
+   "guid": "74d0f5e0-e0a7-4862-b643-3ada2be70eb5",
+   "article": "Article 6",
+   "pastille": "4",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "a) a) Le premier alinéa est ainsi modifié :"
+  },
+  {
+   "guid": "d80ef71b-80c6-423a-9834-49ba6f83d68a",
+   "article": "Article 6",
+   "pastille": "5",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "– au début, est ajoutée la mention : « I. – » ;"
+  },
+  {
+   "guid": "dd5fd799-fe89-4495-bdcc-6c379c273d3e",
+   "article": "Article 6",
+   "pastille": "6",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "– la seconde phrase est supprimée ;"
+  },
+  {
+   "guid": "3989f934-c7b1-457f-885f-906b8dea0ec0",
+   "article": "Article 6",
+   "pastille": "7",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "b) b) Au début du troisième alinéa, est ajoutée la mention : « II. – » ;"
+  },
+  {
+   "guid": "dd99e542-6e2a-4d1c-97e6-5ab055eec9cf",
+   "article": "Article 6",
+   "pastille": "8",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "c) c) Le dixième alinéa est ainsi rédigé :"
+  },
+  {
+   "guid": "bc7ed695-c8d4-4967-a35e-1652ef2f9574",
+   "article": "Article 6",
+   "pastille": "9",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-3",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Tout logement qui fait l’objet d’un contrat de location en cours à l’une des échéances ainsi fixées est considéré comme non décent s’il n’atteint pas le niveau de performance exigible à compter de la date de renouvellement ou de reconduction tacite"
+  },
+  {
+   "guid": "eea86b19-1245-42b5-b1bd-9b6a170d22c7",
+   "article": "Article 6",
+   "pastille": "10",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "d) d) Après le même dixième alinéa, il est inséré un III ainsi rédigé :"
+  },
+  {
+   "guid": "f2a3dd78-6195-4ef8-a73c-0734ff4d88fc",
+   "article": "Article 6",
+   "pastille": "11",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "« III. – Par dérogation au II du présent article, le logement est considéré comme décent au titre de la performance énergétique lorsqu’au moins une des conditions suivantes est remplie :"
+  },
+  {
+   "guid": "b73ec989-77ae-4bb9-9362-f3a42ebe7f8a",
+   "article": "Article 6",
+   "pastille": "12",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "301",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Arnaud-Delorme",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« 1° Les travaux permettant d’atteindre le niveau de performance exigible s’étant révélés impossibles en raison de contraintes techniques, architecturales ou patrimoniales ou de coûts manifestement disproportionnés par rapport à la valeur du bien, ou"
+  },
+  {
+   "guid": "1e779b83-5c3e-46dc-bba1-7b19bd67d1da",
+   "article": "Article 6",
+   "pastille": "13",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "301",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Arnaud-Delorme",
+     "sort": "Adopté"
+    },
+    {
+     "num": "315",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Arnaud-Delorme",
+     "sort": "Adopté"
+    },
+    {
+     "num": "350",
+     "texte": "835",
+     "groupe": "SE",
+     "auteur": "Peyrol-Fournel",
+     "sort": "Adopté"
+    },
+    {
+     "num": "412",
+     "texte": "835",
+     "groupe": "Gouvernement",
+     "auteur": null,
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« 2° Les travaux permettant d’atteindre le niveau de performance exigible ayant été refusés par une résolution votée en assemblée générale des copropriétaires datant de moins de dix‑huit mois, malgré les diligences du bailleur en vue de l’adoption de"
+  },
+  {
+   "guid": "130376a7-d653-4842-9286-26dbbe4efcf4",
+   "article": "Article 6",
+   "pastille": "14",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "380",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Tessier-Carvalho",
+     "sort": "Adopté"
+    },
+    {
+     "num": "381",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Tessier-Carvalho",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« 3° Le logement fait partie d’un immeuble relevant du statut de la copropriété et le syndicat de copropriétaires a conclu un contrat de travaux dont l’exécution totale est de nature à permettre au logement ou à l’immeuble concerné d’atteindre le niv"
+  },
+  {
+   "guid": "88d67743-6fb2-4bb0-ac89-7732b7e0e26a",
+   "article": "Article 6",
+   "pastille": "15",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "381",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Tessier-Carvalho",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« 4° Le logement est une maison individuelle ou fait partie d’un immeuble collectif et le propriétaire a conclu un contrat de travaux dont l’exécution totale est de nature à permettre au logement concerné d’atteindre le niveau de performance exigible"
+  },
+  {
+   "guid": "e5eea6ba-1d2e-48ab-9ac5-df20e033cdd3",
+   "article": "Article 6",
+   "pastille": "16",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "382",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Tessier-Carvalho",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« 5° (Supprimé)"
+  },
+  {
+   "guid": "ec89679f-c583-4da9-91af-108866ebf7bb",
+   "article": "Article 6",
+   "pastille": "17",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "380",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Tessier-Carvalho",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« 6° (nouveau) Le logement est situé dans un bâtiment d’habitation collective dont le diagnostic de performance énergétique mentionné à l’article L. 126‑31 du code de la construction et de l’habitation, établit que l’immeuble atteint le niveau de per"
+  },
+  {
+   "guid": "86d90eba-607e-44e3-a928-d2c8d460bba7",
+   "article": "Article 6",
+   "pastille": "18",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "e) e) Au début du onzième alinéa, est ajoutée la mention : « IV. – » ;"
+  },
+  {
+   "guid": "5eedc48a-9c9b-4f47-9e70-d0bf564fadf8",
+   "article": "Article 6",
+   "pastille": "19",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-5",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    },
+    {
+     "num": "COM-9",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "f) f) (nouveau) Le douzième alinéa est complété par les mots : « du I du présent article » ;"
+  },
+  {
+   "guid": "c15a0345-a73f-4a6f-8615-6dcb84ba2bb2",
+   "article": "Article 6",
+   "pastille": "20",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "424",
+     "texte": "835",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "1° bis 1° bis (nouveau) À la première phrase du e de l’article 7 et à la troisième phrase du V de l’article 24, après le mot : « alinéa », sont insérés les mots : « du I » ;"
+  },
+  {
+   "guid": "005fe51f-70f8-4f87-a20c-89be89755324",
+   "article": "Article 6",
+   "pastille": "21",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-5",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    },
+    {
+     "num": "COM-9",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "1° ter 1° ter (nouveau) Au 2° de l’article 20, à la première phrase du premier alinéa et à la dernière phrase du troisième alinéa de l’article 20‑1, à la première phrase du premier alinéa de l’article 24‑1, au 2° de l’article 25‑1 et à l’article 25‑1"
+  },
+  {
+   "guid": "8a68c5e2-214c-4614-b9e9-497360d08cad",
+   "article": "Article 6",
+   "pastille": "22",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "2° 2° Les trois derniers alinéas de l’article 20‑1 sont remplacés par un alinéa ainsi rédigé :"
+  },
+  {
+   "guid": "74ccf93e-bb97-4886-bcf7-3c031f496d03",
+   "article": "Article 6",
+   "pastille": "23",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "« Quand le juge prononce, en application du troisième alinéa du présent article, une réduction ou une suspension de loyer jusqu’à l’exécution des travaux nécessaires à la mise en conformité énergétique du logement, la réduction ou la suspension de lo"
+  },
+  {
+   "guid": "ce1f8693-4823-4ddf-9a9d-d795a0a44f51",
+   "article": "Article 6",
+   "pastille": "24",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "424",
+     "texte": "835",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "3° 3° (nouveau) Au 2° de l’article 25‑1, après la référence : « a », sont insérés les mots : « du IV » ;"
+  },
+  {
+   "guid": "d437aa8e-caa2-4f7b-afc5-1a215267a9d2",
+   "article": "Article 6",
+   "pastille": "25",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "424",
+     "texte": "835",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "4° 4° (nouveau) Au 2° de l’article 45, après la seconde occurrence du mot : « alinéa », sont insérés les mots : « du I »."
+  },
+  {
+   "guid": "3c3716b7-07c0-4a67-9072-52964b99cbdf",
+   "article": "Article 6",
+   "pastille": "26",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "381",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Tessier-Carvalho",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "I bis A. – I bis A (nouveau). – Le III de l’article 6 de la loi n° 89‑462 du 6 juillet 1989 tendant à améliorer les rapports locatifs et portant modification de la loi n° 86‑1290 du 23 décembre 1986, dans sa rédaction résultant de la présente loi, es"
+  },
+  {
+   "guid": "6302ec55-b1a4-4ac9-b810-63316aa17870",
+   "article": "Article 6",
+   "pastille": "27",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "381",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Tessier-Carvalho",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "1° 1° Le 3° est abrogé ;"
+  },
+  {
+   "guid": "398f7b10-6fc1-48bc-9942-495dbb3c7c39",
+   "article": "Article 6",
+   "pastille": "28",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "381",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Tessier-Carvalho",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "2° 2° Le 4° est abrogé."
+  },
+  {
+   "guid": "15c5c425-3e07-439e-95f3-b711c6ae8f5e",
+   "article": "Article 6",
+   "pastille": "29",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-5",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "I bis. – I bis (nouveau). – À la première phrase du premier alinéa de l’article 13 bis de la loi n° 48‑1360 du 1er septembre 1948 portant modification et codification de la législation relative aux rapports des bailleurs et locataires ou occupants de"
+  },
+  {
+   "guid": "63ca46b3-98a5-4510-8973-782d1d33d70c",
+   "article": "Article 6",
+   "pastille": "30",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-5",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    },
+    {
+     "num": "COM-9",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "I ter. – I ter (nouveau). – Au deuxième alinéa de l’article 25 de la loi n° 86‑1290 du 23 décembre 1986 tendant à favoriser l’investissement locatif, l’accession à la propriété de logements sociaux et le développement de l’offre foncière, après le mo"
+  },
+  {
+   "guid": "bbaf1bf3-1317-40b0-860b-ba12bdc9cb1b",
+   "article": "Article 6",
+   "pastille": "31",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "424",
+     "texte": "835",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "I quater. – I quater (nouveau). – Au premier alinéa des articles L. 444‑3 et L. 822‑9 du code de la construction et de l’habitation, après le mot : « alinéas », sont insérés les mots : « du I »."
+  },
+  {
+   "guid": "34a23e18-84e8-4196-a7bd-c8126c3e0b84",
+   "article": "Article 6",
+   "pastille": "32",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "II. – II. – Les c et d du 1° du I du présent article s’appliquent aux contrats de location en cours d’exécution à la date d’entrée en vigueur de la présente loi."
+  },
+  {
+   "guid": "bef9d3bc-e95f-46c0-b60c-36b6f12f5a32",
+   "article": "Article 6",
+   "pastille": "33",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "381",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Tessier-Carvalho",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "III. – III (nouveau). – Le 1° du I bis A entre en vigueur le 1er janvier 2035."
+  },
+  {
+   "guid": "bb0eb81b-a865-43b9-b108-83c66fb8a7f0",
+   "article": "Article 6",
+   "pastille": "34",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "381",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Tessier-Carvalho",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "IV. – IV (nouveau). – Le 2° du I bis A entre en vigueur le 1er janvier 2033."
+  },
+  {
+   "guid": "93f4ebfc-cfb2-43ff-a25f-e83270efa597",
+   "article": "Article 6 bis",
+   "pastille": "1",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "I. – I. – La loi n° 65‑557 du 10 juillet 1965 fixant le statut de la copropriété des immeubles bâtis est ainsi modifiée :"
+  },
+  {
+   "guid": "46f8db24-5e8b-4c3c-aa1f-24164e39a981",
+   "article": "Article 6 bis",
+   "pastille": "2",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-74",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "1° 1° Le 1° du I de l’article 14‑2 est complété par les mots : « ainsi qu’à l’amélioration du confort d’été et à la lutte contre la surchauffe » ;"
+  },
+  {
+   "guid": "68de4fed-3151-453d-b623-bbf826113026",
+   "article": "Article 6 bis",
+   "pastille": "3",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "208",
+     "texte": "835",
+     "groupe": "SB",
+     "auteur": "Sabatier-Vallat",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "1° bis 1° bis Après le f de l’article 25, il est inséré un f bis ainsi rédigé :"
+  },
+  {
+   "guid": "6a889bc2-8912-4575-a276-e5f200db391b",
+   "article": "Article 6 bis",
+   "pastille": "4",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "208",
+     "texte": "835",
+     "groupe": "SB",
+     "auteur": "Sabatier-Vallat",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« f bis) Les travaux d’intérêt collectif consistant en l’installation de protections solaires extérieures sur les baies vitrées donnant sur l’extérieur, y compris lorsque ces travaux affectent des parties privatives ; »"
+  },
+  {
+   "guid": "2cc9143e-ead1-407e-816f-a02704ce1c3a",
+   "article": "Article 6 bis",
+   "pastille": "5",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "2° 2° Le second alinéa de l’article 25‑1 est ainsi modifié :"
+  },
+  {
+   "guid": "54bcf842-7414-4594-b99a-273e37f8ab55",
+   "article": "Article 6 bis",
+   "pastille": "6",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "208",
+     "texte": "835",
+     "groupe": "SB",
+     "auteur": "Sabatier-Vallat",
+     "sort": "Adopté"
+    },
+    {
+     "num": "151",
+     "texte": "835",
+     "groupe": "SF",
+     "auteur": "Hamadi-Willem",
+     "sort": "Adopté"
+    },
+    {
+     "num": "289",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Sabatier",
+     "sort": "Adopté"
+    },
+    {
+     "num": "353",
+     "texte": "835",
+     "groupe": "SE",
+     "auteur": "Peyrol-Fournel",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "a) a) Après le mot : « prévus », sont insérés les mots : « au b de l’article 25, lorsqu’ils ont pour objet l’installation d’un système de rafraîchissement ou de protections solaires extérieures, ou » ;"
+  },
+  {
+   "guid": "46158027-2c0f-4b11-839b-df82088ac62c",
+   "article": "Article 6 bis",
+   "pastille": "7",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "208",
+     "texte": "835",
+     "groupe": "SB",
+     "auteur": "Sabatier-Vallat",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "a bis) a bis) Les mots : « au f » sont remplacés par les mots : « aux f ou f bis » ;"
+  },
+  {
+   "guid": "53b0434f-b508-420f-ad88-ab06f557d8a8",
+   "article": "Article 6 bis",
+   "pastille": "8",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "b) b) Les mots : « de l’article » sont remplacés par les mots : « du même article » ;"
+  },
+  {
+   "guid": "0bc6941a-1aec-49ed-aa50-0fc105091919",
+   "article": "Article 6 bis",
+   "pastille": "9",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "208",
+     "texte": "835",
+     "groupe": "SB",
+     "auteur": "Sabatier-Vallat",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "3° 3° Au premier alinéa du III de l’article 26‑4, les mots : « et au f » sont remplacés par les mots : « ainsi qu’aux f et f bis »."
+  },
+  {
+   "guid": "18fc2f20-8994-47a8-ae1f-361bfc36eb5e",
+   "article": "Article 6 bis",
+   "pastille": "10",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-74",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "II. – II. – Le 17° bis de l’article L. 111‑1 du code de la construction et de l’habitation est ainsi modifié :"
+  },
+  {
+   "guid": "8f425bb4-72d8-44ab-8e80-c2ffcbaf840c",
+   "article": "Article 6 bis",
+   "pastille": "11",
+   "etape": "nouveau sans amendement nommé",
+   "amendements": [],
+   "texte": "1° 1° Au b, le mot : « six » est remplacé par le mot : « sept » et, après le mot : « ventilation », sont insérés les mots : « , les travaux d’amélioration du confort d’été » ;"
+  },
+  {
+   "guid": "5eb72de1-59f0-418a-bf25-84f431ccbd2e",
+   "article": "Article 6 bis",
+   "pastille": "12",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "425",
+     "texte": "835",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "2° 2° Aux cinquième à septième alinéas, le mot : « six » est remplacé par le mot : « sept »."
+  },
+  {
+   "guid": "5b1583b9-ca4f-4c7f-baf8-79f1c99cd49a",
+   "article": "Article 6 bis",
+   "pastille": "13",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-74",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "III. – III. – Le code du patrimoine est ainsi modifié :"
+  },
+  {
+   "guid": "c1dfc96b-78a7-4a09-9991-8b426486fa40",
+   "article": "Article 6 bis",
+   "pastille": "14",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "21",
+     "texte": "835",
+     "groupe": "SB",
+     "auteur": "Rouvier-Carvalho",
+     "sort": "Adopté"
+    },
+    {
+     "num": "141",
+     "texte": "835",
+     "groupe": "SG",
+     "auteur": "Zeller-Guérin",
+     "sort": "Adopté"
+    },
+    {
+     "num": "357",
+     "texte": "835",
+     "groupe": "SE",
+     "auteur": "Peyrol-Fournel",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "1° 1° L’avant‑dernière phrase du premier alinéa du I de l’article L. 632‑2 est complétée par les mots : « et des objectifs de qualité sanitaire et de confort thermique des bâtiments » ;"
+  },
+  {
+   "guid": "7a78a2de-665c-4df8-ac9f-1a7dff0826e4",
+   "article": "Article 6 bis",
+   "pastille": "15",
+   "etape": "nouveau sans amendement nommé",
+   "amendements": [],
+   "texte": "2° 2° Après le 3° de l’article L. 632‑2‑1, il est inséré un 5° ainsi rédigé :"
+  },
+  {
+   "guid": "4c325f0a-d631-4c97-8997-56625dd1fb0f",
+   "article": "Article 6 bis",
+   "pastille": "16",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-74",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Rouvier-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« 5° Des travaux d’installation de fermetures et de protections solaires extérieures des fenêtres, portes‑fenêtres et fenêtres de toit. »"
+  },
+  {
+   "guid": "6d4fc0f3-a25a-4ee7-94e7-1d1a287d823c",
+   "article": "Article 7",
+   "pastille": "1",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "I. – I. – Le code de la construction et de l’habitation est ainsi modifié :"
+  },
+  {
+   "guid": "695f97d3-6b87-4cf5-b180-ebd4b311939d",
+   "article": "Article 7",
+   "pastille": "2",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "1° 1° L’article L. 353‑9‑2 est ainsi modifié :"
+  },
+  {
+   "guid": "e86a0594-dc5d-40f0-888f-d000993ef707",
+   "article": "Article 7",
+   "pastille": "3",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "a) a) Au début du premier alinéa, est ajoutée la mention : « I. – » ;"
+  },
+  {
+   "guid": "437cb467-86a0-450d-a59f-ff9cc5964f8e",
+   "article": "Article 7",
+   "pastille": "4",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-9",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "a bis) a bis) (nouveau) Au deuxième alinéa, le mot : « article » est remplacé par la référence : « I » ;"
+  },
+  {
+   "guid": "61519d31-b7d3-4c85-a293-276c84c5fb9c",
+   "article": "Article 7",
+   "pastille": "5",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "b) b) Au début du dernier alinéa, est ajoutée la mention : « II. – » ;"
+  },
+  {
+   "guid": "9ce481d9-e9a8-45d1-9735-37739ea85db3",
+   "article": "Article 7",
+   "pastille": "6",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "c) c) Il est ajouté un III ainsi rédigé :"
+  },
+  {
+   "guid": "b35f3e43-c78e-4f9d-aff7-325e1548bdc2",
+   "article": "Article 7",
+   "pastille": "7",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-9",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    },
+    {
+     "num": "COM-27",
+     "texte": "801",
+     "groupe": "SB",
+     "auteur": "Jouve-Bellec",
+     "sort": "Adopté"
+    },
+    {
+     "num": "COM-53",
+     "texte": "801",
+     "groupe": "SG",
+     "auteur": "Tessier-Jouve",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« III. – Pour les logements achevés depuis au moins quarante ans, sous réserve que les prêts réglementés finançant leur construction ou leur acquisition aient été intégralement remboursés, le représentant de l’État dans le département peut autoriser,"
+  },
+  {
+   "guid": "1b189b33-9de4-49d0-82d0-fe6f79f4d822",
+   "article": "Article 7",
+   "pastille": "8",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-10",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "2° 2° (nouveau) La première phrase du second alinéa de l’article L. 353‑9‑3 est ainsi rédigée : « Un organisme d’habitations à loyer modéré peut déroger au premier alinéa du présent article soit, avec l’autorisation de l’autorité administrative, dans"
+  },
+  {
+   "guid": "58132fda-9ee6-4d2e-b227-e862ec526792",
+   "article": "Article 7",
+   "pastille": "9",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-10",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "3° 3° (nouveau) La première phrase du dernier alinéa de l’article L. 442‑1 est ainsi rédigée : « Un organisme d’habitations à loyer modéré peut déroger à l’avant‑dernier alinéa du présent article soit, avec l’autorisation de l’autorité administrative"
+  },
+  {
+   "guid": "379a5614-71fb-4cc0-81b7-4000088a707c",
+   "article": "Article 7",
+   "pastille": "10",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-10",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "4° 4° (nouveau) L’article L. 442‑1‑2 est abrogé ;"
+  },
+  {
+   "guid": "29f2956c-e32c-466e-a81b-b7a937191c2b",
+   "article": "Article 7",
+   "pastille": "11",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-10",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "5° 5° (nouveau) À la première phrase du deuxième alinéa du II de l’article L. 442‑3, le mot : « quinze » est remplacé par le mot : « vingt‑cinq » ;"
+  },
+  {
+   "guid": "9f9eebba-9bb9-4ea1-9d80-4beaa2f67863",
+   "article": "Article 7",
+   "pastille": "12",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-10",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "6° 6° (nouveau) À la première phrase du second alinéa du III de l’article L. 445‑3, les mots : « de l’autorité administrative » sont remplacés par les mots : « du conseil d’administration de l’organisme » et le mot : « elle » est remplacé par le mot "
+  },
+  {
+   "guid": "ba88d93b-ec37-49c4-968c-bdb4b6a9bf03",
+   "article": "Article 7",
+   "pastille": "13",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-10",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "7° 7° (nouveau) Le 7° de l’article L. 472‑3 est abrogé."
+  },
+  {
+   "guid": "ec182709-41ea-423c-aaac-4ddddb1ff4f5",
+   "article": "Article 7",
+   "pastille": "14",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "251",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "I bis. – I bis (nouveau). – À la première phrase du deuxième alinéa de l’article 23‑1 de la loi n° 89‑462 du 6 juillet 1989 tendant à améliorer les rapports locatifs et portant modification de la loi n° 86‑1290 du 23 décembre 1986, le mot : « quinze "
+  },
+  {
+   "guid": "57c24816-79f2-4ce7-a0b8-36139fa0a0e2",
+   "article": "Article 7",
+   "pastille": "15",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-11",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "II. – II (nouveau). – Au E du IV de l’article 81 de la loi n° 2017‑86 du 27 janvier 2017 relative à l’égalité et à la citoyenneté, le mot : « dix » est remplacé par le mot : « quinze »."
+  },
+  {
+   "guid": "c4ba8ce3-3da4-48ea-92e4-58b0273251d3",
+   "article": "Article 8",
+   "pastille": "1",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "I. – I. – Le code de la construction et de l’habitation est ainsi modifié :"
+  },
+  {
+   "guid": "245edc8b-95b6-42fa-8f27-6dde8f238cd3",
+   "article": "Article 8",
+   "pastille": "2",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "1° 1° L’article L. 301‑3 est ainsi modifié :"
+  },
+  {
+   "guid": "c314fb50-0bd9-49d5-aae7-63999312c879",
+   "article": "Article 8",
+   "pastille": "3",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "a) a) Au premier alinéa et à la première phrase du deuxième alinéa, après le mot : « déléguée », sont insérés les mots : « ou transférée » ;"
+  },
+  {
+   "guid": "f8d3e2b1-4870-4a7b-9bd0-6bd04bb6a467",
+   "article": "Article 8",
+   "pastille": "4",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "b) b) À la fin de la seconde phrase du troisième alinéa, les mots : « aux articles L. 301‑5‑1 ou L. 301‑5‑2 » sont remplacés par les mots : « à l’article L. 301‑5‑1 » ;"
+  },
+  {
+   "guid": "1d7588b9-e9af-4994-9309-bc7e90a21bf7",
+   "article": "Article 8",
+   "pastille": "5",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "c) c) À la première phrase du quatrième alinéa, les mots : « la convention prévue » sont remplacés par les mots : « l’une des conventions prévues » ;"
+  },
+  {
+   "guid": "001ee4ef-3be6-46f1-a726-924368d53612",
+   "article": "Article 8",
+   "pastille": "6",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "d) d) Au cinquième alinéa, les mots : « des articles L. 301‑5‑1 et L. 301‑5‑2 » sont remplacés par les mots : « de l’article L. 301‑5‑1 » ;"
+  },
+  {
+   "guid": "afb6f5a6-2605-492d-a7e7-850611c742f4",
+   "article": "Article 8",
+   "pastille": "7",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "e) e) À l’avant‑dernier alinéa, les mots : « aux articles L. 301‑5‑1 et L. 301‑5‑2 » sont remplacés par les mots : « à l’article L. 301‑5‑1 » ;"
+  },
+  {
+   "guid": "96288e18-7c2b-4f47-adf1-e63d2de6e7a1",
+   "article": "Article 8",
+   "pastille": "8",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "2° 2° L’article L. 301‑5‑1 est ainsi modifié :"
+  },
+  {
+   "guid": "6878f376-e36f-48d0-a187-37540ba36110",
+   "article": "Article 8",
+   "pastille": "9",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "a) a) Le I est ainsi rédigé :"
+  },
+  {
+   "guid": "41e92347-7c7c-41f7-95f8-5a808ad2fc62",
+   "article": "Article 8",
+   "pastille": "10",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-12",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« I. – Les communautés urbaines, les métropoles, la métropole d’Aix‑Marseille‑Provence et la métropole de Lyon, mentionnées respectivement aux articles L. 5215‑1, L. 5217‑1, L. 5218‑1 et L. 3611‑1 du code général des collectivités territoriales, exer"
+  },
+  {
+   "guid": "04af9fc9-7e70-47b7-a678-e860d1c34005",
+   "article": "Article 8",
+   "pastille": "11",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-12",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Les communautés d’agglomération et les communautés de communes, mentionnées respectivement aux articles L. 5216‑1 et L. 5214‑1 du code général des collectivités territoriales, dotées d’un programme local de l’habitat exécutoire, ainsi que, à titre "
+  },
+  {
+   "guid": "db648052-67c5-4ac0-9570-1ce0f157c3ca",
+   "article": "Article 8",
+   "pastille": "12",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "« Le président de la collectivité territoriale ou de l’établissement public de coopération intercommunale à fiscalité propre ayant le statut d’autorité organisatrice de l’habitat assure les fonctions de président de cette autorité. » ;"
+  },
+  {
+   "guid": "66b82e6b-1c76-457d-99c2-da2d51f44ec3",
+   "article": "Article 8",
+   "pastille": "13",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "b) b) Le II est ainsi modifié :"
+  },
+  {
+   "guid": "63ca798f-091a-4f25-b2fe-df413fa91222",
+   "article": "Article 8",
+   "pastille": "14",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "– au premier alinéa, les mots : « au I » sont remplacés par les mots : « au premier alinéa du I et la métropole de Lyon » et les mots : « aux IV et » sont remplacés par le mot : « au » ;"
+  },
+  {
+   "guid": "d34c862d-b5b8-4047-ba25-afee5dcacd35",
+   "article": "Article 8",
+   "pastille": "15",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "– après le même premier alinéa, il est inséré un alinéa ainsi rédigé :"
+  },
+  {
+   "guid": "2e2c0e8e-3634-4fe6-9872-c585743c3029",
+   "article": "Article 8",
+   "pastille": "16",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "« Les communautés d’agglomération et les communautés de communes ainsi que les départements mentionnés au deuxième alinéa du I peuvent demander à conclure une telle convention avec l’État, par laquelle celui‑ci leur délègue les compétences mentionnée"
+  },
+  {
+   "guid": "df2a6282-faf3-49d5-a7de-8db950150e37",
+   "article": "Article 8",
+   "pastille": "17",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "– il est ajouté un alinéa ainsi rédigé :"
+  },
+  {
+   "guid": "5deb59b5-0b93-4558-b0c2-5bcf94bc1aad",
+   "article": "Article 8",
+   "pastille": "18",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "« Lorsqu’un établissement public de coopération intercommunale signe avec l’État une convention, alors qu’une convention signée entre l’État et le département est en cours d’exécution, cette dernière convention fait l’objet d’un avenant pour en retra"
+  },
+  {
+   "guid": "417643c0-3adf-4b24-a1c3-3b4ac0d6a409",
+   "article": "Article 8",
+   "pastille": "19",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "c) c) Le III est ainsi modifié :"
+  },
+  {
+   "guid": "fbd7b3e3-5044-4ed9-a2a8-95d0816b0c18",
+   "article": "Article 8",
+   "pastille": "20",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "– le deuxième alinéa est complété par les mots : « , dans la limite de ses compétences lorsque le délégataire est un département » ;"
+  },
+  {
+   "guid": "3b70dc44-28b5-4d31-aa60-66bca0fff30c",
+   "article": "Article 8",
+   "pastille": "21",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "– le troisième alinéa est supprimé ;"
+  },
+  {
+   "guid": "b6383714-cc26-4228-8aa1-64d184b96501",
+   "article": "Article 8",
+   "pastille": "22",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "– au quatrième alinéa, la dernière occurrence du mot : « et » est remplacée par le mot : « à » ;"
+  },
+  {
+   "guid": "d0ab1c9e-47bc-4f48-bf01-cc0f49e19bd2",
+   "article": "Article 8",
+   "pastille": "23",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "d) d) Le IV est ainsi rédigé :"
+  },
+  {
+   "guid": "4c488cd1-adc4-4356-bba0-b57ea009254f",
+   "article": "Article 8",
+   "pastille": "24",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-12",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« IV. – Les compétences transférées aux établissements publics et à la métropole de Lyon mentionnés au premier alinéa du I du présent article ou pouvant être exercées, par délégation, par les établissements publics et les collectivités territoriales "
+  },
+  {
+   "guid": "a20fd222-4287-40cc-a981-a25f4a15fe44",
+   "article": "Article 8",
+   "pastille": "25",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "« 1° L’instruction, la gestion et l’attribution des aides au logement locatif social, au logement intermédiaire et en faveur de la location‑accession ainsi que la notification aux bénéficiaires et l’octroi des autorisations spécifiques prévues aux ar"
+  },
+  {
+   "guid": "b69011d4-6872-43e0-9da3-b5cdf14920fc",
+   "article": "Article 8",
+   "pastille": "26",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "« 2° L’instruction, la gestion et l’attribution des aides en faveur de l’habitat privé, ainsi que la signature des conventions mentionnées à l’article L. 321‑4, par délégation de l’Agence nationale de l’habitat pour les établissements publics et les "
+  },
+  {
+   "guid": "b6209f6d-6610-461a-b4ce-daa9f62c28cd",
+   "article": "Article 8",
+   "pastille": "27",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "« L’État délègue le financement de ces aides aux établissements publics et à la métropole de Lyon mentionnés au premier alinéa du même I par une convention qui fixe notamment, dans la limite des dotations ouvertes en loi de finances, le montant des d"
+  },
+  {
+   "guid": "b83481bc-0108-48d7-ba3d-0e223e26f809",
+   "article": "Article 8",
+   "pastille": "28",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "e) e) Après le même IV, il est inséré un IV bis ainsi rédigé :"
+  },
+  {
+   "guid": "40744f5d-f0ec-4acd-b38b-fea1cafd1695",
+   "article": "Article 8",
+   "pastille": "29",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "« IV bis. – Pour favoriser la production et la rénovation du parc locatif social, les autorités organisatrices de l’habitat peuvent :"
+  },
+  {
+   "guid": "3b4a47f6-9718-4171-bb42-f434ce59a219",
+   "article": "Article 8",
+   "pastille": "30",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "« 1° Sous réserve du respect des objectifs mentionnés au premier alinéa du VI, réassigner les droits à engagement alloués annuellement entre la production nouvelle de logements locatifs sociaux et la rénovation du parc social, d’une part, et entre le"
+  },
+  {
+   "guid": "31a1c04c-b925-44af-bfc6-7f14ddfe44d9",
+   "article": "Article 8",
+   "pastille": "31",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "« 2° Dans des limites prévues par décret, et à l’exception des logements financés en prêts locatifs aidés d’intégration, inscrire, dans les conventions conclues en application de l’article L. 831‑1, lors de leur conclusion, des loyers maximaux supéri"
+  },
+  {
+   "guid": "54e6e3ce-d129-4b95-b7fb-3b5815290394",
+   "article": "Article 8",
+   "pastille": "32",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "« 3° Signer les avenants aux conventions mentionnés à l’article L. 353‑9‑2 ;"
+  },
+  {
+   "guid": "b5d6671b-849f-4eaf-b8c5-2dbd8eeda873",
+   "article": "Article 8",
+   "pastille": "33",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "« 4° Résilier les conventions mentionnées au chapitre III du titre V du présent livre, par dérogation au second alinéa de l’article L. 353‑12 ;"
+  },
+  {
+   "guid": "bfbf23af-977b-408c-93c6-4c916e9fb825",
+   "article": "Article 8",
+   "pastille": "34",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-13",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« 5° Délivrer aux organismes d’habitations à loyer modéré les autorisations d’aliénation de logements, prévues aux articles L. 443‑7 et L. 443‑8 ;"
+  },
+  {
+   "guid": "d33c317b-9769-4c17-9c48-f4f099bbc8f8",
+   "article": "Article 8",
+   "pastille": "35",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-13",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« 6° Délivrer, en lieu et place du représentant de l’État dans le département, les accords préalables à la démolition de logements sociaux mentionnés à l’article L. 443‑15‑1 ;"
+  },
+  {
+   "guid": "236f8667-37ae-403e-b8cc-e08d6d66d2a3",
+   "article": "Article 8",
+   "pastille": "36",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-13",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« 7° Délivrer les accords préalables à la mise en location de logements à usages autres que l’habitation mentionnés à l’article L. 443‑15‑1‑1, sans préjudice de la consultation de la commune d’implantation ;"
+  },
+  {
+   "guid": "21625de9-4433-4d05-9c8d-7f9c4c1dcfea",
+   "article": "Article 8",
+   "pastille": "37",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "378",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Tessier-Carvalho",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« 8° (nouveau) Délivrer aux organismes d’habitations à loyer modéré l’autorisation de vente mentionnée à l’article L. 433‑2."
+  },
+  {
+   "guid": "255ec825-704e-4335-a87c-236540872d06",
+   "article": "Article 8",
+   "pastille": "38",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "« À sa demande, l’autorité organisatrice de l’habitat est consultée sur les modifications des projets d’arrêté pris par les ministres chargés du logement et du budget en application du IV de l’article 199 novovicies du code général des impôts."
+  },
+  {
+   "guid": "651ffc6a-0535-4252-a865-96943f6ba720",
+   "article": "Article 8",
+   "pastille": "39",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "« Lorsque l’autorité organisatrice de l’habitat est signataire d’une convention pluriannuelle avec l’Agence nationale pour la rénovation urbaine, cette convention peut prévoir, par dérogation au deuxième alinéa du I de l’article 9‑1 de la loi n° 2003"
+  },
+  {
+   "guid": "b294aaf6-0980-4424-a414-042b0483a8c5",
+   "article": "Article 8",
+   "pastille": "40",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "f) f) (Supprimé)"
+  },
+  {
+   "guid": "b32c314c-6859-498a-8622-675285d99d2b",
+   "article": "Article 8",
+   "pastille": "41",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "g) g) Le V bis est abrogé ;"
+  },
+  {
+   "guid": "95ff52ba-5c01-4de3-a267-95dc79c9f558",
+   "article": "Article 8",
+   "pastille": "42",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "h) h) Le VI est ainsi modifié :"
+  },
+  {
+   "guid": "c2ae122d-c665-42e7-a995-9e12187ae4a5",
+   "article": "Article 8",
+   "pastille": "43",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "– à la première phrase du premier alinéa, les mots : « à l’établissement public de coopération intercommunale » sont remplacés par les mots : « au délégataire » ;"
+  },
+  {
+   "guid": "3b6a836d-b19c-43c6-88c9-73429079a2a1",
+   "article": "Article 8",
+   "pastille": "44",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "– à la seconde phrase du même premier alinéa, après le mot : « alloués », sont insérés les mots : « et dans le respect des objectifs nationaux et de leur déclinaison par le comité régional de l’habitat et de l’hébergement prévu à l’article L. 364‑1 d"
+  },
+  {
+   "guid": "d9350260-c323-4519-8db3-e993fc97cdac",
+   "article": "Article 8",
+   "pastille": "45",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "– à la fin de la deuxième phrase du deuxième alinéa, les mots : « à l’établissement public de coopération intercommunale » sont remplacés par les mots : « au délégataire » ;"
+  },
+  {
+   "guid": "0cf3122d-0204-41d2-a3a1-a67f8e02e812",
+   "article": "Article 8",
+   "pastille": "46",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-13",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "– à la première phrase du troisième alinéa, les mots : « de coopération intercommunale » sont remplacés par les mots : « ou de la collectivité territoriale délégataire » ;"
+  },
+  {
+   "guid": "31adb141-b14e-4f24-ad8c-6e6a4fe47be4",
+   "article": "Article 8",
+   "pastille": "47",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "– à la dernière phrase du même troisième alinéa, la première occurrence des mots : « l’établissement public de coopération intercommunale » est remplacée par les mots : « le délégataire » et, à la fin, les mots : « à l’établissement public de coopéra"
+  },
+  {
+   "guid": "1836ec79-870f-4db5-a483-aebf8f2dee17",
+   "article": "Article 8",
+   "pastille": "48",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-13",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "– au sixième alinéa, les mots : « de coopération intercommunale » sont remplacés par les mots : « ou de la collectivité territoriale délégataire » ;"
+  },
+  {
+   "guid": "1f6041e4-8983-4a05-aca6-1470631a9d60",
+   "article": "Article 8",
+   "pastille": "49",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "i) i) Sont ajoutés des VII à X ainsi rédigés :"
+  },
+  {
+   "guid": "08b972ac-6631-4633-b03c-bf1a8e810b8b",
+   "article": "Article 8",
+   "pastille": "50",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-13",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« VII. – À des fins de suivi et d’évaluation de la politique publique nationale, l’autorité organisatrice de l’habitat utilise les systèmes d’information nationaux mis à disposition par l’État pour l’instruction des demandes de subvention et le suivi"
+  },
+  {
+   "guid": "d16434fc-b4eb-4b87-a7f2-b1ae24184089",
+   "article": "Article 8",
+   "pastille": "51",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "« VIII. – En Corse, la délégation de compétence au profit des départements prévue au deuxième alinéa du I du présent article s’exerce au profit de la collectivité de Corse."
+  },
+  {
+   "guid": "2d77ea76-8760-42c0-b7c3-6945847b8a4d",
+   "article": "Article 8",
+   "pastille": "52",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "« IX. – Le présent article, à l’exception du 2° du IV bis, est applicable aux établissements publics de coopération intercommunale situés en Guadeloupe, en Guyane, à la Martinique, à La Réunion et à Mayotte ainsi qu’aux départements de la Guadeloupe,"
+  },
+  {
+   "guid": "07ce1cb5-d151-4f4f-91e5-89e1de4bb1e6",
+   "article": "Article 8",
+   "pastille": "53",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "152",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« X. – Les établissements publics territoriaux mentionnés à l’article L. 5219‑2 du code général des collectivités territoriales dotés d’un programme local de l’habitat exécutoire à compter du 1er janvier 2027 peuvent se voir déléguer par l’État, dans"
+  },
+  {
+   "guid": "f8cec9d5-f0a4-4e8c-86f9-ddef52ed24e4",
+   "article": "Article 8",
+   "pastille": "54",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "3° 3° Les articles L. 301‑5‑1‑3, L. 301‑5‑2, L. 301‑5‑3 et L. 301‑5‑4 sont abrogés ;"
+  },
+  {
+   "guid": "1e7593ce-3a98-4855-b292-567779a122fc",
+   "article": "Article 8",
+   "pastille": "55",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "426",
+     "texte": "835",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "3° bis A 3° bis A (nouveau) Au dernier alinéa de l’article L. 303‑1, les mots : « des articles L. 301‑5‑1 ou L. 301‑5‑2 » sont remplacés par les mots : « de l’article L. 301‑5‑1 » ;"
+  },
+  {
+   "guid": "7ea337ee-fa12-45ab-ba71-4216cbd64fa8",
+   "article": "Article 8",
+   "pastille": "56",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-13",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "3° bis 3° bis (nouveau) À la première phrase du premier alinéa de l’article L. 321‑1‑1, les mots : « des articles L. 301‑5‑1 ou L. 301‑5‑2 » sont remplacés par les mots : « de l’article L. 301‑5‑1 » ;"
+  },
+  {
+   "guid": "c434e97f-cae4-4fc5-bda8-5bf30bdcb97f",
+   "article": "Article 8",
+   "pastille": "57",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-13",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "3° ter 3° ter (nouveau) À la première phrase du huitième alinéa de l’article L. 411‑10, les mots : « la convention mentionnée à l’article L. 301‑5‑2 » sont remplacés par les mots : « une convention mentionnée à l’article L. 301‑5‑1 » ;"
+  },
+  {
+   "guid": "c25bb05d-a8da-4682-8548-b85af0bd1213",
+   "article": "Article 8",
+   "pastille": "58",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "4° 4° L’article L. 443‑7 est ainsi modifié :"
+  },
+  {
+   "guid": "b209dab6-4b22-4c44-b7fd-5c1ada5e0d0c",
+   "article": "Article 8",
+   "pastille": "59",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "a) a) Le douzième alinéa est ainsi modifié :"
+  },
+  {
+   "guid": "5d89134d-c260-4b04-8760-f2c85c83b603",
+   "article": "Article 8",
+   "pastille": "60",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "– à la première phrase, au début, les mots : « Lorsqu’une métropole régie par le chapitre VII du titre Ier du livre II de la cinquième partie du code général des collectivités territoriales ou la métropole de Lyon a pris la compétence de délivrance a"
+  },
+  {
+   "guid": "655081c0-18c2-49ff-915a-cfd25673efc9",
+   "article": "Article 8",
+   "pastille": "61",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "– à la deuxième phrase, les mots : « du conseil de la métropole » sont supprimés ;"
+  },
+  {
+   "guid": "48d2cfbe-fa00-454a-8ba3-b0a2ea62acfa",
+   "article": "Article 8",
+   "pastille": "62",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "– à la fin de la troisième phrase et à la dernière phrase, les mots : « du conseil de la métropole » sont remplacés par les mots : « de l’autorité organisatrice de l’habitat » ;"
+  },
+  {
+   "guid": "fff2ed66-1892-472c-9d97-e450012514cf",
+   "article": "Article 8",
+   "pastille": "63",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-13",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "a bis) a bis) (nouveau) Au quatorzième alinéa, les mots : « du conseil de la métropole » sont remplacés par les mots : « de l’autorité organisatrice de l’habitat » ;"
+  },
+  {
+   "guid": "70ff4c38-add8-433f-9f10-015e00b9d3eb",
+   "article": "Article 8",
+   "pastille": "64",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "b) b) À la première phrase du dernier alinéa, les mots : « du conseil de la métropole » sont remplacés par les mots : « de l’autorité organisatrice de l’habitat définie à l’article L. 301‑5‑1 » ;"
+  },
+  {
+   "guid": "425d75a7-4e4c-4cf6-a6fa-299cfc82dad0",
+   "article": "Article 8",
+   "pastille": "65",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "5° 5° À la première phrase de l’article L. 443‑8, les mots : « du président du conseil de la métropole » sont remplacés par les mots : « , le cas échéant, du président de l’autorité organisatrice de l’habitat définie à l’article L. 301‑5‑1 » ;"
+  },
+  {
+   "guid": "213d4b9e-a552-4c17-a7ee-2e9c00538527",
+   "article": "Article 8",
+   "pastille": "66",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "6° 6° Au premier alinéa de l’article L. 443‑15‑1, après le mot : « département », sont insérés les mots : « ou, le cas échéant, du président de l’autorité organisatrice de l’habitat définie à l’article L. 301‑5‑1 » ;"
+  },
+  {
+   "guid": "ebf836f0-a828-4a50-a682-df669d3befc3",
+   "article": "Article 8",
+   "pastille": "67",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "7° 7° À la première phrase du premier alinéa de l’article L. 443‑15‑1‑1, après le mot : « département », sont insérés les mots : « ou, le cas échéant, du président de l’autorité organisatrice de l’habitat définie à l’article L. 301‑5‑1 » ;"
+  },
+  {
+   "guid": "ad9f4cd3-a4f8-438e-93ce-4c9e55090f65",
+   "article": "Article 8",
+   "pastille": "68",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-13",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "8° 8° (nouveau) À la première phrase du quatrième alinéa de l’article L. 445‑1, la référence : « L. 301‑5‑1‑3 » est remplacée par la référence : « L. 301‑5‑1 » ;"
+  },
+  {
+   "guid": "0d9836be-ba6e-4db5-80ef-a93717ddfcd1",
+   "article": "Article 8",
+   "pastille": "69",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-13",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "9° 9° (nouveau) À la fin du II de l’article L. 615‑1, les mots : « la convention mentionnée à l’article L. 301‑5‑2 » sont remplacés par les mots : « une convention mentionnée à l’article L. 301‑5‑1 »."
+  },
+  {
+   "guid": "8b2ca6bf-2953-4337-8895-9c22c73ca7b1",
+   "article": "Article 8",
+   "pastille": "70",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-13",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "I bis. – I bis (nouveau). – À la deuxième phrase du deuxième alinéa de l’article L. 210‑1 du code de l’urbanisme, les mots : « au deuxième alinéa de l’article L. 301‑5‑1 » sont remplacés par les mots : « à l’article L. 301‑5‑1 »."
+  },
+  {
+   "guid": "600c3803-e85b-4847-bbf8-54c78109c34f",
+   "article": "Article 8",
+   "pastille": "71",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "426",
+     "texte": "835",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "I ter. – I ter (nouveau). – Au septième alinéa de l’article 11 de la loi n° 2003‑710 du 1er août 2003 d’orientation et de programmation pour la ville et la rénovation urbaine, les mots : « les articles L. 301‑5‑1 et L. 301‑5‑2 » sont remplacés par le"
+  },
+  {
+   "guid": "f276efdd-43aa-4bd6-a6fd-5d0382458101",
+   "article": "Article 8",
+   "pastille": "72",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "II. – II. – Les établissements publics et la métropole de Lyon mentionnés au premier alinéa du I de l’article L. 301‑5‑1 du code de la construction et de l’habitation exercent les compétences mentionnées au IV du même article L. 301‑5‑1 au plus tard "
+  },
+  {
+   "guid": "39db9f5a-abf9-40c4-b05c-4dea1795214f",
+   "article": "Article 8",
+   "pastille": "73",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "III. – III. – Les transferts de compétences obligatoires de l’État aux collectivités territoriales ou à leurs groupements prévus par le présent article qui ont pour conséquence d’accroître leurs charges ouvrent droit à une compensation financière, da"
+  },
+  {
+   "guid": "250fe16e-72a1-4b81-b0d9-b2194749afec",
+   "article": "Article 8",
+   "pastille": "74",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "152",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "IV. – IV (nouveau). – Le code général des collectivités territoriales est ainsi modifié :"
+  },
+  {
+   "guid": "65f1e81a-f1a5-4526-a1c4-162cd1ad908a",
+   "article": "Article 8",
+   "pastille": "75",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "152",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "1° 1° Après le IV de l’article L. 5219‑5, il est inséré un IV bis ainsi rédigé :"
+  },
+  {
+   "guid": "4b460c06-ba9a-471d-a78e-38f12b5a64b7",
+   "article": "Article 8",
+   "pastille": "76",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "152",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« IV bis. – L’établissement public territorial exerce sur l’ensemble de son périmètre, en lieu et place de ses communes membres, par délibération du conseil de territoire acquise à la majorité des deux tiers de ses membres, les compétences en matière"
+  },
+  {
+   "guid": "8503f032-45fe-4493-8372-d3723cc3d722",
+   "article": "Article 8",
+   "pastille": "77",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "152",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« 1° Programme local de l’habitat ;"
+  },
+  {
+   "guid": "0cc892c7-d5be-44ea-a6c7-975fbd34dbdb",
+   "article": "Article 8",
+   "pastille": "78",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "152",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« 2° Politique du logement ; aides financières au logement social ; actions en faveur du logement social ; actions en faveur du logement des personnes défavorisées ;"
+  },
+  {
+   "guid": "f00d1500-ce9a-4311-a9b0-cf34b1ad620e",
+   "article": "Article 8",
+   "pastille": "79",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "152",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« 3° Création, aménagement, entretien et gestion des aires d’accueil des gens du voyage et des terrains familiaux locatifs définis aux 1° à 3° du II de l’article 1er de la loi n° 2000‑614 du 5 juillet 2000 relative à l’accueil et à l’habitat des gens"
+  },
+  {
+   "guid": "d6cdf423-b89b-41b9-b105-e742bc3743e8",
+   "article": "Article 8",
+   "pastille": "80",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "152",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "2° 2° L’article L. 5219‑10 est ainsi modifié :"
+  },
+  {
+   "guid": "e9445c3d-46c9-42d9-8e9c-518465658cf7",
+   "article": "Article 8",
+   "pastille": "81",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "152",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "a) a) Le V est abrogé ;"
+  },
+  {
+   "guid": "6e3a87e6-73e3-42e8-abb4-2575beab6c5e",
+   "article": "Article 8",
+   "pastille": "82",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "152",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "b) b) Au VI, la référence : « V » est remplacée par la référence : « IV »."
+  },
+  {
+   "guid": "57ef4546-c548-45a8-af99-c0b039ff1095",
+   "article": "Article 8",
+   "pastille": "83",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "152",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "V. – V (nouveau). – Le XII de l’article 59 de la loi n° 2015‑991 du 7 août 2015 portant nouvelle organisation territoriale de la République est abrogé."
+  },
+  {
+   "guid": "8d149e90-74c2-40ce-8fe5-19c2cb5d6729",
+   "article": "Article 9",
+   "pastille": "1",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "I. – I. – Le code de la construction et de l’habitation est ainsi modifié :"
+  },
+  {
+   "guid": "36d8a24d-2787-44aa-89c0-5fec0421ae37",
+   "article": "Article 9",
+   "pastille": "2",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-14",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "1° 1° (Supprimé)"
+  },
+  {
+   "guid": "b60b18c3-4976-45a1-9e8f-4dc8dae5a2a5",
+   "article": "Article 9",
+   "pastille": "3",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "2° 2° Les trois derniers alinéas de l’article L. 441‑2‑1 sont remplacés par un alinéa ainsi rédigé :"
+  },
+  {
+   "guid": "9008e984-f0fb-4d25-9e03-806eddb86fdf",
+   "article": "Article 9",
+   "pastille": "4",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "« Le groupement d’intérêt public mentionné à l’avant‑dernier alinéa du présent article met en place un échange d’informations avec l’administration fiscale, dont les modalités sont précisées par décret en Conseil d’État, aux fins de recueillir et d’e"
+  },
+  {
+   "guid": "e9699bd9-e71d-44b6-b2e3-3b21560a2fef",
+   "article": "Article 9",
+   "pastille": "5",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "3° 3° L’article L. 441‑2‑9 est ainsi modifié :"
+  },
+  {
+   "guid": "46862981-da42-4d5c-a940-3fb21e741200",
+   "article": "Article 9",
+   "pastille": "6",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "a) a) Le 3° est complété par les mots : « ainsi que par les agents des administrations de l’État, des organismes ou des établissements publics ou des personnes chargées d’une mission de service public, soumis à une obligation de secret professionnel "
+  },
+  {
+   "guid": "8511790c-9f9d-42e4-a8d3-e907fd5f54b9",
+   "article": "Article 9",
+   "pastille": "7",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "b) b) Après le même 3°, il est inséré un 3° bis ainsi rédigé :"
+  },
+  {
+   "guid": "ef735d92-1b1c-498d-bca1-791aca2f8756",
+   "article": "Article 9",
+   "pastille": "8",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "« 3° bis Les conditions d’accès aux données anonymisées du système national d’enregistrement ainsi que les services et les personnes morales pouvant y accéder ; »"
+  },
+  {
+   "guid": "d5e4eeef-2b23-4206-8291-9939768af63d",
+   "article": "Article 9",
+   "pastille": "9",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-14",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "b bis) b bis) (nouveau) Au 4°, après la référence : « L. 441‑2‑6 », sont insérés les mots : « du présent code » ;"
+  },
+  {
+   "guid": "d6ac2d0b-9c46-4cc8-8fcb-6b1ca25da7cc",
+   "article": "Article 9",
+   "pastille": "10",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "c) c) Le 8° est abrogé ;"
+  },
+  {
+   "guid": "15dd7170-144b-4f1c-837a-6bd1754a8156",
+   "article": "Article 9",
+   "pastille": "11",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "4° 4° L’article L. 442‑5 est ainsi modifié :"
+  },
+  {
+   "guid": "ad47cfe8-7ab5-4fd0-a195-656b0fa9a2dd",
+   "article": "Article 9",
+   "pastille": "12",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "a) a) Le troisième alinéa est ainsi modifié :"
+  },
+  {
+   "guid": "572f0adb-bf72-475f-974e-e2236baf43b3",
+   "article": "Article 9",
+   "pastille": "13",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "– après le mot : « modéré », sont insérés les mots : « et du groupement d’intérêt public mentionné à l’article L. 441‑2‑1 » et, après le mot : « missions », sont insérés les mots : « de contrôle et » ;"
+  },
+  {
+   "guid": "5e48b72b-df3b-467c-9e5a-ca84fe698fae",
+   "article": "Article 9",
+   "pastille": "14",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "– est ajoutée une phrase ainsi rédigée : « Les personnes publiques ou les personnes morales œuvrant dans les domaines de l’habitat social ou de la politique de la ville et inscrites sur une liste déterminée par arrêté du ministre chargé du logement p"
+  },
+  {
+   "guid": "c76b9a84-cc0d-4900-ba79-7ed14d0f21b2",
+   "article": "Article 9",
+   "pastille": "15",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "b) b) L’avant‑dernier alinéa est complété par deux phrases ainsi rédigées : « Il précise également les modalités de communication de ces données, après établissement d’une convention, à des fins de recherche scientifique ou historique. Il précise, en"
+  },
+  {
+   "guid": "03af65b2-5ee9-4522-a589-af94772cf2f3",
+   "article": "Article 9",
+   "pastille": "16",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "435",
+     "texte": "835",
+     "groupe": "Gouvernement",
+     "auteur": null,
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "I bis. – I bis (nouveau). – À titre expérimental, sur le territoire de la région Île‑de‑France, pour une durée de deux ans à compter de la promulgation de la présente loi, l’État confie, par convention et sans dissociation, les compétences mentionnée"
+  },
+  {
+   "guid": "b71a6bbc-0421-4740-8699-01029e09e485",
+   "article": "Article 9",
+   "pastille": "17",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "435",
+     "texte": "835",
+     "groupe": "Gouvernement",
+     "auteur": null,
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "1° 1° Les communes membres d’établissements publics de coopération intercommunale compétents en matière de logement et d’habitat ou d’établissements publics territoriaux de la métropole du Grand Paris qui, si elles font l’objet de l’arrêté mentionné "
+  },
+  {
+   "guid": "683a5b47-0c17-4bf7-b175-d39bcd9ff24a",
+   "article": "Article 9",
+   "pastille": "18",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "435",
+     "texte": "835",
+     "groupe": "Gouvernement",
+     "auteur": null,
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "2° 2° Les établissements publics de coopération intercommunale compétents en matière de logement et d’habitat ;"
+  },
+  {
+   "guid": "565d0816-74b0-4a2b-93c0-cf146f73e3ba",
+   "article": "Article 9",
+   "pastille": "19",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "435",
+     "texte": "835",
+     "groupe": "Gouvernement",
+     "auteur": null,
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "3° 3° Les établissements publics territoriaux de la métropole du Grand Paris ;"
+  },
+  {
+   "guid": "ceadd478-4d8f-4534-8fb0-9d7ce60190b9",
+   "article": "Article 9",
+   "pastille": "20",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "435",
+     "texte": "835",
+     "groupe": "Gouvernement",
+     "auteur": null,
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "4° 4° La Ville de Paris."
+  },
+  {
+   "guid": "5f37ea42-810c-4a02-bebe-d63384d3b24a",
+   "article": "Article 9",
+   "pastille": "21",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "435",
+     "texte": "835",
+     "groupe": "Gouvernement",
+     "auteur": null,
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "La délégation porte sur les compétences suivantes :"
+  },
+  {
+   "guid": "d9d1b05c-4403-4f31-9eb8-ab1133d0084b",
+   "article": "Article 9",
+   "pastille": "22",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "435",
+     "texte": "835",
+     "groupe": "Gouvernement",
+     "auteur": null,
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "a) a) L’exercice des compétences relatives au droit au logement opposable mentionnées à l’article L. 441‑2‑3 dudit code ;"
+  },
+  {
+   "guid": "bee7e573-e600-487a-a717-94c197ee46eb",
+   "article": "Article 9",
+   "pastille": "23",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "435",
+     "texte": "835",
+     "groupe": "Gouvernement",
+     "auteur": null,
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "b) b) La mise en œuvre de la politique publique de relogement des personnes mentionnées à l’article L. 441‑1 du même code ;"
+  },
+  {
+   "guid": "ca285d64-abf8-46d5-9e25-c6191a32c3a1",
+   "article": "Article 9",
+   "pastille": "24",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "435",
+     "texte": "835",
+     "groupe": "Gouvernement",
+     "auteur": null,
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "c) c) L’exercice des droits de réservation de logements dont le représentant de l’État dans le département bénéficie en application du même article L. 441‑1, à l’exception de l’exercice des droits détenus sur des logements réservés au bénéfice des ag"
+  },
+  {
+   "guid": "9030bc21-bbb5-47c1-a759-b6a4923789c3",
+   "article": "Article 9",
+   "pastille": "25",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "435",
+     "texte": "835",
+     "groupe": "Gouvernement",
+     "auteur": null,
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "d) d) Les compétences nécessaires à la mise en œuvre de l’article L. 313‑26‑2 du même code."
+  },
+  {
+   "guid": "83d90906-407f-41fa-8e8e-8fa8b63afd74",
+   "article": "Article 9",
+   "pastille": "26",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "435",
+     "texte": "835",
+     "groupe": "Gouvernement",
+     "auteur": null,
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "La délégation des compétences mentionnées aux a à d du présent I bis entraîne la pleine et entière responsabilité de ces établissements et collectivités territoriales pour l’exercice de ces compétences."
+  },
+  {
+   "guid": "9a2b4d0f-cb98-4215-a6da-b441e19b559c",
+   "article": "Article 9",
+   "pastille": "27",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "435",
+     "texte": "835",
+     "groupe": "Gouvernement",
+     "auteur": null,
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "En particulier, le conseil municipal, le conseil de Paris, l’organe délibérant des établissements ou, sur délégation de ces derniers, le maire ou le président, intentent au nom de la commune, de la Ville de Paris ou de l’établissement, les actions en"
+  },
+  {
+   "guid": "176d4499-5fc7-422a-8a89-bdd2bf39647f",
+   "article": "Article 9",
+   "pastille": "28",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "435",
+     "texte": "835",
+     "groupe": "Gouvernement",
+     "auteur": null,
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "La convention mentionnée au premier alinéa peut être dénoncée par le représentant de l’État dans le département en cas de manquement du délégataire à ses obligations mentionnées aux a à d, ou si ce dernier est une commune qui ne respecte pas les enga"
+  },
+  {
+   "guid": "c0824e75-ada7-4444-848f-b5910e50a30b",
+   "article": "Article 9",
+   "pastille": "29",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "435",
+     "texte": "835",
+     "groupe": "Gouvernement",
+     "auteur": null,
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "Les établissements et collectivités territoriales volontaires disposent d’un délai de six mois à compter de la promulgation de la présente loi pour demander à bénéficier de l’expérimentation prévue au présent I bis."
+  },
+  {
+   "guid": "b765345e-564c-4a4e-afe4-2b93966855f5",
+   "article": "Article 9",
+   "pastille": "30",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "435",
+     "texte": "835",
+     "groupe": "Gouvernement",
+     "auteur": null,
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "Un arrêté du représentant de l’État dans le département, auquel est annexée la convention mentionnée au premier alinéa, autorise les établissements et collectivités territoriales concernés à réaliser l’expérimentation. Le représentant de l’État dans "
+  },
+  {
+   "guid": "a7d513ba-9eb1-4051-b113-4e9c7b836f71",
+   "article": "Article 9",
+   "pastille": "31",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "435",
+     "texte": "835",
+     "groupe": "Gouvernement",
+     "auteur": null,
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "L’expérimentation est suivie et évaluée par le préfet de la région Île‑de‑France. Au plus tard six mois avant le terme de l’expérimentation, le Gouvernement remet au Parlement un rapport d’évaluation de cette expérimentation."
+  },
+  {
+   "guid": "c2acbcd0-22fc-4023-9a18-810ca1d4cc32",
+   "article": "Article 9",
+   "pastille": "32",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-14",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "II. – II. – (Supprimé)"
+  },
+  {
+   "guid": "a6af3b24-730a-4d70-9498-4bc7a8a7933c",
+   "article": "Article 9",
+   "pastille": "33",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "16",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "III. – III. – L’article L. 5219‑1 du code général des collectivités territoriales est ainsi modifié :"
+  },
+  {
+   "guid": "a1832750-4ab1-42e3-bb7c-9db887f53b61",
+   "article": "Article 9",
+   "pastille": "34",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "16",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "1° 1° Les a, b et d du 2° du II, le VI et le VII sont abrogés ;"
+  },
+  {
+   "guid": "bee0e05f-af13-4b4d-b397-8d20af71eb7e",
+   "article": "Article 9",
+   "pastille": "35",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "16",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "2° 2° (nouveau) À la troisième phrase du septième alinéa du V, les mots : « tient lieu de programme local de l’habitat et poursuit, à ce titre, » sont remplacés par le mot : « poursuit »."
+  },
+  {
+   "guid": "d636f111-4f52-44c7-a2f1-7754aa254bbc",
+   "article": "Article 9",
+   "pastille": "36",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-14",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "IV. – IV. – (Supprimé)"
+  },
+  {
+   "guid": "fe0c657f-f207-4e43-93bc-8a41c7e35b72",
+   "article": "Article 9",
+   "pastille": "36",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-14",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "V. – V. – (Supprimé)"
+  },
+  {
+   "guid": "9ce3adaf-2083-4bac-97e7-066f27e5e1f8",
+   "article": "Article 10",
+   "pastille": "1",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "I. – I. – Le code de la construction et de l’habitation est ainsi modifié :"
+  },
+  {
+   "guid": "f6fe2cfb-fb58-4dc6-b881-6e75f7211d4b",
+   "article": "Article 10",
+   "pastille": "2",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "1° 1° L’article L. 441‑2 est ainsi modifié :"
+  },
+  {
+   "guid": "4a084350-0f07-4600-9bdb-39b5e5fbcd35",
+   "article": "Article 10",
+   "pastille": "3",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "a) a) Le II est ainsi modifié :"
+  },
+  {
+   "guid": "9892fe26-4c7b-4a98-9e96-57b527e5ca21",
+   "article": "Article 10",
+   "pastille": "4",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "– à la fin du 1°, les mots : « , qui élisent en leur sein un président » sont supprimés ;"
+  },
+  {
+   "guid": "f79ec188-93e5-4791-bcc6-27309d6179f6",
+   "article": "Article 10",
+   "pastille": "5",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-15",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "– la seconde phrase du 2° est remplacée par deux phrases ainsi rédigées : « Il peut s’opposer, en le motivant, au choix de l’un des candidats. Cette opposition fait obstacle à l’attribution du logement à ce candidat ; »"
+  },
+  {
+   "guid": "49842f08-8930-43ed-91f8-fc69a66187f9",
+   "article": "Article 10",
+   "pastille": "6",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "– après le 4°, il est inséré un alinéa ainsi rédigé :"
+  },
+  {
+   "guid": "fe126700-1fe2-44e4-a341-192cde5b40fb",
+   "article": "Article 10",
+   "pastille": "7",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-15",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« La présidence de la commission d’attribution des logements et d’examen de l’occupation des logements est exercée par le maire ou son représentant ou, lorsque la commission est créée dans les conditions définies au second alinéa du I du présent arti"
+  },
+  {
+   "guid": "95ec644a-20dd-4c43-b1e1-906b48fb11c6",
+   "article": "Article 10",
+   "pastille": "8",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-15",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "– au sixième alinéa, les mots : « de gérance prévue à » sont remplacés par les mots : « prévoyant la gérance d’un ou de plusieurs immeubles en application de », les mots : « le président » sont remplacés par les mots : « un membre » et, après le mot "
+  },
+  {
+   "guid": "9b6cb592-ac25-4cb8-bf2f-37258a940ca5",
+   "article": "Article 10",
+   "pastille": "9",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-15",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "– il est ajouté un d ainsi rédigé :"
+  },
+  {
+   "guid": "9a02bb72-e5f6-43e3-9d79-ba4d36b31595",
+   "article": "Article 10",
+   "pastille": "10",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-15",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« d) Le président du conseil départemental sur le territoire duquel sont implantés les logements attribués, ou son représentant. » ;"
+  },
+  {
+   "guid": "7cf8175b-bb5b-439c-83df-85d39f25e017",
+   "article": "Article 10",
+   "pastille": "11",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "b) b) Le III est ainsi modifié :"
+  },
+  {
+   "guid": "8d81ea83-8006-4583-a969-4b65cc27b326",
+   "article": "Article 10",
+   "pastille": "12",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "– après le deuxième alinéa, sont insérés quatre alinéas ainsi rédigés :"
+  },
+  {
+   "guid": "a0248583-4b94-42ac-b9c5-efe696026e62",
+   "article": "Article 10",
+   "pastille": "13",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-15",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Lors de la mise en location initiale des logements d’une opération de logements locatifs sociaux :"
+  },
+  {
+   "guid": "e5a4f710-9724-4049-9e57-1c83fb26cc6f",
+   "article": "Article 10",
+   "pastille": "14",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-15",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« 1° Le maire de la commune sur le territoire de laquelle sont implantés les logements attribués, ou son représentant, propose à la commission l’ordre de classement des candidats présentés pour l’attribution de chaque logement par les réservataires o"
+  },
+  {
+   "guid": "c13722c9-4490-4f71-bd6c-f468cf254cdd",
+   "article": "Article 10",
+   "pastille": "15",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-15",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« 2° Le maire ou son représentant peut, en le motivant, s’opposer au choix de l’un des candidats. Cette opposition fait obstacle à l’attribution du logement à ce candidat ;"
+  },
+  {
+   "guid": "d100fde2-99e2-4dff-85ae-8801d0fdbfc4",
+   "article": "Article 10",
+   "pastille": "16",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-15",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« 3° (nouveau) L’État délègue à la commune les réservations de logements dont il bénéficie en application de l’article L. 441‑1, à l’exception des logements réservés au bénéfice des agents civils et militaires de l’État. » ;"
+  },
+  {
+   "guid": "2bc6356b-c6c8-48e3-b18c-0f786de1e220",
+   "article": "Article 10",
+   "pastille": "17",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-15",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "– à l’avant‑dernier alinéa, la première occurrence des mots : « troisième et cinquième » est remplacée par les mots : « septième et neuvième » et, à la fin, les mots : « troisième et cinquième alinéas du présent III » sont remplacés par les mots : « "
+  },
+  {
+   "guid": "b5b9646a-42ba-43e2-a311-6e9e3650ff26",
+   "article": "Article 10",
+   "pastille": "18",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-15",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "c) c) (Supprimé)"
+  },
+  {
+   "guid": "0f772019-41f3-45f2-8d35-8a3b76d031ae",
+   "article": "Article 10",
+   "pastille": "19",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-15",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "1° bis 1° bis (nouveau) Après l’article L. 441‑2, il est inséré un article L. 441‑2‑1 A ainsi rédigé :"
+  },
+  {
+   "guid": "f7c4817d-6ab2-4323-99ee-8c875998931d",
+   "article": "Article 10",
+   "pastille": "20",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-15",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Art. L. 441‑2‑1 A. – Il est créé, dans chaque organisme d’habitations à loyer modéré, une commission de concertation chargée de suivre les programmes de constructions neuves jusqu’à leur date de livraison et de transmettre la liste des candidats pr"
+  },
+  {
+   "guid": "76cd1f23-daea-4037-82c7-035c26203741",
+   "article": "Article 10",
+   "pastille": "21",
+   "etape": "commission",
+   "amendements": [
+    {
+     "num": "COM-15",
+     "texte": "801",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« La commission est composée d’un représentant de chaque réservataire et de l’organisme d’habitations à loyer modéré. Elle est présidée de droit par le maire de la commune où sont implantés les logements en construction, ou par son représentant. » ;"
+  },
+  {
+   "guid": "4e992446-0370-41d4-97e5-648ce8ef64fc",
+   "article": "Article 10",
+   "pastille": "22",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "2° 2° Le premier alinéa de l’article L. 441‑2‑2 est remplacé par deux alinéas ainsi rédigés :"
+  },
+  {
+   "guid": "3e8535fd-be7d-4405-bf58-215ff3da26d1",
+   "article": "Article 10",
+   "pastille": "23",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "« Tout rejet d’une demande d’attribution suivi d’une radiation de la demande effectuée dans les conditions prévues au 2° de l’article L. 441‑2‑9 doit être notifié au demandeur par décision expresse motivée du président de la commission d’attribution "
+  },
+  {
+   "guid": "ad23b8c2-c8d2-49c0-830d-d2cabd36b4f0",
+   "article": "Article 10",
+   "pastille": "24",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "« En cas de gestion non déléguée des réservations, la décision de ne pas donner suite à la proposition d’un réservataire ou de changer l’ordre de priorité parmi les propositions effectuées doit être motivée. Elle est notifiée au réservataire par le p"
+  },
+  {
+   "guid": "64e3aa04-2e23-4758-8d7f-98e993f3fde6",
+   "article": "Article 10",
+   "pastille": "25",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "427",
+     "texte": "835",
+     "groupe": "Commission CAE",
+     "auteur": "Navarro-Willem",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "II. – II (nouveau). – Au b du 2° de l’article L. 281‑1 du code de l’action sociale et des familles, le mot : « troisième » est remplacé par le mot : « septième »."
+  },
+  {
+   "guid": "5b16705e-402e-406f-9f57-393bdb7921a6",
+   "article": "Article 11",
+   "pastille": "1",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "302",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Arnaud-Delorme",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "Le V de l’article L. 441‑2 du code de la construction et de l’habitation est ainsi modifié :"
+  },
+  {
+   "guid": "2dce9f52-d937-4ff8-a4d9-3174f830336e",
+   "article": "Article 11",
+   "pastille": "2",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "302",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Arnaud-Delorme",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "1° 1° Au début, sont ajoutés les mots : « Par dérogation aux deux premiers alinéas du III du présent article, » ;"
+  },
+  {
+   "guid": "a93333c1-b620-4570-bd79-6fdd2894af28",
+   "article": "Article 11",
+   "pastille": "3",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "302",
+     "texte": "835",
+     "groupe": "RC",
+     "auteur": "Arnaud-Delorme",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "2° 2° Les mots : « et L. 442‑6 » sont remplacés par les mots : « , L. 442‑6, L. 472‑1‑8 et L. 481‑3 »."
+  }
+ ],
+ "groupes_fictifs": {
+  "AR": "Avenir rural",
+  "CP": "Centre et progrès",
+  "DC": "Démocratie communale",
+  "ECO": "Écologie urbaine",
+  "LL": "Libertés locales",
+  "NI": "Non-inscrits",
+  "NV": "Nouvelle voie",
+  "PR": "Progrès républicain",
+  "RC": "Rassemblement des communes",
+  "RS": "Renouveau social",
+  "SOL": "Solidarité et logement",
+  "UT": "Union des territoires",
+  "SA": "Alliance des départements",
+  "SB": "Bastion républicain",
+  "SC": "Concorde sénatoriale",
+  "SD": "Démocratie des terroirs",
+  "SE": "Équilibre et territoires",
+  "SF": "Forces sociales",
+  "SG": "Gauche des communes",
+  "SH": "Horizon vert",
+  "SI": "Indépendants du Sénat"
+ },
+ "nota": [
+  "Groupes et personnes rendus fictifs (scripts/fictionnaliser.py) ; textes, sorts et dates réels."
+ ]
+}

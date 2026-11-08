@@ -1,0 +1,2714 @@
+{
+ "total": 145249,
+ "par_type_et_lieu": {
+  "('PPL', 'seance')": {
+   "n": 32131,
+   "en_attente": 9358,
+   "adopte": 2379,
+   "irrecevable": 5400,
+   "retire_avant_discussion": 2718,
+   "rejete": 7923,
+   "tombe": 1892,
+   "non_soutenu": 1661,
+   "retire_en_discussion": 800,
+   "pct_irrecevable": 16.8,
+   "pct_adopte_sur_depose": 7.4,
+   "pct_adopte_sur_examine": 16.2
+  },
+  "('PLF', 'seance')": {
+   "n": 24144,
+   "rejete": 3562,
+   "en_attente": 10505,
+   "adopte": 1809,
+   "retire_avant_discussion": 2008,
+   "irrecevable": 2275,
+   "non_soutenu": 2065,
+   "tombe": 1592,
+   "retire_en_discussion": 326,
+   "None": 2,
+   "pct_irrecevable": 9.4,
+   "pct_adopte_sur_depose": 7.5,
+   "pct_adopte_sur_examine": 19.3
+  },
+  "('PLF', 'commission')": {
+   "n": 22313,
+   "rejete": 8275,
+   "retire_en_discussion": 844,
+   "adopte": 4343,
+   "tombe": 2103,
+   "non_soutenu": 2758,
+   "retire_avant_discussion": 816,
+   "irrecevable": 3043,
+   "en_attente": 131,
+   "pct_irrecevable": 13.6,
+   "pct_adopte_sur_depose": 19.5,
+   "pct_adopte_sur_examine": 23.7
+  },
+  "('PPL', 'commission')": {
+   "n": 18460,
+   "rejete": 5221,
+   "tombe": 3047,
+   "adopte": 3750,
+   "irrecevable": 2613,
+   "retire_avant_discussion": 1467,
+   "retire_en_discussion": 1307,
+   "non_soutenu": 884,
+   "en_attente": 171,
+   "pct_irrecevable": 14.2,
+   "pct_adopte_sur_depose": 20.3,
+   "pct_adopte_sur_examine": 26.4
+  },
+  "('PJL', 'seance')": {
+   "n": 12355,
+   "adopte": 1750,
+   "rejete": 3514,
+   "tombe": 1441,
+   "irrecevable": 3240,
+   "non_soutenu": 906,
+   "retire_avant_discussion": 728,
+   "retire_en_discussion": 365,
+   "en_attente": 411,
+   "pct_irrecevable": 26.2,
+   "pct_adopte_sur_depose": 14.2,
+   "pct_adopte_sur_examine": 21.9
+  },
+  "('PJL', 'commission')": {
+   "n": 11236,
+   "irrecevable": 2506,
+   "tombe": 1263,
+   "adopte": 2888,
+   "rejete": 3014,
+   "retire_en_discussion": 587,
+   "non_soutenu": 605,
+   "retire_avant_discussion": 370,
+   "None": 2,
+   "en_attente": 1,
+   "pct_irrecevable": 22.3,
+   "pct_adopte_sur_depose": 25.7,
+   "pct_adopte_sur_examine": 34.5
+  },
+  "('PLFSS', 'seance')": {
+   "n": 10208,
+   "en_attente": 3238,
+   "adopte": 1100,
+   "irrecevable": 2291,
+   "tombe": 1171,
+   "retire_avant_discussion": 522,
+   "rejete": 1322,
+   "non_soutenu": 351,
+   "retire_en_discussion": 213,
+   "pct_irrecevable": 22.4,
+   "pct_adopte_sur_depose": 10.8,
+   "pct_adopte_sur_examine": 26.5
+  },
+  "('PLFSS', 'commission')": {
+   "n": 6673,
+   "non_soutenu": 500,
+   "irrecevable": 2168,
+   "rejete": 1502,
+   "tombe": 889,
+   "adopte": 927,
+   "retire_avant_discussion": 480,
+   "retire_en_discussion": 205,
+   "en_attente": 2,
+   "pct_irrecevable": 32.5,
+   "pct_adopte_sur_depose": 13.9,
+   "pct_adopte_sur_examine": 23.0
+  },
+  "('Constit.', 'seance')": {
+   "n": 3924,
+   "en_attente": 3785,
+   "irrecevable": 12,
+   "rejete": 32,
+   "adopte": 23,
+   "tombe": 28,
+   "retire_avant_discussion": 26,
+   "retire_en_discussion": 16,
+   "non_soutenu": 2,
+   "pct_irrecevable": 0.3,
+   "pct_adopte_sur_depose": 0.6,
+   "pct_adopte_sur_examine": 22.8
+  },
+  "('Organique', 'seance')": {
+   "n": 1759,
+   "rejete": 35,
+   "irrecevable": 94,
+   "adopte": 7,
+   "retire_en_discussion": 13,
+   "retire_avant_discussion": 8,
+   "non_soutenu": 3,
+   "tombe": 12,
+   "en_attente": 1587,
+   "pct_irrecevable": 5.3,
+   "pct_adopte_sur_depose": 0.4,
+   "pct_adopte_sur_examine": 10.0
+  },
+  "('PLFR', 'seance')": {
+   "n": 361,
+   "en_attente": 135,
+   "retire_avant_discussion": 16,
+   "adopte": 45,
+   "rejete": 81,
+   "non_soutenu": 12,
+   "retire_en_discussion": 10,
+   "tombe": 20,
+   "irrecevable": 42,
+   "pct_irrecevable": 11.6,
+   "pct_adopte_sur_depose": 12.5,
+   "pct_adopte_sur_examine": 26.8
+  },
+  "('Résolution', 'seance')": {
+   "n": 337,
+   "adopte": 126,
+   "rejete": 115,
+   "non_soutenu": 9,
+   "retire_avant_discussion": 17,
+   "retire_en_discussion": 8,
+   "tombe": 10,
+   "irrecevable": 1,
+   "en_attente": 51,
+   "pct_irrecevable": 0.3,
+   "pct_adopte_sur_depose": 37.4,
+   "pct_adopte_sur_examine": 47.0
+  },
+  "('PLFR', 'commission')": {
+   "n": 329,
+   "en_attente": 86,
+   "irrecevable": 34,
+   "tombe": 3,
+   "rejete": 131,
+   "adopte": 41,
+   "non_soutenu": 15,
+   "retire_en_discussion": 8,
+   "retire_avant_discussion": 11,
+   "pct_irrecevable": 10.3,
+   "pct_adopte_sur_depose": 12.5,
+   "pct_adopte_sur_examine": 20.7
+  },
+  "('Résolution', 'commission')": {
+   "n": 314,
+   "rejete": 147,
+   "adopte": 91,
+   "retire_en_discussion": 31,
+   "non_soutenu": 17,
+   "retire_avant_discussion": 11,
+   "irrecevable": 8,
+   "tombe": 9,
+   "pct_irrecevable": 2.5,
+   "pct_adopte_sur_depose": 29.0,
+   "pct_adopte_sur_examine": 30.8
+  },
+  "('Règlement', 'seance')": {
+   "n": 172,
+   "en_attente": 167,
+   "retire_avant_discussion": 3,
+   "irrecevable": 2,
+   "pct_irrecevable": 1.2,
+   "pct_adopte_sur_depose": 0.0,
+   "pct_adopte_sur_examine": null
+  },
+  "('?', 'seance')": {
+   "n": 170,
+   "en_attente": 92,
+   "irrecevable": 7,
+   "retire_avant_discussion": 4,
+   "adopte": 1,
+   "rejete": 60,
+   "retire_en_discussion": 6,
+   "pct_irrecevable": 4.1,
+   "pct_adopte_sur_depose": 0.6,
+   "pct_adopte_sur_examine": 1.5
+  },
+  "('Organique', 'commission')": {
+   "n": 133,
+   "rejete": 65,
+   "irrecevable": 21,
+   "adopte": 27,
+   "retire_en_discussion": 11,
+   "retire_avant_discussion": 4,
+   "non_soutenu": 4,
+   "tombe": 1,
+   "pct_irrecevable": 15.8,
+   "pct_adopte_sur_depose": 20.3,
+   "pct_adopte_sur_examine": 25.0
+  },
+  "('Constit.', 'commission')": {
+   "n": 123,
+   "rejete": 81,
+   "adopte": 20,
+   "tombe": 9,
+   "retire_avant_discussion": 1,
+   "retire_en_discussion": 9,
+   "irrecevable": 3,
+   "pct_irrecevable": 2.4,
+   "pct_adopte_sur_depose": 16.3,
+   "pct_adopte_sur_examine": 16.8
+  },
+  "('Règlement', 'commission')": {
+   "n": 107,
+   "rejete": 58,
+   "adopte": 38,
+   "non_soutenu": 5,
+   "irrecevable": 3,
+   "retire_en_discussion": 2,
+   "tombe": 1,
+   "pct_irrecevable": 2.8,
+   "pct_adopte_sur_depose": 35.5,
+   "pct_adopte_sur_examine": 36.5
+  }
+ },
+ "par_type": {
+  "PPL": {
+   "n": 50591,
+   "rejete": 13144,
+   "tombe": 4939,
+   "adopte": 6129,
+   "irrecevable": 8013,
+   "retire_avant_discussion": 4185,
+   "en_attente": 9529,
+   "non_soutenu": 2545,
+   "retire_en_discussion": 2107,
+   "pct_irrecevable": 15.8,
+   "pct_adopte_sur_depose": 12.1,
+   "pct_adopte_sur_examine": 21.2
+  },
+  "PLF": {
+   "n": 46457,
+   "rejete": 11837,
+   "en_attente": 10636,
+   "adopte": 6152,
+   "retire_avant_discussion": 2824,
+   "retire_en_discussion": 1170,
+   "irrecevable": 5318,
+   "non_soutenu": 4823,
+   "tombe": 3695,
+   "None": 2,
+   "pct_irrecevable": 11.4,
+   "pct_adopte_sur_depose": 13.2,
+   "pct_adopte_sur_examine": 22.2
+  },
+  "PJL": {
+   "n": 23591,
+   "irrecevable": 5746,
+   "tombe": 2704,
+   "adopte": 4638,
+   "rejete": 6528,
+   "retire_en_discussion": 952,
+   "non_soutenu": 1511,
+   "retire_avant_discussion": 1098,
+   "en_attente": 412,
+   "None": 2,
+   "pct_irrecevable": 24.4,
+   "pct_adopte_sur_depose": 19.7,
+   "pct_adopte_sur_examine": 28.4
+  },
+  "PLFSS": {
+   "n": 16881,
+   "en_attente": 3240,
+   "adopte": 2027,
+   "non_soutenu": 851,
+   "irrecevable": 4459,
+   "tombe": 2060,
+   "retire_avant_discussion": 1002,
+   "rejete": 2824,
+   "retire_en_discussion": 418,
+   "pct_irrecevable": 26.4,
+   "pct_adopte_sur_depose": 12.0,
+   "pct_adopte_sur_examine": 24.8
+  },
+  "Constit.": {
+   "n": 4047,
+   "en_attente": 3785,
+   "rejete": 113,
+   "irrecevable": 15,
+   "adopte": 43,
+   "tombe": 37,
+   "retire_avant_discussion": 27,
+   "retire_en_discussion": 25,
+   "non_soutenu": 2,
+   "pct_irrecevable": 0.4,
+   "pct_adopte_sur_depose": 1.1,
+   "pct_adopte_sur_examine": 19.5
+  },
+  "Organique": {
+   "n": 1892,
+   "rejete": 100,
+   "irrecevable": 115,
+   "adopte": 34,
+   "retire_en_discussion": 24,
+   "retire_avant_discussion": 12,
+   "non_soutenu": 7,
+   "tombe": 13,
+   "en_attente": 1587,
+   "pct_irrecevable": 6.1,
+   "pct_adopte_sur_depose": 1.8,
+   "pct_adopte_sur_examine": 19.1
+  },
+  "PLFR": {
+   "n": 690,
+   "en_attente": 221,
+   "irrecevable": 76,
+   "retire_avant_discussion": 27,
+   "tombe": 23,
+   "rejete": 212,
+   "adopte": 86,
+   "non_soutenu": 27,
+   "retire_en_discussion": 18,
+   "pct_irrecevable": 11.0,
+   "pct_adopte_sur_depose": 12.5,
+   "pct_adopte_sur_examine": 23.5
+  },
+  "Résolution": {
+   "n": 651,
+   "rejete": 262,
+   "adopte": 217,
+   "retire_en_discussion": 39,
+   "non_soutenu": 26,
+   "retire_avant_discussion": 28,
+   "irrecevable": 9,
+   "tombe": 19,
+   "en_attente": 51,
+   "pct_irrecevable": 1.4,
+   "pct_adopte_sur_depose": 33.3,
+   "pct_adopte_sur_examine": 38.5
+  },
+  "Règlement": {
+   "n": 279,
+   "rejete": 58,
+   "adopte": 38,
+   "en_attente": 167,
+   "non_soutenu": 5,
+   "irrecevable": 5,
+   "retire_en_discussion": 2,
+   "retire_avant_discussion": 3,
+   "tombe": 1,
+   "pct_irrecevable": 1.8,
+   "pct_adopte_sur_depose": 13.6,
+   "pct_adopte_sur_examine": 36.5
+  },
+  "?": {
+   "n": 170,
+   "en_attente": 92,
+   "irrecevable": 7,
+   "retire_avant_discussion": 4,
+   "adopte": 1,
+   "rejete": 60,
+   "retire_en_discussion": 6,
+   "pct_irrecevable": 4.1,
+   "pct_adopte_sur_depose": 0.6,
+   "pct_adopte_sur_examine": 1.5
+  }
+ },
+ "par_lieu": {
+  "seance": {
+   "n": 85561,
+   "adopte": 7240,
+   "rejete": 16644,
+   "en_attente": 29329,
+   "irrecevable": 13364,
+   "retire_avant_discussion": 6050,
+   "tombe": 6166,
+   "non_soutenu": 5009,
+   "retire_en_discussion": 1757,
+   "None": 2,
+   "pct_irrecevable": 15.6,
+   "pct_adopte_sur_depose": 8.5,
+   "pct_adopte_sur_examine": 19.7
+  },
+  "commission": {
+   "n": 59688,
+   "rejete": 18494,
+   "adopte": 12125,
+   "retire_en_discussion": 3004,
+   "tombe": 7325,
+   "irrecevable": 10399,
+   "retire_avant_discussion": 3160,
+   "non_soutenu": 4788,
+   "en_attente": 391,
+   "None": 2,
+   "pct_irrecevable": 17.4,
+   "pct_adopte_sur_depose": 20.3,
+   "pct_adopte_sur_examine": 26.5
+  }
+ },
+ "par_auteur": {
+  "('Député', 'seance')": {
+   "n": 83265,
+   "adopte": 6641,
+   "rejete": 16501,
+   "en_attente": 28448,
+   "irrecevable": 13254,
+   "retire_avant_discussion": 5575,
+   "tombe": 6091,
+   "non_soutenu": 5009,
+   "retire_en_discussion": 1744,
+   "None": 2,
+   "pct_irrecevable": 15.9,
+   "pct_adopte_sur_depose": 8.0,
+   "pct_adopte_sur_examine": 18.5
+  },
+  "('Député', 'commission')": {
+   "n": 51709,
+   "rejete": 17259,
+   "adopte": 6988,
+   "retire_en_discussion": 2816,
+   "tombe": 6447,
+   "irrecevable": 10188,
+   "retire_avant_discussion": 2996,
+   "non_soutenu": 4625,
+   "en_attente": 388,
+   "None": 2,
+   "pct_irrecevable": 19.7,
+   "pct_adopte_sur_depose": 13.5,
+   "pct_adopte_sur_examine": 18.3
+  },
+  "('Rapporteur', 'commission')": {
+   "n": 7830,
+   "adopte": 5039,
+   "tombe": 870,
+   "rejete": 1229,
+   "irrecevable": 198,
+   "retire_en_discussion": 187,
+   "retire_avant_discussion": 141,
+   "non_soutenu": 163,
+   "en_attente": 3,
+   "pct_irrecevable": 2.5,
+   "pct_adopte_sur_depose": 64.4,
+   "pct_adopte_sur_examine": 67.3
+  },
+  "('Gouvernement', 'seance')": {
+   "n": 1364,
+   "adopte": 577,
+   "rejete": 138,
+   "retire_avant_discussion": 160,
+   "tombe": 73,
+   "irrecevable": 99,
+   "en_attente": 305,
+   "retire_en_discussion": 12,
+   "pct_irrecevable": 7.3,
+   "pct_adopte_sur_depose": 42.3,
+   "pct_adopte_sur_examine": 72.1
+  },
+  "('Rapporteur', 'seance')": {
+   "n": 932,
+   "adopte": 22,
+   "rejete": 5,
+   "retire_avant_discussion": 315,
+   "irrecevable": 11,
+   "retire_en_discussion": 1,
+   "en_attente": 576,
+   "tombe": 2,
+   "pct_irrecevable": 1.2,
+   "pct_adopte_sur_depose": 2.4,
+   "pct_adopte_sur_examine": 73.3
+  },
+  "('Gouvernement', 'commission')": {
+   "n": 149,
+   "irrecevable": 13,
+   "adopte": 98,
+   "tombe": 8,
+   "retire_en_discussion": 1,
+   "retire_avant_discussion": 23,
+   "rejete": 6,
+   "pct_irrecevable": 8.7,
+   "pct_adopte_sur_depose": 65.8,
+   "pct_adopte_sur_examine": 86.7
+  }
+ },
+ "par_organe": {
+  "AN": {
+   "n": 85561,
+   "adopte": 7240,
+   "rejete": 16644,
+   "en_attente": 29329,
+   "irrecevable": 13364,
+   "retire_avant_discussion": 6050,
+   "tombe": 6166,
+   "non_soutenu": 5009,
+   "retire_en_discussion": 1757,
+   "None": 2,
+   "pct_irrecevable": 15.6,
+   "pct_adopte_sur_depose": 8.5,
+   "pct_adopte_sur_examine": 19.7
+  },
+  "CION_FIN": {
+   "n": 18251,
+   "retire_avant_discussion": 856,
+   "rejete": 6205,
+   "adopte": 3431,
+   "tombe": 1909,
+   "irrecevable": 2710,
+   "retire_en_discussion": 575,
+   "en_attente": 91,
+   "non_soutenu": 2474,
+   "pct_irrecevable": 14.8,
+   "pct_adopte_sur_depose": 18.8,
+   "pct_adopte_sur_examine": 23.5
+  },
+  "CION-SOC": {
+   "n": 13558,
+   "rejete": 4262,
+   "tombe": 1548,
+   "adopte": 2183,
+   "irrecevable": 2965,
+   "retire_avant_discussion": 586,
+   "retire_en_discussion": 714,
+   "non_soutenu": 1043,
+   "en_attente": 257,
+   "pct_irrecevable": 21.9,
+   "pct_adopte_sur_depose": 16.1,
+   "pct_adopte_sur_examine": 22.4
+  },
+  "CION_LOIS": {
+   "n": 7237,
+   "tombe": 963,
+   "rejete": 2509,
+   "adopte": 1757,
+   "retire_avant_discussion": 256,
+   "irrecevable": 1064,
+   "retire_en_discussion": 302,
+   "non_soutenu": 375,
+   "en_attente": 11,
+   "pct_irrecevable": 14.7,
+   "pct_adopte_sur_depose": 24.3,
+   "pct_adopte_sur_examine": 29.7
+  },
+  "CION-ECO": {
+   "n": 6157,
+   "irrecevable": 1190,
+   "tombe": 1055,
+   "adopte": 1332,
+   "rejete": 1704,
+   "retire_en_discussion": 368,
+   "non_soutenu": 239,
+   "retire_avant_discussion": 236,
+   "None": 2,
+   "en_attente": 31,
+   "pct_irrecevable": 19.3,
+   "pct_adopte_sur_depose": 21.6,
+   "pct_adopte_sur_examine": 28.3
+  },
+  "CION-CEDU": {
+   "n": 5154,
+   "tombe": 740,
+   "adopte": 937,
+   "rejete": 1299,
+   "irrecevable": 667,
+   "non_soutenu": 212,
+   "retire_en_discussion": 471,
+   "retire_avant_discussion": 827,
+   "en_attente": 1,
+   "pct_irrecevable": 12.9,
+   "pct_adopte_sur_depose": 18.2,
+   "pct_adopte_sur_examine": 25.6
+  },
+  "CION-DVP": {
+   "n": 3491,
+   "retire_en_discussion": 166,
+   "tombe": 632,
+   "adopte": 838,
+   "rejete": 1013,
+   "retire_avant_discussion": 146,
+   "irrecevable": 533,
+   "non_soutenu": 163,
+   "pct_irrecevable": 15.3,
+   "pct_adopte_sur_depose": 24.0,
+   "pct_adopte_sur_examine": 29.8
+  },
+  "CSVIEECO": {
+   "n": 1487,
+   "irrecevable": 465,
+   "rejete": 245,
+   "adopte": 350,
+   "retire_en_discussion": 69,
+   "non_soutenu": 104,
+   "retire_avant_discussion": 76,
+   "tombe": 178,
+   "pct_irrecevable": 31.3,
+   "pct_adopte_sur_depose": 23.5,
+   "pct_adopte_sur_examine": 37.0
+  },
+  "CSPROENF": {
+   "n": 1238,
+   "irrecevable": 484,
+   "rejete": 183,
+   "adopte": 287,
+   "non_soutenu": 40,
+   "tombe": 121,
+   "retire_avant_discussion": 32,
+   "retire_en_discussion": 91,
+   "pct_irrecevable": 39.1,
+   "pct_adopte_sur_depose": 23.2,
+   "pct_adopte_sur_examine": 39.8
+  },
+  "CSINTEG": {
+   "n": 1059,
+   "non_soutenu": 37,
+   "adopte": 350,
+   "irrecevable": 193,
+   "tombe": 127,
+   "retire_en_discussion": 111,
+   "retire_avant_discussion": 80,
+   "rejete": 161,
+   "pct_irrecevable": 18.2,
+   "pct_adopte_sur_depose": 33.1,
+   "pct_adopte_sur_examine": 44.5
+  },
+  "CION_DEF": {
+   "n": 936,
+   "adopte": 267,
+   "irrecevable": 81,
+   "rejete": 431,
+   "retire_avant_discussion": 41,
+   "retire_en_discussion": 75,
+   "non_soutenu": 31,
+   "tombe": 10,
+   "pct_irrecevable": 8.7,
+   "pct_adopte_sur_depose": 28.5,
+   "pct_adopte_sur_examine": 32.8
+  },
+  "CION_AFETR": {
+   "n": 601,
+   "rejete": 355,
+   "adopte": 149,
+   "retire_en_discussion": 21,
+   "retire_avant_discussion": 22,
+   "non_soutenu": 27,
+   "irrecevable": 14,
+   "tombe": 13,
+   "pct_irrecevable": 2.3,
+   "pct_adopte_sur_depose": 24.8,
+   "pct_adopte_sur_examine": 26.4
+  },
+  "CSCYBER": {
+   "n": 505,
+   "adopte": 244,
+   "rejete": 122,
+   "non_soutenu": 43,
+   "retire_en_discussion": 34,
+   "tombe": 29,
+   "irrecevable": 31,
+   "retire_avant_discussion": 2,
+   "pct_irrecevable": 6.1,
+   "pct_adopte_sur_depose": 48.3,
+   "pct_adopte_sur_examine": 51.7
+  },
+  "CSLOFINAP": {
+   "n": 14,
+   "retire_en_discussion": 7,
+   "rejete": 5,
+   "irrecevable": 2,
+   "pct_irrecevable": 14.3,
+   "pct_adopte_sur_depose": 0.0,
+   "pct_adopte_sur_examine": 0.0
+  }
+ },
+ "sous_etats_irrecevabilite": [
+  [
+   [
+    "Irrecevable 40",
+    "Charge",
+    "seance"
+   ],
+   3697
+  ],
+  [
+   [
+    "Irrecevable",
+    "Cavalier (45)",
+    "seance"
+   ],
+   3526
+  ],
+  [
+   [
+    "Irrecevable 40",
+    "Charge",
+    "commission"
+   ],
+   2955
+  ],
+  [
+   [
+    "Irrecevable",
+    "Cavalier (45)",
+    "commission"
+   ],
+   2512
+  ],
+  [
+   [
+    "Irrecevable 40",
+    "Crédits",
+    "commission"
+   ],
+   1047
+  ],
+  [
+   [
+    "Irrecevable",
+    "Sous-amendement (98)",
+    "seance"
+   ],
+   943
+  ],
+  [
+   [
+    "Irrecevable",
+    "Doublon",
+    "seance"
+   ],
+   862
+  ],
+  [
+   [
+    "Irrecevable 40",
+    "Cavalier social",
+    "commission"
+   ],
+   841
+  ],
+  [
+   [
+    "Irrecevable",
+    "Entonnoir (45)",
+    "seance"
+   ],
+   764
+  ],
+  [
+   [
+    "Irrecevable",
+    "Autre irrecevabilité",
+    "seance"
+   ],
+   756
+  ],
+  [
+   [
+    "Irrecevable 40",
+    "Cavalier social",
+    "seance"
+   ],
+   743
+  ],
+  [
+   [
+    "Irrecevable",
+    "Autre irrecevabilité",
+    "commission"
+   ],
+   545
+  ],
+  [
+   [
+    "Irrecevable 40",
+    "Gage",
+    "seance"
+   ],
+   496
+  ],
+  [
+   [
+    "Irrecevable",
+    "Entonnoir (45)",
+    "commission"
+   ],
+   469
+  ],
+  [
+   [
+    "Irrecevable",
+    "Satisfait ou inopérant (42)",
+    "seance"
+   ],
+   387
+  ],
+  [
+   [
+    "Irrecevable",
+    "Doublon",
+    "commission"
+   ],
+   363
+  ],
+  [
+   [
+    "Irrecevable 40",
+    "Gage",
+    "commission"
+   ],
+   360
+  ],
+  [
+   [
+    "Irrecevable",
+    "Hors champ",
+    "commission"
+   ],
+   309
+  ],
+  [
+   [
+    "Irrecevable 40",
+    "Cavalier budgétaire",
+    "commission"
+   ],
+   282
+  ],
+  [
+   [
+    "Irrecevable 40",
+    "Cavalier budgétaire",
+    "seance"
+   ],
+   269
+  ],
+  [
+   [
+    "Irrecevable 40",
+    "Crédits",
+    "seance"
+   ],
+   268
+  ],
+  [
+   [
+    "Irrecevable",
+    "Sous-amendement (98)",
+    "commission"
+   ],
+   161
+  ],
+  [
+   [
+    "Irrecevable 40",
+    "Irr en première partie",
+    "seance"
+   ],
+   142
+  ],
+  [
+   [
+    "Irrecevable 40",
+    "Autres irr LOLFSS",
+    "seance"
+   ],
+   128
+  ],
+  [
+   [
+    "Irrecevable 40",
+    "Irr en première partie",
+    "commission"
+   ],
+   115
+  ],
+  [
+   [
+    "Irrecevable 40",
+    "Autres irr LOLF",
+    "commission"
+   ],
+   104
+  ],
+  [
+   [
+    "Irrecevable 40",
+    "Autres irr LOLFSS",
+    "commission"
+   ],
+   101
+  ],
+  [
+   [
+    "Irrecevable 40",
+    "Autres irr LOLF",
+    "seance"
+   ],
+   92
+  ],
+  [
+   [
+    "Irrecevable",
+    "Champ de l'habilitation (38)",
+    "seance"
+   ],
+   73
+  ],
+  [
+   [
+    "Irrecevable",
+    "Autre irrecevabilité 40",
+    "seance"
+   ],
+   59
+  ],
+  [
+   [
+    "Irrecevable",
+    "Hors-délais",
+    "seance"
+   ],
+   49
+  ],
+  [
+   [
+    "Irrecevable",
+    "Ordre du jour (48)",
+    "seance"
+   ],
+   46
+  ],
+  [
+   [
+    "Irrecevable",
+    "Hors-délais",
+    "commission"
+   ],
+   46
+  ],
+  [
+   [
+    "Irrecevable 40",
+    "Irr en seconde partie",
+    "commission"
+   ],
+   46
+  ],
+  [
+   [
+    "Irrecevable",
+    "Injonction (20)",
+    "commission"
+   ],
+   45
+  ],
+  [
+   [
+    "Irrecevable",
+    "Champ de l'habilitation (38)",
+    "commission"
+   ],
+   41
+  ],
+  [
+   [
+    "Irrecevable",
+    "Autre irrecevabilité 40",
+    "commission"
+   ],
+   35
+  ],
+  [
+   [
+    "Irrecevable",
+    "Disposition réglementaire (37)",
+    "seance"
+   ],
+   24
+  ],
+  [
+   [
+    "Irrecevable",
+    "Domaine loi organique (127)",
+    "seance"
+   ],
+   17
+  ],
+  [
+   [
+    "Irrecevable",
+    "Injonction (20)",
+    "seance"
+   ],
+   12
+  ],
+  [
+   [
+    "Irrecevable",
+    "Disposition réglementaire (37)",
+    "commission"
+   ],
+   11
+  ],
+  [
+   [
+    "Irrecevable",
+    "Domaine loi organique (127)",
+    "commission"
+   ],
+   9
+  ],
+  [
+   [
+    "Irrecevable 40",
+    "Irr en seconde partie",
+    "seance"
+   ],
+   5
+  ],
+  [
+   [
+    "Irrecevable",
+    "Domaine de la loi (41)",
+    "seance"
+   ],
+   4
+  ],
+  [
+   [
+    "Irrecevable",
+    "Domaine de la loi (41)",
+    "commission"
+   ],
+   2
+  ],
+  [
+   [
+    "Irrecevable",
+    "R",
+    "seance"
+   ],
+   1
+  ],
+  [
+   [
+    "Irrecevable",
+    "Ratification traité (53)",
+    "seance"
+   ],
+   1
+  ]
+ ],
+ "irrecevable_par_type_lieu_soustype": {
+  "PLF|seance": {
+   "Entonnoir (45)": 531,
+   "Gage": 309,
+   "Cavalier budgétaire": 249,
+   "Crédits": 247,
+   "Doublon": 236,
+   "Charge": 228,
+   "Irr en première partie": 142,
+   "Sous-amendement (98)": 104
+  },
+  "PLF|commission": {
+   "Crédits": 1035,
+   "Charge": 484,
+   "Entonnoir (45)": 278,
+   "Cavalier budgétaire": 254,
+   "Gage": 229,
+   "Autre irrecevabilité": 160,
+   "Hors champ": 150,
+   "Doublon": 120
+  },
+  "PLFSS|seance": {
+   "Charge": 993,
+   "Cavalier social": 742,
+   "Entonnoir (45)": 125,
+   "Doublon": 119,
+   "Sous-amendement (98)": 108,
+   "Gage": 107,
+   "Satisfait ou inopérant (42)": 21,
+   "Autres irr LOLFSS": 17
+  },
+  "PLFSS|commission": {
+   "Charge": 913,
+   "Cavalier social": 838,
+   "Entonnoir (45)": 140,
+   "Autre irrecevabilité": 109,
+   "Gage": 58,
+   "Doublon": 42,
+   "Autres irr LOLFSS": 30,
+   "Autres irr LOLF": 18
+  },
+  "PPL|seance": {
+   "Charge": 1781,
+   "Cavalier (45)": 1573,
+   "Autre irrecevabilité": 695,
+   "Sous-amendement (98)": 613,
+   "Doublon": 273,
+   "Satisfait ou inopérant (42)": 150,
+   "Entonnoir (45)": 102,
+   "Gage": 58
+  },
+  "PPL|commission": {
+   "Cavalier (45)": 961,
+   "Charge": 929,
+   "Autre irrecevabilité": 238,
+   "Sous-amendement (98)": 145,
+   "Doublon": 123,
+   "Hors champ": 56,
+   "Entonnoir (45)": 49,
+   "Gage": 40
+  },
+  "PJL|seance": {
+   "Cavalier (45)": 1943,
+   "Charge": 676,
+   "Doublon": 149,
+   "Satisfait ou inopérant (42)": 138,
+   "Sous-amendement (98)": 114,
+   "Champ de l'habilitation (38)": 64,
+   "Autre irrecevabilité": 38,
+   "Autre irrecevabilité 40": 24
+  },
+  "PJL|commission": {
+   "Cavalier (45)": 1536,
+   "Charge": 608,
+   "Hors champ": 103,
+   "Doublon": 75,
+   "Champ de l'habilitation (38)": 38,
+   "Autre irrecevabilité": 34,
+   "Gage": 33,
+   "Cavalier budgétaire": 21
+  },
+  "Constit.|seance": {
+   "Doublon": 8,
+   "Satisfait ou inopérant (42)": 2,
+   "Autre irrecevabilité": 1,
+   "Entonnoir (45)": 1
+  },
+  "Constit.|commission": {
+   "Sous-amendement (98)": 2,
+   "Entonnoir (45)": 1
+  }
+ },
+ "en_attente_top": [
+  [
+   "DLR5L17N52428",
+   "En traitement",
+   4982,
+   "Projet de loi de finances pour 2026"
+  ],
+  [
+   "DLR5L17N50198",
+   "En traitement",
+   3364,
+   "Projet de loi de finances pour 2025"
+  ],
+  [
+   "DLR5L17N50819",
+   "En traitement",
+   2100,
+   "Proposition de loi visant à lever les contraintes à l’exercice du métier d’agriculteur"
+  ],
+  [
+   "DLR5L17N54629",
+   "En traitement",
+   1714,
+   "Projet de loi de finances pour 2027"
+  ],
+  [
+   "DLR5L17N52984",
+   "En traitement",
+   1651,
+   "Projet de loi constitutionnelle relatif à la Nouvelle-Calédonie"
+  ],
+  [
+   "DLR5L17N54951",
+   "En traitement",
+   1644,
+   "Projet de loi de financement de la sécurité sociale pour 2027"
+  ],
+  [
+   "DLR5L17N52984",
+   "A discuter",
+   1504,
+   "Projet de loi constitutionnelle relatif à la Nouvelle-Calédonie"
+  ],
+  [
+   "DLR5L17N50819",
+   "A discuter",
+   1092,
+   "Proposition de loi visant à lever les contraintes à l’exercice du métier d’agriculteur"
+  ],
+  [
+   "DLR5L17N52655",
+   "En traitement",
+   925,
+   "Proposition de loi organique visant à reporter le renouvellement général des membres du co"
+  ],
+  [
+   "DLR5L16N47697",
+   "A discuter",
+   803,
+   "Réforme de l’audiovisuel public et souveraineté audiovisuelle"
+  ],
+  [
+   "DLR5L17N52655",
+   "A discuter",
+   662,
+   "Proposition de loi organique visant à reporter le renouvellement général des membres du co"
+  ],
+  [
+   "DLR5L17N50588",
+   "En traitement",
+   637,
+   "Projet de loi de financement de la sécurité sociale pour 2025"
+  ],
+  [
+   "DLR5L17N50588",
+   "A discuter",
+   587,
+   "Projet de loi de financement de la sécurité sociale pour 2025"
+  ],
+  [
+   "DLR5L17N50684",
+   "A discuter",
+   550,
+   "Abrogation de la retraite à 64 ans"
+  ],
+  [
+   "DLR5L11N19503",
+   "En traitement",
+   487,
+   "Droit de vote et éligibilité des étrangers aux élections"
+  ]
+ ],
+ "groupe_issue": {
+  "UT": {
+   "n": 23879,
+   "rejete": 7422,
+   "tombe": 1913,
+   "adopte": 1931,
+   "en_attente": 7687,
+   "retire_en_discussion": 567,
+   "retire_avant_discussion": 790,
+   "irrecevable": 3426,
+   "non_soutenu": 143
+  },
+  "LL": {
+   "n": 18499,
+   "non_soutenu": 2348,
+   "adopte": 1717,
+   "tombe": 1775,
+   "irrecevable": 3656,
+   "retire_en_discussion": 681,
+   "rejete": 4017,
+   "retire_avant_discussion": 1403,
+   "en_attente": 2902
+  },
+  "SOL": {
+   "n": 16819,
+   "adopte": 1677,
+   "rejete": 4665,
+   "tombe": 1760,
+   "irrecevable": 3137,
+   "retire_avant_discussion": 682,
+   "en_attente": 4230,
+   "retire_en_discussion": 496,
+   "non_soutenu": 172
+  },
+  "CP": {
+   "n": 16704,
+   "rejete": 6700,
+   "tombe": 1357,
+   "retire_avant_discussion": 1107,
+   "en_attente": 3199,
+   "irrecevable": 2604,
+   "retire_en_discussion": 506,
+   "adopte": 807,
+   "non_soutenu": 424
+  },
+  "RC": {
+   "n": 15489,
+   "adopte": 2360,
+   "tombe": 1672,
+   "non_soutenu": 678,
+   "rejete": 3891,
+   "retire_avant_discussion": 1066,
+   "irrecevable": 2388,
+   "retire_en_discussion": 648,
+   "en_attente": 2786
+  },
+  "PR": {
+   "n": 13887,
+   "adopte": 2051,
+   "en_attente": 2594,
+   "retire_avant_discussion": 902,
+   "rejete": 1991,
+   "retire_en_discussion": 615,
+   "irrecevable": 2829,
+   "tombe": 1245,
+   "non_soutenu": 1660
+  },
+  "RS": {
+   "n": 7587,
+   "tombe": 595,
+   "adopte": 695,
+   "rejete": 1581,
+   "irrecevable": 928,
+   "non_soutenu": 856,
+   "retire_avant_discussion": 318,
+   "retire_en_discussion": 209,
+   "en_attente": 2405
+  },
+  "DC": {
+   "n": 6206,
+   "tombe": 783,
+   "retire_en_discussion": 241,
+   "adopte": 840,
+   "en_attente": 916,
+   "irrecevable": 1210,
+   "rejete": 858,
+   "retire_avant_discussion": 384,
+   "non_soutenu": 974
+  },
+  "NV": {
+   "n": 5598,
+   "adopte": 808,
+   "retire_en_discussion": 280,
+   "retire_avant_discussion": 381,
+   "irrecevable": 1386,
+   "tombe": 625,
+   "rejete": 717,
+   "en_attente": 691,
+   "non_soutenu": 710
+  },
+  "ECO": {
+   "n": 4713,
+   "rejete": 668,
+   "en_attente": 701,
+   "retire_avant_discussion": 252,
+   "adopte": 567,
+   "retire_en_discussion": 210,
+   "irrecevable": 1075,
+   "tombe": 522,
+   "non_soutenu": 718
+  },
+  "AR": {
+   "n": 1631,
+   "rejete": 349,
+   "irrecevable": 211,
+   "retire_avant_discussion": 687,
+   "tombe": 93,
+   "adopte": 39,
+   "non_soutenu": 140,
+   "en_attente": 85,
+   "retire_en_discussion": 27
+  },
+  "NI": {
+   "n": 1303,
+   "rejete": 161,
+   "non_soutenu": 438,
+   "retire_en_discussion": 29,
+   "irrecevable": 285,
+   "tombe": 90,
+   "adopte": 72,
+   "en_attente": 189,
+   "retire_avant_discussion": 39
+  },
+  "null": {
+   "n": 5,
+   "irrecevable": 1,
+   "None": 4
+  }
+ },
+ "discussions_communes": {
+  "n_grappes": 7485,
+  "n_amdts": 31316,
+  "part_amdts": 21.6,
+  "taille_mediane": 3,
+  "taille_max": 1458,
+  "hist": {
+   "1": 2,
+   "2": 3286,
+   "3": 1587,
+   "4": 898,
+   "5": 510,
+   "6": 315,
+   "7": 218,
+   "8": 136,
+   "9": 113,
+   "10": 349,
+   "20": 65,
+   "50": 6
+  },
+  "pct_transpartisan": 73.6,
+  "groupes_moyen": 2.36,
+  "plus_grosses": [
+   [
+    1458,
+    "DLR5L17N52984",
+    "Projet de loi constitutionnelle relatif à la Nouvelle-Calédonie",
+    "ART. PREMIER",
+    "À l’alinéa 1, substituer aux mots : \n« tard le 26 juillet 2026 », \nles mots :\n« tôt le 22 ",
+    3
+   ],
+   [
+    412,
+    "DLR5L17N52655",
+    "Proposition de loi organique visant à reporter le renouvellement génér",
+    "ART. PREMIER",
+    "Les mots \"28 juin\" sont remplacés par\n\"3 février\"",
+    2
+   ],
+   [
+    100,
+    "DLR5L16N47697",
+    "Réforme de l’audiovisuel public et souveraineté audiovisuelle",
+    "ART. 12",
+    "Rédiger ainsi l’alinéa 3 :\n« a) Après le mot : « ans », sont insérés les mots : « et quatr",
+    1
+   ],
+   [
+    94,
+    "DLR5L16N47697",
+    "Réforme de l’audiovisuel public et souveraineté audiovisuelle",
+    "ART. 3",
+    "À la première phrase du troisième alinéa, substituer au mot : \n« quatorze » \nle mot : \n« v",
+    4
+   ],
+   [
+    64,
+    "DLR5L17N51702",
+    "Proposition de loi relative à la raison impérative d'intérêt public ma",
+    "TITRE",
+    "Rédiger ainsi le titre :\n« visant à mépriser les institutions environnementales ».",
+    2
+   ],
+   [
+    57,
+    "DLR5L17N52428",
+    "Projet de loi de finances pour 2026",
+    "ART. 5",
+    "Supprimer les alinéas 32 à 38.",
+    10
+   ],
+   [
+    49,
+    "DLR5L17N50819",
+    "Proposition de loi visant à lever les contraintes à l’exercice du méti",
+    "AVANT ART. 3",
+    "Rédiger ainsi l’intitulé du titre II :\n« Défendre nos éleveurs face aux industriels de l’a",
+    2
+   ],
+   [
+    48,
+    "DLR5L17N51670",
+    "Fin de vie",
+    "ART. 2",
+    "Rédiger ainsi l’alinéa 3 :\n« Droit à un acte létal médical ».",
+    8
+   ]
+  ]
+ },
+ "identiques": {
+  "n_grappes": 9477,
+  "n_amdts": 28536,
+  "part_amdts": 19.6,
+  "taille_mediane": 2,
+  "taille_max": 44,
+  "hist": {
+   "1": 1,
+   "2": 5906,
+   "3": 1616,
+   "4": 773,
+   "5": 413,
+   "6": 224,
+   "7": 161,
+   "8": 116,
+   "9": 73,
+   "10": 176,
+   "20": 18
+  },
+  "pct_transpartisan": 78.7,
+  "groupes_moyen": 2.31,
+  "plus_grosses": [
+   [
+    44,
+    "DLR5L17N52428",
+    "Projet de loi de finances pour 2026",
+    "ART. 5",
+    "Supprimer les alinéas 32 à 38.",
+    9
+   ],
+   [
+    31,
+    "DLR5L17N52428",
+    "Projet de loi de finances pour 2026",
+    "ART. 10",
+    "I. – À l’alinéa 19, substituer aux mots :\n« d’un an »,\nles mots :\n« de vingt-quatre mois »",
+    6
+   ],
+   [
+    31,
+    "DLR5L17N54629",
+    "Projet de loi de finances pour 2027",
+    "APRÈS ART. 15",
+    "I. – Au deuxième alinéa du 2 du II de l’article 73 du code général des impôts, le taux : «",
+    8
+   ],
+   [
+    29,
+    "DLR5L17N54629",
+    "Projet de loi de finances pour 2027",
+    "ART. 35",
+    "Supprimer cet article.",
+    12
+   ],
+   [
+    23,
+    "DLR5L16N49280",
+    "Proposition de loi portant création d'un statut de l'élu local",
+    "ART. 7 BIS",
+    "Supprimer cet article.",
+    6
+   ],
+   [
+    23,
+    "DLR5L17N52428",
+    "Projet de loi de finances pour 2026",
+    "ART. 5",
+    "Supprimer les alinéas 32 à 38.",
+    6
+   ],
+   [
+    23,
+    "DLR5L17N54629",
+    "Projet de loi de finances pour 2027",
+    "ART. 16",
+    "Supprimer cet article.",
+    10
+   ],
+   [
+    22,
+    "DLR5L17N54951",
+    "Projet de loi de financement de la sécurité sociale pour 2027",
+    "ART. 12",
+    "Supprimer cet article.",
+    11
+   ]
+  ]
+ },
+ "taux_adoption_examines": {
+  "tous": {
+   "n": 82552,
+   "pct_adopte": 23.5
+  },
+  "identique": {
+   "n": 23589,
+   "pct_adopte": 26.6
+  },
+  "non_identique": {
+   "n": 58963,
+   "pct_adopte": 22.2
+  },
+  "disc_commune": {
+   "n": 27074,
+   "pct_adopte": 12.9
+  },
+  "hors_disc_commune": {
+   "n": 55478,
+   "pct_adopte": 28.6
+  },
+  "gouvernement": {
+   "n": 913,
+   "pct_adopte": 73.9
+  },
+  "rapporteur": {
+   "n": 7518,
+   "pct_adopte": 67.3
+  },
+  "depute": {
+   "n": 74121,
+   "pct_adopte": 18.4
+  },
+  "sous_amendement": {
+   "n": 2977,
+   "pct_adopte": 21.2
+  },
+  "rectifie": {
+   "n": 1700,
+   "pct_adopte": 25.9
+  },
+  "gage": {
+   "n": 9431,
+   "pct_adopte": 17.3
+  },
+  "demande_rapport": {
+   "n": 2512,
+   "pct_adopte": 24.6
+  },
+  "redactionnel": {
+   "n": 5726,
+   "pct_adopte": 61.1
+  },
+  "suppression_article": {
+   "n": 5,
+   "pct_adopte": 60.0
+  },
+  "suppression_alinea": {
+   "n": 4153,
+   "pct_adopte": 15.4
+  },
+  "multi_operations": {
+   "n": 18137,
+   "pct_adopte": 21.3
+  },
+  "article_additionnel": {
+   "n": 17833,
+   "pct_adopte": 19.2
+  },
+  "0_cosignataire": {
+   "n": 15115,
+   "pct_adopte": 22.0
+  },
+  "1-9_cosign": {
+   "n": 21836,
+   "pct_adopte": 18.4
+  },
+  "10-49_cosign": {
+   "n": 20493,
+   "pct_adopte": 17.0
+  },
+  "50+_cosign": {
+   "n": 16677,
+   "pct_adopte": 16.9
+  }
+ },
+ "taux_adoption_par_type_lieu_auteur": {
+  "PLF|seance|Député": {
+   "n": 9225,
+   "pct_adopte": 18.7
+  },
+  "PLF|seance|Rapporteur": {
+   "n": 2,
+   "pct_adopte": 50.0
+  },
+  "PLF|seance|Gouvernement": {
+   "n": 127,
+   "pct_adopte": 65.4
+  },
+  "PLF|commission|Député": {
+   "n": 15857,
+   "pct_adopte": 21.3
+  },
+  "PLF|commission|Rapporteur": {
+   "n": 2466,
+   "pct_adopte": 39.3
+  },
+  "PLF|commission|Gouvernement": {
+   "n": 0,
+   "pct_adopte": 0.0
+  },
+  "PLFSS|seance|Député": {
+   "n": 4080,
+   "pct_adopte": 25.4
+  },
+  "PLFSS|seance|Rapporteur": {
+   "n": 0,
+   "pct_adopte": 0.0
+  },
+  "PLFSS|seance|Gouvernement": {
+   "n": 77,
+   "pct_adopte": 80.5
+  },
+  "PLFSS|commission|Député": {
+   "n": 3662,
+   "pct_adopte": 19.6
+  },
+  "PLFSS|commission|Rapporteur": {
+   "n": 361,
+   "pct_adopte": 58.2
+  },
+  "PLFSS|commission|Gouvernement": {
+   "n": 0,
+   "pct_adopte": 0.0
+  },
+  "PPL|seance|Député": {
+   "n": 14343,
+   "pct_adopte": 15.0
+  },
+  "PPL|seance|Rapporteur": {
+   "n": 8,
+   "pct_adopte": 75.0
+  },
+  "PPL|seance|Gouvernement": {
+   "n": 304,
+   "pct_adopte": 74.7
+  },
+  "PPL|commission|Député": {
+   "n": 11474,
+   "pct_adopte": 13.4
+  },
+  "PPL|commission|Rapporteur": {
+   "n": 2696,
+   "pct_adopte": 80.7
+  },
+  "PPL|commission|Gouvernement": {
+   "n": 39,
+   "pct_adopte": 89.7
+  },
+  "PJL|seance|Député": {
+   "n": 7692,
+   "pct_adopte": 20.2
+  },
+  "PJL|seance|Rapporteur": {
+   "n": 10,
+   "pct_adopte": 70.0
+  },
+  "PJL|seance|Gouvernement": {
+   "n": 274,
+   "pct_adopte": 69.0
+  },
+  "PJL|commission|Député": {
+   "n": 6389,
+   "pct_adopte": 18.9
+  },
+  "PJL|commission|Rapporteur": {
+   "n": 1894,
+   "pct_adopte": 85.5
+  },
+  "PJL|commission|Gouvernement": {
+   "n": 74,
+   "pct_adopte": 85.1
+  },
+  "Constit.|seance|Député": {
+   "n": 94,
+   "pct_adopte": 19.1
+  },
+  "Constit.|seance|Rapporteur": {
+   "n": 5,
+   "pct_adopte": 60.0
+  },
+  "Constit.|seance|Gouvernement": {
+   "n": 2,
+   "pct_adopte": 100.0
+  },
+  "Constit.|commission|Député": {
+   "n": 106,
+   "pct_adopte": 8.5
+  },
+  "Constit.|commission|Rapporteur": {
+   "n": 13,
+   "pct_adopte": 84.6
+  },
+  "Constit.|commission|Gouvernement": {
+   "n": 0,
+   "pct_adopte": 0.0
+  }
+ },
+ "sous_amendements": {
+  "n": 7313,
+  "pct": 5.03,
+  "auteur": {
+   "Rapporteur": 127,
+   "Député": 7080,
+   "Gouvernement": 106
+  },
+  "issue": {
+   "adopte": 630,
+   "tombe": 538,
+   "retire_avant_discussion": 953,
+   "en_attente": 1190,
+   "irrecevable": 2193,
+   "rejete": 1432,
+   "non_soutenu": 127,
+   "retire_en_discussion": 250
+  },
+  "lieu": {
+   "commission": 1567,
+   "seance": 5746
+  },
+  "parents_distincts": 1766,
+  "max_sur_un_parent": [
+   [
+    "AMANR5L17PO838901BTC1583P0D1N000040",
+    390
+   ],
+   [
+    "AMANR5L17PO838901B0691P0D1N000016",
+    341
+   ],
+   [
+    "AMANR5L17PO419604B0118P0D1N001138",
+    262
+   ]
+  ]
+ },
+ "rectifications": {
+  "0": 143298,
+  "1": 1871,
+  "2": 80
+ },
+ "rect_par_auteur": {
+  "Député": 1.3,
+  "Rapporteur": 0.4,
+  "Gouvernement": 8.7
+ },
+ "traits": {
+  "multi_operations": {
+   "tous": 15.3,
+   "PLF": 22.9,
+   "PLFSS": 22.6,
+   "PPL": 9.5,
+   "PJL": 11.3,
+   "Constit.": 1.8
+  },
+  "en_consequence": {
+   "tous": 6.5,
+   "PLF": 4.0,
+   "PLFSS": 9.2,
+   "PPL": 7.9,
+   "PJL": 8.1,
+   "Constit.": 1.8
+  },
+  "gage": {
+   "tous": 7.8,
+   "PLF": 19.1,
+   "PLFSS": 10.3,
+   "PPL": 0.7,
+   "PJL": 0.9,
+   "Constit.": 0.0
+  },
+  "demande_rapport": {
+   "tous": 3.1,
+   "PLF": 1.9,
+   "PLFSS": 4.9,
+   "PPL": 4.0,
+   "PJL": 2.1,
+   "Constit.": 0.2
+  },
+  "redactionnel": {
+   "tous": 5.3,
+   "PLF": 1.0,
+   "PLFSS": 4.4,
+   "PPL": 8.8,
+   "PJL": 7.5,
+   "Constit.": 3.5
+  },
+  "suppression_article": {
+   "tous": 0.0,
+   "PLF": 0.0,
+   "PLFSS": 0.0,
+   "PPL": 0.0,
+   "PJL": 0.0,
+   "Constit.": 0.0
+  },
+  "suppression_alinea": {
+   "tous": 3.8,
+   "PLF": 1.2,
+   "PLFSS": 4.3,
+   "PPL": 5.0,
+   "PJL": 6.3,
+   "Constit.": 3.9
+  },
+  "article_additionnel": {
+   "tous": 27.3,
+   "PLF": 30.0,
+   "PLFSS": 47.6,
+   "PPL": 19.8,
+   "PJL": 29.7,
+   "Constit.": 3.5
+  },
+  "soumis_art40": {
+   "tous": 37.4,
+   "PLF": 47.2,
+   "PLFSS": 57.7,
+   "PPL": 29.9,
+   "PJL": 29.0,
+   "Constit.": 3.2
+  },
+  "cartouche": {
+   "tous": 30.0,
+   "PLF": 33.7,
+   "PLFSS": 40.6,
+   "PPL": 22.9,
+   "PJL": 25.4,
+   "Constit.": 53.2
+  },
+  "sous_amendement": {
+   "tous": 5.0,
+   "PLF": 1.1,
+   "PLFSS": 2.4,
+   "PPL": 10.7,
+   "PJL": 4.0,
+   "Constit.": 0.4
+  },
+  "rectifie": {
+   "tous": 1.3,
+   "PLF": 1.1,
+   "PLFSS": 1.3,
+   "PPL": 1.4,
+   "PJL": 2.1,
+   "Constit.": 0.0
+  },
+  "identique": {
+   "tous": 19.6,
+   "PLF": 16.9,
+   "PLFSS": 20.8,
+   "PPL": 18.6,
+   "PJL": 22.1,
+   "Constit.": 38.4
+  },
+  "disc_commune": {
+   "tous": 21.6,
+   "PLF": 25.8,
+   "PLFSS": 18.1,
+   "PPL": 20.0,
+   "PJL": 15.5,
+   "Constit.": 39.6
+  }
+ },
+ "redactionnel_par_auteur": {
+  "Député": 3.7,
+  "Rapporteur": 28.2,
+  "Gouvernement": 9.3
+ },
+ "nops_hist": {
+  "0": 122106,
+  "1": 893,
+  "2": 14308,
+  "3": 4882,
+  "4": 1556,
+  "5": 540,
+  "6": 391,
+  "7": 170,
+  "8": 142,
+  "9": 69,
+  "10": 192
+ },
+ "cosign_hist": {
+  "0": 28995,
+  "1": 19735,
+  "5": 16763,
+  "10": 20398,
+  "30": 18886,
+  "60": 30197
+ },
+ "decl_vs_portee": {
+  "n": 50595,
+  "seul_declare": 40223,
+  "declare_plus_autres": 8724,
+  "declare_absent": 1648,
+  "sans_alinea_declare": 81165
+ },
+ "div_type": {
+  "ARTICLE": 117756,
+  "TITRE": 1917,
+  "CHAPITRE": 416,
+  "ANNEXE": 25156,
+  "null": 4
+ },
+ "longueur_dl": {
+  "med": 94,
+  "p90": 781,
+  "p99": 3314,
+  "max": 85430,
+  "zero": 46307
+ },
+ "longueur_el": {
+  "med": 983,
+  "p90": 2718,
+  "p99": 4869,
+  "max": 21335,
+  "zero": 25205
+ },
+ "top_dossiers": [
+  {
+   "dos": "DLR5L17N52428",
+   "titre": "Projet de loi de finances pour 2026",
+   "P": "PLF",
+   "n": 19510,
+   "seance": 10948,
+   "textes": 2,
+   "adopte": 2232,
+   "rejete": 4665,
+   "tombe": 1473,
+   "non_soutenu": 1676,
+   "irrecevable": 2742,
+   "en_attente": 5332
+  },
+  {
+   "dos": "DLR5L17N50198",
+   "titre": "Projet de loi de finances pour 2025",
+   "P": "PLF",
+   "n": 14522,
+   "seance": 7491,
+   "textes": 2,
+   "adopte": 1908,
+   "rejete": 3533,
+   "tombe": 987,
+   "non_soutenu": 1272,
+   "irrecevable": 1306,
+   "en_attente": 3586
+  },
+  {
+   "dos": "DLR5L17N54629",
+   "titre": "Projet de loi de finances pour 2027",
+   "P": "PLF",
+   "n": 12425,
+   "seance": 5705,
+   "textes": 1,
+   "adopte": 2012,
+   "rejete": 3639,
+   "tombe": 1235,
+   "non_soutenu": 1875,
+   "irrecevable": 1270,
+   "en_attente": 1718
+  },
+  {
+   "dos": "DLR5L17N51670",
+   "titre": "Fin de vie",
+   "P": "PPL",
+   "n": 9270,
+   "seance": 6675,
+   "textes": 6,
+   "adopte": 305,
+   "rejete": 5219,
+   "tombe": 333,
+   "non_soutenu": 1172,
+   "irrecevable": 702,
+   "en_attente": 0
+  },
+  {
+   "dos": "DLR5L17N52922",
+   "titre": "Projet de loi de financement de la sécurité sociale pour 2026",
+   "P": "PLFSS",
+   "n": 6208,
+   "seance": 3781,
+   "textes": 2,
+   "adopte": 1099,
+   "rejete": 1349,
+   "tombe": 799,
+   "non_soutenu": 250,
+   "irrecevable": 1860,
+   "en_attente": 267
+  },
+  {
+   "dos": "DLR5L17N50588",
+   "titre": "Projet de loi de financement de la sécurité sociale pour 2025",
+   "P": "PLFSS",
+   "n": 5892,
+   "seance": 3361,
+   "textes": 3,
+   "adopte": 585,
+   "rejete": 615,
+   "tombe": 694,
+   "non_soutenu": 268,
+   "irrecevable": 1864,
+   "en_attente": 1224
+  },
+  {
+   "dos": "DLR5L17N54951",
+   "titre": "Projet de loi de financement de la sécurité sociale pour 2027",
+   "P": "PLFSS",
+   "n": 4781,
+   "seance": 3066,
+   "textes": 1,
+   "adopte": 343,
+   "rejete": 860,
+   "tombe": 567,
+   "non_soutenu": 333,
+   "irrecevable": 735,
+   "en_attente": 1749
+  },
+  {
+   "dos": "DLR5L17N50819",
+   "titre": "Proposition de loi visant à lever les contraintes à l’exercice du métier d’agriculteur",
+   "P": "PPL",
+   "n": 4650,
+   "seance": 3463,
+   "textes": 3,
+   "adopte": 174,
+   "rejete": 279,
+   "tombe": 414,
+   "non_soutenu": 18,
+   "irrecevable": 327,
+   "en_attente": 3192
+  },
+  {
+   "dos": "DLR5L16N49868",
+   "titre": "Projet de loi de simplification de la vie économique",
+   "P": "PJL",
+   "n": 4245,
+   "seance": 2758,
+   "textes": 3,
+   "adopte": 678,
+   "rejete": 770,
+   "tombe": 422,
+   "non_soutenu": 384,
+   "irrecevable": 1593,
+   "en_attente": 0
+  },
+  {
+   "dos": "DLR5L17N54085",
+   "titre": "Projet de loi d’urgence pour la protection et la souveraineté agricoles",
+   "P": "PJL",
+   "n": 4038,
+   "seance": 2446,
+   "textes": 3,
+   "adopte": 508,
+   "rejete": 1168,
+   "tombe": 528,
+   "non_soutenu": 271,
+   "irrecevable": 1176,
+   "en_attente": 1
+  },
+  {
+   "dos": "DLR5L16N47697",
+   "titre": "Réforme de l’audiovisuel public et souveraineté audiovisuelle",
+   "P": "PPL",
+   "n": 3441,
+   "seance": 1284,
+   "textes": 2,
+   "adopte": 120,
+   "rejete": 270,
+   "tombe": 490,
+   "non_soutenu": 43,
+   "irrecevable": 561,
+   "en_attente": 1108
+  },
+  {
+   "dos": "DLR5L17N52984",
+   "titre": "Projet de loi constitutionnelle relatif à la Nouvelle-Calédonie",
+   "P": "Constit.",
+   "n": 3205,
+   "seance": 3159,
+   "textes": 1,
+   "adopte": 5,
+   "rejete": 39,
+   "tombe": 1,
+   "non_soutenu": 0,
+   "irrecevable": 4,
+   "en_attente": 3155
+  },
+  {
+   "dos": "DLR5L17N54372",
+   "titre": "Projet de loi relatif à la protection des enfants",
+   "P": "PJL",
+   "n": 2458,
+   "seance": 1220,
+   "textes": 2,
+   "adopte": 451,
+   "rejete": 342,
+   "tombe": 511,
+   "non_soutenu": 77,
+   "irrecevable": 847,
+   "en_attente": 0
+  },
+  {
+   "dos": "DLR5L17N54776",
+   "titre": "Apporter une réponse intégrale au phénomène des violences sexuelles et sexistes contre les femmes et",
+   "P": "PPL",
+   "n": 2377,
+   "seance": 1327,
+   "textes": 2,
+   "adopte": 659,
+   "rejete": 423,
+   "tombe": 254,
+   "non_soutenu": 115,
+   "irrecevable": 484,
+   "en_attente": 0
+  },
+  {
+   "dos": "DLR5L17N52985",
+   "titre": "Projet de loi relatif à la lutte contre les fraudes sociales et fiscales",
+   "P": "PJL",
+   "n": 1931,
+   "seance": 1184,
+   "textes": 3,
+   "adopte": 506,
+   "rejete": 470,
+   "tombe": 152,
+   "non_soutenu": 210,
+   "irrecevable": 398,
+   "en_attente": 0
+  },
+  {
+   "dos": "DLR5L17N51672",
+   "titre": "Soins palliatifs et d’accompagnement",
+   "P": "PPL",
+   "n": 1889,
+   "seance": 1030,
+   "textes": 4,
+   "adopte": 391,
+   "rejete": 573,
+   "tombe": 365,
+   "non_soutenu": 187,
+   "irrecevable": 161,
+   "en_attente": 0
+  },
+  {
+   "dos": "DLR5L17N53980",
+   "titre": "Projet de loi visant à offrir des réponses immédiates aux phénomènes troublant l’ordre public, la sé",
+   "P": "PJL",
+   "n": 1831,
+   "seance": 1083,
+   "textes": 3,
+   "adopte": 249,
+   "rejete": 675,
+   "tombe": 189,
+   "non_soutenu": 213,
+   "irrecevable": 410,
+   "en_attente": 0
+  },
+  {
+   "dos": "DLR5L17N52655",
+   "titre": "Proposition de loi organique visant à reporter le renouvellement général des membres du congrès et d",
+   "P": "Organique",
+   "n": 1682,
+   "seance": 1659,
+   "textes": 2,
+   "adopte": 0,
+   "rejete": 22,
+   "tombe": 0,
+   "non_soutenu": 0,
+   "irrecevable": 73,
+   "en_attente": 1587
+  },
+  {
+   "dos": "DLR5L17N50169",
+   "titre": "Proposition de loi visant à sortir la France du piège du narcotrafic",
+   "P": "PPL",
+   "n": 1676,
+   "seance": 1011,
+   "textes": 3,
+   "adopte": 383,
+   "rejete": 565,
+   "tombe": 184,
+   "non_soutenu": 144,
+   "irrecevable": 232,
+   "en_attente": 0
+  },
+  {
+   "dos": "DLR5L16N49849",
+   "titre": "Programmation nationale et simplification normative dans le secteur économique de l’énergie",
+   "P": "PPL",
+   "n": 1567,
+   "seance": 862,
+   "textes": 2,
+   "adopte": 212,
+   "rejete": 383,
+   "tombe": 452,
+   "non_soutenu": 109,
+   "irrecevable": 232,
+   "en_attente": 0
+  },
+  {
+   "dos": "DLR5L16N49280",
+   "titre": "Proposition de loi portant création d'un statut de l'élu local",
+   "P": "PPL",
+   "n": 1364,
+   "seance": 878,
+   "textes": 4,
+   "adopte": 236,
+   "rejete": 175,
+   "tombe": 136,
+   "non_soutenu": 102,
+   "irrecevable": 580,
+   "en_attente": 0
+  },
+  {
+   "dos": "DLR5L17N54083",
+   "titre": "Projet de loi actualisant la programmation militaire pour les années 2024 à 2030 et portant diverses",
+   "P": "PJL",
+   "n": 1364,
+   "seance": 792,
+   "textes": 3,
+   "adopte": 232,
+   "rejete": 770,
+   "tombe": 20,
+   "non_soutenu": 64,
+   "irrecevable": 94,
+   "en_attente": 0
+  },
+  {
+   "dos": "DLR5L17N51985",
+   "titre": "Projet de loi de programmation pour la refondation de Mayotte",
+   "P": "PJL",
+   "n": 1315,
+   "seance": 728,
+   "textes": 2,
+   "adopte": 390,
+   "rejete": 497,
+   "tombe": 141,
+   "non_soutenu": 10,
+   "irrecevable": 176,
+   "en_attente": 0
+  },
+  {
+   "dos": "DLR5L17N50684",
+   "titre": "Abrogation de la retraite à 64 ans",
+   "P": "PPL",
+   "n": 1015,
+   "seance": 997,
+   "textes": 2,
+   "adopte": 7,
+   "rejete": 95,
+   "tombe": 11,
+   "non_soutenu": 4,
+   "irrecevable": 227,
+   "en_attente": 558
+  },
+  {
+   "dos": "DLR5L17N50731",
+   "titre": "Projet de loi relatif à la résilience des infrastructures critiques et au renforcement de la cybersé",
+   "P": "PJL",
+   "n": 903,
+   "seance": 398,
+   "textes": 2,
+   "adopte": 244,
+   "rejete": 122,
+   "tombe": 29,
+   "non_soutenu": 43,
+   "irrecevable": 41,
+   "en_attente": 360
+  }
+ ],
+ "n_dossiers": 345,
+ "dossiers_taille": {
+  "med": 58,
+  "p90": 604,
+  "n_sup_1000": 24,
+  "n_inf_10": 42,
+  "part_top10": 58.9
+ },
+ "depots_par_mois": {
+  "": 10,
+  "2024-09": 118,
+  "2024-10": 15828,
+  "2024-11": 6396,
+  "2024-12": 466,
+  "2025-01": 3106,
+  "2025-02": 2333,
+  "2025-03": 6126,
+  "2025-04": 6380,
+  "2025-05": 10687,
+  "2025-06": 5543,
+  "2025-07": 943,
+  "2025-08": 3,
+  "2025-09": 520,
+  "2025-10": 15416,
+  "2025-11": 8176,
+  "2025-12": 2099,
+  "2026-01": 8915,
+  "2026-02": 5465,
+  "2026-03": 4108,
+  "2026-04": 4782,
+  "2026-05": 4925,
+  "2026-06": 7673,
+  "2026-07": 3208,
+  "2026-09": 3158,
+  "2026-10": 18203,
+  "2026-11": 662
+ },
+ "jours_entre_depot_et_premier_sort_de_l_examen": {
+  "-5": 3318,
+  "-4": 251,
+  "-3": 843,
+  "-2": 2631,
+  "-1": 1750,
+  "0": 4318,
+  "1": 3831,
+  "2": 5642,
+  "3": 15157,
+  "4": 34087,
+  "5": 21748,
+  "6": 11463,
+  "7": 7352,
+  "8": 1888,
+  "9": 1027,
+  "10": 886,
+  "11": 650,
+  "12": 632,
+  "13": 313,
+  "14": 172,
+  "15": 138,
+  "16": 60,
+  "17": 74,
+  "18": 97,
+  "19": 44,
+  "20": 54,
+  "21": 11,
+  "22": 4,
+  "23": 17,
+  "24": 16,
+  "25": 58,
+  "26": 46,
+  "27": 5,
+  "28": 10,
+  "30": 875
+ },
+ "jours_depot_seance_vs_commission": {
+  "seance": {
+   "-5": 1770,
+   "-4": 97,
+   "-3": 207,
+   "-2": 370,
+   "-1": 513,
+   "0": 2319,
+   "1": 776,
+   "2": 2276,
+   "3": 9285,
+   "4": 14562,
+   "5": 10706,
+   "6": 7892,
+   "7": 4845,
+   "8": 1059,
+   "9": 631,
+   "10": 541,
+   "11": 425,
+   "12": 343,
+   "13": 142,
+   "14": 98,
+   "15": 131,
+   "16": 36,
+   "17": 63,
+   "18": 42,
+   "19": 23,
+   "20": 38,
+   "22": 3,
+   "23": 2,
+   "24": 14,
+   "26": 45,
+   "27": 3,
+   "28": 7,
+   "30": 799
+  },
+  "commission": {
+   "-5": 1548,
+   "-4": 154,
+   "-3": 636,
+   "-2": 2261,
+   "-1": 1237,
+   "0": 1999,
+   "1": 3055,
+   "2": 3366,
+   "3": 5872,
+   "4": 19525,
+   "5": 11042,
+   "6": 3571,
+   "7": 2507,
+   "8": 829,
+   "9": 396,
+   "10": 345,
+   "11": 225,
+   "12": 289,
+   "13": 171,
+   "14": 74,
+   "15": 7,
+   "16": 24,
+   "17": 11,
+   "18": 55,
+   "19": 21,
+   "20": 16,
+   "21": 11,
+   "22": 1,
+   "23": 15,
+   "24": 2,
+   "25": 58,
+   "26": 1,
+   "27": 2,
+   "28": 3,
+   "30": 76
+  }
+ },
+ "vitesse_sorts": {
+  "commission": {
+   "heures_actives": 1476,
+   "med_par_heure": 24,
+   "p90": 67,
+   "max": 289,
+   "heure_max": "2025-06-18 09:00:00+02:00",
+   "heure_du_jour": {
+    "0": 745,
+    "1": 101,
+    "9": 2256,
+    "10": 4580,
+    "11": 4673,
+    "12": 4284,
+    "13": 626,
+    "14": 731,
+    "15": 2708,
+    "16": 3194,
+    "17": 3311,
+    "18": 3971,
+    "19": 4595,
+    "20": 659,
+    "21": 2293,
+    "22": 3503,
+    "23": 3350
+   },
+   "meme_seconde": 4584,
+   "jours_semaine": {
+    "Fri": 4365,
+    "Mon": 5023,
+    "Sat": 1773,
+    "Sun": 307,
+    "Thu": 5665,
+    "Tue": 8624,
+    "Wed": 19823
+   }
+  },
+  "seance": {
+   "heures_actives": 1761,
+   "med_par_heure": 16,
+   "p90": 44,
+   "max": 217,
+   "heure_max": "2026-07-16 23:00:00+02:00",
+   "heure_du_jour": {
+    "0": 745,
+    "1": 30,
+    "2": 12,
+    "9": 1385,
+    "10": 1739,
+    "11": 2130,
+    "12": 2215,
+    "13": 226,
+    "14": 17,
+    "15": 2438,
+    "16": 3013,
+    "17": 3388,
+    "18": 4164,
+    "19": 4331,
+    "20": 264,
+    "21": 1807,
+    "22": 4008,
+    "23": 4786
+   },
+   "meme_seconde": 6186,
+   "jours_semaine": {
+    "Fri": 9321,
+    "Mon": 5418,
+    "Sat": 2155,
+    "Sun": 257,
+    "Thu": 9651,
+    "Tue": 3680,
+    "Wed": 6216
+   }
+  }
+ },
+ "grappes_meme_seconde": {
+  "n": 4105,
+  "plus_grosse": 52
+ },
+ "art99": {
+  "n": 402,
+  "issue": {
+   "adopte": 185,
+   "rejete": 43,
+   "retire_avant_discussion": 23,
+   "tombe": 18,
+   "retire_en_discussion": 5,
+   "irrecevable": 8,
+   "en_attente": 120
+  },
+  "auteur": {
+   "Rapporteur": 26,
+   "Gouvernement": 375,
+   "Député": 1
+  }
+ },
+ "hors_delai_accord": 21,
+ "codes_vises_top": [
+  [
+   "1",
+   12269
+  ],
+  [
+   "CGI",
+   8670
+  ],
+  [
+   "0",
+   4458
+  ],
+  [
+   "c sécurité sociale",
+   3512
+  ],
+  [
+   "Z3",
+   3154
+  ],
+  [
+   "2",
+   3024
+  ],
+  [
+   "Z1",
+   2319
+  ],
+  [
+   "0.1",
+   1925
+  ],
+  [
+   "c environnement",
+   1869
+  ],
+  [
+   "D",
+   1669
+  ],
+  [
+   "c rural",
+   1581
+  ],
+  [
+   "3",
+   1553
+  ],
+  [
+   "c santé publique",
+   1494
+  ],
+  [
+   "32",
+   1473
+  ],
+  [
+   "E",
+   1226
+  ],
+  [
+   "CGCT",
+   1105
+  ],
+  [
+   "c action sociale",
+   1073
+  ],
+  [
+   "4",
+   928
+  ],
+  [
+   "Z",
+   917
+  ],
+  [
+   "A",
+   869
+  ]
+ ],
+ "part_code_vise": 54.8,
+ "groupes_fictifs": {
+  "AR": "Avenir rural",
+  "CP": "Centre et progrès",
+  "DC": "Démocratie communale",
+  "ECO": "Écologie urbaine",
+  "LL": "Libertés locales",
+  "NI": "Non-inscrits",
+  "NV": "Nouvelle voie",
+  "PR": "Progrès républicain",
+  "RC": "Rassemblement des communes",
+  "RS": "Renouveau social",
+  "SOL": "Solidarité et logement",
+  "UT": "Union des territoires",
+  "SA": "Alliance des départements",
+  "SB": "Bastion républicain",
+  "SC": "Concorde sénatoriale",
+  "SD": "Démocratie des terroirs",
+  "SE": "Équilibre et territoires",
+  "SF": "Forces sociales",
+  "SG": "Gauche des communes",
+  "SH": "Horizon vert",
+  "SI": "Indépendants du Sénat"
+ },
+ "nota": [
+  "Groupes et personnes rendus fictifs (scripts/fictionnaliser.py) ; textes, sorts et dates réels."
+ ]
+}

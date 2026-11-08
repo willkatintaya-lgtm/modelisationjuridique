@@ -1599,7 +1599,7 @@
     "article_additionnel": false
    },
    "dispositif": "I. – À la première phrase de l’alinéa 12, après la référence :\n« 199 novovicies »,\ninsérer les mots :\n« représentent au moins 20 % du prix d’acquisition du bien et ».\nII. – À la première phrase de l’alinéa 13, après la seconde occurrence du mot : \n« transformation »,\ninsérer les mots :\n« représentent au moins 20 % du prix d’acquisition du bien et ».",
-   "expose": "Cet amendement du groupe Rassemblement des communes vise à réintégrer un taux obligatoire de montant de travaux pour bénéficier du dispositif Jeanbrun pour les logements anciens rénovés. Alors que le dispositif original voté lors du projet de loi de finances pour 2026, prévoyait un montant plancher de travaux correspondant à 30 % du prix du bien, il est proposé de maintenir un montant minimal, mais, dans un souci de compromis, de porter ce montant à 20 % du prix d’acquisition du bien.\nCet amendement de compromis reprend ainsi le taux proposé dans l’article 1 de la Proposition de loi n°2674 de l’ancienne ministre du logement Valérie Letard déposée en avril 2026.\nLe maintien d’un taux minimal de travaux permet un meilleur contrôle du respect des engagements du propriétaire. Il est en effet insuffisant de baser l’accès à cette aide fiscale sur la seule évaluation DPE dont on sait l’inégale appréciation. Par ailleurs l’accroissement des DPE de complaisance est notable (plus de 4 % au premier semestre 2025 contre 2,9 % au premier semestre 2022). Dans un souci de lisibilité et afin d’éviter tout contournement de l’obligation d’une rénovation significative, il est donc utile de réintroduire un taux.",
+   "expose": "Cet amendement du groupe Rassemblement des communes vise à réintégrer un taux obligatoire de montant de travaux pour bénéficier du dispositif Jeanbrun pour les logements anciens rénovés. Alors que le dispositif original voté lors du projet de loi de finances pour 2026, prévoyait un montant plancher de travaux correspondant à 30 % du prix du bien, il est proposé de maintenir un montant minimal, mais, dans un souci de compromis, de porter ce montant à 20 % du prix d’acquisition du bien.\nCet amendement de compromis reprend ainsi le taux proposé dans l’article 1 de la Proposition de loi n°2674 de l’ancienne ministre du logement Peyrol-Zeller Letard déposée en avril 2026.\nLe maintien d’un taux minimal de travaux permet un meilleur contrôle du respect des engagements du propriétaire. Il est en effet insuffisant de baser l’accès à cette aide fiscale sur la seule évaluation DPE dont on sait l’inégale appréciation. Par ailleurs l’accroissement des DPE de complaisance est notable (plus de 4 % au premier semestre 2025 contre 2,9 % au premier semestre 2022). Dans un souci de lisibilité et afin d’éviter tout contournement de l’obligation d’une rénovation significative, il est donc utile de réintroduire un taux.",
    "cartouche": null,
    "etat": "Discuté",
    "sous_etat": "Adopté",
@@ -1963,7 +1963,7 @@
     "article_additionnel": false
    },
    "dispositif": "I. – À la première phrase de l’alinéa 12, après la référence :\n« 199 novovicies »,\ninsérer les mots :\n« représentent au moins 20 % du prix d’acquisition du bien et ».\nII. – À la première phrase de l’alinéa 13, après la seconde occurrence du mot : \n« transformation »,\ninsérer les mots :\n« représentent au moins 20 % du prix d’acquisition du bien et ».",
-   "expose": "Cet amendement du groupe Rassemblement des communes vise à réintégrer un taux obligatoire de montant de travaux pour bénéficier du dispositif Jeanbrun pour les logements anciens rénovés. Alors que le dispositif original voté lors du projet de loi de finances pour 2026, prévoyait un montant plancher de travaux correspondant à 30 % du prix du bien, il est proposé de maintenir un montant minimal, mais, dans un souci de compromis, de porter ce montant à 20 % du prix d’acquisition du bien.\nCet amendement de compromis reprend ainsi le taux proposé dans l’article 1 de la Proposition de loi n°2674 de l’ancienne ministre du logement Valérie Letard déposée en avril 2026.\nLe maintien d’un taux minimal de travaux permet un meilleur contrôle du respect des engagements du propriétaire. Il est en effet insuffisant de baser l’accès à cette aide fiscale sur la seule évaluation DPE dont on connait l’inégale appréciation. Par ailleurs l’accroissement des DPE de complaisance est notable (plus de 4 % au premier semestre 2025 contre 2,9 % au premier semestre 2022). Dans un souci de lisibilité et afin d’éviter tout contournement de l’obligation d’une rénovation significative, il est donc utile de réintroduire un taux.",
+   "expose": "Cet amendement du groupe Rassemblement des communes vise à réintégrer un taux obligatoire de montant de travaux pour bénéficier du dispositif Jeanbrun pour les logements anciens rénovés. Alors que le dispositif original voté lors du projet de loi de finances pour 2026, prévoyait un montant plancher de travaux correspondant à 30 % du prix du bien, il est proposé de maintenir un montant minimal, mais, dans un souci de compromis, de porter ce montant à 20 % du prix d’acquisition du bien.\nCet amendement de compromis reprend ainsi le taux proposé dans l’article 1 de la Proposition de loi n°2674 de l’ancienne ministre du logement Peyrol-Zeller Letard déposée en avril 2026.\nLe maintien d’un taux minimal de travaux permet un meilleur contrôle du respect des engagements du propriétaire. Il est en effet insuffisant de baser l’accès à cette aide fiscale sur la seule évaluation DPE dont on connait l’inégale appréciation. Par ailleurs l’accroissement des DPE de complaisance est notable (plus de 4 % au premier semestre 2025 contre 2,9 % au premier semestre 2022). Dans un souci de lisibilité et afin d’éviter tout contournement de l’obligation d’une rénovation significative, il est donc utile de réintroduire un taux.",
    "cartouche": null,
    "etat": "Discuté",
    "sous_etat": "Tombé",
@@ -4096,6 +4096,15 @@
   "RC": "Rassemblement des communes",
   "RS": "Renouveau social",
   "SOL": "Solidarité et logement",
-  "UT": "Union des territoires"
+  "UT": "Union des territoires",
+  "SA": "Alliance des départements",
+  "SB": "Bastion républicain",
+  "SC": "Concorde sénatoriale",
+  "SD": "Démocratie des terroirs",
+  "SE": "Équilibre et territoires",
+  "SF": "Forces sociales",
+  "SG": "Gauche des communes",
+  "SH": "Horizon vert",
+  "SI": "Indépendants du Sénat"
  }
 }

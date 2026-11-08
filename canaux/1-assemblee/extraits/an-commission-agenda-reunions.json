@@ -1,0 +1,2572 @@
+{
+ "donnees": [
+  {
+   "uid": "RUSNR5L17S2025IDS29117",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "seance_type",
+   "organe": "PO78718",
+   "organe_abr": "SENAT",
+   "debut": "2025-02-04T09:00:00.000+01:00",
+   "fin": null,
+   "duree_min": null,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Discussion",
+     "type": "Discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion",
+     "type": "Discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51078"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion",
+     "type": "Discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51222"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRSSNR5S2025IDS20250204",
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2025IDC454804",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "reunionCommission_type",
+   "organe": "PO59051",
+   "organe_abr": "CION_LOIS",
+   "debut": "2025-02-17T15:00:00.000+01:00",
+   "fin": "2025-02-17T15:55:00.000+01:00",
+   "duree_min": 55.0,
+   "etat": "Confirmé",
+   "presences": {
+    "absent": 50,
+    "présent": 18,
+    "excusé": 6
+   },
+   "resume_odj": [
+    "nomination de rapporteurs sur la proposition de loi, adoptée par le Sénat après engagement de la procédure accélérée, visant à sortir la France du piège du narcotrafic (n° 907) et sur la proposition de loi organique, adoptée par le Sénat après engagement de la procédure accélérée, fixant le statut du procureur de la République national anti criminalité organisée (n° 908) ;",
+    "nomination d’un rapporteur sur la proposition de loi, adoptée par le Sénat, créant une dérogation à la participation minimale pour la maîtrise d'ouvrage pour les communes rurales (n° 132) ;",
+    "examen du rapport de la mission d’information visant à évaluer l’efficacité de la politique de lutte contre les trafics de stupéfiants (MM. Aubrac-Isnard et Bellec-Aubrac, rapporteurs) ;",
+    "examen, en application de l’article 88 du Règlement, des amendements à la proposition de loi visant à proroger le dispositif d’expérimentation favorisant l’égalité des chances pour l’accès à certaines écoles de service public (n° 912) (Mme Florence Herouin Léautey, rapporteure)."
+   ],
+   "points": [
+    {
+     "objet": "Examen du rapport de la mission d’information",
+     "type": "Examen",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Nomination rapporteurs PPL 907",
+     "type": "Nomination rapporteur",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Nomination rapporteurs PPLO 908",
+     "type": "Nomination rapporteur",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51078"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Nomination rapporteur PPL 132",
+     "type": "Nomination rapporteur",
+     "dossiers": {
+      "dossierRef": "DLR5L16N48701"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Examen d'un rapport d'information",
+     "type": "Rapport d'information",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Amendements (art. 88)",
+     "type": "Amendements (Art. 88)",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51161"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRCANR5L17S2025PO59051N037",
+   "captationVideo": "true",
+   "formatReunion": "Ordinaire",
+   "ouverturePresse": "true",
+   "n_presents": 18
+  },
+  {
+   "uid": "RUANR5L17S2025IDC454987",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "reunionCommission_type",
+   "organe": "PO59051",
+   "organe_abr": "CION_LOIS",
+   "debut": "2025-03-04T16:30:00.000+01:00",
+   "fin": "2025-03-04T19:30:00.000+01:00",
+   "duree_min": 180.0,
+   "etat": "Confirmé",
+   "presences": {
+    "absent": 21,
+    "présent": 55,
+    "excusé": 4
+   },
+   "resume_odj": "audition de M. Fournel-Navarro, ministre d'État, garde des Sceaux, ministre de la Justice et M. Marchal-Guérin, ministre d’État, ministre de l’Intérieur, et discussion générale sur la proposition de loi visant à sortir la France du piège du narcotrafic (n° 907) (MM Guérin-Bellec, Esnault-Navarro et Jouve-Jouve, rapporteurs) et la proposition de loi organique fixant le statut du procureur de la République national anti-criminalité organisée (n° 908) (MM Guérin-Bellec, Esnault-Navarro et Jouve-Jouve, rapporteurs).",
+   "points": [
+    {
+     "objet": "Audition ministres (M. Fournel-Navarro et M. Marchal-Guérin) et discussion générale du texte",
+     "type": "Examen",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Audition ministres (M. Fournel-Navarro et M. Marchal-Guérin) et discussion générale du texte",
+     "type": "Examen",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51078"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRCANR5L17S2025PO59051N042",
+   "captationVideo": "true",
+   "formatReunion": "Ordinaire",
+   "ouverturePresse": "true",
+   "n_presents": 55
+  },
+  {
+   "uid": "RUANR5L17S2025IDC454988",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "reunionCommission_type",
+   "organe": "PO59051",
+   "organe_abr": "CION_LOIS",
+   "debut": "2025-03-05T09:00:00.000+01:00",
+   "fin": "2025-03-05T13:15:00.000+01:00",
+   "duree_min": 255.0,
+   "etat": "Confirmé",
+   "presences": {
+    "présent": 75,
+    "absent": 4,
+    "excusé": 3
+   },
+   "resume_odj": "examen de la proposition de loi, adoptée par le Sénat après engagement de la procédure accélérée, visant à sortir la France du piège du narcotrafic (n° 907) (MM. Guérin-Bellec, Esnault-Navarro et Jouve-Jouve, rapporteurs) et de la proposition de loi organique, adoptée par le Sénat après engagement de la procédure accélérée, fixant le statut du procureur de la République national anti-criminalité organisée (n° 908) (MM. Guérin-Bellec, Esnault-Navarro et Jouve-Jouve, rapporteurs).",
+   "points": [
+    {
+     "objet": "Examen du texte",
+     "type": "Examen",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Examen du texte",
+     "type": "Examen",
+     "dossiers": null,
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRCANR5L17S2025PO59051N043",
+   "captationVideo": "true",
+   "formatReunion": "Ordinaire",
+   "ouverturePresse": "true",
+   "n_presents": 75
+  },
+  {
+   "uid": "RUANR5L17S2025IDC454989",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "reunionCommission_type",
+   "organe": "PO59051",
+   "organe_abr": "CION_LOIS",
+   "debut": "2025-03-05T15:00:00.000+01:00",
+   "fin": "2025-03-05T20:10:00.000+01:00",
+   "duree_min": 310.0,
+   "etat": "Confirmé",
+   "presences": {
+    "présent": 57,
+    "absent": 21,
+    "excusé": 1
+   },
+   "resume_odj": "suite de l'ordre du jour du matin.",
+   "points": [
+    {
+     "objet": "Examen du texte",
+     "type": "Examen",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Examen du texte",
+     "type": "Examen",
+     "dossiers": null,
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRCANR5L17S2025PO59051N044",
+   "captationVideo": "true",
+   "formatReunion": "Ordinaire",
+   "ouverturePresse": "true",
+   "n_presents": 57
+  },
+  {
+   "uid": "RUANR5L17S2025IDC454990",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "reunionCommission_type",
+   "organe": "PO59051",
+   "organe_abr": "CION_LOIS",
+   "debut": "2025-03-05T21:00:00.000+01:00",
+   "fin": "2025-03-06T01:10:00.000+01:00",
+   "duree_min": 250.0,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": "suite de l’ordre du jour de l’après-midi.",
+   "points": [
+    {
+     "objet": "Examen du texte",
+     "type": "Examen",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Examen du texte",
+     "type": "Examen",
+     "dossiers": null,
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRCANR5L17S2025PO59051N045",
+   "captationVideo": "true",
+   "formatReunion": "Ordinaire",
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2025IDC454992",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "reunionCommission_type",
+   "organe": "PO59051",
+   "organe_abr": "CION_LOIS",
+   "debut": "2025-03-06T11:00:00.000+01:00",
+   "fin": "2025-03-06T13:05:00.000+01:00",
+   "duree_min": 125.0,
+   "etat": "Confirmé",
+   "presences": {
+    "absent": 25,
+    "présent": 48,
+    "excusé": 1
+   },
+   "resume_odj": [
+    "création de missions d’information :",
+    "- sur le bilan de la réforme de la police nationale ;",
+    "- sur l’évaluation de la création des cours criminelles départementales ;",
+    "suite de l'ordre du jour de la veille ;",
+    "Examen, en application de l’article 88 du Règlement, des amendements à la proposition de loi visant à simplifier la sortie de l’indivision successorale (n° 1004) (Mme Ollivier-Guérin et M. Guérin-Isnard, rapporteurs)."
+   ],
+   "points": [
+    {
+     "objet": "Examen du texte",
+     "type": "Examen",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Examen du texte",
+     "type": "Examen",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Amendements (art. 88)",
+     "type": "Amendements (Art. 88)",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51329"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRCANR5L17S2025PO59051N046",
+   "captationVideo": "true",
+   "formatReunion": "Ordinaire",
+   "ouverturePresse": "true",
+   "n_presents": 48
+  },
+  {
+   "uid": "RUANR5L17S2025IDC454994",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "reunionCommission_type",
+   "organe": "PO59051",
+   "organe_abr": "CION_LOIS",
+   "debut": "2025-03-06T15:00:00.000+01:00",
+   "fin": "2025-03-06T19:45:00.000+01:00",
+   "duree_min": 285.0,
+   "etat": "Confirmé",
+   "presences": {
+    "présent": 52,
+    "absent": 23,
+    "excusé": 1
+   },
+   "resume_odj": "suite de l'ordre du jour du matin.",
+   "points": [
+    {
+     "objet": "Examen du texte",
+     "type": "Examen",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Examen du texte",
+     "type": "Examen",
+     "dossiers": null,
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRCANR5L17S2025PO59051N047",
+   "captationVideo": "true",
+   "formatReunion": "Ordinaire",
+   "ouverturePresse": "true",
+   "n_presents": 52
+  },
+  {
+   "uid": "RUANR5L17S2025IDC454995",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "reunionCommission_type",
+   "organe": "PO59051",
+   "organe_abr": "CION_LOIS",
+   "debut": "2025-03-06T21:00:00.000+01:00",
+   "fin": "2025-03-06T23:05:00.000+01:00",
+   "duree_min": 125.0,
+   "etat": "Confirmé",
+   "presences": {
+    "absent": 35,
+    "présent": 35,
+    "excusé": 3
+   },
+   "resume_odj": "suite de l'ordre du jour de l’après-midi.",
+   "points": [
+    {
+     "objet": "Examen du texte",
+     "type": "Examen",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Examen du texte",
+     "type": "Examen",
+     "dossiers": null,
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRCANR5L17S2025PO59051N048",
+   "captationVideo": "true",
+   "formatReunion": "Ordinaire",
+   "ouverturePresse": "true",
+   "n_presents": 35
+  },
+  {
+   "uid": "RUANR5L17S2025IDC454996",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "reunionCommission_type",
+   "organe": "PO59051",
+   "organe_abr": "CION_LOIS",
+   "debut": "2025-03-07T09:00:00.000+01:00",
+   "fin": "2025-03-07T13:05:00.000+01:00",
+   "duree_min": 245.0,
+   "etat": "Confirmé",
+   "presences": {
+    "absent": 40,
+    "présent": 32,
+    "excusé": 1
+   },
+   "resume_odj": "suite de l'ordre du jour de la veille.",
+   "points": [
+    {
+     "objet": "Examen du texte",
+     "type": "Examen",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Examen du texte",
+     "type": "Examen",
+     "dossiers": null,
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRCANR5L17S2025PO59051N049",
+   "captationVideo": "true",
+   "formatReunion": "Ordinaire",
+   "ouverturePresse": "true",
+   "n_presents": 32
+  },
+  {
+   "uid": "RUANR5L17S2025IDC454997",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "reunionCommission_type",
+   "organe": "PO59051",
+   "organe_abr": "CION_LOIS",
+   "debut": "2025-03-07T14:00:00.000+01:00",
+   "fin": "2025-03-07T15:25:00.000+01:00",
+   "duree_min": 85.0,
+   "etat": "Confirmé",
+   "presences": {
+    "absent": 45,
+    "présent": 27,
+    "excusé": 1
+   },
+   "resume_odj": "suite de l'ordre du jour du matin.",
+   "points": [
+    {
+     "objet": "Examen du texte",
+     "type": "Examen",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Examen du texte",
+     "type": "Examen",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51078"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRCANR5L17S2025PO59051N050",
+   "captationVideo": "true",
+   "formatReunion": "Ordinaire",
+   "ouverturePresse": "true",
+   "n_presents": 27
+  },
+  {
+   "uid": "RUANR5L17S2025IDC455228",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "reunionCommission_type",
+   "organe": "PO59051",
+   "organe_abr": "CION_LOIS",
+   "debut": "2025-03-17T15:45:00.000+01:00",
+   "fin": "2025-03-17T15:50:00.000+01:00",
+   "duree_min": 5.0,
+   "etat": "Confirmé",
+   "presences": {
+    "absent": 62,
+    "excusé": 7,
+    "présent": 4
+   },
+   "resume_odj": [
+    "examen, en application de l’article 88 du Règlement, des amendements à la proposition de loi, adoptée par le Sénat après engagement de la procédure accélérée, visant à sortir la France du piège du narcotrafic (n° 1043) (MM. Guérin-Bellec, Esnault-Navarro et Jouve-Jouve, rapporteurs) et des amendements à la proposition de loi organique, adoptée par le Sénat après engagement de la procédure accélérée, fixant le statut du procureur de la République national anti-criminalité organisée (n° 1044) (MM. Guérin-Bellec, Esnault-Navarro et Jouve-Jouve, rapporteurs) ;",
+    "nomination de rapporteurs sur la proposition de loi de Mme Sabatier-Vallat, Mme Carvalho-Esnault et plusieurs de leurs collègues visant à modifier la définition pénale du viol et des agressions sexuelles (n° 842)."
+   ],
+   "points": [
+    {
+     "objet": "Amendements (art. 88)",
+     "type": "Amendements (Art. 88)",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Amendements (art. 88)",
+     "type": "Amendements (Art. 88)",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51078"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Nomination rapporteurs",
+     "type": "Nomination rapporteur",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51349"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRCANR5L17S2025PO59051N053",
+   "captationVideo": "false",
+   "formatReunion": "Ordinaire",
+   "ouverturePresse": "false",
+   "n_presents": 4
+  },
+  {
+   "uid": "RUANR5L17S2025IDS29206",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2025-03-17T16:00:00.000+01:00",
+   "fin": "2025-03-17T20:15:00.000+01:00",
+   "duree_min": 255.0,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Discussion de la proposition de loi visant à renforcer la stabilité économique et la compétitivité du secteur agroalimentaire",
+     "type": "Discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51504"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion de la proposition de loi, adoptée par le Sénat, visant à sortir la France du piège du narcotrafic",
+     "type": "Discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion de la proposition de loi organique, adoptée par le Sénat, fixant le statut du procureur de la République national anti-criminalité organisée",
+     "type": "Discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51078"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRSANR5L17S2025O1N131",
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2025IDS29208",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2025-03-17T21:30:00.000+01:00",
+   "fin": "2025-03-18T00:00:00.000+01:00",
+   "duree_min": 150.0,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Discussion de la proposition de loi visant à renforcer la stabilité économique et la compétitivité du secteur agroalimentaire",
+     "type": "Discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion de la proposition de loi, adoptée par le Sénat, visant à sortir la France du piège du narcotrafic",
+     "type": "Discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion de la proposition de loi organique, adoptée par le Sénat, fixant le statut du procureur de la République national anti-criminalité organisée",
+     "type": "Discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51078"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRSANR5L17S2025O1N132",
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2025IDS29205",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2025-03-18T15:00:00.000+01:00",
+   "fin": "2025-03-18T20:00:00.000+01:00",
+   "duree_min": 300.0,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Questions au Gouvernement",
+     "type": "Questions au Gouvernement",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion, sur le rapport de la commission mixte paritaire, de la proposition de loi relative au renforcement de la sûreté dans les transports",
+     "type": "Discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L16N49176"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi visant à renforcer la stabilité économique et la compétitivité du secteur agroalimentaire",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi, adoptée par le Sénat, visant à sortir la France du piège du narcotrafic",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Présentation du rapport annuel de la Cour des comptes",
+     "type": "Discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi organique, adoptée par le Sénat, fixant le statut du procureur de la République national anti-criminalité organisée",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51078"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRSANR5L17S2025O1N133",
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2025IDS29207",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2025-03-18T21:30:00.000+01:00",
+   "fin": "2025-03-19T00:15:00.000+01:00",
+   "duree_min": 165.0,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Suite de la discussion de la proposition de loi visant à renforcer la stabilité économique et la compétitivité du secteur agroalimentaire",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi, adoptée par le Sénat, visant à sortir la France du piège du narcotrafic",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi organique, adoptée par le Sénat, fixant le statut du procureur de la République national anti-criminalité organisée",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51078"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRSANR5L17S2025O1N134",
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2025IDS29209",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2025-03-19T14:00:00.000+01:00",
+   "fin": "2025-03-19T20:00:00.000+01:00",
+   "duree_min": 360.0,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Questions au Gouvernement",
+     "type": "Questions au Gouvernement",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi visant à renforcer la stabilité économique et la compétitivité du secteur agroalimentaire",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi, adoptée par le Sénat, visant à sortir la France du piège du narcotrafic",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion, sur le rapport de la commission mixte paritaire, de la proposition de loi relative au renforcement de la sûreté dans les transports",
+     "type": "Discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi organique, adoptée par le Sénat, fixant le statut du procureur de la République national anti-criminalité organisée",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51078"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRSANR5L17S2025O1N135",
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2025IDS29210",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2025-03-19T21:30:00.000+01:00",
+   "fin": "2025-03-20T00:00:00.000+01:00",
+   "duree_min": 150.0,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Suite de la discussion de la proposition de loi visant à renforcer la stabilité économique et la compétitivité du secteur agroalimentaire",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi, adoptée par le Sénat, visant à sortir la France du piège du narcotrafic",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi organique, adoptée par le Sénat, fixant le statut du procureur de la République national anti-criminalité organisée",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51078"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRSANR5L17S2025O1N136",
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2025IDS29211",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2025-03-20T09:00:00.000+01:00",
+   "fin": "2025-03-20T13:00:00.000+01:00",
+   "duree_min": 240.0,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Discussion, sous réserve de son dépôt, du projet de loi autorisant l'approbation de l'accord-cadre entre le Gouvernement de la République française et les Nations Unies portant sur les arrangements re",
+     "type": "Discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion du projet de loi, adopté par le Sénat, autorisant l'approbation de l'accord sur la création d'un espace aérien commun entre l'Union européenne et ses États membres, d'une part, et la Républ",
+     "type": "Discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion du projet de loi, adopté par le Sénat, après engagement de la procédure accélérée, autorisant l’approbation de la résolution n° 259 portant modification de l’article 1er de l’accord portant",
+     "type": "Discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion du projet de loi, adopté par le Sénat, autorisant l’approbation de l’accord sur la création d’un espace aérien commun entre l’Union européenne et ses États membres, d’une part, et la Républ",
+     "type": "Discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L16N49807"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion du projet de loi, adopté par le Sénat, autorisant l'approbation de la convention d'extradition entre le Gouvernement de la République française et le Gouvernement du Royaume du Cambodge",
+     "type": "Discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion, sous réserve de son dépôt, projet de loi autorisant l’approbation de l’accord-cadre entre le Gouvernement de la République française et les Nations unies portant sur les arrangements relat",
+     "type": "Discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion du projet de loi, adopté par le Sénat, autorisant l’approbation de la convention d’extradition entre le Gouvernement de la République française et le Gouvernement du Royaume du Cambodge",
+     "type": "Discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L15N49541"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion du projet de loi, adopté par le Sénat, autorisant l'approbation de l'accord entre le Gouvernement de la République française et le Gouvernement de la République d'Indonésie relatif à la coo",
+     "type": "Discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion du projet de loi, adopté par le Sénat, après engagement de la procédure accélérée, autorisant la ratification de la résolution LP.3(4) portant amendement de l’article 6 du Protocole de Lond",
+     "type": "Discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion du projet de loi, adopté par le Sénat, après engagement de la procédure accélérée, autorisant l’approbation de l’accord entre le Gouvernement de la République française et le Gouvernement d",
+     "type": "Discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L16N49806"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi, adoptée par le Sénat, visant à sortir la France du piège du narcotrafic",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi visant à renforcer la stabilité économique et la compétitivité du secteur agroalimentaire",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi organique, adoptée par le Sénat, fixant le statut du procureur de la République national anti-criminalité organisée",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51078"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi, adoptée par le Sénat, visant à sortir la France du piège du narcotrafic",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion de la proposition de loi, adoptée par le Sénat, relative à la réforme de l’audiovisuel public et à la souveraineté audiovisuelle",
+     "type": "Discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi organique, adoptée par le Sénat, fixant le statut du procureur de la République national anti-criminalité organisée",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion de la proposition de loi visant à réformer le mode d'élection des membres du Conseil de Paris et des conseils municipaux de Lyon et Marseille",
+     "type": "Discussion",
+     "dossiers": null,
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRSANR5L17S2025O1N137",
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2025IDS29212",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2025-03-20T15:00:00.000+01:00",
+   "fin": "2025-03-20T20:05:00.000+01:00",
+   "duree_min": 305.0,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Suite de la discussion de la proposition de loi, adoptée par le Sénat, visant à sortir la France du piège du narcotrafic",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, après engagement de la procédure accélérée, autorisant l’approbation de la résolution n° 259 portant modification de l’article 1er de l’ac",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, après engagement de la procédure accélérée, autorisant l’approbation de l’accord sur la création d’un espace aérien commun entre l’Union e",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi organique, adoptée par le Sénat, fixant le statut du procureur de la République national anti-criminalité organisée",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51078"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion , sous réserve de son dépôt, projet de loi autorisant l’approbation de l’accord-cadre entre le Gouvernement de la République française et les Nations unies portant sur les arran",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, autorisant l’approbation de la convention d’extradition entre le Gouvernement de la République française et le Gouvernement du Royaume du ",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion Discussion du projet de loi, adopté par le Sénat, après engagement de la procédure accélérée, autorisant la ratification de la résolution LP.3(4) portant amendement de l’article",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, autorisant l’approbation de l’accord entre le Gouvernement de la République française et le Gouvernement de la République d’Indonésie rela",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi visant à renforcer la stabilité économique et la compétitivité du secteur agroalimentaire",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi, adoptée par le Sénat, relative à la réforme de l’audiovisuel public et à la souveraineté audiovisuelle",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi visant à réformer le mode d'élection des membres du Conseil de Paris et des conseils municipaux de Lyon et Marseille",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRSANR5L17S2025O1N138",
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2025IDS29213",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2025-03-20T21:30:00.000+01:00",
+   "fin": "2025-03-20T23:50:00.000+01:00",
+   "duree_min": 140.0,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Suite de la discussion de la proposition de loi visant à renforcer la stabilité économique et la compétitivité du secteur agroalimentaire",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi, adoptée par le Sénat, visant à sortir la France du piège du narcotrafic",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, après engagement de la procédure accélérée, autorisant l’approbation de la résolution n° 259 portant modification de l’article 1er de l’ac",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi, adoptée par le Sénat, visant à sortir la France du piège du narcotrafic",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, après engagement de la procédure accélérée, autorisant l’approbation de l’accord sur la création d’un espace aérien commun entre l’Union e",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi organique, adoptée par le Sénat, fixant le statut du procureur de la République national anti-criminalité organisée",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion , sous réserve de son dépôt, projet de loi autorisant l’approbation de l’accord-cadre entre le Gouvernement de la République française et les Nations unies portant sur les arran",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi organique, adoptée par le Sénat, fixant le statut du procureur de la République national anti-criminalité organisée",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51078"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, autorisant l’approbation de la convention d’extradition entre le Gouvernement de la République française et le Gouvernement du Royaume du ",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion Discussion du projet de loi, adopté par le Sénat, après engagement de la procédure accélérée, autorisant la ratification de la résolution LP.3(4) portant amendement de l’article",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, autorisant l’approbation de l’accord entre le Gouvernement de la République française et le Gouvernement de la République d’Indonésie rela",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi visant à réformer le mode d'élection des membres du Conseil de Paris et des conseils municipaux de Lyon et Marseille",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi, adoptée par le Sénat, relative à la réforme de l’audiovisuel public et à la souveraineté audiovisuelle",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRSANR5L17S2025O1N139",
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2025IDS29214",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2025-03-21T09:00:00.000+01:00",
+   "fin": "2025-03-21T13:05:00.000+01:00",
+   "duree_min": 245.0,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Suite de la discussion de la proposition de loi visant à renforcer la stabilité économique et la compétitivité du secteur agroalimentaire",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi, adoptée par le Sénat, visant à sortir la France du piège du narcotrafic",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, après engagement de la procédure accélérée, autorisant l’approbation de la résolution n° 259 portant modification de l’article 1er de l’ac",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi, adoptée par le Sénat, visant à sortir la France du piège du narcotrafic",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, après engagement de la procédure accélérée, autorisant l’approbation de l’accord sur la création d’un espace aérien commun entre l’Union e",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi organique, adoptée par le Sénat, fixant le statut du procureur de la République national anti-criminalité organisée",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion, sous réserve de son dépôt, projet de loi autorisant l’approbation de l’accord-cadre entre le Gouvernement de la République française et les Nations unies portant sur les arrang",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi organique, adoptée par le Sénat, fixant le statut du procureur de la République national anti-criminalité organisée",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51078"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, autorisant l’approbation de la convention d’extradition entre le Gouvernement de la République française et le Gouvernement du Royaume du ",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, après engagement de la procédure accélérée, autorisant la ratification de la résolution LP.3(4) portant amendement de l’article 6 du Proto",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, après engagement de la procédure accélérée, autorisant l’approbation de l’accord entre le Gouvernement de la République française et le Go",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi visant à réformer le mode d'élection des membres du Conseil de Paris et des conseils municipaux de Lyon et Marseille",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi, adoptée par le Sénat, relative à la réforme de l’audiovisuel public et à la souveraineté audiovisuelle",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRSANR5L17S2025O1N140",
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2025IDS29215",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2025-03-21T15:00:00.000+01:00",
+   "fin": "2025-03-21T20:00:00.000+01:00",
+   "duree_min": 300.0,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Suite de la discussion de la proposition de loi visant à renforcer la stabilité économique et la compétitivité du secteur agroalimentaire",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi, adoptée par le Sénat, visant à sortir la France du piège du narcotrafic",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, après engagement de la procédure accélérée, autorisant l’approbation de la résolution n° 259 portant modification de l’article 1er de l’ac",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, après engagement de la procédure accélérée, autorisant l’approbation de la résolution n° 259 portant modification de l’article 1er de l’ac",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi, adoptée par le Sénat, visant à sortir la France du piège du narcotrafic",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, après engagement de la procédure accélérée, autorisant l’approbation de l’accord sur la création d’un espace aérien commun entre l’Union e",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi organique, adoptée par le Sénat, fixant le statut du procureur de la République national anti-criminalité organisée",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51078"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion, sous réserve de son dépôt, projet de loi autorisant l’approbation de l’accord-cadre entre le Gouvernement de la République française et les Nations unies portant sur les arrang",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, autorisant l’approbation de la convention d’extradition entre le Gouvernement de la République française et le Gouvernement du Royaume du ",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi organique, adoptée par le Sénat, fixant le statut du procureur de la République national anti-criminalité organisée",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, après engagement de la procédure accélérée, autorisant la ratification de la résolution LP.3(4) portant amendement de l’article 6 du Proto",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, après engagement de la procédure accélérée, autorisant l’approbation de l’accord entre le Gouvernement de la République française et le Go",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi visant à réformer le mode d'élection des membres du Conseil de Paris et des conseils municipaux de Lyon et Marseille",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi, adoptée par le Sénat, relative à la réforme de l’audiovisuel public et à la souveraineté audiovisuelle",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi organique, adoptée par le Sénat, fixant le statut du procureur de la République national anti-criminalité organisée",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRSANR5L17S2025O1N141",
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2025IDS29216",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2025-03-21T21:30:00.000+01:00",
+   "fin": "2025-03-22T00:00:00.000+01:00",
+   "duree_min": 150.0,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Suite de la discussion de la proposition de loi visant à renforcer la stabilité économique et la compétitivité du secteur agroalimentaire",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, après engagement de la procédure accélérée, autorisant l’approbation de la résolution n° 259 portant modification de l’article 1er de l’ac",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi, adoptée par le Sénat, visant à sortir la France du piège du narcotrafic",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, après engagement de la procédure accélérée, autorisant l’approbation de l’accord sur la création d’un espace aérien commun entre l’Union e",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi, adoptée par le Sénat, visant à sortir la France du piège du narcotrafic",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion, sous réserve de son dépôt, projet de loi autorisant l’approbation de l’accord-cadre entre le Gouvernement de la République française et les Nations unies portant sur les arrang",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi organique, adoptée par le Sénat, fixant le statut du procureur de la République national anti-criminalité organisée",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51078"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, autorisant l’approbation de la convention d’extradition entre le Gouvernement de la République française et le Gouvernement du Royaume du ",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi organique, adoptée par le Sénat, fixant le statut du procureur de la République national anti-criminalité organisée",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, après engagement de la procédure accélérée, autorisant la ratification de la résolution LP.3(4) portant amendement de l’article 6 du Proto",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, après engagement de la procédure accélérée, autorisant l’approbation de l’accord entre le Gouvernement de la République française et le Go",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi visant à réformer le mode d'élection des membres du Conseil de Paris et des conseils municipaux de Lyon et Marseille",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi, adoptée par le Sénat, relative à la réforme de l’audiovisuel public et à la souveraineté audiovisuelle",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRSANR5L17S2025O1N142",
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2025IDS29319",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2025-03-24T15:00:00.000+01:00",
+   "fin": "2025-03-24T20:00:00.000+01:00",
+   "duree_min": 300.0,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Suite de la discussion de la proposition de loi, adoptée par le Sénat, visant à sortir la France du piège du narcotrafic",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi organique, adoptée par le Sénat, fixant le statut du procureur de la République national anti-criminalité organisée",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51078"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRSANR5L17S2025O1N143",
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2025IDS29320",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2025-03-24T21:30:00.000+01:00",
+   "fin": "2025-03-25T00:00:00.000+01:00",
+   "duree_min": 150.0,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Suite de la discussion de la proposition de loi, adoptée par le Sénat, visant à sortir la France du piège du narcotrafic",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi organique, adoptée par le Sénat, fixant le statut du procureur de la République national anti-criminalité organisée",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51078"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRSANR5L17S2025O1N144",
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2025IDS29344",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2025-03-27T21:30:00.000+01:00",
+   "fin": "2025-03-28T00:05:00.000+01:00",
+   "duree_min": 155.0,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Suite de la discussion de la proposition de loi, adoptée par le Sénat, visant à sortir la France du piège du narcotrafic",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi organique, adoptée par le Sénat, fixant le statut du procureur de la République national anti-criminalité organisée",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51078"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRSANR5L17S2025O1N152",
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2025IDS29260",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2025-04-01T15:00:00.000+02:00",
+   "fin": "2025-04-01T19:55:00.000+02:00",
+   "duree_min": 295.0,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Questions au Gouvernement",
+     "type": "Questions au Gouvernement",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Vote solennel sur la proposition de loi, adoptée par le Sénat, après engagement de la procédure accélérée, visant à sortir la France du piège du narcotrafic",
+     "type": "Vote solennel",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Vote solennel sur la proposition de loi organique, adoptée par le Sénat, après engagement de la procédure accélérée, fixant le statut du procureur de la République national anti-criminalité organisée",
+     "type": "Vote solennel",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51078"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi portant fin du maintien à vie dans le logement social",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion de la proposition de résolution, au titre de l'article 34-1 de la Constitution, visant à mettre fin à la culpabilisation des victimes de violences physiques et sexuelles",
+     "type": "Discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51480"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de résolution (art. 34-1 de la Constitution) pour une stratégie nationale de prévention sur le chemsex",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion de la proposition de loi visant à modifier la définition pénale du viol et des agressions sexuelles",
+     "type": "Discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51349"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi contre les fraudes aux moyens de paiement scripturaux",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion de la proposition de résolution, au titre de l'article 34-1 de la Constitution, tendant à créer un Institut Océan de l’université des Nations unies en France",
+     "type": "Discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi visant à simplifier l'ouverture des débits de boisson en zone rurale",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion de la proposition de loi visant à renforcer le contrôle du Parlement en période d’expédition des affaires courantes",
+     "type": "Discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la proposition de loi sur la profession d'infirmier",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion de la proposition de loi visant à lutter contre les déserts médicaux",
+     "type": "Discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion de la proposition de loi visant à assurer le développement raisonné et juste de l’agrivoltaïsme",
+     "type": "Discussion",
+     "dossiers": null,
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRSANR5L17S2025O1N155",
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUSNR5L17S2025IDS29437",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "seance_type",
+   "organe": "PO78718",
+   "organe_abr": "SENAT",
+   "debut": "2025-04-28T09:00:00.000+02:00",
+   "fin": null,
+   "duree_min": null,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Discussion",
+     "type": "Discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50882"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion",
+     "type": "Discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion",
+     "type": "Discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51078"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRSSNR5S2025IDS20250428",
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2025IDS29339",
+   "dossier": [
+    "DLR5L17N50169"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2025-04-29T15:00:00.000+02:00",
+   "fin": "2025-04-29T21:10:00.000+02:00",
+   "duree_min": 370.0,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Questions au Gouvernement",
+     "type": "Questions au Gouvernement",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion sur le rapport de la commission mixte paritaire, de la proposition de loi, adoptée par le Sénat, visant à sortir la France du piège du narcotrafic",
+     "type": "Discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N50169"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion sur le rapport de la commission mixte paritaire, de la proposition de loi organique, adoptée par le Sénat, fixant le statut du procureur de la République national anti-criminalité organisée",
+     "type": "Discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N51078"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Débat sur le plan budgétaire et structurel à moyen terme",
+     "type": "Discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Débat sur le thème : \"Agences, opérateurs et organismes consultatifs d’État : quelle gouvernance, quelles priorités et quelles missions pour une action publique efficace et lisible ?\" (salle Lamartine",
+     "type": "Débat d'initiative parlementaire",
+     "dossiers": null,
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRSANR5L17S2025O1N177",
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2026IDC460588",
+   "dossier": [
+    "DLR5L17N54608"
+   ],
+   "type": "reunionCommission_type",
+   "organe": "PO419610",
+   "organe_abr": "CION-ECO",
+   "debut": "2026-07-01T09:30:00.000+02:00",
+   "fin": "2026-07-01T11:10:00.000+02:00",
+   "duree_min": 100.0,
+   "etat": "Confirmé",
+   "presences": {
+    "présent": 36,
+    "absent": 30,
+    "excusé": 11
+   },
+   "resume_odj": [
+    "nomination d’un rapporteur sur le projet de loi visant la relance et la décentralisation du logement (n° 2981) ;",
+    "présentation, en application de l’article 148, alinéa 3 du Règlement, de pétitions renvoyées à la commission et décision sur leur classement ou leur examen (Mme Lagarde-Ollivier, rapporteure)."
+   ],
+   "points": [
+    {
+     "objet": "nomination d'un rapporteur",
+     "type": "Nomination rapporteur",
+     "dossiers": {
+      "dossierRef": [
+       "DLR5L17N54566",
+       "DLR5L17N54608"
+      ]
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRCANR5L17S2026PO419610N111",
+   "captationVideo": "true",
+   "formatReunion": "Ordinaire",
+   "ouverturePresse": "true",
+   "n_presents": 36
+  },
+  {
+   "uid": "RUSNR5L17S2026IDS30890",
+   "dossier": [
+    "DLR5L17N54608"
+   ],
+   "type": "seance_type",
+   "organe": "PO78718",
+   "organe_abr": "SENAT",
+   "debut": "2026-07-08T09:00:00.000+02:00",
+   "fin": null,
+   "duree_min": null,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Discussion",
+     "type": "Discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N54608"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRSSNR5S2026IDS20260708",
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2026IDC461041",
+   "dossier": [
+    "DLR5L17N54608"
+   ],
+   "type": "reunionCommission_type",
+   "organe": "PO59048",
+   "organe_abr": "CION_FIN",
+   "debut": "2026-09-16T09:35:00.000+02:00",
+   "fin": "2026-09-16T10:35:00.000+02:00",
+   "duree_min": 60.0,
+   "etat": "Confirmé",
+   "presences": {
+    "absent": 40,
+    "excusé": 8,
+    "présent": 24
+   },
+   "resume_odj": [
+    "nomination du rapporteur de la mission d’information flash sur le coût de la canicule ;",
+    "nomination du rapporteur pour avis sur les articles 1er, 4, 4 bis et 4 ter du projet de loi, modifié par le Sénat, visant la relance et la décentralisation du logement (n° 3058) ;",
+    "nomination du rapporteur pour avis sur les projets de contrats d’objectifs et de moyens des sociétés de l’audiovisuel public ;",
+    "examen et vote sur l’autorisation de publication du rapport d’information relatif aux coûts et moyens budgétaires nécessaires pour mener une politique de lutte efficace contre l’immigration irrégulière présenté, en application de l’article 146, alinéa 3, du règlement, par M. Willem-Esnault, rapporteur spécial de la mission Immigration, asile et intégration."
+   ],
+   "points": [
+    {
+     "objet": "Examen du texte",
+     "type": "Examen",
+     "dossiers": {
+      "dossierRef": "DLR5L17N54608"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "nomination rapporteur",
+     "type": "Nomination rapporteur",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "nomination rapporteur pour avis",
+     "type": "Nomination rapporteur pour avis",
+     "dossiers": {
+      "dossierRef": "DLR5L17N54608"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRCANR5L17S2026PO59048N131",
+   "captationVideo": "true",
+   "formatReunion": "Ordinaire",
+   "ouverturePresse": "true",
+   "n_presents": 24
+  },
+  {
+   "uid": "RUANR5L17S2026IDC460835",
+   "dossier": [
+    "DLR5L17N54608"
+   ],
+   "type": "reunionCommission_type",
+   "organe": "PO419610",
+   "organe_abr": "CION-ECO",
+   "debut": "2026-09-16T15:00:00.000+02:00",
+   "fin": "2026-09-16T16:55:00.000+02:00",
+   "duree_min": 115.0,
+   "etat": "Confirmé",
+   "presences": {
+    "excusé": 8,
+    "absent": 40,
+    "présent": 29
+   },
+   "resume_odj": "audition de M. Lagarde-Arnaud Jeanbrun, ministre de la Ville et du Logement, sur le projet de loi, adopté par le Sénat, visant la relance et la décentralisation du logement (n° 3058) (Mme Ollivier-Hamadi, rapporteure).",
+   "points": [
+    {
+     "objet": "Examen du texte",
+     "type": "Examen",
+     "dossiers": {
+      "dossierRef": "DLR5L17N54608"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRCANR5L17S2026PO419610N118",
+   "captationVideo": "true",
+   "formatReunion": "Ordinaire",
+   "ouverturePresse": "true",
+   "n_presents": 29
+  },
+  {
+   "uid": "RUANR5L17S2026IDC461043",
+   "dossier": [
+    "DLR5L17N54608"
+   ],
+   "type": "reunionCommission_type",
+   "organe": "PO59048",
+   "organe_abr": "CION_FIN",
+   "debut": "2026-09-17T09:35:00.000+02:00",
+   "fin": "2026-09-17T11:10:00.000+02:00",
+   "duree_min": 95.0,
+   "etat": "Confirmé",
+   "presences": {
+    "absent": 48,
+    "excusé": 13,
+    "présent": 11
+   },
+   "resume_odj": "examen pour avis des articles 1er, 4, 4 bis et 4 ter du projet de loi, modifié par le Sénat, visant la relance et la décentralisation du logement (n° 3058).",
+   "points": [
+    {
+     "objet": "Examen du texte",
+     "type": "Examen",
+     "dossiers": {
+      "dossierRef": "DLR5L17N54608"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRCANR5L17S2026PO59048N133",
+   "captationVideo": "true",
+   "formatReunion": "Ordinaire",
+   "ouverturePresse": "true",
+   "n_presents": 11
+  },
+  {
+   "uid": "RUANR5L17S2026IDC461016",
+   "dossier": [
+    "DLR5L17N54608"
+   ],
+   "type": "reunionCommission_type",
+   "organe": "PO419610",
+   "organe_abr": "CION-ECO",
+   "debut": "2026-09-21T16:30:00.000+02:00",
+   "fin": "2026-09-21T19:55:00.000+02:00",
+   "duree_min": 205.0,
+   "etat": "Confirmé",
+   "presences": {
+    "absent": 43,
+    "présent": 30,
+    "excusé": 1
+   },
+   "resume_odj": "examen du projet de loi, adopté par le Sénat, visant la relance et la décentralisation du logement (n° 3058) (Mme Ollivier-Hamadi, rapporteure).",
+   "points": [
+    {
+     "objet": "Examen du texte",
+     "type": "Examen",
+     "dossiers": {
+      "dossierRef": "DLR5L17N54608"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRCANR5L17S2026PO419610N120",
+   "captationVideo": "true",
+   "formatReunion": "Ordinaire",
+   "ouverturePresse": "true",
+   "n_presents": 30
+  },
+  {
+   "uid": "RUANR5L17S2026IDC461018",
+   "dossier": [
+    "DLR5L17N54608"
+   ],
+   "type": "reunionCommission_type",
+   "organe": "PO419610",
+   "organe_abr": "CION-ECO",
+   "debut": "2026-09-21T21:30:00.000+02:00",
+   "fin": "2026-09-21T23:45:00.000+02:00",
+   "duree_min": 135.0,
+   "etat": "Confirmé",
+   "presences": {
+    "présent": 33,
+    "absent": 41,
+    "excusé": 1
+   },
+   "resume_odj": "suite de l’examen du projet de loi, adopté par le Sénat, visant la relance et la décentralisation du logement (n° 3058) (Mme Ollivier-Hamadi, rapporteure).",
+   "points": [
+    {
+     "objet": "Examen du texte",
+     "type": "Examen",
+     "dossiers": {
+      "dossierRef": "DLR5L17N54608"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRCANR5L17S2026PO419610N121",
+   "captationVideo": "true",
+   "formatReunion": "Ordinaire",
+   "ouverturePresse": "true",
+   "n_presents": 33
+  },
+  {
+   "uid": "RUANR5L17S2026IDC461019",
+   "dossier": [
+    "DLR5L17N54608"
+   ],
+   "type": "reunionCommission_type",
+   "organe": "PO419610",
+   "organe_abr": "CION-ECO",
+   "debut": "2026-09-22T15:30:00.000+02:00",
+   "fin": "2026-09-22T20:00:00.000+02:00",
+   "duree_min": 270.0,
+   "etat": "Confirmé",
+   "presences": {
+    "présent": 56,
+    "absent": 22,
+    "excusé": 1
+   },
+   "resume_odj": [
+    "création d’une mission d’information sur l’avenir, la gestion et la gouvernance du foncier agricole ;",
+    "Suite de l’examen du projet de loi, adopté par le Sénat, visant la relance et la décentralisation du logement (n° 3058) (Mme Ollivier-Hamadi, rapporteure)."
+   ],
+   "points": [
+    {
+     "objet": "Examen du texte",
+     "type": "Examen",
+     "dossiers": {
+      "dossierRef": "DLR5L17N54608"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRCANR5L17S2026PO419610N122",
+   "captationVideo": "true",
+   "formatReunion": "Ordinaire",
+   "ouverturePresse": "true",
+   "n_presents": 56
+  },
+  {
+   "uid": "RUANR5L17S2026IDC461020",
+   "dossier": [
+    "DLR5L17N54608"
+   ],
+   "type": "reunionCommission_type",
+   "organe": "PO419610",
+   "organe_abr": "CION-ECO",
+   "debut": "2026-09-22T21:30:00.000+02:00",
+   "fin": "2026-09-23T00:05:00.000+02:00",
+   "duree_min": 155.0,
+   "etat": "Confirmé",
+   "presences": {
+    "absent": 34,
+    "présent": 42,
+    "excusé": 1
+   },
+   "resume_odj": "suite de l’examen du projet de loi, adopté par le Sénat, visant la relance et la décentralisation du logement (n° 3058) (Mme Ollivier-Hamadi, rapporteure).",
+   "points": [
+    {
+     "objet": "Examen du texte",
+     "type": "Examen",
+     "dossiers": {
+      "dossierRef": "DLR5L17N54608"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": "CRCANR5L17S2026PO419610N123",
+   "captationVideo": "true",
+   "formatReunion": "Ordinaire",
+   "ouverturePresse": "true",
+   "n_presents": 42
+  },
+  {
+   "uid": "RUANR5L17S2027IDS31002",
+   "dossier": [
+    "DLR5L17N54608"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2026-11-16T16:00:00.000+01:00",
+   "fin": null,
+   "duree_min": null,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Suite de la discussion du projet de loi de finances pour 2027 (seconde partie)",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la seconde partie du projet de loi de finances pour 2027",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion de la proposition de loi, adoptée par le Sénat après engagement de la procédure accélérée, visant au renforcement de l'attractivité de l'épargne salariale et à la mise en œuvre d'une procéd",
+     "type": "Discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N53699"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi de finances pour 2027 (seconde partie)",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Discussion du projet de loi, adopté par le Sénat, visant la relance et la décentralisation du logement",
+     "type": "Discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N54608"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Éventuellement, suite des discussions budgétaires",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": null,
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2027IDC461620",
+   "dossier": [
+    "DLR5L17N54608"
+   ],
+   "type": "reunionCommission_type",
+   "organe": "PO419610",
+   "organe_abr": "CION-ECO",
+   "debut": "2026-11-16T16:30:00.000+01:00",
+   "fin": null,
+   "duree_min": null,
+   "etat": "Eventuel",
+   "presences": {},
+   "resume_odj": "examen, en application de l’article 88 du Règlement, des amendements restant en discussion sur le projet de loi, adopté par le Sénat, visant la relance et la décentralisation du logement (n° 3058) (Mme Ollivier-Hamadi, rapporteure).",
+   "points": [
+    {
+     "objet": "Examen du texte",
+     "type": "Examen",
+     "dossiers": {
+      "dossierRef": "DLR5L17N54608"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": null,
+   "captationVideo": "false",
+   "formatReunion": "Ordinaire",
+   "ouverturePresse": "false",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2027IDS31003",
+   "dossier": [
+    "DLR5L17N54608"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2026-11-16T21:30:00.000+01:00",
+   "fin": null,
+   "duree_min": null,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Suite de la discussion du projet de loi de finances pour 2027 (seconde partie)",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion de la seconde partie du projet de loi de finances pour 2027",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, visant la relance et la décentralisation du logement",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N54608"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Éventuellement, suite des discussions budgétaires",
+     "type": "Suite de la discussion",
+     "dossiers": null,
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": null,
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2027IDS31004",
+   "dossier": [
+    "DLR5L17N54608"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2026-11-17T15:00:00.000+01:00",
+   "fin": null,
+   "duree_min": null,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Questions au Gouvernement",
+     "type": "Questions au Gouvernement",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Vote solennel sur l'ensemble du projet de loi de finances pour 2027",
+     "type": "Vote solennel",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Vote solennel sur le projet de loi de finances pour 2027",
+     "type": "Vote solennel",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, visant la relance et la décentralisation du logement",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N54608"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": null,
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2027IDS31050",
+   "dossier": [
+    "DLR5L17N54608"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2026-11-17T21:30:00.000+01:00",
+   "fin": null,
+   "duree_min": null,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, visant la relance et la décentralisation du logement",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N54608"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": null,
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2027IDS31051",
+   "dossier": [
+    "DLR5L17N54608"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2026-11-18T14:00:00.000+01:00",
+   "fin": null,
+   "duree_min": null,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Questions au Gouvernement",
+     "type": "Questions au Gouvernement",
+     "dossiers": null,
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, visant la relance et la décentralisation du logement",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N54608"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": null,
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2027IDS31052",
+   "dossier": [
+    "DLR5L17N54608"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2026-11-18T21:30:00.000+01:00",
+   "fin": null,
+   "duree_min": null,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Discussion, en 2e lecture, de la proposition de loi, modifiée par le Sénat, pour retrouver la confiance et l'équilibre dans les rapports locatifs",
+     "type": "Discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N53069"
+     },
+     "cr": "false"
+    },
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, visant la relance et la décentralisation du logement",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N54608"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": null,
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2027IDS31057",
+   "dossier": [
+    "DLR5L17N54608"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2026-11-20T09:00:00.000+01:00",
+   "fin": null,
+   "duree_min": null,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, visant la relance et la décentralisation du logement",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N54608"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": null,
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2027IDS31058",
+   "dossier": [
+    "DLR5L17N54608"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2026-11-20T15:00:00.000+01:00",
+   "fin": null,
+   "duree_min": null,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, visant la relance et la décentralisation du logement",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N54608"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": null,
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  },
+  {
+   "uid": "RUANR5L17S2027IDS31059",
+   "dossier": [
+    "DLR5L17N54608"
+   ],
+   "type": "seance_type",
+   "organe": "PO838901",
+   "organe_abr": "AN",
+   "debut": "2026-11-20T21:30:00.000+01:00",
+   "fin": null,
+   "duree_min": null,
+   "etat": "Confirmé",
+   "presences": {},
+   "resume_odj": null,
+   "points": [
+    {
+     "objet": "Suite de la discussion du projet de loi, adopté par le Sénat, visant la relance et la décentralisation du logement",
+     "type": "Suite de la discussion",
+     "dossiers": {
+      "dossierRef": "DLR5L17N54608"
+     },
+     "cr": "false"
+    }
+   ],
+   "compteRenduRef": null,
+   "captationVideo": "true",
+   "formatReunion": null,
+   "ouverturePresse": "true",
+   "n_presents": 0
+  }
+ ],
+ "groupes_fictifs": {
+  "AR": "Avenir rural",
+  "CP": "Centre et progrès",
+  "DC": "Démocratie communale",
+  "ECO": "Écologie urbaine",
+  "LL": "Libertés locales",
+  "NI": "Non-inscrits",
+  "NV": "Nouvelle voie",
+  "PR": "Progrès républicain",
+  "RC": "Rassemblement des communes",
+  "RS": "Renouveau social",
+  "SOL": "Solidarité et logement",
+  "UT": "Union des territoires",
+  "SA": "Alliance des départements",
+  "SB": "Bastion républicain",
+  "SC": "Concorde sénatoriale",
+  "SD": "Démocratie des terroirs",
+  "SE": "Équilibre et territoires",
+  "SF": "Forces sociales",
+  "SG": "Gauche des communes",
+  "SH": "Horizon vert",
+  "SI": "Indépendants du Sénat"
+ },
+ "nota": [
+  "Groupes et personnes rendus fictifs (scripts/fictionnaliser.py) ; textes, sorts et dates réels."
+ ]
+}

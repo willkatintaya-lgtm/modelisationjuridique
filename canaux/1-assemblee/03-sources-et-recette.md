@@ -12,11 +12,11 @@ Racine open data AN, législature 17 : `https://data.assemblee-nationale.fr/stat
 | Agenda | `vp/reunions/Agenda.json.zip` | 9 Mo | réunions (séance et commissions), ordres du jour |
 | Acteurs, organes | `amo/deputes_actifs_mandats_actifs_organes/AMO10_….json.zip` | 5 Mo | députés, groupes, commissions |
 
-Textes (contenu) et rapports : `https://www.assemblee-nationale.fr/dyn/opendata/<uid>.html` (ex. `PRJLANR5L17BTC3188`). Les uid des textes se trouvent dans l'arbre du dossier (`texteAssocie`, `texteAdopte`). Les rapports (`RAPPANR5L17B….html`) contiennent les débats de commission.
+Textes (contenu) et rapports : `https://www.assemblee-nationale.fr/dyn/opendata/<uid>.html` (ex. `PRJLANR5L17BTC3188`). Les uid des textes se trouvent dans l'arbre du dossier (`texteAssocie`, `texteAdopte`). Les rapports (`RAPPANR5L17B….html`, parfois en tomes `…-tI`, `…-tII`) contiennent les débats de commission ; chaque réunion a aussi son compte rendu `CRCANR5L17S….html` (uid dans l'agenda, `compteRenduRef`).
 
-Non explorés encore : Tricoteuses (`git.tricoteuses.fr`, site `tricoteuses.fr`), Sénat (Ameli, Akoma Ntoso, `data.senat.fr` répond), Légifrance (code consolidé).
+Explorés depuis : Tricoteuses, Sénat, code consolidé, eLiasse, écosystèmes étrangers ; voir `explorations/` et `04-synthese.md` §3.
 
-L'archive est régénérée quotidiennement (fichiers datés du jour). Le téléchargement du compte rendu a échoué une fois (flux HTTP/2 coupé) : relancer suffit.
+L'archive est régénérée **toutes les 2 h** (hh:20 UTC ; voir `explorations/logement-direct.md`). Le téléchargement du compte rendu a échoué une fois (flux HTTP/2 coupé) : relancer suffit.
 
 ## Recette (reproduire l'échantillon)
 Les données brutes ne sont pas dans le dépôt. Dans un répertoire de travail `$S` :

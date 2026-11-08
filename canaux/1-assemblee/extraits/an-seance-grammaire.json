@@ -1,0 +1,2712 @@
+{
+ "donnees": [
+  {
+   "code": "49_3_1_10",
+   "n": 8,
+   "seances": 7,
+   "mots": 72,
+   "horodates": 0,
+   "famille": "responsabilité du gouvernement (49.3, censure, 50-1), élections",
+   "exemple": "Application de l’article 49, alinéa 3, de la Constitution"
+  },
+  {
+   "code": "49_3_2_1",
+   "n": 2,
+   "seances": 1,
+   "mots": 12,
+   "horodates": 2,
+   "famille": "responsabilité du gouvernement (49.3, censure, 50-1), élections",
+   "exemple": "Je ne souhaite pas que vous gagniez !"
+  },
+  {
+   "code": "ACCORD_CONV_1_10",
+   "n": 17,
+   "seances": 8,
+   "mots": 287,
+   "horodates": 0,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Accord entre le gouvernement de la République française et le gouvernement de la République fédérale d’Allemagne relatif à l’apprentissage transfrontalier"
+  },
+  {
+   "code": "ACCORD_CONV_2_1",
+   "n": 18,
+   "seances": 9,
+   "mots": 108,
+   "horodates": 2,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "(Le projet de loi est adopté.)"
+  },
+  {
+   "code": "ADOP_ADT",
+   "n": 1829,
+   "seances": 353,
+   "mots": 17454,
+   "horodates": 9,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "(L’amendement no 53 est adopté ; en conséquence, les amendements nos 14 et 15 tombent.)"
+  },
+  {
+   "code": "ADOP_ADTS",
+   "n": 329,
+   "seances": 161,
+   "mots": 5223,
+   "horodates": 1,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "(L’amendement no 1, modifiant l’article 1er, et les amendements nos 2 et 3, modifiant l’article 2, sont successivement adoptés.)"
+  },
+  {
+   "code": "ADT_SORTS_DIRECT_1_10",
+   "n": 1272,
+   "seances": 190,
+   "mots": 8057,
+   "horodates": 635,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "L’amendement no 30 de M. Peyrol-Rouvier est défendu."
+  },
+  {
+   "code": "ADT_SORTS_DIRECT_1_20",
+   "n": 671,
+   "seances": 192,
+   "mots": 9867,
+   "horodates": 3,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "(L’amendement no 30, repoussé par la commission et le gouvernement, n’est pas adopté.)"
+  },
+  {
+   "code": "ADT_SORTS_DIRECT_1_30",
+   "n": 772,
+   "seances": 140,
+   "mots": 4333,
+   "horodates": 386,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "L’amendement no 75 de M. Hamadi-Rouvier, rapporteur, est rédactionnel."
+  },
+  {
+   "code": "ADT_SORTS_DIRECT_1_40",
+   "n": 438,
+   "seances": 155,
+   "mots": 4931,
+   "horodates": 2,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "(L’amendement no 75, accepté par le gouvernement, est adopté.)"
+  },
+  {
+   "code": "AM8ENDSORT_REJET_IDENTIQUES",
+   "n": 1197,
+   "seances": 300,
+   "mots": 17380,
+   "horodates": 2,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "(Les amendements identiques nos 22, 37 et 48 ne sont pas adoptés.)"
+  },
+  {
+   "code": "ANN_SCRUTIN_1_10",
+   "n": 58,
+   "seances": 48,
+   "mots": 2891,
+   "horodates": 58,
+   "famille": "annonce de scrutin public (demandeur)",
+   "exemple": "Sur l’amendement no 3028, je suis saisie par le groupe Progrès républicain d’une demande de scrutin public. Le scrutin est annoncé dans l’enceinte de l’"
+  },
+  {
+   "code": "ANN_SCRUT_MOT_1_1",
+   "n": 1,
+   "seances": 1,
+   "mots": 35,
+   "horodates": 1,
+   "famille": "motions (rejet préalable, renvoi)",
+   "exemple": "Sur la motion de rejet préalable, je suis saisi par le groupe Solidarité et logement d’une demande de scrutin public. Le scrutin est annoncé dans l’enceinte de l’"
+  },
+  {
+   "code": "ANN_SCR_ART50_1_1_10",
+   "n": 3,
+   "seances": 3,
+   "mots": 27,
+   "horodates": 0,
+   "famille": "annonce de scrutin public (demandeur)",
+   "exemple": "Vote en application de l’article 50-1 de la Constitution"
+  },
+  {
+   "code": "ANN_SCR_ART50_1_2_1",
+   "n": 3,
+   "seances": 2,
+   "mots": 109,
+   "horodates": 3,
+   "famille": "annonce de scrutin public (demandeur)",
+   "exemple": "En application de l’article 65 du règlement, la conférence des présidents a décidé que le vote se déroulerait dans les salles voisines de la salle des séances."
+  },
+  {
+   "code": "ANN_SCR_AUTRE_1_0",
+   "n": 3108,
+   "seances": 523,
+   "mots": 155580,
+   "horodates": 3098,
+   "famille": "annonce de scrutin public (demandeur)",
+   "exemple": "Je suis saisi de plusieurs amendements identiques nos 4, 13, 32 et 52, visant à supprimer l’article 1er et sur lesquels le groupe Union des territoires-Nouveau Fr"
+  },
+  {
+   "code": "ANN_SCR_DEC_1_10",
+   "n": 1,
+   "seances": 1,
+   "mots": 11,
+   "horodates": 0,
+   "famille": "annonce de scrutin public (demandeur)",
+   "exemple": "Vote en application de l’article 49, alinéa 1er, de la Constitution"
+  },
+  {
+   "code": "ANN_SCR_TEXTE_1_10",
+   "n": 7,
+   "seances": 7,
+   "mots": 266,
+   "horodates": 7,
+   "famille": "annonce de scrutin public (demandeur)",
+   "exemple": "Sur la première partie du projet de loi de finances pour 2025, le scrutin est annoncé dans l’enceinte de l’Assemblée nationale.La parole est à M. Willem-Willem."
+  },
+  {
+   "code": "APPEL_PLF_1_20",
+   "n": 84,
+   "seances": 81,
+   "mots": 592,
+   "horodates": 0,
+   "famille": "ordre du jour, appel d'un texte",
+   "exemple": "Projet de loi de finances de fin de gestion pour 2025"
+  },
+  {
+   "code": "APPEL_PLF_1_30",
+   "n": 76,
+   "seances": 74,
+   "mots": 229,
+   "horodates": 0,
+   "famille": "ordre du jour, appel d'un texte",
+   "exemple": "Avant la première partie (suite)"
+  },
+  {
+   "code": "APPEL_PLF_1_40",
+   "n": 1,
+   "seances": 1,
+   "mots": 2,
+   "horodates": 0,
+   "famille": "ordre du jour, appel d'un texte",
+   "exemple": "Vote solennel"
+  },
+  {
+   "code": "APPEL_PLF_2_1",
+   "n": 83,
+   "seances": 83,
+   "mots": 4299,
+   "horodates": 83,
+   "famille": "ordre du jour, appel d'un texte",
+   "exemple": "L’ordre du jour appelle la discussion du projet de loi de finances pour 2025 (nos 324, 468)."
+  },
+  {
+   "code": "ART_SORT_DIRECT_1_30",
+   "n": 17,
+   "seances": 15,
+   "mots": 85,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Articles 21 quinquies et 21 sexies"
+  },
+  {
+   "code": "ART_SORT_DIRECT_1_60",
+   "n": 160,
+   "seances": 83,
+   "mots": 437,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Article 27 quater (appelé par priorité)"
+  },
+  {
+   "code": "ART_SORT_DIRECT_2_1_1",
+   "n": 19,
+   "seances": 17,
+   "mots": 202,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "(Les articles 2, 3 et 4 sont successivement adoptés.)"
+  },
+  {
+   "code": "ART_SORT_DIRECT_2_70",
+   "n": 173,
+   "seances": 87,
+   "mots": 865,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "(L’article 1er, amendé, est adopté.) (Applaudissements sur les bancs du groupe SOL et sur plusieurs bancs des groupes UT et RC.)"
+  },
+  {
+   "code": "AUTRE_INTERTITRE_1_10",
+   "n": 100,
+   "seances": 77,
+   "mots": 392,
+   "horodates": 2,
+   "famille": "ordre du jour, appel d'un texte",
+   "exemple": "Article 24 (appelé par priorité - suite)"
+  },
+  {
+   "code": "AUTRE_INTERTITRE_2_1",
+   "n": 2,
+   "seances": 2,
+   "mots": 59,
+   "horodates": 2,
+   "famille": "ordre du jour, appel d'un texte",
+   "exemple": "Ce matin, l’Assemblée a poursuivi la discussion des articles de la proposition de loi, s’arrêtant à l’amendement no 692 à l’article 6."
+  },
+  {
+   "code": "AUTRE_VOTE_1_10",
+   "n": 3,
+   "seances": 2,
+   "mots": 35,
+   "horodates": 3,
+   "famille": "seconde délibération, réserve, retrait de texte, prolongation",
+   "exemple": "Je mets aux voix la demande de seconde délibération de l’article 8."
+  },
+  {
+   "code": "AUTRE_VOTE_1_20",
+   "n": 3,
+   "seances": 2,
+   "mots": 28,
+   "horodates": 0,
+   "famille": "seconde délibération, réserve, retrait de texte, prolongation",
+   "exemple": "(La demande de seconde délibération de l’article 8 est rejetée.)"
+  },
+  {
+   "code": "AUTRE_VOTE_1_30",
+   "n": 3,
+   "seances": 3,
+   "mots": 28,
+   "horodates": 2,
+   "famille": "seconde délibération, réserve, retrait de texte, prolongation",
+   "exemple": "(La demande de prolongation de la séance est adoptée.)"
+  },
+  {
+   "code": "AUTRE_VOTE_1_40",
+   "n": 2,
+   "seances": 2,
+   "mots": 15,
+   "horodates": 0,
+   "famille": "seconde délibération, réserve, retrait de texte, prolongation",
+   "exemple": "(La demande de prolongation de la séance est adoptée.)"
+  },
+  {
+   "code": "CHGT_PRES_1_1",
+   "n": 52,
+   "seances": 38,
+   "mots": 827,
+   "horodates": 5,
+   "famille": "cadre de séance (ouverture, présidence, levée)",
+   "exemple": "(À seize heures quinze, M. Roland Lescure remplace Mme Peyrol-Carvalho au fauteuil de la présidence.)"
+  },
+  {
+   "code": "CHGT_PRES_2_2",
+   "n": 53,
+   "seances": 39,
+   "mots": 322,
+   "horodates": 0,
+   "famille": "cadre de séance (ouverture, présidence, levée)",
+   "exemple": "Présidence de M. Roland Lescure vice-président"
+  },
+  {
+   "code": "DEBAT_1_0",
+   "n": 1,
+   "seances": 1,
+   "mots": 3,
+   "horodates": 0,
+   "famille": "ordre du jour, appel d'un texte",
+   "exemple": "Reprise du débat"
+  },
+  {
+   "code": "DEBAT_1_10",
+   "n": 3,
+   "seances": 3,
+   "mots": 120,
+   "horodates": 3,
+   "famille": "ordre du jour, appel d'un texte",
+   "exemple": "Sa clôture sera annoncée par quatre sonneries."
+  },
+  {
+   "code": "DISC_ARTICLES_1_1",
+   "n": 448,
+   "seances": 369,
+   "mots": 1710,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Discussion des articles (proposition de loi ordinaire)"
+  },
+  {
+   "code": "DISC_ARTICLES_1_2",
+   "n": 161,
+   "seances": 130,
+   "mots": 503,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Explications de vote (Projet de loi de financement de la sécurité sociale)"
+  },
+  {
+   "code": "DISC_ARTICLES_1_20",
+   "n": 55,
+   "seances": 30,
+   "mots": 3547,
+   "horodates": 55,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Si vous y consentez, madame la présidente, je présenterai également par anticipation, dans un souci d’efficacité, l’amendement no 3477, qui suit immédiatement.C"
+  },
+  {
+   "code": "DISC_ARTICLES_1_30",
+   "n": 83,
+   "seances": 75,
+   "mots": 1442,
+   "horodates": 82,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Nous avons achevé l’examen des articles du projet de loi."
+  },
+  {
+   "code": "DISC_ARTICLES_1_30_1",
+   "n": 6,
+   "seances": 5,
+   "mots": 302,
+   "horodates": 6,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Je suis saisi de plusieurs amendements identiques, nos 255, 537, 1116, 1282 et 2371 qui font l’objet d’une demande de scrutin public par le groupe La France ins"
+  },
+  {
+   "code": "DISC_ARTICLES_2_1",
+   "n": 432,
+   "seances": 361,
+   "mots": 12341,
+   "horodates": 432,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "J’appelle maintenant, dans le texte de la commission, les articles de la proposition de loi."
+  },
+  {
+   "code": "DISC_ARTICLES_2_1_1",
+   "n": 13,
+   "seances": 12,
+   "mots": 151,
+   "horodates": 13,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Dans les explications de vote, la parole est à M. Vallat-Sabatier. Compte tenu de l’heure, je vous demande de faire preuve de concision."
+  },
+  {
+   "code": "DISC_ARTICLES_2_2_1",
+   "n": 29,
+   "seances": 12,
+   "mots": 4008,
+   "horodates": 29,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Je vais donner l’exemple en indiquant que nous soutiendrons évidemment l’adoption de cette partie relative aux recettes, pour deux raisons. D’abord, nous voulon"
+  },
+  {
+   "code": "DISC_ARTICLES_2_4",
+   "n": 4009,
+   "seances": 507,
+   "mots": 13513,
+   "horodates": 1,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Article 3 bis (article soumis à la procédure de législation en commission)"
+  },
+  {
+   "code": "DISC_ARTICLES_3_1",
+   "n": 22224,
+   "seances": 499,
+   "mots": 157542,
+   "horodates": 11091,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "La parole est à M. Aubrac-Isnard, pour soutenir l’amendement no 13."
+  },
+  {
+   "code": "DISC_ARTICLES_3_30",
+   "n": 5406,
+   "seances": 406,
+   "mots": 51795,
+   "horodates": 2694,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "L’amendement no 55 rectifié a déjà été présenté par M. le rapporteur."
+  },
+  {
+   "code": "DISC_ARTICLES_3_40",
+   "n": 1328,
+   "seances": 223,
+   "mots": 19998,
+   "horodates": 662,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "Les amendements identiques nos 36 de Mme Carvalho-Hamadi et 50 de M. Isnard-Kervella sont défendus.Quel est l’avis de la commission sur cette série d’amendemen"
+  },
+  {
+   "code": "DISC_ARTICLES_3_4_1",
+   "n": 15874,
+   "seances": 502,
+   "mots": 1755381,
+   "horodates": 15830,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "Le groupe Rassemblement des communes propose de supprimer l’article 1er. Nous l’avons dit : ce texte répond à des préoccupations démagogiques. C’est l’applicatio"
+  },
+  {
+   "code": "DISC_ARTICLES_3_9",
+   "n": 3945,
+   "seances": 468,
+   "mots": 473371,
+   "horodates": 3927,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "Il vise à supprimer l’article 2 bis, introduit lors de l’examen du texte en commission. Je le dis comme je le pense : c’est une honte d’avoir ajouté une telle d"
+  },
+  {
+   "code": "DISC_ARTICLES_3_9_1",
+   "n": 6330,
+   "seances": 457,
+   "mots": 113973,
+   "horodates": 3157,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "Je suis saisie de quatre amendements identiques, nos 6, 18, 33 et 44, tendant à supprimer l’article 2. La parole est à Mme Isnard-Hamadi, pour soutenir l’amend"
+  },
+  {
+   "code": "DISC_ARTICLES_4_1",
+   "n": 358,
+   "seances": 88,
+   "mots": 4590,
+   "horodates": 179,
+   "famille": "sous-amendements",
+   "exemple": "La parole est à M. le rapporteur, pour soutenir les sous-amendements nos 133, 140 rectifié, 141, 135 rectifié, 134, 136 rectifié et 137, à l’amendement no 126 r"
+  },
+  {
+   "code": "DISC_ARTICLES_4_13",
+   "n": 317,
+   "seances": 94,
+   "mots": 37212,
+   "horodates": 316,
+   "famille": "sous-amendements",
+   "exemple": "La commission n’a pas examiné ces amendements, pour la plupart rédactionnels, ni l’amendement du gouvernement. Il me semble qu’il est souhaitable d’encourager l"
+  },
+  {
+   "code": "DISC_ARTICLES_4_20",
+   "n": 2065,
+   "seances": 254,
+   "mots": 223268,
+   "horodates": 2058,
+   "famille": "sous-amendements",
+   "exemple": "Je suis favorable à l’amendement, sous réserve de l’adoption du sous-amendement.L’amendement énumère par erreur une liste de personnes qui ne correspond pas exa"
+  },
+  {
+   "code": "DISC_ARTICLES_4_30",
+   "n": 244,
+   "seances": 68,
+   "mots": 3055,
+   "horodates": 122,
+   "famille": "sous-amendements",
+   "exemple": "Le sous-amendement no 2365 de Mme Fournel-Isnard est défendu.Quel est l’avis de la commission sur ces amendements en discussion commune ?"
+  },
+  {
+   "code": "DISC_ARTICLES_4_40",
+   "n": 80,
+   "seances": 31,
+   "mots": 1304,
+   "horodates": 40,
+   "famille": "sous-amendements",
+   "exemple": "Les sous-amendements nos 145, 146, 149, 150, 148 et 147 de M. Guérin-Isnard, rapporteur, sont rédactionnels."
+  },
+  {
+   "code": "DISC_ARTICLES_4_50",
+   "n": 2348,
+   "seances": 245,
+   "mots": 17055,
+   "horodates": 1170,
+   "famille": "sous-amendements",
+   "exemple": "La parole est à M. le rapporteur, pour soutenir le sous-amendement et donner l’avis de la commission sur l’amendement."
+  },
+  {
+   "code": "DISC_GENERALE_1",
+   "n": 351,
+   "seances": 230,
+   "mots": 774,
+   "horodates": 0,
+   "famille": "discussion générale",
+   "exemple": "Discussion générale commune (suite)"
+  },
+  {
+   "code": "DISC_GENERALE_2",
+   "n": 139,
+   "seances": 122,
+   "mots": 1908,
+   "horodates": 138,
+   "famille": "discussion générale",
+   "exemple": "Dans la discussion générale, la parole est à Mme Bellec-Peyrol."
+  },
+  {
+   "code": "DISC_GENERALE_2_2",
+   "n": 147,
+   "seances": 47,
+   "mots": 33124,
+   "horodates": 147,
+   "famille": "discussion générale",
+   "exemple": "Trop souvent, ces derniers mois, le désir de simplification a été synonyme de régression environnementale. Ce texte, dans sa version initiale, ne faisait pas ex"
+  },
+  {
+   "code": "DISC_GENERALE_2_40",
+   "n": 256,
+   "seances": 203,
+   "mots": 3095,
+   "horodates": 255,
+   "famille": "discussion générale",
+   "exemple": "La discussion générale est close.La parole est à M. le président de la commission des lois constitutionnelles, de la législation et de l’administration générale"
+  },
+  {
+   "code": "ELECTION_VP_1_20",
+   "n": 1,
+   "seances": 1,
+   "mots": 8,
+   "horodates": 0,
+   "famille": "responsabilité du gouvernement (49.3, censure, 50-1), élections",
+   "exemple": "(Le scrutin est ouvert à seize heures trente-cinq.)"
+  },
+  {
+   "code": "EXPL_VOTE_2_30",
+   "n": 7,
+   "seances": 1,
+   "mots": 748,
+   "horodates": 7,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Constitution, article 66 : « Nul ne peut être arbitrairement détenu. » Vous bafouez ce principe en détenant arbitrairement les étrangers.Déclaration des droits"
+  },
+  {
+   "code": "EXPL_VOTE_PERSO_1_10",
+   "n": 2,
+   "seances": 2,
+   "mots": 6,
+   "horodates": 0,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Explications de vote"
+  },
+  {
+   "code": "FAIT_PERSONNEL_0_1",
+   "n": 8,
+   "seances": 8,
+   "mots": 16,
+   "horodates": 0,
+   "famille": "incidents de procédure (rappels au règlement, fait personnel, quorum)",
+   "exemple": "Fait personnel"
+  },
+  {
+   "code": "FIN_SEAN_1_0",
+   "n": 349,
+   "seances": 348,
+   "mots": 5014,
+   "horodates": 348,
+   "famille": "cadre de séance (ouverture, présidence, levée)",
+   "exemple": "La suite de la discussion est renvoyée à la prochaine séance."
+  },
+  {
+   "code": "FIN_SEAN_1_2",
+   "n": 653,
+   "seances": 653,
+   "mots": 4562,
+   "horodates": 0,
+   "famille": "cadre de séance (ouverture, présidence, levée)",
+   "exemple": "Ordre du jour de la prochaine séance"
+  },
+  {
+   "code": "FIN_SEAN_2_1",
+   "n": 652,
+   "seances": 649,
+   "mots": 40045,
+   "horodates": 648,
+   "famille": "cadre de séance (ouverture, présidence, levée)",
+   "exemple": "Prochaine séance, demain, à quinze heures : Nomination, éventuellement par scrutin, des six vice-présidents, des trois questeurs et des douze secrétaires ; Inst"
+  },
+  {
+   "code": "FIN_SEAN_2_4",
+   "n": 657,
+   "seances": 657,
+   "mots": 5123,
+   "horodates": 8,
+   "famille": "cadre de séance (ouverture, présidence, levée)",
+   "exemple": "(La séance est levée à vingt heures cinquante.)"
+  },
+  {
+   "code": "FIN_SEAN_2_5",
+   "n": 667,
+   "seances": 656,
+   "mots": 4634,
+   "horodates": 8,
+   "famille": "cadre de séance (ouverture, présidence, levée)",
+   "exemple": "Le directeur des comptes rendus Serge Ezdra"
+  },
+  {
+   "code": "FUSION",
+   "n": 1,
+   "seances": 1,
+   "mots": 0,
+   "horodates": 0,
+   "famille": "autre",
+   "exemple": ""
+  },
+  {
+   "code": "INTERRUPTION_1_10",
+   "n": 79352,
+   "seances": 650,
+   "mots": 511353,
+   "horodates": 78872,
+   "famille": "interruptions (exclamations, applaudissements, apostrophes)",
+   "exemple": "Ils n’ont pas voté pour vous ! (Protestations.)"
+  },
+  {
+   "code": "MAV_PART_PLFSS_2_20_1",
+   "n": 2,
+   "seances": 2,
+   "mots": 24,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "(L’ensemble de la première partie du projet de loi n’est pas adopté.)"
+  },
+  {
+   "code": "MOTION_RP_1_1",
+   "n": 75,
+   "seances": 62,
+   "mots": 336,
+   "horodates": 0,
+   "famille": "motions (rejet préalable, renvoi)",
+   "exemple": "Motion de rejet préalable (proposition de loi)"
+  },
+  {
+   "code": "MOTION_RP_2_1",
+   "n": 53,
+   "seances": 43,
+   "mots": 1920,
+   "horodates": 53,
+   "famille": "motions (rejet préalable, renvoi)",
+   "exemple": "J’ai reçu de M. Bellec-Aubrac et des membres du groupe Rassemblement des communes une motion de rejet préalable déposée en application de l’article 91, alinéa 5,"
+  },
+  {
+   "code": "MOTION_RP_2_2",
+   "n": 163,
+   "seances": 23,
+   "mots": 26356,
+   "horodates": 163,
+   "famille": "motions (rejet préalable, renvoi)",
+   "exemple": "La tâche me revient d’expliquer en quoi le texte que vous avez appelé « proposition de loi relative à la lutte contre l’antisémitisme dans l’enseignement supéri"
+  },
+  {
+   "code": "ODJ_APPEL_DISCUSSION",
+   "n": 1053,
+   "seances": 590,
+   "mots": 46840,
+   "horodates": 1044,
+   "famille": "ordre du jour, appel d'un texte",
+   "exemple": "Je déclare ouverte la XVIIe législature de l’Assemblée nationale et la session de droit prévue par l’article 12 de la Constitution."
+  },
+  {
+   "code": "OUV_SEAN_1_1",
+   "n": 657,
+   "seances": 657,
+   "mots": 3752,
+   "horodates": 0,
+   "famille": "cadre de séance (ouverture, présidence, levée)",
+   "exemple": "Présidence de M. Lagarde-Navarro, doyen d’âge"
+  },
+  {
+   "code": "OUV_SEAN_2_1",
+   "n": 657,
+   "seances": 655,
+   "mots": 2720,
+   "horodates": 653,
+   "famille": "cadre de séance (ouverture, présidence, levée)",
+   "exemple": "Ce n’est pas sans une certaine émotion que je déclare la séance ouverte. (Applaudissements sur divers bancs.)"
+  },
+  {
+   "code": "OUV_SEAN_2_2",
+   "n": 658,
+   "seances": 657,
+   "mots": 5385,
+   "horodates": 9,
+   "famille": "cadre de séance (ouverture, présidence, levée)",
+   "exemple": "(La séance est ouverte à quinze heures.)"
+  },
+  {
+   "code": "PAROLE_GENERIQUE",
+   "n": 169445,
+   "seances": 657,
+   "mots": 14356198,
+   "horodates": 168412,
+   "famille": "parole générique (suite d’une intervention)",
+   "exemple": "Mesdames et messieurs, mes chers collègues, je ne sais si l’âge est un privilège mais ouvrir cette séance solennelle l’est incontestablement. Pour moi, enfant d"
+  },
+  {
+   "code": "PLFSS_1_10",
+   "n": 5,
+   "seances": 5,
+   "mots": 12,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Après l’article 3 (suite)"
+  },
+  {
+   "code": "PLFSS_1_20",
+   "n": 31,
+   "seances": 31,
+   "mots": 87,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Deuxième partie (suite)"
+  },
+  {
+   "code": "PLFSS_1_30",
+   "n": 13,
+   "seances": 13,
+   "mots": 35,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Troisième partie (suite)"
+  },
+  {
+   "code": "PLFSS_2_10",
+   "n": 4,
+   "seances": 4,
+   "mots": 97,
+   "horodates": 4,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "J’appelle maintenant les articles du projet de loi dans le texte du Gouvernement, en commençant par les dispositions relatives à l’exercice 2024."
+  },
+  {
+   "code": "PLFSS_2_20",
+   "n": 26,
+   "seances": 26,
+   "mots": 668,
+   "horodates": 26,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "J’appelle maintenant la deuxième partie du projet de loi, concernant les dispositions relatives à l’année 2025."
+  },
+  {
+   "code": "PLFSS_2_30",
+   "n": 11,
+   "seances": 11,
+   "mots": 404,
+   "horodates": 11,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Cet après-midi, l’Assemblée a poursuivi l’examen des articles, s’arrêtant à l’article 15. Nous abordons maintenant la troisième partie du projet de loi, concern"
+  },
+  {
+   "code": "PLF_2_20_1",
+   "n": 1,
+   "seances": 1,
+   "mots": 60,
+   "horodates": 1,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Nous avons achevé l’examen des articles de la première partie du projet de loi de finances pour 2025.Je rappelle que la conférence des présidents a décidé que l"
+  },
+  {
+   "code": "PLF_PARTIES_1_10",
+   "n": 17,
+   "seances": 17,
+   "mots": 45,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Première partie (suite)"
+  },
+  {
+   "code": "PLF_PARTIES_1_20",
+   "n": 3,
+   "seances": 3,
+   "mots": 7,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Seconde partie (suite)"
+  },
+  {
+   "code": "PLF_PARTIES_1_30",
+   "n": 10,
+   "seances": 10,
+   "mots": 40,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Avant la première partie"
+  },
+  {
+   "code": "PLF_PARTIES_2_1",
+   "n": 11,
+   "seances": 11,
+   "mots": 253,
+   "horodates": 10,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Nous abordons l’examen de la première partie du projet de loi de finances pour 2025."
+  },
+  {
+   "code": "PLF_PARTIES_2_1_1",
+   "n": 2,
+   "seances": 2,
+   "mots": 30,
+   "horodates": 2,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Nous abordons l’examen de la seconde partie du projet de loi de finances de fin de gestion pour 2025."
+  },
+  {
+   "code": "PLF_PARTIES_2_1_1_1",
+   "n": 11,
+   "seances": 10,
+   "mots": 481,
+   "horodates": 11,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "J’appelle maintenant les articles du projet de loi de finances pour 2025. Ce matin, la conférence des présidents a décidé qu’il pourrait être fait application d"
+  },
+  {
+   "code": "PRESENTATION_1_0",
+   "n": 302,
+   "seances": 210,
+   "mots": 319,
+   "horodates": 0,
+   "famille": "ordre du jour, appel d'un texte",
+   "exemple": "Présentation commune"
+  },
+  {
+   "code": "QG_1_1",
+   "n": 1946,
+   "seances": 138,
+   "mots": 8319,
+   "horodates": 0,
+   "famille": "questions",
+   "exemple": "Situation des urgences hospitalières face à la canicule"
+  },
+  {
+   "code": "QG_1_50",
+   "n": 136,
+   "seances": 136,
+   "mots": 966,
+   "horodates": 135,
+   "famille": "questions",
+   "exemple": "Nous avons terminé les questions au gouvernement."
+  },
+  {
+   "code": "QOSD_1_1",
+   "n": 815,
+   "seances": 24,
+   "mots": 3649,
+   "horodates": 0,
+   "famille": "questions",
+   "exemple": "Difficultés des résidences services senior"
+  },
+  {
+   "code": "QOSD_2_1",
+   "n": 813,
+   "seances": 24,
+   "mots": 16356,
+   "horodates": 744,
+   "famille": "questions",
+   "exemple": "La parole est à Mme Lagarde-Ollivier, pour exposer sa question, no 8, relative au pôle de santé de Wiwersheim."
+  },
+  {
+   "code": "QOSD_2_2",
+   "n": 419,
+   "seances": 24,
+   "mots": 158206,
+   "horodates": 385,
+   "famille": "questions",
+   "exemple": "Ma question s’adresse à Mme la ministre de la santé et de l’accès aux soins.La commune de Wiwersheim, au sein de ma circonscription, a développé de longue date"
+  },
+  {
+   "code": "QOSD_2_40",
+   "n": 24,
+   "seances": 24,
+   "mots": 212,
+   "horodates": 22,
+   "famille": "questions",
+   "exemple": "Nous avons terminé les questions orales sans débat."
+  },
+  {
+   "code": "QPM_1_1",
+   "n": 6,
+   "seances": 1,
+   "mots": 19,
+   "horodates": 0,
+   "famille": "questions",
+   "exemple": "Politique du prochain gouvernement"
+  },
+  {
+   "code": "QPM_1_50",
+   "n": 1,
+   "seances": 1,
+   "mots": 8,
+   "horodates": 1,
+   "famille": "questions",
+   "exemple": "Nous avons terminé les questions au premier ministre."
+  },
+  {
+   "code": "RAP_REGLEMENT_1_1",
+   "n": 1117,
+   "seances": 350,
+   "mots": 3356,
+   "horodates": 0,
+   "famille": "incidents de procédure (rappels au règlement, fait personnel, quorum)",
+   "exemple": "Rappels au règlement (suite)"
+  },
+  {
+   "code": "RAP_REGLEMENT_2_1",
+   "n": 1248,
+   "seances": 350,
+   "mots": 16494,
+   "horodates": 1244,
+   "famille": "incidents de procédure (rappels au règlement, fait personnel, quorum)",
+   "exemple": "La parole est à M. Rouvier-Quintin, pour un rappel au règlement."
+  },
+  {
+   "code": "RAP_REGLEMENT_2_2",
+   "n": 2306,
+   "seances": 347,
+   "mots": 142012,
+   "horodates": 2295,
+   "famille": "incidents de procédure (rappels au règlement, fait personnel, quorum)",
+   "exemple": "Il est fondé sur les articles 10 et 11 relatifs à la constitution du bureau et à l’élection de nos vice-présidents. Le premier tour de cette élection nous dévoi"
+  },
+  {
+   "code": "RAP_REGLEMENT_2_30",
+   "n": 1,
+   "seances": 1,
+   "mots": 17,
+   "horodates": 1,
+   "famille": "incidents de procédure (rappels au règlement, fait personnel, quorum)",
+   "exemple": "Je ne prends plus de rappels au règlement, monsieur Willem-Guérin. (Sourires sur les bancs du groupe UT.)"
+  },
+  {
+   "code": "RAP_REGLEMENT_2_30_1",
+   "n": 74,
+   "seances": 36,
+   "mots": 1021,
+   "horodates": 74,
+   "famille": "incidents de procédure (rappels au règlement, fait personnel, quorum)",
+   "exemple": "La parole est à M. Bellec-Aubrac, pour un rappel au règlement."
+  },
+  {
+   "code": "RAP_REGLEMENT_2_40",
+   "n": 188,
+   "seances": 43,
+   "mots": 12985,
+   "horodates": 188,
+   "famille": "incidents de procédure (rappels au règlement, fait personnel, quorum)",
+   "exemple": "Il se fonde également sur l’article 100. Cher collègue, il est paradoxal de se plaindre que les droits du Parlement ne soient pas respectés,…"
+  },
+  {
+   "code": "REJET_ADT",
+   "n": 3704,
+   "seances": 416,
+   "mots": 28444,
+   "horodates": 8,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "(L’amendement no 28, repoussé par le gouvernement, n’est pas adopté.)"
+  },
+  {
+   "code": "REJET_MOTION_1_2",
+   "n": 9,
+   "seances": 9,
+   "mots": 87,
+   "horodates": 0,
+   "famille": "motions (rejet préalable, renvoi)",
+   "exemple": "(La motion de rejet préalable, mise aux voix, n’est pas adoptée.)"
+  },
+  {
+   "code": "RESERVE_VOTE_2_1",
+   "n": 1,
+   "seances": 1,
+   "mots": 36,
+   "horodates": 1,
+   "famille": "seconde délibération, réserve, retrait de texte, prolongation",
+   "exemple": "Je vous informe que le gouvernement lève la réserve des amendements portant article additionnel après l’article 14 bis A, qui seront donc examinés après cet art"
+  },
+  {
+   "code": "RES_ELECTION_VP_1_10",
+   "n": 4,
+   "seances": 1,
+   "mots": 381,
+   "horodates": 4,
+   "famille": "responsabilité du gouvernement (49.3, censure, 50-1), élections",
+   "exemple": "Voici le résultat du scrutin pour l’élection du vice-président de l’Assemblée nationale. Nombre de votants : 510 Bulletins blancs ou nuls : 2 Suffrages exprimés"
+  },
+  {
+   "code": "RETRAIT_ADT",
+   "n": 1243,
+   "seances": 346,
+   "mots": 6865,
+   "horodates": 14,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "(L’amendement no 72, ayant reçu un avis défavorable du gouvernement, est retiré.)"
+  },
+  {
+   "code": "RETRAIT_ADTS",
+   "n": 166,
+   "seances": 119,
+   "mots": 1499,
+   "horodates": 1,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "(Les amendements nos 595, 596, 816 et 817 sont retirés.)"
+  },
+  {
+   "code": "RETRAIT_PPL_1_10",
+   "n": 2,
+   "seances": 2,
+   "mots": 16,
+   "horodates": 0,
+   "famille": "seconde délibération, réserve, retrait de texte, prolongation",
+   "exemple": "Application de l’article 84, alinéa 2, du règlement"
+  },
+  {
+   "code": "RETRAIT_PPL_2_1",
+   "n": 4,
+   "seances": 4,
+   "mots": 142,
+   "horodates": 4,
+   "famille": "seconde délibération, réserve, retrait de texte, prolongation",
+   "exemple": "Il est pris acte du retrait de la proposition de loi par son auteure en application de l’article 84, alinéa 2, du règlement. En conséquence, il n’y a pas lieu d"
+  },
+  {
+   "code": "RETRAIT_PPL_2_20",
+   "n": 2,
+   "seances": 2,
+   "mots": 18,
+   "horodates": 0,
+   "famille": "seconde délibération, réserve, retrait de texte, prolongation",
+   "exemple": "(La discussion de la proposition de loi est interrompue.)"
+  },
+  {
+   "code": "SCDE_DELIB_1_1",
+   "n": 24,
+   "seances": 23,
+   "mots": 50,
+   "horodates": 0,
+   "famille": "seconde délibération, réserve, retrait de texte, prolongation",
+   "exemple": "Demandes de seconde délibération"
+  },
+  {
+   "code": "SCDE_DELIB_2_1",
+   "n": 16,
+   "seances": 16,
+   "mots": 644,
+   "horodates": 16,
+   "famille": "seconde délibération, réserve, retrait de texte, prolongation",
+   "exemple": "En application de l’article 121-3 du règlement, la commission a demandé qu’il soit procédé à une seconde délibération sur un amendement portant article addition"
+  },
+  {
+   "code": "SCRUPUB_SSADTS_1_2",
+   "n": 45,
+   "seances": 20,
+   "mots": 513,
+   "horodates": 45,
+   "famille": "sous-amendements",
+   "exemple": "Je mets aux voix les sous-amendements identiques nos 29 et 39."
+  },
+  {
+   "code": "SCRUPUB_SSADTS_1_3",
+   "n": 46,
+   "seances": 20,
+   "mots": 306,
+   "horodates": 8,
+   "famille": "sous-amendements",
+   "exemple": "(Le vote à main levée n’ayant pas été concluant, il est procédé à un scrutin public.)"
+  },
+  {
+   "code": "SCRUPUB_SSADTS_1_4",
+   "n": 46,
+   "seances": 20,
+   "mots": 1058,
+   "horodates": 46,
+   "famille": "sous-amendements",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 217 Nombre de suffrages exprimés 216 Majorité absolue 109 Pour l’adoption 97 Contre 119"
+  },
+  {
+   "code": "SCRUPUB_SSADTS_1_5",
+   "n": 46,
+   "seances": 20,
+   "mots": 518,
+   "horodates": 8,
+   "famille": "sous-amendements",
+   "exemple": "(Les sous-amendements identiques nos 29 et 39 ne sont pas adoptés.)"
+  },
+  {
+   "code": "SCRUPUB_SSADTS_1_6",
+   "n": 17,
+   "seances": 12,
+   "mots": 196,
+   "horodates": 17,
+   "famille": "sous-amendements",
+   "exemple": "Je mets aux voix les sous-amendements identiques nos 2384 et 2388."
+  },
+  {
+   "code": "SCRUPUB_SSADTS_1_7",
+   "n": 17,
+   "seances": 12,
+   "mots": 118,
+   "horodates": 0,
+   "famille": "sous-amendements",
+   "exemple": "(Le vote à main levée n’ayant pas été concluant, il est procédé à un scrutin public.)"
+  },
+  {
+   "code": "SCRUPUB_SSADTS_1_8",
+   "n": 17,
+   "seances": 12,
+   "mots": 391,
+   "horodates": 17,
+   "famille": "sous-amendements",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 159 Nombre de suffrages exprimés 157 Majorité absolue 79 Pour l’adoption 96 Contre 61"
+  },
+  {
+   "code": "SCRUPUB_SSADTS_1_9",
+   "n": 17,
+   "seances": 12,
+   "mots": 203,
+   "horodates": 0,
+   "famille": "sous-amendements",
+   "exemple": "(Les sous-amendements identiques nos 2384 et 2388 sont adoptés ; en conséquence, les sous-amendements nos 2378, 2427, 2428, 2430 et 2387 tombent.)"
+  },
+  {
+   "code": "SCRUT_ADTS_1_2",
+   "n": 518,
+   "seances": 239,
+   "mots": 6803,
+   "horodates": 517,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "Je mets aux voix les amendements identiques nos 60, 25 et 49."
+  },
+  {
+   "code": "SCRUT_ADTS_1_3",
+   "n": 529,
+   "seances": 241,
+   "mots": 3127,
+   "horodates": 3,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "(Le vote à main levée n’ayant pas été concluant, il est procédé à un scrutin public.)"
+  },
+  {
+   "code": "SCRUT_ADTS_1_4",
+   "n": 530,
+   "seances": 241,
+   "mots": 12191,
+   "horodates": 528,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 125 Nombre de suffrages exprimés 125 Majorité absolue 63 Pour l’adoption 110 Contre 15"
+  },
+  {
+   "code": "SCRUT_ADTS_1_5",
+   "n": 535,
+   "seances": 242,
+   "mots": 12027,
+   "horodates": 3,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "(Les amendements identiques nos 60, 25 et 49 sont adoptés ; en conséquence, l’article est supprimé.)"
+  },
+  {
+   "code": "SCRUT_ADTS_1_6",
+   "n": 967,
+   "seances": 319,
+   "mots": 11953,
+   "horodates": 960,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "Je mets aux voix les amendements identiques nos 4, 13, 32 et 52."
+  },
+  {
+   "code": "SCRUT_ADTS_1_7",
+   "n": 994,
+   "seances": 324,
+   "mots": 5660,
+   "horodates": 10,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "(Le vote à main levée n’ayant pas été concluant, il est procédé à un scrutin public.)"
+  },
+  {
+   "code": "SCRUT_ADTS_1_8",
+   "n": 989,
+   "seances": 323,
+   "mots": 22747,
+   "horodates": 983,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 112 Nombre de suffrages exprimés 112 Majorité absolue 57 Pour l’adoption 37 Contre 75"
+  },
+  {
+   "code": "SCRUT_ADTS_1_9",
+   "n": 990,
+   "seances": 322,
+   "mots": 12744,
+   "horodates": 9,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "(Les amendements identiques nos 4, 13, 32 et 52 ne sont pas adoptés.)"
+  },
+  {
+   "code": "SCRUT_ADTS_ANN_1_100",
+   "n": 3,
+   "seances": 2,
+   "mots": 58,
+   "horodates": 0,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "(Les amendements identiques nos 2085 et 2702 ne sont pas adoptés.) (Applaudissements sur plusieurs bancs des groupes UT et RC.)"
+  },
+  {
+   "code": "SCRUT_ADTS_ANN_1_3",
+   "n": 1,
+   "seances": 1,
+   "mots": 5,
+   "horodates": 0,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "(Il est procédé au scrutin.)"
+  },
+  {
+   "code": "SCRUT_ADTS_ANN_1_4",
+   "n": 1,
+   "seances": 1,
+   "mots": 23,
+   "horodates": 1,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 122 Nombre de suffrages exprimés 110 Majorité absolue 56 Pour l’adoption 110 Contre 0"
+  },
+  {
+   "code": "SCRUT_ADTS_ANN_1_5",
+   "n": 1,
+   "seances": 1,
+   "mots": 16,
+   "horodates": 0,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "(Les amendements identiques nos 13 et 42 sont adoptés ; en conséquence, l’amendement no 26 tombe.)"
+  },
+  {
+   "code": "SCRUT_ADTS_ANN_1_70",
+   "n": 2,
+   "seances": 2,
+   "mots": 26,
+   "horodates": 2,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "Je vais maintenant mettre aux voix les amendements identiques nos 2085 et 2702."
+  },
+  {
+   "code": "SCRUT_ADTS_ANN_1_80",
+   "n": 2,
+   "seances": 2,
+   "mots": 21,
+   "horodates": 0,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "(Le vote à main levée n’ayant pas été concluant, il est procédé à un scrutin public.)"
+  },
+  {
+   "code": "SCRUT_ADTS_ANN_1_90",
+   "n": 2,
+   "seances": 2,
+   "mots": 46,
+   "horodates": 2,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 196 Nombre de suffrages exprimés 195 Majorité absolue 98 Pour l’adoption 71 Contre 124"
+  },
+  {
+   "code": "SCRUT_ART_ANN_1_10",
+   "n": 3,
+   "seances": 3,
+   "mots": 13,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "(L’article 14, amendé, est adopté.)"
+  },
+  {
+   "code": "SCRUT_ART_ANN_1_7",
+   "n": 3,
+   "seances": 3,
+   "mots": 27,
+   "horodates": 3,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Je vais maintenant mettre aux voix l’article 14, tel qu’il a été amendé."
+  },
+  {
+   "code": "SCRUT_ART_ANN_1_8",
+   "n": 3,
+   "seances": 3,
+   "mots": 15,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "(Il est procédé au scrutin.)"
+  },
+  {
+   "code": "SCRUT_ART_ANN_1_9",
+   "n": 3,
+   "seances": 3,
+   "mots": 69,
+   "horodates": 3,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 102 Nombre de suffrages exprimés 91 Majorité absolue 46 Pour l’adoption 85 Contre 6"
+  },
+  {
+   "code": "SCRUT_ART_PUB_1_2",
+   "n": 50,
+   "seances": 43,
+   "mots": 433,
+   "horodates": 50,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Je mets aux voix l’article 11, tel qu’il a été amendé."
+  },
+  {
+   "code": "SCRUT_ART_PUB_1_3",
+   "n": 53,
+   "seances": 45,
+   "mots": 417,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "(Le vote à main levée n’ayant pas été concluant, il est procédé à un scrutin public.)"
+  },
+  {
+   "code": "SCRUT_ART_PUB_1_4",
+   "n": 54,
+   "seances": 46,
+   "mots": 1242,
+   "horodates": 54,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 99 Nombre de suffrages exprimés 93 Majorité absolue 47 Pour l’adoption 8 Contre 85"
+  },
+  {
+   "code": "SCRUT_ART_PUB_1_5",
+   "n": 52,
+   "seances": 44,
+   "mots": 453,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "(L’article 40, amendé, n’est pas adopté.) (Applaudissements sur plusieurs bancs du groupe RC. – M. Bellec-Aubrac semble demander la parole.)"
+  },
+  {
+   "code": "SCRUT_ART_PUB_1_6",
+   "n": 833,
+   "seances": 290,
+   "mots": 7795,
+   "horodates": 828,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Je mets aux voix l’article 1er, tel qu’il a été amendé."
+  },
+  {
+   "code": "SCRUT_ART_PUB_1_7",
+   "n": 881,
+   "seances": 299,
+   "mots": 4768,
+   "horodates": 11,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "(Le vote à main levée n’ayant pas été concluant, il est procédé à un scrutin public.)"
+  },
+  {
+   "code": "SCRUT_ART_PUB_1_8",
+   "n": 876,
+   "seances": 297,
+   "mots": 20148,
+   "horodates": 871,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 115 Nombre de suffrages exprimés 115 Majorité absolue 58 Pour l’adoption 74 Contre 41"
+  },
+  {
+   "code": "SCRUT_ART_PUB_1_9",
+   "n": 875,
+   "seances": 297,
+   "mots": 5249,
+   "horodates": 10,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "(L’article 1er bis, amendé, est adopté.)"
+  },
+  {
+   "code": "SCRUT_PUB_ADT_1_2",
+   "n": 4667,
+   "seances": 447,
+   "mots": 34429,
+   "horodates": 4663,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "Je mets aux voix l’amendement no 731 rectifié."
+  },
+  {
+   "code": "SCRUT_PUB_ADT_1_3",
+   "n": 4767,
+   "seances": 448,
+   "mots": 28337,
+   "horodates": 27,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "(Le vote à main levée n’ayant pas été concluant, il est procédé à un scrutin public.)"
+  },
+  {
+   "code": "SCRUT_PUB_ADT_1_4",
+   "n": 4762,
+   "seances": 449,
+   "mots": 109554,
+   "horodates": 4758,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 116 Nombre de suffrages exprimés 116 Majorité absolue 59 Pour l’adoption 41 Contre 75"
+  },
+  {
+   "code": "SCRUT_PUB_ADT_1_5",
+   "n": 4774,
+   "seances": 449,
+   "mots": 30383,
+   "horodates": 23,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "(L’amendement no 717 n’est pas adopté.)(Applaudissements sur quelques bancs du groupe RC.)"
+  },
+  {
+   "code": "SCRUT_PUB_ADT_1_6",
+   "n": 1303,
+   "seances": 341,
+   "mots": 10312,
+   "horodates": 1299,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "Je mets aux voix l’amendement no 55 rectifié."
+  },
+  {
+   "code": "SCRUT_PUB_ADT_1_7",
+   "n": 1341,
+   "seances": 346,
+   "mots": 9417,
+   "horodates": 13,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "(Le vote à main levée n’ayant pas été concluant, il est procédé à un scrutin public.)"
+  },
+  {
+   "code": "SCRUT_PUB_ADT_1_8",
+   "n": 1342,
+   "seances": 347,
+   "mots": 30866,
+   "horodates": 1338,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 127 Nombre de suffrages exprimés 127 Majorité absolue 64 Pour l’adoption 90 Contre 37"
+  },
+  {
+   "code": "SCRUT_PUB_ADT_1_9",
+   "n": 1350,
+   "seances": 348,
+   "mots": 15632,
+   "horodates": 13,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "(L’amendement no 55 rectifié est adopté.)"
+  },
+  {
+   "code": "SCRUT_SOUS_AMEND_1_2",
+   "n": 562,
+   "seances": 110,
+   "mots": 4644,
+   "horodates": 560,
+   "famille": "sous-amendements",
+   "exemple": "Je mets aux voix le sous-amendement no 143."
+  },
+  {
+   "code": "SCRUT_SOUS_AMEND_1_3",
+   "n": 569,
+   "seances": 110,
+   "mots": 3230,
+   "horodates": 21,
+   "famille": "sous-amendements",
+   "exemple": "(Le vote à main levée n’ayant pas été concluant, il est procédé à un scrutin public.)"
+  },
+  {
+   "code": "SCRUT_SOUS_AMEND_1_4",
+   "n": 568,
+   "seances": 110,
+   "mots": 13064,
+   "horodates": 566,
+   "famille": "sous-amendements",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 67 Nombre de suffrages exprimés 61 Majorité absolue 31 Pour l’adoption 27 Contre 34"
+  },
+  {
+   "code": "SCRUT_SOUS_AMEND_1_5",
+   "n": 572,
+   "seances": 112,
+   "mots": 4168,
+   "horodates": 21,
+   "famille": "sous-amendements",
+   "exemple": "(Le sous-amendement no 143 n’est pas adopté.)"
+  },
+  {
+   "code": "SCRUT_SOUS_AMEND_1_6",
+   "n": 136,
+   "seances": 79,
+   "mots": 1251,
+   "horodates": 134,
+   "famille": "sous-amendements",
+   "exemple": "Je mets aux voix le sous-amendement no 59."
+  },
+  {
+   "code": "SCRUT_SOUS_AMEND_1_7",
+   "n": 137,
+   "seances": 79,
+   "mots": 949,
+   "horodates": 0,
+   "famille": "sous-amendements",
+   "exemple": "(Le vote à main levée n’ayant pas été concluant, il est procédé à un scrutin public.)"
+  },
+  {
+   "code": "SCRUT_SOUS_AMEND_1_8",
+   "n": 138,
+   "seances": 79,
+   "mots": 3174,
+   "horodates": 137,
+   "famille": "sous-amendements",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 128 Nombre de suffrages exprimés 128 Majorité absolue 65 Pour l’adoption 84 Contre 44"
+  },
+  {
+   "code": "SCRUT_SOUS_AMEND_1_9",
+   "n": 141,
+   "seances": 81,
+   "mots": 1151,
+   "horodates": 0,
+   "famille": "sous-amendements",
+   "exemple": "(Le sous-amendement no 2364 est adopté.)"
+  },
+  {
+   "code": "SCR_AUTRE_ANN_1_07",
+   "n": 1,
+   "seances": 1,
+   "mots": 10,
+   "horodates": 1,
+   "famille": "annonce de scrutin public (demandeur)",
+   "exemple": "Je vais maintenant mettre aux voix la proposition de résolution."
+  },
+  {
+   "code": "SCR_AUTRE_ANN_1_08",
+   "n": 1,
+   "seances": 1,
+   "mots": 5,
+   "horodates": 0,
+   "famille": "annonce de scrutin public (demandeur)",
+   "exemple": "(Il est procédé au scrutin.)"
+  },
+  {
+   "code": "SCR_AUTRE_ANN_1_09",
+   "n": 1,
+   "seances": 1,
+   "mots": 23,
+   "horodates": 1,
+   "famille": "annonce de scrutin public (demandeur)",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 169 Nombre de suffrages exprimés 169 Majorité absolue 85 Pour l’adoption 169 Contre 0"
+  },
+  {
+   "code": "SCR_AUTRE_ANN_1_10",
+   "n": 1,
+   "seances": 1,
+   "mots": 16,
+   "horodates": 0,
+   "famille": "annonce de scrutin public (demandeur)",
+   "exemple": "(La proposition de résolution est adoptée.) (Applaudissements sur les bancs des groupes UT, SOL et LL.)"
+  },
+  {
+   "code": "SCR_AUTRE_DIVERS_1_2",
+   "n": 7,
+   "seances": 5,
+   "mots": 76,
+   "horodates": 7,
+   "famille": "annonce de scrutin public (demandeur)",
+   "exemple": "Je mets donc aux voix la demande de suspension de séance."
+  },
+  {
+   "code": "SCR_AUTRE_DIVERS_1_3",
+   "n": 7,
+   "seances": 5,
+   "mots": 83,
+   "horodates": 0,
+   "famille": "annonce de scrutin public (demandeur)",
+   "exemple": "(Le vote à main levée n’ayant pas été concluant, il est procédé à un scrutin public.)"
+  },
+  {
+   "code": "SCR_AUTRE_DIVERS_1_4",
+   "n": 7,
+   "seances": 6,
+   "mots": 161,
+   "horodates": 7,
+   "famille": "annonce de scrutin public (demandeur)",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 287 Nombre de suffrages exprimés 285 Majorité absolue 143 Pour l’adoption 118 Contre 167"
+  },
+  {
+   "code": "SCR_AUTRE_DIVERS_1_5",
+   "n": 7,
+   "seances": 5,
+   "mots": 82,
+   "horodates": 0,
+   "famille": "annonce de scrutin public (demandeur)",
+   "exemple": "(La demande de seconde délibération est rejetée.)"
+  },
+  {
+   "code": "SCR_AUTRE_DIVERS_1_50",
+   "n": 8,
+   "seances": 4,
+   "mots": 143,
+   "horodates": 0,
+   "famille": "annonce de scrutin public (demandeur)",
+   "exemple": "(La demande de prolongation de la séance est adoptée.)"
+  },
+  {
+   "code": "SCR_AUTRE_DIVERS_1_50_1",
+   "n": 8,
+   "seances": 5,
+   "mots": 201,
+   "horodates": 8,
+   "famille": "annonce de scrutin public (demandeur)",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 288 Nombre de suffrages exprimés 285 Majorité absolue 143 Pour l’adoption 175 Contre 110"
+  },
+  {
+   "code": "SCR_AUTRE_DIVERS_1_50_1_1",
+   "n": 8,
+   "seances": 5,
+   "mots": 73,
+   "horodates": 0,
+   "famille": "annonce de scrutin public (demandeur)",
+   "exemple": "(Le vote à main levée n’ayant pas été concluant, il est procédé à un scrutin public.)"
+  },
+  {
+   "code": "SCR_AUTRE_DIVERS_1_50_1_1_1",
+   "n": 6,
+   "seances": 4,
+   "mots": 121,
+   "horodates": 6,
+   "famille": "annonce de scrutin public (demandeur)",
+   "exemple": "Je mets aux voix la demande de prolongation de la séance."
+  },
+  {
+   "code": "SCR_MREF_1_2",
+   "n": 1,
+   "seances": 1,
+   "mots": 9,
+   "horodates": 1,
+   "famille": "motions (rejet préalable, renvoi)",
+   "exemple": "Je mets aux voix la motion de rejet préalable."
+  },
+  {
+   "code": "SCR_MREF_1_3",
+   "n": 1,
+   "seances": 1,
+   "mots": 5,
+   "horodates": 0,
+   "famille": "motions (rejet préalable, renvoi)",
+   "exemple": "(Il est procédé au scrutin.)"
+  },
+  {
+   "code": "SCR_MREF_1_4",
+   "n": 1,
+   "seances": 1,
+   "mots": 23,
+   "horodates": 1,
+   "famille": "motions (rejet préalable, renvoi)",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 374 Nombre de suffrages exprimés 373 Majorité absolue 187 Pour l’adoption 126 Contre 247"
+  },
+  {
+   "code": "SCR_MREF_1_5",
+   "n": 1,
+   "seances": 1,
+   "mots": 25,
+   "horodates": 0,
+   "famille": "motions (rejet préalable, renvoi)",
+   "exemple": "(La motion de rejet préalable n’est pas adoptée.) (Applaudissements sur les bancs du groupe LL ainsi que sur quelques bancs des groupes CP et PR.)"
+  },
+  {
+   "code": "SCR_MRJ_1_10",
+   "n": 12,
+   "seances": 10,
+   "mots": 158,
+   "horodates": 0,
+   "famille": "motions (rejet préalable, renvoi)",
+   "exemple": "(La motion de rejet préalable est adoptée.)"
+  },
+  {
+   "code": "SCR_MRJ_1_2",
+   "n": 43,
+   "seances": 40,
+   "mots": 406,
+   "horodates": 43,
+   "famille": "motions (rejet préalable, renvoi)",
+   "exemple": "Je mets aux voix la motion de rejet préalable."
+  },
+  {
+   "code": "SCR_MRJ_1_3",
+   "n": 45,
+   "seances": 42,
+   "mots": 225,
+   "horodates": 0,
+   "famille": "motions (rejet préalable, renvoi)",
+   "exemple": "(Il est procédé au scrutin.)"
+  },
+  {
+   "code": "SCR_MRJ_1_4",
+   "n": 45,
+   "seances": 42,
+   "mots": 1035,
+   "horodates": 45,
+   "famille": "motions (rejet préalable, renvoi)",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 218 Nombre de suffrages exprimés 217 Majorité absolue 109 Pour l’adoption 44 Contre 173"
+  },
+  {
+   "code": "SCR_MRJ_1_5",
+   "n": 45,
+   "seances": 42,
+   "mots": 629,
+   "horodates": 0,
+   "famille": "motions (rejet préalable, renvoi)",
+   "exemple": "(La motion de rejet préalable n’est pas adoptée.) (Applaudissements sur de nombreux bancs des groupes PR, LL, NV et ECO.)"
+  },
+  {
+   "code": "SCR_MRJ_1_7",
+   "n": 10,
+   "seances": 8,
+   "mots": 90,
+   "horodates": 10,
+   "famille": "motions (rejet préalable, renvoi)",
+   "exemple": "Je mets aux voix la motion de rejet préalable."
+  },
+  {
+   "code": "SCR_MRJ_1_8",
+   "n": 12,
+   "seances": 10,
+   "mots": 60,
+   "horodates": 0,
+   "famille": "motions (rejet préalable, renvoi)",
+   "exemple": "(Il est procédé au scrutin.)"
+  },
+  {
+   "code": "SCR_MRJ_1_9",
+   "n": 12,
+   "seances": 10,
+   "mots": 276,
+   "horodates": 12,
+   "famille": "motions (rejet préalable, renvoi)",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 159 Nombre de suffrages exprimés 158 Majorité absolue 80 Pour l’adoption 108 Contre 50"
+  },
+  {
+   "code": "SCR_MRJ_1_90",
+   "n": 12,
+   "seances": 10,
+   "mots": 147,
+   "horodates": 12,
+   "famille": "motions (rejet préalable, renvoi)",
+   "exemple": "En conséquence, le projet de loi est rejeté. (Les députés des groupes UT, RC, SOL et RS se lèvent et applaudissent.)"
+  },
+  {
+   "code": "SCR_MRJ_ANN_1_2",
+   "n": 2,
+   "seances": 2,
+   "mots": 18,
+   "horodates": 2,
+   "famille": "motions (rejet préalable, renvoi)",
+   "exemple": "Je mets aux voix la motion de rejet préalable."
+  },
+  {
+   "code": "SCR_MRJ_ANN_1_3",
+   "n": 2,
+   "seances": 2,
+   "mots": 10,
+   "horodates": 0,
+   "famille": "motions (rejet préalable, renvoi)",
+   "exemple": "(Il est procédé au scrutin.)"
+  },
+  {
+   "code": "SCR_MRJ_ANN_1_4",
+   "n": 2,
+   "seances": 2,
+   "mots": 46,
+   "horodates": 2,
+   "famille": "motions (rejet préalable, renvoi)",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 275 Nombre de suffrages exprimés 273 Majorité absolue 137 Pour l’adoption 51 Contre 222"
+  },
+  {
+   "code": "SCR_MRJ_ANN_1_5",
+   "n": 2,
+   "seances": 2,
+   "mots": 16,
+   "horodates": 0,
+   "famille": "motions (rejet préalable, renvoi)",
+   "exemple": "(La motion de rejet préalable n’est pas adoptée.)"
+  },
+  {
+   "code": "SCR_PART_PLFSS_1_10",
+   "n": 5,
+   "seances": 5,
+   "mots": 35,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Vote sur l’ensemble de la deuxième partie"
+  },
+  {
+   "code": "SCR_PART_PLFSS_1_20",
+   "n": 1,
+   "seances": 1,
+   "mots": 7,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Vote sur l’ensemble de la deuxième partie"
+  },
+  {
+   "code": "SCR_PART_PLFSS_2_10",
+   "n": 5,
+   "seances": 5,
+   "mots": 71,
+   "horodates": 5,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Je mets aux voix l’ensemble de la deuxième partie du projet de loi."
+  },
+  {
+   "code": "SCR_PART_PLFSS_2_20",
+   "n": 5,
+   "seances": 5,
+   "mots": 25,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "(Il est procédé au scrutin.)"
+  },
+  {
+   "code": "SCR_PART_PLFSS_2_30",
+   "n": 5,
+   "seances": 5,
+   "mots": 115,
+   "horodates": 5,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 292 Nombre de suffrages exprimés 224 Majorité absolue 113 Pour l’adoption 126 Contre 98"
+  },
+  {
+   "code": "SCR_PART_PLFSS_2_40",
+   "n": 5,
+   "seances": 5,
+   "mots": 89,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "(L’ensemble de la deuxième partie du projet de loi est adopté.) (Applaudissements sur les bancs des groupes UT, RC, SOL et RS.)"
+  },
+  {
+   "code": "SCR_PART_PLFSS_2_50",
+   "n": 1,
+   "seances": 1,
+   "mots": 21,
+   "horodates": 1,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Je mets aux voix l’ensemble de la deuxième partie du projet de loi de financement de la sécurité sociale pour 2027."
+  },
+  {
+   "code": "SCR_PART_PLFSS_2_60",
+   "n": 1,
+   "seances": 1,
+   "mots": 5,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "(Il est procédé au scrutin.)"
+  },
+  {
+   "code": "SCR_PART_PLFSS_2_70",
+   "n": 1,
+   "seances": 1,
+   "mots": 23,
+   "horodates": 1,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 138 Nombre de suffrages exprimés 116 Majorité absolue 59 Pour l’adoption 1 Contre 115"
+  },
+  {
+   "code": "SCR_PART_PLFSS_2_80",
+   "n": 3,
+   "seances": 1,
+   "mots": 46,
+   "horodates": 1,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "(L’ensemble de la deuxième partie du projet de loi n’est pas adopté.)"
+  },
+  {
+   "code": "SCR_PLF1_1_10",
+   "n": 1,
+   "seances": 1,
+   "mots": 19,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Vote sur l’ensemble de la première partie du projet de loi de finances de fin de gestion pour 2025"
+  },
+  {
+   "code": "SCR_PLF1_1_20",
+   "n": 4,
+   "seances": 4,
+   "mots": 64,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Vote sur l’ensemble de la première partie du projet de loi de finances pour 2025"
+  },
+  {
+   "code": "SCR_PLF1_2_10",
+   "n": 1,
+   "seances": 1,
+   "mots": 21,
+   "horodates": 1,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Je mets aux voix l’ensemble de la première partie du projet de loi de finances de fin de gestion pour 2025."
+  },
+  {
+   "code": "SCR_PLF1_2_20",
+   "n": 1,
+   "seances": 1,
+   "mots": 5,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "(Il est procédé au scrutin.)"
+  },
+  {
+   "code": "SCR_PLF1_2_30",
+   "n": 1,
+   "seances": 1,
+   "mots": 23,
+   "horodates": 1,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 213 Nombre de suffrages exprimés 102 Majorité absolue 52 Pour l’adoption 90 Contre 12"
+  },
+  {
+   "code": "SCR_PLF1_2_40",
+   "n": 1,
+   "seances": 1,
+   "mots": 19,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "(L’ensemble de la première partie du projet de loi de finances de fin de gestion pour 2025 est adopté.)"
+  },
+  {
+   "code": "SCR_PLF1_2_50",
+   "n": 4,
+   "seances": 4,
+   "mots": 72,
+   "horodates": 4,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Je mets aux voix l’ensemble de la première partie du projet de loi de finances pour 2025."
+  },
+  {
+   "code": "SCR_PLF1_2_60",
+   "n": 4,
+   "seances": 4,
+   "mots": 20,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "(Il est procédé au scrutin.)"
+  },
+  {
+   "code": "SCR_PLF1_2_70",
+   "n": 4,
+   "seances": 4,
+   "mots": 92,
+   "horodates": 4,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 573 Nombre de suffrages exprimés 554 Majorité absolue 278 Pour l’adoption 192 Contre 362"
+  },
+  {
+   "code": "SCR_PLF1_2_80",
+   "n": 4,
+   "seances": 4,
+   "mots": 88,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "(L’ensemble de la première partie du projet de loi de finances pour 2025 n’est pas adopté.)"
+  },
+  {
+   "code": "SCyRUT_ADT_ANN_1_2",
+   "n": 13,
+   "seances": 8,
+   "mots": 111,
+   "horodates": 13,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "Je vais maintenant mettre aux voix l’amendement no 1525."
+  },
+  {
+   "code": "SCyRUT_ADT_ANN_1_3",
+   "n": 16,
+   "seances": 10,
+   "mots": 146,
+   "horodates": 0,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "(Le vote à main levée n’ayant pas été concluant, il est procédé à un scrutin public.)"
+  },
+  {
+   "code": "SCyRUT_ADT_ANN_1_4",
+   "n": 16,
+   "seances": 10,
+   "mots": 368,
+   "horodates": 16,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 322 Nombre de suffrages exprimés 294 Majorité absolue 148 Pour l’adoption 133 Contre 161"
+  },
+  {
+   "code": "SCyRUT_ADT_ANN_1_5",
+   "n": 16,
+   "seances": 10,
+   "mots": 112,
+   "horodates": 0,
+   "famille": "amendements (présentation, avis, sort)",
+   "exemple": "(L’amendement no 1525 n’est pas adopté.)"
+  },
+  {
+   "code": "SORT_ARTICLE_1_1",
+   "n": 594,
+   "seances": 201,
+   "mots": 3138,
+   "horodates": 1,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "(L’article 1er est adopté à l’unanimité.)"
+  },
+  {
+   "code": "SORT_ARTICLE_1_3",
+   "n": 18,
+   "seances": 12,
+   "mots": 117,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "(L’article 38, amendé, n’est pas adopté.) (Mêmes mouvements.)"
+  },
+  {
+   "code": "SORT_ARTICLE_1_90",
+   "n": 2,
+   "seances": 1,
+   "mots": 12,
+   "horodates": 0,
+   "famille": "articles, parties de loi de finances",
+   "exemple": "(La discussion sur l’article est réservée.)"
+  },
+  {
+   "code": "SORT_SS_ADT_1_1",
+   "n": 30,
+   "seances": 27,
+   "mots": 180,
+   "horodates": 1,
+   "famille": "sous-amendements",
+   "exemple": "(Le sous-amendement no 3706 est retiré.)"
+  },
+  {
+   "code": "SORT_SS_ADT_1_2",
+   "n": 8,
+   "seances": 8,
+   "mots": 68,
+   "horodates": 0,
+   "famille": "sous-amendements",
+   "exemple": "(Les sous-amendements nos 867 et 868 sont retirés.)"
+  },
+  {
+   "code": "SORT_SS_ADT_1_20",
+   "n": 31,
+   "seances": 23,
+   "mots": 424,
+   "horodates": 0,
+   "famille": "sous-amendements",
+   "exemple": "(Les sous-amendements nos 140 rectifié, 141, 135 rectifié, 134, 136 rectifié et 137, successivement mis aux voix, sont adoptés.)"
+  },
+  {
+   "code": "SORT_SS_ADT_1_50",
+   "n": 200,
+   "seances": 124,
+   "mots": 1457,
+   "horodates": 0,
+   "famille": "sous-amendements",
+   "exemple": "(Le sous-amendement no 3678 est adopté.)"
+  },
+  {
+   "code": "SORT_SS_ADT_1_70",
+   "n": 155,
+   "seances": 98,
+   "mots": 1133,
+   "horodates": 0,
+   "famille": "sous-amendements",
+   "exemple": "(Le sous-amendement no 881 n’est pas adopté.)"
+  },
+  {
+   "code": "SORT_SS_ADT_1_80_1",
+   "n": 109,
+   "seances": 45,
+   "mots": 1537,
+   "horodates": 0,
+   "famille": "sous-amendements",
+   "exemple": "(Les sous-amendements identiques nos 2403 et 2431 ne sont pas adoptés.)"
+  },
+  {
+   "code": "SOUS_TITRE_TEXTE_DISCUSSION",
+   "n": 674,
+   "seances": 442,
+   "mots": 4805,
+   "horodates": 2,
+   "famille": "ordre du jour, appel d'un texte",
+   "exemple": "Discussion d’une proposition de loi adoptée par le Sénat"
+  },
+  {
+   "code": "SUSP_BREVE_1_1",
+   "n": 57,
+   "seances": 52,
+   "mots": 463,
+   "horodates": 0,
+   "famille": "suspensions",
+   "exemple": "(La séance, suspendue quelques instants, est immédiatement reprise.)"
+  },
+  {
+   "code": "SUSP_SEANCE_1_1",
+   "n": 994,
+   "seances": 478,
+   "mots": 5964,
+   "horodates": 0,
+   "famille": "suspensions",
+   "exemple": "Suspensions et reprises de la séance"
+  },
+  {
+   "code": "SUSP_SEANCE_2_1",
+   "n": 991,
+   "seances": 478,
+   "mots": 4624,
+   "horodates": 989,
+   "famille": "suspensions",
+   "exemple": "La séance est suspendue pour cinq minutes."
+  },
+  {
+   "code": "SUSP_SEANCE_2_2",
+   "n": 995,
+   "seances": 478,
+   "mots": 12899,
+   "horodates": 18,
+   "famille": "suspensions",
+   "exemple": "(La séance, suspendue à seize heures dix, est reprise à dix-sept heures dix.)"
+  },
+  {
+   "code": "SUSP_SEANCE_2_3",
+   "n": 1001,
+   "seances": 478,
+   "mots": 19714,
+   "horodates": 999,
+   "famille": "suspensions",
+   "exemple": "La séance est reprise.Voici le résultat du scrutin pour l’élection du président ou de la présidente de l’Assemblée nationale. Nombre de votants : 574 Bulletins"
+  },
+  {
+   "code": "SUSP_SEAN_PRES_1",
+   "n": 127,
+   "seances": 119,
+   "mots": 762,
+   "horodates": 0,
+   "famille": "suspensions",
+   "exemple": "Suspension et reprise de la séance"
+  },
+  {
+   "code": "SUSP_SEAN_PRES_1_2",
+   "n": 131,
+   "seances": 122,
+   "mots": 763,
+   "horodates": 0,
+   "famille": "suspensions",
+   "exemple": "Présidence de Mme Tessier-Ollivier vice-présidente"
+  },
+  {
+   "code": "SUSP_SEAN_PRES_2",
+   "n": 126,
+   "seances": 119,
+   "mots": 504,
+   "horodates": 125,
+   "famille": "suspensions",
+   "exemple": "La séance est suspendue."
+  },
+  {
+   "code": "SUSP_SEAN_PRES_2_1",
+   "n": 133,
+   "seances": 123,
+   "mots": 713,
+   "horodates": 132,
+   "famille": "suspensions",
+   "exemple": "L’ordre du jour appelle la discussion, sur le rapport de la commission mixte paritaire, du projet de loi de finances de fin de gestion pour 2024 (no 645)."
+  },
+  {
+   "code": "SUSP_SEAN_PRES_3",
+   "n": 129,
+   "seances": 120,
+   "mots": 2534,
+   "horodates": 5,
+   "famille": "suspensions",
+   "exemple": "(La séance, suspendue à seize heures trente-cinq, est reprise à seize heures quarante-cinq, sous la présidence de Mme Tessier-Ollivier.)"
+  },
+  {
+   "code": "TITRE_TEXTE_DISCUSSION",
+   "n": 1163,
+   "seances": 597,
+   "mots": 8846,
+   "horodates": 2,
+   "famille": "ordre du jour, appel d'un texte",
+   "exemple": "Élection du président de l’Assemblée nationale"
+  },
+  {
+   "code": "VERIF_QUORUM_1_10",
+   "n": 10,
+   "seances": 9,
+   "mots": 50,
+   "horodates": 0,
+   "famille": "incidents de procédure (rappels au règlement, fait personnel, quorum)",
+   "exemple": "Demande de vérification du quorum"
+  },
+  {
+   "code": "VERIF_QUORUM_2_1",
+   "n": 1,
+   "seances": 1,
+   "mots": 194,
+   "horodates": 1,
+   "famille": "incidents de procédure (rappels au règlement, fait personnel, quorum)",
+   "exemple": "À la fin de cette séance, le règlement de l’Assemblée nationale n’aura plus de secret pour moi.Je viens d’être saisi par la présidente du groupe La France insou"
+  },
+  {
+   "code": "VOTE_CENSURE_1_10",
+   "n": 7,
+   "seances": 7,
+   "mots": 508,
+   "horodates": 7,
+   "famille": "responsabilité du gouvernement (49.3, censure, 50-1), élections",
+   "exemple": "La discussion est close. Je vais maintenant mettre aux voix la motion de censure. Le scrutin est annoncé dans l’enceinte de l’Assemblée nationale. Je rappelle q"
+  },
+  {
+   "code": "VOTE_CENSURE_1_20",
+   "n": 2,
+   "seances": 2,
+   "mots": 51,
+   "horodates": 2,
+   "famille": "responsabilité du gouvernement (49.3, censure, 50-1), élections",
+   "exemple": "En conséquence, les conclusions de la commission mixte paritaire sur le projet de loi de finances pour 2025 sont considérées comme adoptées. (« Bravo ! » et app"
+  },
+  {
+   "code": "VOTE_DECL_50_1_1_10",
+   "n": 2,
+   "seances": 2,
+   "mots": 100,
+   "horodates": 1,
+   "famille": "responsabilité du gouvernement (49.3, censure, 50-1), élections",
+   "exemple": "Mme Elisabeth Borne a voté pour l’approbation mais, en raison d’un incident technique, sa position de vote n’a pas pu être prise en compte au moment de l’annonc"
+  },
+  {
+   "code": "VOTE_ENS_CMP_ML_1_10",
+   "n": 1,
+   "seances": 1,
+   "mots": 3,
+   "horodates": 0,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Vote sur l’ensemble"
+  },
+  {
+   "code": "VOTE_ENS_CMP_ML_2_10",
+   "n": 1,
+   "seances": 1,
+   "mots": 27,
+   "horodates": 1,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Je mets aux voix l’ensemble de la proposition de loi, telle qu’elle est issue de la commission mixte paritaire, modifiée par les amendements qui viennent d’être"
+  },
+  {
+   "code": "VOTE_ENS_CMP_ML_2_20",
+   "n": 1,
+   "seances": 1,
+   "mots": 15,
+   "horodates": 0,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "(La proposition de loi est adoptée.) (Applaudissements sur plusieurs bancs des groupes PR et NV.)"
+  },
+  {
+   "code": "VOTE_ENS_CMP_S_1_10",
+   "n": 32,
+   "seances": 27,
+   "mots": 115,
+   "horodates": 0,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Vote sur l’ensemble (projet de loi ordinaire)"
+  },
+  {
+   "code": "VOTE_ENS_CMP_S_2_20",
+   "n": 32,
+   "seances": 27,
+   "mots": 709,
+   "horodates": 31,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Je mets aux voix l’ensemble de la proposition de loi, telle qu’elle est issue de la commission mixte paritaire."
+  },
+  {
+   "code": "VOTE_ENS_CMP_S_2_30",
+   "n": 31,
+   "seances": 26,
+   "mots": 155,
+   "horodates": 1,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "(Il est procédé au scrutin.)"
+  },
+  {
+   "code": "VOTE_ENS_CMP_S_2_40",
+   "n": 32,
+   "seances": 27,
+   "mots": 736,
+   "horodates": 31,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 461 Nombre de suffrages exprimés 454 Majorité absolue 228 Pour l’adoption 366 Contre 88"
+  },
+  {
+   "code": "VOTE_ENS_CMP_S_2_50",
+   "n": 32,
+   "seances": 27,
+   "mots": 500,
+   "horodates": 1,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "(L’ensemble de la proposition de loi est adopté.) (« Quelle honte pour la gauche ! » sur les bancs du groupe CP et sur quelques bancs des groupes PR et LL.)"
+  },
+  {
+   "code": "VOTE_ENS_PJL_ML_1_10",
+   "n": 4,
+   "seances": 3,
+   "mots": 30,
+   "horodates": 0,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Vote sur l’article unique (accord dans le domaine de la défense)"
+  },
+  {
+   "code": "VOTE_ENS_PJL_ML_2_10",
+   "n": 4,
+   "seances": 3,
+   "mots": 39,
+   "horodates": 4,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Je mets aux voix l’ensemble du projet de loi."
+  },
+  {
+   "code": "VOTE_ENS_PJL_ML_2_20",
+   "n": 10,
+   "seances": 9,
+   "mots": 75,
+   "horodates": 2,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "(L’article unique est adopté, ainsi que l’ensemble du projet de loi.)"
+  },
+  {
+   "code": "VOTE_ENS_PJL_S_1_10",
+   "n": 36,
+   "seances": 32,
+   "mots": 141,
+   "horodates": 0,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Vote sur l’ensemble (projet de loi ordinaire)"
+  },
+  {
+   "code": "VOTE_ENS_PJL_S_1_20",
+   "n": 2,
+   "seances": 2,
+   "mots": 6,
+   "horodates": 0,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Vote sur l’ensemble"
+  },
+  {
+   "code": "VOTE_ENS_PJL_S_2_100",
+   "n": 3,
+   "seances": 3,
+   "mots": 64,
+   "horodates": 0,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "(L’article unique n’est pas adopté, non plus que l’ensemble du projet de loi.)"
+  },
+  {
+   "code": "VOTE_ENS_PJL_S_2_20",
+   "n": 36,
+   "seances": 32,
+   "mots": 529,
+   "horodates": 35,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Je mets aux voix l’ensemble du projet de loi de programmation pour la refondation de Mayotte."
+  },
+  {
+   "code": "VOTE_ENS_PJL_S_2_30",
+   "n": 36,
+   "seances": 32,
+   "mots": 180,
+   "horodates": 1,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "(Il est procédé au scrutin.)"
+  },
+  {
+   "code": "VOTE_ENS_PJL_S_2_40",
+   "n": 36,
+   "seances": 32,
+   "mots": 828,
+   "horodates": 35,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 540 Nombre de suffrages exprimés 476 Majorité absolue 239 Pour l’adoption 367 Contre 109"
+  },
+  {
+   "code": "VOTE_ENS_PJL_S_2_50",
+   "n": 37,
+   "seances": 31,
+   "mots": 550,
+   "horodates": 1,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "(Le projet de loi est adopté.) (Applaudissements sur les bancs des groupes CP, LL, NV et AR ainsi que sur quelques bancs du groupe PR.)"
+  },
+  {
+   "code": "VOTE_ENS_PJL_S_2_70",
+   "n": 2,
+   "seances": 2,
+   "mots": 19,
+   "horodates": 2,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Je mets aux voix l’ensemble du projet de loi."
+  },
+  {
+   "code": "VOTE_ENS_PJL_S_2_80",
+   "n": 2,
+   "seances": 2,
+   "mots": 10,
+   "horodates": 0,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "(Il est procédé au scrutin.)"
+  },
+  {
+   "code": "VOTE_ENS_PJL_S_2_90",
+   "n": 2,
+   "seances": 2,
+   "mots": 46,
+   "horodates": 2,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 334 Nombre de suffrages exprimés 252 Majorité absolue 127 Pour l’adoption 107 Contre 145"
+  },
+  {
+   "code": "VOTE_ENS_PPL_ML_1_10",
+   "n": 4,
+   "seances": 4,
+   "mots": 12,
+   "horodates": 0,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Vote sur l’ensemble"
+  },
+  {
+   "code": "VOTE_ENS_PPL_ML_2_10",
+   "n": 4,
+   "seances": 4,
+   "mots": 55,
+   "horodates": 4,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Je mets aux voix l’ensemble de la proposition de loi."
+  },
+  {
+   "code": "VOTE_ENS_PPL_ML_2_20",
+   "n": 4,
+   "seances": 4,
+   "mots": 61,
+   "horodates": 0,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "(La proposition de loi est adoptée.) (Applaudissements sur divers bancs.)"
+  },
+  {
+   "code": "VOTE_ENS_PPL_ML_2_40",
+   "n": 1,
+   "seances": 1,
+   "mots": 7,
+   "horodates": 0,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "(La proposition de loi n’est pas adoptée.)"
+  },
+  {
+   "code": "VOTE_ENS_PPL_S_1_10",
+   "n": 164,
+   "seances": 127,
+   "mots": 571,
+   "horodates": 0,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Vote sur l’ensemble de la proposition de loi"
+  },
+  {
+   "code": "VOTE_ENS_PPL_S_1_20",
+   "n": 3,
+   "seances": 3,
+   "mots": 9,
+   "horodates": 0,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Vote sur l’ensemble"
+  },
+  {
+   "code": "VOTE_ENS_PPL_S_2_100",
+   "n": 3,
+   "seances": 3,
+   "mots": 47,
+   "horodates": 0,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "(La proposition de loi n’est pas adoptée.) (Applaudissements sur divers bancs.)"
+  },
+  {
+   "code": "VOTE_ENS_PPL_S_2_20",
+   "n": 163,
+   "seances": 126,
+   "mots": 1865,
+   "horodates": 163,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Je mets aux voix l’article unique de la proposition de loi."
+  },
+  {
+   "code": "VOTE_ENS_PPL_S_2_30",
+   "n": 162,
+   "seances": 125,
+   "mots": 810,
+   "horodates": 3,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "(Il est procédé au scrutin.)"
+  },
+  {
+   "code": "VOTE_ENS_PPL_S_2_40",
+   "n": 162,
+   "seances": 125,
+   "mots": 3726,
+   "horodates": 162,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 111 Nombre de suffrages exprimés 111 Majorité absolue 56 Pour l’adoption 111 Contre 0"
+  },
+  {
+   "code": "VOTE_ENS_PPL_S_2_50",
+   "n": 165,
+   "seances": 125,
+   "mots": 3056,
+   "horodates": 3,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "(L’article unique est adopté, ainsi que l’ensemble de la proposition de loi.) (Applaudissements sur divers bancs.)"
+  },
+  {
+   "code": "VOTE_ENS_PPL_S_2_70",
+   "n": 3,
+   "seances": 3,
+   "mots": 30,
+   "horodates": 3,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Je mets aux voix l’ensemble de la proposition de loi."
+  },
+  {
+   "code": "VOTE_ENS_PPL_S_2_80",
+   "n": 3,
+   "seances": 3,
+   "mots": 15,
+   "horodates": 0,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "(Il est procédé au scrutin.)"
+  },
+  {
+   "code": "VOTE_ENS_PPL_S_2_90",
+   "n": 3,
+   "seances": 3,
+   "mots": 69,
+   "horodates": 3,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 334 Nombre de suffrages exprimés 316 Majorité absolue 159 Pour l’adoption 119 Contre 197"
+  },
+  {
+   "code": "VOTE_ENS_PPR_ML_1_10",
+   "n": 1,
+   "seances": 1,
+   "mots": 6,
+   "horodates": 0,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Vote sur la proposition de résolution"
+  },
+  {
+   "code": "VOTE_ENS_PPR_ML_2_10",
+   "n": 1,
+   "seances": 1,
+   "mots": 8,
+   "horodates": 1,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Je mets aux voix la proposition de résolution."
+  },
+  {
+   "code": "VOTE_ENS_PPR_ML_2_20",
+   "n": 2,
+   "seances": 2,
+   "mots": 12,
+   "horodates": 0,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "(La proposition de résolution est adoptée.)"
+  },
+  {
+   "code": "VOTE_ENS_PPR_S_1_10",
+   "n": 30,
+   "seances": 25,
+   "mots": 139,
+   "horodates": 0,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Vote sur la proposition de résolution"
+  },
+  {
+   "code": "VOTE_ENS_PPR_S_1_20",
+   "n": 4,
+   "seances": 2,
+   "mots": 24,
+   "horodates": 0,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Vote sur la proposition de résolution."
+  },
+  {
+   "code": "VOTE_ENS_PPR_S_2_100",
+   "n": 4,
+   "seances": 2,
+   "mots": 79,
+   "horodates": 0,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "(La proposition de résolution n’est pas adoptée.) (Applaudissements sur de nombreux bancs des groupes UT, RC, SOL et RS.)"
+  },
+  {
+   "code": "VOTE_ENS_PPR_S_2_20",
+   "n": 30,
+   "seances": 25,
+   "mots": 330,
+   "horodates": 30,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Je mets aux voix l’article unique de la proposition de résolution."
+  },
+  {
+   "code": "VOTE_ENS_PPR_S_2_30",
+   "n": 29,
+   "seances": 24,
+   "mots": 145,
+   "horodates": 2,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "(Il est procédé au scrutin.)"
+  },
+  {
+   "code": "VOTE_ENS_PPR_S_2_40",
+   "n": 29,
+   "seances": 24,
+   "mots": 667,
+   "horodates": 29,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 226 Nombre de suffrages exprimés 226 Majorité absolue 114 Pour l’adoption 226 Contre 0"
+  },
+  {
+   "code": "VOTE_ENS_PPR_S_2_50",
+   "n": 29,
+   "seances": 24,
+   "mots": 600,
+   "horodates": 2,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "(L’article unique est adopté, ainsi que l’ensemble de la proposition de résolution.) (Mmes et M. les députés se lèvent et applaudissent longuement en direction"
+  },
+  {
+   "code": "VOTE_ENS_PPR_S_2_70",
+   "n": 4,
+   "seances": 2,
+   "mots": 32,
+   "horodates": 4,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Je mets aux voix la proposition de résolution."
+  },
+  {
+   "code": "VOTE_ENS_PPR_S_2_80",
+   "n": 4,
+   "seances": 2,
+   "mots": 20,
+   "horodates": 0,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "(Il est procédé au scrutin.)"
+  },
+  {
+   "code": "VOTE_ENS_PPR_S_2_90",
+   "n": 4,
+   "seances": 2,
+   "mots": 92,
+   "horodates": 4,
+   "famille": "explications de vote et vote sur l'ensemble",
+   "exemple": "Voici le résultat du scrutin : Nombre de votants 322 Nombre de suffrages exprimés 316 Majorité absolue 159 Pour l’adoption 156 Contre 160"
+  }
+ ],
+ "groupes_fictifs": {
+  "AR": "Avenir rural",
+  "CP": "Centre et progrès",
+  "DC": "Démocratie communale",
+  "ECO": "Écologie urbaine",
+  "LL": "Libertés locales",
+  "NI": "Non-inscrits",
+  "NV": "Nouvelle voie",
+  "PR": "Progrès républicain",
+  "RC": "Rassemblement des communes",
+  "RS": "Renouveau social",
+  "SOL": "Solidarité et logement",
+  "UT": "Union des territoires",
+  "SA": "Alliance des départements",
+  "SB": "Bastion républicain",
+  "SC": "Concorde sénatoriale",
+  "SD": "Démocratie des terroirs",
+  "SE": "Équilibre et territoires",
+  "SF": "Forces sociales",
+  "SG": "Gauche des communes",
+  "SH": "Horizon vert",
+  "SI": "Indépendants du Sénat"
+ },
+ "nota": [
+  "Groupes et personnes rendus fictifs (scripts/fictionnaliser.py) ; textes, sorts et dates réels."
+ ]
+}

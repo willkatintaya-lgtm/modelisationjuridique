@@ -4,6 +4,10 @@ une ligne JSON par alinéa : article, n° d'alinéa (pastille), texte, amendemen
 Usage : python3 -I senat_akn.py fichier.akn.xml [sortie.jsonl]"""
 import sys, json, re
 import xml.etree.ElementTree as ET
+def own(al, A='{http://docs.oasis-open.org/legaldocml/ns/akn/3.0}'):
+    """Texte propre d'un alinéa (num + content), sans les alinéas imbriqués."""
+    parts = [''.join(c.itertext()) for c in al if c.tag in (A + 'num', A + 'content')]
+    return re.sub(r'\s+', ' ', ' '.join(parts)).strip()
 NS = {'a': 'http://docs.oasis-open.org/legaldocml/ns/akn/3.0'}
 D = '{http://data.parlement.fr/v1}'
 def txt(e):
@@ -19,7 +23,7 @@ def lire(path):
                         'art_amdts': art.get(D + 'amdts'), 'art_mention': art.get(D + 'mention'),
                         'eId': al.get('eId'), 'pastille': al.get(D + 'pastille'),
                         'amdts': al.get(D + 'amdts'), 'mention': al.get(D + 'mention'),
-                        'texte': txt(al)})
+                        'texte': own(al), 'conteneur': al.find('{%s}alinea' % NS['a']) is not None})
     return out
 def nums(s):
     """'n° 248, 266(s/amdt)' -> [('248',False),('266',True)] ; 'n° COM-12 rect.' géré."""

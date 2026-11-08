@@ -1,0 +1,900 @@
+{
+ "credits": {
+  "n": 21108,
+  "un_programme_seul": 2384,
+  "zero_mouvement": 9,
+  "par_groupe_n": [
+   [
+    "CP",
+    3891
+   ],
+   [
+    "UT",
+    3879
+   ],
+   [
+    "RC",
+    3649
+   ],
+   [
+    "SOL",
+    3176
+   ],
+   [
+    "PR",
+    1708
+   ],
+   [
+    "RS",
+    1355
+   ],
+   [
+    "LL",
+    1268
+   ],
+   [
+    "DC",
+    809
+   ],
+   [
+    "NV",
+    600
+   ],
+   [
+    "ECO",
+    356
+   ],
+   [
+    "AR",
+    157
+   ],
+   [
+    "Gouvernement",
+    122
+   ],
+   [
+    "NI",
+    107
+   ],
+   [
+    "Député",
+    28
+   ]
+  ],
+  "adoption_examines": 25.2,
+  "n_annexe": 25156,
+  "n_programmes": {
+   "2": 17869,
+   "1": 2384,
+   "3": 490,
+   "5": 168,
+   "4": 188,
+   "0": 9
+  },
+  "net_nul": 18166,
+  "actions": [
+   [
+    "modification",
+    37615
+   ],
+   [
+    "création",
+    3383
+   ],
+   [
+    "suppression",
+    18
+   ]
+  ],
+  "cp_deplace_med": 15000000,
+  "cp_deplace_p90": 250000000,
+  "un_euro": 785,
+  "cp_hist": {
+   "5": 142,
+   "8": 6671,
+   "9": 3558,
+   "7": 5313,
+   "10": 694,
+   "6": 1066,
+   "1": 825,
+   "2": 21,
+   "4": 4,
+   "3": 5
+  },
+  "moins_1M": 2063,
+  "plus_1Md": 694,
+  "issue": {
+   "en_attente": 8890,
+   "Rejeté": 5284,
+   "Retiré": 651,
+   "Adopté": 2954,
+   "Tombé": 1373,
+   "Non soutenu": 1453,
+   "retire": 503
+  },
+  "programmes_plus_cites": [
+   [
+    "Emploi outre-mer",
+    1802
+   ],
+   [
+    "Conditions de vie outre-mer",
+    1379
+   ],
+   [
+    "Recherches scientifiques et technologiques pluridisciplinaires",
+    971
+   ],
+   [
+    "Service public de l'énergie",
+    866
+   ],
+   [
+    "Administration pénitentiaire",
+    857
+   ],
+   [
+    "Infrastructures et services de transports",
+    824
+   ],
+   [
+    "Urbanisme, territoires et amélioration de l'habitat",
+    784
+   ],
+   [
+    "Accès et retour à l'emploi",
+    782
+   ],
+   [
+    "Compétitivité et durabilité de l'agriculture, de l'agroalimentaire et de la forêt",
+    769
+   ],
+   [
+    "Enseignement privé du premier et du second degrés",
+    740
+   ],
+   [
+    "Formations supérieures et recherche universitaire",
+    685
+   ],
+   [
+    "Soutien des ministères sociaux",
+    677
+   ]
+  ],
+  "programmes_crediteurs": [
+   [
+    "Conditions de vie outre-mer",
+    1051
+   ],
+   [
+    "Accès et retour à l'emploi",
+    662
+   ],
+   [
+    "Compétitivité et durabilité de l'agriculture, de l'agroalimentaire et de la forêt",
+    561
+   ],
+   [
+    "Vie de l'élève",
+    488
+   ],
+   [
+    "Formations supérieures et recherche universitaire",
+    372
+   ],
+   [
+    "Vie étudiante",
+    344
+   ],
+   [
+    "Infrastructures et services de transports",
+    332
+   ],
+   [
+    "Urbanisme, territoires et amélioration de l'habitat",
+    320
+   ]
+  ],
+  "programmes_debites": [
+   [
+    "Emploi outre-mer",
+    1612
+   ],
+   [
+    "Service public de l'énergie",
+    817
+   ],
+   [
+    "Recherches scientifiques et technologiques pluridisciplinaires",
+    711
+   ],
+   [
+    "Enseignement privé du premier et du second degrés",
+    658
+   ],
+   [
+    "Soutien des ministères sociaux",
+    617
+   ],
+   [
+    "Conduite et pilotage des politiques de l'agriculture",
+    550
+   ],
+   [
+    "Administration pénitentiaire",
+    540
+   ],
+   [
+    "Soutien de la politique de l'éducation nationale",
+    535
+   ]
+  ],
+  "adoptes_plus_gros": [
+   [
+    9500000000,
+    "II-AC16",
+    "DLR5L17N54629",
+    [
+     [
+      "Recherches scientifiques et technologiques pluridisciplinaires",
+      -6100000000,
+      -6100000000,
+      "modification"
+     ],
+     [
+      "Recherche spatiale",
+      -1300000000,
+      -1300000000,
+      "modification"
+     ]
+    ]
+   ],
+   [
+    8898175000,
+    "II-CF891",
+    "DLR5L17N54629",
+    [
+     [
+      "Enseignement scolaire public du second degré",
+      -598175000,
+      -598175000,
+      "modification"
+     ],
+     [
+      "Enseignement privé du premier et du second degrés",
+      -8300000000,
+      -8300000000,
+      "modification"
+     ]
+    ]
+   ],
+   [
+    6200000000,
+    "II-CF451",
+    "DLR5L17N50198",
+    [
+     [
+      "Enseignement privé du premier et du second degrés",
+      -6200000000,
+      -6200000000,
+      "modification"
+     ],
+     [
+      "Gratuité de l'école publique",
+      6200000000,
+      6200000000,
+      "création"
+     ]
+    ]
+   ],
+   [
+    5300000000,
+    "II-CD170",
+    "DLR5L17N54629",
+    [
+     [
+      "Aide à l'accès au logement",
+      -5300000000,
+      -5300000000,
+      "modification"
+     ],
+     [
+      "Urbanisme, territoires et amélioration de l'habitat",
+      5300000000,
+      5300000000,
+      "modification"
+     ]
+    ]
+   ],
+   [
+    5300000000,
+    "II-CF1044",
+    "DLR5L17N54629",
+    [
+     [
+      "Accompagnement des mutations économiques et développement de l'emploi",
+      -5300000000,
+      -5300000000,
+      "modification"
+     ],
+     [
+      "Emplois spécifiques jeunes dans le secteur non marchand et public",
+      5300000000,
+      5300000000,
+      "création"
+     ]
+    ]
+   ]
+  ]
+ },
+ "series": {
+  "n_series_10plus": 398,
+  "amdts_en_series": 9123,
+  "part": 6.3,
+  "plus_grandes": [
+   [
+    584,
+    "Projet de loi constitutionnelle relatif à la Nouvelle-Calédo",
+    "Député",
+    "UT",
+    "À l’alinéa 1, substituer aux mots : \n« tard le 26 juillet 2026 », \nles mots :\n« tôt le 29 septembre 2039 ».",
+    "À l’alinéa 1, substituer aux mots : \n« tard le 26 juillet 2026 », \nles mots :\n« tôt le 13 octobre 2039 ».",
+    {
+     "en_attente": 584
+    }
+   ],
+   [
+    386,
+    "Projet de loi constitutionnelle relatif à la Nouvelle-Calédo",
+    "Député",
+    "RS",
+    "À l’alinéa 1, substituer aux mots : \n« tard le 26 juillet 2026 », \nles mots :\n« tôt le 22 novembre 2039 ».",
+    "À l’alinéa 1, substituer aux mots :\n« tard le 26 juillet 2026 »,\nles mots :\n« tôt le 30 juillet 2038 ».",
+    {
+     "en_attente": 386
+    }
+   ],
+   [
+    199,
+    "Projet de loi constitutionnelle relatif à la Nouvelle-Calédo",
+    "Député",
+    "UT",
+    "À la fin, substituer aux mots : \n« le jour de la publication au Journal officiel de la République française de",
+    "À la fin, substituer aux mots :\n« le jour de la publication au Journal officiel de la République française des",
+    {
+     "en_attente": 199
+    }
+   ],
+   [
+    175,
+    "Projet de loi constitutionnelle relatif à la Nouvelle-Calédo",
+    "Député",
+    "UT",
+    "À la fin de l’alinéa 1, substituer à la date :\n« 20 décembre 2026 »,\nla date :\n« 19 octobre 2026 ».",
+    "À la fin de l’alinéa 1, substituer à la date :\n« 20 décembre 2026 »,\nla date :\n« 8 septembre 2026 ».",
+    {
+     "en_attente": 175
+    }
+   ],
+   [
+    139,
+    "Projet de loi constitutionnelle relatif à la Nouvelle-Calédo",
+    "Député",
+    "UT",
+    "À l’alinéa 1, substituer aux mots : \n« tard le 26 juillet 2026 » \nles mots : \n« tôt le 18 mars 2039 ».",
+    "À l’alinéa 1, substituer aux mots : \n« tard le 26 juillet 2026 » \nles mots : \n« tôt le 1 mai 2039 ».",
+    {
+     "en_attente": 139
+    }
+   ],
+   [
+    135,
+    "Projet de loi constitutionnelle relatif à la Nouvelle-Calédo",
+    "Député",
+    "RS",
+    "À l’alinéa 1, substituer aux mots :\n« tard le 26 juillet 2026 » \nles mots :\n« tôt le 13 novembre 2038 ».",
+    "À l’alinéa 1, substituer aux mots : \n« tard le 26 juillet 2026 » \nles mots : \n« tôt le 15 avril 2039 ».",
+    {
+     "en_attente": 135
+    }
+   ],
+   [
+    131,
+    "Projet de loi constitutionnelle relatif à la Nouvelle-Calédo",
+    "Député",
+    "RS",
+    "À la fin substituer aux mots :\n« le jour de la publication au Journal officiel de la République française des ",
+    "À la fin substituer aux mots :\n« le jour de la publication au Journal officiel de la République française des ",
+    {
+     "en_attente": 131
+    }
+   ],
+   [
+    125,
+    "Fin de vie",
+    "Député",
+    null,
+    "À l’alinéa 13, substituer aux mots : \n« aide à mourir » \nles mots :\n« assassinat médical ».",
+    "À l’alinéa 2, substituer aux mots :\n« aide à mourir » \nles mots :\n« injection létale médicalement assistée ».",
+    {
+     "retire": 122,
+     "Tombé": 1,
+     "Rejeté": 1,
+     "Non soutenu": 1
+    }
+   ],
+   [
+    119,
+    "Projet de loi constitutionnelle relatif à la Nouvelle-Calédo",
+    "Député",
+    "RS",
+    "À la fin de l’alinéa 1, substituer à la date :\n« 20 décembre 2026 »,\nla date :\n« 27 août 2026 ».",
+    "À la fin de l’alinéa 1, substituer à la date :\n« 20 décembre 2026 »,\nla date : \n« 4 septembre 2026 ».",
+    {
+     "en_attente": 119
+    }
+   ],
+   [
+    100,
+    "Réforme de l’audiovisuel public et souveraineté audiovisuell",
+    "Député",
+    "RC",
+    "Rédiger ainsi l’alinéa 3 :\n« a) Après le mot : « ans », sont insérés les mots : « et quatre-vingt-dix-huit jou",
+    "Rédiger ainsi l’alinéa 3 :\n« a) Après le mot : « ans », sont insérés les mots : « et soixante-cinq jours » ; »",
+    {
+     "Tombé": 100
+    }
+   ],
+   [
+    92,
+    "Réforme de l’audiovisuel public et souveraineté audiovisuell",
+    "Député",
+    "RC",
+    "À l'alinéa 2, substituer aux mots : \n« 30 jours »\nLes mots : \n« 37 jours »",
+    "À l'alinéa 3, substituer aux mots : \n« d’un an »\nLes mots : \n« de trente-neuf ans »",
+    {
+     "en_attente": 92
+    }
+   ],
+   [
+    91,
+    "Projet de loi constitutionnelle relatif à la Nouvelle-Calédo",
+    "Député",
+    "RS",
+    "À l’alinéa 1, substituer aux mots :\n« tard le 26 juillet 2026 »,\nles mots :\n« tôt le 13 juin 2040 ».",
+    "À l’alinéa 1, substituer aux mots :\n« tard le 26 juillet 2026 »,\nles mots :\n« tôt le 12 mai 2040 ».",
+    {
+     "en_attente": 91
+    }
+   ]
+  ],
+  "par_auteur_type": {
+   "Député": 382,
+   "Rapporteur": 12,
+   "Gouvernement": 4
+  },
+  "par_issue": {
+   "en_attente": 4946,
+   "Adopté": 944,
+   "Rejeté": 1363,
+   "Tombé": 398,
+   "Retiré": 188,
+   "retire": 1034,
+   "Non soutenu": 250
+  },
+  "dossiers_les_plus_seriels": [
+   [
+    "DLR5L17N52984",
+    "Projet de loi constitutionnelle relatif à la Nouvelle-Calédo",
+    2659,
+    3205,
+    83
+   ],
+   [
+    "DLR5L16N47697",
+    "Réforme de l’audiovisuel public et souveraineté audiovisuell",
+    1136,
+    3441,
+    33
+   ],
+   [
+    "DLR5L17N51670",
+    "Fin de vie",
+    1117,
+    9270,
+    12
+   ],
+   [
+    "DLR5L17N50819",
+    "Proposition de loi visant à lever les contraintes à l’exerci",
+    901,
+    4650,
+    19
+   ],
+   [
+    "DLR5L17N52655",
+    "Proposition de loi organique visant à reporter le renouvelle",
+    471,
+    1682,
+    28
+   ],
+   [
+    "DLR5L17N52922",
+    "Projet de loi de financement de la sécurité sociale pour 202",
+    456,
+    6208,
+    7
+   ],
+   [
+    "DLR5L17N52428",
+    "Projet de loi de finances pour 2026",
+    326,
+    19510,
+    2
+   ],
+   [
+    "DLR5L17N50588",
+    "Projet de loi de financement de la sécurité sociale pour 202",
+    314,
+    5892,
+    5
+   ],
+   [
+    "DLR5L17N54951",
+    "Projet de loi de financement de la sécurité sociale pour 202",
+    238,
+    4781,
+    5
+   ],
+   [
+    "DLR5L16N49868",
+    "Projet de loi de simplification de la vie économique",
+    225,
+    4245,
+    5
+   ]
+  ]
+ },
+ "vitesse_seance": {
+  "n_ecarts": 36299,
+  "ecart_median_s": 16.0,
+  "p25": 1.0,
+  "p75": 133.0,
+  "p90": 372.0,
+  "part_moins_60s": 65.9,
+  "part_zero": 17.0,
+  "amdts_par_heure_par_jour_med": 17.9,
+  "rph_p10": 6.0,
+  "rph_p90": 38.4,
+  "n_journees": 237,
+  "cascades_meme_seconde": [
+   [
+    [
+     "Rejeté"
+    ],
+    1007
+   ],
+   [
+    [
+     "Tombé"
+    ],
+    629
+   ],
+   [
+    [
+     "Adopté"
+    ],
+    475
+   ],
+   [
+    [
+     "Non soutenu"
+    ],
+    97
+   ],
+   [
+    [
+     "Retiré"
+    ],
+    41
+   ],
+   [
+    [
+     "Adopté",
+     "Tombé"
+    ],
+    25
+   ],
+   [
+    [
+     "Non soutenu",
+     "Rejeté"
+    ],
+    7
+   ],
+   [
+    [
+     "Adopté",
+     "Non soutenu"
+    ],
+    2
+   ],
+   [
+    [
+     "Non soutenu",
+     "Tombé"
+    ],
+    2
+   ],
+   [
+    [
+     "Adopté",
+     "Rejeté"
+    ],
+    2
+   ]
+  ]
+ },
+ "vitesse_par_dossier": {
+  "DLR5L17N51670": {
+   "titre": "Fin de vie",
+   "sorts": 5080,
+   "jours": 20,
+   "max_jour": 597
+  },
+  "DLR5L17N52428": {
+   "titre": "Projet de loi de finances pour 2026",
+   "sorts": 3438,
+   "jours": 20,
+   "max_jour": 528
+  },
+  "DLR5L17N50169": {
+   "titre": "Proposition de loi visant à sortir la France du pi",
+   "sorts": 753,
+   "jours": 10,
+   "max_jour": 209
+  },
+  "DLR5L17N50588": {
+   "titre": "Projet de loi de financement de la sécurité social",
+   "sorts": 936,
+   "jours": 6,
+   "max_jour": 385
+  },
+  "DLR5L17N54085": {
+   "titre": "Projet de loi d’urgence pour la protection et la s",
+   "sorts": 1576,
+   "jours": 11,
+   "max_jour": 436
+  },
+  "DLR5L16N49868": {
+   "titre": "Projet de loi de simplification de la vie économiq",
+   "sorts": 1442,
+   "jours": 14,
+   "max_jour": 564
+  }
+ },
+ "sources_externes": {
+  "echantillon": 39970,
+  "avec_mention": 2468,
+  "pct": 6.2,
+  "top": [
+   [
+    "Gouvernement",
+    136
+   ],
+   [
+    "France",
+    132
+   ],
+   [
+    "FNSEA",
+    124
+   ],
+   [
+    "Fédération des Entreprises des Outre-mer",
+    60
+   ],
+   [
+    "Conseil",
+    56
+   ],
+   [
+    "Union",
+    55
+   ],
+   [
+    "Fondation pour",
+    52
+   ],
+   [
+    "ESS France",
+    46
+   ],
+   [
+    "Fédération",
+    35
+   ],
+   [
+    "Chambres d’",
+    34
+   ],
+   [
+    "USH",
+    30
+   ],
+   [
+    "Fédération des",
+    29
+   ],
+   [
+    "France Assos Santé",
+    27
+   ],
+   [
+    "Jeunes Agriculteurs",
+    24
+   ],
+   [
+    "Confédération",
+    22
+   ],
+   [
+    "Nexem",
+    22
+   ],
+   [
+    "Sénat",
+    20
+   ],
+   [
+    "Syndicat",
+    19
+   ],
+   [
+    "Association pour",
+    18
+   ],
+   [
+    "Union des",
+    15
+   ],
+   [
+    "MEDEF",
+    15
+   ],
+   [
+    "UNICEF France",
+    15
+   ],
+   [
+    "Association des",
+    14
+   ],
+   [
+    "Bio",
+    14
+   ],
+   [
+    "Chambres d'",
+    14
+   ],
+   [
+    "FHF",
+    14
+   ],
+   [
+    "France Universités",
+    13
+   ],
+   [
+    "Fondation Abbé Peyrol-Delorme",
+    12
+   ],
+   [
+    "Association",
+    12
+   ],
+   [
+    "CCI France",
+    12
+   ],
+   [
+    "France Nature Environnement",
+    12
+   ],
+   [
+    "Collectif Handicaps",
+    11
+   ],
+   [
+    "Collectif Démocratie",
+    11
+   ],
+   [
+    "CFDT Santé-Sociaux",
+    10
+   ],
+   [
+    "Conseil National des Barreaux",
+    10
+   ],
+   [
+    "Mouvement Impact France",
+    10
+   ],
+   [
+    "Action Santé Mondiale",
+    10
+   ],
+   [
+    "CNAPE",
+    10
+   ],
+   [
+    "AMORCE",
+    9
+   ],
+   [
+    "France Urbaine",
+    9
+   ]
+  ]
+ },
+ "concentration_auteurs": {
+  "n_auteurs": 630,
+  "top10_part": 10.7,
+  "top50_part": 32.3,
+  "max": 2570,
+  "median": 132
+ },
+ "suppression_article": {
+  "n": 8182,
+  "issue": {
+   "Adopté": 2209,
+   "Rejeté": 2939,
+   "retire": 349,
+   "en_attente": 1562,
+   "Retiré": 147,
+   "Non soutenu": 971,
+   "Tombé": 5
+  },
+  "identiques": 6094
+ },
+ "gage_variantes": [
+  [
+   "autre",
+   11273
+  ],
+  [
+   "tabac",
+   10
+  ]
+ ],
+ "groupes_fictifs": {
+  "AR": "Avenir rural",
+  "CP": "Centre et progrès",
+  "DC": "Démocratie communale",
+  "ECO": "Écologie urbaine",
+  "LL": "Libertés locales",
+  "NI": "Non-inscrits",
+  "NV": "Nouvelle voie",
+  "PR": "Progrès républicain",
+  "RC": "Rassemblement des communes",
+  "RS": "Renouveau social",
+  "SOL": "Solidarité et logement",
+  "UT": "Union des territoires",
+  "SA": "Alliance des départements",
+  "SB": "Bastion républicain",
+  "SC": "Concorde sénatoriale",
+  "SD": "Démocratie des terroirs",
+  "SE": "Équilibre et territoires",
+  "SF": "Forces sociales",
+  "SG": "Gauche des communes",
+  "SH": "Horizon vert",
+  "SI": "Indépendants du Sénat"
+ },
+ "nota": [
+  "Groupes et personnes rendus fictifs (scripts/fictionnaliser.py) ; textes, sorts et dates réels."
+ ]
+}

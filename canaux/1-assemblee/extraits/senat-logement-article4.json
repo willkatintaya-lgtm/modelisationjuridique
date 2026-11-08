@@ -1,0 +1,1806 @@
+{
+ "etats": {
+  "pjl25-801": [
+   {
+    "pastille": "1",
+    "amdts": null,
+    "mention": null,
+    "conteneur": true,
+    "texte": "I. – I. – Le 1° du I de l’article 31 du code général des impôts est ainsi modifié :"
+   },
+   {
+    "pastille": "2",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "1° 1° Au troisième alinéa du g, après les mots : « du j » sont insérés les mots : « , dans sa rédaction antérieure à l’article 110 de la loi n° 2023‑1322 du 29 décembre 2023 de finances pour 2024, » ;"
+   },
+   {
+    "pastille": "3",
+    "amdts": null,
+    "mention": null,
+    "conteneur": true,
+    "texte": "2° 2° Le premier alinéa du j est remplacé par quatre alinéas ainsi rédigés :"
+   },
+   {
+    "pastille": "4",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "« j) Pour les logements situés en France que le contribuable acquiert, qui font ou ont fait l’objet de travaux concourant à la production ou à la livraison d’un immeuble neuf, au sens du 2° du 2 du I de l’article 257 du présent code, ou pour lesquels les travaux d’amélioration, définis en application du 5° du B du I de l’article 199 novovicies, représentent au moins 20 % du prix d’acquisition net de frais, à la demande du contribuable, une déduction au titre de l’amortissement du prix d’acquisition du logement net de frais, majoré, le cas échéant, du montant des travaux."
+   },
+   {
+    "pastille": "5",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "« La déduction prévue au premier alinéa du présent j est applicable aux locaux situés en France que le contribuable acquiert et qui font ou ont fait l’objet de travaux de transformation en logement, lorsque ces locaux étaient, avant les travaux, affectés à un usage autre que l’habitation et que le montant de ces travaux représente au moins 20 % du prix d’acquisition net de frais. Ont le caractère de travaux de transformation au sens du présent alinéa les travaux permettant l’aménagement de locaux d’habitation dans des locaux affectés auparavant à un autre usage, ainsi que les travaux d’amélioration réalisés à l’occasion de cet aménagement tels que définis en application du 5° du B du I de l’article 199 novovicies."
+   },
+   {
+    "pastille": "6",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "« Lorsque les travaux d’amélioration ou de transformation ont été effectués avant l’acquisition du logement ou du local, ou lorsque le bien est acquis dans le cadre d’un contrat de vente d’immeuble à rénover défini aux articles L. 262‑1 à L. 262‑11 du code de la construction et de l’habitation, le prix d’acquisition servant de base au calcul des seuils de 20 % prévus aux premier et deuxième alinéas du présent j est minoré du montant des travaux. Pour les logements ou locaux qui ont fait l’objet de travaux avant leur acquisition, la déduction s’applique à condition qu’ils n’aient pas été utilisés ou occupés à quelque titre que ce soit depuis l’achèvement de ces travaux."
+   },
+   {
+    "pastille": "7",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "« Dans tous les cas, le bénéfice de la déduction est subordonné à la double condition que le logement, à l’issue des travaux, ne soit pas équipé, à titre individuel ou collectif, d’une chaudière susceptible d’utiliser des combustibles fossiles et présente un niveau de performance énergétique et environnementale correspondant au moins à la classe D au sens de l’article L. 173‑1‑1 du code de la construction et de l’habitation ou, lorsqu’il est situé en Guadeloupe, en Guyane, à la Martinique, à Mayotte ou à La Réunion, réponde aux critères de performance énergétique et environnementale mentionnés au 4 du I de l’article 244 quater X. » ;"
+   },
+   {
+    "pastille": "8",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "3° 3° Au deuxième alinéa du j, qui devient le cinquième, les mots : « de le louer » sont remplacés par les mots : « de louer le logement nu à titre de résidence principale » ;"
+   },
+   {
+    "pastille": "9",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "4° 4° Au sixième alinéa du j, qui devient le neuvième, le mot : « troisième » est remplacé par le mot : « sixième » ;"
+   },
+   {
+    "pastille": "10",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "5° 5° Au neuvième alinéa du j, qui devient le douzième, les mots : « deuxième alinéa » sont remplacés par les mots : « cinquième alinéa » ;"
+   },
+   {
+    "pastille": "11",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "6° 6° Au dernier alinéa du j, après les mots : « s’applique », sont insérés les mots : « , dans sa rédaction en vigueur à la date d’acquisition, » ;"
+   },
+   {
+    "pastille": "12",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "7° 7° Au sixième alinéa du l, les mots : « aux j et k » sont remplacés par les mots : « au j, dans sa rédaction antérieure à l’article 110 de la loi n° 2023‑1322 du 29 décembre 2023 de finances pour 2024, et au k » ;"
+   },
+   {
+    "pastille": "13",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "8° 8° Au cinquième alinéa du m, après les mots : « du j », sont insérés les mots : « , dans sa rédaction antérieure à l’article 110 de la loi n° 2023‑1322 du 29 décembre 2023 de finances pour 2024 »."
+   },
+   {
+    "pastille": "14",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "II. – II. – Le I s’applique à compter du lendemain de la publication de la présente loi."
+   }
+  ],
+  "pjl25-835": [
+   {
+    "pastille": "1",
+    "amdts": null,
+    "mention": null,
+    "conteneur": true,
+    "texte": "I. – I. – Le 1° du I de l’article 31 du code général des impôts est ainsi modifié :"
+   },
+   {
+    "pastille": "2",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "1° 1° À la dernière phrase du troisième alinéa du g, après les mots : « du j », sont insérés les mots : « , dans sa rédaction antérieure à l’article 110 de la loi n° 2023‑1322 du 29 décembre 2023 de finances pour 2024, » ;"
+   },
+   {
+    "pastille": "3",
+    "amdts": null,
+    "mention": null,
+    "conteneur": true,
+    "texte": "2° 2° Le j est ainsi modifié :"
+   },
+   {
+    "pastille": "4",
+    "amdts": null,
+    "mention": null,
+    "conteneur": true,
+    "texte": "a) a) Le premier alinéa est remplacé par quatre alinéas ainsi rédigés :"
+   },
+   {
+    "pastille": "5",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "« j) Pour les logements situés en France que le contribuable acquiert, qui font ou ont fait l’objet de travaux concourant à la production ou à la livraison d’un immeuble neuf, au sens du 2° du 2 du I de l’article 257 du présent code, ou pour lesquels les travaux d’amélioration, définis en application du 5° du B du I de l’article 199 novovicies, représentent au moins 20 % du prix d’acquisition net de frais, à la demande du contribuable, une déduction au titre de l’amortissement du prix d’acquisition du logement net de frais, majoré, le cas échéant, du montant des travaux."
+   },
+   {
+    "pastille": "6",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "« La déduction prévue au premier alinéa du présent j est applicable aux locaux situés en France que le contribuable acquiert et qui font ou ont fait l’objet de travaux de transformation en logement, lorsque ces locaux étaient, avant les travaux, affectés à un usage autre que l’habitation et que le montant de ces travaux représente au moins 20 % du prix d’acquisition net de frais. Ont le caractère de travaux de transformation, au sens du présent alinéa, les travaux permettant l’aménagement de locaux d’habitation dans des locaux affectés auparavant à un autre usage, ainsi que les travaux d’amélioration réalisés à l’occasion de cet aménagement, définis en application du 5° du B du I de l’article 199 novovicies."
+   },
+   {
+    "pastille": "7",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "« Lorsque les travaux d’amélioration ou de transformation ont été effectués avant l’acquisition du logement ou du local ou lorsque le bien est acquis dans le cadre d’un contrat de vente d’immeuble à rénover défini aux articles L. 262‑1 à L. 262‑11 du code de la construction et de l’habitation, le prix d’acquisition servant de base au calcul des seuils de 20 % prévus aux premier et deuxième alinéas du présent j est minoré du montant des travaux. Pour les logements ou locaux qui ont fait l’objet de travaux avant leur acquisition, la déduction s’applique à condition qu’ils n’aient pas été utilisés ou occupés à quelque titre que ce soit depuis l’achèvement de ces travaux."
+   },
+   {
+    "pastille": "8",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "« Dans tous les cas, le bénéfice de la déduction est subordonné à la double condition que le logement, à l’issue des travaux, ne soit pas équipé, à titre individuel ou collectif, d’une chaudière susceptible d’utiliser des combustibles fossiles et présente un niveau de performance énergétique et environnementale correspondant au moins à la classe D au sens de l’article L. 173‑1‑1 du code de la construction et de l’habitation ou, lorsqu’il est situé en Guadeloupe, en Guyane, à la Martinique, à Mayotte ou à La Réunion, réponde aux critères de performance énergétique et environnementale mentionnés au 4 du I de l’article 244 quater X du présent code. » ;"
+   },
+   {
+    "pastille": "9",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "b) b) À la première phrase du deuxième alinéa, les mots : « de le louer » sont remplacés par les mots : « de louer le logement nu à titre de résidence principale » ;"
+   },
+   {
+    "pastille": "10",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "c) c) Au sixième alinéa, le mot : « troisième » est remplacé par le mot : « sixième » ;"
+   },
+   {
+    "pastille": "11",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "d) d) À la première phrase du neuvième alinéa, le mot : « deuxième » est remplacé par le mot : « cinquième » ;"
+   },
+   {
+    "pastille": "12",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "e) e) Au dernier alinéa, après les mots : « s’applique », sont insérés les mots : « , dans sa rédaction en vigueur à la date d’acquisition, » ;"
+   },
+   {
+    "pastille": "13",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "3° 3° À la fin du dernier alinéa du l, les mots : « aux j et k » sont remplacés par les mots : « au j, dans sa rédaction antérieure à l’article 110 de la loi n° 2023‑1322 du 29 décembre 2023 de finances pour 2024, et au k » ;"
+   },
+   {
+    "pastille": "14",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "4° 4° La deuxième phrase du cinquième alinéa du m est complétée par les mots : « , dans sa rédaction antérieure à l’article 110 de la loi n° 2023‑1322 du 29 décembre 2023 de finances pour 2024 »."
+   },
+   {
+    "pastille": "15",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "II. – II. – Le I s’applique à compter du lendemain de la publication de la présente loi."
+   }
+  ],
+  "tas25-157": [
+   {
+    "pastille": "1",
+    "amdts": null,
+    "mention": null,
+    "conteneur": true,
+    "texte": "I. – I. – Le 1° du I de l’article 31 du code général des impôts est ainsi modifié :"
+   },
+   {
+    "pastille": "2",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "1° 1° À la dernière phrase du troisième alinéa du g, après les mots : « du j », sont insérés les mots : « , dans sa rédaction antérieure à l’article 110 de la loi n° 2023‑1322 du 29 décembre 2023 de finances pour 2024, » ;"
+   },
+   {
+    "pastille": "3",
+    "amdts": "n° 209 rect. ter, n° 409 rect. bis",
+    "mention": "(nouveau)",
+    "conteneur": true,
+    "texte": "1° bis 1° bis (nouveau) Le i est ainsi modifié :"
+   },
+   {
+    "pastille": "4",
+    "amdts": "n° 209 rect. ter, n° 409 rect. bis",
+    "mention": null,
+    "conteneur": false,
+    "texte": "a) a) À la fin de la seconde phrase du neuvième alinéa, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ;"
+   },
+   {
+    "pastille": "5",
+    "amdts": "n° 209 rect. ter, n° 409 rect. bis",
+    "mention": null,
+    "conteneur": false,
+    "texte": "b) b) À la seconde phrase du dixième alinéa, les mots : « , un parent ou un allié jusqu’au deuxième degré inclus » sont supprimés ;"
+   },
+   {
+    "pastille": "6",
+    "amdts": "n° 14 rect. quater",
+    "mention": null,
+    "conteneur": true,
+    "texte": "c) c) Après le douzième alinéa, sont insérés trois alinéas ainsi rédigés :"
+   },
+   {
+    "pastille": "7",
+    "amdts": "n° 14 rect. quater",
+    "mention": null,
+    "conteneur": false,
+    "texte": "« Lorsque la société mentionnée au dixième alinéa du présent i est une société civile de placement immobilier, au sens de l’article L. 214‑114 du code monétaire et financier, l’amortissement est déterminé au niveau de la société, immeuble par immeuble, pour les seuls immeubles qui remplissent les conditions prévues au présent i. La quote‑part d’amortissement ainsi déterminée est répartie entre les associés à proportion des droits qu’ils détiennent dans la société, sans qu’il y ait lieu d’établir un lien entre les sommes versées par chaque associé lors de la souscription de ses parts et les immeubles détenus ou acquis par la société."
+   },
+   {
+    "pastille": "8",
+    "amdts": "n° 14 rect. quater",
+    "mention": null,
+    "conteneur": false,
+    "texte": "« Pour l’application du présent i aux sociétés civiles de placement immobilier mentionnées à l’article L. 214‑114 du code monétaire et financier, le bénéfice de cette quote‑part d’amortissement est subordonné à l’engagement de l’associé de conserver les parts ouvrant droit à la déduction pendant une durée de neuf ans à compter de leur souscription. Cet engagement est apprécié individuellement au niveau de chaque associé. En cas de rupture de cet engagement, la remise en cause de l’avantage fiscal est limitée au seul associé concerné."
+   },
+   {
+    "pastille": "9",
+    "amdts": "n° 14 rect. quater",
+    "mention": null,
+    "conteneur": false,
+    "texte": "« Par dérogation au dixième alinéa du présent i, la circonstance qu’un logement détenu par une société civile de placement immobilier mentionnée à l’article L. 214‑114 du code monétaire et financier soit loué à un associé ou à un membre de son foyer fiscal n’a pas pour effet de remettre en cause le bénéfice de la déduction au titre de l’amortissement pour l’associé qui n’est pas un membre fondateur de ladite société et qui détient directement ou indirectement, avec les membres de son foyer fiscal, moins de 5 % de son capital. » ;"
+   },
+   {
+    "pastille": "10",
+    "amdts": null,
+    "mention": null,
+    "conteneur": true,
+    "texte": "2° 2° Le j est ainsi modifié :"
+   },
+   {
+    "pastille": "11",
+    "amdts": null,
+    "mention": null,
+    "conteneur": true,
+    "texte": "a) a) Le premier alinéa est remplacé par trois alinéas ainsi rédigés :"
+   },
+   {
+    "pastille": "12",
+    "amdts": "n° 210 rect. ter, n° 3 rect. ter",
+    "mention": null,
+    "conteneur": false,
+    "texte": "« j) Pour les logements situés en France que le contribuable acquiert, qui font ou ont fait l’objet de travaux concourant à la production ou à la livraison d’un immeuble neuf, au sens du 2° du 2 du I de l’article 257 du présent code, ou pour lesquels les travaux d’amélioration, définis en application du 5° du B du I de l’article 199 novovicies, permettent au logement d’atteindre un niveau de performance énergétique et environnementale correspondant au moins à la classe D, au sens de l’article L. 173‑1‑1 du code de la construction et de l’habitation, ou, lorsque la classe initiale du logement est G, au moins à la classe E, ou, lorsqu’il est situé en Guadeloupe, en Guyane, à la Martinique, à Mayotte ou à La Réunion, de répondre aux critères de performance énergétique et environnementale mentionnés au 4 du I de l’article 244 quater X du présent code, à la demande du contribuable, une déduction au titre de l’amortissement du prix d’acquisition du logement net de frais, majoré, le cas échéant, du montant des travaux."
+   },
+   {
+    "pastille": "13",
+    "amdts": "n° 210 rect. ter, n° 3 rect. ter",
+    "mention": null,
+    "conteneur": false,
+    "texte": "« La déduction prévue au premier alinéa du présent j est applicable aux locaux situés en France que le contribuable acquiert et qui font ou ont fait l’objet de travaux de transformation en logement, lorsque ces locaux étaient, avant les travaux, affectés à un usage autre que l’habitation et que lesdits travaux de transformation permettent au logement d’atteindre un niveau de performance énergétique et environnementale correspondant au moins à la classe D, au sens de l’article L. 173‑1‑1 du code de la construction et de l’habitation, ou, lorsque la classe initiale du logement est G, au moins à la classe E, ou, lorsqu’il est situé en Guadeloupe, en Guyane, à la Martinique, à Mayotte ou à La Réunion, de répondre aux critères de performance énergétique et environnementale mentionnés au 4 du I de l’article 244 quater X du présent code. Ont le caractère de travaux de transformation, au sens du présent alinéa, les travaux permettant l’aménagement de locaux d’habitation dans des locaux affectés auparavant à un autre usage, ainsi que les travaux d’amélioration réalisés à l’occasion de cet aménagement, définis en application du 5° du B du I de l’article 199 novovicies."
+   },
+   {
+    "pastille": "14",
+    "amdts": "n° 210 rect. ter, n° 3 rect. ter",
+    "mention": null,
+    "conteneur": false,
+    "texte": "« Lorsque les travaux d’amélioration ou de transformation ont été effectués avant l’acquisition du logement ou du local ou lorsque le bien est acquis dans le cadre d’un contrat de vente d’immeuble à rénover défini aux articles L. 262‑1 à L. 262‑11 du code de la construction et de l’habitation, le prix d’acquisition est minoré du montant des travaux. Pour les logements ou locaux qui ont fait l’objet de travaux avant leur acquisition, la déduction s’applique à condition qu’ils n’aient pas été utilisés ou occupés à quelque titre que ce soit depuis l’achèvement de ces travaux. » ;"
+   },
+   {
+    "pastille": "15",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "b) b) À la première phrase du deuxième alinéa, les mots : « de le louer » sont remplacés par les mots : « de louer le logement nu à titre de résidence principale » ;"
+   },
+   {
+    "pastille": "16",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "c) c) Au sixième alinéa, le mot : « troisième » est remplacé par le mot : « sixième » ;"
+   },
+   {
+    "pastille": "17",
+    "amdts": "n° 209 rect. ter, n° 409 rect. bis",
+    "mention": "(nouveau)",
+    "conteneur": false,
+    "texte": "c bis) c bis) (nouveau) À la fin de la seconde phrase du huitième alinéa, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ;"
+   },
+   {
+    "pastille": "18",
+    "amdts": "n° 209 rect. ter, n° 409 rect. bis",
+    "mention": null,
+    "conteneur": true,
+    "texte": "d) d) Le neuvième alinéa est ainsi modifié :"
+   },
+   {
+    "pastille": "19",
+    "amdts": "n° 14 rect. quater",
+    "mention": null,
+    "conteneur": false,
+    "texte": "– à la première phrase, le mot : « deuxième » est remplacé par le mot : « cinquième » ;"
+   },
+   {
+    "pastille": "20",
+    "amdts": "n° 14 rect. quater, n° 210 rect. ter, n° 3 rect. ter",
+    "mention": null,
+    "conteneur": false,
+    "texte": "– à la seconde phrase, les mots : « , un parent ou un allié jusqu’au deuxième degré inclus » sont supprimés ;"
+   },
+   {
+    "pastille": "21",
+    "amdts": "n° 14 rect. quater",
+    "mention": "(nouveau)",
+    "conteneur": true,
+    "texte": "d bis) d bis) (nouveau) Après le onzième alinéa, sont insérés trois alinéas ainsi rédigés :"
+   },
+   {
+    "pastille": "22",
+    "amdts": "n° 14 rect. quater",
+    "mention": null,
+    "conteneur": false,
+    "texte": "« Lorsque la société mentionnée au douzième alinéa du présent j est une société civile de placement immobilier, au sens de l’article L. 214‑114 du code monétaire et financier, l’amortissement est déterminé au niveau de la société, immeuble par immeuble, pour les seuls immeubles qui remplissent les conditions prévues au présent j. La quote‑part d’amortissement ainsi déterminée est répartie entre les associés à proportion des droits qu’ils détiennent dans la société, sans qu’il y ait lieu d’établir un lien entre les sommes versées par chaque associé lors de la souscription de ses parts et les immeubles détenus ou acquis par la société."
+   },
+   {
+    "pastille": "23",
+    "amdts": "n° 14 rect. quater",
+    "mention": null,
+    "conteneur": false,
+    "texte": "« Pour l’application du présent j aux sociétés civiles de placement immobilier mentionnées à l’article L. 214‑114 du code monétaire et financier, le bénéfice de cette quote‑part d’amortissement est subordonné à l’engagement de l’associé de conserver les parts ouvrant droit à la déduction pendant une durée de neuf ans à compter de leur souscription. Cet engagement est apprécié individuellement au niveau de chaque associé. En cas de rupture de cet engagement, la remise en cause de l’avantage fiscal est limitée au seul associé concerné."
+   },
+   {
+    "pastille": "24",
+    "amdts": "n° 14 rect. quater",
+    "mention": null,
+    "conteneur": false,
+    "texte": "« Par dérogation au douzième alinéa du présent j, la circonstance qu’un logement détenu par une société civile de placement immobilier mentionnée à l’article L. 214‑114 du code monétaire et financier soit loué à un associé ou à un membre de son foyer fiscal n’a pas pour effet de remettre en cause le bénéfice de la déduction au titre de l’amortissement pour l’associé qui n’est pas un membre fondateur de ladite société et qui détient directement ou indirectement, avec les membres de son foyer fiscal, moins de 5 % de son capital. » ;"
+   },
+   {
+    "pastille": "25",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "e) e) Au dernier alinéa, après les mots : « s’applique », sont insérés les mots : « , dans sa rédaction en vigueur à la date d’acquisition, » ;"
+   },
+   {
+    "pastille": "26",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "3° 3° À la fin du dernier alinéa du l, les mots : « aux j et k » sont remplacés par les mots : « au j, dans sa rédaction antérieure à l’article 110 de la loi n° 2023‑1322 du 29 décembre 2023 de finances pour 2024, et au k » ;"
+   },
+   {
+    "pastille": "27",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "4° 4° La deuxième phrase du cinquième alinéa du m est complétée par les mots : « , dans sa rédaction antérieure à l’article 110 de la loi n° 2023‑1322 du 29 décembre 2023 de finances pour 2024 »."
+   },
+   {
+    "pastille": "28",
+    "amdts": null,
+    "mention": null,
+    "conteneur": false,
+    "texte": "II. – II. – Le I du présent article s’applique à compter du lendemain de la publication de la présente loi."
+   },
+   {
+    "pastille": "29",
+    "amdts": "n° 209 rect. ter, n° 409 rect. bis",
+    "mention": "(nouveau)",
+    "conteneur": false,
+    "texte": "III. – III (nouveau). – La perte de recettes résultant pour l’État de l’inclusion des locations consenties aux parents ou alliés, jusqu’au deuxième degré, dans le dispositif « Relance logement » est compensée, à due concurrence, par la création d’une taxe additionnelle à l’accise sur les tabacs prévue au chapitre IV du titre Ier du livre III du code des impositions sur les biens et services."
+   },
+   {
+    "pastille": "30",
+    "amdts": "n° 210 rect. ter, n° 3 rect. ter",
+    "mention": "(nouveau)",
+    "conteneur": false,
+    "texte": "IV. – IV(nouveau). – La perte de recettes résultant pour l’État de la suppression de la quotité de travaux nécessaires pour bénéficier du dispositif « Relance logement » au profit d’un critère unique de performance énergétique et de la condition obligeant le retrait des chaudières à combustibles fossiles est compensée, à due concurrence, par la création d’une taxe additionnelle à l’accise sur les tabacs prévue au chapitre IV du titre Ier du livre III du code des impositions sur les biens et services."
+   }
+  ]
+ },
+ "amendements": [
+  {
+   "num": "COM-82",
+   "texte": "801",
+   "alinea": null,
+   "groupe": "SB",
+   "sort": "Rejeté",
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": null,
+   "dispositif": "I. – Après le 8° du I de l'article 4, est ajouté un 9° ainsi rédigé : 9° Au premier alinéa du i, les mots : « dans un bâtiment d'habitation collectif au sens du 6° de l'article L. 111-1 du code de la construction et de l'habitation » sont supprimés. II. – La perte de recettes pour l'État est compensée à due concurrence par la création d'une taxe additionnelle à l'accise sur les tabacs prévue au chapitre IV du titre Ier du livre III du code des impositions sur les biens et services."
+  },
+  {
+   "num": "345",
+   "texte": "835",
+   "alinea": "7",
+   "groupe": "SE",
+   "sort": "Tombé",
+   "avis_commission": "Défavorable",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "Alinéa 7 Supprimer cet alinéa."
+  },
+  {
+   "num": "346",
+   "texte": "835",
+   "alinea": "12",
+   "groupe": "SE",
+   "sort": "Rejeté",
+   "avis_commission": "Défavorable",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "Alinéa 12 Compléter cet alinéa par les mots : et après le mot : « acquiert », sont insérés les mots : « dans la limite de deux logements par foyer fiscal et »"
+  },
+  {
+   "num": "367",
+   "texte": "835",
+   "alinea": null,
+   "groupe": "SB",
+   "sort": "Non soutenu",
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": null,
+   "dispositif": "Après l’alinéa 5 Insérer un alinéa ainsi rédigé : « Les logements situés sur des zones non desservies par un réseau de distribution publique de gaz naturel ou de chaleur urbaine, et ayant recours à une chaudière autonome alimentée par du bioGPL à l’issue des travaux sont éligibles au présent dispositif."
+  },
+  {
+   "num": "341",
+   "texte": "835",
+   "alinea": "5",
+   "groupe": "SE",
+   "sort": "Tombé",
+   "avis_commission": "Défavorable",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "Alinéas 5 à 7 Remplacer le pourcentage : 20 % par le pourcentage : 30 %"
+  },
+  {
+   "num": "342",
+   "texte": "835",
+   "alinea": "8",
+   "groupe": "SE",
+   "sort": "Tombé",
+   "avis_commission": "Demande de retrait",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "Alinéa 8 Remplacer la lettre : D Par la lettre : C"
+  },
+  {
+   "num": "343",
+   "texte": "835",
+   "alinea": "8",
+   "groupe": "SE",
+   "sort": "Tombé",
+   "avis_commission": "Défavorable",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "Alinéa 8 1° Remplacer le mot : double par le mot : triple 2° Après le mot : fossiles insérer les mots : , qu’il ait fait l’objet de travaux d’isolation thermique de nature à garantir le confort d’été,"
+  },
+  {
+   "num": "344",
+   "texte": "835",
+   "alinea": null,
+   "groupe": "SE",
+   "sort": "Rejeté",
+   "avis_commission": "Défavorable",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "Alinéa 9 Compléter cet alinéa par les mots : et le mot : « neuf » est remplacé par le mot : « douze »"
+  },
+  {
+   "num": "COM-26",
+   "texte": "801",
+   "alinea": null,
+   "groupe": "SB",
+   "sort": null,
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": "article 45, alinéa 1, de la Constitution (cavalier)",
+   "dispositif": "Après l'article 4 Insérer un article additionnel ainsi rédigé : Après le III bis de l'article L. 321-1 du code de la construction et de l'habitation, il est inséré un nouveau paragraphe ainsi rédigé : «...– Le maire peut saisir l'Agence nationale de l'habitat de toute situation de vacance durable d'un logement ou d'un immeuble situé sur le territoire de sa commune. L'agence instruit cette saisine dans le cadre de ses missions définies au présent article et informe le maire des suites qui lui sont réservées dans un délai de trois mois. »"
+  },
+  {
+   "num": "70",
+   "texte": "835",
+   "alinea": "-20",
+   "groupe": "SD",
+   "sort": "Rejeté",
+   "avis_commission": "Défavorable",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "Supprimer cet article."
+  },
+  {
+   "num": "COM-81",
+   "texte": "801",
+   "alinea": "8",
+   "groupe": "SB",
+   "sort": "Rejeté",
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": null,
+   "dispositif": "Alinéa 8 I. – Après le 8° du I de l'article 4, est ajouté un 9° ainsi rédigé : 9° Au premier alinéa du i, les mots : « dans un bâtiment d'habitation collectif au sens du 6° de l'article L. 111-1 du code de la construction et de l'habitation » sont supprimés. II. – La perte de recettes pour l'État est compensée à due concurrence par la création d'une taxe additionnelle à l'accise sur les tabacs prévue au chapitre IV du titre Ier du livre III du code des impositions sur les biens et services."
+  },
+  {
+   "num": "COM-79",
+   "texte": "801",
+   "alinea": "3",
+   "groupe": "SB",
+   "sort": "Rejeté",
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": null,
+   "dispositif": "Alinéa 3 I. – Au 2° du I de l’article 4, les quatre premiers alinéas, qui remplacent le premier alinéa du j , sont supprimés et remplacés par les deux alinéas suivants : « Pour les logements, ou locaux transformés en logements, donnés en location à titre de résidence principale en France et ayant fait l’objet de travaux qui ont permis une amélioration de leur niveau de performance énergétique, au sens de l’article L. 173‑1‑1 du code de la construction et de l’habitation, d’au moins deux classes si leur classe initiale était F ou G ou d’une classe sinon, à la demande du contribuable, une déduction au titre de l'amortissement du prix d'acquisition du logement net de frais, majoré le cas échéant du montant des travaux. Pour les logements, ou locaux transformés en logements, qui ont fait l'obj"
+  },
+  {
+   "num": "276",
+   "texte": "835",
+   "alinea": null,
+   "groupe": "SD",
+   "sort": null,
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": "article 45, alinéa 1, de la Constitution (cavalier)",
+   "dispositif": "Après l’article 4 Insérer un article additionnel ainsi rédigé : Après l’avant‑dernière phrase du premier alinéa du I de l’article 15 de la loi n° 89‑462 du 6 juillet 1989 tendant à améliorer les rapports locatifs et portant modification de la loi n° 86‑1290 du 23 décembre 1986, est insérée une phrase ainsi rédigée : « Il ne peut louer le logement en tant que meublés de tourisme au sens de l’article L. 324‑1‑1 du code du tourisme avant l’expiration d’un délai d’un an à compter de la date de la reprise. »"
+  },
+  {
+   "num": "95",
+   "texte": "835",
+   "alinea": "3",
+   "groupe": "SF",
+   "sort": "Non soutenu",
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 2 Insérer quatre alinéas ainsi rédigés : ...° Le i est ainsi modifié : a) Au premier alinéa, les mots : « dans un bâtiment d’habitation collectif au sens du 6° de l’article L. 111‑1 du code de la construction et de l’habitation » sont supprimés ; b) À la seconde phrase du neuvième alinéa, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ; c) À la seconde phrase du dixième alinéa, les mots : « , un parent ou un allié jusqu’au deuxième degré inclus d’un associé » sont supprimés ; II. – Alinéas 5 à 8 Remplacer ces alinéas par deux alinéas ainsi rédigés : « j) Pour les logements, ou locaux transformés en logements, donnés en location à titre de résidence principale en France et ayant fait l’objet de travaux qui ont permis une amélioratio"
+  },
+  {
+   "num": "96",
+   "texte": "835",
+   "alinea": "3",
+   "groupe": "SF",
+   "sort": "Non soutenu",
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 2 Insérer quatre alinéas ainsi rédigés : ...° Le i est ainsi modifié : a) Au premier alinéa, les mots : « dans un bâtiment d’habitation collectif au sens du 6° de l’article L. 111‑1 du code de la construction et de l’habitation » sont supprimés ; b) À la seconde phrase du neuvième alinéa, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ; c) À la seconde phrase du dixième alinéa, les mots : « , un parent ou un allié jusqu’au deuxième degré inclus d’un associé » sont supprimés ; II. – Alinéas 5 à 8 Remplacer ces alinéas par deux alinéas ainsi rédigés : « j) Pour les logements, ou locaux transformés en logements, donnés en location à titre de résidence principale en France et ayant fait l’objet de travaux qui ont permis une amélioratio"
+  },
+  {
+   "num": "94",
+   "texte": "835",
+   "alinea": "3",
+   "groupe": "SF",
+   "sort": "Non soutenu",
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 2 Insérer un alinéa ainsi rédigé : ...° Au premier alinéa du i, les mots : « dans un bâtiment d’habitation collectif au sens du 6° de l’article L. 111‑1 du code de la construction et de l’habitation » sont supprimés ; II. – Alinéas 5 à 8 Remplacer ces alinéas par deux alinéas ainsi rédigés : « j) Pour les logements, ou locaux transformés en logements, donnés en location à titre de résidence principale en France et ayant fait l’objet de travaux qui ont permis une amélioration de leur niveau de performance énergétique, au sens de l’article L. 173‑1‑1 du code de la construction et de l’habitation, d’au moins deux classes si leur classe initiale était F ou G ou d’une classe sinon, à la demande du contribuable, une déduction au titre de l’amortissement du prix d’acquisition "
+  },
+  {
+   "num": "98",
+   "texte": "835",
+   "alinea": null,
+   "groupe": "SC",
+   "sort": "Non soutenu",
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 2 Insérer quatre alinéas ainsi rédigés : ...° Le i est ainsi modifié : a) Au premier alinéa, les mots : « dans un bâtiment d’habitation collectif au sens du 6° de l’article L. 111‑1 du code de la construction et de l’habitation » sont supprimés ; b) À la seconde phrase du neuvième alinéa, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ; c) À la seconde phrase du dixième alinéa, les mots : « , un parent ou un allié jusqu’au deuxième degré inclus d’un associé » sont supprimés ; II. – Alinéas 5 à 8 Remplacer ces alinéas par deux alinéas ainsi rédigés : « j) Pour les logements, ou locaux transformés en logements, donnés en location à titre de résidence principale en France et ayant fait l’objet de travaux qui ont permis une amélioratio"
+  },
+  {
+   "num": "COM-56",
+   "texte": "801",
+   "alinea": "14",
+   "groupe": "SG",
+   "sort": "Rejeté",
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": null,
+   "dispositif": "I.- Au II, remplacer les mots « du lendemain » Par les mots « du 1 er janvier de l’année » II. – La perte de recettes pour l’État est compensée, à due concurrence, par la création d’une taxe additionnelle à l’accise sur les tabacs prévue au chapitre IV du titre Ier du livre III du code des impositions sur les biens et services."
+  },
+  {
+   "num": "124",
+   "texte": "835",
+   "alinea": null,
+   "groupe": "SD",
+   "sort": "Rejeté",
+   "avis_commission": "Défavorable",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "Après l’article 4 Insérer un article additionnel ainsi rédigé : I. – Le code général des impôts est ainsi modifié : 1° Au 19° decies du II de la section V du chapitre premier du titre premier de la première partie du livre premier, les mots : « Réduction d’impôt accordée » sont remplacés par les mots : « Réductions et Crédit d’impôt accordés » ; 2° Le h) du 2 de l’article 32 est abrogé ; 3° Au troisième alinéa du 3° du I de l’article 156, les mots : « l’une des déductions prévues aux f ou o du 1° du I de l’article 31 » sont remplacés par les mots : « la déduction prévue au f du 1° du I de l’article 31 ou l’un des crédits prévus aux a, b ou c du IV de l’article 199 tricies » ; 4° L’article 199 tricies est ainsi rédigé : a) Au 1° du A du I, les mots : « entre le 1 er mars 2022 et le 31 décem"
+  },
+  {
+   "num": "390",
+   "texte": "835",
+   "alinea": null,
+   "groupe": "SH",
+   "sort": null,
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": "article 45, alinéa 1, de la Constitution (cavalier)",
+   "dispositif": "Après l’article 4 Insérer un article additionnel ainsi rédigé : Après l’avant‑dernière phrase du premier alinéa du I de l’article 15 de la loi n° 89‑462 du 6 juillet 1989 tendant à améliorer les rapports locatifs et portant modification de la loi n° 86‑1290 du 23 décembre 1986, est insérée une phrase ainsi rédigée : « Il ne peut louer le logement en tant que meublés de tourisme au sens de l’article L. 324‑1‑1 du code du tourisme avant l’expiration d’un délai d’un an à compter de la date de la reprise. »"
+  },
+  {
+   "num": "397",
+   "texte": "835",
+   "alinea": null,
+   "groupe": "SH",
+   "sort": null,
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": "article 45, alinéa 1, de la Constitution (cavalier)",
+   "dispositif": "Après l’article 4 Insérer un article additionnel ainsi rédigé : Le 1 de l’article 50‑0 du code général des impôts est ainsi modifié : 1° Le 1° bis est ainsi rédigé : « 1° bis 15 000 € s’il s’agit de la location directe ou indirecte d’un meublé de tourisme au sens de l’article L. 324‑1‑1 du code du tourisme lorsque le bien donné à la location constitue la résidence principale du contribuable » ; 2° Le b du 2 est ainsi rétabli : « b. Les revenus tirés, directement ou indirectement, d’une activité de la location de meublés de tourisme, au sens du I de l’article L. 324‑1‑1 du code du tourisme, autres que ceux mentionnés au 2° du I de l’article 1414 bis, sauf dans le cas prévu au 1° bis »."
+  },
+  {
+   "num": "1",
+   "texte": "835",
+   "alinea": "2",
+   "groupe": "SC",
+   "sort": "Non soutenu",
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 2 Insérer quatre alinéas ainsi rédigés : ...° Le i est ainsi modifié : a) Au premier alinéa, les mots : « dans un bâtiment d’habitation collectif au sens du 6° de l’article L. 111‑1 du code de la construction et de l’habitation » sont supprimés ; b) À la seconde phrase du neuvième alinéa du i, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ; c) À la seconde phrase du dixième alinéa, les mots : « un parent ou un allié jusqu’au deuxième degré inclus d’un associé » sont supprimés ; II. – Alinéas 5 à 8 Remplacer ces alinéas par deux alinéas ainsi rédigés : « j) Pour les logements, ou locaux transformés en logements, donnés en location à titre de résidence principale en France et ayant fait l’objet de travaux qui ont permis une améliora"
+  },
+  {
+   "num": "106",
+   "texte": "835",
+   "alinea": "5",
+   "groupe": "groupe Alliance des départements",
+   "sort": "Retiré",
+   "avis_commission": "Demande de retrait",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "Après l’alinéa 5 Insérer un alinéa ainsi rédigé : « Les logements situés sur des zones non desservies par un réseau de distribution publique de gaz naturel ou de chaleur urbaine, et ayant recours à une chaudière autonome alimentée par du bioGPL à l’issue des travaux sont éligibles au présent dispositif.»"
+  },
+  {
+   "num": "210",
+   "texte": "835",
+   "alinea": "5",
+   "groupe": "SC",
+   "sort": "Adopté",
+   "avis_commission": "Favorable",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Alinéa 5 Remplacer les mots : représentent au moins 20 % du prix d’acquisition net de frais par les mots : permettent au logement d’atteindre un niveau de performance énergétique et environnementale correspondant au moins à la classe D au sens de l’article L. 173‑1‑1 du code de la construction et de l’habitation, ou, lorsque la classe initiale du logement est G, au moins la classe E, ou, lorsqu’il est situé en Guadeloupe, en Guyane, à la Martinique, à Mayotte ou à La Réunion, de répondre aux critères de performance énergétique et environnementale mentionnés au 4 du I de l’article 244 quater X du présent code II. – Alinéa 6 Remplacer les mots : le montant de ces travaux représente au moins 20 % du prix d’acquisition net de frais par les mots : lesdits travaux de transformation permette"
+  },
+  {
+   "num": "108",
+   "texte": "835",
+   "alinea": null,
+   "groupe": "SB",
+   "sort": "Retiré",
+   "avis_commission": "Demande de retrait",
+   "avis_gouvernement": "Demande de retrait",
+   "irrecevabilite": null,
+   "dispositif": "Après l’article 4 Insérer un article additionnel ainsi rédigé : Après l’article 14 du code général des impôts, il est inséré un article 14... ainsi rédigé « Art. 14.... – Il est institué une catégorie fiscale unique applicable aux revenus tirés de la location de logements destinés à constituer la résidence principale du locataire, quelle que soit la nature de la location. « Cette catégorie fiscale est exclusive des revenus tirés des meublés de tourisme et des activités de location à caractère hôtelier ou para‑hôtelier. « Les modalités de recouvrement et de l’assiette taxable sont déterminés par décret. »"
+  },
+  {
+   "num": "130",
+   "texte": "835",
+   "alinea": "8",
+   "groupe": "SB",
+   "sort": "Tombé",
+   "avis_commission": "Demande de retrait",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "Alinéa 8 Rédiger ainsi cet alinéa « Dans tous les cas, le bénéfice de la déduction est subordonné à la double condition que le logement, à l’issue des travaux, ne soit pas équipé, à titre individuel ou collectif, d’une chaudière susceptible d’utiliser des combustibles fossiles et présente un niveau de performance énergétique et environnementale correspondant au moins à la classe D au sens de l’article L. 173‑1‑1 du code de la construction et de l’habitation. Toutefois, l’installation d’une chaudière intégrée à un système comprenant une ou plusieurs pompes à chaleur électriques couvrant au total plus de 70 % des besoins de chauffage du logement ne fait pas obstacle au bénéfice de la déduction. La déduction s’applique également au profit des logement qui, situé en Guadeloupe, en Guyane, à la"
+  },
+  {
+   "num": "31",
+   "texte": "835",
+   "alinea": "15",
+   "groupe": "SG",
+   "sort": "Rejeté",
+   "avis_commission": "Défavorable",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I.‑ Alinéa 15 Remplacer les mots : du lendemain par les mots : du 1 er janvier de l’année II. – Pour compenser la perte de recettes résultant du I, compléter cet article par un paragraphe ainsi rédigé : ... – La perte de recettes résultant pour l’État du présent article est compensée, à due concurrence, par la création d’une taxe additionnelle à l’accise sur les tabacs prévue au chapitre IV du titre I er du livre III du code des impositions sur les biens et services."
+  },
+  {
+   "num": "COM-16",
+   "texte": "801",
+   "alinea": null,
+   "groupe": "groupe Alliance des départements",
+   "sort": null,
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": "article 45, alinéa 1, de la Constitution (cavalier)",
+   "dispositif": "Après l'article 4 Insérer un article additionnel ainsi rédigé : I. – Après le 2° de l’article 1459 du code général des impôts, il est inséré un alinéa ainsi rédigé : « ...° Les bailleurs qui louent leur bien meublé dans le cadre d’un bail commercial à un exploitant de résidences para-hôtelières ; ». II. - La perte de recettes résultant pour les collectivités territoriales du I est compensée, à due concurrence, par une majoration de la dotation globale de fonctionnement. III. – La perte de recettes résultant pour l’État du I est compensée, à due concurrence, par la création d’une taxe additionnelle à l’accise sur les tabacs prévue au chapitre IV du titre I er du livre III du code des impositions sur les biens et services."
+  },
+  {
+   "num": "19",
+   "texte": "835",
+   "alinea": "2",
+   "groupe": "SG",
+   "sort": "Tombé",
+   "avis_commission": "Demande de retrait",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 2 Insérer quatre alinéas ainsi rédigés : ...° Le i est ainsi modifié : a) Au premier alinéa, les mots : « dans un bâtiment d’habitation collectif au sens du 6° de l’article L. 111‑1 du code de la construction et de l’habitation » sont supprimés ; b) À la seconde phrase du neuvième alinéa, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ; c) À la seconde phrase du dixième alinéa, les mots : « , un parent ou un allié jusqu’au deuxième degré inclus d’un associé » sont supprimés ; II. – Alinéas 5 à 8 Remplacer ces alinéas par deux alinéas ainsi rédigés : « j) Pour les logements, ou locaux transformés en logements, donnés en location à titre de résidence principale en France et ayant fait l’objet de travaux qui ont permis une amélioratio"
+  },
+  {
+   "num": "105",
+   "texte": "835",
+   "alinea": "8",
+   "groupe": "groupe Alliance des départements",
+   "sort": "Tombé",
+   "avis_commission": "Demande de retrait",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "Alinéa 8 Remplacer les mots : susceptible d’utiliser des combustibles fossiles par les mots : autonome utilisant exclusivement des combustibles fossiles"
+  },
+  {
+   "num": "253",
+   "texte": "835",
+   "alinea": null,
+   "groupe": "SB",
+   "sort": "Rejeté",
+   "avis_commission": "Défavorable",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 6 Insérer un alinéa ainsi rédigé : « Par dérogation aux deux premiers alinéas du présent j, pour les logements situés dans les départements de Guadeloupe, de la Martinique, de Guyane, de La Réunion et de Mayotte, la condition relative à l’amélioration du niveau de performance énergétique est réputée satisfaite lorsque les travaux permettent une amélioration d’au moins une classe, quelle que soit la classe initiale du logement ou du local. » II. – Pour compenser la perte de recettes résultant du I, compléter cet article par un paragraphe ainsi rédigé : ... – La perte de recettes résultant pour l’État du présent article est compensée, à due concurrence, par la création d’une taxe additionnelle à l’accise sur les tabacs prévue au chapitre IV du titre I er du livre III du c"
+  },
+  {
+   "num": "320",
+   "texte": "835",
+   "alinea": null,
+   "groupe": "SH",
+   "sort": "Rejeté",
+   "avis_commission": "Défavorable",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 9 Insérer deux alinéas ainsi rédigés : ...) Au quatrième alinéa, est ajoutée une phrase ainsi rédigée : « Uniquement pour la location sociale et la location très sociale au sens du IV de l’article 199 tricies, le taux est encore majoré de 0,5 point lorsque le logement est donné en mandat de gestion ou en location à un organisme public ou privé agréé en application de l’article L. 365‑4 du code de la construction et de l’habitation. » ; II. – Après l’alinéa 10 Insérer deux alinéas ainsi rédigés : ...) Au septième alinéa, est ajoutée une phrase ainsi rédigée : « Uniquement pour la location sociale ou la location très sociale au sens du IV de l’article 199 tricies, ce montant est encore majoré de 1 000 € lorsque le logement est donné en mandat de gestion ou en location à u"
+  },
+  {
+   "num": "391",
+   "texte": "835",
+   "alinea": null,
+   "groupe": "SH",
+   "sort": null,
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": "article 45, alinéa 1, de la Constitution (cavalier)",
+   "dispositif": "Après l’article 4 Insérer un article additionnel ainsi rédigé : Au premier alinéa de l’article L. 651‑2 du code de la construction et de l’habitation, le montant : « 100 000 € » est remplacé par le montant : « 150 000 € »."
+  },
+  {
+   "num": "20",
+   "texte": "835",
+   "alinea": "2",
+   "groupe": "SG",
+   "sort": "Tombé",
+   "avis_commission": "Demande de retrait",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 2 Insérer un alinéa ainsi rédigé : ...° Au premier alinéa du i, les mots : « dans un bâtiment d’habitation collectif au sens du 6° de l’article L. 111‑1 du code de la construction et de l’habitation » sont supprimés ; II. – Alinéas 5 à 8 Remplacer ces alinéas par deux alinéas ainsi rédigés : « j) Pour les logements, ou locaux transformés en logements, donnés en location à titre de résidence principale en France et ayant fait l’objet de travaux qui ont permis une amélioration de leur niveau de performance énergétique, au sens de l’article L. 173‑1‑1 du code de la construction et de l’habitation, d’au moins deux classes si leur classe initiale était F ou G ou d’une classe sinon, à la demande du contribuable, une déduction au titre de l’amortissement du prix d’acquisition "
+  },
+  {
+   "num": "4",
+   "texte": "835",
+   "alinea": "2",
+   "groupe": "SB",
+   "sort": "Rejeté",
+   "avis_commission": "Défavorable",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 2 Insérer un alinéa ainsi rédigé : ...° Au premier alinéa du i, les mots : « dans un bâtiment d’habitation collectif au sens du 6° de l’article L. 111‑1 du code de la construction et de l’habitation » sont supprimés ; II. – Pour compenser la perte de recettes résultant du I, compléter cet article par un paragraphe ainsi rédigé : ... – La perte de recettes résultant pour l’État du présent article est compensée, à due concurrence, par la création d’une taxe additionnelle à l’accise sur les tabacs prévue au chapitre IV du titre I er du livre III du code des impositions sur les biens et services."
+  },
+  {
+   "num": "129",
+   "texte": "835",
+   "alinea": "2",
+   "groupe": "SC",
+   "sort": "Tombé",
+   "avis_commission": "Demande de retrait",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 2 Insérer quatre alinéas ainsi rédigés : ...° Le i est ainsi modifié : a) Au premier alinéa, les mots : « dans un bâtiment d’habitation collectif au sens du 6° de l’article L. 111‑1 du code de la construction et de l’habitation » sont supprimés ; b) À la seconde phrase du neuvième alinéa, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ; c) À la seconde phrase du dixième alinéa, les mots : « , un parent ou un allié jusqu’au deuxième degré inclus d’un associé » sont supprimés ; II. – Alinéas 5 à 8 Remplacer ces alinéas par deux alinéas ainsi rédigés : « j) Pour les logements, ou locaux transformés en logements, donnés en location à titre de résidence principale en France et ayant fait l’objet de travaux qui ont permis une amélioratio"
+  },
+  {
+   "num": "252",
+   "texte": "835",
+   "alinea": "8",
+   "groupe": "SB",
+   "sort": "Tombé",
+   "avis_commission": "Demande de retrait",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Alinéa 8 Supprimer cet alinéa. II. – Pour compenser la perte de recettes résultant du I, compléter cet article par un paragraphe ainsi rédigé : ... – La perte de recettes résultant pour l’État du présent article est compensée, à due concurrence, par la création d’une taxe additionnelle à l’accise sur les tabacs prévue au chapitre IV du titre I er du livre III du code des impositions sur les biens et services."
+  },
+  {
+   "num": "110",
+   "texte": "835",
+   "alinea": null,
+   "groupe": "SB",
+   "sort": null,
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": "article 45, alinéa 1, de la Constitution (cavalier)",
+   "dispositif": "Après l’article 4 Insérer un article additionnel ainsi rédigé : À la première phrase du premier alinéa de l’article L. 412‑4 du code des procédures civiles d’exécution, les mots : « un mois » sont remplacés par les mots : « quinze jours » et les mots : « un an » sont remplacés par les mots : « trois mois »."
+  },
+  {
+   "num": "COM-78",
+   "texte": "801",
+   "alinea": "1",
+   "groupe": "SB",
+   "sort": "Rejeté",
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": null,
+   "dispositif": "Alinéa 1 I. Le I de l'article 4 est ainsi modifié : 1.– Au 2°, les quatre premiers alinéas, qui remplacent le premier alinéa du j , sont supprimés et remplacés par les deux alinéas suivants : « Pour les logements, ou locaux transformés en logements, donnés en location à titre de résidence principale en France et ayant fait l’objet de travaux qui ont permis une amélioration de leur niveau de performance énergétique, au sens de l’article L. 17311 du code de la construction et de l’habitation, d’au moins deux classes si leur classe initiale était F ou G ou d’une classe sinon, à la demande du contribuable, une déduction au titre de l'amortissement du prix d'acquisition du logement net de frais, majoré le cas échéant du montant des travaux. Pour les logements, ou locaux transformés en logements"
+  },
+  {
+   "num": "97",
+   "texte": "835",
+   "alinea": "2",
+   "groupe": "SC",
+   "sort": "Non soutenu",
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 2 Insérer quatre alinéas ainsi rédigés : ...° Le i est ainsi modifié : a) Au premier alinéa, les mots : « dans un bâtiment d’habitation collectif au sens du 6° de l’article L. 111‑1 du code de la construction et de l’habitation » sont supprimés ; b) À la seconde phrase du neuvième alinéa, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ; c) À la seconde phrase du dixième alinéa, les mots : « , un parent ou un allié jusqu’au deuxième degré inclus d’un associé » sont supprimés ; II. – Alinéas 5 à 8 Remplacer ces alinéas par deux alinéas ainsi rédigés : « j) Pour les logements, ou locaux transformés en logements, donnés en location à titre de résidence principale en France et ayant fait l’objet de travaux qui ont permis une amélioratio"
+  },
+  {
+   "num": "399",
+   "texte": "835",
+   "alinea": null,
+   "groupe": "SH",
+   "sort": null,
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": "article 45, alinéa 1, de la Constitution (cavalier)",
+   "dispositif": "Après l’article 4 Insérer un article additionnel ainsi rédigé : L’article 39 C du code général des impôts est complété par un alinéa ainsi rédigé : « .... – Ne peut être admis en déduction du résultat imposable le montant de l’amortissement des biens que le contribuable acquiert à compter du 1 er janvier 2027, donnés en location de meublés de tourisme au sens du I de l’article L. 324‑1‑1 du code du tourisme. »"
+  },
+  {
+   "num": "133",
+   "texte": "835",
+   "alinea": "3",
+   "groupe": "SC",
+   "sort": "Tombé",
+   "avis_commission": "Demande de retrait",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 2 Insérer un alinéa ainsi rédigé : ...° Au premier alinéa du i, les mots : « dans un bâtiment d’habitation collectif au sens du 6° de l’article L. 111‑1 du code de la construction et de l’habitation » sont supprimés ; II. – Alinéas 5 à 8 Remplacer ces alinéas par deux alinéas ainsi rédigés : « j) Pour les logements, ou locaux transformés en logements, donnés en location à titre de résidence principale en France et ayant fait l’objet de travaux qui ont permis une amélioration de leur niveau de performance énergétique, au sens de l’article L. 173‑1‑1 du code de la construction et de l’habitation, d’au moins deux classes si leur classe initiale était F ou G ou d’une classe sinon, à la demande du contribuable, une déduction au titre de l’amortissement du prix d’acquisition "
+  },
+  {
+   "num": "100",
+   "texte": "835",
+   "alinea": "5",
+   "groupe": "SC",
+   "sort": "Tombé",
+   "avis_commission": "Défavorable",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Alinéa 5 Remplacer les mots : ou pour lesquels les travaux d’amélioration, définis en application du 5° du B du I de l’article 199 novovicies, représentent au moins 20 % du prix d’acquisition net de frais par les mots : ou qui font ou ont fait l’objet de travaux d’amélioration définis en application du 5° du B du I de l’article 199 novovicies II. – Alinéa 6 Supprimer les mots : et que le montant de ces travaux représente au moins 20 % du prix d’acquisition net de frais III. – Alinéa 7, première phrase Supprimer cette phrase. IV. – Pour compenser la perte de recettes résultant des I à III, compléter cet article par un paragraphe ainsi rédigé : ... – La perte de recettes résultant pour l’État du présent article est compensée, à due concurrence, par la création d’une taxe additionnelle à"
+  },
+  {
+   "num": "400",
+   "texte": "835",
+   "alinea": null,
+   "groupe": "SH",
+   "sort": null,
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": "article 45, alinéa 1, de la Constitution (cavalier)",
+   "dispositif": "Après l’article 4 Insérer un article additionnel ainsi rédigé : La dernière phrase du 35° de l’article L. 311‑3 du code de la sécurité sociale est supprimée."
+  },
+  {
+   "num": "80",
+   "texte": "835",
+   "alinea": "-10",
+   "groupe": "SC",
+   "sort": null,
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": "article 45, alinéa 1, de la Constitution (cavalier)",
+   "dispositif": "Après l’article 4 Insérer un article additionnel ainsi rédigé : Le 1 de l’article 200 quater du code général des impôts est complété par un alinéa ainsi rédigé : « Pour les travaux réalisés avant 2021, la déclaration sur l’honneur, à l’appui des demandes mentionnées au présent article, est présumée sincère. La preuve de la mauvaise foi et des manœuvres frauduleuses incombe à l’administration. »"
+  },
+  {
+   "num": "36",
+   "texte": "835",
+   "alinea": "10",
+   "groupe": "SH",
+   "sort": "Tombé",
+   "avis_commission": "Demande de retrait",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I.‑ Après l’alinéa 10 Insérer un alinéa ainsi rédigé : …) Le huitième alinéa est complété par une phrase ainsi rédigée : « Par dérogation, en Guadeloupe, en Guyane, à la Martinique, à Mayotte ou à La Réunion, le propriétaire peut louer le logement nu à usage d’habitation principale à un parent ou allié jusqu’au deuxième degré inclus. » ; II. – Pour compenser la perte de recettes résultant du I, compléter cet article par un paragraphe ainsi rédigé : ... – La perte de recettes résultant pour l’État du présent article est compensée, à due concurrence, par la création d’une taxe additionnelle à l’accise sur les tabacs prévue au chapitre IV du titre I er du livre III du code des impositions sur les biens et services."
+  },
+  {
+   "num": "263",
+   "texte": "835",
+   "alinea": null,
+   "groupe": "SF",
+   "sort": "Adopté",
+   "avis_commission": "Défavorable",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "Après l'article 4 Insérer un article additionnel ainsi rédigé : Après le 2° du B du I de l’article 1406 bis du code général des impôts, il est inséré un alinéa ainsi rédigé : « ...° Les communes situées dans des zones insulaires métropolitaines sans lien permanent avec le continent. »"
+  },
+  {
+   "num": "269",
+   "texte": "835",
+   "alinea": "8",
+   "groupe": "SC",
+   "sort": "Tombé",
+   "avis_commission": "Demande de retrait",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Alinéa 8 Supprimer cet alinéa. II. – Pour compenser la perte de recettes résultant du I, compléter cet article par un paragraphe ainsi rédigé : ... – La perte de recettes résultant pour l’État du présent article est compensée, à due concurrence, par la création d’une taxe additionnelle à l’accise sur les tabacs prévue au chapitre IV du titre I er du livre III du code des impositions sur les biens et services."
+  },
+  {
+   "num": "336",
+   "texte": "835",
+   "alinea": "8",
+   "groupe": "SB",
+   "sort": "Tombé",
+   "avis_commission": "Demande de retrait",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Alinéa 8 Remplacer les mots : susceptible d’utiliser des combustibles fossiles par les mots : autonome alimentée majoritairement par des combustibles d’origine fossile II. – Pour compenser la perte de recettes résultant du I, compléter cet article par un paragraphe ainsi rédigé : ... – La perte de recettes résultant pour l’État du présent article est compensée, à due concurrence, par la création d’une taxe additionnelle à l’accise sur les tabacs prévue au chapitre IV du titre I er du livre III du code des impositions sur les biens et services."
+  },
+  {
+   "num": "81",
+   "texte": "835",
+   "alinea": "-10",
+   "groupe": "SC",
+   "sort": null,
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": "article 45, alinéa 1, de la Constitution (cavalier)",
+   "dispositif": "Après l’article 4 Insérer un article additionnel ainsi rédigé : Le 2 du I de l’article 244 quater U du code général des impôts est complété par un alinéa ainsi rédigé : « Les travaux d’isolation thermique ou d’amélioration de la performance énergétique réalisés sur un bâtiment ancien à caractère patrimonial, au sens du 6° bis de l’article L. 111‑1 du code de la construction et de l’habitation, n’ouvrent pas droit au crédit d’impôt lorsque les matériaux et techniques utilisés ne sont pas compatibles avec les caractéristiques structurelles, hygrothermiques et architecturales du bâtiment. Un décret précise les matériaux et techniques considérés comme incompatibles en fonction des caractéristiques du bâtiment. »"
+  },
+  {
+   "num": "14",
+   "texte": "835",
+   "alinea": "2",
+   "groupe": "SC",
+   "sort": "Adopté",
+   "avis_commission": "Favorable",
+   "avis_gouvernement": "Favorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 2 Insérer quatre alinéas ainsi rédigés ...° Après le douzième alinéa du i, sont insérés trois alinéas ainsi rédigés : « Lorsque la société mentionnée au dixième alinéa du présent i est une société civile de placement immobilier mentionnée à l’article L. 214‑114 du code monétaire et financier, l’amortissement est déterminé au niveau de la société, immeuble par immeuble, pour les seuls immeubles qui remplissent les conditions prévues au présent i. La quote‑part d’amortissement ainsi déterminée est répartie entre les associés à proportion des droits qu’ils détiennent dans la société, sans qu’il y ait lieu d’établir un lien entre les sommes versées par chaque associé lors de la souscription de ses parts et les immeubles détenus ou acquis par la société. « Pour l’application"
+  },
+  {
+   "num": "334",
+   "texte": "835",
+   "alinea": "8",
+   "groupe": "SB",
+   "sort": "Tombé",
+   "avis_commission": "Demande de retrait",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Alinéa 8 Supprimer les mots : ne soit pas équipé, à titre individuel ou collectif, d’une chaudière susceptible d’utiliser des combustibles fossiles et II. – Pour compenser la perte de recettes résultant du I, compléter cet article par un paragraphe ainsi rédigé : ... – La perte de recettes résultant pour l’État du présent article est compensée, à due concurrence, par la création d’une taxe additionnelle à l’accise sur les tabacs prévue au chapitre IV du titre I er du livre III du code des impositions sur les biens et services."
+  },
+  {
+   "num": "3",
+   "texte": "835",
+   "alinea": "5",
+   "groupe": "SB",
+   "sort": "Adopté",
+   "avis_commission": "Favorable",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I.– Alinéa 5 Remplacer les mots : représentent au moins 20 % du prix d’acquisition net de frais par les mots : permettent au logement d’atteindre un niveau de performance énergétique et environnementale correspondant au moins à la classe D au sens de l’article L. 173-1-1 du code de la construction et de l’habitation, ou, lorsque la classe initiale du logement est G, au moins la classe E, ou, lorsqu’il est situé en Guadeloupe, en Guyane, à la Martinique, à Mayotte ou à La Réunion, de répondre aux critères de performance énergétique et environnementale mentionnés au 4 du I de l’article 244 quater X du présent code II. – Alinéa 6 Remplacer les mots : le montant de ces travaux représente au moins 20 % du prix d’acquisition net de frais par les mots : lesdits travaux de transformation permetten"
+  },
+  {
+   "num": "409",
+   "texte": "835",
+   "alinea": "1",
+   "groupe": "SC",
+   "sort": "Adopté",
+   "avis_commission": "Favorable",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 2 Insérer trois alinéas ainsi rédigés : …° Le i est ainsi modifié : a) À la seconde phrase du neuvième alinéa, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ; b) À la seconde phrase du dixième alinéa, les mots : « , un parent ou un allié jusqu’au deuxième degré inclus » sont supprimés ; II. – Après l’alinéa 10 Insérer un alinéa ainsi rédigé : …) À la seconde phrase du huitième alinéa, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ; III. – Après l’alinéa 11 Insérer un alinéa ainsi rédigé : …) À la seconde phrase du neuvième alinéa, les mots : « , un parent ou un allié jusqu’au deuxième degré inclus » sont supprimés ; IV. – Pour compenser la perte de recettes résultant du I, compléter cet arti"
+  },
+  {
+   "num": "132",
+   "texte": "835",
+   "alinea": "3",
+   "groupe": "SC",
+   "sort": "Tombé",
+   "avis_commission": "Demande de retrait",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 2 Insérer quatre alinéas ainsi rédigés : ...° Le i est ainsi modifié : a) Au premier alinéa, les mots : « dans un bâtiment d’habitation collectif au sens du 6° de l’article L. 111‑1 du code de la construction et de l’habitation » sont supprimés ; b) À la seconde phrase du neuvième alinéa, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ; c) À la seconde phrase du dixième alinéa, les mots : « , un parent ou un allié jusqu’au deuxième degré inclus d’un associé » sont supprimés ; II. – Alinéas 5 à 8 Remplacer ces alinéas par deux alinéas ainsi rédigés : « j) Pour les logements, ou locaux transformés en logements, donnés en location à titre de résidence principale en France et ayant fait l’objet de travaux qui ont permis une amélioratio"
+  },
+  {
+   "num": "392",
+   "texte": "835",
+   "alinea": null,
+   "groupe": "SH",
+   "sort": null,
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": "article 45, alinéa 1, de la Constitution (cavalier)",
+   "dispositif": "Après l’article 4 Insérer un article additionnel ainsi rédigé : Le premier alinéa de l’article L. 651‑2 du code de la construction et de l’habitation est complété par une phrase ainsi rédigée : « Le taux maximum de l’amende civile applicable aux personnes morales est égal au quintuple de celui prévu pour les personnes physiques. »"
+  },
+  {
+   "num": "2",
+   "texte": "835",
+   "alinea": "2",
+   "groupe": "SB",
+   "sort": "Tombé",
+   "avis_commission": "Demande de retrait",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 2 Insérer un alinéa ainsi rédigé : ...° Au premier alinéa du i, les mots : « dans un bâtiment d’habitation collectif au sens du 6° de l’article L. 111‑1 du code de la construction et de l’habitation » sont supprimés ; II. – Alinéas 5 à 8 Remplacer ces alinéas par deux alinéas ainsi rédigés : « j) Pour les logements, ou locaux transformés en logements, situés en France que le contribuable acquiert, qui font ou ont fait l'objet de travaux concourant à la production ou à la livraison d'un immeuble neuf, au sens du 2° du 2 du I de l'article 257 du présent code, ou qui ont fait l'objet de travaux ayant permis une amélioration de leur niveau de performance énergétique, au sens de l'article L. 173-1-1 du code de la construction et de l'habitation, d'au moins deux classes si le"
+  },
+  {
+   "num": "37",
+   "texte": "835",
+   "alinea": "10",
+   "groupe": "SH",
+   "sort": "Tombé",
+   "avis_commission": "Demande de retrait",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 10 Insérer un alinéa ainsi rédigé : ...) Le huitième alinéa est complété par une phrase ainsi rédigée : « Par dérogation, en Guadeloupe, en Guyane, à la Martinique, à Mayotte ou à La Réunion, la société propriétaire peut louer le logement nu à usage d’habitation principale à un parent ou allié jusqu’au deuxième degré inclus. » II. – Pour compenser la perte de recettes résultant du I, compléter cet article par un paragraphe ainsi rédigé : ... – La perte de recettes résultant pour l’État du présent article est compensée, à due concurrence, par la création d’une taxe additionnelle à l’accise sur les tabacs prévue au chapitre IV du titre I er du livre III du code des impositions sur les biens et services."
+  },
+  {
+   "num": "115",
+   "texte": "835",
+   "alinea": "2",
+   "groupe": "SC",
+   "sort": "Tombé",
+   "avis_commission": "Demande de retrait",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 2 Insérer quatre alinéas ainsi rédigés : ...° Le i est ainsi modifié : a) Au premier alinéa, les mots : « dans un bâtiment d’habitation collectif au sens du 6° de l’article L. 111‑1 du code de la construction et de l’habitation » sont supprimés ; b) À la seconde phrase du neuvième alinéa, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ; c) À la seconde phrase du dixième alinéa, les mots : « , un parent ou un allié jusqu’au deuxième degré inclus d’un associé » sont supprimés ; II. – Alinéas 5 à 8 Remplacer ces alinéas par deux alinéas ainsi rédigés : « j) Pour les logements, ou locaux transformés en logements, donnés en location à titre de résidence principale en France et ayant fait l’objet de travaux qui ont permis une amélioratio"
+  },
+  {
+   "num": "335",
+   "texte": "835",
+   "alinea": "8",
+   "groupe": "SB",
+   "sort": "Tombé",
+   "avis_commission": "Demande de retrait",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Alinéa 8 Remplacer les mots : susceptible d’utiliser des combustibles fossiles par les mots : autonome alimentée exclusivement par des combustibles d’origine fossile II. – Pour compenser la perte de recettes résultant du I, compléter cet article par un paragraphe ainsi rédigé : ... – La perte de recettes résultant pour l’État du présent article est compensée, à due concurrence, par la création d’une taxe additionnelle à l’accise sur les tabacs prévue au chapitre IV du titre I er du livre III du code des impositions sur les biens et services."
+  },
+  {
+   "num": "38",
+   "texte": "835",
+   "alinea": "15",
+   "groupe": "SH",
+   "sort": "Rejeté",
+   "avis_commission": "Défavorable",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l'alinéa 15 Insérer un alinéa ainsi rédigé : Par dérogation, en Guadeloupe, en Guyane, à la Martinique, à Mayotte ou à La Réunion, le I s’applique à compter du lendemain de la publication de la loi n° 2026‑103 du 19 février 2026 de finances pour 2026. II. – Pour compenser la perte de recettes résultant du I, compléter cet article par un paragraphe ainsi rédigé : ... – La perte de recettes résultant pour l’État du présent article est compensée, à due concurrence, par la création d’une taxe additionnelle à l’accise sur les tabacs prévue au chapitre IV du titre I er du livre III du code des impositions sur les biens et services."
+  },
+  {
+   "num": "134",
+   "texte": "835",
+   "alinea": "2",
+   "groupe": "SC",
+   "sort": "Tombé",
+   "avis_commission": "Demande de retrait",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 2 Insérer quatre alinéas ainsi rédigés : ...° Le i est ainsi modifié : a) Au premier alinéa, les mots : « dans un bâtiment d’habitation collectif au sens du 6° de l’article L. 111‑1 du code de la construction et de l’habitation » sont supprimés ; b) À la seconde phrase du neuvième alinéa, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ; c) À la seconde phrase du dixième alinéa, les mots : « , un parent ou un allié jusqu’au deuxième degré inclus d’un associé » sont supprimés ; II. – Alinéas 5 à 8 Remplacer ces alinéas par deux alinéas ainsi rédigés : « j) Pour les logements, ou locaux transformés en logements, donnés en location à titre de résidence principale en France et ayant fait l’objet de travaux qui ont permis une amélioratio"
+  },
+  {
+   "num": "337",
+   "texte": "835",
+   "alinea": "8",
+   "groupe": "SB",
+   "sort": "Tombé",
+   "avis_commission": "Demande de retrait",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Alinéa 8 Compléter cet alinéa par trois phrases ainsi rédigées : Par dérogation, une chaudière alimentée dans le cadre d’un contrat de fourniture comportant une part de gaz issu de sources renouvelables au moins égale à 50 % n’est pas regardée, pour l’application du présent article, comme une chaudière alimentée majoritairement par des combustibles d’origine fossile. Cette part est attestée par des garanties d’origine émises en application de l’article L. 446‑18 du code de l’énergie. Le contribuable s’engage à maintenir un tel contrat, ou un contrat présentant des caractéristiques équivalentes, pendant les dix années suivant l’achèvement des travaux et justifie du respect de cet engagement à la demande de l’administration. II. – Pour compenser la perte de recettes résultant du I, comp"
+  },
+  {
+   "num": "22",
+   "texte": "835",
+   "alinea": "2",
+   "groupe": "groupe Alliance des départements",
+   "sort": "Tombé",
+   "avis_commission": "Demande de retrait",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 2 Insérer un alinéa ainsi rédigé : ...° Au premier alinéa du i, les mots : « dans un bâtiment d’habitation collectif au sens du 6° de l’article L. 111‑1 du code de la construction et de l’habitation » sont supprimés ; II. – Alinéas 5 à 8 Remplacer ces alinéas par deux alinéas ainsi rédigés : « j) Pour les logements, ou locaux transformés en logements, donnés en location à titre de résidence principale en France et ayant fait l’objet de travaux qui ont permis une amélioration de leur niveau de performance énergétique, au sens de l’article L. 173‑1‑1 du code de la construction et de l’habitation, d’au moins deux classes si leur classe initiale était F ou G ou d’une classe sinon, à la demande du contribuable, une déduction au titre de l’amortissement du prix d’acquisition "
+  },
+  {
+   "num": "209",
+   "texte": "835",
+   "alinea": "2",
+   "groupe": "SC",
+   "sort": "Adopté",
+   "avis_commission": "Favorable",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 2 Insérer trois alinéas ainsi rédigés : …° Le i est ainsi modifié : a) À la seconde phrase du neuvième alinéa, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ; b) À la seconde phrase du dixième alinéa, les mots : « , un parent ou un allié jusqu’au deuxième degré inclus » sont supprimés ; II. – Après l’alinéa 10 Insérer un alinéa ainsi rédigé : …) À la seconde phrase du huitième alinéa, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ; III. – Après l’alinéa 11 Insérer un alinéa ainsi rédigé : …) À la seconde phrase du neuvième alinéa, les mots : « , un parent ou un allié jusqu’au deuxième degré inclus » sont supprimés ; IV. – Pour compenser la perte de recettes résultant du I, compléter cet arti"
+  },
+  {
+   "num": "109",
+   "texte": "835",
+   "alinea": null,
+   "groupe": "SB",
+   "sort": "Retiré",
+   "avis_commission": "Défavorable",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "Après l’article 4 Insérer un article additionnel ainsi rédigé : I. – Le 3° du I de l’article 156 du code général des impôts est ainsi modifié : 1° Aux première et seconde phrases du deuxième alinéa, le montant : « 10 700 € » est remplacé par le montant : « 21 400 € » ; 2° Au troisième alinéa, le montant : « 15 300 € » est remplacé par le montant : « 26 000 € ». 3° À la première phrase du quatrième alinéa, le montant : « 21 400 € » est remplacé par le montant : « 42 800 € ». II. – Le I s’applique aux revenus perçus à compter du 1 er janvier 2027. III. – La perte de recettes résultant pour l’État des I et II est compensée, à due concurrence, par la création d’une taxe additionnelle à l’accise sur les tabacs prévue au chapitre IV du titre I er du livre III du code des impositions sur les bien"
+  },
+  {
+   "num": "COM-77",
+   "texte": "801",
+   "alinea": "1",
+   "groupe": "SB",
+   "sort": "Rejeté",
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": null,
+   "dispositif": "Alinéa 1 I. Le I de l'article 4 est ainsi modifié : 1.– Au 2°, les quatre premiers alinéas, qui remplacent le premier alinéa du j , sont supprimés et remplacés par les deux alinéas suivants : « Pour les logements, ou locaux transformés en logements, donnés en location à titre de résidence principale en France et ayant fait l’objet de travaux qui ont permis une amélioration de leur niveau de performance énergétique, au sens de l’article L. 17311 du code de la construction et de l’habitation, d’au moins deux classes si leur classe initiale était F ou G ou d’une classe sinon, à la demande du contribuable, une déduction au titre de l'amortissement du prix d'acquisition du logement net de frais, majoré le cas échéant du montant des travaux. Pour les logements, ou locaux transformés en logements"
+  },
+  {
+   "num": "396",
+   "texte": "835",
+   "alinea": null,
+   "groupe": "SH",
+   "sort": null,
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": "article 45, alinéa 1, de la Constitution (cavalier)",
+   "dispositif": "Après l’article 4 Insérer un article additionnel ainsi rédigé : Le 1 de l’article 50‑0 du code général des impôts est ainsi modifié : 1° Le 1° bis est abrogé ; 2° A la première phrase du sixième alinéa, les mots : « et d’un abattement de 30 % pour le chiffre d’affaires provenant d’activités de la catégorie mentionnée au 1° bis » sont supprimés. 3° Le b du 2 est ainsi rétabli : « b. Les revenus tirés, directement ou indirectement, d’une activité de la location de meublés de tourisme, au sens du I de l’article L. 324‑1‑1 du code du tourisme, autres que ceux mentionnés au 2° du I de l’article 1414 bis du présent code ; »."
+  },
+  {
+   "num": "18",
+   "texte": "835",
+   "alinea": "2",
+   "groupe": "SG",
+   "sort": "Tombé",
+   "avis_commission": "Demande de retrait",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 2 Insérer quatre alinéas ainsi rédigés : ...° Le i est ainsi modifié : a) Au premier alinéa, les mots : « dans un bâtiment d’habitation collectif au sens du 6° de l’article L. 111‑1 du code de la construction et de l’habitation » sont supprimés ; b) À la seconde phrase du neuvième alinéa, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ; c) À la seconde phrase du dixième alinéa, les mots : « , un parent ou un allié jusqu’au deuxième degré inclus d’un associé » sont supprimés ; II. – Alinéas 5 à 8 Remplacer ces alinéas par deux alinéas ainsi rédigés : « j) Pour les logements, ou locaux transformés en logements, donnés en location à titre de résidence principale en France et ayant fait l’objet de travaux qui ont permis une amélioratio"
+  },
+  {
+   "num": "271",
+   "texte": "835",
+   "alinea": "2",
+   "groupe": "SB",
+   "sort": "Rejeté",
+   "avis_commission": "Défavorable",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 2 Insérer un alinéa ainsi rédigé : ...° Au premier alinéa du i, les mots : « dans un bâtiment d’habitation collectif au sens du 6° de l’article L. 111-1 du code de la construction et de l’habitation » sont supprimés ; II. – Pour compenser la perte de recettes résultant du I, compléter cet article par un paragraphe ainsi rédigé : ... – La perte de recettes résultant pour l’État du présent article est compensée, à due concurrence, par la création d’une taxe additionnelle à l’accise sur les tabacs prévue au chapitre IV du titre I er du livre III du code des impositions sur les biens et services."
+  },
+  {
+   "num": "46",
+   "texte": "835",
+   "alinea": null,
+   "groupe": "SH",
+   "sort": "Adopté",
+   "avis_commission": "Défavorable",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "Après l'article 4 Insérer un article additionnel ainsi rédigé : I. – Le I de l’article 1406 bis du code général des impôts est complété par six alinéas ainsi rédigés : « .... – Pour l’application du B dans les collectivités régies par l’article 73 de la Constitution, la qualification des communes situées en zone caractérisée par un déséquilibre entre l’offre et la demande de logements est appréciée au regard d’indicateurs tenant notamment compte : « 1° Du taux de vacance structurelle du parc de logements ; « 2° De la part de logements durablement inoccupés en raison de situations d’indivision successorale ; « 3° De l’état du parc immobilier et de la proportion de logements dégradés, insalubres ou indignes impropres à l’habitation ; « 4° Des dynamiques démographiques et des tensions observé"
+  },
+  {
+   "num": "COM-43",
+   "texte": "801",
+   "alinea": null,
+   "groupe": "SC",
+   "sort": "Rejeté",
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": null,
+   "dispositif": "I. Au premier alinéa du j du 1° du I de l’article 31 du code général des impôts, dans sa rédaction résultant du 2° du I du présent article, remplacer les mots : « ou pour lesquels les travaux d’amélioration, définis en application du 5° du B du I de l’article 199 novovicies, représentent au moins 20 % du prix d’acquisition net de frais » par les mots : « ou qui font ou ont fait l’objet de travaux d’amélioration définis en application du 5° du B du I de l’article 199 novovicies ». II. Au deuxième alinéa du même j, dans sa rédaction résultant du même 2°, supprimer les mots : « et que le montant de ces travaux représente au moins 20 % du prix d’acquisition net de frais ». III. Au troisième alinéa du même j, dans sa rédaction résultant du même 2°, supprimer la première phrase. IV. - La perte d"
+  },
+  {
+   "num": "281",
+   "texte": "835",
+   "alinea": "2",
+   "groupe": "SF",
+   "sort": "Tombé",
+   "avis_commission": "Demande de retrait",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 2 Insérer un alinéa ainsi rédigé : ...° Au premier alinéa du i, les mots : « dans un bâtiment d’habitation collectif au sens du 6° de l’article L. 111‑1 du code de la construction et de l’habitation » sont supprimés ; II. – Alinéas 5 à 8 Remplacer ces alinéas par deux alinéas ainsi rédigés : « j) Pour les logements, ou locaux transformés en logements, donnés en location à titre de résidence principale en France et ayant fait l’objet de travaux qui ont permis une amélioration de leur niveau de performance énergétique, au sens de l’article L. 173‑1‑1 du code de la construction et de l’habitation, d’au moins deux classes si leur classe initiale était F ou G ou d’une classe sinon, à la demande du contribuable, une déduction au titre de l’amortissement du prix d’acquisition "
+  },
+  {
+   "num": "COM-17",
+   "texte": "801",
+   "alinea": null,
+   "groupe": "groupe Alliance des départements",
+   "sort": null,
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": "article 45, alinéa 1, de la Constitution (cavalier)",
+   "dispositif": "Après l'article 4 Insérer un article additionnel ainsi rédigé : I. – Le III de l’article 150 VB du code général des impôts est complété par un alinéa ainsi rédigé : « ...° Une résidence qui fait l’objet d’une exploitation para-hôtelière et qui est gérée par un exploitant ayant conclu des baux commerciaux avec les propriétaires. » II. – La perte de recettes résultant pour l’État du I est compensée, à due concurrence, par la création d’une taxe additionnelle à l’accise sur les tabacs prévue au chapitre IV du titre I er du livre III du code des impositions sur les biens et services."
+  },
+  {
+   "num": "312",
+   "texte": "835",
+   "alinea": "8",
+   "groupe": "SH",
+   "sort": "Tombé",
+   "avis_commission": "Demande de retrait",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "Alinéa 8 Remplacer la lettre : D par la lettre : C"
+  },
+  {
+   "num": "99",
+   "texte": "835",
+   "alinea": null,
+   "groupe": "SC",
+   "sort": "Non soutenu",
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": null,
+   "dispositif": "I. – Après l’alinéa 2 Insérer un alinéa ainsi rédigé : ...° Au premier alinéa du i, les mots : « dans un bâtiment d’habitation collectif au sens du 6° de l’article L. 111‑1 du code de la construction et de l’habitation » sont supprimés ; II. – Alinéas 5 à 8 Remplacer ces alinéas par deux alinéas ainsi rédigés : « j) Pour les logements, ou locaux transformés en logements, donnés en location à titre de résidence principale en France et ayant fait l’objet de travaux qui ont permis une amélioration de leur niveau de performance énergétique, au sens de l’article L. 173‑1‑1 du code de la construction et de l’habitation, d’au moins deux classes si leur classe initiale était F ou G ou d’une classe sinon, à la demande du contribuable, une déduction au titre de l’amortissement du prix d’acquisition "
+  },
+  {
+   "num": "398",
+   "texte": "835",
+   "alinea": null,
+   "groupe": "SH",
+   "sort": null,
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": "article 45, alinéa 1, de la Constitution (cavalier)",
+   "dispositif": "Après l’article 4 Insérer un article additionnel ainsi rédigé : L’article 39 C du code général des impôts est complété par un alinéa ainsi rédigé : « .... – Ne peut être admis en déduction du résultat imposable le montant de l’amortissement des biens donnés en location de meublés de tourisme au sens du I de l’article L. 324‑1‑1 du code du tourisme. »"
+  },
+  {
+   "num": "35",
+   "texte": "835",
+   "alinea": "8",
+   "groupe": "SH",
+   "sort": "Tombé",
+   "avis_commission": "Défavorable",
+   "avis_gouvernement": "Défavorable",
+   "irrecevabilite": null,
+   "dispositif": "I. – Alinéa 8 Compléter cet alinéa par les mots : ou présente un niveau de performance énergétique et environnementale permettant une amélioration d’au moins d’une classe au sens de l’article L. 173‑1‑1 du code de la construction, quelle que soit la classe initiale du logement ou du local concerné II. Pour compenser la perte de recettes résultant du I, compléter cet article par un paragraphe ainsi rédigé : ... – La perte de recettes résultant pour l’État du présent article est compensée, à due concurrence, par la création d’une taxe additionnelle à l’accise sur les tabacs prévue au chapitre IV du titre I er du livre III du code des impositions sur les biens et services."
+  },
+  {
+   "num": "COM-80",
+   "texte": "801",
+   "alinea": "3",
+   "groupe": "SB",
+   "sort": "Rejeté",
+   "avis_commission": null,
+   "avis_gouvernement": null,
+   "irrecevabilite": null,
+   "dispositif": "Alinéa 3 I. – Au 2° du I de l'article 4, les quatre premiers alinéas, qui remplacent le premier alinéa du j, sont supprimés et remplacés par les deux alinéas suivants : « j) Pour les logements, ou locaux transformés en logements, donnés en location nue à titre de résidence principale en France et ayant fait l'objet de travaux ayant permis une amélioration de leur niveau de performance énergétique, au sens de l'article L. 173-1-1 du code de la construction et de l'habitation, d'au moins deux classes lorsque leur classe initiale était F ou G, ou d'au moins une classe dans les autres cas, à la demande du contribuable, une déduction au titre de l'amortissement du prix d'acquisition du logement net de frais, majoré, le cas échéant, du montant des travaux. Pour les logements ou locaux transformé"
+  }
+ ],
+ "provenance_tas25_157": [
+  {
+   "guid": "28c0fb82-6001-475a-8c0e-850c940262e9",
+   "article": "Article 4",
+   "pastille": "1",
+   "etape": "dépôt, inchangé",
+   "amendements": [],
+   "texte": "I. – I. – Le 1° du I de l’article 31 du code général des impôts est ainsi modifié :"
+  },
+  {
+   "guid": "dbc04cb6-a2e5-4cdb-9cec-6b54744e118a",
+   "article": "Article 4",
+   "pastille": "2",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "1° 1° À la dernière phrase du troisième alinéa du g, après les mots : « du j », sont insérés les mots : « , dans sa rédaction antérieure à l’article 110 de la loi n° 2023‑1322 du 29 décembre 2023 de finances pour 2024, » ;"
+  },
+  {
+   "guid": "73ff645e-d137-44a4-aa45-4f0ed7b77f12",
+   "article": "Article 4",
+   "pastille": "3",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "209",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Carvalho-Zeller",
+     "sort": "Adopté"
+    },
+    {
+     "num": "409",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Lagarde-Arnaud",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "1° bis 1° bis (nouveau) Le i est ainsi modifié :"
+  },
+  {
+   "guid": "27b1fe14-a437-4d67-8580-d4d1122069f8",
+   "article": "Article 4",
+   "pastille": "4",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "209",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Carvalho-Zeller",
+     "sort": "Adopté"
+    },
+    {
+     "num": "409",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Lagarde-Arnaud",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "a) a) À la fin de la seconde phrase du neuvième alinéa, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ;"
+  },
+  {
+   "guid": "e04de716-e354-46e2-8568-8bc5faa2ba2a",
+   "article": "Article 4",
+   "pastille": "5",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "209",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Carvalho-Zeller",
+     "sort": "Adopté"
+    },
+    {
+     "num": "409",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Lagarde-Arnaud",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "b) b) À la seconde phrase du dixième alinéa, les mots : « , un parent ou un allié jusqu’au deuxième degré inclus » sont supprimés ;"
+  },
+  {
+   "guid": "eedd432a-8af0-4b07-9e7c-45b508bdbf5b",
+   "article": "Article 4",
+   "pastille": "6",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "14",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "c) c) Après le douzième alinéa, sont insérés trois alinéas ainsi rédigés :"
+  },
+  {
+   "guid": "ebd083a9-8318-44d4-9916-ff825cf0f1c4",
+   "article": "Article 4",
+   "pastille": "7",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "14",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Lorsque la société mentionnée au dixième alinéa du présent i est une société civile de placement immobilier, au sens de l’article L. 214‑114 du code monétaire et financier, l’amortissement est déterminé au niveau de la société, immeuble par immeuble, pour les seuls immeubles qui remplissent les conditions prévues au présent i. La quote‑part d’amortissement ainsi déterminée est répartie entre les"
+  },
+  {
+   "guid": "2ba68e20-98b3-416a-bdcb-270331b890b2",
+   "article": "Article 4",
+   "pastille": "8",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "14",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Pour l’application du présent i aux sociétés civiles de placement immobilier mentionnées à l’article L. 214‑114 du code monétaire et financier, le bénéfice de cette quote‑part d’amortissement est subordonné à l’engagement de l’associé de conserver les parts ouvrant droit à la déduction pendant une durée de neuf ans à compter de leur souscription. Cet engagement est apprécié individuellement au n"
+  },
+  {
+   "guid": "eb334a50-5e8d-4b0c-a7db-9abeb480bbc2",
+   "article": "Article 4",
+   "pastille": "9",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "14",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Par dérogation au dixième alinéa du présent i, la circonstance qu’un logement détenu par une société civile de placement immobilier mentionnée à l’article L. 214‑114 du code monétaire et financier soit loué à un associé ou à un membre de son foyer fiscal n’a pas pour effet de remettre en cause le bénéfice de la déduction au titre de l’amortissement pour l’associé qui n’est pas un membre fondateu"
+  },
+  {
+   "guid": "d3331a1f-ca43-4f61-a900-d2d3597ba385",
+   "article": "Article 4",
+   "pastille": "10",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "2° 2° Le j est ainsi modifié :"
+  },
+  {
+   "guid": "57c5254a-941b-42c6-84fb-41352fbffef8",
+   "article": "Article 4",
+   "pastille": "11",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "a) a) Le premier alinéa est remplacé par trois alinéas ainsi rédigés :"
+  },
+  {
+   "guid": "23704e23-7e8d-4f5d-80c5-5821fe55e4e0",
+   "article": "Article 4",
+   "pastille": "12",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "210",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Carvalho-Zeller",
+     "sort": "Adopté"
+    },
+    {
+     "num": "3",
+     "texte": "835",
+     "groupe": "SB",
+     "auteur": "Bellec-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« j) Pour les logements situés en France que le contribuable acquiert, qui font ou ont fait l’objet de travaux concourant à la production ou à la livraison d’un immeuble neuf, au sens du 2° du 2 du I de l’article 257 du présent code, ou pour lesquels les travaux d’amélioration, définis en application du 5° du B du I de l’article 199 novovicies, permettent au logement d’atteindre un niveau de perfo"
+  },
+  {
+   "guid": "04908a0d-20c1-4121-8429-650def8c87fa",
+   "article": "Article 4",
+   "pastille": "13",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "210",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Carvalho-Zeller",
+     "sort": "Adopté"
+    },
+    {
+     "num": "3",
+     "texte": "835",
+     "groupe": "SB",
+     "auteur": "Bellec-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« La déduction prévue au premier alinéa du présent j est applicable aux locaux situés en France que le contribuable acquiert et qui font ou ont fait l’objet de travaux de transformation en logement, lorsque ces locaux étaient, avant les travaux, affectés à un usage autre que l’habitation et que lesdits travaux de transformation permettent au logement d’atteindre un niveau de performance énergétiqu"
+  },
+  {
+   "guid": "902e1294-3d87-47a8-8583-f8b5c00d18d2",
+   "article": "Article 4",
+   "pastille": "14",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "210",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Carvalho-Zeller",
+     "sort": "Adopté"
+    },
+    {
+     "num": "3",
+     "texte": "835",
+     "groupe": "SB",
+     "auteur": "Bellec-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Lorsque les travaux d’amélioration ou de transformation ont été effectués avant l’acquisition du logement ou du local ou lorsque le bien est acquis dans le cadre d’un contrat de vente d’immeuble à rénover défini aux articles L. 262‑1 à L. 262‑11 du code de la construction et de l’habitation, le prix d’acquisition est minoré du montant des travaux. Pour les logements ou locaux qui ont fait l’obje"
+  },
+  {
+   "guid": "86dcddf8-f46c-46dc-a6cb-371208f22f91",
+   "article": "Article 4",
+   "pastille": "15",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "b) b) À la première phrase du deuxième alinéa, les mots : « de le louer » sont remplacés par les mots : « de louer le logement nu à titre de résidence principale » ;"
+  },
+  {
+   "guid": "328ae82d-7e7e-4af2-9777-685c9a44f9c2",
+   "article": "Article 4",
+   "pastille": "16",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "c) c) Au sixième alinéa, le mot : « troisième » est remplacé par le mot : « sixième » ;"
+  },
+  {
+   "guid": "b5ebb36c-ab26-425a-a928-1cbe7ef87108",
+   "article": "Article 4",
+   "pastille": "17",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "209",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Carvalho-Zeller",
+     "sort": "Adopté"
+    },
+    {
+     "num": "409",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Lagarde-Arnaud",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "c bis) c bis) (nouveau) À la fin de la seconde phrase du huitième alinéa, les mots : « et qu’un parent ou allié jusqu’au deuxième degré inclus » sont supprimés ;"
+  },
+  {
+   "guid": "b1b0ef72-bf1b-4581-93e6-4b405adfd47a",
+   "article": "Article 4",
+   "pastille": "18",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "209",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Carvalho-Zeller",
+     "sort": "Adopté"
+    },
+    {
+     "num": "409",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Lagarde-Arnaud",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "d) d) Le neuvième alinéa est ainsi modifié :"
+  },
+  {
+   "guid": "a132834d-6209-4ce9-bcde-943695e80532",
+   "article": "Article 4",
+   "pastille": "19",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "14",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "– à la première phrase, le mot : « deuxième » est remplacé par le mot : « cinquième » ;"
+  },
+  {
+   "guid": "d3767f26-143b-4181-b682-013b5951d397",
+   "article": "Article 4",
+   "pastille": "20",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "14",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    },
+    {
+     "num": "210",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Carvalho-Zeller",
+     "sort": "Adopté"
+    },
+    {
+     "num": "3",
+     "texte": "835",
+     "groupe": "SB",
+     "auteur": "Bellec-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "– à la seconde phrase, les mots : « , un parent ou un allié jusqu’au deuxième degré inclus » sont supprimés ;"
+  },
+  {
+   "guid": "7c5197c0-c24a-468f-9aef-9e02a5c515a9",
+   "article": "Article 4",
+   "pastille": "21",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "14",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "d bis) d bis) (nouveau) Après le onzième alinéa, sont insérés trois alinéas ainsi rédigés :"
+  },
+  {
+   "guid": "eb3e6dad-7f60-4a63-afaa-6f3e4f74c731",
+   "article": "Article 4",
+   "pastille": "22",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "14",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Lorsque la société mentionnée au douzième alinéa du présent j est une société civile de placement immobilier, au sens de l’article L. 214‑114 du code monétaire et financier, l’amortissement est déterminé au niveau de la société, immeuble par immeuble, pour les seuls immeubles qui remplissent les conditions prévues au présent j. La quote‑part d’amortissement ainsi déterminée est répartie entre le"
+  },
+  {
+   "guid": "427dde4a-06ff-4c76-8b4f-4f02364fa704",
+   "article": "Article 4",
+   "pastille": "23",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "14",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Pour l’application du présent j aux sociétés civiles de placement immobilier mentionnées à l’article L. 214‑114 du code monétaire et financier, le bénéfice de cette quote‑part d’amortissement est subordonné à l’engagement de l’associé de conserver les parts ouvrant droit à la déduction pendant une durée de neuf ans à compter de leur souscription. Cet engagement est apprécié individuellement au n"
+  },
+  {
+   "guid": "86041fbc-2ad4-4e24-9851-077259c9fca9",
+   "article": "Article 4",
+   "pastille": "24",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "14",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Peyrol-Navarro",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "« Par dérogation au douzième alinéa du présent j, la circonstance qu’un logement détenu par une société civile de placement immobilier mentionnée à l’article L. 214‑114 du code monétaire et financier soit loué à un associé ou à un membre de son foyer fiscal n’a pas pour effet de remettre en cause le bénéfice de la déduction au titre de l’amortissement pour l’associé qui n’est pas un membre fondate"
+  },
+  {
+   "guid": "f67d4f7c-5976-4678-aee2-572f85f340ff",
+   "article": "Article 4",
+   "pastille": "25",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "e) e) Au dernier alinéa, après les mots : « s’applique », sont insérés les mots : « , dans sa rédaction en vigueur à la date d’acquisition, » ;"
+  },
+  {
+   "guid": "57774778-caec-4f41-a8fe-7d0b4dc2bfe0",
+   "article": "Article 4",
+   "pastille": "26",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "3° 3° À la fin du dernier alinéa du l, les mots : « aux j et k » sont remplacés par les mots : « au j, dans sa rédaction antérieure à l’article 110 de la loi n° 2023‑1322 du 29 décembre 2023 de finances pour 2024, et au k » ;"
+  },
+  {
+   "guid": "63ed79fa-e30f-4a57-8a0a-f59adea4ab69",
+   "article": "Article 4",
+   "pastille": "27",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "4° 4° La deuxième phrase du cinquième alinéa du m est complétée par les mots : « , dans sa rédaction antérieure à l’article 110 de la loi n° 2023‑1322 du 29 décembre 2023 de finances pour 2024 »."
+  },
+  {
+   "guid": "69f3d91e-f418-4cb0-b89a-bf5866bc25b5",
+   "article": "Article 4",
+   "pastille": "28",
+   "etape": "dépôt, retouché sans amendement nommé",
+   "amendements": [],
+   "texte": "II. – II. – Le I du présent article s’applique à compter du lendemain de la publication de la présente loi."
+  },
+  {
+   "guid": "49da4061-0a35-4d82-9add-66f710456b87",
+   "article": "Article 4",
+   "pastille": "29",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "209",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Carvalho-Zeller",
+     "sort": "Adopté"
+    },
+    {
+     "num": "409",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Lagarde-Arnaud",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "III. – III (nouveau). – La perte de recettes résultant pour l’État de l’inclusion des locations consenties aux parents ou alliés, jusqu’au deuxième degré, dans le dispositif « Relance logement » est compensée, à due concurrence, par la création d’une taxe additionnelle à l’accise sur les tabacs prévue au chapitre IV du titre Ier du livre III du code des impositions sur les biens et services."
+  },
+  {
+   "guid": "54543161-0a7d-48aa-bd2a-085348922a98",
+   "article": "Article 4",
+   "pastille": "30",
+   "etape": "séance",
+   "amendements": [
+    {
+     "num": "210",
+     "texte": "835",
+     "groupe": "SC",
+     "auteur": "Carvalho-Zeller",
+     "sort": "Adopté"
+    },
+    {
+     "num": "3",
+     "texte": "835",
+     "groupe": "SB",
+     "auteur": "Bellec-Ollivier",
+     "sort": "Adopté"
+    }
+   ],
+   "texte": "IV. – IV(nouveau). – La perte de recettes résultant pour l’État de la suppression de la quotité de travaux nécessaires pour bénéficier du dispositif « Relance logement » au profit d’un critère unique de performance énergétique et de la condition obligeant le retrait des chaudières à combustibles fossiles est compensée, à due concurrence, par la création d’une taxe additionnelle à l’accise sur les "
+  }
+ ],
+ "groupes_fictifs": {
+  "AR": "Avenir rural",
+  "CP": "Centre et progrès",
+  "DC": "Démocratie communale",
+  "ECO": "Écologie urbaine",
+  "LL": "Libertés locales",
+  "NI": "Non-inscrits",
+  "NV": "Nouvelle voie",
+  "PR": "Progrès républicain",
+  "RC": "Rassemblement des communes",
+  "RS": "Renouveau social",
+  "SOL": "Solidarité et logement",
+  "UT": "Union des territoires",
+  "SA": "Alliance des départements",
+  "SB": "Bastion républicain",
+  "SC": "Concorde sénatoriale",
+  "SD": "Démocratie des terroirs",
+  "SE": "Équilibre et territoires",
+  "SF": "Forces sociales",
+  "SG": "Gauche des communes",
+  "SH": "Horizon vert",
+  "SI": "Indépendants du Sénat"
+ },
+ "nota": [
+  "Groupes et personnes rendus fictifs (scripts/fictionnaliser.py) ; textes, sorts et dates réels."
+ ]
+}

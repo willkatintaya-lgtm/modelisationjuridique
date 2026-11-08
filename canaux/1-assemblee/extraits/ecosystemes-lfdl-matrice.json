@@ -1,0 +1,1767 @@
+{
+ "source": "https://www.lafabriquedelaloi.fr/api/ppl19-285/viz/articles_etapes.json",
+ "etapes": [
+  {
+   "id": "00_1erelecture_assemblee_depot",
+   "lecture": "1ère lecture",
+   "lieu": "assemblee",
+   "moment": "depot",
+   "date": "2019-12-03",
+   "nb_amendements": null
+  },
+  {
+   "id": "01_1erelecture_assemblee_commission",
+   "lecture": "1ère lecture",
+   "lieu": "assemblee",
+   "moment": "commission",
+   "date": "2020-01-15",
+   "nb_amendements": 131
+  },
+  {
+   "id": "02_1erelecture_assemblee_hemicycle",
+   "lecture": "1ère lecture",
+   "lieu": "assemblee",
+   "moment": "hemicycle",
+   "date": "2020-01-28",
+   "nb_amendements": 261
+  },
+  {
+   "id": "03_1erelecture_senat_depot",
+   "lecture": "1ère lecture",
+   "lieu": "senat",
+   "moment": "depot",
+   "date": "2020-01-30",
+   "nb_amendements": null
+  },
+  {
+   "id": "04_1erelecture_senat_commission",
+   "lecture": "1ère lecture",
+   "lieu": "senat",
+   "moment": "commission",
+   "date": "2020-06-03",
+   "nb_amendements": 19
+  },
+  {
+   "id": "05_1erelecture_senat_hemicycle",
+   "lecture": "1ère lecture",
+   "lieu": "senat",
+   "moment": "hemicycle",
+   "date": "2020-06-09",
+   "nb_amendements": 85
+  },
+  {
+   "id": "06_cmp_cmp_commission",
+   "lecture": "CMP",
+   "lieu": "CMP",
+   "moment": "commission",
+   "date": "2020-07-09",
+   "nb_amendements": null
+  },
+  {
+   "id": "07_cmp_assemblee_hemicycle",
+   "lecture": "CMP",
+   "lieu": "assemblee",
+   "moment": "hemicycle",
+   "date": "2020-07-16",
+   "nb_amendements": 0
+  },
+  {
+   "id": "08_cmp_senat_hemicycle",
+   "lecture": "CMP",
+   "lieu": "senat",
+   "moment": "hemicycle",
+   "date": "2020-07-21",
+   "nb_amendements": 0
+  },
+  {
+   "id": "09_promulgation_gouvernement_",
+   "lecture": "promulgation",
+   "lieu": "gouvernement",
+   "moment": null,
+   "date": "2020-07-31",
+   "nb_amendements": null
+  }
+ ],
+ "table_concordance": {
+  "10": "17",
+  "10 bis": "18",
+  "10 quater": "20",
+  "10 ter": "19",
+  "11": "22",
+  "11 A": "21",
+  "11 bis": "24",
+  "11 bis A": "23",
+  "12": "25",
+  "12 bis": "26",
+  "12 ter": "27",
+  "13": "28",
+  "14": "supprimé",
+  "15": "supprimé",
+  "16": "29",
+  "1er": "supprimé",
+  "1er A": "supprimé",
+  "1er B": "supprimé",
+  "1er C": "supprimé",
+  "1er D": "supprimé",
+  "1er E": "1er",
+  "1er F": "2",
+  "1er G": "3",
+  "2": "supprimé",
+  "3": "4",
+  "4": "5",
+  "5": "6",
+  "6": "7",
+  "6 bis": "8",
+  "7": "9",
+  "7 bis": "10",
+  "7 ter": "11",
+  "8": "12",
+  "8 bis": "13",
+  "8 ter": "14",
+  "9": "15",
+  "9 bis": "16"
+ },
+ "articles": [
+  {
+   "article": "1er A",
+   "section": "C1",
+   "etapes": {
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "new",
+     "longueur": 235,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "rem",
+     "n_diff": 0,
+     "statut": "sup",
+     "longueur": 0,
+     "nouveau_numero": null
+    }
+   }
+  },
+  {
+   "article": "1er B",
+   "section": "C1",
+   "etapes": {
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "new",
+     "longueur": 227,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "rem",
+     "n_diff": 0,
+     "statut": "sup",
+     "longueur": 0,
+     "nouveau_numero": null
+    }
+   }
+  },
+  {
+   "article": "1er C",
+   "section": "C1",
+   "etapes": {
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "new",
+     "longueur": 138,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "rem",
+     "n_diff": 0,
+     "statut": "sup",
+     "longueur": 0,
+     "nouveau_numero": null
+    }
+   }
+  },
+  {
+   "article": "1er D",
+   "section": "C1",
+   "etapes": {
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "new",
+     "longueur": 177,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "rem",
+     "n_diff": 0,
+     "statut": "sup",
+     "longueur": 0,
+     "nouveau_numero": null
+    }
+   }
+  },
+  {
+   "article": "1er E",
+   "section": "C1",
+   "etapes": {
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "new",
+     "longueur": 715,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "add",
+     "n_diff": 0.389,
+     "statut": "none",
+     "longueur": 684,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 684,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 684,
+     "nouveau_numero": "1er"
+    }
+   }
+  },
+  {
+   "article": "1er F",
+   "section": "C1",
+   "etapes": {
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "new",
+     "longueur": 161,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "rem",
+     "n_diff": 0.496,
+     "statut": "none",
+     "longueur": 320,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "both",
+     "n_diff": 0.044,
+     "statut": "none",
+     "longueur": 315,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 315,
+     "nouveau_numero": "2"
+    }
+   }
+  },
+  {
+   "article": "1er G",
+   "section": "C1 bis",
+   "etapes": {
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "new",
+     "longueur": 345,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 345,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 345,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 345,
+     "nouveau_numero": "3"
+    }
+   }
+  },
+  {
+   "article": "1er",
+   "section": "C1",
+   "etapes": {
+    "00_1erelecture_assemblee_depot": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "depot",
+     "longueur": 1757,
+     "nouveau_numero": null
+    },
+    "01_1erelecture_assemblee_commission": {
+     "diff": "rem",
+     "n_diff": 0,
+     "statut": "sup",
+     "longueur": 0,
+     "nouveau_numero": null
+    }
+   }
+  },
+  {
+   "article": "2",
+   "section": "C1",
+   "etapes": {
+    "00_1erelecture_assemblee_depot": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "depot",
+     "longueur": 908,
+     "nouveau_numero": null
+    },
+    "01_1erelecture_assemblee_commission": {
+     "diff": "rem",
+     "n_diff": 0,
+     "statut": "sup",
+     "longueur": 0,
+     "nouveau_numero": null
+    }
+   }
+  },
+  {
+   "article": "3",
+   "section": "C1",
+   "etapes": {
+    "00_1erelecture_assemblee_depot": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "depot",
+     "longueur": 338,
+     "nouveau_numero": null
+    },
+    "01_1erelecture_assemblee_commission": {
+     "diff": "add",
+     "n_diff": 0.083,
+     "statut": "none",
+     "longueur": 348,
+     "nouveau_numero": null
+    },
+    "02_1erelecture_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 348,
+     "nouveau_numero": null
+    },
+    "04_1erelecture_senat_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 348,
+     "nouveau_numero": null
+    },
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "both",
+     "n_diff": 0.23,
+     "statut": "none",
+     "longueur": 445,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "rem",
+     "n_diff": 0.273,
+     "statut": "none",
+     "longueur": 564,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "both",
+     "n_diff": 0.012,
+     "statut": "none",
+     "longueur": 555,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 555,
+     "nouveau_numero": "4"
+    }
+   }
+  },
+  {
+   "article": "4",
+   "section": "C2S1",
+   "etapes": {
+    "00_1erelecture_assemblee_depot": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "depot",
+     "longueur": 907,
+     "nouveau_numero": null
+    },
+    "01_1erelecture_assemblee_commission": {
+     "diff": "both",
+     "n_diff": 0.15,
+     "statut": "none",
+     "longueur": 842,
+     "nouveau_numero": null
+    },
+    "02_1erelecture_assemblee_hemicycle": {
+     "diff": "both",
+     "n_diff": 0.06,
+     "statut": "none",
+     "longueur": 903,
+     "nouveau_numero": null
+    },
+    "04_1erelecture_senat_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 903,
+     "nouveau_numero": null
+    },
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "both",
+     "n_diff": 0.055,
+     "statut": "none",
+     "longueur": 865,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "both",
+     "n_diff": 0.055,
+     "statut": "none",
+     "longueur": 903,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 909,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 909,
+     "nouveau_numero": "5"
+    }
+   }
+  },
+  {
+   "article": "5",
+   "section": "C2S2",
+   "etapes": {
+    "00_1erelecture_assemblee_depot": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "depot",
+     "longueur": 270,
+     "nouveau_numero": null
+    },
+    "01_1erelecture_assemblee_commission": {
+     "diff": "both",
+     "n_diff": 0.023,
+     "statut": "none",
+     "longueur": 273,
+     "nouveau_numero": null
+    },
+    "02_1erelecture_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 273,
+     "nouveau_numero": null
+    },
+    "04_1erelecture_senat_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 273,
+     "nouveau_numero": null
+    },
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 273,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 273,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 273,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 273,
+     "nouveau_numero": "6"
+    }
+   }
+  },
+  {
+   "article": "6",
+   "section": "C3",
+   "etapes": {
+    "00_1erelecture_assemblee_depot": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "depot",
+     "longueur": 300,
+     "nouveau_numero": null
+    },
+    "01_1erelecture_assemblee_commission": {
+     "diff": "both",
+     "n_diff": 0.283,
+     "statut": "none",
+     "longueur": 262,
+     "nouveau_numero": null
+    },
+    "02_1erelecture_assemblee_hemicycle": {
+     "diff": "both",
+     "n_diff": 0.283,
+     "statut": "none",
+     "longueur": 363,
+     "nouveau_numero": null
+    },
+    "04_1erelecture_senat_commission": {
+     "diff": "rem",
+     "n_diff": 0.889,
+     "statut": "none",
+     "longueur": 3262,
+     "nouveau_numero": null
+    },
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "add",
+     "n_diff": 0.9,
+     "statut": "none",
+     "longueur": 326,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 326,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 326,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 326,
+     "nouveau_numero": "7"
+    }
+   }
+  },
+  {
+   "article": "6 bis",
+   "section": "C3",
+   "etapes": {
+    "02_1erelecture_assemblee_hemicycle": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "new",
+     "longueur": 205,
+     "nouveau_numero": null
+    },
+    "04_1erelecture_senat_commission": {
+     "diff": "rem",
+     "n_diff": 0.551,
+     "statut": "none",
+     "longueur": 378,
+     "nouveau_numero": null
+    },
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "both",
+     "n_diff": 0.115,
+     "statut": "none",
+     "longueur": 420,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "both",
+     "n_diff": 0.192,
+     "statut": "none",
+     "longueur": 351,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 350,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "add",
+     "n_diff": 0.089,
+     "statut": "none",
+     "longueur": 317,
+     "nouveau_numero": "8"
+    }
+   }
+  },
+  {
+   "article": "7",
+   "section": "C4",
+   "etapes": {
+    "00_1erelecture_assemblee_depot": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "depot",
+     "longueur": 241,
+     "nouveau_numero": null
+    },
+    "01_1erelecture_assemblee_commission": {
+     "diff": "both",
+     "n_diff": 0.026,
+     "statut": "none",
+     "longueur": 239,
+     "nouveau_numero": null
+    },
+    "02_1erelecture_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 239,
+     "nouveau_numero": null
+    },
+    "04_1erelecture_senat_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 239,
+     "nouveau_numero": null
+    },
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 239,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 239,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 239,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 239,
+     "nouveau_numero": "9"
+    }
+   }
+  },
+  {
+   "article": "7 bis",
+   "section": "C4",
+   "etapes": {
+    "02_1erelecture_assemblee_hemicycle": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "new",
+     "longueur": 93,
+     "nouveau_numero": null
+    },
+    "04_1erelecture_senat_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 93,
+     "nouveau_numero": null
+    },
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 93,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 93,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 93,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 93,
+     "nouveau_numero": "10"
+    }
+   }
+  },
+  {
+   "article": "7 ter",
+   "section": "C4 bis",
+   "etapes": {
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "new",
+     "longueur": 338,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "both",
+     "n_diff": 0.485,
+     "statut": "none",
+     "longueur": 589,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 589,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 589,
+     "nouveau_numero": "11"
+    }
+   }
+  },
+  {
+   "article": "8",
+   "section": "C5",
+   "etapes": {
+    "00_1erelecture_assemblee_depot": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "depot",
+     "longueur": 673,
+     "nouveau_numero": null
+    },
+    "01_1erelecture_assemblee_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 675,
+     "nouveau_numero": null
+    },
+    "02_1erelecture_assemblee_hemicycle": {
+     "diff": "rem",
+     "n_diff": 0.109,
+     "statut": "none",
+     "longueur": 701,
+     "nouveau_numero": null
+    },
+    "04_1erelecture_senat_commission": {
+     "diff": "both",
+     "n_diff": 0.15,
+     "statut": "none",
+     "longueur": 796,
+     "nouveau_numero": null
+    },
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 796,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 796,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 796,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 796,
+     "nouveau_numero": "12"
+    }
+   }
+  },
+  {
+   "article": "8 bis",
+   "section": "C5",
+   "etapes": {
+    "02_1erelecture_assemblee_hemicycle": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "new",
+     "longueur": 307,
+     "nouveau_numero": null
+    },
+    "04_1erelecture_senat_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 307,
+     "nouveau_numero": null
+    },
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 307,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 307,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 307,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 307,
+     "nouveau_numero": "13"
+    }
+   }
+  },
+  {
+   "article": "8 ter",
+   "section": "C5",
+   "etapes": {
+    "02_1erelecture_assemblee_hemicycle": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "new",
+     "longueur": 369,
+     "nouveau_numero": null
+    },
+    "04_1erelecture_senat_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 369,
+     "nouveau_numero": null
+    },
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 369,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 369,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 369,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 369,
+     "nouveau_numero": "14"
+    }
+   }
+  },
+  {
+   "article": "9",
+   "section": "C6",
+   "etapes": {
+    "00_1erelecture_assemblee_depot": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "depot",
+     "longueur": 562,
+     "nouveau_numero": null
+    },
+    "01_1erelecture_assemblee_commission": {
+     "diff": "add",
+     "n_diff": 0.16,
+     "statut": "none",
+     "longueur": 480,
+     "nouveau_numero": null
+    },
+    "02_1erelecture_assemblee_hemicycle": {
+     "diff": "both",
+     "n_diff": 0.119,
+     "statut": "none",
+     "longueur": 534,
+     "nouveau_numero": null
+    },
+    "04_1erelecture_senat_commission": {
+     "diff": "both",
+     "n_diff": 0.2,
+     "statut": "none",
+     "longueur": 427,
+     "nouveau_numero": null
+    },
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 427,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 427,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 427,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 427,
+     "nouveau_numero": "15"
+    }
+   }
+  },
+  {
+   "article": "9 bis",
+   "section": "C6",
+   "etapes": {
+    "01_1erelecture_assemblee_commission": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "new",
+     "longueur": 562,
+     "nouveau_numero": null
+    },
+    "02_1erelecture_assemblee_hemicycle": {
+     "diff": "both",
+     "n_diff": 0.005,
+     "statut": "none",
+     "longueur": 563,
+     "nouveau_numero": null
+    },
+    "04_1erelecture_senat_commission": {
+     "diff": "rem",
+     "n_diff": 0.232,
+     "statut": "none",
+     "longueur": 767,
+     "nouveau_numero": null
+    },
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 767,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "rem",
+     "n_diff": 0.221,
+     "statut": "none",
+     "longueur": 980,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "both",
+     "n_diff": 0.049,
+     "statut": "none",
+     "longueur": 1000,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 995,
+     "nouveau_numero": "16"
+    }
+   }
+  },
+  {
+   "article": "10",
+   "section": "C7",
+   "etapes": {
+    "00_1erelecture_assemblee_depot": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "depot",
+     "longueur": 529,
+     "nouveau_numero": null
+    },
+    "01_1erelecture_assemblee_commission": {
+     "diff": "rem",
+     "n_diff": 0.382,
+     "statut": "none",
+     "longueur": 811,
+     "nouveau_numero": null
+    },
+    "02_1erelecture_assemblee_hemicycle": {
+     "diff": "both",
+     "n_diff": 0.017,
+     "statut": "none",
+     "longueur": 825,
+     "nouveau_numero": null
+    },
+    "04_1erelecture_senat_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 825,
+     "nouveau_numero": null
+    },
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 825,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 825,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 825,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 821,
+     "nouveau_numero": "17"
+    }
+   }
+  },
+  {
+   "article": "10 bis",
+   "section": "C7",
+   "etapes": {
+    "01_1erelecture_assemblee_commission": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "new",
+     "longueur": 301,
+     "nouveau_numero": null
+    },
+    "02_1erelecture_assemblee_hemicycle": {
+     "diff": "rem",
+     "n_diff": 0.32,
+     "statut": "none",
+     "longueur": 456,
+     "nouveau_numero": null
+    },
+    "04_1erelecture_senat_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 456,
+     "nouveau_numero": null
+    },
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 456,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 456,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 456,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 456,
+     "nouveau_numero": "18"
+    }
+   }
+  },
+  {
+   "article": "10 ter",
+   "section": "C7",
+   "etapes": {
+    "02_1erelecture_assemblee_hemicycle": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "new",
+     "longueur": 294,
+     "nouveau_numero": null
+    },
+    "04_1erelecture_senat_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 294,
+     "nouveau_numero": null
+    },
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 294,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 294,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 294,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 294,
+     "nouveau_numero": "19"
+    }
+   }
+  },
+  {
+   "article": "10 quater",
+   "section": "C7",
+   "etapes": {
+    "04_1erelecture_senat_commission": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "new",
+     "longueur": 275,
+     "nouveau_numero": null
+    },
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "both",
+     "n_diff": 0.134,
+     "statut": "none",
+     "longueur": 264,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "both",
+     "n_diff": 0.138,
+     "statut": "none",
+     "longueur": 276,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 276,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 276,
+     "nouveau_numero": "20"
+    }
+   }
+  },
+  {
+   "article": "11 A",
+   "section": "C8",
+   "etapes": {
+    "02_1erelecture_assemblee_hemicycle": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "new",
+     "longueur": 187,
+     "nouveau_numero": null
+    },
+    "04_1erelecture_senat_commission": {
+     "diff": "rem",
+     "n_diff": 0.597,
+     "statut": "none",
+     "longueur": 473,
+     "nouveau_numero": null
+    },
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "both",
+     "n_diff": 0.245,
+     "statut": "none",
+     "longueur": 403,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "rem",
+     "n_diff": 0.306,
+     "statut": "none",
+     "longueur": 501,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 501,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 501,
+     "nouveau_numero": "21"
+    }
+   }
+  },
+  {
+   "article": "11",
+   "section": "C8",
+   "etapes": {
+    "00_1erelecture_assemblee_depot": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "depot",
+     "longueur": 303,
+     "nouveau_numero": null
+    },
+    "01_1erelecture_assemblee_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 303,
+     "nouveau_numero": null
+    },
+    "02_1erelecture_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 303,
+     "nouveau_numero": null
+    },
+    "04_1erelecture_senat_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 303,
+     "nouveau_numero": null
+    },
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 303,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 303,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 303,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 303,
+     "nouveau_numero": "22"
+    }
+   }
+  },
+  {
+   "article": "11 bis A",
+   "section": "C8",
+   "etapes": {
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "new",
+     "longueur": 1915,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "both",
+     "n_diff": 0.031,
+     "statut": "none",
+     "longueur": 1952,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 1952,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 1952,
+     "nouveau_numero": "23"
+    }
+   }
+  },
+  {
+   "article": "11 bis",
+   "section": "C8",
+   "etapes": {
+    "01_1erelecture_assemblee_commission": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "new",
+     "longueur": 1924,
+     "nouveau_numero": null
+    },
+    "02_1erelecture_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 1924,
+     "nouveau_numero": null
+    },
+    "04_1erelecture_senat_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 1924,
+     "nouveau_numero": null
+    },
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 1924,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 1924,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 1924,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 1924,
+     "nouveau_numero": "24"
+    }
+   }
+  },
+  {
+   "article": "12",
+   "section": "C9",
+   "etapes": {
+    "00_1erelecture_assemblee_depot": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "depot",
+     "longueur": 573,
+     "nouveau_numero": null
+    },
+    "01_1erelecture_assemblee_commission": {
+     "diff": "both",
+     "n_diff": 0.006,
+     "statut": "none",
+     "longueur": 575,
+     "nouveau_numero": null
+    },
+    "02_1erelecture_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 575,
+     "nouveau_numero": null
+    },
+    "04_1erelecture_senat_commission": {
+     "diff": "rem",
+     "n_diff": 0,
+     "statut": "sup",
+     "longueur": 0,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "new",
+     "longueur": 512,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 512,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 512,
+     "nouveau_numero": "25"
+    }
+   }
+  },
+  {
+   "article": "12 bis",
+   "section": "C9",
+   "etapes": {
+    "02_1erelecture_assemblee_hemicycle": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "new",
+     "longueur": 149,
+     "nouveau_numero": null
+    },
+    "04_1erelecture_senat_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 149,
+     "nouveau_numero": null
+    },
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 149,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 149,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 149,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 149,
+     "nouveau_numero": "26"
+    }
+   }
+  },
+  {
+   "article": "12 ter",
+   "section": "C9 bis",
+   "etapes": {
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "new",
+     "longueur": 1443,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "both",
+     "n_diff": 0.402,
+     "statut": "none",
+     "longueur": 1112,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "both",
+     "n_diff": 0.024,
+     "statut": "none",
+     "longueur": 1130,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "add",
+     "n_diff": 0.004,
+     "statut": "none",
+     "longueur": 1096,
+     "nouveau_numero": "27"
+    }
+   }
+  },
+  {
+   "article": "13",
+   "section": "C10",
+   "etapes": {
+    "00_1erelecture_assemblee_depot": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "depot",
+     "longueur": 829,
+     "nouveau_numero": null
+    },
+    "01_1erelecture_assemblee_commission": {
+     "diff": "both",
+     "n_diff": 0.023,
+     "statut": "none",
+     "longueur": 849,
+     "nouveau_numero": null
+    },
+    "02_1erelecture_assemblee_hemicycle": {
+     "diff": "rem",
+     "n_diff": 0.215,
+     "statut": "none",
+     "longueur": 1094,
+     "nouveau_numero": null
+    },
+    "04_1erelecture_senat_commission": {
+     "diff": "both",
+     "n_diff": 0.219,
+     "statut": "none",
+     "longueur": 872,
+     "nouveau_numero": null
+    },
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 872,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "rem",
+     "n_diff": 0.333,
+     "statut": "none",
+     "longueur": 1320,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 1320,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "both",
+     "n_diff": 0.041,
+     "statut": "none",
+     "longueur": 1280,
+     "nouveau_numero": "28"
+    }
+   }
+  },
+  {
+   "article": "14",
+   "section": "C11",
+   "etapes": {
+    "00_1erelecture_assemblee_depot": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "depot",
+     "longueur": 168,
+     "nouveau_numero": null
+    },
+    "01_1erelecture_assemblee_commission": {
+     "diff": "rem",
+     "n_diff": 0,
+     "statut": "sup",
+     "longueur": 0,
+     "nouveau_numero": null
+    }
+   }
+  },
+  {
+   "article": "15",
+   "section": "C11",
+   "etapes": {
+    "02_1erelecture_assemblee_hemicycle": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "new",
+     "longueur": 393,
+     "nouveau_numero": null
+    },
+    "04_1erelecture_senat_commission": {
+     "diff": "rem",
+     "n_diff": 0,
+     "statut": "sup",
+     "longueur": 0,
+     "nouveau_numero": null
+    }
+   }
+  },
+  {
+   "article": "16",
+   "section": "C11",
+   "etapes": {
+    "05_1erelecture_senat_hemicycle": {
+     "diff": "add",
+     "n_diff": 1,
+     "statut": "new",
+     "longueur": 257,
+     "nouveau_numero": null
+    },
+    "06_cmp_cmp_commission": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 257,
+     "nouveau_numero": null
+    },
+    "07_cmp_assemblee_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 257,
+     "nouveau_numero": null
+    },
+    "08_cmp_senat_hemicycle": {
+     "diff": "none",
+     "n_diff": 0,
+     "statut": "none",
+     "longueur": 257,
+     "nouveau_numero": "29"
+    }
+   }
+  }
+ ],
+ "groupes_fictifs": {
+  "AR": "Avenir rural",
+  "CP": "Centre et progrès",
+  "DC": "Démocratie communale",
+  "ECO": "Écologie urbaine",
+  "LL": "Libertés locales",
+  "NI": "Non-inscrits",
+  "NV": "Nouvelle voie",
+  "PR": "Progrès républicain",
+  "RC": "Rassemblement des communes",
+  "RS": "Renouveau social",
+  "SOL": "Solidarité et logement",
+  "UT": "Union des territoires",
+  "SA": "Alliance des départements",
+  "SB": "Bastion républicain",
+  "SC": "Concorde sénatoriale",
+  "SD": "Démocratie des terroirs",
+  "SE": "Équilibre et territoires",
+  "SF": "Forces sociales",
+  "SG": "Gauche des communes",
+  "SH": "Horizon vert",
+  "SI": "Indépendants du Sénat"
+ },
+ "nota": [
+  "Groupes et personnes rendus fictifs (scripts/fictionnaliser.py) ; textes, sorts et dates réels."
+ ]
+}
