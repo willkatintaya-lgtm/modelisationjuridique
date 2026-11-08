@@ -1,0 +1,154 @@
+/* =====================================================================
+   Boussole des amendements · direction artistique figée (v1, 8 novembre 2026)
+   « Le bordereau » : papier clair, encre, cadre complet, purement graphique.
+   Source des choix : direction-artistique/DA.md et DECISIONS.md (parapheurs 01 et 02, 03 validé d'emblée).
+   Thème unique, clair. Aucune ombre sur les feuilles, aucun rayon, aucune matière (ni grain, ni tampon).
+   ===================================================================== */
+
+/* Polices (licences libres) :
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&family=Courier+Prime:wght@400;700&display=swap"> */
+
+:root{
+  color-scheme: light;
+
+  /* ---- surfaces ---- */
+  --da-bureau:      #e4e1da;  /* fond de l'application (le bureau) */
+  --da-papier:      #fdfcf9;  /* feuilles, panneaux, listes */
+  --da-papier-ref:  #f6f3ec;  /* la référence (texte face auquel on compare) */
+  --da-papier-2:    #faf8f2;  /* survol, pied de feuille, zone d'édition */
+
+  /* ---- encre (texte, 3 niveaux) ---- */
+  --da-encre:       #1a1a1a;  /* texte principal · 16,9:1 sur papier */
+  --da-encre-2:     #4a453d;  /* texte secondaire · 9,3:1 */
+  --da-encre-3:     #655e52;  /* mentions, en-têtes de colonnes · 6,2:1 sur papier, 4,9:1 sur bureau */
+
+  /* ---- filets ---- */
+  --da-filet:       #e3ded3;  /* séparation discrète (décoratif) */
+  --da-filet-fort:  #cfc7b6;  /* bord des feuilles et des panneaux */
+  --da-filet-encre: #1a1a1a;  /* cadre du bordereau, filet sous un en-tête */
+  --da-trait: 1px;            /* filet courant */
+  --da-trait-fort: 1.5px;     /* cadre du bordereau, filet d'en-tête */
+
+  /* ---- accent rare : le parapheur (ma rédaction, la validation ; rien d'autre) ---- */
+  --da-bordeaux:    #5b1e25;  /* 12,3:1 ; texte papier sur bordeaux 12,3:1 */
+  --da-or:          #a8843f;  /* filets seulement, jamais du texte · 3,4:1 (objet graphique ≥ 3:1) */
+
+  /* ---- corrections apparentes (sur la rédaction comparée seulement) ---- */
+  --da-ins:         #1f3a93;  /* ajout : souligné, gras, encre bleue · 9,8:1 */
+  --da-del:         #a8452f;  /* suppression : barrée, reste lisible · 5,7:1 */
+  --da-dispute:     #4a453d;  /* passage disputé : pointillé d'encre */
+  --da-dispute-1: 1px;        /* 2 propositions */
+  --da-dispute-2: 1.5px;      /* 3 à 5 */
+  --da-dispute-3: 2.5px;      /* 6 et plus */
+
+  /* ---- intercalaires (la chemise : séparer des familles, ex. thèmes) ; encre dessus ≥ 10:1 ---- */
+  --da-int-1: #e9d8a8;  /* paille */
+  --da-int-2: #c9d3b0;  /* tilleul */
+  --da-int-3: #e7c3b5;  /* saumon */
+  --da-int-4: #c8d6e0;  /* ciel */
+  --da-int-5: #d6cde3;  /* lavande */
+
+  /* ---- sorts : mention en capitales + filet de marge (aucune couleur) ---- */
+  --da-sort-adopte:  4px solid var(--da-encre);
+  --da-sort-rejete:  1px solid var(--da-encre);
+  --da-sort-tombe:   2px dotted var(--da-encre);
+  --da-sort-retire:  2px dashed var(--da-encre);
+  --da-sort-aucun:   0 solid transparent;   /* non soutenu, en attente, irrecevable */
+
+  /* ---- typographie ---- */
+  --da-f-loi: "Source Serif 4", Georgia, "Times New Roman", serif;   /* texte de loi, titres de feuille */
+  --da-f-ui:  "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif; /* interface */
+  --da-f-num: "Courier Prime", "Courier New", ui-monospace, monospace; /* numéros, cotes */
+  --da-caps-ls: .14em;        /* capitales espacées (en-têtes) */
+  --da-chev-ls: .18em;        /* noms en capitales (chevalets) */
+  /* échelle : taille / interligne */
+  --da-t-caps: 11px;  --da-l-caps: 16px;   /* en-têtes en capitales, 600 */
+  --da-t-s:    12px;  --da-l-s:    18px;   /* secondaire */
+  --da-t-ui:   13px;  --da-l-ui:   20px;   /* interface courante */
+  --da-t-h:    15px;  --da-l-h:    22px;   /* titre de panneau, 600 */
+  --da-t-loi:  16px;  --da-l-loi:  26px;   /* texte de loi */
+  --da-t-loi-c:15px;  --da-l-loi-c:24px;   /* texte de loi compact (listes, mobile) */
+  --da-t-titre:20px;  --da-l-titre:28px;   /* titre de feuille, Source Serif 600 */
+  --da-mesure: 66ch;                        /* longueur de ligne du texte de loi */
+
+  /* ---- forme ---- */
+  --da-rayon: 0;              /* aucun rayon */
+  --da-ombre: none;           /* feuilles : un filet, pas d'ombre */
+  --da-ombre-flottant: 0 1px 2px rgba(26,26,26,.10), 0 8px 24px rgba(26,26,26,.12); /* menus, palettes, dialogues seulement */
+  --da-pas: 4px;              /* grille d'espacement : multiples de 4 */
+  --da-ligne: 32px;           /* hauteur minimale d'une ligne de liste */
+  --da-cible: 44px;           /* cible tactile minimale sur écran étroit */
+  --da-focus: 2px solid var(--da-encre);
+}
+
+/* =====================================================================
+   Composants de référence (facultatifs : à reprendre ou à transposer
+   dans les classes existantes d'une maquette, sans changer sa structure)
+   ===================================================================== */
+
+/* feuille de papier */
+.da-feuille{background:var(--da-papier);border:var(--da-trait) solid var(--da-filet-fort);border-radius:0;box-shadow:none;color:var(--da-encre)}
+.da-ref{background:var(--da-papier-ref);border-left:2px solid var(--da-filet-fort)}
+
+/* en-tête en capitales espacées */
+.da-caps{font:600 var(--da-t-caps)/var(--da-l-caps) var(--da-f-ui);letter-spacing:var(--da-caps-ls);text-transform:uppercase;color:var(--da-encre-3)}
+
+/* en-tête de feuille (la note) : émetteur à gauche, date ou numéro à droite ; ligne « Objet » soulignée */
+.da-entete{display:flex;justify-content:space-between;gap:12px}
+.da-objet u,.da-objet .lbl{text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+
+/* texte de loi */
+.da-loi{font-family:var(--da-f-loi);font-size:var(--da-t-loi);line-height:var(--da-l-loi);max-width:var(--da-mesure);color:var(--da-encre)}
+
+/* corrections apparentes (portées sur la rédaction comparée, jamais sur la référence) */
+.da-loi ins,ins.da-ins{color:var(--da-ins);font-weight:600;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px;background:none}
+.da-loi del,del.da-del{color:var(--da-del);text-decoration:line-through;text-decoration-color:var(--da-del);text-decoration-thickness:1px}
+.da-dispute{background:none;color:inherit;text-decoration:underline dotted var(--da-dispute);text-decoration-thickness:var(--da-dispute-1);text-underline-offset:5px;cursor:pointer}
+.da-dispute.w2{text-decoration-thickness:var(--da-dispute-2)}
+.da-dispute.w3{text-decoration-thickness:var(--da-dispute-3)}
+.da-dispute:hover,.da-dispute.on{background:var(--da-papier-2)}
+/* calque miroir pendant la frappe : ajouts soulignés, suppressions en trait rouge fin */
+.da-live ins{font-weight:400;color:inherit;text-decoration:underline var(--da-ins) 1px}
+.da-live .delpt{display:inline-block;width:2px;height:1em;background:var(--da-del);vertical-align:-2px}
+
+/* le bordereau : cadre complet, en-tête sur filet d'encre, numéro à la machine à gauche */
+.da-bordereau{border-collapse:collapse;width:100%;font:var(--da-t-ui)/var(--da-l-ui) var(--da-f-ui);border:var(--da-trait-fort) solid var(--da-filet-encre)}
+.da-bordereau th{font:600 var(--da-t-caps)/var(--da-l-caps) var(--da-f-ui);letter-spacing:var(--da-caps-ls);text-transform:uppercase;color:var(--da-encre-3);text-align:left;padding:6px 8px;border:var(--da-trait) solid var(--da-filet-encre);border-bottom-width:var(--da-trait-fort)}
+.da-bordereau td{padding:6px 8px;border:var(--da-trait) solid var(--da-filet-encre);vertical-align:top;height:var(--da-ligne)}
+.da-bordereau td.da-no,.da-no{font:700 var(--da-t-ui)/var(--da-l-ui) var(--da-f-num);white-space:nowrap}
+.da-bordereau tr:hover td{background:var(--da-papier-2)}
+.da-bordereau tr.sel td,.da-sel{outline:var(--da-focus);outline-offset:-2px}
+
+/* sorts : mention en capitales + filet de marge sur la première cellule (ou le bord gauche d'une carte) */
+.da-sort{font:600 10.5px/16px var(--da-f-ui);letter-spacing:var(--da-caps-ls);text-transform:uppercase;color:var(--da-encre-3);white-space:nowrap}
+.da-sort.adopte{color:var(--da-encre)}
+.s-adopte  >:first-child,.da-carte.s-adopte {border-left:var(--da-sort-adopte)}
+.s-rejete  >:first-child,.da-carte.s-rejete {border-left:var(--da-sort-rejete)}
+.s-tombe   >:first-child,.da-carte.s-tombe  {border-left:var(--da-sort-tombe)}
+.s-retire  >:first-child,.da-carte.s-retire {border-left:var(--da-sort-retire)}
+.s-ns,.s-attente,.s-ecarte{}
+.s-ecarte{color:var(--da-encre-3)}  /* irrecevable, écarté : texte en encre-3, mention « IRRECEVABLE » */
+
+/* chevalet : noms (groupes, orateurs) en capitales, fonction dessous */
+.da-chevalet{font:600 var(--da-t-ui)/1.3 var(--da-f-ui);letter-spacing:var(--da-chev-ls);text-transform:uppercase;color:var(--da-encre)}
+.da-chevalet small{display:block;font-weight:500;font-size:10px;letter-spacing:var(--da-chev-ls);color:var(--da-encre-3)}
+.da-groupe{display:inline-block;width:8px;height:8px;background:var(--g);vertical-align:1px;margin-right:6px} /* couleur de groupe : un carré de 8 px, jamais un aplat de texte */
+
+/* cote (la chemise) et intercalaires */
+.da-cote{font:700 var(--da-t-ui)/1 var(--da-f-num);letter-spacing:.06em}
+.da-intercalaire{display:inline-block;font:600 10px/1 var(--da-f-ui);letter-spacing:.12em;text-transform:uppercase;padding:5px 8px;color:var(--da-encre);background:var(--da-int-1)}
+
+/* boutons : primaire = parapheur (valider, signer, confirmer) ; secondaire = cadre d'encre ; tertiaire = texte souligné */
+.da-btn{font:600 12px/1 var(--da-f-ui);letter-spacing:.1em;text-transform:uppercase;padding:10px 16px;border:var(--da-trait-fort) solid var(--da-encre);background:var(--da-papier);color:var(--da-encre);border-radius:0;cursor:pointer}
+.da-btn:hover{background:var(--da-papier-2)}
+.da-btn.pri{background:var(--da-bordeaux);border-color:var(--da-bordeaux);color:var(--da-papier)}
+.da-btn.ter{border-color:transparent;background:none;text-decoration:underline;text-underline-offset:3px;text-transform:none;letter-spacing:0;font-weight:500;font-size:13px}
+.da-mienne{border-top:2px solid var(--da-or)} /* ma rédaction : filet d'or en tête de feuille ; libellé en bordeaux */
+.da-mienne .da-caps{color:var(--da-bordeaux)}
+
+/* couches flottantes (menus, palettes, dialogues) : la seule ombre admise */
+.da-flottant{background:var(--da-papier);border:var(--da-trait) solid var(--da-filet-fort);box-shadow:var(--da-ombre-flottant);border-radius:0}
+
+:focus-visible{outline:var(--da-focus);outline-offset:2px}
+/* listes à défilement natif : pas de barre visible */
+.da-defile{overflow:auto;scrollbar-width:none}.da-defile::-webkit-scrollbar{display:none}

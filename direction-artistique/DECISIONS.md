@@ -30,3 +30,6 @@ Page : https://claude.ai/artifact/L5iPcjLNYgSz6XABgd4Xb5 (privée) · source : `
 ### Conséquences
 - L'or n'a plus qu'un seul emploi : le parapheur (ma rédaction, la validation). Le passage disputé passe en pointillé d'encre ; son épaisseur selon le nombre de propositions reste à fixer au parapheur 03.
 - Le cadre complet donne aux listes un aspect de formulaire : à vérifier sur des listes longues (densité) lors de l'essai Figma.
+
+## Parapheur n° 03 · direction artistique figée (validé d'emblée le 8 novembre 2026)
+L'utilisateur a validé sans relecture la mise en système (« je te fais confiance, c'est un prototype ») et demandé la transmission directe à la Vigie, sans l'essai préalable sur la maquette Figma. Résultat : `DA.md` et `da.css` (v1).
