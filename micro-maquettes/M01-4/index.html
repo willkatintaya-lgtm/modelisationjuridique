@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="fr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M01-4 · Le texte auquel on est exposé</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../commun/cadre.css">
+<style>
+.bureau{flex-direction:column;align-items:center}
+.colonne{width:min(100%,760px);display:flex;flex-direction:column;gap:18px}
+.page{width:100%}
+.lu{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;margin:2px 0 16px;padding:10px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.lu .mention{flex:0 0 auto}
+.lu .titre{font:600 17px/1.35 var(--serif)}
+.lu .ou{font:400 12px var(--ui);color:var(--muted-p);margin-left:auto}
+.page.avenir .al,.page.avenir h2,.page.avenir .lec-tit{display:none}
+.blanc{font:italic 400 16px/1.6 var(--serif);color:var(--muted-p);padding:40px 0 60px;text-align:center}
+.lec-h{font:600 11px/1 var(--ui);letter-spacing:.16em;text-transform:uppercase;color:var(--ink2);margin:20px 0 4px}
+.lec-tit{font:600 19px/1.3 var(--serif);margin:0 0 14px}
+/* A : la frise (une bande de papier) */
+.frise{background:linear-gradient(135deg,#efebe1,#e4ded0);border:1px solid var(--rule);box-shadow:0 10px 30px rgba(0,0,0,.45);padding:12px 18px 14px;color:var(--ink)}
+.frise .lieux{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:6px}
+.frise .lieu{font:600 9px/1.2 var(--ui);letter-spacing:.14em;text-transform:uppercase;color:var(--muted-p);border-bottom:1px solid var(--rule);padding:0 4px 5px;margin:0 3px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.frise .pts{display:grid;grid-template-columns:repeat(7,1fr);position:relative}
+.frise .pts::before{content:"";position:absolute;left:7%;right:7%;top:10px;border-top:1.5px solid var(--ink2)}
+.frise .pts::after{content:"";position:absolute;left:var(--auj);right:7%;top:10px;border-top:1.5px dashed #f0ece2}
+.frise .pt{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;padding:0 2px;text-align:center}
+.frise .pt i{width:13px;height:13px;border-radius:50%;background:var(--paper);border:1.5px solid var(--ink2);margin-top:4px;z-index:1}
+.frise .pt.avenir i{border-style:dashed;border-color:var(--muted-p)}
+.frise .pt.on i{background:var(--gold);border-color:#8a6a2a;box-shadow:0 0 0 4px rgba(217,181,106,.3)}
+.frise .pt .e{font:400 12.5px/1.25 var(--serif);color:var(--ink)}
+.frise .pt.avenir .e{color:var(--muted-p);font-style:italic}
+.frise .pt small{font:400 10px/1.2 var(--ui);color:var(--muted-p)}
+.frise .pt.on .e{font-weight:600}
+.frise .pt:hover .e{text-decoration:underline dotted var(--rule);text-underline-offset:3px}
+.frise .auj{position:absolute;top:-2px;left:var(--auj);transform:translateX(-50%);font:600 8.5px/1 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--stamp);background:#ebe6da;padding:0 3px;z-index:2}
+/* B : le tampon */
+.tamp{float:right;display:flex;align-items:center;gap:6px;margin:4px 0 12px 18px}
+.tamp .tampon{font-size:10px;padding:6px 9px 5px;max-width:230px;text-align:center;line-height:1.3;transform:rotate(-3deg);background:rgba(244,241,233,.6)}
+.tamp .tampon.avenir{border-style:dashed;color:var(--muted-p);border-color:var(--muted-p)}
+.tamp button.f{font:400 18px/1 var(--serif);color:var(--ink2);width:28px;height:28px;border:1px solid var(--rule);background:rgba(255,255,255,.4)}
+.tamp button.f:hover{border-color:var(--gold)}
+.tamp button.f:disabled{opacity:.3;cursor:default}
+.echelle{display:flex;gap:3px;margin:-10px 0 14px}
+.echelle span{flex:1;height:4px;background:var(--rule)}
+.echelle span.passe{background:var(--ink2)}
+.echelle span.on{background:var(--gold)}
+.echelle span.avenir{background:repeating-linear-gradient(90deg,var(--rule) 0 4px,transparent 4px 7px)}
+/* C : les intercalaires */
+.pile{position:relative;padding-top:42px}
+.onglets{position:absolute;top:0;left:0;right:0;display:flex;gap:3px;padding:0 10px}
+.onglets button{flex:1 1 0;min-width:0;height:44px;padding:7px 8px 0;text-align:left;background:linear-gradient(#ebe6da,#e2dccd);border:1px solid var(--rule);border-bottom:0;color:var(--ink2);font:400 12px/1.2 var(--serif);overflow:hidden;position:relative;top:4px;transition:top .15s}
+.onglets button small{display:block;font:600 8.5px/1.2 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--muted-p);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.onglets button .e{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.onglets button:hover{top:0}
+.onglets button.on{top:-2px;height:48px;background:linear-gradient(#f4f1e9,#f2eee5);color:var(--ink);font-weight:600;z-index:2}
+.onglets button.avenir{background:none;border-style:dashed;color:#8a90a0}
+.onglets button.avenir small{color:#5b6170}
+.pile .page{z-index:1}
+@media (max-width:700px){
+  .frise{padding:10px 8px 12px}
+  .frise .lieu{font-size:8px;letter-spacing:.06em;margin:0 1px;padding:0 1px 4px}
+  .frise .pt .e{font-size:10.5px}.frise .pt small{display:none}
+  .tamp{float:none;margin:0 0 14px;justify-content:flex-start}
+  .onglets{padding:0 4px;gap:2px}.onglets button{padding:6px 3px 0;font-size:10px}.onglets button small{font-size:7px;letter-spacing:.04em}
+}
+</style>
+<script>window.MAQ = "micro-M01-4";</script>
+<script src="../../maquettes/commun/data.js"></script>
+<script src="../../maquettes/commun/base.js"></script>
+<script src="../../maquettes/commun/modele.js"></script>
+<script src="../../maquettes/commun/noyau.js"></script>
+<script src="../commun/cadre.js"></script>
+</head><body>
+<p class="consigne" id="consigne"></p>
+<main class="bureau"><div class="colonne" id="colonne"></div></main>
+<script>
+"use strict";
+const CONSIGNES = [
+  "<b>La frise.</b> Une seule suite, du dépôt au texte définitif : le lieu se lit au-dessus, comme une conséquence du moment. Le point doré est le texte que vous lisez ; « aujourd'hui » sépare ce qui existe de ce qui est à venir.",
+  "<b>Le tampon.</b> Le texte lu est un tampon sur la page ; ‹ › (ou les flèches du clavier) remontent ou avancent dans le temps. Un filet sous le titre situe l'étape dans la suite.",
+  "<b>Les intercalaires.</b> Les textes successifs sont des feuilles empilées ; leurs onglets dépassent, dans l'ordre du temps. Le texte lu est la feuille de devant. Les feuilles à venir sont en pointillé.",
+];
+const S = MM.STAGES, AUJ = 3.5;   // aujourd'hui (9 nov. 2026) : après le texte de la commission, avant la séance
+let cur = 2, V = 0;
+try{ const r = localStorage.getItem("mm:M01-4:cur"), c = r == null ? -1 : +r; if (c >= 0 && c < S.length && MM.hasText(S[c].id)) cur = c; }catch(_){}
+const lieux = () => { const out = []; S.forEach((s, i) => { const l = out[out.length - 1]; if (l && l.lieu === s.lieu) l.n++; else out.push({lieu: s.lieu, from: i, n: 1}); }); return out; };
+function corps(){
+  const s = S[cur], A = MM.art4(s.id);
+  const lu = `<div class="lu"><span class="mention">Vous lisez</span><span class="titre">${esc(s.titre)}</span><span class="ou">étape ${cur + 1} sur ${S.length}${s.examine ? " · texte examiné par la commission de l'Assemblée" : ""}${s.date ? " · " + esc(s.date) : ""}</span></div>`;
+  if (!A) return lu + `<p class="blanc">Ce texte n'existe pas encore${s.avenir ? " (" + esc(s.avenir) + ")" : ""}.</p>`;
+  const n = MM.plan(s.id).filter(p => p.presence !== "absent").length;
+  return lu + `<p class="small">${n} articles dans ce texte ; seul l'article 4 est chargé dans le prototype.</p><h2 class="lec-h">Article 4</h2><p class="lec-tit">${esc(D.plan.find(p => p.num === "4").intitule)}</p>` + A.map((t, i) => MM.alHTML(t, i + 1)).join("");
+}
+const page = (cls, avant) => MM.page(`${esc(D.dossier.uid)} · ${esc(S[cur].titre)}`, esc(MM.stageLabel(S[cur].id)), (avant || "") + MM.entete() + corps(), cls + (MM.hasText(S[cur].id) ? "" : " avenir"));
+function frise(){
+  const auj = (AUJ + .5) / S.length * 100;
+  return `<nav class="frise"><div class="lieux">${lieux().map(l => `<span class="lieu" style="grid-column:${l.from + 1} / span ${l.n}">${esc(l.lieu === "Commission mixte paritaire" ? "CMP" : l.lieu)}</span>`).join("")}</div>
+    <div class="pts" style="--auj:${auj}%"><span class="auj">aujourd'hui</span>${S.map((s, i) => `<button class="pt${i === cur ? " on" : ""}${MM.hasText(s.id) ? "" : " avenir"}" data-i="${i}"><i></i><span class="e">${esc(s.etape ? cap(s.etape.replace(" · texte transmis", "")) : "Texte de la CMP")}</span><small>${esc(s.examine ? "texte transmis" : s.avenir || s.date || "")}</small></button>`).join("")}</div></nav>`;
+}
+function tampon(){
+  const s = S[cur];
+  return `<div class="tamp"><button class="f" data-pas="-1"${cur === 0 ? " disabled" : ""} title="texte précédent">‹</button><span class="tampon${MM.hasText(s.id) ? "" : " avenir"}">${esc(s.titre)}</span><button class="f" data-pas="1"${cur === S.length - 1 ? " disabled" : ""} title="texte suivant">›</button></div>`;
+}
+const echelle = () => `<div class="echelle">${S.map((s, i) => `<span class="${i === cur ? "on" : i < cur ? "passe" : ""}${MM.hasText(s.id) ? "" : " avenir"}" title="${esc(s.titre)}"></span>`).join("")}</div>`;
+function rendre(){
+  const c = document.getElementById("colonne");
+  if (V === 0) c.innerHTML = frise() + page("");
+  else if (V === 1) c.innerHTML = page("b", echelle() + tampon());
+  else c.innerHTML = `<div class="pile"><div class="onglets">${S.map((s, i) => `<button class="${i === cur ? "on" : ""}${MM.hasText(s.id) ? "" : " avenir"}" data-i="${i}"><small>${esc(s.lieu === "Commission mixte paritaire" ? "CMP" : s.lieu)}</small><span class="e">${esc(s.etape ? cap(s.etape.replace(" · texte transmis", "")) : "Texte de la CMP")}</span></button>`).join("")}</div>${page("")}</div>`;
+  document.getElementById("consigne").innerHTML = CONSIGNES[V];
+  try{ localStorage.setItem("mm:M01-4:cur", MM.hasText(S[cur].id) ? cur : 2); }catch(_){}
+}
+function aller(i){ if (i < 0 || i >= S.length) return; cur = i; rendre(); }
+document.getElementById("colonne").addEventListener("click", e => {
+  const b = e.target.closest("[data-i]"); if (b){ aller(+b.dataset.i); return; }
+  const p = e.target.closest("[data-pas]"); if (p) aller(cur + +p.dataset.pas);
+});
+addEventListener("keydown", e => { if (e.key === "ArrowLeft") aller(cur - 1); if (e.key === "ArrowRight") aller(cur + 1); });
+const cart = MM.cartouche({id: "M01-4", question: "Le <b>texte auquel on est exposé</b>, rendu visible et changeable ; lieu et étape en <b>une seule variable</b> (la suite des étapes)", fondement: "T2 (B)",
+  variantes: ["La frise", "Le tampon", "Les intercalaires"], onChange: v => { V = v; rendre(); }});
+V = cart.get(); rendre();
+window.MMaller = aller;
+</script>
+</body></html>
