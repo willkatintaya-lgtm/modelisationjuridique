@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="fr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M01-1 · La loi entière, dépliable</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../commun/cadre.css">
+<style>
+.outils{display:flex;flex-wrap:wrap;gap:6px 18px;margin:16px 0 4px;font:400 12.5px var(--ui);color:var(--muted-p)}
+.outils button{color:var(--ink);text-decoration:underline dotted var(--rule);text-decoration-thickness:1.5px;text-underline-offset:4px}
+.outils button:hover{text-decoration-color:var(--gold)}
+/* un article = un pli */
+details.art{border-top:1px solid var(--rule)}
+details.art:last-of-type{border-bottom:1px solid var(--rule)}
+details.art>summary{list-style:none;display:grid;grid-template-columns:18px 1fr auto;gap:2px 12px;align-items:baseline;padding:12px 0 11px;cursor:pointer}
+details.art>summary::-webkit-details-marker{display:none}
+.pli{font:400 11px var(--ui);color:var(--muted-p);transition:transform .2s;display:inline-block}
+details[open]>summary .pli{transform:rotate(90deg)}
+.art .nom{font:600 10.5px/1.2 var(--ui);letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
+.art .tit{grid-column:2;font:400 16px/1.4 var(--serif);color:var(--ink)}
+.art .apercu{grid-column:2;font:italic 400 13.5px/1.45 var(--serif);color:var(--muted-p);display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+details[open]>summary .apercu{display:none}
+.art .compte{grid-column:3;grid-row:1}
+.art .corps{padding:4px 0 18px 30px}
+.art.supp .tit{text-decoration:line-through 1px var(--muted-p);color:var(--muted-p)}
+.art summary:hover .nom{color:var(--ink)}
+.art.cur>summary{box-shadow:inset 3px 0 0 var(--gold);padding-left:6px;margin-left:-6px}
+/* B : tout déplié, plis de lecture */
+.lecture .art-b{padding:18px 0 6px;border-top:1px solid var(--rule)}
+.lecture .art-b h3{margin:0 0 8px;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.lecture .art-b h3 .nom{font:600 10.5px/1.2 var(--ui);letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
+.lecture .art-b h3 .tit{font:600 16.5px/1.35 var(--serif);flex:1 1 300px}
+.repli{display:flex;align-items:center;gap:12px;margin:6px 0 12px;font:400 12px var(--ui);color:var(--muted-p);cursor:pointer;width:100%}
+.repli::before,.repli::after{content:"";flex:1;border-top:1px dashed var(--rule)}
+.repli:hover{color:var(--ink)}
+.marge{position:sticky;top:14px;align-self:flex-start;display:flex;flex-direction:column;gap:2px;font:500 11px var(--ui);color:var(--muted);min-width:64px}
+.marge .t{font:600 9.5px var(--ui);letter-spacing:.14em;text-transform:uppercase;color:#5b6170;margin-bottom:4px}
+.marge button{text-align:left;padding:3px 6px;border-left:2px solid transparent;color:var(--muted)}
+.marge button:hover{color:var(--fg)}
+.marge button.on{color:var(--gold);border-left-color:var(--gold)}
+/* C : plis par division */
+details.div{margin:0}
+details.div>summary{list-style:none;cursor:pointer;position:relative}
+details.div>summary::-webkit-details-marker{display:none}
+details.div>summary .al{padding-left:0}
+details.div>summary .al::before{content:"▸";position:absolute;left:-18px;top:3px;font:400 10px var(--ui);color:var(--muted-p);transition:transform .2s}
+details.div[open]>summary .al::before{transform:rotate(90deg)}
+details.div>.sous-div{padding-left:22px;border-left:1px solid rgba(201,191,166,.6);margin:0 0 8px 2px}
+details.div:not([open])>summary .al::after{content:attr(data-n);font:400 11px var(--ui);color:var(--muted-p);margin-left:8px;white-space:nowrap}
+.cite{padding-left:0}
+@media (max-width:1100px){.marge{display:none}}
+@media (max-width:700px){.art .corps{padding-left:4px}details.div>.sous-div{padding-left:12px}details.art>summary{grid-template-columns:14px 1fr auto;gap:2px 8px}}
+</style>
+<script>window.MAQ = "micro-M01-1";</script>
+<script src="../../maquettes/commun/data.js"></script>
+<script src="../../maquettes/commun/base.js"></script>
+<script src="../../maquettes/commun/modele.js"></script>
+<script src="../../maquettes/commun/noyau.js"></script>
+<script src="../commun/cadre.js"></script>
+</head><body>
+<p class="consigne" id="consigne"></p>
+<main class="bureau" id="bureau"></main>
+<script>
+"use strict";
+const ETAPE = "transmis";        // le texte examiné par la commission de l'Assemblée
+const PLAN = MM.plan(ETAPE).filter(p => p.presence !== "absent");
+const A4 = MM.art4(ETAPE);
+const CONSIGNES = [
+  "<b>Sommaire qui se déplie.</b> La loi entière tient sur une page : chaque article est replié sur son intitulé ; un clic le déplie en place, sans quitter la page.",
+  "<b>Tout déplié, plis de lecture.</b> La loi est d'emblée lue de bout en bout ; seuls les articles longs sont pliés au milieu. La marge situe la lecture.",
+  "<b>Plis par division.</b> On déplie la loi article par article, puis l'article division par division (I, 1°, a), comme le plan d'un texte légistique.",
+];
+const nonCharge = p => `<p class="nontexte">Texte non chargé dans le prototype (seul l'article 4 l'est).</p>`;
+const compte = p => p.n ? `<span class="compte">${p.n} am.</span>` : `<span class="compte"></span>`;
+const debut = (corps, outils) => MM.page(`${esc(D.dossier.uid)} · ${esc(ET[ETAPE].label)}`, esc(short(D.dossier.lecture, 60)),
+  MM.entete() + `<p class="sous">${PLAN.length} articles · texte que la commission de l'Assemblée examine</p>` + (outils || "") + corps);
+
+function varA(){
+  const corps = PLAN.map(p => `<details class="art${p.texte ? " cur" : ""}${p.presence === "supprime" ? " supp" : ""}" data-art="${esc(p.num)}">
+    <summary><span class="pli">▸</span><span class="nom">${MM.artNom(p)}</span>${compte(p)}<span class="tit">${esc(p.titre)}</span><span class="apercu">${esc(p.texte ? A4[0] : MM.apercu(p))}</span></summary>
+    <div class="corps">${p.texte ? A4.map((t, i) => MM.alHTML(t, i + 1)).join("") : nonCharge(p)}</div></details>`).join("");
+  return debut(corps, `<div class="outils"><button data-tout="1">Tout déplier</button><button data-tout="0">Tout replier</button></div>`);
+}
+function varB(){
+  const PLI_DEBUT = 4, PLI_FIN = 2;
+  const corps = PLAN.map(p => {
+    let txt;
+    if (!p.texte) txt = nonCharge(p);
+    else {
+      const tete = A4.slice(0, PLI_DEBUT), queue = A4.slice(A4.length - PLI_FIN), milieu = A4.slice(PLI_DEBUT, A4.length - PLI_FIN);
+      txt = tete.map((t, i) => MM.alHTML(t, i + 1)).join("") +
+        `<button class="repli" data-repli>${milieu.length} alinéas repliés (${PLI_DEBUT + 1} à ${A4.length - PLI_FIN}) · déplier</button>` +
+        `<div class="milieu" hidden>${milieu.map((t, i) => MM.alHTML(t, i + PLI_DEBUT + 1)).join("")}<button class="repli" data-replier>replier</button></div>` +
+        queue.map((t, i) => MM.alHTML(t, A4.length - PLI_FIN + i + 1)).join("");
+    }
+    return `<section class="art-b" id="art-${esc(p.num)}"><h3><span class="nom">${MM.artNom(p)}</span><span class="tit">${esc(p.titre)}</span>${compte(p)}</h3>${txt}</section>`;
+  }).join("");
+  const marge = `<nav class="marge" id="marge"><span class="t">Articles</span>${PLAN.map(p => `<button data-va="${esc(p.num)}">${esc(p.num)}</button>`).join("")}</nav>`;
+  return marge + debut(`<div class="lecture">${corps}</div>`) + `<div class="marge" style="visibility:hidden"></div>`;
+}
+function divHTML(node, ouvrir){
+  const k = node.i + 1;
+  if (!node.kids.length) return `<div class="${node.niv ? "" : "cite"}">${MM.alHTML(node.t, k)}</div>`;
+  const n = countAl(node) - 1;
+  return `<details class="div" data-lvl="${node.niv}"${ouvrir(node) ? " open" : ""}><summary>${MM.alHTML(node.t, k, ` data-n="${n} ${plural(n, "alinéa")} replié${n > 1 ? "s" : ""}"`)}</summary><div class="sous-div">${node.kids.map(c => divHTML(c, ouvrir)).join("")}</div></details>`;
+}
+const countAl = node => 1 + node.kids.reduce((s, c) => s + countAl(c), 0);
+function varC(){
+  const struct = MM.structure(A4);
+  const corps = PLAN.map(p => `<details class="art${p.texte ? " cur" : ""}${p.presence === "supprime" ? " supp" : ""}"${p.texte ? " open" : ""} data-art="${esc(p.num)}">
+    <summary><span class="pli">▸</span><span class="nom">${MM.artNom(p)}</span>${compte(p)}<span class="tit">${esc(p.titre)}</span><span class="apercu">${esc(p.texte ? A4[0] : MM.apercu(p))}</span></summary>
+    <div class="corps">${p.texte ? `<div class="outils" style="margin-top:0"><button data-niv="1">Déplier les I, II…</button><button data-niv="2">… et les 1°, 2°</button><button data-niv="9">Tout l'article</button></div>` + struct.map(n => divHTML(n, x => x.niv <= 1)).join("") : nonCharge(p)}</div></details>`).join("");
+  return debut(corps, `<div class="outils"><button data-tout="1">Déplier les articles</button><button data-tout="0">Tout replier</button></div>`);
+}
+const VARS = [varA, varB, varC];
+const bureau = document.getElementById("bureau");
+function rendre(v){
+  bureau.innerHTML = VARS[v]();
+  document.getElementById("consigne").innerHTML = CONSIGNES[v];
+}
+bureau.addEventListener("click", e => {
+  const t = e.target.closest("[data-tout]");
+  if (t){ bureau.querySelectorAll("details.art").forEach(d => d.open = t.dataset.tout === "1"); return; }
+  const r = e.target.closest("[data-repli]");
+  if (r){ r.hidden = true; r.nextElementSibling.hidden = false; return; }
+  const rr = e.target.closest("[data-replier]");
+  if (rr){ const m = rr.parentElement; m.hidden = true; m.previousElementSibling.hidden = false; m.previousElementSibling.scrollIntoView({block: "center", behavior: "smooth"}); return; }
+  const va = e.target.closest("[data-va]");
+  if (va){ document.getElementById("art-" + va.dataset.va).scrollIntoView({behavior: "smooth", block: "start"}); return; }
+  const nv = e.target.closest("[data-niv]");
+  if (nv){ const lim = +nv.dataset.niv; nv.closest(".corps").querySelectorAll("details.div").forEach(d => { const lvl = +d.dataset.lvl; d.open = lvl > 0 && lvl <= lim; }); }
+});
+// B : la marge suit la lecture
+const obs = new IntersectionObserver(es => { for (const x of es) if (x.isIntersecting){ const n = x.target.id.slice(4); document.querySelectorAll("#marge [data-va]").forEach(b => b.classList.toggle("on", b.dataset.va === n)); } }, {rootMargin: "-20% 0px -70% 0px"});
+const cart = MM.cartouche({id: "M01-1", question: "La <b>loi entière</b> dès l'entrée, articles dépliables / repliables : « entière mais agréable »", fondement: "T2 (A)",
+  variantes: ["Sommaire qui se déplie", "Tout déplié, plis de lecture", "Plis par division"],
+  onChange: v => { rendre(v); if (v === 1) document.querySelectorAll(".art-b").forEach(s => obs.observe(s)); }});
+rendre(cart.get()); if (cart.get() === 1) document.querySelectorAll(".art-b").forEach(s => obs.observe(s));
+</script>
+</body></html>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Micro-maquettes · portfolio</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="commun/cadre.css">
+<style>
+.pf{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:26px 22px 40px}
+.pf h1{font:600 26px/1.2 var(--serif);color:#efe9dc;margin:0 0 6px}
+.pf .intro{color:var(--muted);max-width:760px;margin:0 0 22px;font-size:13.5px}
+.module{font:600 10.5px var(--ui);letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:26px 0 10px}
+.cartes{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
+.carte{display:block;text-decoration:none;background:linear-gradient(135deg,var(--paper),var(--paper-2));color:var(--ink);border:1px solid var(--rule);outline:8px solid var(--frame);outline-offset:-8px;padding:22px 24px 20px;box-shadow:0 10px 30px rgba(0,0,0,.45);transition:transform .15s}
+.carte:hover{transform:translateY(-2px)}
+.carte .id{font:600 10.5px var(--ui);letter-spacing:.14em;color:var(--muted-p);border-bottom:1px solid var(--rule);padding-bottom:7px;margin-bottom:10px;display:flex;justify-content:space-between}
+.carte .q{font:400 15.5px/1.4 var(--serif);margin:0 0 10px}
+.carte .v{font:400 12px/1.5 var(--ui);color:var(--muted-p)}
+.vue{margin-top:26px;border:1px solid #232835;display:none}
+.vue.on{display:block}
+.vue .barre{display:flex;justify-content:space-between;gap:10px;padding:8px 12px;font:500 11px var(--ui);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:#10131a}
+.vue .barre a{color:var(--gold);text-decoration:none}
+.vue iframe{display:block;width:100%;height:80vh;border:0;background:var(--bg)}
+</style></head><body>
+<div class="pf">
+  <h1>Micro-maquettes</h1>
+  <p class="intro">Chaque micro-maquette teste une seule question d'interface, sur les données réelles de l'article 4 du projet de loi logement (groupes fictifs). Les variantes se commutent dans le cartouche du haut. Commandes : <code>arbitrage/commandes-maquettes.md</code> ; état : <code>micro-maquettes/index.md</code>.</p>
+  <div id="liste"></div>
+  <div class="vue" id="vue"><div class="barre"><span id="vue-t"></span><a id="vue-a" href="#" target="_blank">ouvrir seule ↗</a></div><iframe id="vue-f" title="micro-maquette"></iframe></div>
+</div>
+<script>
+const MICRO = [
+  {module: "01 · Projet de loi (espace Dossier)", items: [
+    {id: "M01-1", q: "La loi entière dès l'entrée, articles dépliables / repliables", v: ["Sommaire qui se déplie", "Tout déplié, plis de lecture", "Plis par division"]},
+  ]},
+];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+document.getElementById("liste").innerHTML = MICRO.map(m => `<div class="module">${esc(m.module)}</div><div class="cartes">${m.items.map(x =>
+  `<a class="carte" href="${x.id}/index.html" data-id="${x.id}"><div class="id"><span>${x.id}</span><span>${x.v.length} variante${x.v.length > 1 ? "s" : ""}</span></div><p class="q">${esc(x.q)}</p><div class="v">${x.v.map((v, i) => String.fromCharCode(65 + i) + " · " + esc(v)).join("<br>")}</div></a>`).join("")}</div>`).join("");
+document.getElementById("liste").addEventListener("click", e => {
+  const a = e.target.closest(".carte"); if (!a || innerWidth < 700) return;
+  e.preventDefault(); const vue = document.getElementById("vue");
+  document.getElementById("vue-f").src = a.getAttribute("href"); document.getElementById("vue-t").textContent = a.dataset.id;
+  document.getElementById("vue-a").href = a.getAttribute("href"); vue.classList.add("on"); vue.scrollIntoView({behavior: "smooth"});
+});
+</script></body></html>
