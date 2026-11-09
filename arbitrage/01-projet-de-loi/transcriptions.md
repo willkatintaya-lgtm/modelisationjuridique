@@ -19,3 +19,8 @@ Contexte : à propos de la méthode, après T2 (pas de maquette nommée).
 Contexte : réponse à la question « je lance une session sur la branche des micro-maquettes ? ».
 
 > ok
+
+## T5 · 9 novembre 2026, ~11 h 52 UTC
+Contexte : espace Dossier, **grille « alinéas × étapes »** (maquette non précisée). L'utilisateur demande de transmettre sa question à la session « questions techniques ».
+
+> Ok, je continue. Sur d'autres modules ou fonctionnalités. Là, je suis sur la grille d'alinéa, si je ne dis pas de bêtises. Il y a marqué grille alinéa fois étape. Voilà. Toujours dans dossier, hein. Bon, je sais pas trop à quoi ça sert déjà, je t'avoue, ça paraît un peu flou, hein. En fait, je comprends pas, il y a plusieurs colonnes. Donc les colonnes, ça a l'air d'être les étapes. Les lignes, ça a l'air d'être les alinéas. Donc déjà, il y a un problème parce que c'est pas, il n'y a pas d'article. Juste, attends, ça sert à quoi déjà, juste? Tu sais quoi, pose cette question aux questions techniques. Attends, pose cette question à la branche question technique, s'il te plaît. Rapidement, n'en fais pas plus.
