@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="fr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M01-3 · Barres dépliantes à gauche</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../commun/cadre.css">
+<style>
+.bureau{align-items:flex-start}
+.page{--pw:740px}
+/* la colonne de gauche : une bande de papier, pas un panneau */
+.cote{position:sticky;top:14px;flex:0 0 auto;max-height:calc(100vh - 28px);overflow:auto;scrollbar-width:none;display:flex;gap:6px}
+.cote::-webkit-scrollbar{display:none}
+.bande{background:linear-gradient(135deg,#efebe1,#e4ded0);color:var(--ink);border:1px solid var(--rule);box-shadow:0 10px 30px rgba(0,0,0,.45)}
+.bt{display:flex;align-items:center;gap:8px;width:100%;text-align:left;padding:10px 12px 9px;font:600 9.5px/1 var(--ui);letter-spacing:.16em;text-transform:uppercase;color:var(--muted-p);border-bottom:1px solid var(--rule)}
+.bt .chev{display:inline-block;transition:transform .2s;font-size:9px}
+.bt.ouvert .chev{transform:rotate(90deg)}
+.bt .val{margin-left:auto;font:400 12px/1.2 var(--serif);letter-spacing:0;text-transform:none;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
+.bt.ouvert .val{display:none}
+.li{display:flex;gap:8px;align-items:baseline;width:100%;text-align:left;padding:5px 12px;font:400 13.5px/1.3 var(--serif);color:var(--ink2)}
+.li:hover{background:rgba(217,181,106,.16)}
+.li.on{color:var(--ink);box-shadow:inset 3px 0 0 var(--gold);background:rgba(217,181,106,.12)}
+.li.vu:not(.on){box-shadow:inset 3px 0 0 rgba(140,47,34,.35)}
+.li .k{font:500 10.5px var(--ui);color:var(--muted-p);min-width:34px}
+.li .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.li.off{opacity:.42;cursor:default;font-style:italic}
+.li small{font:400 10.5px var(--ui);color:var(--muted-p);margin-left:auto;white-space:nowrap}
+/* A : arbre */
+.arbre{width:280px;padding-bottom:6px}
+.arbre .n1{padding-left:12px}.arbre .n2{padding-left:26px}.arbre .n3{padding-left:40px}
+.arbre .tog{display:inline-block;width:12px;font:400 9px var(--ui);color:var(--muted-p);transition:transform .2s}
+.arbre .tog.o{transform:rotate(90deg)}
+/* B : barres empilées */
+.pile{width:280px;display:flex;flex-direction:column}
+.pile .sec{border-bottom:1px solid var(--rule)}
+.pile .sec:last-child{border-bottom:0}
+.pile .sec .bt{border-bottom:0}
+.pile .sec .contenu{padding:2px 0 8px;max-height:46vh;overflow:auto;scrollbar-width:none}
+/* C : colonnes repliables */
+.cols{display:flex;gap:6px}
+.col{width:200px;display:flex;flex-direction:column;max-height:calc(100vh - 28px)}
+.col .contenu{overflow:auto;scrollbar-width:none;padding:2px 0 8px}
+.col.replie{width:38px;cursor:pointer}
+.col.replie .bt{writing-mode:vertical-rl;transform:rotate(180deg);border-bottom:0;padding:12px 10px;height:100%;justify-content:flex-end}
+.col.replie .bt .val{display:block;max-width:none;font-size:12.5px}
+.col.replie .bt .chev{transform:rotate(0)}
+.col.replie .contenu{display:none}
+/* le texte entier à droite */
+.t-art{padding:16px 0 8px;border-top:1px solid var(--rule);scroll-margin-top:16px}
+.t-art h3{margin:0 0 8px;display:flex;gap:4px 12px;align-items:baseline;flex-wrap:wrap}
+.t-art h3 .nom{font:600 10.5px/1.2 var(--ui);letter-spacing:.14em;text-transform:uppercase;color:var(--ink2)}
+.t-art h3 .tit{font:600 16.5px/1.35 var(--serif);flex:1 1 280px}
+.t-art.flash{animation:flash 1.4s}
+.t-art .al{scroll-margin-top:30vh;padding:1px 6px;margin-left:-6px}
+.t-art .al.flash{animation:flashal 1.6s}
+@keyframes flash{0%{box-shadow:inset 3px 0 0 var(--gold)}100%{box-shadow:inset 3px 0 0 transparent}}
+@keyframes flashal{0%,40%{background:rgba(217,181,106,.35)}100%{background:transparent}}
+.sommaire-btn{display:none}
+@media (max-width:980px){
+  .bureau{flex-direction:column;align-items:stretch}
+  .cote{position:sticky;top:0;z-index:5;max-height:none;overflow:visible;flex-direction:column}
+  .sommaire-btn{display:flex;justify-content:space-between;align-items:center;width:100%;padding:10px 14px;font:600 10px var(--ui);letter-spacing:.14em;text-transform:uppercase;color:var(--ink);background:linear-gradient(135deg,#efebe1,#e4ded0);border:1px solid var(--rule)}
+  .sommaire-btn .val{font:400 13px var(--serif);letter-spacing:0;text-transform:none;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62%}
+  .cote .tiroir{display:none;max-height:60vh;overflow:auto;scrollbar-width:none}
+  .cote.ouvert .tiroir{display:block}
+  .arbre,.pile{width:100%}
+  .cols{flex-direction:column}.col{width:100%;max-height:none}.col .contenu{max-height:34vh}
+  .col.replie{width:100%}.col.replie .bt{writing-mode:horizontal-tb;transform:none;height:auto;justify-content:flex-start;border-bottom:1px solid var(--rule)}
+  .col.replie .bt .val{display:block;margin-left:auto}
+  .page{width:100%}
+}
+</style>
+<script>window.MAQ = "micro-M01-3";</script>
+<script src="../../maquettes/commun/data.js"></script>
+<script src="../../maquettes/commun/base.js"></script>
+<script src="../../maquettes/commun/modele.js"></script>
+<script src="../../maquettes/commun/noyau.js"></script>
+<script src="../commun/cadre.js"></script>
+<script src="../commun/lecture.js"></script>
+</head><body>
+<p class="consigne" id="consigne"></p>
+<main class="bureau"><aside class="cote" id="cote"></aside><div id="droite" style="flex:1 1 auto;display:flex;justify-content:center;min-width:0"></div></main>
+<script>
+"use strict";
+const CONSIGNES = [
+  "<b>L'arbre.</b> Une seule bande à gauche : les textes, puis les articles du texte choisi, puis les alinéas de l'article. Un clic sur un article ou un alinéa amène le texte entier, à droite, à cet endroit : on ne quitte pas la vue d'ensemble.",
+  "<b>Les barres empilées.</b> Trois barres l'une sous l'autre : textes, articles, alinéas. Chacune se replie sur sa valeur courante. Le texte entier reste à droite.",
+  "<b>Les colonnes repliables.</b> Trois colonnes côte à côte ; une colonne repliée devient un dos étroit qui porte sa valeur (« Texte transmis », « Art. 4 »). Le texte entier reste à droite.",
+];
+let st = {texte: "transmis", art: "4", al: 12}, V = 0, vu = {art: "4", al: null};
+const ouv = {textes: true, articles: true, alineas: true, arbreArt: "4"};
+let droiteTexte = null;
+function rendreDroite(){
+  if (droiteTexte === st.texte) return; droiteTexte = st.texte;
+  const plan = LEC.planDe(st.texte), A = MM.art4(st.texte);
+  const corps = plan.filter(p => p.presence !== "absent").map(p => `<section class="t-art" id="art-${esc(p.num)}" data-art="${esc(p.num)}">
+    <h3><span class="nom">Article <span class="num">${LEC.nomArt(p.num)}</span></span><span class="tit">${esc(p.titre)}</span>${p.n ? `<span class="compte">${p.n} am.</span>` : ""}</h3>
+    ${p.presence === "supprime" ? `<p class="al" style="font-style:italic">(Supprimé)</p>` : p.texte ? A.map((t, i) => `<p class="al" id="al-${i + 1}" data-al="${i + 1}"><span class="n">${i + 1}</span>${esc(t)}</p>`).join("") : `<p class="nontexte">Texte non chargé dans le prototype.</p>`}</section>`).join("");
+  document.getElementById("droite").innerHTML = MM.page(`${esc(D.dossier.uid)} · ${esc(ET[st.texte].label)}`, "le texte entier", MM.entete() + `<p class="sous">${plan.filter(p => p.presence !== "absent").length} articles · ${esc(MM.ST[st.texte].titre)}</p>` + corps);
+  observer();
+}
+const liTexte = s => `<button class="li${s.id === st.texte ? " on" : ""}" data-texte="${s.id}"><span class="t">${esc(s.titre)}</span>${s.examine ? "<small>examiné</small>" : ""}</button>`;
+const liArt = p => `<button class="li${p.num === st.art ? " on" : ""}${p.num === vu.art && p.num !== st.art ? " vu" : ""}${p.presence === "absent" ? " off" : ""}" data-art="${esc(p.num)}"><span class="k">${LEC.nomArt(p.num)}</span><span class="t">${esc(p.titre)}</span></button>`;
+const liAl = (t, i) => `<button class="li${i + 1 === st.al ? " on" : ""}${i + 1 === vu.al && i + 1 !== st.al ? " vu" : ""}" data-al="${i + 1}"><span class="k">${i + 1}</span><span class="t">${esc(t)}</span></button>`;
+const bt = (cle, titre, val) => `<button class="bt${ouv[cle] ? " ouvert" : ""}" data-tog="${cle}"><span class="chev">▸</span>${titre}<span class="val">${val}</span></button>`;
+const valTexte = () => esc(ET[st.texte].court), valArt = () => "Art. " + LEC.nomArt(st.art), valAl = () => st.art === "4" ? "al. " + st.al : "—";
+function gaucheA(){
+  const plan = LEC.planDe(st.texte), A = MM.art4(st.texte);
+  return `<div class="bande arbre">${bt("textes", "Projet de loi", valTexte())}${ouv.textes ? LEC.TEXTES.map(s => {
+    const cur = s.id === st.texte;
+    return `<button class="li n1${cur ? " on" : ""}" data-texte="${s.id}"><span class="tog${cur ? " o" : ""}">▸</span><span class="t">${esc(s.titre)}</span></button>` +
+      (cur ? plan.map(p => `<button class="li n2${p.num === st.art ? " on" : ""}${p.num === vu.art && p.num !== st.art ? " vu" : ""}${p.presence === "absent" ? " off" : ""}" data-art="${esc(p.num)}">${p.texte ? `<span class="tog${ouv.arbreArt === p.num ? " o" : ""}" data-tog-art="${esc(p.num)}">▸</span>` : `<span class="tog"></span>`}<span class="k">${LEC.nomArt(p.num)}</span><span class="t">${esc(p.titre)}</span></button>` +
+        (p.texte && ouv.arbreArt === p.num && p.presence === "present" ? A.map((t, i) => liAl(t, i).replace('class="li', 'class="li n3')).join("") : "")).join("") : "");
+  }).join("") : ""}</div>`;
+}
+function gaucheB(){
+  const plan = LEC.planDe(st.texte), A = MM.art4(st.texte);
+  const sec = (cle, titre, val, contenu) => `<div class="sec">${bt(cle, titre, val)}${ouv[cle] ? `<div class="contenu">${contenu}</div>` : ""}</div>`;
+  return `<div class="bande pile">${sec("textes", "Textes", valTexte(), LEC.TEXTES.map(liTexte).join(""))}${sec("articles", "Articles", valArt(), plan.map(liArt).join(""))}${sec("alineas", "Alinéas", valAl(), st.art === "4" ? A.map(liAl).join("") : `<p class="nontexte" style="padding:6px 12px">Texte de l'article non chargé.</p>`)}</div>`;
+}
+function gaucheC(){
+  const plan = LEC.planDe(st.texte), A = MM.art4(st.texte);
+  const col = (cle, titre, val, contenu) => `<div class="bande col${ouv[cle] ? "" : " replie"}" data-col="${cle}">${bt(cle, titre, val)}<div class="contenu">${contenu}</div></div>`;
+  return `<div class="cols">${col("textes", "Textes", valTexte(), LEC.TEXTES.map(liTexte).join(""))}${col("articles", "Articles", valArt(), plan.map(liArt).join(""))}${col("alineas", "Alinéas", valAl(), st.art === "4" ? A.map(liAl).join("") : `<p class="nontexte" style="padding:6px 12px">Texte non chargé.</p>`)}</div>`;
+}
+const GAUCHES = [gaucheA, gaucheB, gaucheC];
+function rendreGauche(){
+  const c = document.getElementById("cote"), ouvert = c.classList.contains("ouvert");
+  c.innerHTML = `<button class="sommaire-btn" data-tiroir>Sommaire <span class="val">${valTexte()} · ${valArt()}${st.art === "4" ? " · " + valAl() : ""}</span></button><div class="tiroir">${GAUCHES[V]()}</div>`;
+  c.classList.toggle("ouvert", ouvert);
+}
+function aller(sel, cls){
+  const el = document.querySelector(sel); if (!el) return;
+  el.scrollIntoView({behavior: "smooth", block: cls === "al" ? "center" : "start"});
+  el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash");
+  if (innerWidth <= 980) document.getElementById("cote").classList.remove("ouvert");
+}
+let io;
+function observer(){
+  if (io) io.disconnect();
+  io = new IntersectionObserver(es => {
+    for (const x of es) if (x.isIntersecting){
+      if (x.target.dataset.al) vu.al = +x.target.dataset.al; else if (x.target.dataset.art){ vu.art = x.target.dataset.art; if (vu.art !== "4") vu.al = null; }
+    }
+    document.querySelectorAll("#cote [data-art]").forEach(b => b.classList.toggle("vu", b.dataset.art === vu.art && b.dataset.art !== st.art));
+    document.querySelectorAll("#cote [data-al]").forEach(b => b.classList.toggle("vu", +b.dataset.al === vu.al && +b.dataset.al !== st.al));
+  }, {rootMargin: "-35% 0px -60% 0px"});
+  document.querySelectorAll(".t-art, .t-art .al").forEach(e => io.observe(e));
+}
+document.getElementById("cote").addEventListener("click", e => {
+  if (e.target.closest("[data-tiroir]")){ document.getElementById("cote").classList.toggle("ouvert"); return; }
+  const ta = e.target.closest("[data-tog-art]"); if (ta){ e.stopPropagation(); ouv.arbreArt = ouv.arbreArt === ta.dataset.togArt ? null : ta.dataset.togArt; rendreGauche(); return; }
+  const tg = e.target.closest("[data-tog]"); if (tg){ ouv[tg.dataset.tog] = !ouv[tg.dataset.tog]; rendreGauche(); return; }
+  const rc = e.target.closest(".col.replie"); if (rc){ ouv[rc.dataset.col] = true; rendreGauche(); return; }
+  const tx = e.target.closest("[data-texte]");
+  if (tx){ const msg = LEC.changerTexte(st, tx.dataset.texte); rendreDroite(); rendreGauche(); if (msg) MM.trace(msg); requestAnimationFrame(() => aller(st.art === "4" ? "#al-" + st.al : "#art-" + CSS.escape(st.art), st.art === "4" ? "al" : "art")); return; }
+  const ar = e.target.closest("[data-art]");
+  if (ar && !ar.classList.contains("off")){ st.art = ar.dataset.art; if (V === 0 && st.art === "4") ouv.arbreArt = "4"; rendreGauche(); aller("#art-" + CSS.escape(st.art), "art"); return; }
+  const al = e.target.closest("[data-al]");
+  if (al){ st.art = "4"; st.al = +al.dataset.al; rendreGauche(); aller("#al-" + st.al, "al"); }
+});
+document.getElementById("droite").addEventListener("click", e => {
+  const al = e.target.closest(".al[data-al]"); if (al){ st.art = "4"; st.al = +al.dataset.al; rendreGauche(); return; }
+  const ar = e.target.closest(".t-art"); if (ar){ st.art = ar.dataset.art; rendreGauche(); }
+});
+const cart = MM.cartouche({id: "M01-3", question: "Variante : des <b>barres dépliantes à gauche</b> (textes → articles → alinéas) ; le texte entier reste à droite quand on clique un article", fondement: "T2 (C)",
+  variantes: ["L'arbre", "Les barres empilées", "Les colonnes repliables"], onChange: v => { V = v; if (v === 2){ ouv.textes = false; ouv.articles = true; ouv.alineas = true; } else Object.assign(ouv, {textes: true, articles: true, alineas: true}); rendreGauche(); document.getElementById("consigne").innerHTML = CONSIGNES[v]; }});
+V = cart.get(); if (V === 2) ouv.textes = false;
+rendreDroite(); rendreGauche(); document.getElementById("consigne").innerHTML = CONSIGNES[V];
+window.MMaller = (art, al) => { const b = document.querySelector(al ? `#cote [data-al="${al}"]` : `#cote [data-art="${art}"]`); if (b) b.click(); };
+</script>
+</body></html>

@@ -17,8 +17,8 @@ MM.stageLabel = id => { const s = MM.ST[id]; return s.lieu + (s.etape ? " · " +
 /* Les articles du projet de loi à une étape. Seul l'article 4 a son texte dans le socle ; la présence des autres est déduite de leur statut et de leur numéro (dit comme tel). */
 MM.artName = p => p.num === "1er" ? "Article 1er" : "Article " + p.num;
 MM.artNom = p => `Article <span class="num">${p.num === "1er" ? "1<sup>er</sup>" : esc(p.num)}</span>`;   // en HTML
-MM.apercu = p => p.intitule && p.cible ? "modifie l'" + short(p.cible, 120) : "";
-MM.artTitle = p => p.intitule || short((p.cible || "").replace(/^articles? /, "modifie les articles "), 110) || "(sans intitulé)";
+MM.apercu = p => p.intitule && p.cible ? "Vise : " + short(p.cible, 120) : "";
+MM.artTitle = p => p.intitule || cap(short(p.cible || "", 110)) || "(sans intitulé)";
 MM.presence = (p, id) => {
   const intro = /Introduit par la commission/i.test(p.statut), supp = /Supprimé par la commission/i.test(p.statut), bis = /\b(bis|ter|quater)\b/.test(p.num);
   if (id === "AN-com") return supp ? "supprime" : "present";
