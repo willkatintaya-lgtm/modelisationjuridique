@@ -60,8 +60,14 @@ button{font-family:inherit}
 .sheet.now .av{background:#2a2540;color:var(--now)}
 .sheet .who{color:var(--fg);font-weight:500}
 .sheet .meta{display:block;color:var(--dim)}
-.sheet .sub{margin:6px 0 0 30px;color:var(--muted)}
-.sheet.now .chip{color:var(--now)}
+.sheet.now .meta{color:var(--now)}
+.sheet.future{background:transparent;border-style:dashed;padding-bottom:12px}
+.sheet.future .av{background:var(--bg);border:1px solid var(--border-2)}
+.sheet.future .who{color:var(--muted);font-weight:400}
+.sheet .hd{padding-right:30px}
+.cmpbtn{position:absolute;right:10px;top:10px;width:26px;height:26px;border-radius:6px;border:1px solid var(--border-2);background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:color .2s,background .2s}
+.cmpbtn:hover{color:var(--fg);background:#1f2023}
+.gap.empty{flex-basis:72px;padding:0}
 .toggle{position:absolute;right:10px;bottom:10px;width:26px;height:26px;border-radius:6px;border:1px solid var(--border-2);background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:color .2s,background .2s}
 .toggle:hover{color:var(--fg);background:#1f2023}
 .toggle svg{transition:transform .35s var(--ease)}
@@ -79,14 +85,6 @@ button{font-family:inherit}
 .sheet:not(.open) .al.same{display:none}
 ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
 del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
-.note{position:absolute;left:44px;right:46px;bottom:14px;font-size:12px;color:var(--dim);opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sheet.open .note{opacity:1;transition-delay:.2s;pointer-events:auto}
-.pick{position:relative;display:inline-flex;align-items:center;gap:4px;color:var(--text);border:1px solid var(--border-2);border-radius:6px;padding:1px 6px 1px 8px;margin-left:2px}
-.pick:hover{background:#1f2023}
-.pick select{appearance:none;-webkit-appearance:none;background:none;border:0;color:inherit;font:inherit;padding:0;cursor:pointer;outline:none}
-.pick select option{background:#17181b;color:var(--text)}
-.pick svg{pointer-events:none;color:var(--muted);width:10px;height:10px}
-
 /* --- interstice entre deux cartes : le fil et les deux plis --- */
 .gap{position:relative;flex:0 0 var(--gap);padding:calc(var(--rail) + 14px) 18px 0;transition:flex-basis .38s var(--ease)}
 .gap.wide{flex-basis:var(--gapw)}
@@ -123,7 +121,35 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 .fiche dl{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:0;font-size:12px;color:var(--dim)}
 .fiche dd{margin:0;color:var(--muted)}
 .hint{position:fixed;left:0;right:0;bottom:calc(14px + env(safe-area-inset-bottom,0px));text-align:center;font-size:11.5px;color:var(--dim);pointer-events:none}
-@media (max-width:520px){ :root{--cardw:min(270px,calc(100vw - 110px));--gap:178px;--gapw:min(340px,calc(100vw - 40px))} .row{padding-left:24px;padding-right:48px} }
+/* --- mode comparer : la frise s'efface, un ou deux textes ouverts, et la liste des étapes à comparer --- */
+.frise{transition:opacity .25s}
+.page.cmping .frise{opacity:0;pointer-events:none}
+.cmp{position:absolute;inset:0;overflow:auto;scrollbar-width:none;padding:8px 16px 48px;opacity:0;pointer-events:none;transition:opacity .25s}
+.cmp::-webkit-scrollbar{display:none}
+.page.cmping .cmp{opacity:1;pointer-events:auto}
+.cmp-in{display:flex;align-items:center;justify-content:center;gap:14px;min-height:100%;width:max-content;min-width:100%;margin:0 auto}
+.cg{--cw:min(460px,calc((100vw - 120px)/var(--n)));display:grid;grid-template-columns:repeat(var(--n),var(--cw));column-gap:18px;align-self:center;animation:rise .3s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}}
+.c{background:var(--card-2);border-left:1px solid var(--border);border-right:1px solid var(--border);padding:0 16px;min-width:0}
+.c.h{position:relative;border-top:1px solid var(--border);border-radius:8px 8px 0 0;padding-top:12px;padding-bottom:12px;display:flex;align-items:flex-start;gap:10px;padding-right:46px}
+.c.h .av{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:#2a2c31;color:var(--muted);margin-top:-1px}
+.c.h.now .av{background:#2a2540;color:var(--now)}
+.c.h .who{color:var(--fg);font-weight:500}
+.c.h .meta{display:block;color:var(--dim)}
+.c.h.now .meta{color:var(--now)}
+.c.f{border-bottom:1px solid var(--border);border-radius:0 0 8px 8px;height:14px}
+.c.a{display:grid;grid-template-columns:18px 1fr;gap:0 6px;padding-top:3px;padding-bottom:5px;font-size:13.5px;line-height:1.65}
+.c.a .n{font-size:11px;line-height:2.1;color:var(--dim);text-align:right}
+.c.a.same p{color:var(--dim)}
+.c.a .none{color:var(--dim);font-style:italic}
+.x{position:absolute;right:10px;top:10px;width:26px;height:26px;border-radius:6px;border:1px solid var(--border-2);background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer}
+.x:hover{color:var(--fg);background:#1f2023}
+.pickl{flex:none;width:250px;align-self:center;animation:rise .3s var(--ease)}
+.pickl .k{font-size:12px;color:var(--dim);margin:0 0 6px 0}
+.pickl .list{max-height:none;margin-left:7px}
+.pk .t{display:block;color:var(--dim)}
+@media (max-width:520px){ .cg{--cw:calc(100vw - 56px)} .cmp-in{flex-direction:column;align-items:flex-start;justify-content:flex-start;padding-top:8px} .pickl{align-self:flex-start} }
+@media (max-width:520px){ .hint{display:none} :root{--cardw:min(270px,calc(100vw - 110px));--gap:178px;--gapw:min(340px,calc(100vw - 40px))} .row{padding-left:24px;padding-right:48px} }
 @media (prefers-reduced-motion:reduce){ *{transition-duration:.01ms!important;scroll-behavior:auto!important} }
 </style>
 </head>
@@ -134,7 +160,7 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
   <button class="nav" id="next" type="button" aria-label="Article suivant"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6l5 5 5-5"/></svg></button>
 </div></header>
 <div id="stage"><div id="track"></div></div>
-<div class="hint">← → parcourir les étapes · ↑ ↓ changer d'article</div>
+<div class="hint" id="hint">← → parcourir les étapes · ↑ ↓ changer d'article</div>
 <script>
 const GROUPS={
   RAP:{name:"Rapporteur",color:"#b89a5a"}, SOL:{name:"Solidarité et logement",color:"#d13a30"}, ECO:{name:"Écologie urbaine",color:"#2a9d63"},
@@ -273,15 +299,21 @@ function alsHTML(art,i,r){
   }).join("");
 }
 
+// étapes à venir : un titre, rien d'autre
+STEPS.push({stage:"Séance publique de l'Assemblée nationale",future:true},{stage:"Commission mixte paritaire",future:true},{stage:"Promulgation",future:true});
+const DONE=4; // nombre d'étapes qui ont un texte (la dernière est en cours)
 const RIGHT='<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3.5l4.5 4.5L6 12.5"/></svg>';
+const CMPI='<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5.5 2v12M10.5 2v12M2 5h3.5M10.5 11H14"/></svg>';
+const X='<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 4l8 8M12 4l-8 8"/></svg>';
+const dateOf=st=>st.now?"en cours":st.date;
+
 function sheetHTML(art,i){
-  const st=STEPS[i], als=alsHTML(art,i,i?i-1:null), chip=st.now?"en cours":(art.chips[i]||st.chip);
-  const pick=i?`Comparé à <span class="pick"><select class="ref" aria-label="Étape de référence">${STEPS.slice(0,i).map((x,j)=>`<option value="${j}"${j===i-1?" selected":""}>${j===i-1?"l'étape précédente":x.short}</option>`).join("")}</select>${DOWN}</span>`:"Projet de loi n° 412";
+  const st=STEPS[i];
+  if(st.future) return `<article class="sheet future" data-i="${i}"><div class="hd"><span class="av"></span><span><span class="who">${st.stage}</span></span></div></article>`;
   return `<article class="sheet${st.now?" now":""}" data-i="${i}">
-    <div class="hd"><span class="av">${st.now?DOTS:CHECK}</span><span><span class="who">${st.stage}</span><span class="meta">${st.date}</span></span></div>
-    <div class="sub">${st.h} · <span class="chip">${chip}</span></div>
-    <div class="txt">${als}</div>
-    <span class="note">${pick}</span>
+    <div class="hd"><span class="av">${st.now?DOTS:CHECK}</span><span><span class="who">${st.stage}</span><span class="meta">${dateOf(st)}</span></span></div>
+    <button class="cmpbtn" type="button" aria-label="Comparer cette version" title="Comparer">${CMPI}</button>
+    <div class="txt">${alsHTML(art,i,i?i-1:null)}</div>
     <button class="toggle" type="button" aria-label="Ouvrir l'article">${DOWN}</button>
   </article>`;
 }
@@ -307,22 +339,32 @@ function foldHTML(list,label,prevV){
 function pageHTML(art,k){
   return `<section class="page" style="top:${k*100}%"><div class="frise"><div class="row">`+STEPS.map((_,i)=>{
     let h=sheetHTML(art,i);
+    if(i===STEPS.length-1) return h;
     const nx=art.amds[i+1];
     if(nx){
       const ad=nx.filter(a=>a.sort==="adopté"), rr=nx.filter(a=>a.sort!=="adopté");
       h+=`<div class="gap">`+
         foldHTML(ad,ad.length?plural(ad.length,"amendement adopté","amendements adoptés"):"Aucun amendement adopté",art.v[i])+
         foldHTML(rr,rr.length?plural(rr.length,"rejeté ou retiré","rejetés ou retirés"):"Aucun rejeté ni retiré",art.v[i])+`</div>`;
-    }
+    } else h+=`<div class="gap empty"></div>`;
     return h;
-  }).join("")+`</div></div></section>`;
+  }).join("")+`</div></div><div class="cmp"></div></section>`;
 }
+let cur=1;
 const track=document.getElementById("track");
 track.innerHTML=ARTICLES.map(pageHTML).join("");
 const pages=[...track.children];
+const CMP=pages.map(()=>[]);
+const inCmp=()=>CMP[cur].length>0;
 document.getElementById("dots").innerHTML=ARTICLES.map(()=>"<i></i>").join("");
 
-// hauteur disponible pour les listes et le texte : tout tient dans l'écran, rien ne fait défiler la page verticalement
+// à l'arrivée, la frise est centrée sur l'étape en cours
+function centerNow(page,smooth){
+  const fr=page.querySelector(".frise"), s=page.querySelector(".sheet.now"); if(!s) return;
+  fr.style.scrollBehavior=smooth?"":"auto";
+  fr.scrollLeft=s.offsetLeft+s.offsetWidth/2-fr.clientWidth/2;
+  fr.style.scrollBehavior="";
+}
 function sizes(){
   const H=document.getElementById("stage").clientHeight;
   document.documentElement.style.setProperty("--lh",Math.max(160,H-190)+"px");
@@ -331,7 +373,6 @@ function sizes(){
 addEventListener("resize",sizes);
 
 // --- changer d'article : haut / bas ---
-let cur=1;
 function go(k){
   const n=Math.max(0,Math.min(ARTICLES.length-1,k)); if(n===cur&&track.style.transform) return;
   cur=n; track.style.transform=`translateY(${-cur*100}%)`;
@@ -340,39 +381,39 @@ function go(k){
   document.querySelectorAll("#dots i").forEach((d,i)=>d.classList.toggle("on",i===cur));
   document.getElementById("prev").disabled=cur===0;
   document.getElementById("next").disabled=cur===ARTICLES.length-1;
+  hint();
 }
 document.getElementById("prev").onclick=()=>go(cur-1);
 document.getElementById("next").onclick=()=>go(cur+1);
 go(1); sizes();
+const centerAll=()=>pages.forEach(p=>centerNow(p,false));
+centerAll(); if(document.fonts) document.fonts.ready.then(centerAll);
 
 const stage=document.getElementById("stage");
-// une liste ou un texte qui peut encore défiler garde le geste vertical
-const canScroll=(el,dy)=>{ for(let n=el;n&&n!==stage;n=n.parentElement){ if(n.matches&&n.matches(".list,.sheet.scrolling .txt")&&n.scrollHeight>n.clientHeight+1){ if(dy>0?n.scrollTop+n.clientHeight<n.scrollHeight-1:n.scrollTop>0) return true; } } return false; };
+const canScroll=(el,dy)=>{ for(let n=el;n&&n!==stage;n=n.parentElement){ if(n.matches&&n.matches(".list,.sheet.scrolling .txt,.cmp")&&n.scrollHeight>n.clientHeight+1){ if(dy>0?n.scrollTop+n.clientHeight<n.scrollHeight-1:n.scrollTop>0) return true; } } return false; };
 let wy=0,wt=0,wlock=0;
 stage.addEventListener("wheel",e=>{
   if(e.ctrlKey) return;
   const fr=pages[cur].querySelector(".frise");
-  if(Math.abs(e.deltaX)>Math.abs(e.deltaY)) return; // horizontal : la frise défile nativement
+  if(Math.abs(e.deltaX)>Math.abs(e.deltaY)) return;
   if(canScroll(e.target,e.deltaY)) return;
   e.preventDefault(); const now=Date.now();
-  if(e.shiftKey){ fr.scrollLeft+=e.deltaY; return; }
+  if(e.shiftKey&&!inCmp()){ fr.scrollLeft+=e.deltaY; return; }
   if(now<wlock) return; if(now-wt>250) wy=0; wt=now; wy+=e.deltaY;
   if(Math.abs(wy)>90){ go(cur+(wy>0?1:-1)); wy=0; wlock=now+650; }
 },{passive:false});
-// tactile : glisser vertical = changer d'article (le glisser horizontal fait défiler la frise)
 let t0=null;
 stage.addEventListener("touchstart",e=>{ const t=e.touches[0]; t0={x:t.clientX,y:t.clientY,el:e.target}; },{passive:true});
 stage.addEventListener("touchend",e=>{
   if(!t0) return; const t=e.changedTouches[0], dx=t.clientX-t0.x, dy=t.clientY-t0.y, el=t0.el; t0=null;
   if(Math.abs(dy)>70&&Math.abs(dy)>Math.abs(dx)*1.4&&!canScroll(el,-dy)) go(cur+(dy<0?1:-1));
 },{passive:true});
-// souris : glisser horizontalement attrape la frise
 let grab=null, moved=false;
-stage.addEventListener("pointerdown",e=>{ if(e.pointerType!=="mouse"||e.button!==0||e.target.closest("button,select,.txt,.list")) return; grab={x:e.clientX,l:pages[cur].querySelector(".frise").scrollLeft}; moved=false; });
+stage.addEventListener("pointerdown",e=>{ if(e.pointerType!=="mouse"||e.button!==0||inCmp()||e.target.closest("button,select,.txt,.list")) return; grab={x:e.clientX,l:pages[cur].querySelector(".frise").scrollLeft}; moved=false; });
 addEventListener("pointermove",e=>{ if(!grab) return; const dx=e.clientX-grab.x; if(Math.abs(dx)>4){ moved=true; const fr=pages[cur].querySelector(".frise"); fr.style.scrollBehavior="auto"; fr.scrollLeft=grab.l-dx; } });
 addEventListener("pointerup",()=>{ if(grab){ pages[cur].querySelector(".frise").style.scrollBehavior=""; } grab=null; });
 
-// --- les plis : l'interstice s'élargit et pousse la suite vers la droite ---
+// --- les plis ---
 function syncGap(gap){ gap.classList.toggle("wide",!!gap.querySelector(".fold.open")); }
 function reveal(el,pad=36){
   const fr=el.closest(".frise"), r=el.getBoundingClientRect(), fx=fr.getBoundingClientRect();
@@ -380,7 +421,7 @@ function reveal(el,pad=36){
   else if(r.left<fx.left+pad) fr.scrollTo({left:fr.scrollLeft-(fx.left-r.left)-pad,behavior:"smooth"});
 }
 
-// --- ouvrir l'article : la carte s'élargit et s'allonge ; l'interstice suivant et le bord de la carte d'après restent visibles ---
+// --- ouvrir l'article dans la frise ---
 const PEEK=56;
 function openSheet(sheet){
   const fr=sheet.closest(".frise");
@@ -402,13 +443,50 @@ function closeSheet(sheet){
   sheet.classList.remove("open","scrolling","fits"); txt.scrollTop=0; txt.style.removeProperty("--h");
   sheet.querySelector(".toggle").setAttribute("aria-label","Ouvrir l'article");
 }
-document.addEventListener("change",e=>{
-  const sel=e.target.closest(".ref"); if(!sel) return;
-  const sheet=sel.closest(".sheet"), art=ARTICLES[pages.indexOf(sheet.closest(".page"))], i=+sheet.dataset.i, txt=sheet.querySelector(".txt");
-  txt.style.setProperty("--h",txt.offsetHeight+"px"); txt.innerHTML=alsHTML(art,i,+sel.value); txt.scrollTop=0; fit(sheet);
-});
+
+// --- comparer ---
+// Un texte seul : la liste des étapes à comparer se tient à sa droite.
+// Deux textes : toujours dans l'ordre chronologique, l'antérieur à gauche (vierge),
+// le postérieur à droite avec ses corrections apparentes par rapport à l'antérieur.
+// Fermer l'un : l'autre reste, à gauche, et la liste revient à sa droite. Fermer le dernier : retour à la frise.
+function hint(){ document.getElementById("hint").textContent=inCmp()?"Échap ou × pour revenir à la frise":"← → parcourir les étapes · ↑ ↓ changer d'article"; }
+function cmpHead(i){
+  const st=STEPS[i];
+  return `<div class="c h${st.now?" now":""}"><span class="av">${st.now?DOTS:CHECK}</span><span><span class="who">${st.stage}</span><span class="meta">${dateOf(st)}</span></span>
+    <button class="x" type="button" data-close="${i}" aria-label="Fermer ce texte">${X}</button></div>`;
+}
+function renderCmp(k){
+  const page=pages[k], box=page.querySelector(".cmp"), items=CMP[k], art=ARTICLES[k];
+  page.classList.toggle("cmping",items.length>0); hint();
+  if(!items.length){ box.innerHTML=""; return; }
+  let cells=items.map(cmpHead).join("");
+  const keys=[...new Set(items.flatMap(i=>Object.keys(art.v[i])))].map(Number).sort((a,b)=>a-b);
+  if(items.length===1){
+    const i=items[0], prev=i?art.v[i-1]:null;
+    keys.forEach(n=>{ const a=prev?prev[n]:undefined, b=art.v[i][n];
+      cells+=`<div class="c a${prev&&a===b?" same":""}"><span class="n">${n}</span><p style="margin:0">${prev?diff(a??null,b??null):esc(b)}</p></div>`; });
+  } else {
+    const [l,r]=items, L=art.v[l], Rv=art.v[r];
+    keys.forEach(n=>{ const a=L[n], b=Rv[n], same=a===b;
+      cells+=`<div class="c a${same?" same":""}"><span class="n">${a!=null?n:""}</span><p style="margin:0">${a!=null?esc(a):'<span class="none">absent</span>'}</p></div>`;
+      cells+=`<div class="c a${same?" same":""}"><span class="n">${b!=null||a!=null?n:""}</span><p style="margin:0">${diff(a??null,b??null)}</p></div>`; });
+  }
+  cells+=items.map(()=>`<div class="c f"></div>`).join("");
+  let html=`<div class="cmp-in"><div class="cg" style="--n:${items.length}">${cells}</div>`;
+  if(items.length===1){
+    const i=items[0], others=STEPS.map((s,j)=>j).filter(j=>j<DONE&&j!==i);
+    html+=`<div class="pickl"><div class="k">Comparer avec</div><div class="list">${others.map(j=>`<div class="ev"><button class="ev-row pk" type="button" data-pick="${j}"><span class="ico">${PLUS}</span><span><b>${STEPS[j].stage}</b><span class="t">${dateOf(STEPS[j])}</span></span></button></div>`).join("")}</div></div>`;
+  }
+  box.innerHTML=html+`</div>`; box.scrollTop=0;
+}
 document.addEventListener("click",e=>{
   if(moved){ moved=false; e.stopPropagation(); e.preventDefault(); return; }
+  const cb=e.target.closest(".cmpbtn");
+  if(cb){ const s=cb.closest(".sheet"); CMP[cur]=[+s.dataset.i]; renderCmp(cur); return; }
+  const pk=e.target.closest("[data-pick]");
+  if(pk){ CMP[cur]=[...CMP[cur],+pk.dataset.pick].sort((a,b)=>a-b); renderCmp(cur); return; }
+  const x=e.target.closest("[data-close]");
+  if(x){ CMP[cur]=CMP[cur].filter(i=>i!==+x.dataset.close); renderCmp(cur); return; }
   const tg=e.target.closest(".toggle");
   if(tg){ const s=tg.closest(".sheet"); s.classList.contains("open")?closeSheet(s):openSheet(s); return; }
   const fh=e.target.closest(".fold-head");
@@ -426,7 +504,6 @@ document.addEventListener("click",e=>{
     if(!was){ ev.classList.add("open"); light(ev); setTimeout(()=>ev.scrollIntoView({block:"nearest",behavior:"smooth"}),340); }
   }
 },true);
-// le passage produit par un amendement adopté s'allume dans la carte suivante (à droite)
 function clearLit(){ document.querySelectorAll(".al.lit").forEach(x=>x.classList.remove("lit")); document.querySelectorAll(".sheet.pulse").forEach(x=>x.classList.remove("pulse")); }
 function light(ev){
   if(ev.dataset.sort!=="adopté") return;
@@ -435,13 +512,13 @@ function light(ev){
   next.classList.add("pulse"); setTimeout(()=>next.classList.remove("pulse"),900);
 }
 document.addEventListener("keydown",e=>{
-  if(e.target.closest&&e.target.closest("select")) return;
   const fr=pages[cur].querySelector(".frise");
   if(e.key==="ArrowDown"){ e.preventDefault(); go(cur+1); return; }
   if(e.key==="ArrowUp"){ e.preventDefault(); go(cur-1); return; }
-  if(e.key==="ArrowRight"){ e.preventDefault(); fr.scrollBy({left:320,behavior:"smooth"}); return; }
-  if(e.key==="ArrowLeft"){ e.preventDefault(); fr.scrollBy({left:-320,behavior:"smooth"}); return; }
+  if(!inCmp()&&e.key==="ArrowRight"){ e.preventDefault(); fr.scrollBy({left:320,behavior:"smooth"}); return; }
+  if(!inCmp()&&e.key==="ArrowLeft"){ e.preventDefault(); fr.scrollBy({left:-320,behavior:"smooth"}); return; }
   if(e.key!=="Escape") return;
+  if(inCmp()){ CMP[cur]=[]; renderCmp(cur); return; }
   const ev=document.querySelector(".ev.open"); if(ev){ ev.classList.remove("open"); clearLit(); return; }
   const s=document.querySelector(".sheet.open"); if(s){ closeSheet(s); return; }
   const f=document.querySelector(".fold.open"); if(f){ f.classList.remove("open"); syncGap(f.closest(".gap")); }
