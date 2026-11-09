@@ -116,6 +116,7 @@
 <script src="../../maquettes/commun/noyau.js"></script>
 <script src="../commun/cadre.js"></script>
 <script src="../commun/lecture.js"></script>
+<script src="../commun/textes.js"></script>
 <style>
 /* ===== Module navigation · design repris de « Module - Historique des versions » (branche claude/contexte-general, historique-article.html),
    lui-même repris de Linear : fond presque noir, cartes sombres arrondies, texte sans empattement (Inter), accents bleu-violet. Seule la forme change. ===== */
@@ -204,6 +205,28 @@ body::before{display:none}
 .feuillet .it.on{box-shadow:none;background:#1f2023;color:var(--fg)}
 .feuillet .tt{text-transform:none;letter-spacing:0;font:400 12px var(--ui);color:var(--dim)}
 .trace{background:var(--card-2);border:1px solid var(--border-2);border-left:2px solid var(--accent);border-radius:8px;color:var(--text)}
+/* le projet de loi en entier : divisions, mentions, fiches d'amendement */
+.div-tit{display:flex;flex-direction:column;gap:2px;margin:26px 0 4px;padding-top:14px;border-top:1px solid var(--border-2)}
+.div-tit .dn{font:500 11.5px var(--ui);color:var(--accent);letter-spacing:.02em}
+.div-tit .di{font:500 15px/1.35 var(--ui);color:var(--fg)}
+.div-tit.chapitre{margin-top:14px;border-top:0;padding-top:4px}.div-tit.chapitre .di{font-size:13.5px;color:var(--text)}
+.div-tit+.t-art{border-top:0}
+.t-art h3 .mention{font:400 11.5px var(--ui);color:var(--violet);margin-left:4px}
+.li-div{padding:10px 14px 3px;font:500 10.5px/1.3 var(--ui);color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.li-div.titre{color:var(--accent);padding-top:12px}
+span.li.off{display:flex}
+.pastilles button.ec{border-style:dashed}
+.liste-am .am{cursor:pointer}
+.liste-am .am:hover>span:nth-child(2){color:var(--fg)}
+.liste-am .am.ouvert{background:rgba(94,106,210,.06)}
+.liste-am .am em.add{font-style:normal;font-size:11px;color:var(--violet);border:1px solid var(--border-2);border-radius:4px;padding:0 5px;margin-right:4px}
+.fiche{grid-column:1/-1;margin:6px 0 4px;padding:10px 12px;border:1px solid var(--border-2);border-radius:8px;background:var(--card);cursor:default}
+.fiche p{margin:0 0 6px;font:400 12.5px/1.5 var(--ui);color:var(--text)}
+.fiche .et{display:inline-block;min-width:74px;margin-right:8px;font:500 11px var(--ui);color:var(--dim)}
+.fiche .dispo{margin:0 0 8px;padding:8px 10px;border-left:2px solid var(--accent);background:var(--card-2);border-radius:4px;font:400 12.5px/1.6 var(--ui);color:var(--text);white-space:pre-wrap;max-height:260px;overflow:auto;scrollbar-width:none}
+.fiche .expo{color:var(--muted)}
+.fiche .lien{margin-left:6px;font:400 12px var(--ui);color:var(--accent)}
+.fiche .lien:hover{text-decoration:underline}
 </style>
 </head><body>
 <p class="consigne" id="consigne"></p>
@@ -211,92 +234,175 @@ body::before{display:none}
 <script>
 "use strict";
 const CONSIGNES = [
-  "<b>L'arbre.</b> Deux barres : « type de texte », fermée sur le texte choisi ; « articles et alinéas », les alinéas dépliés sous leur article. Choisir un texte referme sa barre ; la barre des articles reste ouverte pour en parcourir plusieurs. Le texte entier reste à droite.",
+  "<b>L'arbre.</b> Deux barres : « type de texte », fermée sur le texte choisi ; « articles et alinéas », les alinéas dépliés sous leur article (▸). Choisir un texte referme sa barre ; la barre des articles reste ouverte pour en parcourir plusieurs. Le texte entier reste à droite.",
   "<b>Les barres empilées.</b> Trois barres fixes, toujours dans le même ordre : type de texte, articles, alinéas. Choisir un texte referme sa barre et l'on revient au menu ; les barres des articles et des alinéas restent ouvertes pour cliquer successivement. Le texte entier reste à droite.",
   "<b>Les colonnes repliables.</b> Trois colonnes : type de texte, articles, alinéas. Choisir un texte replie sa colonne en un dos qui porte sa valeur ; articles et alinéas restent ouverts. Le texte entier reste à droite.",
 ];
+/* ===== Le projet de loi en entier (micro-maquettes/commun/textes.js) : seize articles aux quatre étapes, 788 amendements de commission ===== */
+const TX = window.TXT;
+const slug = n => String(n).replace(/\s+/g, "-");
+const artDe = (texte, num) => (TX.etapes[texte] || []).find(a => a.num === num);
+const alsDe = (texte, num) => (num === "4" && MM.art4(texte)) || ((artDe(texte, num) || {}).alineas || []);
+MM.plan = id => D.plan.map(p => {
+  const a = artDe(id, p.num), m = (a && a.mention) || "";
+  return {...p, nom: MM.artName(p), titre: MM.artTitle(p), presence: !a ? "absent" : /Supprimé/.test(m) ? "supprime" : "present",
+    texte: !!(a && a.alineas.length), mention: m, divisions: a ? a.divisions : []};
+});
+const cas = t => { t = String(t || ""); return t === t.toUpperCase() ? t.charAt(0) + t.slice(1).toLowerCase() : t; };
+const nomArtTxt = num => "article " + (num === "1er" ? "1er" : num);
+// le même alinéa dans un autre texte : suivi par le socle pour l'article 4, par ressemblance des mots ailleurs (dit comme tel)
+const mots = t => new Set((String(t).toLowerCase().match(/[a-zà-ÿœ0-9]{3,}/g) || []));
+function alProche(from, num, k, to){
+  const A = alsDe(from, num), B = alsDe(to, num); if (!B.length) return {k: null, exact: false};
+  const a = mots(A[k - 1] || ""); let best = -1, bi = 0;
+  B.forEach((t, i) => { const b = mots(t); let n = 0; a.forEach(w => b.has(w) && n++); const s = n / Math.max(1, a.size + b.size - n);
+    if (s > best + 1e-9 || (Math.abs(s - best) < 1e-9 && Math.abs(i - k + 1) < Math.abs(bi - k + 1))){ best = s; bi = i; } });
+  return {k: bi + 1, exact: best >= .6, approx: true};
+}
+LEC.changerTexte = (st, texte) => {
+  const avant = st.texte; if (avant === texte) return "";
+  let msg = `${esc(MM.ST[texte].titre)} : `;
+  const plan = LEC.planDe(texte), i = plan.findIndex(p => p.num === st.art), p = plan[i];
+  if (!p || p.presence === "absent"){
+    let j = i; while (j > 0 && plan[j].presence === "absent") j--;
+    msg += `l'${nomArtTxt(st.art)} n'existe pas dans ce texte ; article le plus proche : <b>${esc(plan[j].num)}</b>.`;
+    st.art = plan[j].num; st.al = null;
+  } else if (p.presence === "supprime"){ msg += `${nomArtTxt(st.art)} conservé ; il est supprimé dans ce texte.`; st.al = null; }
+  else if (st.al){
+    const m = st.art === "4" ? MM.alMap(avant, st.al, texte) : alProche(avant, st.art, st.al, texte);
+    const ici = `${nomArtTxt(st.art)}`;
+    msg += m.exact ? (m.k === st.al ? `${ici}, alinéa ${m.k} conservés.` : `${ici} conservé ; l'alinéa ${st.al} y devient l'alinéa <b>${m.k}</b>${m.approx ? " (rapproché par les mots)" : ""}.`)
+      : `${ici} conservé ; l'alinéa ${st.al} n'a pas d'équivalent sûr ici : alinéa le plus proche, <b>${m.k}</b>.`;
+    st.al = m.k;
+  } else msg += `${nomArtTxt(st.art)} conservé.`;
+  st.texte = texte; return msg;
+};
+
 let st = {texte: "transmis", art: "4", al: 12}, V = 0, vu = {art: "4", al: null};
 const ouv = {textes: false, articles: true, alineas: false, arbreArt: null};   // la barre des textes se referme après un choix ; articles et alinéas restent ouverts
 let droiteTexte = null;
-const COCHES = new Set(), COCHES_AL = new Set(), COMP = {mode: null}, GROUPE_OUVERT = {g: null};   // COMP.mode : null | "articles" | "alineas"
+const COCHES = new Set(), COCHES_AL = new Set(), COMP = {mode: null}, GROUPE_OUVERT = {g: null}, AM_OUVERT = new Set();   // COCHES_AL : « article|alinéa »
+const cleAl = (num, k) => num + "|" + k, deCle = c => { const [n, k] = c.split("|"); return {num: n, k: +k}; };
+
+/* ----- fenêtres de comparaison ----- */
+function corpsArt(texte, num){
+  const p = LEC.art(texte, num);
+  return p.presence === "supprime" ? `<p class="al" style="font-style:italic">(Supprimé)</p>` : alsDe(texte, num).map((t, i) => MM.alHTML(t, i + 1)).join("");
+}
 function fenetreArt(num){
-  const p = LEC.art(st.texte, num), A = MM.art4(st.texte);
-  const corps = p.presence === "supprime" ? `<p class="al" style="font-style:italic">(Supprimé)</p>` : p.texte ? A.map((t, i) => MM.alHTML(t, i + 1)).join("") : `<p class="nontexte">Texte non chargé dans le prototype.</p>`;
-  return `<article class="page fen"><div class="runhead"><span>Article ${LEC.nomArt(num)}</span><span>${esc(ET[st.texte].court)}</span><button class="x" data-retire="${esc(num)}" title="retirer de la comparaison">×</button></div><p class="fen-tit">${esc(p.titre)}</p><div class="fen-corps">${corps}</div></article>`;
+  const p = LEC.art(st.texte, num);
+  return `<article class="page fen"><div class="runhead"><span>Article ${LEC.nomArt(num)}${p.mention ? " " + esc(p.mention) : ""}</span><span>${esc(ET[st.texte].court)} · ${alsDe(st.texte, num).length} al.</span><button class="x" data-retire="${esc(num)}" title="retirer de la comparaison">×</button></div><p class="fen-tit">${esc(p.titre)}</p><div class="fen-corps">${corpsArt(st.texte, num)}</div></article>`;
 }
-function fenetreAl(k){
-  const t = MM.art4(st.texte)[k - 1];
-  return `<article class="page fen"><div class="runhead"><span>Article 4 · alinéa ${k}</span><span>${esc(ET[st.texte].court)}</span><button class="x" data-retire-al="${k}" title="retirer de la comparaison">×</button></div><div class="fen-corps">${MM.alHTML(t, k)}</div></article>`;
+function fenetreAl(c){
+  const {num, k} = deCle(c), t = alsDe(st.texte, num)[k - 1];
+  return `<article class="page fen"><div class="runhead"><span>Article ${LEC.nomArt(num)} · alinéa ${k}</span><span>${esc(ET[st.texte].court)}</span><button class="x" data-retire-al="${esc(c)}" title="retirer de la comparaison">×</button></div><div class="fen-corps">${t == null ? `<p class="nontexte">Cet alinéa n'existe pas dans ce texte.</p>` : MM.alHTML(t, k)}</div></article>`;
 }
+const ordreArt = num => D.plan.findIndex(p => p.num === num);
 function majComparaison(){
   const lect = document.getElementById("lecture"), cmp = document.getElementById("cmp"); if (!lect || !cmp) return;
-  const sel = COMP.mode === "articles" ? [...COCHES].filter(n => LEC.art(st.texte, n) && LEC.art(st.texte, n).presence !== "absent") : COMP.mode === "alineas" ? [...COCHES_AL].filter(k => k <= (MM.art4(st.texte) || []).length).sort((x, y) => x - y) : [];
+  const sel = COMP.mode === "articles" ? [...COCHES].filter(n => LEC.art(st.texte, n) && LEC.art(st.texte, n).presence !== "absent").sort((x, y) => ordreArt(x) - ordreArt(y))
+    : COMP.mode === "alineas" ? [...COCHES_AL].filter(c => { const {num} = deCle(c), p = LEC.art(st.texte, num); return p && p.presence === "present"; })
+        .sort((x, y) => { const a = deCle(x), b = deCle(y); return ordreArt(a.num) - ordreArt(b.num) || a.k - b.k; }) : [];
   if (!COMP.mode || !sel.length){ cmp.hidden = true; lect.hidden = false;
-    const b = document.getElementById("bandeau"); if (b) b.innerHTML = COMP.mode ? `<div class="bandeau"><span>Comparer ${COMP.mode === "articles" ? "les articles" : "les alinéas"} : cochez-en deux ou plus dans la barre de gauche.</span><button data-fin>annuler</button></div>` : "";
+    const b = document.getElementById("bandeau"); if (b) b.innerHTML = COMP.mode ? `<div class="bandeau"><span>Comparer ${COMP.mode === "articles" ? "les articles" : "les alinéas"} : cochez-en deux ou plus dans la barre de gauche${COMP.mode === "alineas" ? " (on peut changer d'article entre deux coches)" : ""}.</span><button data-fin>annuler</button></div>` : "";
     return; }
   lect.hidden = true; cmp.hidden = false; const bd = document.getElementById("bandeau"); if (bd) bd.innerHTML = "";
   cmp.innerHTML = `<div class="bandeau"><span>Comparaison · ${sel.length} ${COMP.mode === "articles" ? plural(sel.length, "article") : plural(sel.length, "alinéa")} · ${esc(ET[st.texte].court)} · chacun dans sa fenêtre</span><button data-fin>fin de la comparaison</button></div>
     <div class="fenetres">${sel.map(x => COMP.mode === "articles" ? fenetreArt(x) : fenetreAl(x)).join("")}</div>`;
 }
-const cleQui = a => a.inst ? "i:" + a.inst : "g:" + (a.groupe || "?");
-const nomQui = k => k.startsWith("i:") ? INS[k.slice(2)].name : NX.groupName(k.slice(2));
-const couleurQui = k => k.startsWith("i:") ? INS[k.slice(2)].color : NX.groupColor(k.slice(2));
+
+/* ----- les amendements sous l'article courant (commission de l'Assemblée, sur le texte transmis) ----- */
+const AMS = TX.amendements;
+const ecarte = a => /^Irrecevable/.test(a.etat) || a.etat === "Retiré";
+const cleQui = a => a.inst ? "i:" + a.inst : "g:" + (a.groupe || "NI");
+const nomQui = k => k === "x:ecartes" ? "Écartés avant l'examen" : k.startsWith("i:") ? INS[k.slice(2)].name : NX.groupName(k.slice(2));
+const couleurQui = k => k === "x:ecartes" ? "transparent" : k.startsWith("i:") ? INS[k.slice(2)].color : NX.groupColor(k.slice(2));
+const motSort = a => ecarte(a) ? (a.etat === "Retiré" ? "retiré avant l'examen" : "irrecevable · " + (a.sousEtat || "").toLowerCase()) : (a.sort || "non examiné").toLowerCase();
+const date = d => d ? new Date(String(d).slice(0, 10) + "T12:00:00").toLocaleDateString("fr-FR", {day: "numeric", month: "long", year: "numeric"}) : "";
+const alVise = a => { const m = /(\d+)/.exec(a.alinea || ""); return m ? +m[1] : null; };
+function ficheAm(a){
+  const k = alVise(a), vis = a.place ? `article additionnel ${a.place} l'${nomArtTxt(a.art)}` : a.alinea ? a.alinea.toLowerCase() : "l'article entier";
+  const auteur = a.inst ? `${esc(INS[a.inst].name)} (${esc(INS[a.inst].sub)})` : `${esc(a.auteur)} · ${esc(NX.groupName(a.groupe || "NI"))}`;
+  return `<div class="fiche">
+    <p><span class="et">Vise</span>${esc(vis)}${k && !a.place ? ` <button class="lien" data-va-art="${esc(a.art)}" data-va-al="${k}">voir l'alinéa ${k} du texte transmis ↗</button>` : ""}</p>
+    <p><span class="et">Auteur</span>${auteur}${a.cosign ? ` · ${a.cosign} ${plural(a.cosign, "cosignataire")}` : ""} · déposé le ${esc(date(a.depot))}${a.dateSort ? ` · examiné le ${esc(date(a.dateSort))}` : ""}</p>
+    <p><span class="et">Sort</span>${esc(motSort(a))}</p>
+    ${a.dispositif ? `<p><span class="et">Dispositif</span></p><div class="dispo">${esc(a.dispositif)}</div>` : `<p class="nontexte">Pas de dispositif publié (amendement écarté avant publication).</p>`}
+    ${a.objet ? `<p><span class="et">Exposé sommaire (début)</span></p><p class="expo">${esc(a.objet)}</p>` : ""}</div>`;
+}
 function modulesHTML(p){
-  if (p.presence !== "present") return "";
-  if (!p.texte){
-    const ent = Object.entries(p.amendements || {}).sort((x, y) => y[1] - x[1]);
-    return `<div class="modules"><div class="tt"><span>Amendements en commission (Assemblée) · ${p.n}</span><span>par sort ; le détail par groupe n'est chargé que pour l'article 4</span></div><div class="pastilles">${ent.map(([k, n]) => `<span class="p">${esc(k)} <b>${n}</b></span>`).join("") || `<span class="p">aucun</span>`}</div></div>`;
-  }
-  const ams = ALL.filter(a => !isEcarte(a) && a.mode !== "hors-texte"), m = new Map();
+  if (p.presence === "absent") return "";
+  const tous = AMS.filter(a => a.art === p.num);
+  if (!tous.length) return `<div class="modules"><div class="tt"><span>Propositions d'amendement en commission (Assemblée) · aucune</span><span>${/nouveau/.test(p.mention) && st.texte === "AN-com" ? "article introduit par la commission elle-même" : ""}</span></div></div>`;
+  const ams = tous.filter(a => !ecarte(a)), ec = tous.filter(ecarte), add = tous.filter(a => a.place).length, m = new Map();
   for (const a of ams){ const k = cleQui(a); if (!m.has(k)) m.set(k, []); m.get(k).push(a); }
-  const ent = [...m.entries()].sort((x, y) => y[1].length - x[1].length), g = GROUPE_OUVERT.g;
-  const liste = g && m.has(g) ? `<div class="liste-am">${m.get(g).map(a => `<div class="am"><span class="num">${esc(a.num)}</span><span>${esc(short(objetOf(a), 130))}</span><span class="sort${a.sort === "Adopté" ? " adopte" : ""}">${esc(sortWord(a))}</span></div>`).join("")}</div>` : "";
-  return `<div class="modules"><div class="tt"><span>Propositions d'amendement en commission (Assemblée) · ${ams.length} examinées sur ${p.n} déposées (hors irrecevables et retirés)</span><span>par auteur ; cliquer un groupe pour ses amendements</span></div>
-    <div class="pastilles">${ent.map(([k, l]) => { const ad = l.filter(a => a.sort === "Adopté").length; return `<button class="${k === g ? "on" : ""}" data-groupe="${esc(k)}"><i style="background:${couleurQui(k)}"></i>${esc(nomQui(k))} <b>${l.length}</b>${ad ? ` <span style="color:var(--stamp)">· ${ad} ${plural(ad, "adopté")}</span>` : ""}</button>`; }).join("")}</div>${liste}</div>`;
+  const ent = [...m.entries()].sort((x, y) => y[1].length - x[1].length);
+  if (ec.length) ent.push(["x:ecartes", ec]); m.set("x:ecartes", ec);
+  const g = GROUPE_OUVERT.g;
+  const liste = g && m.has(g) ? `<div class="liste-am">${m.get(g).map(a => `<div class="am${AM_OUVERT.has(a.num) ? " ouvert" : ""}" data-am="${esc(a.num)}"><span class="num">${esc(a.num)}</span><span>${a.place ? `<em class="add">article additionnel</em> ` : ""}${esc(short(a.objet || (a.dispositif ? a.dispositif : "(sans exposé publié)"), 150))}</span><span class="sort${a.sort === "Adopté" ? " adopte" : ""}">${esc(motSort(a))}</span>${AM_OUVERT.has(a.num) ? ficheAm(a) : ""}</div>`).join("")}</div>` : "";
+  const note = st.texte !== "transmis" ? ` · les alinéas visés sont numérotés dans le texte transmis` : "";
+  return `<div class="modules"><div class="tt"><span>Propositions d'amendement en commission (Assemblée) · ${ams.length} examinées sur ${tous.length} déposées${add ? ` (dont ${add} ${plural(add, "article")} additionnel${add > 1 ? "s" : ""})` : ""}</span><span>par auteur ; cliquer un groupe, puis un amendement${note}</span></div>
+    <div class="pastilles">${ent.map(([k, l]) => { const ad = l.filter(a => a.sort === "Adopté").length; return `<button class="${k === g ? "on" : ""}${k === "x:ecartes" ? " ec" : ""}" data-groupe="${esc(k)}">${k === "x:ecartes" ? "" : `<i style="background:${couleurQui(k)}"></i>`}${esc(nomQui(k))} <b>${l.length}</b>${ad ? ` <span style="color:var(--stamp)">· ${ad} ${plural(ad, "adopté")}</span>` : ""}</button>`; }).join("")}</div>${liste}</div>`;
 }
 function majModules(){
   document.querySelectorAll(".t-art .modules").forEach(x => x.remove());
-  const sct = document.getElementById("art-" + st.art); if (!sct) return;
+  const sct = document.getElementById("art-" + slug(st.art)); if (!sct) return;
   const p = LEC.art(st.texte, st.art); if (!p) return;
   sct.querySelector("h3").insertAdjacentHTML("afterend", modulesHTML(p));
 }
+
+/* ----- le texte entier à droite ----- */
+const numDiv = n => String(n || "").replace(/^TITRE\b/, "Titre").replace(/^CHAPITRE\b/, "Chapitre");
+const divHTML = d => `<div class="div-tit ${d.niv}"><span class="dn">${esc(numDiv(d.num))}</span><span class="di">${esc(cas(d.intit))}</span></div>`;
 function rendreDroite(){
   if (droiteTexte === st.texte) return; droiteTexte = st.texte;
-  const plan = LEC.planDe(st.texte), A = MM.art4(st.texte);
-  const corps = plan.filter(p => p.presence !== "absent").map(p => `<section class="t-art" id="art-${esc(p.num)}" data-art="${esc(p.num)}">
-    <h3><span class="nom">Article <span class="num">${LEC.nomArt(p.num)}</span></span><span class="tit">${esc(p.titre)}</span>${p.n ? `<span class="compte">${p.n} am.</span>` : ""}</h3>
-    ${p.presence === "supprime" ? `<p class="al" style="font-style:italic">(Supprimé)</p>` : p.texte ? A.map((t, i) => `<p class="al" id="al-${i + 1}" data-al="${i + 1}"><span class="n">${i + 1}</span>${esc(t)}</p>`).join("") : `<p class="nontexte">Texte non chargé dans le prototype.</p>`}</section>`).join("");
-  document.getElementById("droite").innerHTML = `<div id="lecture" style="width:100%;display:flex;justify-content:center">` + MM.page(`${esc(D.dossier.uid)} · ${esc(ET[st.texte].label)}`, "le texte entier", MM.entete() + `<p class="sous">${plan.filter(p => p.presence !== "absent").length} articles · ${esc(MM.ST[st.texte].titre)}</p><div id="bandeau"></div>` + corps) + `</div><div id="cmp" hidden></div>`;
+  const plan = LEC.planDe(st.texte).filter(p => p.presence !== "absent"), nal = plan.reduce((n, p) => n + alsDe(st.texte, p.num).length, 0);
+  const corps = plan.map(p => (p.divisions || []).map(divHTML).join("") + `<section class="t-art" id="art-${slug(p.num)}" data-art="${esc(p.num)}">
+    <h3><span class="nom">Article <span class="num">${LEC.nomArt(p.num)}</span>${p.mention ? ` <span class="mention">${esc(p.mention)}</span>` : ""}</span><span class="tit">${esc(p.titre)}</span><span class="compte">${alsDe(st.texte, p.num).length} al.</span></h3>
+    ${p.presence === "supprime" ? `<p class="al" style="font-style:italic">(Supprimé)</p>` : alsDe(st.texte, p.num).map((t, i) => `<p class="al" id="al-${slug(p.num)}-${i + 1}" data-art="${esc(p.num)}" data-al="${i + 1}"><span class="n">${i + 1}</span>${esc(t)}</p>`).join("")}</section>`).join("");
+  const s = MM.ST[st.texte];
+  document.getElementById("droite").innerHTML = `<div id="lecture" style="width:100%;display:flex;justify-content:center">` + MM.page(`${esc(D.dossier.uid)} · ${esc(ET[st.texte].label)}`, "le texte entier", MM.entete() + `<p class="sous">${plan.length} articles · ${nal} alinéas · ${esc(s.titre)}${s.date ? " · " + esc(s.date) : ""}</p><div id="bandeau"></div>` + corps) + `</div><div id="cmp" hidden></div>`;
   observer();
 }
-const liTexte = s => `<button class="li${s.id === st.texte ? " on" : ""}" data-texte="${s.id}"><span class="t">${esc(s.titre)}</span>${s.examine ? "<small>examiné</small>" : ""}</button>`;
-const liArt = p => `<button class="li${p.num === st.art ? " on" : ""}${p.num === vu.art && p.num !== st.art ? " vu" : ""}${p.presence === "absent" ? " off" : ""}" data-art="${esc(p.num)}">${p.presence === "absent" || COMP.mode !== "articles" ? "" : `<span class="coche${COCHES.has(p.num) ? " on" : ""}" data-coche="${esc(p.num)}" title="comparer cet article"></span>`}<span class="k">${LEC.nomArt(p.num)}</span><span class="t">${esc(p.titre)}</span></button>`;
-const liAl = (t, i) => `<button class="li${i + 1 === st.al ? " on" : ""}${i + 1 === vu.al && i + 1 !== st.al ? " vu" : ""}" data-al="${i + 1}">${COMP.mode === "alineas" ? `<span class="coche${COCHES_AL.has(i + 1) ? " on" : ""}" data-coche-al="${i + 1}" title="comparer cet alinéa"></span>` : ""}<span class="k">${i + 1}</span><span class="t">${esc(t)}</span></button>`;
+
+/* ----- la colonne de gauche ----- */
+const liTexte = s => `<button class="li${s.id === st.texte ? " on" : ""}" data-texte="${s.id}"><span class="t">${esc(s.titre)}</span>${s.examine ? "<small>examiné</small>" : s.date ? `<small>${esc(s.date.replace("adopté le ", ""))}</small>` : ""}</button>`;
+const liAvenir = s => `<span class="li off" title="pas encore de texte"><span class="t">${esc(s.titre)}</span><small>${esc(s.avenir || "à venir")}</small></span>`;
+const listeTextes = cls => LEC.TEXTES.map(s => liTexte(s).replace('class="li', 'class="li' + (cls || ""))).join("") + MM.STAGES.filter(s => !MM.hasText(s.id)).map(s => liAvenir(s).replace('class="li', 'class="li' + (cls || ""))).join("");
+const divLi = d => `<div class="li-div ${d.niv}">${esc(numDiv(d.num))} · ${esc(cas(d.intit))}</div>`;
+const liArt = (p, cls, tog) => `<button class="li${cls || ""}${p.num === st.art ? " on" : ""}${p.num === vu.art && p.num !== st.art ? " vu" : ""}${p.presence === "absent" ? " off" : ""}" data-art="${esc(p.num)}"${p.presence === "absent" ? ` title="n'existe pas dans ce texte"` : ""}>${p.presence === "absent" || COMP.mode !== "articles" ? "" : `<span class="coche${COCHES.has(p.num) ? " on" : ""}" data-coche="${esc(p.num)}" title="comparer cet article"></span>`}${tog || ""}<span class="k">${LEC.nomArt(p.num)}</span><span class="t">${esc(p.titre)}</span>${p.presence === "supprime" ? "<small>supprimé</small>" : p.presence === "absent" ? "<small>absent</small>" : ""}</button>`;
+const listeArts = (plan, cls, apres, tog) => plan.map(p => (p.presence !== "absent" ? (p.divisions || []).map(divLi).join("") : "") + liArt(p, cls, tog ? tog(p) : "") + (apres ? apres(p) : "")).join("");
+const liAl = (num, t, i, cls) => `<button class="li${cls || ""}${num === st.art && i + 1 === st.al ? " on" : ""}${num === vu.art && i + 1 === vu.al && !(num === st.art && i + 1 === st.al) ? " vu" : ""}" data-al="${i + 1}" data-of="${esc(num)}">${COMP.mode === "alineas" ? `<span class="coche${COCHES_AL.has(cleAl(num, i + 1)) ? " on" : ""}" data-coche-al="${esc(cleAl(num, i + 1))}" title="comparer cet alinéa"></span>` : ""}<span class="k">${i + 1}</span><span class="t">${esc(t)}</span></button>`;
+const listeAls = (num, cls) => { const p = LEC.art(st.texte, num);
+  if (!p || p.presence === "absent") return `<p class="nontexte" style="padding:6px 12px">L'${nomArtTxt(num)} n'existe pas dans ce texte.</p>`;
+  if (p.presence === "supprime") return `<p class="nontexte" style="padding:6px 12px">L'${nomArtTxt(num)} est supprimé dans ce texte.</p>`;
+  return `<div class="li-div">Article ${LEC.nomArt(num)} · ${alsDe(st.texte, num).length} alinéas</div>` + alsDe(st.texte, num).map((t, i) => liAl(num, t, i, cls)).join(""); };
 const bt = (cle, titre, val) => `<button class="bt${ouv[cle] ? " ouvert" : ""}" data-tog="${cle}"><span class="chev">▸</span>${titre}<span class="val">${val}</span></button>`;
-const valTexte = () => esc(ET[st.texte].court), valArt = () => "Art. " + LEC.nomArt(st.art), valAl = () => st.art === "4" ? "al. " + st.al : "—";
+const valTexte = () => esc(ET[st.texte].court), valArt = () => "Art. " + LEC.nomArt(st.art), valAl = () => st.al ? "al. " + st.al : "—";
 function gaucheA(){
-  const plan = LEC.planDe(st.texte), A = MM.art4(st.texte);
-  const textes = ouv.textes ? LEC.TEXTES.map(s => `<button class="li n1${s.id === st.texte ? " on" : ""}" data-texte="${s.id}"><span class="t">${esc(s.titre)}</span>${s.examine ? "<small>examiné</small>" : ""}</button>`).join("") : "";
-  const arts = plan.map(p => `<button class="li n1${p.num === st.art ? " on" : ""}${p.num === vu.art && p.num !== st.art ? " vu" : ""}${p.presence === "absent" ? " off" : ""}" data-art="${esc(p.num)}">${p.presence === "absent" || COMP.mode !== "articles" ? "" : `<span class="coche${COCHES.has(p.num) ? " on" : ""}" data-coche="${esc(p.num)}" title="comparer cet article"></span>`}${p.texte ? `<span class="tog${ouv.arbreArt === p.num ? " o" : ""}" data-tog-art="${esc(p.num)}">▸</span>` : `<span class="tog"></span>`}<span class="k">${LEC.nomArt(p.num)}</span><span class="t">${esc(p.titre)}</span></button>` +
-    (p.texte && ouv.arbreArt === p.num && p.presence === "present" ? A.map((t, i) => liAl(t, i).replace('class="li', 'class="li n2')).join("") : "")).join("");
-  return `<div class="bande arbre">${bt("textes", "Type de texte", valTexte())}${textes}${bt("articles", "Articles et alinéas", valArt() + (st.art === "4" ? " · " + valAl() : ""))}${ouv.articles ? btnCmp("articles") + (st.art === "4" ? btnCmp("alineas") : "") + arts : ""}</div>`;
+  const plan = LEC.planDe(st.texte);
+  const arts = listeArts(plan, " n1", p => p.texte && p.presence === "present" && ouv.arbreArt === p.num ? alsDe(st.texte, p.num).map((t, i) => liAl(p.num, t, i, " n2")).join("") : "",
+    p => p.texte && p.presence === "present" ? `<span class="tog${ouv.arbreArt === p.num ? " o" : ""}" data-tog-art="${esc(p.num)}">▸</span>` : `<span class="tog"></span>`);
+  return `<div class="bande arbre">${bt("textes", "Type de texte", valTexte())}${ouv.textes ? listeTextes(" n1") : ""}${bt("articles", "Articles et alinéas", valArt() + (st.al ? " · " + valAl() : ""))}${ouv.articles ? btnCmp("articles") + btnCmp("alineas") + arts : ""}</div>`;
 }
 function gaucheB(){
-  const plan = LEC.planDe(st.texte), A = MM.art4(st.texte);
+  const plan = LEC.planDe(st.texte);
   const sec = (cle, titre, val, contenu) => `<div class="sec ${cle}${ouv[cle] ? " o" : ""}">${bt(cle, titre, val)}${ouv[cle] ? `<div class="contenu">${contenu}</div>` : ""}</div>`;
-  return `<div class="bande pile">${sec("textes", "Type de texte", valTexte(), LEC.TEXTES.map(liTexte).join(""))}${sec("articles", "Articles", valArt(), btnCmp("articles") + plan.map(liArt).join(""))}${sec("alineas", "Alinéas", valAl(), st.art === "4" ? btnCmp("alineas") + A.map(liAl).join("") : `<p class="nontexte" style="padding:6px 12px">Texte de l'article non chargé.</p>`)}</div>`;
+  return `<div class="bande pile">${sec("textes", "Type de texte", valTexte(), listeTextes())}${sec("articles", "Articles", valArt(), btnCmp("articles") + listeArts(plan))}${sec("alineas", "Alinéas", valAl(), btnCmp("alineas") + listeAls(st.art))}</div>`;
 }
 function gaucheC(){
-  const plan = LEC.planDe(st.texte), A = MM.art4(st.texte);
+  const plan = LEC.planDe(st.texte);
   const col = (cle, titre, val, contenu) => `<div class="bande col${ouv[cle] ? "" : " replie"}" data-col="${cle}">${bt(cle, titre, val)}<div class="contenu">${contenu}</div></div>`;
-  return `<div class="cols">${col("textes", "Type de texte", valTexte(), LEC.TEXTES.map(liTexte).join(""))}${col("articles", "Articles", valArt(), btnCmp("articles") + plan.map(liArt).join(""))}${col("alineas", "Alinéas", valAl(), st.art === "4" ? btnCmp("alineas") + A.map(liAl).join("") : `<p class="nontexte" style="padding:6px 12px">Texte non chargé.</p>`)}</div>`;
+  return `<div class="cols">${col("textes", "Type de texte", valTexte(), listeTextes())}${col("articles", "Articles", valArt(), btnCmp("articles") + listeArts(plan))}${col("alineas", "Alinéas", valAl(), btnCmp("alineas") + listeAls(st.art))}</div>`;
 }
 const btnCmp = mode => `<button class="cmp-btn${COMP.mode === mode ? " on" : ""}" data-cmp="${mode}">${COMP.mode === mode ? "✓ Comparaison en cours · terminer" : mode === "articles" ? "⧉ Comparer les articles" : "⧉ Comparer les alinéas"}</button>`;
 const GAUCHES = [gaucheA, gaucheB, gaucheC];
 function rendreGauche(){
   const c = document.getElementById("cote"), ouvert = c.classList.contains("ouvert");
-  c.innerHTML = `<button class="sommaire-btn" data-tiroir>Sommaire <span class="val">${valTexte()} · ${valArt()}${st.art === "4" ? " · " + valAl() : ""}</span></button><div class="tiroir">${GAUCHES[V]()}</div>`;
+  const sc = [...c.querySelectorAll(".contenu, .bande.arbre")].map(e => e.scrollTop);
+  c.innerHTML = `<button class="sommaire-btn" data-tiroir>Sommaire <span class="val">${valTexte()} · ${valArt()}${st.al ? " · " + valAl() : ""}</span></button><div class="tiroir">${GAUCHES[V]()}</div>`;
   c.classList.toggle("ouvert", ouvert);
+  [...c.querySelectorAll(".contenu, .bande.arbre")].forEach((e, i) => { if (sc[i]) e.scrollTop = sc[i]; });
   majComparaison(); majModules();
 }
 function aller(sel, cls){
@@ -304,15 +410,17 @@ function aller(sel, cls){
   el.scrollIntoView({behavior: "smooth", block: cls === "al" ? "center" : "start"});
   el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash");
 }
+const allerIci = () => requestAnimationFrame(() => st.al ? aller(`#al-${slug(st.art)}-${st.al}`, "al") : aller("#art-" + slug(st.art), "art"));
+function choisirTexte(id){ const msg = LEC.changerTexte(st, id); ouv.textes = false; rendreDroite(); rendreGauche(); if (msg) MM.trace(msg); allerIci(); }
 let io;
 function observer(){
   if (io) io.disconnect();
   io = new IntersectionObserver(es => {
     for (const x of es) if (x.isIntersecting){
-      if (x.target.dataset.al) vu.al = +x.target.dataset.al; else if (x.target.dataset.art){ vu.art = x.target.dataset.art; if (vu.art !== "4") vu.al = null; }
+      if (x.target.dataset.al){ vu.art = x.target.dataset.art; vu.al = +x.target.dataset.al; } else if (x.target.dataset.art){ if (vu.art !== x.target.dataset.art) vu.al = null; vu.art = x.target.dataset.art; }
     }
     document.querySelectorAll("#cote [data-art]").forEach(b => b.classList.toggle("vu", b.dataset.art === vu.art && b.dataset.art !== st.art));
-    document.querySelectorAll("#cote [data-al]").forEach(b => b.classList.toggle("vu", +b.dataset.al === vu.al && +b.dataset.al !== st.al));
+    document.querySelectorAll("#cote [data-al]").forEach(b => b.classList.toggle("vu", b.dataset.of === vu.art && +b.dataset.al === vu.al && !(b.dataset.of === st.art && +b.dataset.al === st.al)));
   }, {rootMargin: "-35% 0px -60% 0px"});
   document.querySelectorAll(".t-art, .t-art .al").forEach(e => io.observe(e));
 }
@@ -321,34 +429,37 @@ document.getElementById("cote").addEventListener("click", e => {
   const ta = e.target.closest("[data-tog-art]"); if (ta){ e.stopPropagation(); ouv.arbreArt = ouv.arbreArt === ta.dataset.togArt ? null : ta.dataset.togArt; rendreGauche(); return; }
   const tg = e.target.closest("[data-tog]"); if (tg){ ouv[tg.dataset.tog] = !ouv[tg.dataset.tog]; rendreGauche(); return; }
   const rc = e.target.closest(".col.replie"); if (rc){ ouv[rc.dataset.col] = true; rendreGauche(); return; }
-  const tx = e.target.closest("[data-texte]");
-  if (tx){ const msg = LEC.changerTexte(st, tx.dataset.texte); ouv.textes = false; rendreDroite(); rendreGauche(); if (msg) MM.trace(msg); requestAnimationFrame(() => aller(st.art === "4" ? "#al-" + st.al : "#art-" + CSS.escape(st.art), st.art === "4" ? "al" : "art")); return; }
+  const tx = e.target.closest("[data-texte]"); if (tx){ choisirTexte(tx.dataset.texte); return; }
   const cb = e.target.closest("[data-cmp]");
-  if (cb){ const m = cb.dataset.cmp; COMP.mode = COMP.mode === m ? null : m; if (m === "alineas" && COMP.mode){ ouv.alineas = true; if (V === 0) ouv.arbreArt = "4"; } rendreGauche(); return; }
-  const ca = e.target.closest("[data-coche-al]");
-  if (ca || (COMP.mode === "alineas" && e.target.closest("[data-al]"))){ const k = +(ca || e.target.closest("[data-al]")).dataset.al || +ca.dataset.cocheAl; COCHES_AL.has(k) ? COCHES_AL.delete(k) : COCHES_AL.add(k); rendreGauche(); return; }
-  if (COMP.mode === "articles" && !e.target.closest("[data-tog-art]")){ const r = e.target.closest("[data-art]"); if (r && !r.classList.contains("off")){ const n = r.dataset.art; COCHES.has(n) ? COCHES.delete(n) : COCHES.add(n); rendreGauche(); return; } }
+  if (cb){ const m = cb.dataset.cmp; COMP.mode = COMP.mode === m ? null : m; if (m === "alineas" && COMP.mode){ ouv.alineas = true; if (V === 0) ouv.arbreArt = st.art; } rendreGauche(); return; }
+  const ca = e.target.closest("[data-coche-al]"), alb = e.target.closest("[data-al]");
+  if (ca || (COMP.mode === "alineas" && alb)){ const c = ca ? ca.dataset.cocheAl : cleAl(alb.dataset.of, +alb.dataset.al); COCHES_AL.has(c) ? COCHES_AL.delete(c) : COCHES_AL.add(c); rendreGauche(); return; }
+  if (COMP.mode === "articles"){ const r = e.target.closest("[data-art]"); if (r && !r.classList.contains("off")){ const n = r.dataset.art; COCHES.has(n) ? COCHES.delete(n) : COCHES.add(n); rendreGauche(); return; } }
   const co = e.target.closest("[data-coche]");
   if (co){ const n = co.dataset.coche; COCHES.has(n) ? COCHES.delete(n) : COCHES.add(n); rendreGauche(); return; }
   const ar = e.target.closest("[data-art]");
-  if (ar && !ar.classList.contains("off")){ st.art = ar.dataset.art; rendreGauche(); aller("#art-" + CSS.escape(st.art), "art"); return; }
-  const al = e.target.closest("[data-al]");
-  if (al){ st.art = "4"; st.al = +al.dataset.al; rendreGauche(); aller("#al-" + st.al, "al"); }
+  if (ar && !ar.classList.contains("off")){ if (st.art !== ar.dataset.art){ st.art = ar.dataset.art; st.al = null; GROUPE_OUVERT.g = null; } rendreGauche(); aller("#art-" + slug(st.art), "art"); return; }
+  if (alb){ st.art = alb.dataset.of; st.al = +alb.dataset.al; rendreGauche(); aller(`#al-${slug(st.art)}-${st.al}`, "al"); }
 });
 document.getElementById("droite").addEventListener("click", e => {
   if (e.target.closest("[data-fin]")){ COMP.mode = null; rendreGauche(); return; }
   const rt = e.target.closest("[data-retire]"); if (rt){ COCHES.delete(rt.dataset.retire); rendreGauche(); return; }
-  const ra = e.target.closest("[data-retire-al]"); if (ra){ COCHES_AL.delete(+ra.dataset.retireAl); rendreGauche(); return; }
+  const ra = e.target.closest("[data-retire-al]"); if (ra){ COCHES_AL.delete(ra.dataset.retireAl); rendreGauche(); return; }
   if (e.target.closest("#cmp")) return;
+  const va = e.target.closest("[data-va-al]");
+  if (va){ st.art = va.dataset.vaArt; st.al = +va.dataset.vaAl;
+    if (st.texte !== "transmis"){ const t = st.texte; st.texte = "transmis"; rendreDroite(); MM.trace(`${esc(MM.ST.transmis.titre)} : les amendements visent sa numérotation (on quitte « ${esc(ET[t].court)} »).`); }
+    rendreGauche(); allerIci(); return; }
   const gp = e.target.closest("[data-groupe]"); if (gp){ GROUPE_OUVERT.g = GROUPE_OUVERT.g === gp.dataset.groupe ? null : gp.dataset.groupe; majModules(); return; }
+  const am = e.target.closest("[data-am]"); if (am && !e.target.closest(".fiche")){ const n = am.dataset.am; AM_OUVERT.has(n) ? AM_OUVERT.delete(n) : AM_OUVERT.add(n); majModules(); return; }
   if (e.target.closest(".modules")) return;
-  const al = e.target.closest(".al[data-al]"); if (al){ st.art = "4"; st.al = +al.dataset.al; rendreGauche(); return; }
-  const ar = e.target.closest(".t-art"); if (ar){ st.art = ar.dataset.art; rendreGauche(); }
+  const al = e.target.closest(".al[data-al]"); if (al){ if (st.art !== al.dataset.art) GROUPE_OUVERT.g = null; st.art = al.dataset.art; st.al = +al.dataset.al; rendreGauche(); return; }
+  const ar = e.target.closest(".t-art"); if (ar){ if (st.art !== ar.dataset.art){ st.al = null; GROUPE_OUVERT.g = null; } st.art = ar.dataset.art; rendreGauche(); }
 });
 const cart = MM.cartouche({id: "Module navigation", question: "Variante : des <b>barres dépliantes à gauche</b> (textes → articles → alinéas) ; le texte entier reste à droite quand on clique un article", fondement: "T2 (C)",
   variantes: ["L'arbre", "Les barres empilées", "Les colonnes repliables"], onChange: v => { V = v; Object.assign(ouv, {textes: false, articles: true, alineas: false}); rendreGauche(); document.getElementById("consigne").innerHTML = CONSIGNES[v]; }});
 V = (() => { try{ return localStorage.getItem("mm:module-navigation:v") == null ? 1 : cart.get(); }catch(_){ return 1; } })(); if (V !== cart.get()) cart.set(V); if (V === 2) ouv.textes = false;
 rendreDroite(); rendreGauche(); document.getElementById("consigne").innerHTML = CONSIGNES[V];
-window.MMaller = (art, al) => { const b = document.querySelector(al ? `#cote [data-al="${al}"]` : `#cote [data-art="${art}"]`); if (b) b.click(); };
+window.MMaller = (art, al) => { const b = document.querySelector(al ? `#cote [data-of="${art || "4"}"][data-al="${al}"]` : `#cote [data-art="${art}"]`); if (b) b.click(); };
 </script>
 </body></html>
