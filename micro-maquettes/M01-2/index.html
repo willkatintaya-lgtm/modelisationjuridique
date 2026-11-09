@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="fr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M01-2 · Texte, article, alinéa en haut du texte</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../commun/cadre.css">
+<style>
+/* le sélecteur, imprimé dans la page */
+.sel{margin:0 0 6px}
+/* A : le fil */
+.fil{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 8px;padding:10px 0 12px;border-bottom:1px solid var(--rule);position:sticky;top:0;background:linear-gradient(#f2efe6,#efebe1);z-index:3;margin:0 -8px;padding-left:8px;padding-right:8px}
+.fil .niv{font:600 9.5px/1 var(--ui);letter-spacing:.16em;text-transform:uppercase;color:var(--muted-p);padding:3px 0}
+.fil .niv.on{color:var(--ink);box-shadow:inset 0 -2px 0 var(--gold)}
+.fil .val{font:400 15.5px/1.3 var(--serif);color:var(--ink);text-decoration:underline dotted var(--rule);text-decoration-thickness:1.5px;text-underline-offset:4px}
+.fil .val:hover{text-decoration-color:var(--gold)}
+.fil .val.off{color:var(--muted-p);font-style:italic;text-decoration:none;cursor:default}
+.fil .val::after{content:" ▾";font:400 10px var(--ui);color:var(--muted-p)}
+.fil .val.off::after{content:""}
+.fil .sep{color:var(--rule);margin:0 4px}
+.fil .grp{display:inline-flex;align-items:baseline;gap:7px}
+/* B : les rubans */
+.rubans{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;align-items:start;padding:4px 0 14px;border-bottom:1px solid var(--rule)}
+.rubans .niv{font:600 9.5px/1 var(--ui);letter-spacing:.16em;text-transform:uppercase;color:var(--muted-p);padding:8px 0 0;text-align:left}
+.rubans .niv.on{color:var(--ink)}
+.rubans .niv.on::before{content:"";display:inline-block;width:6px;height:6px;background:var(--gold);margin-right:6px;vertical-align:1px}
+.onglets{display:flex;flex-wrap:wrap;gap:4px}
+.onglets button{font:400 13px/1 var(--serif);color:var(--ink2);padding:7px 9px 6px;border:1px solid var(--rule);background:rgba(255,255,255,.35)}
+.onglets button:hover{border-color:var(--gold)}
+.onglets button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.onglets button.off{opacity:.38;cursor:default;border-style:dashed}
+.onglets.petits button{font:500 11px/1 var(--ui);min-width:28px;padding:6px 4px;text-align:center}
+.onglets .vide{font:italic 13px var(--serif);color:var(--muted-p);padding-top:6px}
+/* C : la phrase */
+.phrase{font:400 18px/1.55 var(--serif);color:var(--ink);margin:2px 0 6px;max-width:44ch}
+.phrase .val{color:var(--ink);text-decoration:underline dotted #b9ab88;text-decoration-thickness:2px;text-underline-offset:5px}
+.phrase .val:hover{text-decoration-color:var(--gold);text-decoration-style:solid}
+.monter{display:flex;gap:16px;flex-wrap:wrap;font:400 12.5px var(--ui);color:var(--muted-p);padding-bottom:12px;border-bottom:1px solid var(--rule)}
+.monter button{color:var(--ink);text-decoration:underline dotted var(--rule);text-underline-offset:4px;text-decoration-thickness:1.5px}
+@media (max-width:700px){.rubans{grid-template-columns:1fr;gap:4px}.rubans .niv{padding-top:6px}.phrase{font-size:16.5px}}
+</style>
+<script>window.MAQ = "micro-M01-2";</script>
+<script src="../../maquettes/commun/data.js"></script>
+<script src="../../maquettes/commun/base.js"></script>
+<script src="../../maquettes/commun/modele.js"></script>
+<script src="../../maquettes/commun/noyau.js"></script>
+<script src="../commun/cadre.js"></script>
+<script src="../commun/lecture.js"></script>
+</head><body>
+<p class="consigne" id="consigne"></p>
+<main class="bureau" id="bureau"></main>
+<script>
+"use strict";
+document.head.insertAdjacentHTML("beforeend", `<style>${LEC.css}</style>`);
+const CONSIGNES = [
+  "<b>Le fil.</b> En tête du texte, une ligne : texte ▾ › article ▾ › alinéa ▾. Le libellé en capitales choisit le niveau ; la valeur ouvre la liste. Changer de texte garde l'article et l'alinéa.",
+  "<b>Les rubans.</b> Les trois niveaux restent visibles, en onglets imprimés : les textes, les articles, les alinéas. Le choix d'un rang garde ceux des autres.",
+  "<b>La phrase.</b> Le sélecteur est une phrase du texte : « Vous lisez l'alinéa 12 de l'article 4 du texte transmis par le Sénat. » Chaque partie soulignée se change.",
+];
+const DE = {"S-depot": "du projet de loi déposé au Sénat", "S-com": "du texte de la commission du Sénat", "transmis": "du texte transmis par le Sénat", "AN-com": "du texte de la commission de l'Assemblée"};
+const LE = {"S-depot": "le projet de loi déposé au Sénat", "S-com": "le texte de la commission du Sénat", "transmis": "le texte transmis par le Sénat", "AN-com": "le texte de la commission de l'Assemblée"};
+let st = Object.assign({texte: "transmis", art: "4", al: 12, niv: "article"}, (() => { try{ return JSON.parse(localStorage.getItem("mm:M01-2:st")) || {}; }catch(_){ return {}; } })());
+const garder = () => { try{ localStorage.setItem("mm:M01-2:st", JSON.stringify(st)); }catch(_){} };
+const nAl = () => st.art === "4" && LEC.art(st.texte, "4").presence === "present" ? MM.art4(st.texte).length : 0;
+let V = 0;
+
+function selA(){
+  const n = nAl();
+  return `<div class="sel fil">
+    <span class="grp"><button class="niv${st.niv === "texte" ? " on" : ""}" data-niv="texte">Texte</button><button class="val" data-menu="texte">${esc(ET[st.texte].court)}</button></span><span class="sep">›</span>
+    <span class="grp"><button class="niv${st.niv === "article" ? " on" : ""}" data-niv="article">Article</button><button class="val" data-menu="art">${LEC.nomArt(st.art)}</button></span><span class="sep">›</span>
+    <span class="grp"><button class="niv${st.niv === "alinea" ? " on" : ""}" data-niv="alinea"${n ? "" : " disabled"}>Alinéa</button><button class="val${n ? "" : " off"}" data-menu="al">${n ? st.al + `<small class="compte"> / ${n}</small>` : "—"}</button></span>
+  </div>`;
+}
+function selB(){
+  const n = nAl(), plan = LEC.planDe(st.texte);
+  return `<div class="sel rubans">
+    <button class="niv${st.niv === "texte" ? " on" : ""}" data-niv="texte">Texte</button>
+    <div class="onglets">${LEC.TEXTES.map(s => `<button class="${s.id === st.texte ? "on" : ""}" data-texte="${s.id}">${esc(ET[s.id].court)}</button>`).join("")}</div>
+    <button class="niv${st.niv === "article" ? " on" : ""}" data-niv="article">Article</button>
+    <div class="onglets petits">${plan.map(p => `<button class="${p.num === st.art ? "on" : ""}${p.presence === "absent" ? " off" : ""}" data-art="${esc(p.num)}"${p.presence === "absent" ? ` title="n'existe pas dans ce texte"` : ""}>${LEC.nomArt(p.num)}</button>`).join("")}</div>
+    <button class="niv${st.niv === "alinea" ? " on" : ""}" data-niv="alinea"${n ? "" : " disabled"}>Alinéa</button>
+    <div class="onglets petits">${n ? Array.from({length: n}, (_, i) => `<button class="${st.niv === "alinea" && st.al === i + 1 ? "on" : ""}" data-al="${i + 1}">${i + 1}</button>`).join("") : `<span class="vide">texte de l'article non chargé</span>`}</div>
+  </div>`;
+}
+function selC(){
+  const n = nAl(), t = `<button class="val" data-menu="texte">${st.niv === "texte" ? LE[st.texte] : DE[st.texte].replace(/^du /, "")}</button>`;
+  const a = `<button class="val" data-menu="art">l'article ${LEC.nomArt(st.art)}</button>`, l = `<button class="val" data-menu="al">l'alinéa ${st.al}</button>`;
+  const phrase = st.niv === "texte" ? `Vous lisez ${t} en entier.` : st.niv === "article" ? `Vous lisez ${a} du ${t}.` : `Vous lisez ${l} de ${a} du ${t}.`;
+  const monter = [st.niv === "alinea" ? `<button data-niv="article">l'article entier</button>` : "", st.niv !== "texte" ? `<button data-niv="texte">tout le texte</button>` : "",
+    st.niv === "texte" ? `<button data-menu="art">choisir un article</button>` : "", st.niv === "article" && n ? `<button data-menu="al">choisir un alinéa</button>` : ""].filter(Boolean).join("");
+  return `<div class="sel"><p class="phrase">${phrase}</p><div class="monter">${monter}</div></div>`;
+}
+const SELS = [selA, selB, selC];
+function rendre(){
+  const b = document.getElementById("bureau");
+  b.innerHTML = MM.page(`${esc(D.dossier.uid)} · ${esc(ET[st.texte].label)}`, st.niv === "texte" ? "le texte entier" : st.niv === "article" ? "article " + st.art : `article ${st.art} · alinéa ${st.al}`,
+    MM.entete() + SELS[V]() + LEC.corps(st));
+  document.getElementById("consigne").innerHTML = CONSIGNES[V];
+  garder();
+  if (st.niv === "alinea"){ const c = b.querySelector(".al.cur"); if (c) c.scrollIntoView({block: "center"}); }
+}
+function menu(type, anchor){
+  if (type === "texte") MM.feuillet(anchor, LEC.TEXTES.map(s => ({label: s.titre, small: s.examine ? "texte examiné" : "", on: s.id === st.texte, id: s.id})), it => choisirTexte(it.id), "Les textes");
+  if (type === "art") MM.feuillet(anchor, LEC.planDe(st.texte).map(p => ({html: `Article ${LEC.nomArt(p.num)} <span class="small">· ${esc(short(p.titre, 46))}</span>`, small: p.presence === "absent" ? "absent" : p.n ? p.n + " am." : "", on: p.num === st.art, off: p.presence === "absent", num: p.num})), it => { st.art = it.num; st.niv = "article"; rendre(); }, "Les articles · " + ET[st.texte].court);
+  if (type === "al"){ const n = nAl(); if (!n) return; MM.feuillet(anchor, MM.art4(st.texte).map((t, i) => ({html: `<b>${i + 1}</b> · ${esc(short(t, 70))}`, on: i + 1 === st.al, k: i + 1})), it => { st.al = it.k; st.niv = "alinea"; rendre(); }, "Les alinéas · article 4"); }
+}
+function choisirTexte(id){ const msg = LEC.changerTexte(st, id); rendre(); if (msg) MM.trace(msg); }
+document.getElementById("bureau").addEventListener("click", e => {
+  const m = e.target.closest("[data-menu]"); if (m){ e.stopPropagation(); menu(m.dataset.menu, m); return; }
+  const nv = e.target.closest("[data-niv]"); if (nv && !nv.disabled){ st.niv = nv.dataset.niv; rendre(); return; }
+  const tx = e.target.closest("[data-texte]"); if (tx){ choisirTexte(tx.dataset.texte); return; }
+  const ar = e.target.closest("[data-art]"); if (ar && !ar.classList.contains("off")){ st.art = ar.dataset.art; st.niv = "article"; rendre(); return; }
+  const al = e.target.closest("[data-al]"); if (al){ st.al = +al.dataset.al; st.niv = "alinea"; rendre(); return; }
+  const ga = e.target.closest("[data-go-art]"); if (ga && !ga.classList.contains("absent")){ st.art = ga.dataset.goArt; st.niv = "article"; rendre(); scrollTo(0, 0); return; }
+  const gl = e.target.closest("[data-go-al]"); if (gl){ st.al = +gl.dataset.goAl; st.niv = st.niv === "alinea" && st.al === +gl.dataset.goAl && e.detail > 1 ? "article" : "alinea"; rendre(); }
+});
+const cart = MM.cartouche({id: "M01-2", question: "Le sélecteur <b>texte · article · alinéa en haut du texte</b> ; le choix du texte se conserve d'un niveau à l'autre", fondement: "T2 (C)",
+  variantes: ["Le fil", "Les rubans", "La phrase"], onChange: v => { V = v; rendre(); }});
+V = cart.get(); rendre();
+window.MMetat = s => { Object.assign(st, s); rendre(); };
+window.MMtexte = choisirTexte;
+</script>
+</body></html>
