@@ -532,8 +532,11 @@ document.addEventListener("click",e=>{
   const fh=e.target.closest(".fold-head");
   if(fh){
     const f=fh.parentElement, gap=f.closest(".gap");
-    if(f.classList.contains("open")) f.querySelectorAll(".ev.open").forEach(x=>x.classList.remove("open"));
-    f.classList.toggle("open"); clearLit(); syncGap(gap);
+    const was=f.classList.contains("open");
+    // accordéon : un seul pli ouvert par interstice
+    gap.querySelectorAll(".fold.open").forEach(o=>{ o.classList.remove("open"); o.querySelectorAll(".ev.open").forEach(x=>x.classList.remove("open")); });
+    if(!was) f.classList.add("open");
+    clearLit(); syncGap(gap);
     if(f.classList.contains("open")) setTimeout(()=>reveal(gap),390);
     return;
   }
