@@ -30,11 +30,14 @@
 .arbre .tog{display:inline-block;width:12px;font:400 9px var(--ui);color:var(--muted-p);transition:transform .2s}
 .arbre .tog.o{transform:rotate(90deg)}
 /* B : barres empilées */
-.pile{width:280px;display:flex;flex-direction:column}
-.pile .sec{border-bottom:1px solid var(--rule)}
+.pile{width:280px;display:flex;flex-direction:column;height:calc(100vh - 28px)}
+.pile .sec{border-bottom:1px solid var(--rule);flex:0 0 auto}
+.pile .sec.o{flex:1 1 0;min-height:0;display:flex;flex-direction:column}
 .pile .sec:last-child{border-bottom:0}
 .pile .sec .bt{border-bottom:0}
-.pile .sec .contenu{padding:2px 0 8px;max-height:46vh;overflow:auto;scrollbar-width:none}
+.pile .sec .contenu{padding:2px 0 8px;flex:1 1 auto;min-height:0;overflow:auto;scrollbar-width:none}
+.pile .sec.textes .contenu{flex:0 0 auto}
+.pile .sec.textes.o{flex:0 0 auto}
 /* C : colonnes repliables */
 .cols{display:flex;gap:6px}
 .col{width:200px;display:flex;flex-direction:column;max-height:calc(100vh - 28px)}
@@ -62,7 +65,7 @@
   .sommaire-btn .val{font:400 13px var(--serif);letter-spacing:0;text-transform:none;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:62%}
   .cote .tiroir{display:none;max-height:60vh;overflow:auto;scrollbar-width:none}
   .cote.ouvert .tiroir{display:block}
-  .arbre,.pile{width:100%}
+  .arbre,.pile{width:100%}.pile{height:auto}.pile .sec.o{flex:0 0 auto;display:block}.pile .sec .contenu{max-height:30vh}
   .cols{flex-direction:column}.col{width:100%;max-height:none}.col .contenu{max-height:34vh}
   .col.replie{width:100%}.col.replie .bt{writing-mode:horizontal-tb;transform:none;height:auto;justify-content:flex-start;border-bottom:1px solid var(--rule)}
   .col.replie .bt .val{display:block;margin-left:auto}
@@ -82,12 +85,12 @@
 <script>
 "use strict";
 const CONSIGNES = [
-  "<b>L'arbre.</b> Une seule bande à gauche : les textes, puis les articles du texte choisi, puis les alinéas de l'article. Un clic sur un article ou un alinéa amène le texte entier, à droite, à cet endroit : on ne quitte pas la vue d'ensemble.",
-  "<b>Les barres empilées.</b> Trois barres l'une sous l'autre : textes, articles, alinéas. Chacune se replie sur sa valeur courante. Le texte entier reste à droite.",
-  "<b>Les colonnes repliables.</b> Trois colonnes côte à côte ; une colonne repliée devient un dos étroit qui porte sa valeur (« Texte transmis », « Art. 4 »). Le texte entier reste à droite.",
+  "<b>L'arbre.</b> Deux barres : « type de texte », fermée sur le texte choisi ; « articles et alinéas », les alinéas dépliés sous leur article. Choisir un texte referme sa barre ; la barre des articles reste ouverte pour en parcourir plusieurs. Le texte entier reste à droite.",
+  "<b>Les barres empilées.</b> Trois barres fixes, toujours dans le même ordre : type de texte, articles, alinéas. Choisir un texte referme sa barre et l'on revient au menu ; les barres des articles et des alinéas restent ouvertes pour cliquer successivement. Le texte entier reste à droite.",
+  "<b>Les colonnes repliables.</b> Trois colonnes : type de texte, articles, alinéas. Choisir un texte replie sa colonne en un dos qui porte sa valeur ; articles et alinéas restent ouverts. Le texte entier reste à droite.",
 ];
 let st = {texte: "transmis", art: "4", al: 12}, V = 0, vu = {art: "4", al: null};
-const ouv = {textes: true, articles: true, alineas: true, arbreArt: "4"};
+const ouv = {textes: false, articles: true, alineas: true, arbreArt: "4"};   // la barre des textes se referme après un choix ; articles et alinéas restent ouverts
 let droiteTexte = null;
 function rendreDroite(){
   if (droiteTexte === st.texte) return; droiteTexte = st.texte;
@@ -105,22 +108,20 @@ const bt = (cle, titre, val) => `<button class="bt${ouv[cle] ? " ouvert" : ""}" 
 const valTexte = () => esc(ET[st.texte].court), valArt = () => "Art. " + LEC.nomArt(st.art), valAl = () => st.art === "4" ? "al. " + st.al : "—";
 function gaucheA(){
   const plan = LEC.planDe(st.texte), A = MM.art4(st.texte);
-  return `<div class="bande arbre">${bt("textes", "Projet de loi", valTexte())}${ouv.textes ? LEC.TEXTES.map(s => {
-    const cur = s.id === st.texte;
-    return `<button class="li n1${cur ? " on" : ""}" data-texte="${s.id}"><span class="tog${cur ? " o" : ""}">▸</span><span class="t">${esc(s.titre)}</span></button>` +
-      (cur ? plan.map(p => `<button class="li n2${p.num === st.art ? " on" : ""}${p.num === vu.art && p.num !== st.art ? " vu" : ""}${p.presence === "absent" ? " off" : ""}" data-art="${esc(p.num)}">${p.texte ? `<span class="tog${ouv.arbreArt === p.num ? " o" : ""}" data-tog-art="${esc(p.num)}">▸</span>` : `<span class="tog"></span>`}<span class="k">${LEC.nomArt(p.num)}</span><span class="t">${esc(p.titre)}</span></button>` +
-        (p.texte && ouv.arbreArt === p.num && p.presence === "present" ? A.map((t, i) => liAl(t, i).replace('class="li', 'class="li n3')).join("") : "")).join("") : "");
-  }).join("") : ""}</div>`;
+  const textes = ouv.textes ? LEC.TEXTES.map(s => `<button class="li n1${s.id === st.texte ? " on" : ""}" data-texte="${s.id}"><span class="t">${esc(s.titre)}</span>${s.examine ? "<small>examiné</small>" : ""}</button>`).join("") : "";
+  const arts = plan.map(p => `<button class="li n1${p.num === st.art ? " on" : ""}${p.num === vu.art && p.num !== st.art ? " vu" : ""}${p.presence === "absent" ? " off" : ""}" data-art="${esc(p.num)}">${p.texte ? `<span class="tog${ouv.arbreArt === p.num ? " o" : ""}" data-tog-art="${esc(p.num)}">▸</span>` : `<span class="tog"></span>`}<span class="k">${LEC.nomArt(p.num)}</span><span class="t">${esc(p.titre)}</span></button>` +
+    (p.texte && ouv.arbreArt === p.num && p.presence === "present" ? A.map((t, i) => liAl(t, i).replace('class="li', 'class="li n2')).join("") : "")).join("");
+  return `<div class="bande arbre">${bt("textes", "Type de texte", valTexte())}${textes}${bt("articles", "Articles et alinéas", valArt() + (st.art === "4" ? " · " + valAl() : ""))}${ouv.articles ? arts : ""}</div>`;
 }
 function gaucheB(){
   const plan = LEC.planDe(st.texte), A = MM.art4(st.texte);
-  const sec = (cle, titre, val, contenu) => `<div class="sec">${bt(cle, titre, val)}${ouv[cle] ? `<div class="contenu">${contenu}</div>` : ""}</div>`;
-  return `<div class="bande pile">${sec("textes", "Textes", valTexte(), LEC.TEXTES.map(liTexte).join(""))}${sec("articles", "Articles", valArt(), plan.map(liArt).join(""))}${sec("alineas", "Alinéas", valAl(), st.art === "4" ? A.map(liAl).join("") : `<p class="nontexte" style="padding:6px 12px">Texte de l'article non chargé.</p>`)}</div>`;
+  const sec = (cle, titre, val, contenu) => `<div class="sec ${cle}${ouv[cle] ? " o" : ""}">${bt(cle, titre, val)}${ouv[cle] ? `<div class="contenu">${contenu}</div>` : ""}</div>`;
+  return `<div class="bande pile">${sec("textes", "Type de texte", valTexte(), LEC.TEXTES.map(liTexte).join(""))}${sec("articles", "Articles", valArt(), plan.map(liArt).join(""))}${sec("alineas", "Alinéas", valAl(), st.art === "4" ? A.map(liAl).join("") : `<p class="nontexte" style="padding:6px 12px">Texte de l'article non chargé.</p>`)}</div>`;
 }
 function gaucheC(){
   const plan = LEC.planDe(st.texte), A = MM.art4(st.texte);
   const col = (cle, titre, val, contenu) => `<div class="bande col${ouv[cle] ? "" : " replie"}" data-col="${cle}">${bt(cle, titre, val)}<div class="contenu">${contenu}</div></div>`;
-  return `<div class="cols">${col("textes", "Textes", valTexte(), LEC.TEXTES.map(liTexte).join(""))}${col("articles", "Articles", valArt(), plan.map(liArt).join(""))}${col("alineas", "Alinéas", valAl(), st.art === "4" ? A.map(liAl).join("") : `<p class="nontexte" style="padding:6px 12px">Texte non chargé.</p>`)}</div>`;
+  return `<div class="cols">${col("textes", "Type de texte", valTexte(), LEC.TEXTES.map(liTexte).join(""))}${col("articles", "Articles", valArt(), plan.map(liArt).join(""))}${col("alineas", "Alinéas", valAl(), st.art === "4" ? A.map(liAl).join("") : `<p class="nontexte" style="padding:6px 12px">Texte non chargé.</p>`)}</div>`;
 }
 const GAUCHES = [gaucheA, gaucheB, gaucheC];
 function rendreGauche(){
@@ -132,7 +133,6 @@ function aller(sel, cls){
   const el = document.querySelector(sel); if (!el) return;
   el.scrollIntoView({behavior: "smooth", block: cls === "al" ? "center" : "start"});
   el.classList.remove("flash"); void el.offsetWidth; el.classList.add("flash");
-  if (innerWidth <= 980) document.getElementById("cote").classList.remove("ouvert");
 }
 let io;
 function observer(){
@@ -152,7 +152,7 @@ document.getElementById("cote").addEventListener("click", e => {
   const tg = e.target.closest("[data-tog]"); if (tg){ ouv[tg.dataset.tog] = !ouv[tg.dataset.tog]; rendreGauche(); return; }
   const rc = e.target.closest(".col.replie"); if (rc){ ouv[rc.dataset.col] = true; rendreGauche(); return; }
   const tx = e.target.closest("[data-texte]");
-  if (tx){ const msg = LEC.changerTexte(st, tx.dataset.texte); rendreDroite(); rendreGauche(); if (msg) MM.trace(msg); requestAnimationFrame(() => aller(st.art === "4" ? "#al-" + st.al : "#art-" + CSS.escape(st.art), st.art === "4" ? "al" : "art")); return; }
+  if (tx){ const msg = LEC.changerTexte(st, tx.dataset.texte); ouv.textes = false; rendreDroite(); rendreGauche(); if (msg) MM.trace(msg); requestAnimationFrame(() => aller(st.art === "4" ? "#al-" + st.al : "#art-" + CSS.escape(st.art), st.art === "4" ? "al" : "art")); return; }
   const ar = e.target.closest("[data-art]");
   if (ar && !ar.classList.contains("off")){ st.art = ar.dataset.art; if (V === 0 && st.art === "4") ouv.arbreArt = "4"; rendreGauche(); aller("#art-" + CSS.escape(st.art), "art"); return; }
   const al = e.target.closest("[data-al]");
@@ -163,8 +163,8 @@ document.getElementById("droite").addEventListener("click", e => {
   const ar = e.target.closest(".t-art"); if (ar){ st.art = ar.dataset.art; rendreGauche(); }
 });
 const cart = MM.cartouche({id: "M01-3", question: "Variante : des <b>barres dépliantes à gauche</b> (textes → articles → alinéas) ; le texte entier reste à droite quand on clique un article", fondement: "T2 (C)",
-  variantes: ["L'arbre", "Les barres empilées", "Les colonnes repliables"], onChange: v => { V = v; if (v === 2){ ouv.textes = false; ouv.articles = true; ouv.alineas = true; } else Object.assign(ouv, {textes: true, articles: true, alineas: true}); rendreGauche(); document.getElementById("consigne").innerHTML = CONSIGNES[v]; }});
-V = cart.get(); if (V === 2) ouv.textes = false;
+  variantes: ["L'arbre", "Les barres empilées", "Les colonnes repliables"], onChange: v => { V = v; Object.assign(ouv, {textes: false, articles: true, alineas: true}); rendreGauche(); document.getElementById("consigne").innerHTML = CONSIGNES[v]; }});
+V = (() => { try{ return localStorage.getItem("mm:M01-3:v") == null ? 1 : cart.get(); }catch(_){ return 1; } })(); if (V !== cart.get()) cart.set(V); if (V === 2) ouv.textes = false;
 rendreDroite(); rendreGauche(); document.getElementById("consigne").innerHTML = CONSIGNES[V];
 window.MMaller = (art, al) => { const b = document.querySelector(al ? `#cote [data-al="${al}"]` : `#cote [data-art="${art}"]`); if (b) b.click(); };
 </script>
