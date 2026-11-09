@@ -58,6 +58,28 @@
 @keyframes flash{0%{box-shadow:inset 3px 0 0 var(--gold)}100%{box-shadow:inset 3px 0 0 transparent}}
 @keyframes flashal{0%,40%{background:rgba(217,181,106,.35)}100%{background:transparent}}
 .sommaire-btn{display:none}
+/* cocher des articles : n'afficher qu'eux */
+.coche{flex:0 0 auto;width:13px;height:13px;border:1px solid var(--muted-p);margin-right:2px;align-self:center;position:relative;cursor:pointer;background:rgba(255,255,255,.4)}
+.coche:hover{border-color:#8a6a2a}
+.coche.on{background:var(--ink);border-color:var(--ink)}
+.coche.on::after{content:"";position:absolute;left:3.5px;top:0.5px;width:4px;height:8px;border:solid var(--paper);border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
+.bandeau{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;margin:10px 0 0;padding:8px 12px;border:1px solid var(--rule);background:rgba(217,181,106,.12);font:400 12.5px var(--ui);color:var(--ink2)}
+.bandeau button{color:var(--ink);text-decoration:underline dotted var(--rule);text-decoration-thickness:1.5px;text-underline-offset:3px}
+.t-art.cache{display:none}
+/* les petits modules sous l'article courant */
+.modules{margin:2px 0 14px;padding:10px 12px 8px;border:1px solid var(--rule);background:rgba(255,255,255,.3)}
+.modules .tt{font:600 9.5px var(--ui);letter-spacing:.14em;text-transform:uppercase;color:var(--muted-p);margin-bottom:8px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.pastilles{display:flex;flex-wrap:wrap;gap:5px}
+.pastilles button,.pastilles span.p{display:inline-flex;align-items:center;gap:6px;font:400 12.5px/1 var(--ui);color:var(--ink2);padding:6px 8px;border:1px solid var(--rule);background:rgba(255,255,255,.45)}
+.pastilles button:hover{border-color:var(--gold)}
+.pastilles button.on{border-color:var(--ink);box-shadow:inset 0 -2px 0 var(--gold);color:var(--ink)}
+.pastilles i{width:8px;height:8px;display:inline-block}
+.pastilles b{font-weight:600;color:var(--ink)}
+.liste-am{margin:10px 0 2px;border-top:1px solid var(--rule)}
+.liste-am .am{display:grid;grid-template-columns:64px 1fr auto;gap:4px 10px;padding:6px 0;border-bottom:1px solid rgba(201,191,166,.5);font:400 13.5px/1.4 var(--serif)}
+.liste-am .am .num{font:500 11px var(--ui);color:var(--muted-p);padding-top:2px}
+.liste-am .am .sort{font:500 9.5px var(--ui);letter-spacing:.1em;text-transform:uppercase;color:var(--muted-p);padding-top:3px;white-space:nowrap}
+.liste-am .am .sort.adopte{color:var(--stamp)}
 @media (max-width:980px){
   .bureau{flex-direction:column;align-items:stretch}
   .cote{position:sticky;top:0;z-index:5;max-height:none;overflow:visible;flex-direction:column}
@@ -92,24 +114,52 @@ const CONSIGNES = [
 let st = {texte: "transmis", art: "4", al: 12}, V = 0, vu = {art: "4", al: null};
 const ouv = {textes: false, articles: true, alineas: true, arbreArt: "4"};   // la barre des textes se referme après un choix ; articles et alinéas restent ouverts
 let droiteTexte = null;
+const COCHES = new Set(), GROUPE_OUVERT = {g: null};
+function majFiltre(){
+  document.querySelectorAll(".t-art").forEach(sct => sct.classList.toggle("cache", COCHES.size > 0 && !COCHES.has(sct.dataset.art)));
+  const b = document.getElementById("bandeau"); if (!b) return;
+  b.innerHTML = COCHES.size ? `<div class="bandeau"><span>${COCHES.size} ${plural(COCHES.size, "article coché", "articles cochés")} : seuls ${COCHES.size > 1 ? "ils sont" : "il est"} affiché${COCHES.size > 1 ? "s" : ""} (${[...COCHES].map(n => "art. " + LEC.nomArt(n)).join(", ")})</span><button data-tout>tout le texte</button></div>` : "";
+}
+const cleQui = a => a.inst ? "i:" + a.inst : "g:" + (a.groupe || "?");
+const nomQui = k => k.startsWith("i:") ? INS[k.slice(2)].name : NX.groupName(k.slice(2));
+const couleurQui = k => k.startsWith("i:") ? INS[k.slice(2)].color : NX.groupColor(k.slice(2));
+function modulesHTML(p){
+  if (p.presence !== "present") return "";
+  if (!p.texte){
+    const ent = Object.entries(p.amendements || {}).sort((x, y) => y[1] - x[1]);
+    return `<div class="modules"><div class="tt"><span>Amendements en commission (Assemblée) · ${p.n}</span><span>par sort ; le détail par groupe n'est chargé que pour l'article 4</span></div><div class="pastilles">${ent.map(([k, n]) => `<span class="p">${esc(k)} <b>${n}</b></span>`).join("") || `<span class="p">aucun</span>`}</div></div>`;
+  }
+  const ams = ALL.filter(a => !isEcarte(a) && a.mode !== "hors-texte"), m = new Map();
+  for (const a of ams){ const k = cleQui(a); if (!m.has(k)) m.set(k, []); m.get(k).push(a); }
+  const ent = [...m.entries()].sort((x, y) => y[1].length - x[1].length), g = GROUPE_OUVERT.g;
+  const liste = g && m.has(g) ? `<div class="liste-am">${m.get(g).map(a => `<div class="am"><span class="num">${esc(a.num)}</span><span>${esc(short(objetOf(a), 130))}</span><span class="sort${a.sort === "Adopté" ? " adopte" : ""}">${esc(sortWord(a))}</span></div>`).join("")}</div>` : "";
+  return `<div class="modules"><div class="tt"><span>Propositions d'amendement en commission (Assemblée) · ${ams.length} examinées sur ${p.n} déposées (hors irrecevables et retirés)</span><span>par auteur ; cliquer un groupe pour ses amendements</span></div>
+    <div class="pastilles">${ent.map(([k, l]) => { const ad = l.filter(a => a.sort === "Adopté").length; return `<button class="${k === g ? "on" : ""}" data-groupe="${esc(k)}"><i style="background:${couleurQui(k)}"></i>${esc(nomQui(k))} <b>${l.length}</b>${ad ? ` <span style="color:var(--stamp)">· ${ad} ${plural(ad, "adopté")}</span>` : ""}</button>`; }).join("")}</div>${liste}</div>`;
+}
+function majModules(){
+  document.querySelectorAll(".t-art .modules").forEach(x => x.remove());
+  const sct = document.getElementById("art-" + st.art); if (!sct) return;
+  const p = LEC.art(st.texte, st.art); if (!p) return;
+  sct.querySelector("h3").insertAdjacentHTML("afterend", modulesHTML(p));
+}
 function rendreDroite(){
   if (droiteTexte === st.texte) return; droiteTexte = st.texte;
   const plan = LEC.planDe(st.texte), A = MM.art4(st.texte);
   const corps = plan.filter(p => p.presence !== "absent").map(p => `<section class="t-art" id="art-${esc(p.num)}" data-art="${esc(p.num)}">
     <h3><span class="nom">Article <span class="num">${LEC.nomArt(p.num)}</span></span><span class="tit">${esc(p.titre)}</span>${p.n ? `<span class="compte">${p.n} am.</span>` : ""}</h3>
     ${p.presence === "supprime" ? `<p class="al" style="font-style:italic">(Supprimé)</p>` : p.texte ? A.map((t, i) => `<p class="al" id="al-${i + 1}" data-al="${i + 1}"><span class="n">${i + 1}</span>${esc(t)}</p>`).join("") : `<p class="nontexte">Texte non chargé dans le prototype.</p>`}</section>`).join("");
-  document.getElementById("droite").innerHTML = MM.page(`${esc(D.dossier.uid)} · ${esc(ET[st.texte].label)}`, "le texte entier", MM.entete() + `<p class="sous">${plan.filter(p => p.presence !== "absent").length} articles · ${esc(MM.ST[st.texte].titre)}</p>` + corps);
+  document.getElementById("droite").innerHTML = MM.page(`${esc(D.dossier.uid)} · ${esc(ET[st.texte].label)}`, "le texte entier", MM.entete() + `<p class="sous">${plan.filter(p => p.presence !== "absent").length} articles · ${esc(MM.ST[st.texte].titre)}</p><div id="bandeau"></div>` + corps);
   observer();
 }
 const liTexte = s => `<button class="li${s.id === st.texte ? " on" : ""}" data-texte="${s.id}"><span class="t">${esc(s.titre)}</span>${s.examine ? "<small>examiné</small>" : ""}</button>`;
-const liArt = p => `<button class="li${p.num === st.art ? " on" : ""}${p.num === vu.art && p.num !== st.art ? " vu" : ""}${p.presence === "absent" ? " off" : ""}" data-art="${esc(p.num)}"><span class="k">${LEC.nomArt(p.num)}</span><span class="t">${esc(p.titre)}</span></button>`;
+const liArt = p => `<button class="li${p.num === st.art ? " on" : ""}${p.num === vu.art && p.num !== st.art ? " vu" : ""}${p.presence === "absent" ? " off" : ""}" data-art="${esc(p.num)}">${p.presence === "absent" ? "" : `<span class="coche${COCHES.has(p.num) ? " on" : ""}" data-coche="${esc(p.num)}" title="ne montrer que les articles cochés (double-clic : celui-ci seul)"></span>`}<span class="k">${LEC.nomArt(p.num)}</span><span class="t">${esc(p.titre)}</span></button>`;
 const liAl = (t, i) => `<button class="li${i + 1 === st.al ? " on" : ""}${i + 1 === vu.al && i + 1 !== st.al ? " vu" : ""}" data-al="${i + 1}"><span class="k">${i + 1}</span><span class="t">${esc(t)}</span></button>`;
 const bt = (cle, titre, val) => `<button class="bt${ouv[cle] ? " ouvert" : ""}" data-tog="${cle}"><span class="chev">▸</span>${titre}<span class="val">${val}</span></button>`;
 const valTexte = () => esc(ET[st.texte].court), valArt = () => "Art. " + LEC.nomArt(st.art), valAl = () => st.art === "4" ? "al. " + st.al : "—";
 function gaucheA(){
   const plan = LEC.planDe(st.texte), A = MM.art4(st.texte);
   const textes = ouv.textes ? LEC.TEXTES.map(s => `<button class="li n1${s.id === st.texte ? " on" : ""}" data-texte="${s.id}"><span class="t">${esc(s.titre)}</span>${s.examine ? "<small>examiné</small>" : ""}</button>`).join("") : "";
-  const arts = plan.map(p => `<button class="li n1${p.num === st.art ? " on" : ""}${p.num === vu.art && p.num !== st.art ? " vu" : ""}${p.presence === "absent" ? " off" : ""}" data-art="${esc(p.num)}">${p.texte ? `<span class="tog${ouv.arbreArt === p.num ? " o" : ""}" data-tog-art="${esc(p.num)}">▸</span>` : `<span class="tog"></span>`}<span class="k">${LEC.nomArt(p.num)}</span><span class="t">${esc(p.titre)}</span></button>` +
+  const arts = plan.map(p => `<button class="li n1${p.num === st.art ? " on" : ""}${p.num === vu.art && p.num !== st.art ? " vu" : ""}${p.presence === "absent" ? " off" : ""}" data-art="${esc(p.num)}">${p.presence === "absent" ? "" : `<span class="coche${COCHES.has(p.num) ? " on" : ""}" data-coche="${esc(p.num)}" title="ne montrer que les articles cochés (double-clic : celui-ci seul)"></span>`}${p.texte ? `<span class="tog${ouv.arbreArt === p.num ? " o" : ""}" data-tog-art="${esc(p.num)}">▸</span>` : `<span class="tog"></span>`}<span class="k">${LEC.nomArt(p.num)}</span><span class="t">${esc(p.titre)}</span></button>` +
     (p.texte && ouv.arbreArt === p.num && p.presence === "present" ? A.map((t, i) => liAl(t, i).replace('class="li', 'class="li n2')).join("") : "")).join("");
   return `<div class="bande arbre">${bt("textes", "Type de texte", valTexte())}${textes}${bt("articles", "Articles et alinéas", valArt() + (st.art === "4" ? " · " + valAl() : ""))}${ouv.articles ? arts : ""}</div>`;
 }
@@ -128,6 +178,7 @@ function rendreGauche(){
   const c = document.getElementById("cote"), ouvert = c.classList.contains("ouvert");
   c.innerHTML = `<button class="sommaire-btn" data-tiroir>Sommaire <span class="val">${valTexte()} · ${valArt()}${st.art === "4" ? " · " + valAl() : ""}</span></button><div class="tiroir">${GAUCHES[V]()}</div>`;
   c.classList.toggle("ouvert", ouvert);
+  majFiltre(); majModules();
 }
 function aller(sel, cls){
   const el = document.querySelector(sel); if (!el) return;
@@ -153,12 +204,21 @@ document.getElementById("cote").addEventListener("click", e => {
   const rc = e.target.closest(".col.replie"); if (rc){ ouv[rc.dataset.col] = true; rendreGauche(); return; }
   const tx = e.target.closest("[data-texte]");
   if (tx){ const msg = LEC.changerTexte(st, tx.dataset.texte); ouv.textes = false; rendreDroite(); rendreGauche(); if (msg) MM.trace(msg); requestAnimationFrame(() => aller(st.art === "4" ? "#al-" + st.al : "#art-" + CSS.escape(st.art), st.art === "4" ? "al" : "art")); return; }
+  const co = e.target.closest("[data-coche]");
+  if (co){ const n = co.dataset.coche; COCHES.has(n) ? COCHES.delete(n) : COCHES.add(n); rendreGauche(); return; }
   const ar = e.target.closest("[data-art]");
   if (ar && !ar.classList.contains("off")){ st.art = ar.dataset.art; if (V === 0 && st.art === "4") ouv.arbreArt = "4"; rendreGauche(); aller("#art-" + CSS.escape(st.art), "art"); return; }
   const al = e.target.closest("[data-al]");
   if (al){ st.art = "4"; st.al = +al.dataset.al; rendreGauche(); aller("#al-" + st.al, "al"); }
 });
+document.getElementById("cote").addEventListener("dblclick", e => {
+  const ar = e.target.closest("[data-art]"); if (!ar || ar.classList.contains("off") || e.target.closest("[data-coche]")) return;
+  COCHES.clear(); COCHES.add(ar.dataset.art); st.art = ar.dataset.art; rendreGauche(); aller("#art-" + CSS.escape(st.art), "art");
+});
 document.getElementById("droite").addEventListener("click", e => {
+  if (e.target.closest("[data-tout]")){ COCHES.clear(); rendreGauche(); return; }
+  const gp = e.target.closest("[data-groupe]"); if (gp){ GROUPE_OUVERT.g = GROUPE_OUVERT.g === gp.dataset.groupe ? null : gp.dataset.groupe; majModules(); return; }
+  if (e.target.closest(".modules")) return;
   const al = e.target.closest(".al[data-al]"); if (al){ st.art = "4"; st.al = +al.dataset.al; rendreGauche(); return; }
   const ar = e.target.closest(".t-art"); if (ar){ st.art = ar.dataset.art; rendreGauche(); }
 });
