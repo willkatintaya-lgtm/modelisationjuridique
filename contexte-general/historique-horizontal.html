@@ -60,10 +60,9 @@ button{font-family:inherit}
 .sheet.now .av{background:#2a2540;color:var(--now)}
 .sheet .who{color:var(--fg);font-weight:500}
 .sheet .meta{display:block;color:var(--dim)}
-.sheet.now .meta{color:var(--now)}
-.sheet.future{background:transparent;border-style:dashed;padding-bottom:12px}
-.sheet.future .av{background:var(--bg);border:1px solid var(--border-2)}
-.sheet.future .who{color:var(--muted);font-weight:400}
+.sheet.now .who{color:var(--now)}
+.sheet.now .meta{color:var(--now);font-weight:600}
+.sheet.future:hover{border-color:var(--border)}
 .sheet .hd{padding-right:30px}
 .cmpbtn{position:absolute;right:10px;top:10px;width:26px;height:26px;border-radius:6px;border:1px solid var(--border-2);background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:color .2s,background .2s}
 .cmpbtn:hover{color:var(--fg);background:#1f2023}
@@ -91,7 +90,7 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 .gap::after{content:"";position:absolute;right:-1px;top:calc(var(--rail) - 3px);width:7px;height:7px;border-top:1px solid var(--border-2);border-right:1px solid var(--border-2);transform:rotate(45deg);background:var(--bg)}
 .fold{position:relative}
 .fold + .fold{margin-top:2px}
-.fold-head,.fold-none{display:flex;align-items:center;gap:8px;width:100%;background:none;border:0;padding:5px 0;color:var(--muted);font:400 12.5px var(--f);text-align:left;cursor:pointer;white-space:nowrap}
+.fold-head,.fold-none{display:flex;align-items:center;gap:22px;width:100%;background:none;border:0;padding:5px 0;color:var(--muted);font:400 12.5px var(--f);text-align:left;cursor:pointer;white-space:nowrap}
 .fold-none{cursor:default;color:var(--dim)}
 .fold-head .pin,.fold-none .pin{flex:none;width:16px;height:16px;display:grid;place-items:center;color:var(--dim)}
 .fold-head .pin svg{transition:transform .3s var(--ease)}
@@ -105,7 +104,7 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 .list{max-height:var(--lh,50vh);overflow-y:auto;scrollbar-width:none;padding:2px 0 6px;margin-left:7px;border-left:1px solid var(--border)}
 .list::-webkit-scrollbar{display:none}
 .ev-row{display:flex;align-items:flex-start;gap:8px;width:100%;background:none;border:0;padding:5px 0;cursor:pointer;text-align:left;color:var(--muted);font:400 12.5px/1.5 var(--f)}
-.ev-row .ico{flex:none;width:16px;height:16px;margin-left:-8px;margin-top:1px;display:grid;place-items:center;background:var(--bg);color:var(--dim);transition:transform .3s var(--ease),color .2s}
+.ev-row .ico{flex:none;width:16px;height:16px;margin-left:6px;margin-top:1px;display:grid;place-items:center;background:var(--bg);color:var(--dim);transition:transform .3s var(--ease),color .2s}
 .ev-row .lg{display:inline-grid;place-items:center;width:14px;height:14px;border-radius:4px;background:var(--g);color:#fff;font-size:8.5px;font-weight:700;margin-right:5px;vertical-align:-2px}
 .ev-row b{color:var(--fg);font-weight:500}
 .ev-row .t{display:block;color:var(--dim)}
@@ -122,13 +121,13 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 .fiche dd{margin:0;color:var(--muted)}
 .hint{position:fixed;left:0;right:0;bottom:calc(14px + env(safe-area-inset-bottom,0px));text-align:center;font-size:11.5px;color:var(--dim);pointer-events:none}
 /* --- mode comparer : la frise s'efface, un ou deux textes ouverts, et la liste des étapes à comparer --- */
-.frise{transition:opacity .25s}
-.page.cmping .frise{opacity:0;pointer-events:none}
+.frise{transition:opacity .3s,transform .4s var(--ease)}
+.page.cmping .frise{opacity:0;transform:scale(.97);pointer-events:none}
 .cmp{position:absolute;inset:0;overflow:auto;scrollbar-width:none;padding:8px 16px 48px;opacity:0;pointer-events:none;transition:opacity .25s}
 .cmp::-webkit-scrollbar{display:none}
 .page.cmping .cmp{opacity:1;pointer-events:auto}
 .cmp-in{display:flex;align-items:center;justify-content:center;gap:14px;min-height:100%;width:max-content;min-width:100%;margin:0 auto}
-.cg{--cw:min(460px,calc((100vw - 120px)/var(--n)));display:grid;grid-template-columns:repeat(var(--n),var(--cw));column-gap:18px;align-self:center;animation:rise .3s var(--ease)}
+.cg{--cw:min(460px,calc((100vw - 120px)/var(--n)));display:grid;grid-template-columns:repeat(var(--n),var(--cw));column-gap:18px;align-self:center}
 @keyframes rise{from{opacity:0;transform:translateY(6px)}}
 .c{background:var(--card-2);border-left:1px solid var(--border);border-right:1px solid var(--border);padding:0 16px;min-width:0}
 .c.h{position:relative;border-top:1px solid var(--border);border-radius:8px 8px 0 0;padding-top:12px;padding-bottom:12px;display:flex;align-items:flex-start;gap:10px;padding-right:46px}
@@ -136,7 +135,12 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 .c.h.now .av{background:#2a2540;color:var(--now)}
 .c.h .who{color:var(--fg);font-weight:500}
 .c.h .meta{display:block;color:var(--dim)}
-.c.h.now .meta{color:var(--now)}
+.c.h.now .who{color:var(--now)}
+.c.h.now .meta{color:var(--now);font-weight:600}
+.c .n.add{color:var(--ins);font-weight:700}
+.c .n.rem{text-decoration:line-through 1px var(--del)}
+.al .n.add{color:var(--ins);font-weight:700}
+.al .n.rem{text-decoration:line-through 1px var(--del)}
 .c.f{border-bottom:1px solid var(--border);border-radius:0 0 8px 8px;height:14px}
 .c.a{display:grid;grid-template-columns:18px 1fr;gap:0 6px;padding-top:3px;padding-bottom:5px;font-size:13.5px;line-height:1.65}
 .c.a .n{font-size:11px;line-height:2.1;color:var(--dim);text-align:right}
@@ -144,8 +148,9 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 .c.a .none{color:var(--dim);font-style:italic}
 .x{position:absolute;right:10px;top:10px;width:26px;height:26px;border-radius:6px;border:1px solid var(--border-2);background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer}
 .x:hover{color:var(--fg);background:#1f2023}
-.pickl{flex:none;width:250px;align-self:center;animation:rise .3s var(--ease)}
-.pickl .k{font-size:12px;color:var(--dim);margin:0 0 6px 0}
+.pickl{flex:none;width:250px;align-self:center}
+.pk.now b{color:var(--now)}
+.pk.now .t{color:var(--now);font-weight:600}
 .pickl .list{max-height:none;margin-left:7px}
 .pk .t{display:block;color:var(--dim)}
 @media (max-width:520px){ .cg{--cw:calc(100vw - 56px)} .cmp-in{flex-direction:column;align-items:flex-start;justify-content:flex-start;padding-top:8px} .pickl{align-self:flex-start} }
@@ -299,10 +304,21 @@ function alsHTML(art,i,r){
   }).join("");
 }
 
+// numéro d'alinéa : un alinéa ajouté porte un numéro en bleu gras, un alinéa supprimé un numéro barré
+const numCls=(a,b,hasPrev)=>!hasPrev?"":(a==null&&b!=null?" add":(a!=null&&b==null?" rem":""));
+function alsHTML(art,i,r){
+  const v=art.v[i], prev=r==null?null:art.v[r];
+  const keys=[...new Set([...Object.keys(prev||{}),...Object.keys(v)])].map(Number).sort((a,b)=>a-b);
+  return keys.map(k=>{
+    const a=prev?prev[k]:undefined,b=v[k],same=prev&&a===b;
+    return `<div class="al${same?" same":""}" data-al="${k}"><span class="n${numCls(a,b,!!prev)}">${k}</span><p style="margin:0">${prev?diff(a??null,b??null):esc(b)}</p></div>`;
+  }).join("");
+}
 // étapes à venir : un titre, rien d'autre
 STEPS.push({stage:"Séance publique de l'Assemblée nationale",future:true},{stage:"Commission mixte paritaire",future:true},{stage:"Promulgation",future:true});
 const DONE=4; // nombre d'étapes qui ont un texte (la dernière est en cours)
 const RIGHT='<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3.5l4.5 4.5L6 12.5"/></svg>';
+const CMPS='<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5.5 2v12M10.5 2v12M2 5h3.5M10.5 11H14"/></svg>';
 const CMPI='<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5.5 2v12M10.5 2v12M2 5h3.5M10.5 11H14"/></svg>';
 const X='<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 4l8 8M12 4l-8 8"/></svg>';
 const dateOf=st=>st.now?"en cours":st.date;
@@ -452,11 +468,13 @@ function closeSheet(sheet){
 function hint(){ document.getElementById("hint").textContent=inCmp()?"Échap ou × pour revenir à la frise":"← → parcourir les étapes · ↑ ↓ changer d'article"; }
 function cmpHead(i){
   const st=STEPS[i];
-  return `<div class="c h${st.now?" now":""}"><span class="av">${st.now?DOTS:CHECK}</span><span><span class="who">${st.stage}</span><span class="meta">${dateOf(st)}</span></span>
+  return `<div class="c h${st.now?" now":""}" data-col="${i}"><span class="av">${st.now?DOTS:CHECK}</span><span><span class="who">${st.stage}</span><span class="meta">${dateOf(st)}</span></span>
     <button class="x" type="button" data-close="${i}" aria-label="Fermer ce texte">${X}</button></div>`;
 }
-function renderCmp(k){
+function renderCmp(k,src){
   const page=pages[k], box=page.querySelector(".cmp"), items=CMP[k], art=ARTICLES[k];
+  const before={}; box.querySelectorAll(".c.h[data-col]").forEach(h=>before[h.dataset.col]=h.getBoundingClientRect());
+  const lb=box.querySelector(".pickl"); const listBefore=lb?lb.getBoundingClientRect():null;
   page.classList.toggle("cmping",items.length>0); hint();
   if(!items.length){ box.innerHTML=""; return; }
   let cells=items.map(cmpHead).join("");
@@ -464,25 +482,43 @@ function renderCmp(k){
   if(items.length===1){
     const i=items[0], prev=i?art.v[i-1]:null;
     keys.forEach(n=>{ const a=prev?prev[n]:undefined, b=art.v[i][n];
-      cells+=`<div class="c a${prev&&a===b?" same":""}"><span class="n">${n}</span><p style="margin:0">${prev?diff(a??null,b??null):esc(b)}</p></div>`; });
+      cells+=`<div class="c a${prev&&a===b?" same":""}" data-col="${i}"><span class="n${numCls(a,b,!!prev)}">${n}</span><p style="margin:0">${prev?diff(a??null,b??null):esc(b)}</p></div>`; });
   } else {
     const [l,r]=items, L=art.v[l], Rv=art.v[r];
     keys.forEach(n=>{ const a=L[n], b=Rv[n], same=a===b;
-      cells+=`<div class="c a${same?" same":""}"><span class="n">${a!=null?n:""}</span><p style="margin:0">${a!=null?esc(a):'<span class="none">absent</span>'}</p></div>`;
-      cells+=`<div class="c a${same?" same":""}"><span class="n">${b!=null||a!=null?n:""}</span><p style="margin:0">${diff(a??null,b??null)}</p></div>`; });
+      cells+=`<div class="c a${same?" same":""}" data-col="${l}"><span class="n">${a!=null?n:""}</span><p style="margin:0">${a!=null?esc(a):""}</p></div>`;
+      cells+=`<div class="c a${same?" same":""}" data-col="${r}"><span class="n${numCls(a,b,true)}">${n}</span><p style="margin:0">${diff(a??null,b??null)}</p></div>`; });
   }
-  cells+=items.map(()=>`<div class="c f"></div>`).join("");
+  cells+=items.map(i=>`<div class="c f" data-col="${i}"></div>`).join("");
   let html=`<div class="cmp-in"><div class="cg" style="--n:${items.length}">${cells}</div>`;
   if(items.length===1){
     const i=items[0], others=STEPS.map((s,j)=>j).filter(j=>j<DONE&&j!==i);
-    html+=`<div class="pickl"><div class="k">Comparer avec</div><div class="list">${others.map(j=>`<div class="ev"><button class="ev-row pk" type="button" data-pick="${j}"><span class="ico">${PLUS}</span><span><b>${STEPS[j].stage}</b><span class="t">${dateOf(STEPS[j])}</span></span></button></div>`).join("")}</div></div>`;
+    html+=`<div class="pickl"><div class="list">${others.map(j=>`<div class="ev"><button class="ev-row pk${STEPS[j].now?" now":""}" type="button" data-pick="${j}" aria-label="Comparer avec ${STEPS[j].stage}"><span class="ico">${CMPS}</span><span><b>${STEPS[j].stage}</b><span class="t">${dateOf(STEPS[j])}</span></span></button></div>`).join("")}</div></div>`;
   }
   box.innerHTML=html+`</div>`; box.scrollTop=0;
+  animateCmp(box,before,listBefore,src);
+}
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+function animateCmp(box,before,listBefore,src){
+  if(reduce) return;
+  const E="cubic-bezier(.25,.8,.25,1)";
+  const cols=[...new Set([...box.querySelectorAll("[data-col]")].map(c=>c.dataset.col))];
+  cols.forEach((c,ci)=>{
+    const head=box.querySelector(`.c.h[data-col="${c}"]`), now=head.getBoundingClientRect();
+    const from=before[c]||(src&&String(src.i)===c?src.r:null)||(listBefore?{left:listBefore.left,top:now.top}:null);
+    const cells=box.querySelectorAll(`[data-col="${c}"]`);
+    if(from){
+      const dx=from.left-now.left, dy=from.top-now.top, fresh=!before[c];
+      cells.forEach((el,k)=>el.animate([{transform:`translate(${dx}px,${dy}px)`,opacity:fresh?(k?0:.6):1},{transform:"none",opacity:1}],{duration:fresh?420:380,easing:E,delay:fresh&&k?Math.min(k*18,140):0,fill:"backwards"}));
+    } else cells.forEach(el=>el.animate([{opacity:0,transform:"translateY(8px)"},{opacity:1,transform:"none"}],{duration:320,easing:E}));
+  });
+  const pl=box.querySelector(".pickl");
+  if(pl) pl.animate([{opacity:0,transform:"translateX(-12px)"},{opacity:1,transform:"none"}],{duration:360,delay:listBefore?60:200,easing:E,fill:"backwards"});
 }
 document.addEventListener("click",e=>{
   if(moved){ moved=false; e.stopPropagation(); e.preventDefault(); return; }
   const cb=e.target.closest(".cmpbtn");
-  if(cb){ const s=cb.closest(".sheet"); CMP[cur]=[+s.dataset.i]; renderCmp(cur); return; }
+  if(cb){ const s=cb.closest(".sheet"); CMP[cur]=[+s.dataset.i]; renderCmp(cur,{i:+s.dataset.i,r:s.getBoundingClientRect()}); return; }
   const pk=e.target.closest("[data-pick]");
   if(pk){ CMP[cur]=[...CMP[cur],+pk.dataset.pick].sort((a,b)=>a-b); renderCmp(cur); return; }
   const x=e.target.closest("[data-close]");
