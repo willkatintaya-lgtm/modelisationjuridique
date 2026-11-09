@@ -8,6 +8,8 @@ Les catégories ci-dessous sont créées par la session « Arbitrage » à parti
 - *confirmé* — Test **manuel**, en brainstorm, avec des **allers-retours** entre maquettes pour juger à l'œil ce qui est agréable. (T1, T2)
 - *entendu* — Les enseignements se tirent **petit à petit**, sans conclure trop tôt. (T1)
 - *entendu* — La session crée elle-même les thèmes et catégories à partir des propos. (T2)
+- **Demande** · *entendu* — Les propos appellent des **micro-maquettes** : de petites maquettes fictives centrées sur une seule micro-interface (pas toute l'interface), pour tester une question à la fois. Ici : le texte entier, aller article par article, la nature de la fenêtre, son architecture et son emplacement (à côté ou non). (T3)
+- **Demande** · *entendu* — Une **branche dédiée** (« maquette arbitrage » / « maquette technique ») produit ces micro-maquettes, **en dialogue constant** avec l'arbitrage. Les commandes passent par `arbitrage/commandes-maquettes.md`. (T3)
 
 ## A. Le texte entier, dès l'entrée
 - **Demande** · *entendu* — Arriver d'emblée sur **la loi entière, telle quelle**, avec tous ses articles, plutôt que sur un onglet ou un tableau. (T2)
