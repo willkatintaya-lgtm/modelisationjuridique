@@ -58,14 +58,29 @@
 @keyframes flash{0%{box-shadow:inset 3px 0 0 var(--gold)}100%{box-shadow:inset 3px 0 0 transparent}}
 @keyframes flashal{0%,40%{background:rgba(217,181,106,.35)}100%{background:transparent}}
 .sommaire-btn{display:none}
-/* cocher des articles : n'afficher qu'eux */
+/* comparer : les coches n'apparaissent qu'après « Comparer les articles / les alinéas » */
 .coche{flex:0 0 auto;width:13px;height:13px;border:1px solid var(--muted-p);margin-right:2px;align-self:center;position:relative;cursor:pointer;background:rgba(255,255,255,.4)}
 .coche:hover{border-color:#8a6a2a}
 .coche.on{background:var(--ink);border-color:var(--ink)}
 .coche.on::after{content:"";position:absolute;left:3.5px;top:0.5px;width:4px;height:8px;border:solid var(--paper);border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
 .bandeau{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;margin:10px 0 0;padding:8px 12px;border:1px solid var(--rule);background:rgba(217,181,106,.12);font:400 12.5px var(--ui);color:var(--ink2)}
 .bandeau button{color:var(--ink);text-decoration:underline dotted var(--rule);text-decoration-thickness:1.5px;text-underline-offset:3px}
-.t-art.cache{display:none}
+.cmp-btn{display:flex;align-items:center;gap:8px;width:calc(100% - 24px);margin:6px 12px 6px;padding:6px 10px;font:500 11px var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);border:1px dashed var(--muted-p);background:rgba(255,255,255,.3)}
+.cmp-btn:hover{border-color:#8a6a2a;color:var(--ink)}
+.cmp-btn.on{border-style:solid;border-color:var(--ink);background:var(--ink);color:var(--paper)}
+#droite{flex-direction:column;align-items:center}
+#cmp{width:100%}
+#cmp>.bandeau{margin:0 0 16px;background:rgba(217,181,106,.08);border-color:#3a3f4c;color:var(--fg)}
+#cmp>.bandeau button{color:var(--gold);text-decoration-color:var(--gold)}
+.fenetres{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px;align-items:start}
+.page.fen{width:100%;padding:28px 30px 30px;outline-width:8px;outline-offset:-8px}
+.page.fen .runhead{margin-bottom:12px;align-items:baseline}
+.page.fen .x{font:400 18px/1 var(--ui);color:var(--muted-p);margin-left:auto;padding:0 2px}
+.page.fen .x:hover{color:var(--ink)}
+.fen-tit{font:600 16px/1.35 var(--serif);margin:0 0 10px}
+.fen-corps{max-height:calc(100vh - 230px);overflow:auto;scrollbar-width:none;-webkit-mask-image:linear-gradient(#000 calc(100% - 28px),transparent);mask-image:linear-gradient(#000 calc(100% - 28px),transparent);padding-bottom:20px}
+.fen-corps::-webkit-scrollbar{display:none}
+.fen-corps .al{font-size:15px}
 /* les petits modules sous l'article courant */
 .modules{margin:2px 0 14px;padding:10px 12px 8px;border:1px solid var(--rule);background:rgba(255,255,255,.3)}
 .modules .tt{font:600 9.5px var(--ui);letter-spacing:.14em;text-transform:uppercase;color:var(--muted-p);margin-bottom:8px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
@@ -112,13 +127,27 @@ const CONSIGNES = [
   "<b>Les colonnes repliables.</b> Trois colonnes : type de texte, articles, alinéas. Choisir un texte replie sa colonne en un dos qui porte sa valeur ; articles et alinéas restent ouverts. Le texte entier reste à droite.",
 ];
 let st = {texte: "transmis", art: "4", al: 12}, V = 0, vu = {art: "4", al: null};
-const ouv = {textes: false, articles: true, alineas: true, arbreArt: "4"};   // la barre des textes se referme après un choix ; articles et alinéas restent ouverts
+const ouv = {textes: false, articles: true, alineas: false, arbreArt: null};   // la barre des textes se referme après un choix ; articles et alinéas restent ouverts
 let droiteTexte = null;
-const COCHES = new Set(), GROUPE_OUVERT = {g: null};
-function majFiltre(){
-  document.querySelectorAll(".t-art").forEach(sct => sct.classList.toggle("cache", COCHES.size > 0 && !COCHES.has(sct.dataset.art)));
-  const b = document.getElementById("bandeau"); if (!b) return;
-  b.innerHTML = COCHES.size ? `<div class="bandeau"><span>${COCHES.size} ${plural(COCHES.size, "article coché", "articles cochés")} : seuls ${COCHES.size > 1 ? "ils sont" : "il est"} affiché${COCHES.size > 1 ? "s" : ""} (${[...COCHES].map(n => "art. " + LEC.nomArt(n)).join(", ")})</span><button data-tout>tout le texte</button></div>` : "";
+const COCHES = new Set(), COCHES_AL = new Set(), COMP = {mode: null}, GROUPE_OUVERT = {g: null};   // COMP.mode : null | "articles" | "alineas"
+function fenetreArt(num){
+  const p = LEC.art(st.texte, num), A = MM.art4(st.texte);
+  const corps = p.presence === "supprime" ? `<p class="al" style="font-style:italic">(Supprimé)</p>` : p.texte ? A.map((t, i) => MM.alHTML(t, i + 1)).join("") : `<p class="nontexte">Texte non chargé dans le prototype.</p>`;
+  return `<article class="page fen"><div class="runhead"><span>Article ${LEC.nomArt(num)}</span><span>${esc(ET[st.texte].court)}</span><button class="x" data-retire="${esc(num)}" title="retirer de la comparaison">×</button></div><p class="fen-tit">${esc(p.titre)}</p><div class="fen-corps">${corps}</div></article>`;
+}
+function fenetreAl(k){
+  const t = MM.art4(st.texte)[k - 1];
+  return `<article class="page fen"><div class="runhead"><span>Article 4 · alinéa ${k}</span><span>${esc(ET[st.texte].court)}</span><button class="x" data-retire-al="${k}" title="retirer de la comparaison">×</button></div><div class="fen-corps">${MM.alHTML(t, k)}</div></article>`;
+}
+function majComparaison(){
+  const lect = document.getElementById("lecture"), cmp = document.getElementById("cmp"); if (!lect || !cmp) return;
+  const sel = COMP.mode === "articles" ? [...COCHES].filter(n => LEC.art(st.texte, n) && LEC.art(st.texte, n).presence !== "absent") : COMP.mode === "alineas" ? [...COCHES_AL].filter(k => k <= (MM.art4(st.texte) || []).length).sort((x, y) => x - y) : [];
+  if (!COMP.mode || !sel.length){ cmp.hidden = true; lect.hidden = false;
+    const b = document.getElementById("bandeau"); if (b) b.innerHTML = COMP.mode ? `<div class="bandeau"><span>Comparer ${COMP.mode === "articles" ? "les articles" : "les alinéas"} : cochez-en deux ou plus dans la barre de gauche.</span><button data-fin>annuler</button></div>` : "";
+    return; }
+  lect.hidden = true; cmp.hidden = false; const bd = document.getElementById("bandeau"); if (bd) bd.innerHTML = "";
+  cmp.innerHTML = `<div class="bandeau"><span>Comparaison · ${sel.length} ${COMP.mode === "articles" ? plural(sel.length, "article") : plural(sel.length, "alinéa")} · ${esc(ET[st.texte].court)} · chacun dans sa fenêtre</span><button data-fin>fin de la comparaison</button></div>
+    <div class="fenetres">${sel.map(x => COMP.mode === "articles" ? fenetreArt(x) : fenetreAl(x)).join("")}</div>`;
 }
 const cleQui = a => a.inst ? "i:" + a.inst : "g:" + (a.groupe || "?");
 const nomQui = k => k.startsWith("i:") ? INS[k.slice(2)].name : NX.groupName(k.slice(2));
@@ -148,37 +177,38 @@ function rendreDroite(){
   const corps = plan.filter(p => p.presence !== "absent").map(p => `<section class="t-art" id="art-${esc(p.num)}" data-art="${esc(p.num)}">
     <h3><span class="nom">Article <span class="num">${LEC.nomArt(p.num)}</span></span><span class="tit">${esc(p.titre)}</span>${p.n ? `<span class="compte">${p.n} am.</span>` : ""}</h3>
     ${p.presence === "supprime" ? `<p class="al" style="font-style:italic">(Supprimé)</p>` : p.texte ? A.map((t, i) => `<p class="al" id="al-${i + 1}" data-al="${i + 1}"><span class="n">${i + 1}</span>${esc(t)}</p>`).join("") : `<p class="nontexte">Texte non chargé dans le prototype.</p>`}</section>`).join("");
-  document.getElementById("droite").innerHTML = MM.page(`${esc(D.dossier.uid)} · ${esc(ET[st.texte].label)}`, "le texte entier", MM.entete() + `<p class="sous">${plan.filter(p => p.presence !== "absent").length} articles · ${esc(MM.ST[st.texte].titre)}</p><div id="bandeau"></div>` + corps);
+  document.getElementById("droite").innerHTML = `<div id="lecture" style="width:100%;display:flex;justify-content:center">` + MM.page(`${esc(D.dossier.uid)} · ${esc(ET[st.texte].label)}`, "le texte entier", MM.entete() + `<p class="sous">${plan.filter(p => p.presence !== "absent").length} articles · ${esc(MM.ST[st.texte].titre)}</p><div id="bandeau"></div>` + corps) + `</div><div id="cmp" hidden></div>`;
   observer();
 }
 const liTexte = s => `<button class="li${s.id === st.texte ? " on" : ""}" data-texte="${s.id}"><span class="t">${esc(s.titre)}</span>${s.examine ? "<small>examiné</small>" : ""}</button>`;
-const liArt = p => `<button class="li${p.num === st.art ? " on" : ""}${p.num === vu.art && p.num !== st.art ? " vu" : ""}${p.presence === "absent" ? " off" : ""}" data-art="${esc(p.num)}">${p.presence === "absent" ? "" : `<span class="coche${COCHES.has(p.num) ? " on" : ""}" data-coche="${esc(p.num)}" title="ne montrer que les articles cochés (double-clic : celui-ci seul)"></span>`}<span class="k">${LEC.nomArt(p.num)}</span><span class="t">${esc(p.titre)}</span></button>`;
-const liAl = (t, i) => `<button class="li${i + 1 === st.al ? " on" : ""}${i + 1 === vu.al && i + 1 !== st.al ? " vu" : ""}" data-al="${i + 1}"><span class="k">${i + 1}</span><span class="t">${esc(t)}</span></button>`;
+const liArt = p => `<button class="li${p.num === st.art ? " on" : ""}${p.num === vu.art && p.num !== st.art ? " vu" : ""}${p.presence === "absent" ? " off" : ""}" data-art="${esc(p.num)}">${p.presence === "absent" || COMP.mode !== "articles" ? "" : `<span class="coche${COCHES.has(p.num) ? " on" : ""}" data-coche="${esc(p.num)}" title="comparer cet article"></span>`}<span class="k">${LEC.nomArt(p.num)}</span><span class="t">${esc(p.titre)}</span></button>`;
+const liAl = (t, i) => `<button class="li${i + 1 === st.al ? " on" : ""}${i + 1 === vu.al && i + 1 !== st.al ? " vu" : ""}" data-al="${i + 1}">${COMP.mode === "alineas" ? `<span class="coche${COCHES_AL.has(i + 1) ? " on" : ""}" data-coche-al="${i + 1}" title="comparer cet alinéa"></span>` : ""}<span class="k">${i + 1}</span><span class="t">${esc(t)}</span></button>`;
 const bt = (cle, titre, val) => `<button class="bt${ouv[cle] ? " ouvert" : ""}" data-tog="${cle}"><span class="chev">▸</span>${titre}<span class="val">${val}</span></button>`;
 const valTexte = () => esc(ET[st.texte].court), valArt = () => "Art. " + LEC.nomArt(st.art), valAl = () => st.art === "4" ? "al. " + st.al : "—";
 function gaucheA(){
   const plan = LEC.planDe(st.texte), A = MM.art4(st.texte);
   const textes = ouv.textes ? LEC.TEXTES.map(s => `<button class="li n1${s.id === st.texte ? " on" : ""}" data-texte="${s.id}"><span class="t">${esc(s.titre)}</span>${s.examine ? "<small>examiné</small>" : ""}</button>`).join("") : "";
-  const arts = plan.map(p => `<button class="li n1${p.num === st.art ? " on" : ""}${p.num === vu.art && p.num !== st.art ? " vu" : ""}${p.presence === "absent" ? " off" : ""}" data-art="${esc(p.num)}">${p.presence === "absent" ? "" : `<span class="coche${COCHES.has(p.num) ? " on" : ""}" data-coche="${esc(p.num)}" title="ne montrer que les articles cochés (double-clic : celui-ci seul)"></span>`}${p.texte ? `<span class="tog${ouv.arbreArt === p.num ? " o" : ""}" data-tog-art="${esc(p.num)}">▸</span>` : `<span class="tog"></span>`}<span class="k">${LEC.nomArt(p.num)}</span><span class="t">${esc(p.titre)}</span></button>` +
+  const arts = plan.map(p => `<button class="li n1${p.num === st.art ? " on" : ""}${p.num === vu.art && p.num !== st.art ? " vu" : ""}${p.presence === "absent" ? " off" : ""}" data-art="${esc(p.num)}">${p.presence === "absent" || COMP.mode !== "articles" ? "" : `<span class="coche${COCHES.has(p.num) ? " on" : ""}" data-coche="${esc(p.num)}" title="comparer cet article"></span>`}${p.texte ? `<span class="tog${ouv.arbreArt === p.num ? " o" : ""}" data-tog-art="${esc(p.num)}">▸</span>` : `<span class="tog"></span>`}<span class="k">${LEC.nomArt(p.num)}</span><span class="t">${esc(p.titre)}</span></button>` +
     (p.texte && ouv.arbreArt === p.num && p.presence === "present" ? A.map((t, i) => liAl(t, i).replace('class="li', 'class="li n2')).join("") : "")).join("");
-  return `<div class="bande arbre">${bt("textes", "Type de texte", valTexte())}${textes}${bt("articles", "Articles et alinéas", valArt() + (st.art === "4" ? " · " + valAl() : ""))}${ouv.articles ? arts : ""}</div>`;
+  return `<div class="bande arbre">${bt("textes", "Type de texte", valTexte())}${textes}${bt("articles", "Articles et alinéas", valArt() + (st.art === "4" ? " · " + valAl() : ""))}${ouv.articles ? btnCmp("articles") + (st.art === "4" ? btnCmp("alineas") : "") + arts : ""}</div>`;
 }
 function gaucheB(){
   const plan = LEC.planDe(st.texte), A = MM.art4(st.texte);
   const sec = (cle, titre, val, contenu) => `<div class="sec ${cle}${ouv[cle] ? " o" : ""}">${bt(cle, titre, val)}${ouv[cle] ? `<div class="contenu">${contenu}</div>` : ""}</div>`;
-  return `<div class="bande pile">${sec("textes", "Type de texte", valTexte(), LEC.TEXTES.map(liTexte).join(""))}${sec("articles", "Articles", valArt(), plan.map(liArt).join(""))}${sec("alineas", "Alinéas", valAl(), st.art === "4" ? A.map(liAl).join("") : `<p class="nontexte" style="padding:6px 12px">Texte de l'article non chargé.</p>`)}</div>`;
+  return `<div class="bande pile">${sec("textes", "Type de texte", valTexte(), LEC.TEXTES.map(liTexte).join(""))}${sec("articles", "Articles", valArt(), btnCmp("articles") + plan.map(liArt).join(""))}${sec("alineas", "Alinéas", valAl(), st.art === "4" ? btnCmp("alineas") + A.map(liAl).join("") : `<p class="nontexte" style="padding:6px 12px">Texte de l'article non chargé.</p>`)}</div>`;
 }
 function gaucheC(){
   const plan = LEC.planDe(st.texte), A = MM.art4(st.texte);
   const col = (cle, titre, val, contenu) => `<div class="bande col${ouv[cle] ? "" : " replie"}" data-col="${cle}">${bt(cle, titre, val)}<div class="contenu">${contenu}</div></div>`;
-  return `<div class="cols">${col("textes", "Type de texte", valTexte(), LEC.TEXTES.map(liTexte).join(""))}${col("articles", "Articles", valArt(), plan.map(liArt).join(""))}${col("alineas", "Alinéas", valAl(), st.art === "4" ? A.map(liAl).join("") : `<p class="nontexte" style="padding:6px 12px">Texte non chargé.</p>`)}</div>`;
+  return `<div class="cols">${col("textes", "Type de texte", valTexte(), LEC.TEXTES.map(liTexte).join(""))}${col("articles", "Articles", valArt(), btnCmp("articles") + plan.map(liArt).join(""))}${col("alineas", "Alinéas", valAl(), st.art === "4" ? btnCmp("alineas") + A.map(liAl).join("") : `<p class="nontexte" style="padding:6px 12px">Texte non chargé.</p>`)}</div>`;
 }
+const btnCmp = mode => `<button class="cmp-btn${COMP.mode === mode ? " on" : ""}" data-cmp="${mode}">${COMP.mode === mode ? "✓ Comparaison en cours · terminer" : mode === "articles" ? "⧉ Comparer les articles" : "⧉ Comparer les alinéas"}</button>`;
 const GAUCHES = [gaucheA, gaucheB, gaucheC];
 function rendreGauche(){
   const c = document.getElementById("cote"), ouvert = c.classList.contains("ouvert");
   c.innerHTML = `<button class="sommaire-btn" data-tiroir>Sommaire <span class="val">${valTexte()} · ${valArt()}${st.art === "4" ? " · " + valAl() : ""}</span></button><div class="tiroir">${GAUCHES[V]()}</div>`;
   c.classList.toggle("ouvert", ouvert);
-  majFiltre(); majModules();
+  majComparaison(); majModules();
 }
 function aller(sel, cls){
   const el = document.querySelector(sel); if (!el) return;
@@ -204,26 +234,30 @@ document.getElementById("cote").addEventListener("click", e => {
   const rc = e.target.closest(".col.replie"); if (rc){ ouv[rc.dataset.col] = true; rendreGauche(); return; }
   const tx = e.target.closest("[data-texte]");
   if (tx){ const msg = LEC.changerTexte(st, tx.dataset.texte); ouv.textes = false; rendreDroite(); rendreGauche(); if (msg) MM.trace(msg); requestAnimationFrame(() => aller(st.art === "4" ? "#al-" + st.al : "#art-" + CSS.escape(st.art), st.art === "4" ? "al" : "art")); return; }
+  const cb = e.target.closest("[data-cmp]");
+  if (cb){ const m = cb.dataset.cmp; COMP.mode = COMP.mode === m ? null : m; if (m === "alineas" && COMP.mode){ ouv.alineas = true; if (V === 0) ouv.arbreArt = "4"; } rendreGauche(); return; }
+  const ca = e.target.closest("[data-coche-al]");
+  if (ca || (COMP.mode === "alineas" && e.target.closest("[data-al]"))){ const k = +(ca || e.target.closest("[data-al]")).dataset.al || +ca.dataset.cocheAl; COCHES_AL.has(k) ? COCHES_AL.delete(k) : COCHES_AL.add(k); rendreGauche(); return; }
+  if (COMP.mode === "articles" && !e.target.closest("[data-tog-art]")){ const r = e.target.closest("[data-art]"); if (r && !r.classList.contains("off")){ const n = r.dataset.art; COCHES.has(n) ? COCHES.delete(n) : COCHES.add(n); rendreGauche(); return; } }
   const co = e.target.closest("[data-coche]");
   if (co){ const n = co.dataset.coche; COCHES.has(n) ? COCHES.delete(n) : COCHES.add(n); rendreGauche(); return; }
   const ar = e.target.closest("[data-art]");
-  if (ar && !ar.classList.contains("off")){ st.art = ar.dataset.art; if (V === 0 && st.art === "4") ouv.arbreArt = "4"; rendreGauche(); aller("#art-" + CSS.escape(st.art), "art"); return; }
+  if (ar && !ar.classList.contains("off")){ st.art = ar.dataset.art; rendreGauche(); aller("#art-" + CSS.escape(st.art), "art"); return; }
   const al = e.target.closest("[data-al]");
   if (al){ st.art = "4"; st.al = +al.dataset.al; rendreGauche(); aller("#al-" + st.al, "al"); }
 });
-document.getElementById("cote").addEventListener("dblclick", e => {
-  const ar = e.target.closest("[data-art]"); if (!ar || ar.classList.contains("off") || e.target.closest("[data-coche]")) return;
-  COCHES.clear(); COCHES.add(ar.dataset.art); st.art = ar.dataset.art; rendreGauche(); aller("#art-" + CSS.escape(st.art), "art");
-});
 document.getElementById("droite").addEventListener("click", e => {
-  if (e.target.closest("[data-tout]")){ COCHES.clear(); rendreGauche(); return; }
+  if (e.target.closest("[data-fin]")){ COMP.mode = null; rendreGauche(); return; }
+  const rt = e.target.closest("[data-retire]"); if (rt){ COCHES.delete(rt.dataset.retire); rendreGauche(); return; }
+  const ra = e.target.closest("[data-retire-al]"); if (ra){ COCHES_AL.delete(+ra.dataset.retireAl); rendreGauche(); return; }
+  if (e.target.closest("#cmp")) return;
   const gp = e.target.closest("[data-groupe]"); if (gp){ GROUPE_OUVERT.g = GROUPE_OUVERT.g === gp.dataset.groupe ? null : gp.dataset.groupe; majModules(); return; }
   if (e.target.closest(".modules")) return;
   const al = e.target.closest(".al[data-al]"); if (al){ st.art = "4"; st.al = +al.dataset.al; rendreGauche(); return; }
   const ar = e.target.closest(".t-art"); if (ar){ st.art = ar.dataset.art; rendreGauche(); }
 });
 const cart = MM.cartouche({id: "M01-3", question: "Variante : des <b>barres dépliantes à gauche</b> (textes → articles → alinéas) ; le texte entier reste à droite quand on clique un article", fondement: "T2 (C)",
-  variantes: ["L'arbre", "Les barres empilées", "Les colonnes repliables"], onChange: v => { V = v; Object.assign(ouv, {textes: false, articles: true, alineas: true}); rendreGauche(); document.getElementById("consigne").innerHTML = CONSIGNES[v]; }});
+  variantes: ["L'arbre", "Les barres empilées", "Les colonnes repliables"], onChange: v => { V = v; Object.assign(ouv, {textes: false, articles: true, alineas: false}); rendreGauche(); document.getElementById("consigne").innerHTML = CONSIGNES[v]; }});
 V = (() => { try{ return localStorage.getItem("mm:M01-3:v") == null ? 1 : cart.get(); }catch(_){ return 1; } })(); if (V !== cart.get()) cart.set(V); if (V === 2) ouv.textes = false;
 rendreDroite(); rendreGauche(); document.getElementById("consigne").innerHTML = CONSIGNES[V];
 window.MMaller = (art, al) => { const b = document.querySelector(al ? `#cote [data-al="${al}"]` : `#cote [data-art="${art}"]`); if (b) b.click(); };
