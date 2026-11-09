@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="fr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M01-6 · Frise de l'histoire de l'article</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="../commun/cadre.css">
+<style>
+.bureau{flex-direction:column;align-items:center}
+.colonne{width:min(100%,1120px);display:flex;flex-direction:column;gap:22px}
+.page{width:100%}
+.scene{position:relative;width:100%}
+svg.frise{display:block;width:100%;overflow:visible}
+svg .queue{fill:none;stroke:var(--ink2);stroke-width:1.6;stroke-linecap:round}
+svg .fil{fill:none;stroke:#8a7f69;stroke-width:1.1;stroke-linecap:round;opacity:.85}
+svg .fil.on{stroke:#8a6a2a;stroke-width:1.8;opacity:1}
+svg .tete{cursor:pointer}
+svg .tete ellipse{fill:var(--paper);stroke:var(--ink2);stroke-width:1.6;transition:fill .15s}
+svg .tete:hover ellipse{fill:#fbf6e6}
+svg .tete.ouverte ellipse{fill:#f3e4bd;stroke:#8a6a2a;stroke-width:2.2}
+svg .tete .lieu{font:600 8.5px var(--ui);letter-spacing:.14em;text-transform:uppercase;fill:var(--muted-p)}
+svg .tete .et{font:600 13px var(--serif);fill:var(--ink)}
+svg .tete .sous{font:400 11px var(--ui);fill:var(--muted-p)}
+svg .petite{cursor:pointer}
+svg .petite ellipse{fill:#fffdf7;stroke:var(--ink2);stroke-width:1.3}
+svg .petite.anonyme ellipse{stroke-dasharray:3 2;stroke:var(--muted-p);fill:transparent}
+svg .petite:hover ellipse{fill:#f6ecd2}
+svg .petite.on ellipse{fill:var(--gold);stroke:#8a6a2a}
+svg .petite .num{font:600 11px var(--ui);fill:var(--ink)}
+svg .petite .qui{font:400 10.5px var(--ui);fill:var(--muted-p)}
+svg .carre{stroke:rgba(0,0,0,.25);stroke-width:.5}
+svg text{user-select:none}
+.compte-l{font:400 13px var(--ui);color:var(--muted-p);margin:4px 0 0}
+.compte-l b{color:var(--ink);font-weight:600}
+.aide{font:italic 400 14.5px/1.55 var(--serif);color:var(--muted-p);margin:0}
+/* la fiche */
+.fiche h2{font:600 20px/1.3 var(--serif);margin:0 0 4px}
+.fiche .meta{display:flex;flex-wrap:wrap;gap:6px 16px;font:400 12.5px var(--ui);color:var(--muted-p);margin:6px 0 14px}
+.qui-l{display:inline-flex;align-items:center;gap:6px}
+.qui-l i{width:8px;height:8px;display:inline-block}
+.membre{border-top:1px solid var(--rule);padding:14px 0 6px}
+.membre h3{margin:0 0 6px;display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline}
+.membre h3 .n{font:600 11px var(--ui);letter-spacing:.12em;color:var(--ink2)}
+.membre h3 .o{font:600 15.5px/1.35 var(--serif);flex:1 1 280px}
+.membre .ex{font:400 15px/1.6 var(--serif);max-width:66ch;margin:6px 0;white-space:pre-line}
+.membre .disp{font:400 14px/1.55 var(--serif);color:var(--ink2);border-left:2px solid var(--rule);padding:2px 0 2px 12px;margin:8px 0;white-space:pre-line;max-width:66ch}
+.membre details summary{cursor:pointer;font:500 11px var(--ui);letter-spacing:.1em;text-transform:uppercase;color:var(--muted-p);margin:6px 0}
+.reunion{font:400 13px/1.5 var(--ui);color:var(--ink2);background:rgba(255,255,255,.35);border:1px solid var(--rule);padding:8px 12px;margin:8px 0;max-width:66ch}
+.reunion b{font-weight:600}
+.feuille .al .n{min-width:3.2em}
+.feuille .al.same{color:#5e574b}
+.feuille .al.vide{color:var(--muted-p)}
+.fermer{float:right;font:500 11px var(--ui);letter-spacing:.1em;text-transform:uppercase;color:var(--muted-p);text-decoration:underline dotted var(--rule);text-underline-offset:3px}
+</style>
+<script>window.MAQ = "micro-M01-6";</script>
+<script src="../../maquettes/commun/data.js"></script>
+<script src="../../maquettes/commun/base.js"></script>
+<script src="../../maquettes/commun/modele.js"></script>
+<script src="../../maquettes/commun/noyau.js"></script>
+<script src="../commun/cadre.js"></script>
+</head><body>
+<p class="consigne" id="consigne"><b>Frise de l'histoire de l'article.</b> Une tête par version de l'article 4, reliées par leurs queues, du dépôt au Sénat à la commission de l'Assemblée. Un clic sur une tête : en sortent les modifications adoptées à cette étape (une petite tête par rédaction ; les amendements identiques partagent une tête). Un clic sur une petite tête : qui, pourquoi, comment c'est passé. Nouveau clic sur la grande tête : tout se replie. Remplace la grille alinéas × étapes.</p>
+<main class="bureau"><div class="colonne"><article class="page" id="pfrise"></article><article class="page fiche" id="pfiche"></article></div></main>
+<script>
+"use strict";
+/* ---------- les données : les versions et ce qui les a fait changer ---------- */
+const VERS = ETAPES.map(id => ({id, lieu: ET[id].chambre === "Sénat → Assemblée" ? "Sénat" : ET[id].chambre, et: {"S-depot": "Dépôt", "S-com": "Commission", "transmis": "Séance", "AN-com": "Commission"}[id], titre: ET[id].label, n: ET[id].alineas.length}));
+const SENAT = {SC: "#6f6552", SB: "#b3a88f"};   // groupes sénatoriaux (clés fictives), deux gris distincts
+const quiDe = g => g && GR[g] ? {nom: GR[g].name, color: GR[g].color} : {nom: "groupe sénatorial " + g, color: SENAT[g] || "#9b9384"};
+const quiAm = a => a.inst ? {nom: INS[a.inst].name, color: INS[a.inst].color} : quiDe(a.groupe);
+const lignesChangees = (de, a) => LINES.map(ln => {
+  const r = ln[de] == null ? null : ET[de].alineas[ln[de]], t = ln[a] == null ? null : ET[a].alineas[ln[a]];
+  return r == null && t == null ? null : r == null ? "ajout" : t == null ? "suppr" : sameText(r, t) ? null : "mod";
+}).filter(Boolean);
+function modifs(i){
+  const id = ETAPES[i];
+  if (id === "S-depot") return [];
+  if (id === "S-com"){
+    const n = lignesChangees("S-depot", "S-com").length;
+    return [{cle: "anon-scom", anonyme: true, nums: ["sans amendement nommé"], qui: [], als: n + " " + plural(n, "alinéa") + " retouché" + (n > 1 ? "s" : ""), senat: true,
+      note: "La commission du Sénat a retouché l'article, mais les données ne nomment aucun amendement pour ces changements : on ne peut dire ni qui, ni pourquoi."}];
+  }
+  if (id === "transmis"){
+    const m = new Map();
+    D.provSenat.forEach((p, k) => (p.amendements || []).forEach(x => { if (!m.has(x.num)) m.set(x.num, {cle: "S" + x.num, nums: [x.num], qui: [quiDe(x.groupe)], alsT: [], senat: true}); m.get(x.num).alsT.push(k + 1); }));
+    return [...m.values()].map(x => ({...x, court: "al. " + x.alsT.join(", "), als: "al. " + x.alsT.join(", ") + " du texte transmis"}));
+  }
+  // commission de l'Assemblée : les adoptés, les identiques regroupés
+  const ad = ALL.filter(a => a.sort === "Adopté"), grp = new Map();
+  for (const a of ad){ const k = a.ident ? "I" + a.ident : a.id; if (!grp.has(k)) grp.set(k, []); grp.get(k).push(a); }
+  const anM = new Map(); D.provAN.forEach((p, k) => (p.amendements || []).forEach(x => { if (!anM.has(x.num)) anM.set(x.num, []); anM.get(x.num).push(k + 1); }));
+  const out = [...grp.entries()].map(([k, ams]) => {
+    const visT = [...new Set(ams.flatMap(a => a.applique.rows.map(r => r.o).filter(o => o != null)))].sort((x, y) => x - y);
+    const visAN = [...new Set(ams.flatMap(a => anM.get(a.num) || []))].sort((x, y) => x - y);
+    return {cle: k, nums: ams.map(a => a.num), ams, qui: ams.map(quiAm),
+      court: visAN.length ? "al. " + visAN.join(", ") : visT.length ? "transmis : al. " + visT.join(", ") : "article",
+      als: visAN.length ? "al. " + visAN.join(", ") + " du texte de la commission" : visT.length ? "al. " + visT.join(", ") + " du texte transmis" + (ams.every(a => a.mode === "supprimer") ? " (supprimés)" : "") : "article"};
+  });
+  const sansNom = D.provAN.filter(p => /sans amendement nommé/.test(p.etape)).length;
+  out.push({cle: "anon-an", anonyme: true, nums: ["sans amendement nommé"], qui: [], als: sansNom + " " + plural(sansNom, "alinéa") + " retouché" + (sansNom > 1 ? "s" : "") + " ou nouveau" + (sansNom > 1 ? "x" : ""),
+    note: "Ces alinéas ont changé sans qu'un amendement soit nommé dans les données : renumérotations, coordinations, « (Supprimé) » laissés en place."});
+  return out;
+}
+const MODS = ETAPES.map((_, i) => modifs(i));
+
+/* ---------- l'état ---------- */
+let ouverte = null, choisie = null;
+try{ const s = JSON.parse(localStorage.getItem("mm:M01-6:st")); if (s){ ouverte = s.ouverte; choisie = s.choisie; } }catch(_){}
+const garder = () => { try{ localStorage.setItem("mm:M01-6:st", JSON.stringify({ouverte, choisie})); }catch(_){} };
+
+/* ---------- le dessin ---------- */
+const NS = "http://www.w3.org/2000/svg";
+function ondule(x1, y1, x2, y2, amp, lg){
+  const dx = x2 - x1, dy = y2 - y1, L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L, nx = -uy, ny = ux;
+  const n = Math.max(2, Math.round(L / lg)); let d = `M${x1.toFixed(1)},${y1.toFixed(1)}`;
+  for (let k = 1; k <= n * 16; k++){
+    const t = k / (n * 16), s = Math.sin(t * n * 2 * Math.PI) * amp * Math.sin(Math.PI * t);
+    d += ` L${(x1 + dx * t + nx * s).toFixed(1)},${(y1 + dy * t + ny * s).toFixed(1)}`;
+  }
+  return d;
+}
+function fil(x1, y1, x2, y2){   // une queue qui descend en s'incurvant, légèrement ondulée
+  const pts = [], n = 40;
+  for (let k = 0; k <= n; k++){
+    const t = k / n, bx = (1 - t) ** 2 * x1 + 2 * (1 - t) * t * x1 + t * t * x2, by = (1 - t) ** 2 * y1 + 2 * (1 - t) * t * y2 + t * t * y2;
+    const w = Math.sin(t * Math.PI * 5) * 3 * Math.sin(Math.PI * t);
+    pts.push(`${(bx + w).toFixed(1)},${(by).toFixed(1)}`);
+  }
+  return "M" + pts.join(" L");
+}
+const carres = (qui, x, y) => qui.slice(0, 6).map((q, k) => `<rect class="carre" x="${x + k * 10}" y="${y}" width="8" height="8" fill="${q.color}"><title>${esc(q.nom)}</title></rect>`).join("");
+function dessiner(){
+  const P = document.getElementById("pfrise");
+  const W = Math.max(320, P.clientWidth - (innerWidth < 700 ? 44 : 116));
+  const vertical = W < 640;
+  let svg = "", H;
+  const RX = vertical ? 42 : 46, RY = vertical ? 24 : 30;
+  const tete = (v, i, x, y) => `<g class="tete${ouverte === i ? " ouverte" : ""}" data-tete="${i}" tabindex="0" role="button" aria-label="${esc(v.titre)}"><ellipse cx="${x}" cy="${y}" rx="${RX}" ry="${RY}"></ellipse>
+    <text class="lieu" x="${x}" y="${y - 7}" text-anchor="middle">${esc(v.lieu)}</text><text class="et" x="${x}" y="${y + 9}" text-anchor="middle">${esc(v.et)}</text>
+    <text class="sous" x="${x}" y="${y + RY + 16}" text-anchor="middle">${v.n} alinéas${MODS[i].length ? "" : " · origine"}</text></g>`;
+  const petite = (m, x, y, sous) => {
+    const on = choisie === m.cle, lab = m.anonyme ? "sans amendement nommé" : m.nums.length > 2 ? m.nums[0] + " + " + (m.nums.length - 1) + " identiques" : m.nums.join(" · ");
+    return `<g class="petite${m.anonyme ? " anonyme" : ""}${on ? " on" : ""}" data-petite="${esc(m.cle)}" tabindex="0" role="button"><ellipse cx="${x}" cy="${y}" rx="13" ry="9"></ellipse>
+      <text class="num" x="${sous ? x : x + 22}" y="${sous ? y + 25 : y - 1}" text-anchor="${sous ? "middle" : "start"}">${esc(lab)}</text>
+      ${m.qui.length ? carres(m.qui, sous ? x - m.qui.slice(0, 6).length * 5 : x + 22, sous ? y + 32 : y + 6) : ""}
+      <text class="qui" x="${sous ? x : x + 22 + (m.qui.length ? Math.min(6, m.qui.length) * 10 + 4 : 0)}" y="${sous ? y + 54 : y + 14}" text-anchor="${sous ? "middle" : "start"}">${esc(short(m.court || m.als, sous ? 34 : 60))}</text></g>`;
+  };
+  if (!vertical){
+    const y0 = 70, xs = VERS.map((_, i) => 74 + i * (W - 148) / (VERS.length - 1));
+    for (let i = 1; i < VERS.length; i++) svg += `<path class="queue" d="${ondule(xs[i] - RX, y0, xs[i - 1] + RX + 6, y0, 7, 26)}"></path>`;
+    H = 140;
+    if (ouverte != null && MODS[ouverte].length){
+      const ms = MODS[ouverte], par = Math.min(ms.length, Math.max(3, Math.floor(W / 150))), rangs = Math.ceil(ms.length / par);
+      ms.forEach((m, k) => {
+        const r = Math.floor(k / par), c = k % par, nr = Math.min(par, ms.length - r * par);
+        const x = W / 2 + (c - (nr - 1) / 2) * (W - 60) / par, y = 220 + r * 110;
+        svg += `<path class="fil${choisie === m.cle ? " on" : ""}" d="${fil(xs[ouverte], y0 + RY, x, y - 9)}"></path>`;
+      });
+      ms.forEach((m, k) => { const r = Math.floor(k / par), c = k % par, nr = Math.min(par, ms.length - r * par); svg += petite(m, W / 2 + (c - (nr - 1) / 2) * (W - 60) / par, 220 + r * 110, true); });
+      H = 220 + (rangs - 1) * 110 + 70;
+    }
+    VERS.forEach((v, i) => svg += tete(v, i, xs[i], y0));
+  } else {
+    let y = 40; const x0 = 50, ys = [];
+    VERS.forEach((v, i) => { ys.push(y); y += RY * 2 + 40; if (ouverte === i) y += MODS[i].length * 50 + 10; });
+    for (let i = 1; i < VERS.length; i++) svg += `<path class="queue" d="${ondule(x0, ys[i] - RY, x0, ys[i - 1] + RY + 18, 6, 22)}"></path>`;
+    if (ouverte != null){ MODS[ouverte].forEach((m, k) => { const yy = ys[ouverte] + RY + 46 + k * 50; svg += `<path class="fil${choisie === m.cle ? " on" : ""}" d="${fil(x0 + 10, ys[ouverte] + RY, x0 + 50, yy)}"></path>`; }); MODS[ouverte].forEach((m, k) => svg += petite(m, x0 + 60, ys[ouverte] + RY + 46 + k * 50, false)); }
+    VERS.forEach((v, i) => svg += tete(v, i, x0, ys[i]));
+    H = y;
+  }
+  const ms = ouverte != null ? MODS[ouverte] : [], nAm = ms.reduce((s, m) => s + (m.anonyme ? 0 : m.nums.length), 0), nRed = ms.filter(m => !m.anonyme).length;
+  const compte = ouverte == null ? `<p class="aide">Cliquez sur une tête pour voir ce qui a fait changer l'article à cette étape.</p>`
+    : !ms.length ? `<p class="compte-l"><b>${esc(VERS[ouverte].titre)}</b> : la version d'origine, rien ne la précède.</p>`
+    : `<p class="compte-l"><b>${esc(VERS[ouverte].titre)}</b> · ${nAm ? `<b>${nAm}</b> ${plural(nAm, "amendement adopté", "amendements adoptés")}` : "aucun amendement nommé"}${nRed && nRed !== nAm ? `, en <b>${nRed}</b> ${plural(nRed, "rédaction")} (les identiques partagent une tête)` : ""}${ms.some(m => m.anonyme) ? " · et des changements sans amendement nommé (tête en pointillé)" : ""}.</p>`;
+  P.innerHTML = `<div class="runhead"><span>${esc(D.dossier.uid)} · article 4</span><span>histoire de l'article</span></div>
+    <h1>Article 4, d'étape en étape</h1><p class="sous">${esc(D.plan.find(p => p.num === "4").intitule)}</p>
+    <div class="scene"><svg class="frise" viewBox="0 0 ${W} ${H}" height="${H}">${svg}</svg></div>${compte}`;
+  fiche();
+  garder();
+}
+/* ---------- la fiche sous la frise ---------- */
+function versionFace(i){
+  if (i === 0) return ET[ETAPES[0]].alineas.map((t, k) => MM.alHTML(t, k + 1)).join("");
+  const de = ETAPES[i - 1], a = ETAPES[i];
+  return LINES.map(ln => {
+    const r = ln[de] == null ? null : ET[de].alineas[ln[de]], t = ln[a] == null ? null : ET[a].alineas[ln[a]];
+    if (r == null && t == null) return "";
+    const n = `<span class="n">${t != null ? ln[a] + 1 : "<s>" + (ln[de] + 1) + "</s>"}</span>`;
+    if (t == null) return `<p class="al vide">${n}<del>${esc(r)}</del></p>`;
+    if (r == null) return `<p class="al">${n}<ins>${esc(t)}</ins></p>`;
+    if (sameText(r, t)) return `<p class="al same">${n}${esc(t)}</p>`;
+    return `<p class="al">${n}${inlineDiff(r, t)}</p>`;
+  }).join("");
+}
+function fiche(){
+  const F = document.getElementById("pfiche");
+  if (ouverte == null){ F.hidden = true; return; }
+  F.hidden = false;
+  const m = choisie && MODS[ouverte].find(x => x.cle === choisie);
+  if (!m){
+    F.innerHTML = `<div class="runhead"><span>${esc(VERS[ouverte].titre)}</span><span>${ouverte ? "face à : " + esc(VERS[ouverte - 1].titre.toLowerCase()) : "version d'origine"}</span></div>
+      <p class="small" style="margin:0 0 14px">${ouverte ? "Les corrections apparentes sont portées sur cette version ; le texte précédent reste la référence. Numéro barré : alinéa supprimé (numéro dans le texte précédent)." : "Le projet de loi tel que déposé au Sénat."}</p><div class="feuille">${versionFace(ouverte)}</div>`;
+    return;
+  }
+  let corps;
+  if (m.anonyme) corps = `<p class="ex">${esc(m.note)}</p>`;
+  else if (m.senat) corps = `<div class="meta"><span class="qui-l"><i style="background:${m.qui[0].color}"></i>${esc(m.qui[0].nom)}</span><span>${esc(m.als)}</span></div><p class="ex">Amendement n° ${esc(m.nums[0])}, adopté en séance au Sénat. Les données ne donnent pour le Sénat ni l'auteur, ni l'exposé, ni le vote : seulement le numéro, le groupe (fictif) et les alinéas qu'il a produits.</p>`;
+  else corps = m.ams.map(a => {
+    const q = quiAm(a), ep = NX.epOf(a);
+    const dec = ep ? ep.decisions.map(d => esc(d.txt)).join(" ") : "";
+    return `<section class="membre"><h3><span class="n">${esc(a.num)}</span><span class="o">${esc(a.cible && a.cible.label ? a.cible.label : "Article 4")} · ${esc({rediger: "rédiger", supprimer: "supprimer", completer: "compléter", inserer: "insérer"}[a.mode] || a.mode || "")}</span></h3>
+      <div class="meta"><span class="qui-l"><i style="background:${q.color}"></i>${esc(q.nom)}${a.auteur ? " · " + esc(a.auteur) : ""}</span><span>${a.org === "CF" ? "adopté par la commission des finances (saisie pour avis)" : "adopté par la commission des affaires économiques"}</span>${a.avis ? `<span>avis de la rapporteure : ${esc(a.avis)}</span>` : ""}</div>
+      ${ep ? `<div class="reunion"><b>En réunion, place ${ep.place}</b> · ${esc(short(ep.titre, 140))}<br>${dec}</div>` : a.org === "CF" ? `<div class="reunion">Examiné par la commission des finances : pas de compte rendu de cette réunion dans les données.</div>` : ""}
+      <p class="ex">${esc(short(a.expose || "", 520))}</p>
+      <details><summary>Dispositif</summary><div class="disp">${esc(a.dispositif || "")}</div></details></section>`;
+  }).join("");
+  const titre = m.anonyme ? "Changements sans amendement nommé" : m.nums.length > 1 ? `${m.nums.length} amendements identiques` : "Amendement " + m.nums[0];
+  F.innerHTML = `<div class="runhead"><span>${esc(VERS[ouverte].titre)}</span><span>modification adoptée</span></div><button class="fermer" data-fermer>voir la version entière</button>
+    <h2>${esc(titre)}</h2><div class="meta"><span>${esc(m.als)}</span></div>${corps}`;
+}
+document.querySelector(".colonne").addEventListener("click", e => {
+  const t = e.target.closest("[data-tete]");
+  if (t){ const i = +t.dataset.tete; ouverte = ouverte === i ? null : i; choisie = null; dessiner(); return; }
+  const p = e.target.closest("[data-petite]");
+  if (p){ choisie = choisie === p.dataset.petite ? null : p.dataset.petite; dessiner(); if (choisie) document.getElementById("pfiche").scrollIntoView({behavior: "smooth", block: "start"}); return; }
+  if (e.target.closest("[data-fermer]")){ choisie = null; dessiner(); }
+});
+document.querySelector(".colonne").addEventListener("keydown", e => { if ((e.key === "Enter" || e.key === " ") && e.target.closest("[data-tete],[data-petite]")){ e.preventDefault(); e.target.dispatchEvent(new MouseEvent("click", {bubbles: true})); } });
+addEventListener("resize", () => { clearTimeout(window._r); window._r = setTimeout(dessiner, 120); });
+MM.cartouche({id: "M01-6", question: "Une <b>frise interactive de l'histoire de l'article</b> : une tête par version, reliées par leurs queues ; un clic fait sortir les modifications adoptées", fondement: "demande transmise par « Questions techniques »"});
+dessiner();
+window.MMouvrir = (i, c) => { ouverte = i; choisie = c || null; dessiner(); };
+</script>
+</body></html>
