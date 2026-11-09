@@ -342,9 +342,9 @@ function evHTML(a,prevV){
   const amd=mode==="ajouter"?`<ins>${esc(a.text)}</ins>`:diff(prevV[a.al]??null,a.text);
   return `<div class="ev" data-al="${a.al}" data-sort="${a.sort}">
     <button class="ev-row" type="button"><span class="ico">${PLUS}</span>
-      <span><span class="lg" style="--g:${g.color}">${g.name[0]}</span><b>${g.name}</b> ${VERB[mode]} l'alinéa ${a.al}<span class="t">${a.num} · ${a.who} · ${a.sort}</span></span></button>
+      <span><span class="lg" style="--g:${g.color}">${g.name[0]}</span><b>${g.name}</b> ${VERB[mode]} l'alinéa ${a.al}<span class="t">${a.num} · ${a.who}</span></span></button>
     <div class="slide"><div class="inner"><div class="fiche">
-      <div class="head"><span class="lg" style="--g:${g.color}">${g.name[0]}</span><b>${g.name}</b><span>${a.num} · ${a.who} · ${a.sort}</span></div>
+      <div class="head"><span class="lg" style="--g:${g.color}">${g.name[0]}</span><b>${g.name}</b><span>${a.num} · ${a.who}</span></div>
       <div class="amd">${amd}</div>
       <p class="expo">${esc(a.expo)}</p>
       <dl><dt>Avis</dt><dd>${a.avis}</dd><dt>Vote</dt><dd>${a.vote}</dd></dl>
