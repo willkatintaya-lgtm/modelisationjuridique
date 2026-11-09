@@ -59,7 +59,9 @@ button{font-family:inherit}
 .sheet .av{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:#2a2c31;color:var(--muted);margin-top:-1px}
 .sheet.now .av{background:#2a2540;color:var(--now)}
 .sheet .who{color:var(--fg);font-weight:500}
-.sheet .meta{display:block;color:var(--dim)}
+/* toutes les cartes ont la taille de « Dépôt au Sénat » : titre en haut (deux lignes au plus), date en bas, près de l'arête */
+.sheet:not(.open){height:var(--ch,96px)}
+.sheet .meta{position:absolute;left:44px;bottom:14px;line-height:26px;color:var(--dim)}
 .sheet.now .who{color:var(--now)}
 .sheet.now .meta{color:var(--now);font-weight:600}
 .sheet.future:hover{border-color:var(--border)}
@@ -157,7 +159,7 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 /* numéro d'un alinéa ajouté : comme un ajout (bleu, gras, souligné) ; d'un alinéa supprimé : barré */
 .al .n.add,.c.a .n.add{color:var(--ins);font-weight:700;text-decoration:underline 1px;text-underline-offset:3px}
 .al .n.rem,.c.a .n.rem{text-decoration:line-through 1px var(--del)}
-@media (max-width:520px){ .hint{display:none} :root{--cardw:min(270px,calc(100vw - 110px));--gap:178px;--gapw:min(340px,calc(100vw - 40px))} .row{padding-left:24px;padding-right:48px} }
+@media (max-width:520px){ :root{--ch:116px} .hint{display:none} :root{--cardw:min(270px,calc(100vw - 110px));--gap:178px;--gapw:min(340px,calc(100vw - 40px))} .row{padding-left:24px;padding-right:48px} }
 @media (prefers-reduced-motion:reduce){ *{transition-duration:.01ms!important;scroll-behavior:auto!important} }
 </style>
 </head>
