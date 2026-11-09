@@ -1,6 +1,6 @@
 # Commandes de micro-maquettes
 
-L'arbitrage écrit ici les micro-maquettes que les propos de l'utilisateur appellent (T3). La branche `claude/maquettes-arbitrage` les construit et répond dans la colonne « État ».
+L'arbitrage écrit ici les micro-maquettes que les propos de l'utilisateur appellent (T3). La branche `claude/maquettes-arbitrage` les construit et répond dans la colonne « État ». Session de construction : « Maquettes arbitrage » (`session_016ThzeXAEXGek4h1LdsPuQ2`), lancée le 9 novembre 2026.
 Une micro-maquette teste **une seule question** d'interface, sur les données réelles (`maquettes/commun/`), sans refaire toute l'interface. Chaque ligne renvoie aux transcriptions qui la fondent.
 
 | N° | Module | Question testée | Fondement | État |
