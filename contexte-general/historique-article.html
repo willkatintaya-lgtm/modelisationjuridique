@@ -4,109 +4,89 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Historique d'un article</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <style>
-/* Historique d'un article, sur le modèle de l'historique replié de Linear et du panneau de versions de Figma :
-   les feuilles sont les versions de l'article (une par étape) ; entre deux feuilles, deux plis :
-   les amendements adoptés, puis les rejetés ou retirés. Une ligne par amendement ; un clic ouvre sa fiche. */
+/* Historique d'un article, repris du design de l'historique replié de Linear :
+   fond presque noir, cartes sombres, texte sans empattement, une ligne par événement.
+   Cartes = versions de l'article (une par étape) ; entre deux cartes, deux plis : adoptés, puis rejetés ou retirés. */
 :root{
-  --bg:#0b0d12; --fg:#e8e6df; --muted:#8a8f9b; --dim:#5d6270; --accent:#d9b56a; --line:#232733; --line-2:#2f3443;
-  --paper:#f4f1e9; --paper-2:#e9e4d8; --paper-ink:#1d1a16; --paper-muted:#6b6457; --paper-line:#c9bfa6; --paper-frame:#ece7db;
-  --f-ui:"IBM Plex Sans",system-ui,sans-serif; --f-legal:"Source Serif 4",Georgia,serif;
-  --ease:cubic-bezier(.2,.8,.2,1); --ins:#1d4f91; --del:#a8452f;
-  --rail:22px; color-scheme:dark;
+  --bg:#08090a; --card:#121315; --card-2:#17181b; --border:#1f2023; --border-2:#2a2b2f;
+  --fg:#f7f8f8; --text:#d0d6e0; --muted:#8a8f98; --dim:#62666d; --faint:#3e4046;
+  --ins:#8ab4ff; --del:#e5484d;
+  --f:"Inter",system-ui,-apple-system,sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  --rail:17px; color-scheme:dark;
 }
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
-body{background:var(--bg);color:var(--fg);font:14px/1.45 var(--f-ui);overflow:hidden}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;
-  background:radial-gradient(ellipse at 50% 30%,#151924 0%,transparent 60%),
-    linear-gradient(var(--line) 1px,transparent 1px) 0 0/48px 48px,linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/48px 48px;
-  opacity:.35;mask-image:radial-gradient(ellipse at 50% 45%,#000 15%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse at 50% 45%,#000 15%,transparent 75%)}
+body{background:var(--bg);color:var(--text);font:13px/1.5 var(--f);-webkit-font-smoothing:antialiased;overflow:hidden;font-feature-settings:"cv11","ss01"}
 #scroller{position:fixed;inset:0;overflow-y:auto;scrollbar-width:none;scroll-behavior:smooth}
 #scroller::-webkit-scrollbar{display:none}
-.col{position:relative;max-width:700px;margin:0 auto;padding:28px 16px 40vh}
-.top{margin:0 0 22px;padding-left:2px}
-.top .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-.top h1{margin:6px 0 0;font:400 22px/1.3 var(--f-legal);color:var(--fg)}
+.col{position:relative;max-width:640px;margin:0 auto;padding:40px 16px 40vh}
+.top{margin:0 0 20px}
+.top .k{font-size:12px;color:var(--dim)}
+.top h1{margin:4px 0 0;font:500 17px/1.4 var(--f);color:var(--fg);letter-spacing:-.01em}
 
-/* --- feuilles : la même matière papier que le reste du prototype --- */
-.paper{position:relative;background:linear-gradient(135deg,var(--paper),var(--paper-2));color:var(--paper-ink);border:1px solid var(--paper-line);
-  outline:14px solid var(--paper-frame);outline-offset:-14px;box-shadow:0 24px 60px rgba(0,0,0,.55),0 0 0 1px rgba(217,181,106,.22);
-  transition:box-shadow .4s}
-.sheet{padding:22px 30px 20px;cursor:zoom-in;transition:box-shadow .4s,padding .3s}
-.sheet.open{padding:26px 30px 16px;cursor:auto}
-.sheet.pulse{box-shadow:0 24px 60px rgba(0,0,0,.55),0 0 0 2px rgba(217,181,106,.85)}
-.sheet .head{display:flex;justify-content:space-between;gap:4px 12px;flex-wrap:wrap;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-muted);
-  border-bottom:1px solid var(--paper-line);padding-bottom:8px}
-.sheet .title{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:10px 0 0;transition:margin .3s}
-.sheet.open .title{margin:10px 0 8px}
-.sheet .title h2{margin:0;font:600 19px/1.3 var(--f-legal)}
-.chip{flex:none;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--paper-muted);border:1px solid var(--paper-line);border-radius:99px;padding:2px 9px}
-.chip.now{color:#8a6a24;border-color:#d9b56a}
-.txt{position:relative;overflow:hidden;max-height:var(--h,0px);transition:max-height .42s var(--ease);
-  font:400 17px/1.55 var(--f-legal);scrollbar-width:none;
-  }
+/* --- cartes : une version de l'article --- */
+.sheet{position:relative;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 14px;cursor:pointer;transition:border-color .2s,background .2s}
+.sheet:hover{border-color:var(--border-2)}
+.sheet.open{cursor:auto;background:var(--card-2)}
+.sheet.pulse{border-color:#5e6ad2}
+.sheet .row{display:flex;align-items:center;gap:10px}
+.sheet .av{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:#2a2c31;color:var(--muted)}
+.sheet .who{color:var(--fg);font-weight:500}
+.sheet .meta{color:var(--dim)}
+.sheet .sub{margin:4px 0 0 30px;color:var(--muted)}
+.sheet .chip{display:inline-block;margin-left:2px;color:var(--muted)}
+.sheet .chip.now{color:#c9a8ff}
+.txt{position:relative;overflow:hidden;max-height:var(--h,0px);transition:max-height .4s var(--ease);margin-left:30px;scrollbar-width:none;font-size:13.5px;line-height:1.65}
 .txt::-webkit-scrollbar{display:none}
-.sheet.open .txt{-webkit-mask-image:linear-gradient(transparent 0,#000 18px,#000 calc(100% - 26px),transparent);mask-image:linear-gradient(transparent 0,#000 18px,#000 calc(100% - 26px),transparent)}
+.sheet.open .txt{margin-top:10px;-webkit-mask-image:linear-gradient(transparent 0,#000 12px,#000 calc(100% - 22px),transparent);mask-image:linear-gradient(transparent 0,#000 12px,#000 calc(100% - 22px),transparent)}
 .sheet.open.fits .txt{-webkit-mask-image:none;mask-image:none}
 .sheet.scrolling .txt{overflow-y:auto}
-.al{display:grid;grid-template-columns:22px 1fr;gap:0 6px;margin:0 0 .55em;border-radius:3px;transition:background .3s,box-shadow .3s}
+.al{display:grid;grid-template-columns:18px 1fr;gap:0 6px;margin:0 0 .6em;padding:2px 6px 2px 0;border-radius:4px;transition:background .3s}
 .al:first-child{padding-top:6px}
-.al .n{font:500 11px/2.2 var(--f-ui);color:var(--paper-muted);text-align:right}
-.al.lit{background:rgba(217,181,106,.2);box-shadow:-6px 0 0 rgba(217,181,106,.9)}
-.al.same{color:#5c564b}
+.al .n{font-size:11px;line-height:2.1;color:var(--dim);text-align:right}
+.al.lit{background:rgba(94,106,210,.16)}
+.al.same{color:var(--dim)}
 .sheet:not(.open) .al.same{display:none}
-.paper ins{color:var(--ins);font-weight:600;text-decoration:underline 1.5px;text-underline-offset:3px;background:none}
-.paper del{color:#7d7466;text-decoration:line-through 1.5px var(--del);background:none}
+.sheet ins,.fiche ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+.sheet del,.fiche del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
 .sheet:not(.open) .foot{display:none}
-.foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:6px;font-size:12px;color:var(--paper-muted)}
-.more{font:500 12px var(--f-ui);color:var(--paper-ink);background:none;border:1px solid var(--paper-line);border-radius:99px;padding:5px 12px;cursor:pointer}
-.more:hover{background:rgba(29,26,22,.05)}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:8px 0 0 30px;font-size:12px;color:var(--dim)}
+.more{font:500 12px var(--f);color:var(--muted);background:none;border:1px solid var(--border-2);border-radius:6px;padding:3px 10px;cursor:pointer}
+.more:hover{color:var(--fg);background:#1f2023}
 .sheet .hit{position:absolute;inset:0}
 .sheet.open .hit{display:none}
 
-/* --- entre deux feuilles : le fil et les plis --- */
-.between{position:relative;padding:12px 0 12px;display:flex;flex-direction:column;gap:2px}
-.between::before{content:"";position:absolute;left:var(--rail);top:0;bottom:0;width:1px;background:var(--line-2)}
-.fold-head{position:relative;display:flex;align-items:center;gap:12px;width:100%;background:none;border:0;padding:7px 0;color:var(--fg);
-  font:500 13.5px var(--f-ui);text-align:left;cursor:pointer}
-.fold-head .pin{position:relative;z-index:1;flex:none;width:30px;height:30px;margin-left:calc(var(--rail) - 15px);border-radius:50%;
-  display:grid;place-items:center;background:#161a23;border:1px solid var(--line-2);color:var(--muted);transition:color .2s,border-color .2s}
-.fold-head .pin svg{transition:transform .32s var(--ease)}
-.fold.open > .fold-head .pin svg{transform:rotate(180deg)}
-.fold-head:hover .pin{color:var(--fg);border-color:#474d5e}
-.fold-head .lbl b{font-weight:600}
-.fold.rej .fold-head{color:var(--muted)}
-.fold.rej .fold-head .lbl b{color:#b9bcc4}
-.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .34s var(--ease)}
-.slide > .inner{min-height:0;overflow:hidden;opacity:0;transition:opacity .14s}
+/* --- entre deux cartes : le fil et les plis --- */
+.between{position:relative;padding:8px 0;display:flex;flex-direction:column}
+.between::before{content:"";position:absolute;left:var(--rail);top:0;bottom:0;width:1px;background:var(--border)}
+.fold-head{position:relative;display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;padding:6px 0;color:var(--muted);font:400 12.5px var(--f);text-align:left;cursor:pointer}
+.fold-head .pin{position:relative;z-index:1;flex:none;width:16px;height:16px;margin-left:calc(var(--rail) - 8px);display:grid;place-items:center;background:var(--bg);color:var(--dim)}
+.fold-head:hover{color:var(--text)}
+.fold-head:hover .pin{color:var(--text)}
+.fold.open > .fold-head{color:var(--text)}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide > .inner{min-height:0;overflow:hidden;opacity:0;transition:opacity .12s}
 .open > .slide{grid-template-rows:1fr}
-.open > .slide > .inner{opacity:1;transition:opacity .22s .12s}
+.open > .slide > .inner{opacity:1;transition:opacity .2s .1s}
 
-.ev{position:relative}
-.ev-row{display:flex;align-items:flex-start;gap:12px;width:100%;background:none;border:0;padding:5px 0;cursor:pointer;text-align:left;color:var(--muted);font:13px/1.5 var(--f-ui)}
-.ev-row .ico{position:relative;z-index:1;flex:none;width:22px;height:22px;margin-left:calc(var(--rail) - 11px);margin-top:-1px;display:grid;place-items:center;
-  background:var(--bg);color:var(--dim)}
-.ev-row .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--g);margin-right:6px;vertical-align:1px}
+.ev-row{display:flex;align-items:flex-start;gap:10px;width:100%;background:none;border:0;padding:5px 0;cursor:pointer;text-align:left;color:var(--muted);font:400 12.5px/1.55 var(--f)}
+.ev-row .ico{position:relative;z-index:1;flex:none;width:16px;height:16px;margin-left:calc(var(--rail) - 8px);margin-top:1px;display:grid;place-items:center;background:var(--bg);color:var(--dim)}
+.ev-row .lg{display:inline-grid;place-items:center;width:14px;height:14px;border-radius:4px;background:var(--g);color:#fff;font-size:8.5px;font-weight:700;margin-right:5px;vertical-align:-2px}
 .ev-row b{color:var(--fg);font-weight:500}
-.ev-row .num{color:var(--dim)}
-.ev-row .sort{color:var(--dim)}
-.ev-row:hover b{text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line-2)}
-.ev.open > .ev-row .ico{color:var(--accent)}
-.fiche{margin:6px 0 12px calc(var(--rail) + 22px);padding:18px 22px 14px;outline-width:8px;outline-offset:-8px}
-.fiche .head{display:flex;justify-content:space-between;gap:4px 12px;flex-wrap:wrap;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-muted);border-bottom:1px solid var(--paper-line);padding-bottom:7px}
-.fiche .head .g{display:inline-flex;align-items:center;gap:6px}
-.fiche .head .g i{width:7px;height:7px;border-radius:50%;background:var(--g)}
-.fiche .amd{font:400 15.5px/1.55 var(--f-legal);margin:10px 0 8px}
-.fiche .expo{font:italic 400 14px/1.5 var(--f-legal);color:var(--paper-muted);margin:0 0 10px}
-.fiche dl{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:0;font-size:12px;color:var(--paper-muted)}
-.fiche dt{text-transform:uppercase;letter-spacing:.08em;font-size:10.5px;padding-top:1px}
-.fiche dd{margin:0;color:var(--paper-ink)}
-@media (max-width:520px){
-  .sheet{padding:22px 22px 14px} .txt{font-size:16px} .fiche{margin-left:12px;padding:16px 18px 12px}
-  .al{grid-template-columns:16px 1fr}
-}
+.ev-row .t{color:var(--dim)}
+.ev-row:hover{color:var(--text)}
+.ev.open > .ev-row .ico{color:var(--text)}
+.fiche{margin:4px 0 10px 28px;padding:12px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px}
+.fiche .head{display:flex;align-items:center;gap:8px;color:var(--dim)}
+.fiche .head b{color:var(--fg);font-weight:500}
+.fiche .head .lg{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:4px;background:var(--g);color:#fff;font-size:9px;font-weight:700}
+.fiche .amd{font-size:13.5px;line-height:1.65;margin:8px 0 6px;color:var(--text)}
+.fiche .expo{margin:0 0 8px;color:var(--muted)}
+.fiche dl{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:0;font-size:12px;color:var(--dim)}
+.fiche dd{margin:0;color:var(--muted)}
+@media (max-width:520px){ .txt,.foot{margin-left:0} .sheet .sub{margin-left:0} .fiche{margin-left:12px} }
 </style>
 </head>
 <body>
@@ -199,7 +179,9 @@ const ICO={
   completer:'<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M3 8h10"/></svg>',
   ajouter:'<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M3 8h10"/></svg>',
   supprimer:'<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10"/></svg>'};
-const CHEV='<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4.5l3 3 3-3"/></svg>';
+const CHEV='<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M3.5 4.5L6 2l2.5 2.5M3.5 7.5L6 10l2.5-2.5"/></svg>';
+const STEP='<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8.5l3 3 7-7"/></svg>';
+const DOC='<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 2h5l3 3v9H4z"/><path d="M9 2v3h3"/></svg>';
 const plural=(n,s,p)=>`${n} ${n>1?p:s}`;
 
 function sheetHTML(st,i){
@@ -209,11 +191,11 @@ function sheetHTML(st,i){
     const body=!prev?esc(b):diff(a??null,b??null);
     return `<div class="al${same?" same":""}" data-al="${k}"><span class="n">${k}</span><p style="margin:0">${body}</p></div>`;
   }).join("");
-  return `<article class="paper sheet" data-i="${i}">
-    <div class="head"><span>Article 4 · ${st.stage}</span><span>${st.date}</span></div>
-    <div class="title"><h2>${st.h}</h2><span class="chip${st.now?" now":""}">${st.chip}</span></div>
+  return `<article class="sheet" data-i="${i}">
+    <div class="row"><span class="av">${i?STEP:DOC}</span><span><span class="who">${st.stage}</span> <span class="meta">· ${st.date}</span></span></div>
+    <div class="sub">${st.h} · <span class="chip${st.now?" now":""}">${st.chip}</span></div>
     <div class="txt">${als}</div>
-    <div class="foot"><span>${i?"Corrections apparentes par rapport à l'étape précédente":"Projet de loi n° 412"}</span><button class="more" type="button">Lire l'article en entier</button></div>
+    <div class="foot"><span>${i?"Corrections apparentes par rapport à l'étape précédente":"Projet de loi n° 412"}</span><button class="more" type="button">Réduire</button></div>
     <div class="hit"></div>
   </article>`;
 }
@@ -223,9 +205,9 @@ function evHTML(a,prevV){
   const amd=mode==="ajouter"?`<ins>${esc(a.text)}</ins>`:diff(prevV[a.al],a.text);
   return `<div class="ev" data-al="${a.al}" data-sort="${a.sort}">
     <button class="ev-row" type="button"><span class="ico">${ICO[mode]}</span>
-      <span><span class="dot" style="--g:${g.color}"></span><b>${g.name}</b> <span class="num">· ${a.num} · ${a.who}</span> ${what} <span class="sort">· ${a.sort}</span></span></button>
-    <div class="slide"><div class="inner"><div class="paper fiche">
-      <div class="head"><span class="g" style="--g:${g.color}"><i></i>${g.name} · ${a.num}</span><span>${a.sort}</span></div>
+      <span><span class="lg" style="--g:${g.color}">${g.name[0]}</span><b>${g.name}</b> ${what} <span class="t">· ${a.num} · ${a.who} · ${a.sort}</span></span></button>
+    <div class="slide"><div class="inner"><div class="fiche">
+      <div class="head"><span class="lg" style="--g:${g.color}">${g.name[0]}</span><b>${g.name}</b><span>· ${a.num} · ${a.who}</span></div>
       <div class="amd">${amd}</div>
       <p class="expo">${esc(a.expo)}</p>
       <dl><dt>Avis</dt><dd>${a.avis}</dd><dt>Vote</dt><dd>${a.vote}</dd></dl>
@@ -238,15 +220,15 @@ function foldHTML(list,label,cls,prevV){
     <div class="slide"><div class="inner">${list.map(a=>evHTML(a,prevV)).join("")}</div></div></div>`;
 }
 const col=document.getElementById("col");
-col.innerHTML=`<header class="top"><div class="k">Historique de l'article · Projet de loi pour l'accès au logement</div><h1>Article 4 — Obligation de logements sociaux</h1></header>`+
+col.innerHTML=`<header class="top"><div class="k">Projet de loi pour l'accès au logement · Historique</div><h1>Article 4 — Obligation de logements sociaux</h1></header>`+
   STAGES.map((st,i)=>{
     let h=sheetHTML(st,i);
     const nx=STAGES[i+1];
     if(nx){
       const ad=nx.amds.filter(a=>a.sort==="adopté"), rr=nx.amds.filter(a=>a.sort!=="adopté");
       h+=`<div class="between" data-i="${i}">`+
-        foldHTML(ad,`<b>${plural(ad.length,"amendement adopté","amendements adoptés")}</b>`,"adp",st.v)+
-        foldHTML(rr,`<b>${plural(rr.length,"amendement rejeté ou retiré","amendements rejetés ou retirés")}</b>`,"rej",st.v)+`</div>`;
+        foldHTML(ad,`${plural(ad.length,"amendement adopté","amendements adoptés")}`,"adp",st.v)+
+        foldHTML(rr,`${plural(rr.length,"amendement rejeté ou retiré","amendements rejetés ou retirés")}`,"rej",st.v)+`</div>`;
     }
     return h;
   }).join("");
@@ -275,14 +257,12 @@ function openSheet(sheet){
   const full=txt.scrollHeight, h=Math.max(120,Math.min(full,b?avail:full));
   sheet.classList.toggle("fits",full<=h);
   txt.style.setProperty("--h",h+"px");
-  sheet.querySelector(".more").textContent="Réduire";
-  setTimeout(()=>{ if(sheet.classList.contains("open")) sheet.classList.add("scrolling"); },420);
+    setTimeout(()=>{ if(sheet.classList.contains("open")) sheet.classList.add("scrolling"); },420);
   scroller.scrollTo({top:sheet.offsetTop-top,behavior:"smooth"});
 }
 function closeSheet(sheet){
   const txt=sheet.querySelector(".txt");
   sheet.classList.remove("open","scrolling","fits"); txt.scrollTop=0; txt.style.removeProperty("--h");
-  sheet.querySelector(".more").textContent="Lire l'article en entier";
 }
 document.addEventListener("click",e=>{
   const more=e.target.closest(".more,.sheet .hit");
