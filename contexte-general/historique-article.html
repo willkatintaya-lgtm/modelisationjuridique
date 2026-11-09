@@ -75,8 +75,13 @@ button{font-family:inherit}
 .sheet:not(.open) .al.same{display:none}
 ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
 del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
-.note{position:absolute;left:44px;bottom:15px;font-size:12px;color:var(--dim);opacity:0;transition:opacity .2s;pointer-events:none}
-.sheet.open .note{opacity:1;transition-delay:.15s}
+.note{position:absolute;left:44px;right:46px;bottom:14px;font-size:12px;color:var(--dim);opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sheet.open .note{opacity:1;transition-delay:.15s;pointer-events:auto}
+.pick{position:relative;display:inline-flex;align-items:center;gap:4px;color:var(--text);border:1px solid var(--border-2);border-radius:6px;padding:1px 6px 1px 8px;margin-left:2px;vertical-align:0}
+.pick:hover{background:#1f2023}
+.pick select{appearance:none;-webkit-appearance:none;background:none;border:0;color:inherit;font:inherit;padding:0;cursor:pointer;outline:none}
+.pick select option{background:#17181b;color:var(--text)}
+.pick svg{pointer-events:none;color:var(--muted);width:10px;height:10px}
 
 /* --- entre deux cartes : le fil et les plis --- */
 .between{position:relative;padding:8px 0;display:flex;flex-direction:column}
@@ -127,9 +132,9 @@ const GROUPS={
 };
 const R=(g,num,who,al,text,sort,expo,avis,vote,mode)=>({g,num,who,al,text,sort,expo,avis,vote,mode});
 const STEPS=[
-  {stage:"Dépôt au Sénat",date:"4 mars 2026",h:"Texte du Gouvernement",chip:"texte initial"},
-  {stage:"Commission des affaires économiques du Sénat",date:"25 mars 2026",h:"Texte adopté par la commission"},
-  {stage:"Séance publique du Sénat",date:"8 avril 2026",h:"Texte adopté par le Sénat"},
+  {short:"le dépôt au Sénat",stage:"Dépôt au Sénat",date:"4 mars 2026",h:"Texte du Gouvernement",chip:"texte initial"},
+  {short:"la commission du Sénat",stage:"Commission des affaires économiques du Sénat",date:"25 mars 2026",h:"Texte adopté par la commission"},
+  {short:"la séance du Sénat",stage:"Séance publique du Sénat",date:"8 avril 2026",h:"Texte adopté par le Sénat"},
   {stage:"Commission des affaires économiques de l'Assemblée",date:"depuis le 13 mai 2026",h:"Examen en commission",now:true}
 ];
 const DEF="Commission : défavorable · Gouvernement : défavorable";
@@ -228,7 +233,16 @@ function diff(a,b){
   const out=[];let i=0,j=0;const push=(t,s)=>{const l=out[out.length-1];if(l&&l.t===t)l.s+=s;else out.push({t,s});};
   while(i<n&&j<m){if(A[i]===B[j]){push("=",A[i]);i++;j++;}else if(L[i+1][j]>=L[i][j+1])push("-",A[i++]);else push("+",B[j++]);}
   while(i<n)push("-",A[i++]);while(j<m)push("+",B[j++]);
-  return out.map(o=>o.t==="="?esc(o.s):o.t==="-"?`<del>${esc(o.s)}</del>`:`<ins>${esc(o.s)}</ins>`).join("");
+  // regroupe les changements voisins (séparés par un simple blanc) : « à l'alinéa précédent » → « au deuxième alinéa » en un seul bloc
+  const res=[];let k=0;
+  while(k<out.length){
+    if(out[k].t==="="){res.push(esc(out[k].s));k++;continue;}
+    let d="",ins="",e=k;
+    while(e<out.length&&(out[e].t!=="="||(/^\s+$/.test(out[e].s)&&e+1<out.length&&out[e+1].t!=="="))){
+      if(out[e].t==="-")d+=out[e].s;else if(out[e].t==="+")ins+=out[e].s;else{d+=out[e].s;ins+=out[e].s;}e++;}
+    res.push((d.trim()?`<del>${esc(d)}</del>`:"")+(ins.trim()?`<ins>${esc(ins)}</ins>`:(d.trim()?"":esc(d))));k=e;
+  }
+  return res.join("");
 }
 const VERB={rediger:"réécrit",completer:"complète",supprimer:"supprime",ajouter:"ajoute"};
 const PLUS='<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 3v10M3 8h10"/></svg>';
@@ -238,19 +252,22 @@ const CHEV='<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="
 const DOWN='<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3.5 6l4.5 4.5L12.5 6"/></svg>';
 const plural=(n,s,p)=>`${n} ${n>1?p:s}`;
 
-function sheetHTML(art,i){
-  const st=STEPS[i], v=art.v[i], prev=i?art.v[i-1]:null;
+function alsHTML(art,i,r){
+  const v=art.v[i], prev=r==null?null:art.v[r];
   const keys=[...new Set([...Object.keys(prev||{}),...Object.keys(v)])].map(Number).sort((a,b)=>a-b);
-  const als=keys.map(k=>{
+  return keys.map(k=>{
     const a=prev?prev[k]:undefined,b=v[k],same=prev&&a===b;
     return `<div class="al${same?" same":""}" data-al="${k}"><span class="n">${k}</span><p style="margin:0">${prev?diff(a??null,b??null):esc(b)}</p></div>`;
   }).join("");
+}
+function sheetHTML(art,i){
+  const st=STEPS[i], als=alsHTML(art,i,i?i-1:null);
   const chip=st.now?"en cours":(art.chips[i]||st.chip);
   return `<article class="sheet${st.now?" now":""}" data-i="${i}">
     <div class="row"><span class="av">${st.now?DOTS:CHECK}</span><span><span class="who">${st.stage}</span> <span class="meta">· ${st.date}</span></span></div>
     <div class="sub">${st.h} · <span class="chip">${chip}</span></div>
     <div class="txt">${als}</div>
-    <span class="note">${i?(st.now?"Texte en discussion · corrections par rapport à l'étape précédente":"Corrections apparentes par rapport à l'étape précédente"):"Projet de loi n° 412"}</span>
+    <span class="note">${i?`Corrections par rapport à <span class="pick"><select class="ref" aria-label="Étape de référence">${STEPS.slice(0,i).map((x,j)=>`<option value="${j}"${j===i-1?" selected":""}>${j===i-1?"l'étape précédente":x.short}</option>`).join("")}</select>${DOWN}</span>`:"Projet de loi n° 412"}</span>
     <button class="toggle" type="button" aria-label="Ouvrir l'article">${DOWN}</button>
   </article>`;
 }
@@ -338,23 +355,32 @@ function openSheet(sheet){
   page.querySelectorAll(".sheet.open").forEach(s=>{ if(s!==sheet) closeSheet(s); });
   const b=sheet.nextElementSibling;
   if(b&&b.classList.contains("between")) b.querySelectorAll(".open").forEach(o=>o.classList.remove("open"));
-  const txt=sheet.querySelector(".txt");
   sheet.classList.add("open");
+  fit(sheet);
+  sheet.querySelector(".toggle").setAttribute("aria-label","Refermer l'article");
+  setTimeout(()=>{ if(sheet.classList.contains("open")) sheet.classList.add("scrolling"); },420);
+  page.scrollTo({top:sheet.offsetTop-topOf(),behavior:"smooth"});
+}
+const topOf=()=>parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--bar"))+8;
+function fit(sheet){
+  const page=sheet.closest(".page"), b=sheet.nextElementSibling, txt=sheet.querySelector(".txt");
   const chrome=sheet.offsetHeight-txt.offsetHeight+44;
   let below=0;
   if(b&&b.classList.contains("between")){
     const cs=getComputedStyle(b);
     below=[...b.querySelectorAll(".fold-head,.fold-none")].reduce((s,h)=>s+h.offsetHeight,0)+parseFloat(cs.paddingTop)+parseFloat(cs.paddingBottom)+PEEK;
   }
-  const top=parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--bar"))+8;
-  const avail=page.clientHeight-top-chrome-below-8;
+  const avail=page.clientHeight-topOf()-chrome-below-8;
   const full=txt.scrollHeight, h=Math.max(120,Math.min(full,b?avail:full));
   sheet.classList.toggle("fits",full<=h);
   txt.style.setProperty("--h",h+"px");
-  sheet.querySelector(".toggle").setAttribute("aria-label","Refermer l'article");
-  setTimeout(()=>{ if(sheet.classList.contains("open")) sheet.classList.add("scrolling"); },420);
-  page.scrollTo({top:sheet.offsetTop-top,behavior:"smooth"});
 }
+// changer l'étape de référence : la même carte, d'autres corrections
+document.addEventListener("change",e=>{
+  const sel=e.target.closest(".ref"); if(!sel) return;
+  const sheet=sel.closest(".sheet"), page=sheet.closest(".page"), art=ARTICLES[pages.indexOf(page)], i=+sheet.dataset.i, txt=sheet.querySelector(".txt");
+  txt.style.setProperty("--h",txt.offsetHeight+"px"); txt.innerHTML=alsHTML(art,i,+sel.value); txt.scrollTop=0; fit(sheet);
+});
 function closeSheet(sheet){
   const txt=sheet.querySelector(".txt");
   sheet.classList.remove("open","scrolling","fits"); txt.scrollTop=0; txt.style.removeProperty("--h");
