@@ -14,3 +14,8 @@ Contexte : premier tour puis aller-retour sur l'espace Dossier (projet de loi) d
 Contexte : à propos de la méthode, après T2 (pas de maquette nommée).
 
 > Je ne sais pas si tu vois ce que je veux dire, mais je pense qu'il y a pas mal de conversations de contenu de conversation en commande vocale qui appellent à réaliser un certain nombre de maquettes fictives de portfolios de maquettes par exemple là ce que je vois c'est que il y a quelques maquettes fictives qui refont pas toute l'interface etc qui se concentrent sur une petite interface sur une micro-interface là il y a pas mal de trucs à tester sur les fenêtres le texte entier la possibilité d'aller article par article la nature de la fenêtre, est-ce qu'elle est à côté, son architecture et son emplacement. Etc. Je pense qu'il y a donc en fait automatiquement, je pense que cette branche arbitrage doit créer une nouvelle branche maquette arbitrage ou maquette technique, je sais pas comment l'appeler. Qui elle-même est dialogue constant avec elle, quoi.
+
+## T4 · 9 novembre 2026, ~11 h 39 UTC
+Contexte : réponse à la question « je lance une session sur la branche des micro-maquettes ? ».
+
+> ok
