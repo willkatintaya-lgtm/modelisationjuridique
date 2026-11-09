@@ -16,7 +16,7 @@
   --fg:#f7f8f8; --text:#d0d6e0; --muted:#8a8f98; --dim:#62666d;
   --ins:#8ab4ff; --del:#e5484d; --accent:#5e6ad2; --now:#c9a8ff;
   --f:"Inter",system-ui,-apple-system,sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
-  --bar:92px; --rail:30px; --cardw:280px; --gap:196px; --gapw:392px;
+  --bar:92px; --rail:30px; --cardw:280px; --gap:232px; --gapw:392px;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -61,14 +61,14 @@ button{font-family:inherit}
 .sheet .who{color:var(--fg);font-weight:500}
 /* toutes les cartes ont la taille de « Dépôt au Sénat » : titre en haut (deux lignes au plus), date en bas, près de l'arête */
 .sheet:not(.open){height:var(--ch,96px)}
-.sheet .meta{position:absolute;left:44px;bottom:14px;line-height:26px;color:var(--dim)}
+.sheet .meta{position:absolute;left:44px;bottom:10px;line-height:26px;color:var(--dim)}
 .sheet.now .who{color:var(--now)}
 .sheet.now .meta{color:var(--now);font-weight:600}
 .sheet.future:hover{border-color:var(--border)}
 .sheet .hd{padding-right:30px}
-.cmpbtn{position:absolute;right:10px;top:10px;width:26px;height:26px;border-radius:6px;border:1px solid var(--border-2);background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:color .2s,background .2s}
+.cmpbtn{position:absolute;right:10px;top:8px;width:26px;height:26px;border-radius:6px;border:1px solid var(--border-2);background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:color .2s,background .2s}
 .cmpbtn:hover{color:var(--fg);background:#1f2023}
-.gap.empty{flex-basis:72px;padding:0}
+.gap.empty{padding:0}
 .toggle{position:absolute;right:10px;bottom:10px;width:26px;height:26px;border-radius:6px;border:1px solid var(--border-2);background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:color .2s,background .2s}
 .toggle:hover{color:var(--fg);background:#1f2023}
 .toggle svg{transition:transform .35s var(--ease)}
@@ -87,7 +87,7 @@ button{font-family:inherit}
 ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
 del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
 /* --- interstice entre deux cartes : le fil et les deux plis --- */
-.gap{position:relative;flex:0 0 var(--gap);padding:calc(var(--rail) + 14px) 18px 0;transition:flex-basis .38s var(--ease)}
+.gap{position:relative;min-width:0;flex:0 0 var(--gap);padding:calc(var(--rail) + 14px) 18px 0;transition:flex-basis .38s var(--ease)}
 .gap.wide{flex-basis:var(--gapw)}
 .gap::after{content:"";position:absolute;right:-1px;top:calc(var(--rail) - 3px);width:7px;height:7px;border-top:1px solid var(--border-2);border-right:1px solid var(--border-2);transform:rotate(45deg);background:var(--bg)}
 .fold{position:relative}
