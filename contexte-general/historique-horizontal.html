@@ -154,6 +154,9 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 .pickl .list{max-height:none;margin-left:7px}
 .pk .t{display:block;color:var(--dim)}
 @media (max-width:520px){ .cg{--cw:calc(100vw - 56px)} .cmp-in{flex-direction:column;align-items:flex-start;justify-content:flex-start;padding-top:8px} .pickl{align-self:flex-start} }
+/* numéro d'un alinéa ajouté : comme un ajout (bleu, gras, souligné) ; d'un alinéa supprimé : barré */
+.al .n.add,.c.a .n.add{color:var(--ins);font-weight:700;text-decoration:underline 1px;text-underline-offset:3px}
+.al .n.rem,.c.a .n.rem{text-decoration:line-through 1px var(--del)}
 @media (max-width:520px){ .hint{display:none} :root{--cardw:min(270px,calc(100vw - 110px));--gap:178px;--gapw:min(340px,calc(100vw - 40px))} .row{padding-left:24px;padding-right:48px} }
 @media (prefers-reduced-motion:reduce){ *{transition-duration:.01ms!important;scroll-behavior:auto!important} }
 </style>
@@ -321,13 +324,14 @@ const RIGHT='<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke=
 const CMPS='<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5.5 2v12M10.5 2v12M2 5h3.5M10.5 11H14"/></svg>';
 const CMPI='<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5.5 2v12M10.5 2v12M2 5h3.5M10.5 11H14"/></svg>';
 const X='<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 4l8 8M12 4l-8 8"/></svg>';
-const dateOf=st=>st.now?"en cours":st.date;
+const dateOf=st=>st.now?"":st.date;
+const metaOf=(st,cls="meta")=>st.now?"":`<span class="${cls}">${st.date}</span>`;
 
 function sheetHTML(art,i){
   const st=STEPS[i];
   if(st.future) return `<article class="sheet future" data-i="${i}"><div class="hd"><span class="av"></span><span><span class="who">${st.stage}</span></span></div></article>`;
   return `<article class="sheet${st.now?" now":""}" data-i="${i}">
-    <div class="hd"><span class="av">${st.now?DOTS:CHECK}</span><span><span class="who">${st.stage}</span><span class="meta">${dateOf(st)}</span></span></div>
+    <div class="hd"><span class="av">${st.now?DOTS:CHECK}</span><span><span class="who">${st.stage}</span>${metaOf(st)}</span></div>
     <button class="cmpbtn" type="button" aria-label="Comparer cette version" title="Comparer">${CMPI}</button>
     <div class="txt">${alsHTML(art,i,i?i-1:null)}</div>
     <button class="toggle" type="button" aria-label="Ouvrir l'article">${DOWN}</button>
@@ -348,7 +352,7 @@ function evHTML(a,prevV){
   </div>`;
 }
 function foldHTML(list,label,prevV){
-  if(!list.length) return `<div class="fold-none"><span class="pin">${RIGHT}</span><span>${label}</span></div>`;
+  if(!list.length) return "";
   return `<div class="fold"><button class="fold-head" type="button"><span class="pin">${RIGHT}</span><span>${label}</span></button>
     <div class="slide"><div class="inner"><div class="list">${list.map(a=>evHTML(a,prevV)).join("")}</div></div></div></div>`;
 }
@@ -358,10 +362,10 @@ function pageHTML(art,k){
     if(i===STEPS.length-1) return h;
     const nx=art.amds[i+1];
     if(nx){
-      const ad=nx.filter(a=>a.sort==="adopté"), rr=nx.filter(a=>a.sort!=="adopté");
-      h+=`<div class="gap">`+
-        foldHTML(ad,ad.length?plural(ad.length,"amendement adopté","amendements adoptés"):"Aucun amendement adopté",art.v[i])+
-        foldHTML(rr,rr.length?plural(rr.length,"rejeté ou retiré","rejetés ou retirés"):"Aucun rejeté ni retiré",art.v[i])+`</div>`;
+      const by=t=>nx.filter(a=>a.sort===t);
+      const folds=[["adopté","amendement adopté","amendements adoptés"],["rejeté","amendement rejeté","amendements rejetés"],["retiré","amendement retiré","amendements retirés"]]
+        .map(([t,one,many])=>{ const l=by(t); return foldHTML(l,plural(l.length,one,many),art.v[i]); }).join("");
+      h+=folds?`<div class="gap">${folds}</div>`:`<div class="gap empty"></div>`;
     } else h+=`<div class="gap empty"></div>`;
     return h;
   }).join("")+`</div></div><div class="cmp"></div></section>`;
@@ -468,7 +472,7 @@ function closeSheet(sheet){
 function hint(){ document.getElementById("hint").textContent=inCmp()?"Échap ou × pour revenir à la frise":"← → parcourir les étapes · ↑ ↓ changer d'article"; }
 function cmpHead(i){
   const st=STEPS[i];
-  return `<div class="c h${st.now?" now":""}" data-col="${i}"><span class="av">${st.now?DOTS:CHECK}</span><span><span class="who">${st.stage}</span><span class="meta">${dateOf(st)}</span></span>
+  return `<div class="c h${st.now?" now":""}" data-col="${i}"><span class="av">${st.now?DOTS:CHECK}</span><span><span class="who">${st.stage}</span>${metaOf(st)}</span>
     <button class="x" type="button" data-close="${i}" aria-label="Fermer ce texte">${X}</button></div>`;
 }
 function renderCmp(k,src){
@@ -493,7 +497,7 @@ function renderCmp(k,src){
   let html=`<div class="cmp-in"><div class="cg" style="--n:${items.length}">${cells}</div>`;
   if(items.length===1){
     const i=items[0], others=STEPS.map((s,j)=>j).filter(j=>j<DONE&&j!==i);
-    html+=`<div class="pickl"><div class="list">${others.map(j=>`<div class="ev"><button class="ev-row pk${STEPS[j].now?" now":""}" type="button" data-pick="${j}" aria-label="Comparer avec ${STEPS[j].stage}"><span class="ico">${CMPS}</span><span><b>${STEPS[j].stage}</b><span class="t">${dateOf(STEPS[j])}</span></span></button></div>`).join("")}</div></div>`;
+    html+=`<div class="pickl"><div class="list">${others.map(j=>`<div class="ev"><button class="ev-row pk${STEPS[j].now?" now":""}" type="button" data-pick="${j}" aria-label="Comparer avec ${STEPS[j].stage}"><span class="ico">${CMPS}</span><span><b>${STEPS[j].stage}</b>${metaOf(STEPS[j],"t")}</span></button></div>`).join("")}</div></div>`;
   }
   box.innerHTML=html+`</div>`; box.scrollTop=0;
   animateCmp(box,before,listBefore,src);
