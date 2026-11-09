@@ -36,7 +36,7 @@ let MODAL = null;   // {kind, …}
 const STOP = /^(et|de|des|du|la|le|les|pour|l’|d’|l'|d')$/i;
 const ini = n => String(n || "?").replace(/^(La|Le|Les) /, "").split(/[\s-]+/).filter(w => w && !STOP.test(w)).map(w => w[0].toUpperCase()).join("").slice(0, 2);
 const lum = h => { const c = h.replace("#", ""); const r = parseInt(c.slice(0, 2), 16), g = parseInt(c.slice(2, 4), 16), b = parseInt(c.slice(4, 6), 16); return (r * 299 + g * 587 + b * 114) / 1000; };
-const avc = (name, color, cls) => `<span class="av ${cls || ""}" style="--c:${color};${lum(color) < 90 ? "color:#e2e8f0" : ""}">${esc(ini(name))}</span>`;
+const avc = (name, color, cls) => `<span class="av ${cls || ""}" style="--c:${color};${lum(color) < 90 ? "color:var(--da-encre)" : ""}">${esc(ini(name))}</span>`;
 const avA = (a, cls) => { const w = who(a); return avc(w.name, w.color, cls); };
 const avMe = cls => avc(GR[ME].name, GR[ME].color, "me " + (cls || ""));
 const sk = a => NX.sortKey(a);
@@ -115,7 +115,7 @@ function annonces(){
 function annonceHTML(){
   if (st.hideAnn) return "";
   const S = annonces(), i = st.slide % S.length, s = S[i];
-  return `<div id="ann"><div class="annonce shine" ${s.attr}><span class="ic">${esc(String(s.ic))}</span><div><b>${esc(s.t)}</b><small>${esc(s.s)}</small></div><button class="ib x" data-cmd="hideann" title="Masquer">${IC.x}</button></div>
+  return `<div id="ann"><div class="annonce" ${s.attr}><span class="ic">${esc(String(s.ic))}</span><div><b>${esc(s.t)}</b><small>${esc(s.s)}</small></div><button class="ib x" data-cmd="hideann" title="Masquer">${IC.x}</button></div>
     <div class="dots" style="margin-top:10px">${S.map((_, k) => `<i class="${k === i ? "on" : ""}" data-slide="${k}"></i>`).join("")}</div></div>`;
 }
 function draftsCard(alt){
@@ -190,7 +190,7 @@ function concList(){
 }
 function vAtelier(){
   const o = st.o, H = NX.hist(o), nmod = H.filter((h, i) => i && !h.same && !h.absent).length;
-  const tc = `<div class="tcards"><div class="tcard" data-hist="${o}"><span class="av" style="--c:#212a36;color:var(--t)">§</span><div class="tx"><b>Alinéa ${o} ${IC.ext}</b><small>d'étape en étape</small></div><div class="n">${nmod}<small class="faint" style="font-size:11px;display:block;font-weight:400">${plural(nmod, "étape", "étapes")}</small></div></div>
+  const tc = `<div class="tcards"><div class="tcard" data-hist="${o}"><span class="av" style="--c:transparent;color:var(--t)">§</span><div class="tx"><b>Alinéa ${o} ${IC.ext}</b><small>d'étape en étape</small></div><div class="n">${nmod}<small class="faint" style="font-size:11px;display:block;font-weight:400">${plural(nmod, "étape", "étapes")}</small></div></div>
     <div class="tcard" data-go="article"><span class="av" style="--c:${GR[ME].color}">4</span><div class="tx"><b>Article 4 ${IC.ext}</b><small>vos brouillons appliqués</small></div><div class="n">${verTouched(myVer()).size}<small class="faint" style="font-size:11px;display:block;font-weight:400">${plural(verTouched(myVer()).size, "alinéa", "alinéas")}</small></div></div></div>`;
   return {html: `<div class="cols3"><aside class="c-left">${draftsCard()}</aside>
     <div class="mid">${annonceHTML()}${swapCard()}${tc}<div class="chev2">${IC.chev2}</div>${concList()}</div>
@@ -224,7 +224,7 @@ function vComparer(){
     : `<div class="col hollow"><div class="ch"><b>—</b></div><div class="empty">Choisissez une seconde rédaction.</div><div></div></div>`;
   return {html: `<div class="cmp-wrap"><div class="hero" style="margin-top:0"><h1 style="font-size:32px;line-height:38px;letter-spacing:-.8px">Comparer <span class="g">deux rédactions</span></h1><p style="font-size:14px">La référence reste vierge au centre ; les corrections apparentes sont portées sur chaque rédaction, de la même manière des deux côtés.</p></div>
     <div class="cmp-slots">${pill(0, A)}<button class="flip" data-cmd="swap-slots" title="Inverser">${IC.swapH}</button>${pill(1, B)}<button class="chip" data-al="${o}">§ Alinéa ${o}</button></div>
-    <div class="cols">${col(A)}<div class="col full"><div class="ch"><span class="av lg" style="--c:#212a36;color:var(--t)">§</span><div><b>La référence</b><small>${esc(refLabel())} · alinéa ${o}</small></div></div><div class="legal">${esc(refAl(o))}</div><div class="foot">vierge : aucune correction n'y est portée</div></div>${col(B)}</div></div>`};
+    <div class="cols">${col(A)}<div class="col full"><div class="ch"><span class="av lg" style="--c:transparent;color:var(--t)">§</span><div><b>La référence</b><small>${esc(refLabel())} · alinéa ${o}</small></div></div><div class="legal">${esc(refAl(o))}</div><div class="foot">vierge : aucune correction n'y est portée</div></div>${col(B)}</div></div>`};
 }
 
 /* ---------- MON ARTICLE et le code ---------- */
@@ -233,8 +233,8 @@ function vArticle(){
   let body;
   if (st.artTab === "article"){
     const L = verLines(myVer()), out = []; let run = [];
-    const lrow = (n, html, cls) => `<div class="row" style="cursor:default;align-items:flex-start;${cls === "same" ? "background:none;box-shadow:inset 0 0 0 1px var(--bd)" : ""}"><span class="av sm" style="--c:${cls === "same" ? "#212a36" : cls === "ins" ? "#38bdf8" : GR[ME].color};${cls === "same" ? "color:var(--t3)" : ""};margin-top:3px">${n}</span><div class="tx legal">${html}</div></div>`;
-    const flush = () => { if (run.length > 2) out.push(`<button class="row" data-cmd="unfold" style="min-height:44px;justify-content:center;color:var(--t3);background:none;box-shadow:inset 0 0 0 1px dashed var(--bd)">${IC.chev} ${run.length} alinéas inchangés (${run[0].o}–${run[run.length - 1].o}) · déplier</button>`); else run.forEach(l => out.push(lrow(l.o, esc(l.text), "same"))); run = []; };
+    const lrow = (n, html, cls) => `<div class="row" style="cursor:default;align-items:flex-start;${cls === "same" ? "background:none;border-color:var(--bd)" : ""}"><span class="av sm" style="--c:${cls === "same" ? "transparent" : cls === "ins" ? "#1f3a93" : GR[ME].color};${cls === "same" ? "color:var(--t3)" : ""};margin-top:3px">${n}</span><div class="tx legal">${html}</div></div>`;
+    const flush = () => { if (run.length > 2) out.push(`<button class="row" data-cmd="unfold" style="min-height:44px;justify-content:center;color:var(--t3);background:none;border:1px dashed var(--bd)">${IC.chev} ${run.length} alinéas inchangés (${run[0].o}–${run[run.length - 1].o}) · déplier</button>`); else run.forEach(l => out.push(lrow(l.o, esc(l.text), "same"))); run = []; };
     for (const l of L){
       if (l.kind === "same" && !st.unfold){ run.push(l); continue; }
       flush();
@@ -246,7 +246,7 @@ function vArticle(){
     const C = NX.code; let apres = C.apresCommission, err = "";
     if (st.codeTab === "mine"){ try { apres = applyToCode(verAlineas(verOfDraftsOnRef())).apres; } catch (e){ err = "Application mécanique impossible sur cette version."; } }
     const blocks = C.lettres.map(l => { const av = (C.avant[l] || []).join("\n"), ap = (apres[l] || []).join("\n"), same = sameText(av, ap);
-      return `<div class="card" style="padding:16px;margin-bottom:10px"><div style="display:flex;gap:8px;align-items:center;margin-bottom:8px"><span class="av sm" style="--c:#212a36;color:var(--t)">${l}</span><b>${l})</b><span class="sp" style="flex:1"></span><span class="bdg ${same ? "" : "g"}">${same ? "inchangé" : "modifié"}</span></div><div class="legal" style="white-space:pre-line">${same ? esc(short(ap, 420)) : inlineDiff(av, ap)}</div></div>`; }).join("");
+      return `<div class="card" style="padding:16px;margin-bottom:10px"><div style="display:flex;gap:8px;align-items:center;margin-bottom:8px"><span class="av sm" style="--c:transparent;color:var(--t)">${l}</span><b>${l})</b><span class="sp" style="flex:1"></span><span class="bdg ${same ? "" : "g"}">${same ? "inchangé" : "modifié"}</span></div><div class="legal" style="white-space:pre-line">${same ? esc(short(ap, 420)) : inlineDiff(av, ap)}</div></div>`; }).join("");
     body = `<div class="sect-h"><h2>${esc(C.article)}</h2><span class="sp"></span></div><div class="tp" style="margin-bottom:12px"><button class="${st.codeTab === "commission" ? "on" : ""}" data-codetab="commission">En vigueur → après commission</button><button class="${st.codeTab === "mine" ? "on" : ""}" data-codetab="mine">En vigueur → avec ma version</button></div>${err ? `<div class="empty">${err}</div>` : ""}<p class="muted" style="font-size:13px;margin:0 0 12px">Les instructions de l'article, appliquées mécaniquement au code : ce qu'il deviendrait. Corrections portées sur la version d'arrivée.</p>${blocks}`;
   }
   return {html: `<div class="wrap" style="max-width:820px"><div class="hero" style="margin-top:0"><h1 style="font-size:32px;line-height:38px;letter-spacing:-.8px">L'article 4, <span class="g">tel que vous l'écrivez</span></h1><p style="font-size:14px">Face à : ${esc(refLabel())}</p></div>${tabs}${body}</div>`};
@@ -283,7 +283,7 @@ function vEnjeux(){
     <div class="en-grid"><div style="display:flex;flex-direction:column;gap:16px"><div class="card"><div class="card-h"><h3>${esc(th.label)}</h3><span class="bdg ${th.src === "déclaré" ? "g" : ""}">${th.src === "déclaré" ? "déclaré par le rapport" : "calculé par mots-clés"}</span><span class="sp"></span><span class="faint" style="font-size:12px">${ams.length} amendements</span></div>
       <div class="strate"><h4>CE QUE DIT LE RAPPORT</h4><div class="quote">${esc(th.doc || "—")}</div></div>
       <div class="strate"><h4>CE QUI A ÉTÉ DIT EN RÉUNION · ${eps.length} ${plural(eps.length, "place")}</h4>${par || `<div class="faint">Rien en réunion.</div>`}</div>
-      <div class="strate"><h4>CE QUE FAIT VOTRE TEXTE</h4>${mine.length ? mine.map(m => `<div class="parole" data-draft="${m.id}" style="cursor:pointer"><div class="w">${modeIc(m, 1)}<b>${esc(draftNum(m))}</b> · alinéa ${m.al}</div><div class="legal" style="font-size:14px;line-height:23px">${NX.draftDiff(m)}</div></div>`).join("") : `<div class="faint">Aucun de vos brouillons ne touche ce thème.</div>`}
+      <div class="strate"><h4>CE QUE FAIT VOTRE TEXTE</h4>${mine.length ? mine.map(m => `<div class="parole" data-draft="${m.id}" style="cursor:pointer"><div class="w">${modeIc(m, 1)}<b>${esc(draftNum(m))}</b> · alinéa ${m.al}</div><div class="legal" style="font-size:15px;line-height:24px">${NX.draftDiff(m)}</div></div>`).join("") : `<div class="faint">Aucun de vos brouillons ne touche ce thème.</div>`}
         <div class="units" style="margin-top:10px"><span class="faint" style="font-size:12px;align-self:center">Alinéas du thème :</span>${als.map(o => `<button class="chip" data-al="${o}">§ ${o}</button>`).join("") || "—"}</div></div></div>
       <div><div class="sect-h"><h2>Les amendements du thème</h2><span class="bdg">${ams.length}</span></div><div class="rows">${amRows}</div></div></div>
       <div class="card" style="position:sticky;top:0"><div class="card-h"><h3>Thèmes × groupes</h3></div><div style="padding:0 12px 6px;color:var(--t3);font-size:12px">Nombre d'amendements, une seule chose comptée. Cliquer une case ouvre le thème.</div><div style="padding:0 8px 14px;overflow-x:auto">${mx}</div></div></div></div>`};
@@ -302,19 +302,19 @@ function vReunion(){
   const nad = ams.filter(a => a.sort === "Adopté").length;
   let tab;
   if (st.rtab === "vote") tab = `<div style="overflow-x:auto"><table class="vote"><thead><tr><th>#</th><th>Auteur</th><th>N°</th><th class="ob">Objet</th><th>Avis</th><th style="text-align:right">Sort</th></tr></thead><tbody>${ams.map((a, i) => `<tr class="${a.id === st.amSel ? "on" : ""}" data-sel="${a.id}"><td class="faint">${i + 1}</td><td><span class="who">${avA(a, "sm")}${esc(short(who(a).name, 26))}</span></td><td><b>${a.num}</b></td><td class="ob">${esc(short(objetOf(a), 110))}</td><td title="${esc(a.avis || "")}">${avisSym(a.avis)}</td><td style="text-align:right" class="s-${sk(a)}">${esc(sortWord(a))}</td></tr>`).join("")}</tbody></table></div>`;
-  else if (st.rtab === "paroles") tab = `<div class="feed">${e.paroles.map(p => `<div class="parole"><div class="w">${p.groupe ? avc(NX.groupName(p.groupe), NX.groupColor(p.groupe), "sm") : `<span class="av sm" style="--c:#3d3a33;color:#e2e8f0">${p.role ? "R" : "·"}</span>`}<b style="color:var(--t)">${esc(NX.speaker(p))}</b><span>${p.mots} mots</span></div>${esc(p.txt)}</div>`).join("") || `<div class="empty">Aucune prise de parole.</div>`}</div>`;
+  else if (st.rtab === "paroles") tab = `<div class="feed">${e.paroles.map(p => `<div class="parole"><div class="w">${p.groupe ? avc(NX.groupName(p.groupe), NX.groupColor(p.groupe), "sm") : `<span class="av sm" style="--c:transparent;color:var(--da-encre)">${p.role ? "R" : "·"}</span>`}<b style="color:var(--t)">${esc(NX.speaker(p))}</b><span>${p.mots} mots</span></div>${esc(p.txt)}</div>`).join("") || `<div class="empty">Aucune prise de parole.</div>`}</div>`;
   else tab = `<div class="feed">${e.decisions.map(d => `<div class="parole" style="display:flex;gap:10px"><span class="g">→</span><div>${esc(d.txt)}${d.ams.length ? `<div class="units" style="margin-top:8px">${d.ams.map(id => AM[id] ? `<button class="chip" data-sel="${id}">${id}</button>` : "").join("")}</div>` : ""}</div></div>`).join("")}</div>`;
   const a = AM[st.amSel];
   const right = a ? (() => { const w = who(a), o = amO(a), ep = NX.epOf(a);
     return `<div style="display:flex;gap:12px;align-items:center">${avA(a, "lg")}<div style="flex:1;min-width:0"><b style="font-size:16px">${a.num}</b><div class="muted" style="font-size:12px">${esc(w.name)}${a.auteur ? " · " + esc(a.auteur) : ""}</div></div>${sortBdg(a)}</div>
       <div class="seg"><button class="${st.rseg === "diff" ? "on" : ""}" data-rseg="diff">Face à la référence</button><button class="${st.rseg === "expose" ? "on" : ""}" data-rseg="expose">Exposé sommaire</button></div>
-      <div class="amfield"><div class="lab"><span>${esc(modeLead(a, o))}</span><span>al. ${o}</span></div><div class="legal" style="font-size:14px;line-height:23px">${st.rseg === "diff" ? amHTML(a, o) : esc(a.expose || "—")}</div></div>
+      <div class="amfield"><div class="lab"><span>${esc(modeLead(a, o))}</span><span>al. ${o}</span></div><div class="legal" style="font-size:15px;line-height:24px">${st.rseg === "diff" ? amHTML(a, o) : esc(a.expose || "—")}</div></div>
       <button class="btn-main" data-open-at="${a.id}">Ouvrir dans l'atelier</button>
       <dl class="kv"><dt>Groupe</dt><dd>${esc(w.name)}</dd><dt>Avis</dt><dd>${esc(a.avis || "—")}</dd><dt>Sort</dt><dd class="s-${sk(a)}">${esc(sortWord(a))}</dd><dt>Déposé le</dt><dd>${NX.fmtDate(a.depot)}</dd><dt>Place en réunion</dt><dd>${ep ? ep.place + " / " + E.length : "—"}</dd><dt>Alinéa visé</dt><dd>${o}</dd></dl>
       <button class="btn-ghost" data-cmp-add="${a.id}">${st.cmp.includes(a.id) ? "Retirer du comparateur" : "Déposer au comparateur"}</button>`; })() : `<div class="empty">Aucun amendement à cette place.</div>`;
   return {full: true, html: `<div class="term">
     <div class="tcol tl-left"><div class="hd"><div class="search-in" style="height:36px">${IC.search}<input id="pq" placeholder="Rechercher une place" value="${esc(st.pq)}"></div><div class="tp">${[["toutes", "Toutes"], ["adopte", "Avec adoption"]].map(([k, l]) => `<button class="${st.pf === k ? "on" : ""}" data-pf="${k}">${l}</button>`).join("")}</div></div><div class="lh"><span>Place · ordre d'appel</span><span>Mots prononcés</span></div><div id="plist">${list}</div></div>
-    <div class="tcol tc-center"><div class="mkt"><button class="tok m-only" data-cmd="pick-place">${e.place} / ${E.length}${IC.chev}</button><div class="sym"><span class="pn av" style="--c:${adopted(e) ? "#acf47d" : "#212a36"};${adopted(e) ? "" : "color:var(--t)"}">${e.place}</span>Place ${e.place}</div><div class="st">Mots<b>${e.mots}</b></div><div class="st">Prises de parole<b>${e.paroles.length}</b></div><div class="st">Amendements<b>${ams.length}</b></div><div class="st">Adoptés<b class="${nad ? "g" : ""}">${nad}</b></div><div class="st">Réunion<b>21 sept. 2026</b></div></div>
+    <div class="tcol tc-center"><div class="mkt"><button class="tok m-only" data-cmd="pick-place">${e.place} / ${E.length}${IC.chev}</button><div class="sym"><span class="pn av" style="--c:${adopted(e) ? "#1a1a1a" : "transparent"};${adopted(e) ? "" : "color:var(--t)"}">${e.place}</span>Place ${e.place}</div><div class="st">Mots<b>${e.mots}</b></div><div class="st">Prises de parole<b>${e.paroles.length}</b></div><div class="st">Amendements<b>${ams.length}</b></div><div class="st">Adoptés<b class="${nad ? "g" : ""}">${nad}</b></div><div class="st">Réunion<b>21 sept. 2026</b></div></div>
       <div style="padding:12px 16px 0;font-weight:500;color:var(--t2);font-size:13px;line-height:19px">${esc(e.titre)}</div>
       <div class="bande"><div class="bh"><span>Les ${E.length} places, à l'échelle des mots prononcés (${total} mots)</span><span><span class="dot" style="background:var(--a2)"></span> amendement adopté</span></div><div class="bars">${bars}</div><div class="bnums">${bnums}</div></div>
       <div class="tl">${[["vote", "Liste de vote", ams.length], ["paroles", "Paroles", e.paroles.length], ["decisions", "Décisions", e.decisions.length]].map(([k, l, n]) => `<button class="${st.rtab === k ? "on" : ""}" data-rtab="${k}">${l} <span class="faint">${n}</span></button>`).join("")}</div>${tab}</div>
@@ -323,7 +323,7 @@ function vReunion(){
 
 /* ---------- LISEZ-MOI ---------- */
 function vLisez(){
-  return {html: `<div class="readme"><div class="hero" style="margin-top:0"><h1 style="font-size:36px;line-height:42px">Boussole, <span class="g">à la manière d'une super-app.</span></h1><p style="font-size:14px">Maquette inspirée de Jupiter (jup.ag, 2025–2026) · article 4 du projet de loi logement · données réelles, groupes politiques fictifs.</p></div>
+  return {html: `<div class="readme"><div class="hero" style="margin-top:0"><h1 style="font-size:36px;line-height:42px">Boussole, <span class="g">à la manière d'une super-app.</span></h1><p style="font-size:14px">Maquette inspirée de Jupiter (jup.ag, 2025–2026) · article 4 du projet de loi logement · données réelles, groupes politiques fictifs.</p><p style="font-size:14px">La forme suit désormais la direction artistique « Le bordereau » (<code>direction-artistique/DA.md</code>) ; les relevés ci-dessous décrivent l'inspiration d'origine.</p></div>
   <div class="card" style="padding:4px 22px 20px;margin-top:28px">
   <h3>Les quatre espaces, transposés</h3><ul>
    <li><b>Atelier = la carte d'échange (swap).</b> Bloc plein « De : la référence » (vierge), bloc en creux « Vers : ma rédaction » (corrections apparentes), <b>bouton d'inversion</b> à cheval sur les deux : il met un concurrent à la place de ma rédaction, rendu exactement de la même manière (symétrie). Onglets pilules Rédiger | Insérer | Supprimer = les modes ; la pilule « § Al. 12 » ouvre le sélecteur (recherche, Esc, raccourcis = alinéas les plus disputés, onglets Mes brouillons | Disputés | Tous). Bouton principal plein « Modifier ma rédaction », puis « Valider ». Sous la carte : deux cartes de jeton, le chevron double, les concurrents en lignes de cartes filtrables.</li>
@@ -374,16 +374,16 @@ function bindPick(){
   i.addEventListener("input", () => { MODAL.q = i.value; MODAL.i = 0; $("#mlist").innerHTML = pickList(); });
 }
 function pickRun(i){ const x = MODAL && MODAL.list && MODAL.list[i]; if (!x) return; closeModal(); x.run(); }
-const avSec = (t, c) => `<span class="av" style="--c:${c || "#212a36"};color:${c ? "#090d10" : "var(--t)"}">${esc(t)}</span>`;
+const avSec = (t, c) => `<span class="av" style="--c:${c || "transparent"};color:var(--t)">${esc(t)}</span>`;
 const itDraft = (m, run) => ({av: avMe(), t: `${draftNum(m)} · alinéa ${m.al}`, sub: `${cap(modeWord(m))} · ${short(m.mode === "supprimer" ? refAl(m.al) : m.texte, 80)}`, r: m.id === st.draft ? `<span class="g">en cours</span>` : "", run: run || (() => openDraft(m.id))});
 const itAm = (a, run) => ({av: avA(a), t: a.num, check: sk(a) === "adopte", sub: `${who(a).name} · ${objetOf(a) || modeLead(a, amO(a))}`, r: `<span class="s-${sk(a)}">${esc(sortWord(a))}</span>`, run: run || (() => openModal({kind: "am", id: a.id, wide: true}))});
 const itAl = (o, run) => { const n = concurrents(o).units.length; return {av: avSec(o, MINE.some(m => m.al === o) ? GR[ME].color : null), t: `Alinéa ${o}`, check: MINE.some(m => m.al === o), sub: NX.alShort(o, 90), r: n ? `${n} conc.` : "", run: run || (() => setAl(o))}; };
 const itTh = t => ({av: avSec("#"), t: t.label, sub: `${t.src === "déclaré" ? "déclaré par le rapport" : "calculé par mots-clés"} · ${t.amendements.length} amendements`, run: () => { st.th = t.id; go("enjeux"); }});
-const itPl = e => ({av: avSec(e.place, adopted(e) ? "#acf47d" : null), t: `Place ${e.place}`, sub: e.titre, r: `${e.mots} mots`, run: () => openPlace(e.place)});
+const itPl = e => ({av: avSec(e.place, adopted(e) ? "#1a1a1a" : null), t: `Place ${e.place}`, sub: e.titre, r: `${e.mots} mots`, run: () => openPlace(e.place)});
 const discTop = () => NX.alsDisputes().sort((x, y) => y.n - x.n).slice(0, 5);
 const scAls = run => discTop().map(x => ({av: avSec(x.o), label: `${x.n} conc.`, run: () => (run || setAl)(x.o)}));
 function searchModal(){
-  const acts = [{av: avSec("✎", "#acf47d"), t: "Nouveau brouillon sur l'alinéa courant", sub: `alinéa ${st.o}`, run: () => cmd("new")},
+  const acts = [{av: avSec("✎", "#1a1a1a"), t: "Nouveau brouillon sur l'alinéa courant", sub: `alinéa ${st.o}`, run: () => cmd("new")},
     ...ETAPES.map(id => ({av: avSec("✦"), t: `Référence : ${ET[id].label}`, sub: id === REF ? "actuelle" : "changer la référence vierge", run: () => setRef(id)})),
     ...Object.entries(VIEWS).map(([k, l]) => ({av: avSec("→"), t: `Aller à : ${l}`, sub: "", run: () => go(k)}))];
   const all = () => [...MINE.map(m => itDraft(m)), ...Array.from({length: NAL}, (_, i) => itAl(i + 1)), ...ALL.filter(a => a.mode !== "hors-texte").map(a => itAm(a)), ...THEMES.map(itTh), ...NX.episodes.map(itPl), ...acts];
@@ -405,7 +405,7 @@ function slotModal(k){
 }
 function refModal(){
   openModal({kind: "pick", ph: "Choisir la référence vierge", tab: 0, i: ETAPES.indexOf(REF), sc: [],
-    tabs: [{label: "Étapes", items: () => ETAPES.map((id, i) => ({av: avSec(i + 1, id === REF ? "#acf47d" : null), t: ET[id].label, check: id === REF, sub: id === REF ? "référence actuelle · reste vierge, les corrections sont portées sur les rédactions" : ETL[id], run: () => setRef(id)}))}]});
+    tabs: [{label: "Étapes", items: () => ETAPES.map((id, i) => ({av: avSec(i + 1, id === REF ? "#1a1a1a" : null), t: ET[id].label, check: id === REF, sub: id === REF ? "référence actuelle · reste vierge, les corrections sont portées sur les rédactions" : ETL[id], run: () => setRef(id)}))}]});
 }
 function placeModal(){ openModal({kind: "pick", ph: "Rechercher une place", tab: 0, i: st.place - 1, sc: [], tabs: [{label: "Toutes", items: () => NX.episodes.map(itPl)}, {label: "Avec adoption", items: () => NX.episodes.filter(adopted).map(itPl)}]}); }
 // la fiche d'un amendement
@@ -415,7 +415,7 @@ function mAm(){
   const diff = touched.length ? touched.map(x => `<div class="clu"><div class="faint" style="font-size:12px;margin-bottom:4px">Alinéa ${x}</div><div class="legal" data-o="${x}">${amHTML(a, x)}</div></div>`).join("") : `<div class="clu"><div class="legal">${esc(a.dispositif || "—")}</div></div>`;
   const ins = []; for (const [, l] of verOfAmendment(a).ins) l.forEach(t => ins.push(`<div class="clu"><div class="faint" style="font-size:12px;margin-bottom:4px">Alinéa inséré</div><div class="legal"><ins>${esc(t)}</ins></div></div>`));
   const body = tab === "diff" ? `<div class="muted" style="font-size:13px;margin-top:12px">${esc(modeLead(a, o))} · face à : ${esc(refShort())}</div>${diff}${ins.join("")}`
-    : tab === "expose" ? `<div class="legal" style="margin-top:12px;font-size:14px;line-height:23px">${esc(a.expose || "—")}</div>${a.cartouche ? `<div class="quote" style="margin-top:12px;font-size:13px">${esc(a.cartouche)}</div>` : ""}`
+    : tab === "expose" ? `<div class="legal" style="margin-top:12px;font-size:15px;line-height:24px">${esc(a.expose || "—")}</div>${a.cartouche ? `<div class="quote" style="margin-top:12px;font-size:13px">${esc(a.cartouche)}</div>` : ""}`
     : `<div class="rows" style="margin-top:12px">${a.versions.map(v => `<div class="row" style="cursor:default;min-height:48px"><div class="tx"><div class="t1" style="font-size:13px">${esc(v.etat)}${v.sort ? " · " + esc(v.sort) : ""}</div><div class="t2">${esc((v.champs || []).join(", "))}</div></div><div class="r faint">${esc(v.date.replace("T", " "))}</div></div>`).join("")}</div>`;
   return `<div class="m-head">${avA(a, "lg")}<div class="tx"><b>${a.num} ${sortBdg(a)}</b><small>${esc(w.name)}${a.auteur ? " · " + esc(a.auteur) : ""} · déposé le ${NX.fmtDate(a.depot)}</small></div><button data-cmd="close"><kbd>Esc</kbd></button></div>
     <div class="m-tabs tp">${[["diff", "Face à la référence"], ["expose", "Exposé sommaire"], ["versions", "Versions"]].map(([k, l]) => `<button class="${tab === k ? "on" : ""}" data-amtab="${k}">${l}</button>`).join("")}</div>
@@ -431,12 +431,12 @@ function mUnit(){
     const its = c.items.filter(i => i.id !== "ref"), more = its.length - 8;
     const who_ = its.sort((x, y) => (y.mine ? 1 : 0) - (x.mine ? 1 : 0)).slice(0, 8).map(i => i.a ? `<button class="chip" data-am="${i.a.id}">${avc(i.label, i.color, "sm")}${esc(i.a.num)} · ${esc(short(i.label, 20))}</button>` : `<button class="chip g" data-draft="${i.id}">${avMe("sm")}${esc(i.label)}</button>`).join("") + (more > 0 ? `<span class="chip" style="cursor:default">+${more}</span>` : "");
     return `<div class="clu ${isRef ? "ref" : ""}"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px"><span class="${isRef ? "g" : "muted"}">${isRef ? "Texte transmis · vierge · garder le passage" : c.text == null ? "Supprime le passage" : "Rédaction distincte"}</span><span class="faint">${c.items.filter(i => i.id !== "ref").length} ${plural(c.items.filter(i => i.id !== "ref").length, "porteur")}</span></div><div class="legal">${txt}</div>${who_ ? `<div class="who">${who_}</div>` : ""}</div>`; }).join("");
-  return `<div class="m-head"><span class="av lg" style="--c:rgba(251,191,37,.18);color:var(--warn)">${u.n}</span><div class="tx"><b>« ${esc(u.label)} »</b><small>Alinéa ${u.o} · ${u.n} propositions · ${C.list.length} rédactions distinctes, la référence comprise</small></div><button data-cmd="close"><kbd>Esc</kbd></button></div><div class="m-body">${rows}</div>`;
+  return `<div class="m-head"><span class="av lg" style="--c:transparent;color:var(--t)">${u.n}</span><div class="tx"><b>« ${esc(u.label)} »</b><small>Alinéa ${u.o} · ${u.n} propositions · ${C.list.length} rédactions distinctes, la référence comprise</small></div><button data-cmd="close"><kbd>Esc</kbd></button></div><div class="m-body">${rows}</div>`;
 }
 function mHist(){
   const o = MODAL.o, H = NX.hist(o), n = concurrents(o).units.length;
   return `<div class="m-head">${avSec(o)}<div class="tx"><b>Alinéa ${o}, d'étape en étape</b><small>chaque étape face à la précédente</small></div><button data-cmd="close"><kbd>Esc</kbd></button></div>
-    <div class="m-body">${H.map((h, i) => `<div class="etape"><div class="eh"><span class="av sm" style="--c:${h.same || !i ? "#212a36" : "#acf47d"};${h.same || !i ? "color:var(--t)" : ""}">${i + 1}</span>${esc(ET[h.id].label)}<span class="sp" style="flex:1"></span><span class="bdg ${i && !h.same && !h.absent ? "g" : ""}">${!i ? "origine" : h.absent ? "absent" : h.same ? "inchangé" : "modifié"}</span></div><div class="legal" style="font-size:14px;line-height:23px">${h.diff == null ? `<span class="faint">— absent à cette étape</span>` : h.diff}</div></div>`).join("")}</div>
+    <div class="m-body">${H.map((h, i) => `<div class="etape"><div class="eh"><span class="av sm" style="--c:${h.same || !i ? "transparent" : "#1a1a1a"};${h.same || !i ? "color:var(--t)" : ""}">${i + 1}</span>${esc(ET[h.id].label)}<span class="sp" style="flex:1"></span><span class="bdg ${i && !h.same && !h.absent ? "g" : ""}">${!i ? "origine" : h.absent ? "absent" : h.same ? "inchangé" : "modifié"}</span></div><div class="legal" style="font-size:15px;line-height:24px">${h.diff == null ? `<span class="faint">— absent à cette étape</span>` : h.diff}</div></div>`).join("")}</div>
     <div class="m-act"><button class="btn-main" data-amender="${o}">Amender cet alinéa</button><button class="btn-ghost" data-al="${o}">${n} ${plural(n, "concurrent")}</button></div>`;
 }
 function mArt(){

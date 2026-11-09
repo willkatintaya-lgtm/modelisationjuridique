@@ -36,32 +36,26 @@ const IC = {
   hammer:'<svg viewBox="0 0 16 16"><path d="M9 3l4 4-1.5 1.5-4-4zM7.5 4.5L3 9l4 4 4.5-4.5"/></svg>',
   book:'<svg viewBox="0 0 16 16"><path d="M3 3h4a1.5 1.5 0 0 1 1 .5V13a1.5 1.5 0 0 0-1-.5H3zM13 3H9a1.5 1.5 0 0 0-1 .5V13a1.5 1.5 0 0 1 1-.5h4z"/></svg>',
 };
-// icône de statut ronde : le sort d'un amendement (dérivée des statuts de la liste d'issues)
+// le sort d'un amendement : mention en capitales (sans couleur) ; le filet de marge est porté par la ligne ou la carte (direction « Le bordereau »)
 function sIcon(k){
-  const c = {adopte:"var(--brand)", rejete:"var(--t4)", tombe:"var(--t4)", retire:"var(--t4)", ns:"var(--t3)", ecarte:"var(--t4)", attente:"var(--t3)", draft:"var(--yellow)", place:"var(--t3)"}[k] || "var(--t3)";
+  const M = {adopte:"Adopté", rejete:"Rejeté", tombe:"Tombé", retire:"Retiré", ns:"Non soutenu", ecarte:"Irrecevable", attente:"En attente"};
+  if (M[k]) return `<span class="si sort s-${k}">${M[k]}</span>`;
   const S = {
-    adopte:`<circle cx="7" cy="7" r="6" fill="${c}" stroke="${c}"/><path d="M4.4 7.2l1.8 1.8 3.4-3.6" stroke="#fff" stroke-width="1.6"/>`,
-    rejete:`<circle cx="7" cy="7" r="6" fill="${c}" stroke="${c}"/><path d="M5 5l4 4M9 5l-4 4" stroke="var(--content)" stroke-width="1.5"/>`,
-    tombe:`<circle cx="7" cy="7" r="6" fill="${c}" stroke="${c}"/><path d="M7 4.2v5.2M4.9 7.5L7 9.6l2.1-2.1" stroke="var(--content)" stroke-width="1.4"/>`,
-    retire:`<circle cx="7" cy="7" r="6" fill="${c}" stroke="${c}"/><path d="M9.6 8.6H5.2M6.7 6.6l-2 2 2 2" stroke="var(--content)" stroke-width="1.4"/>`,
-    ns:`<circle cx="7" cy="7" r="6" stroke="${c}" stroke-dasharray="1.6 1.6"/>`,
-    ecarte:`<circle cx="7" cy="7" r="6" stroke="${c}"/><path d="M3 11L11 3" stroke="${c}"/>`,
-    attente:`<circle cx="7" cy="7" r="6" stroke="${c}"/>`,
-    draft:`<circle cx="7" cy="7" r="6" stroke="${c}"/><path d="M7 3a4 4 0 0 1 0 8z" fill="${c}" stroke="none"/>`,
-    place:`<circle cx="7" cy="7" r="6" stroke="${c}"/><circle cx="7" cy="7" r="2" fill="${c}" stroke="none"/>`,
+    draft:`<circle cx="7" cy="7" r="6" stroke="currentColor"/><path d="M7 3a4 4 0 0 1 0 8z" fill="currentColor" stroke="none"/>`,
+    place:`<circle cx="7" cy="7" r="6" stroke="currentColor"/><circle cx="7" cy="7" r="2" fill="currentColor" stroke="none"/>`,
   };
-  return `<span class="si"><svg viewBox="0 0 14 14">${S[k] || S.attente}</svg></span>`;
+  return `<span class="si"><svg viewBox="0 0 14 14">${S[k] || S.place}</svg></span>`;
 }
 const SORT_LABEL = {adopte:"Adopté", rejete:"Rejeté", tombe:"Tombé", retire:"Retiré", ns:"Non soutenu", ecarte:"Écarté (irrecevable)", attente:"Sans sort en commission"};
 const SORT_ORDER = ["adopte", "rejete", "tombe", "retire", "ns", "attente", "ecarte"];
-const THC = ["#5e6ad2", "#27a644", "#f0bf00", "#fc7840", "#eb5757", "#4ea7fc", "#bb87fc", "#26b5ce", "#8a8f98"];
-const thColor = th => THC[THEMES.indexOf(th) % THC.length];
+const THC = ["var(--da-int-1)", "var(--da-int-2)", "var(--da-int-3)", "var(--da-int-4)", "var(--da-int-5)"];
+const thColor = th => THC[THEMES.indexOf(th)] || "transparent"; // intercalaires : au-delà de cinq familles, la cote suffit
 const kbd = s => s.split(" ").map(k => `<kbd>${esc(k)}</kbd>`).join("");
 const isMob = () => innerWidth <= 760;
 const initials = a => a.inst ? (a.inst === "rapporteure" ? "Rp" : "Ra") : (a.groupe || "?").slice(0, 2);
-const av = (a, lg) => { const w = who(a); return `<span class="av${lg ? " lg" : ""}${a.inst ? " inst" : ""}" style="background:${w.color}" title="${esc(w.name)}">${esc(initials(a))}</span>`; };
-const avMe = lg => `<span class="av${lg ? " lg" : ""}" style="background:${GR[ME].color}" title="Vous · ${esc(GR[ME].name)}">${ME}</span>`;
-const avP = p => p.groupe ? `<span class="av" style="background:${NX.groupColor(p.groupe)}">${esc(p.groupe.slice(0, 2))}</span>` : `<span class="av inst" style="background:#5b5446">${p.role === "rapporteure" ? "Rp" : esc((p.role || p.nom || "?").slice(0, 2))}</span>`;
+const av = (a, lg) => { const w = who(a); return `<span class="av${lg ? " lg" : ""}${a.inst ? " inst" : ""}" style="--g:${w.color}" title="${esc(w.name)}">${esc(initials(a))}</span>`; };
+const avMe = lg => `<span class="av${lg ? " lg" : ""}" style="--g:${GR[ME].color}" title="Vous · ${esc(GR[ME].name)}">${ME}</span>`;
+const avP = p => p.groupe ? `<span class="av" style="--g:${NX.groupColor(p.groupe)}">${esc(p.groupe.slice(0, 2))}</span>` : `<span class="av inst" style="--g:#5b5446">${p.role === "rapporteure" ? "Rp" : esc((p.role || p.nom || "?").slice(0, 2))}</span>`;
 const bars = n => { const w = unitWeight(n); return `<span class="bars" title="${n} ${plural(n, "proposition")}">${[5, 8, 11].map((h, i) => `<i class="${i < w ? "on" : ""}" style="height:${h}px"></i>`).join("")}</span>`; };
 function rel(s){
   if (!s) return ""; const d = Math.max(0, Math.round((Date.now() - new Date(s).getTime()) / 864e5));
@@ -206,7 +200,7 @@ function unitsSection(o){
 function issueDraft(m){
   const n = concurrents(m.al).units.length;
   const journal = (m.journal || []).slice(-6).reverse().map(j => `<div class="ev">${avMe()}<span><b>Vous</b> avez modifié la rédaction · ${esc(rel(j.d))}</span></div>`).join("");
-  return `<div class="issue">
+  return `<div class="issue mienne">
     <div class="kicker">${sIcon("draft")}<span>Brouillon ${draftIdx(m)}</span><span>·</span><span>face à : ${esc(refShort())}</span></div>
     <h1>${esc(draftLead(m).replace(/ :$/, ""))}</h1>
     <div class="subof">Article 4 ${IC.chev.replace("<svg", '<svg style="width:12px;height:12px"')} <b data-hist="${m.al}" style="cursor:pointer">alinéa ${m.al}</b><span>·</span><span>${n} ${plural(n, "concurrent")}</span></div>
@@ -323,7 +317,7 @@ function codeView(){
 }
 function sideOf(id){
   const m = MINE.find(z => z.id === id);
-  if (m) return {label:`Brouillon ${draftIdx(m)}`, sub:"Vous", av:avMe(), als:[m.al], cell:o => o === m.al ? NX.draftDiff(m) : null};
+  if (m) return {mine:true, label:`Brouillon ${draftIdx(m)}`, sub:"Vous", av:avMe(), als:[m.al], cell:o => o === m.al ? NX.draftDiff(m) : null};
   const a = AM[id]; return {label:a.num, sub:who(a).name, av:av(a), als:amAls(a), cell:o => NX.amDiff(a, o)};
 }
 function cmpView(){
@@ -334,9 +328,9 @@ function cmpView(){
   const als = [...new Set([...A.als, ...B.als])].sort((x, y) => x - y);
   const col = (cls, head, f) => `<div class="col ${cls}" style="--rows:${als.length + 1}"><div class="ch">${head}</div>${als.map(o => { const c = f(o); return `<div class="cell${c == null ? " none" : ""}"><span class="k">Alinéa ${o}</span>${c == null ? "ne touche pas cet alinéa" : c}</div>`; }).join("")}</div>`;
   return `<div class="cmp" style="grid-template-rows:repeat(${als.length + 1},auto)">
-    ${col("", `${A.av}<span>${esc(A.label)}</span><small>${esc(A.sub)}</small>`, A.cell)}
+    ${col(A.mine ? "mienne" : "", `${A.av}<span>${esc(A.label)}</span><small>${esc(A.sub)}</small>`, A.cell)}
     ${col("ref", `${IC.ref}<span>Référence</span><small>${esc(refShort())} · vierge</small>`, o => esc(refAl(o)))}
-    ${col("", `${B.av}<span>${esc(B.label)}</span><small>${esc(B.sub)}</small>`, B.cell)}</div>`;
+    ${col(B.mine ? "mienne" : "", `${B.av}<span>${esc(B.label)}</span><small>${esc(B.sub)}</small>`, B.cell)}</div>`;
 }
 
 /* ---------- INBOX : la réunion comme fil d'activité ---------- */
@@ -387,7 +381,7 @@ function etapesView(){
   const G = NX.grid(), cell = c => c === "mod" ? `<span class="cellst" title="modifié par rapport à l'étape précédente">${sIcon("draft").replace(/var\(--yellow\)/g, "var(--orange)")}modifié</span>` : c === "same" ? `<span class="cellst t4">·</span>` : c === "origine" ? `<span class="cellst">${sIcon("attente")}</span>` : `<span class="cellst t4"></span>`;
   return `<div class="wrap-pad"><div style="color:var(--t3);font-size:12px;padding:10px 0 6px">Une ligne par alinéa suivi d'étape en étape. Cliquer une ligne : l'alinéa d'étape en étape.</div>
     <div style="overflow-x:auto"><table class="mx"><thead><tr><th>Al.</th>${ETAPES.map(id => `<th>${esc(ETL[id])}</th>`).join("")}<th>Texte transmis</th><th style="text-align:right">Amdts</th></tr></thead><tbody>
-    ${G.map(r => `<tr class="hov${r.o === S.o ? " on" : ""}" ${r.o ? `data-hist="${r.o}"` : ""}><td class="t3">${r.o ?? "+"}</td>${r.cells.map(c => `<td>${cell(c)}</td>`).join("")}<td style="max-width:420px;overflow:hidden;text-overflow:ellipsis;color:var(--t2)">${r.o ? esc(NX.alShort(r.o, 80)) : `<i class="t4">introduit en cours de navette</i>`}</td><td style="text-align:right">${r.n ? `<span class="mul" style="font-size:11px;color:var(--t3);border:1px solid var(--b2);border-radius:999px;padding:0 6px">${r.n}</span>` : ""}</td></tr>`).join("")}</tbody></table></div></div>`;
+    ${G.map(r => `<tr class="hov${r.o === S.o ? " on" : ""}" ${r.o ? `data-hist="${r.o}"` : ""}><td class="t3">${r.o ?? "+"}</td>${r.cells.map(c => `<td>${cell(c)}</td>`).join("")}<td style="max-width:420px;overflow:hidden;text-overflow:ellipsis;color:var(--t2)">${r.o ? esc(NX.alShort(r.o, 80)) : `<i class="t4">introduit en cours de navette</i>`}</td><td style="text-align:right">${r.n ? `<span class="mul" style="font-size:11px;color:var(--t2);border:1px solid var(--da-encre);border-radius:0;padding:2px 5px">${r.n}</span>` : ""}</td></tr>`).join("")}</tbody></table></div></div>`;
 }
 function histView(o){
   const H = NX.hist(o), n = concurrents(o).units.length;
@@ -427,9 +421,9 @@ function themeView(th){
 function matrixView(){
   const M = NX.matrix(), max = Math.max(1, ...M.rows.flatMap(r => r.cells.map(c => c.length)));
   return `<div class="wrap-pad"><div style="color:var(--t3);font-size:12px;padding:10px 0 6px">Nombre d'amendements par thème et par groupe : une seule chose comptée. Une case ouvre le thème.</div>
-    <div style="overflow-x:auto"><table class="mx"><thead><tr><th>Thème</th>${M.gs.map(g => `<th title="${esc(GR[g].name)}"><span style="display:inline-flex;gap:5px;align-items:center"><span class="av" style="background:${GR[g].color}">${g.slice(0, 2)}</span></span></th>`).join("")}<th>Inst.</th></tr></thead><tbody>
+    <div style="overflow-x:auto"><table class="mx"><thead><tr><th>Thème</th>${M.gs.map(g => `<th title="${esc(GR[g].name)}"><span style="display:inline-flex;gap:5px;align-items:center"><span class="av" style="--g:${GR[g].color}">${g.slice(0, 2)}</span></span></th>`).join("")}<th>Inst.</th></tr></thead><tbody>
     ${M.rows.map(r => `<tr><td><a data-th="${r.th.id}" style="cursor:pointer;color:var(--t1);display:inline-flex;gap:7px;align-items:center"><span class="dotc" style="background:${thColor(r.th)};border-radius:50%"></span>${esc(r.th.label)}</a></td>${r.cells.map(c => `<td class="num" data-th="${r.th.id}">${c.length ? `<span style="--v:${Math.round(c.length / max * 55)}">${c.length}</span>` : `<span class="t4" style="--v:0">·</span>`}</td>`).join("")}<td class="num" data-th="${r.th.id}"><span style="--v:0">${r.inst.length || ""}</span></td></tr>`).join("")}</tbody></table></div>
-    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:14px">${M.gs.map(g => `<span class="chip"><span class="av" style="background:${GR[g].color}">${g.slice(0, 2)}</span>${esc(GR[g].name)}</span>`).join("")}</div></div>`;
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:14px">${M.gs.map(g => `<span class="chip"><span class="av" style="--g:${GR[g].color}">${g.slice(0, 2)}</span>${esc(GR[g].name)}</span>`).join("")}</div></div>`;
 }
 
 /* ---------- RÉUNION : un cycle de 26 places ---------- */
@@ -485,7 +479,8 @@ function readme(){
   <li>La direction artistique « papier sombre » du projet est suspendue : la forme suit Linear. Les règles de comparaison sont gardées : la référence reste vierge, les corrections apparentes (ajout : souligné, gras, encre indigo sur fond léger ; suppression : barré rouge, texte visible) sont portées sur la rédaction comparée, la mienne comme celle d'un autre groupe.</li>
   <li>Pas de priorité, d'estimation ni d'assignation : ces notions n'ont pas d'équivalent. Aucune action « accepter / refuser » sur l'amendement d'autrui ; le triage se limite à lire et à épingler.</li>
   <li>Aucun score : les seuls nombres comptent une chose (amendements, mots, propositions, alinéas).</li>
-  <li>Thème clair et thème sombre (comme l'inspiration), bouton en bas de la barre latérale.</li></ul></div>`;
+  <li>Thème clair et thème sombre (comme l'inspiration), bouton en bas de la barre latérale.</li>
+  <li>La forme suit désormais la direction artistique « Le bordereau » (<span class="mono">direction-artistique/DA.md</span>) : papier clair, encre, listes en bordereau à cadre complet, sorts dits par une mention en capitales et un filet de marge.</li></ul></div>`;
 }
 
 /* ---------- aperçu (Peek) ---------- */
@@ -515,7 +510,7 @@ function hunkPop(el){
   const refT = H.seg.filter(s => s.type === "del").map(s => esc(s.text)).join("");
   const verT = H.seg.map(s => `<${s.type}>${esc(s.text)}</${s.type}>`).join("");
   const P = $("#pop"); POP = [];
-  P.innerHTML = `<div class="ph">Loupe : la référence (vierge) | la rédaction</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 8px 8px;font-size:13.5px;line-height:1.6"><div style="color:var(--t2)"><span class="t4">${esc(H.before)} </span><span style="background:var(--ter);border-radius:3px">${refT || "<span class='t4'>∅</span>"}</span><span class="t4"> ${esc(H.after)}</span></div><div class="peek" style="color:var(--t1)"><span class="t4">${esc(H.before)} </span>${verT}<span class="t4"> ${esc(H.after)}</span></div></div>`;
+  P.innerHTML = `<div class="ph">Loupe : la référence (vierge) | la rédaction</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:6px 8px 8px;font-size:13.5px;line-height:1.6"><div style="color:var(--t2)"><span class="t4">${esc(H.before)} </span><span style="background:var(--da-papier-ref);border-radius:0">${refT || "<span class='t4'>∅</span>"}</span><span class="t4"> ${esc(H.after)}</span></div><div class="peek" style="color:var(--t1)"><span class="t4">${esc(H.before)} </span>${verT}<span class="t4"> ${esc(H.after)}</span></div></div>`;
   P.style.maxWidth = "min(560px, calc(100vw - 16px))"; P.classList.add("on");
   const r = el.getBoundingClientRect(), w = P.offsetWidth;
   P.style.left = Math.max(8, Math.min(r.left - 40, innerWidth - w - 8)) + "px"; P.style.top = Math.min(r.bottom + 6, innerHeight - P.offsetHeight - 8) + "px";

@@ -105,7 +105,7 @@ function sideDossier(){
     + sec("etapes", "Chronologie", ETAPES.map((id, i) => `<div class="row" style="--ind:1" data-etape="${id}"><span class="lbl">${esc(ET[id].label)}</span><span class="desc">${i + 1}/4</span></div>`).join(""))};
 }
 function sideAtelier(){
-  const drafts = MINE.map(m => `<div class="row${m.id === st.draft ? " on" : ""}" style="--ind:1" data-draft="${m.id}"><span class="ico-s" style="color:${GR[ME].color}">✎</span><span class="lbl">${esc(draftNum(m))} <span class="desc">al. ${m.al} · ${m.mode === "supprimer" ? "supprimer" : m.mode === "inserer" ? "insérer" : "rédiger"}</span></span><span class="deco ${m.mode === "supprimer" ? "D" : m.mode === "inserer" ? "A" : "M"}">${m.mode === "supprimer" ? "D" : m.mode === "inserer" ? "A" : "M"}</span></div>`).join("");
+  const drafts = MINE.map(m => `<div class="row${m.id === st.draft ? " on" : ""}" style="--ind:1" data-draft="${m.id}"><span class="ico-s" style="color:var(--da-bordeaux)">✎</span><span class="lbl">${esc(draftNum(m))} <span class="desc">al. ${m.al} · ${m.mode === "supprimer" ? "supprimer" : m.mode === "inserer" ? "insérer" : "rédiger"}</span></span><span class="deco ${m.mode === "supprimer" ? "D" : m.mode === "inserer" ? "A" : "M"}">${m.mode === "supprimer" ? "D" : m.mode === "inserer" ? "A" : "M"}</span></div>`).join("");
   const U = unitsOf(st.o);
   const units = U.length ? U.map(u => `<div class="row" style="--ind:1" data-unit="${u.k}"><span class="ico-s" style="color:var(--warn)">⚠</span><span class="lbl">« ${esc(u.label)} »</span><span class="cnt">${u.n}</span></div>`).join("") : `<div class="row" style="--ind:1"><span class="desc">Aucun passage disputé sur cet alinéa.</span></div>`;
   const als = NX.alsDisputes().map(x => `<div class="row${x.o === st.o ? " on" : ""}" style="--ind:1" data-al="${x.o}"><span class="lbl">Alinéa ${x.o} <span class="desc">${esc(NX.alShort(x.o, 40))}</span></span><span class="cnt">${x.n}</span></div>`).join("");
@@ -145,7 +145,7 @@ VIEW.lisez = () => ({crumbs: `<b>Boussole</b><span class="sep">›</span><b>Lise
    <li><b>Notebook</b> : la réunion, une cellule par prise de parole, la décision en sortie ; <b>minimap</b> : les 26 places à l'échelle des mots prononcés.</li>
    <li><b>Aperçu Markdown</b> : la fiche d'un enjeu. <b>Barre d'état</b> : référence, brouillon, nombre de concurrents. <b>Notifications</b> en bas à droite.</li>
    <li>Couleurs : thèmes « Dark Modern » et « Light Modern » (fichiers du dépôt microsoft/vscode). Tailles : barre de titre 35, onglets 35, fil d'Ariane 22, lignes 22, barre d'état 22.</li></ul>
-  <h3>Écarts assumés</h3><ul><li>La direction artistique « papier » du projet est suspendue dans cette maquette : la forme suit VS Code. Les règles de comparaison (référence vierge, symétrie) sont gardées.</li></ul></div>`});
+  <h3>Écarts assumés</h3><ul><li>La direction artistique « papier » du projet est suspendue dans cette maquette : la forme suit VS Code. Les règles de comparaison (référence vierge, symétrie) sont gardées. Depuis, la forme suit la direction artistique « Le bordereau » (<code>direction-artistique/DA.md</code>) ; la structure reste celle de VS Code.</li></ul></div>`});
 
 VIEW.grille = () => {
   const G = NX.grid();
@@ -181,7 +181,7 @@ function draftBody(m){
   const marks = m.mode === "rediger" ? unitMarks(m.al, m.texte) : null;
   let html;
   if (st.diff === "side" && m.mode === "rediger"){
-    return `<div class="split" style="--n:2"><div class="pane"><div class="pane-h"><b>Référence</b> · ${esc(refLabel())} <span style="margin-left:auto">vierge</span></div>${line(m.al, unitMarks(m.al, refAl(m.al)))}</div><div class="pane"><div class="pane-h"><b>${esc(draftNum(m))}</b> · corrections apparentes</div>${line(m.al, NX.unitsOnDiff(NX.draftDiff(m), m.al, m.texte), "mod")}</div></div>`;
+    return `<div class="split" style="--n:2"><div class="pane ref"><div class="pane-h"><b>Référence</b> · ${esc(refLabel())} <span style="margin-left:auto">vierge</span></div>${line(m.al, unitMarks(m.al, refAl(m.al)))}</div><div class="pane mine"><div class="pane-h"><b>${esc(draftNum(m))}</b> · corrections apparentes</div>${line(m.al, NX.unitsOnDiff(NX.draftDiff(m), m.al, m.texte), "mod")}</div></div>`;
   }
   html = m.mode === "rediger" ? NX.unitsOnDiff(NX.draftDiff(m), m.al, m.texte) : NX.draftDiff(m);
   return line(m.al, html, m.mode === "supprimer" ? "dl" : m.mode === "inserer" ? "add" : "mod cur", "") + (st.peek ? peekHTML(st.peek) : "");
@@ -202,8 +202,8 @@ function peekHTML(k){
   const ref = refAl(st.o), ctxA = ref.slice(Math.max(0, u.a - 80), u.a), ctxB = ref.slice(u.b, u.b + 80);
   const body = it.text == null ? `<del>${esc(C.ref)}</del>` : inlineDiff(C.ref, it.text);
   return `<div class="peek"><div class="peek-h"><b>« ${esc(u.label)} »</b><span style="color:var(--muted)">${C.list.length} rédactions distinctes · ${u.n} propositions</span><button class="iconbtn x" data-cmd="peek-close" title="Fermer (Échap)">${I.close}</button></div>
-    <div class="peek-l mono"><span class="ctx">…${esc(ctxA)}</span><span class="c">${body}</span><span class="ctx">${esc(ctxB)}…</span><div style="margin-top:10px;font-family:system-ui;font-size:12px;color:var(--muted)">${it.items.map(x => `${dot(x.color)} ${esc(x.label)}${x.a ? ` · <a class="mono" data-am="${x.a.id}" style="color:var(--link);cursor:pointer">${x.a.num}</a> · ${esc(sortWord(x.a))}` : ""}`).join("<br>")}</div></div>
-    <div class="peek-r">${C.list.map((c, i) => `<div class="row${i === sel ? " on" : ""}" data-psel="${i}"><span class="lbl"><span class="mono" style="font-size:12px">${c.text == null ? "<i>supprimé</i>" : esc(short(c.text, 60))}</span><br><span class="desc">${c.items.map(x => esc(x.label)).slice(0, 3).join(", ")}${c.items.length > 3 ? " +" + (c.items.length - 3) : ""}</span></span><span class="cnt">${c.items.length}</span></div>`).join("")}</div></div>`;
+    <div class="peek-l mono"><span class="ctx">…${esc(ctxA)}</span><span class="c">${body}</span><span class="ctx">${esc(ctxB)}…</span><div style="margin-top:10px;font-family:var(--da-f-ui);font-size:12px;line-height:18px;color:var(--muted)">${it.items.map(x => `${dot(x.color)} ${esc(x.label)}${x.a ? ` · <a class="mono" data-am="${x.a.id}" style="cursor:pointer">${x.a.num}</a> · ${esc(sortWord(x.a))}` : ""}`).join("<br>")}</div></div>
+    <div class="peek-r">${C.list.map((c, i) => `<div class="row${i === sel ? " on" : ""}" data-psel="${i}"><span class="lbl"><span style="font-family:var(--da-f-loi);font-size:13px">${c.text == null ? "<i>supprimé</i>" : esc(short(c.text, 60))}</span><br><span class="desc">${c.items.map(x => esc(x.label)).slice(0, 3).join(", ")}${c.items.length > 3 ? " +" + (c.items.length - 3) : ""}</span></span><span class="cnt">${c.items.length}</span></div>`).join("")}</div></div>`;
 }
 VIEW.am = id => {
   const a = AM[id], w = who(a), o = a.cible.al || st.o;
@@ -213,7 +213,7 @@ VIEW.am = id => {
   const ep = NX.epOf(a);
   return {crumbs: `<b>Atelier</b><span class="sep">›</span><b>Concurrents</b><span class="sep">›</span><b>${a.num}</b><span class="sep">›</span><span>face à : ${esc(refShort())}</span>`,
     tools: `<button class="iconbtn" data-cmd="select-am" data-id="${a.id}" title="Sélectionner pour comparer">${I.compare}</button>`,
-    html: `<div class="hdr"><h1>${a.num} <span style="font-size:14px;color:var(--muted)">${dot(w.color)} ${esc(w.name)} · ${esc(a.auteur || "")}</span></h1><span class="${sortCls(a)}">${sortIcon(a)} ${esc(sortWord(a))}</span>${a.avis ? ` · avis ${esc(a.avis)}` : ""} · déposé le ${NX.fmtDate(a.depot)}${ep ? ` · <a class="mono" style="color:var(--link);cursor:pointer" data-place="${ep.place}">place ${ep.place} en réunion ↗</a>` : ""}</div>
+    html: `<div class="hdr"><h1>${a.num} <span style="font-size:14px;color:var(--muted)">${dot(w.color)} ${esc(w.name)} · ${esc(a.auteur || "")}</span></h1><span class="${sortCls(a)}">${sortIcon(a)} ${esc(sortWord(a))}</span>${a.avis ? ` · avis ${esc(a.avis)}` : ""} · déposé le ${NX.fmtDate(a.depot)}${ep ? ` · <a class="mono" style="cursor:pointer" data-place="${ep.place}">place ${ep.place} en réunion ↗</a>` : ""}</div>
      <div class="doc"><div class="ln"><div class="g"></div><div class="lens"><span class="cmt mono">// ${esc(modeLead(a, o))}</span><span class="s">|</span><a data-cmd="select-am" data-id="${a.id}">Sélectionner pour comparer</a>${st.sel && st.sel !== a.id ? `<span class="s">|</span><a data-cmp="${a.id}">Comparer avec ${esc(st.sel.startsWith("M") ? "mon brouillon" : st.sel)}</a>` : ""}</div></div>${lines}${ins.join("")}</div>
      <div class="md" style="padding-top:0"><h2>Exposé sommaire</h2><p>${esc(a.expose || "—")}</p>${a.cartouche ? `<blockquote>${esc(a.cartouche)}</blockquote>` : ""}<h2>Versions</h2><table class="t">${a.versions.map(v => `<tr><td class="mono">${esc(v.date.replace("T", " "))}</td><td>${esc(v.etat)}${v.sort ? " · " + esc(v.sort) : ""}</td><td>${esc((v.champs || []).join(", "))}</td></tr>`).join("")}</table></div>`};
 };
@@ -222,7 +222,7 @@ VIEW.cmp = ([x, y]) => {
     : (() => { const a = AM[id], o = a.cible.al || st.o; return {label: a.num + " · " + who(a).name, color: who(a).color, o, html: NX.amDiff(a, o) || esc(a.dispositif)}; })();
   const A = side(x), B = side(y), o = A.o;
   return {crumbs: `<b>Atelier</b><span class="sep">›</span><b>Comparer</b><span class="sep">›</span><span>${esc(A.label)} ↔ ${esc(B.label)}</span>`,
-    html: `<div class="split" style="--n:3"><div class="pane"><div class="pane-h">${dot(A.color)}<b>${esc(A.label)}</b></div>${line(o, A.html, "mod")}</div><div class="pane"><div class="pane-h"><b>Référence</b> · ${esc(refLabel())}</div>${line(o, esc(refAl(o)))}</div><div class="pane"><div class="pane-h">${dot(B.color)}<b>${esc(B.label)}</b></div>${line(B.o, B.html, "mod")}</div></div>`};
+    html: `<div class="split" style="--n:3"><div class="pane${x.startsWith("M") ? " mine" : ""}"><div class="pane-h">${dot(A.color)}<b>${esc(A.label)}</b></div>${line(o, A.html, "mod")}</div><div class="pane ref"><div class="pane-h"><b>Référence</b> · ${esc(refLabel())}</div>${line(o, esc(refAl(o)))}</div><div class="pane${y.startsWith("M") ? " mine" : ""}"><div class="pane-h">${dot(B.color)}<b>${esc(B.label)}</b></div>${line(B.o, B.html, "mod")}</div></div>`};
 };
 VIEW.article = () => {
   const L = verLines(myVer());
@@ -268,7 +268,7 @@ VIEW.place = n => {
   const vote = `<table class="t"><tr><th>#</th><th>Auteur</th><th>N°</th><th>Objet</th><th>Avis</th><th>Sort</th></tr>${ams.map((a, i) => `<tr data-am="${a.id}" style="cursor:pointer"><td>${i + 1}</td><td>${dot(who(a).color)} ${esc(who(a).name)}</td><td class="mono">${a.num}</td><td>${esc(objetOf(a))}</td><td>${avisSym(a.avis)}</td><td class="${sortCls(a)}">${esc(sortWord(a))}</td></tr>`).join("")}</table>`;
   let k = 0;
   const cells = `<div class="cellnb"><div class="ex">[${++k}]</div><div class="src">${vote}</div></div>`
-    + e.paroles.map(p => `<div class="cellnb"><div class="ex">[${++k}]</div><div class="src"><div class="who">${p.groupe ? dot(NX.groupColor(p.groupe)) : dot("#888")}<b>${esc(NX.speaker(p))}</b> · ${p.mots} mots</div>${esc(p.txt)}</div></div>`).join("")
+    + e.paroles.map(p => `<div class="cellnb"><div class="ex">[${++k}]</div><div class="src"><div class="who">${p.groupe ? dot(NX.groupColor(p.groupe)) : dot("var(--da-encre-3)")}<b>${esc(NX.speaker(p))}</b> · ${p.mots} mots</div>${esc(p.txt)}</div></div>`).join("")
     + e.decisions.map(d => `<div class="cellnb"><div class="ex"></div><div class="out"><span class="kw">→</span> ${esc(d.txt)}</div></div>`).join("");
   const total = NX.episodes.reduce((s, x) => s + x.mots, 0); let y = 0;
   const mm = NX.episodes.map(x => { const h = Math.max(3, x.mots / total * 100); const el = `<div class="mm-place${x.ams.some(id => AM[id] && AM[id].sort === "Adopté") ? " ad" : ""}${x.place === n ? " on" : ""}" style="top:${y}%;height:calc(${h}% - 2px)" data-place="${x.place}" title="Place ${x.place} · ${x.mots} mots"></div>`; y += x.mots / total * 100; return el; }).join("");
@@ -445,4 +445,4 @@ document.addEventListener("mouseover", e => {
 });
 
 render();
-if (!store.get("vu", false)){ toast("Maquette inspirée de VS Code. <b>F1</b> ouvre la palette de commandes ; le Lisez-moi (espace Dossier) dit ce qui est emprunté.", `<button class="btn" data-go="dossier">Lisez-moi</button>`); store.set("vu", true); }
+if (!store.get("vu", false)){ toast("Maquette inspirée de VS Code. <b>F1</b> ouvre la palette de commandes ; le Lisez-moi (espace Dossier) dit ce qui est emprunté.", `<button class="btn sec2" data-go="dossier">Lisez-moi</button>`); store.set("vu", true); }

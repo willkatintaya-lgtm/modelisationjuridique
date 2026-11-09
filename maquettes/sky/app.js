@@ -28,9 +28,9 @@ const SORTS = [["tous","Tous"],["adopte","Adoptés"],["rejete","Rejetés"],["tom
 const sortOf = a => { const k = NX.sortKey(a); return k === "ns" ? "retire" : k; };
 const sortChip = a => `<span class="chip s-${NX.sortKey(a)}">${esc(cap(sortWord(a)))}</span>`;
 const gauge = w => `<span class="gauge g${w}" aria-label="niveau ${w} sur 3"><i></i><i></i><i></i></span>`;
-const grad = c => `linear-gradient(135deg, ${c}, color-mix(in oklab, ${c} 45%, #d298ff))`;
+const grad = c => c;   // couleur du groupe : un carré de 8 px dans le coin de la pastille
 const amLogo = (a, cls) => { const w = who(a); const ini = a.inst ? (a.inst === "rapporteure" ? "Rap" : "RpA") : (a.groupe || "?"); return `<span class="logo ${cls || "s"}" style="--lg:${grad(w.color)}">${esc(ini)}</span>`; };
-const myLogo = (m, cls) => `<span class="logo ${cls || ""}" style="--lg:linear-gradient(135deg,#2a197d,#6a6cfb 55%,#d298ff)">${m.al}</span>`;
+const myLogo = (m, cls) => `<span class="logo ${cls || ""}" style="--lg:transparent;border-color:var(--da-bordeaux);color:var(--da-bordeaux)">${m.al}</span>`;
 const metric = (lbl, val) => `<div class="metric"><span class="lbl">${lbl}</span><span class="num">${val}</span></div>`;
 const kv = (k, v) => `<div class="kv">${P.dot}${k}<b>${v}</b></div>`;
 const back = (label, to) => `<a class="back" data-back="${to || ""}">${P.back}${esc(label)}</a>`;
@@ -75,12 +75,12 @@ VIEW["atelier:home"] = () => {
   const C = concurrents(st.o), nAm = ALL.filter(a => !isEcarte(a) && a.mode !== "hors-texte").length;
   const cards = MINE.map(m => {
     const ref = refAl(m.al), n = concurrents(m.al).units.length;
-    return `<div class="glass card prod"><div class="top">${myLogo(m)}<div class="chips"><span class="chip w">Alinéa ${m.al}</span><span class="chip w">${modeWord(m)}</span>${m.confirme ? `<span class="chip ok">Confirmé</span>` : `<span class="chip w">${esc(cap(m.vis || "privé"))}</span>`}</div></div>
+    return `<div class="glass card prod mienne"><div class="top">${myLogo(m)}<div class="chips"><span class="chip w">Alinéa ${m.al}</span><span class="chip w">${modeWord(m)}</span>${m.confirme ? `<span class="chip ok">Confirmé</span>` : `<span class="chip w">${esc(cap(m.vis || "privé"))}</span>`}</div></div>
       <h2>${esc(draftNum(m))}</h2><p class="expl">${explain(ref, m.texte, m.mode, m.al)}</p>
       <div class="metrics">${metric("Concurrents", n)}${metric("Dispute", disputeMetric(m.al))}${metric("Délai de dépôt", DELAI + `<span class="info" title="${esc(D.dossier.delai)}">i</span>`)}<button class="cta big" data-draft="${m.id}">Ouvrir</button></div></div>`;
   }).join("");
   const opts = NX.alsDisputes().map(x => `<option value="${x.o}"${x.o === st.o ? " selected" : ""}>Alinéa ${x.o}</option>`).join("");
-  const newCard = `<div class="glass card prod"><div class="top"><span class="logo" style="--lg:linear-gradient(135deg,#9ca0e5,#d298ff)">+</span></div>
+  const newCard = `<div class="glass card prod"><div class="top"><span class="logo" style="--lg:transparent">+</span></div>
       <h2>Nouveau brouillon</h2><p class="expl">Un brouillon part toujours de la référence (${esc(refShort())}) : choisissez l'alinéa, puis réécrivez-le en place. Rien n'est déposé.</p>
       <div class="metrics"><div class="metric"><span class="lbl">Alinéa</span><select class="sel" id="newal">${Array.from({length: NAL}, (_, i) => `<option value="${i + 1}"${i + 1 === st.o ? " selected" : ""}>Alinéa ${i + 1}</option>`).join("")}</select></div><button class="cta big" data-cmd="new">Créer</button></div></div>`;
   return `<div class="col"><div class="hero"><div class="stats"><span class="stat"><span class="orb"></span>${MINE.length} brouillons</span><span class="stat"><span class="orb"></span>${nAm} amendements en concurrence</span><span class="stat"><span class="orb"></span>Face à : ${esc(refShort())}</span></div>
@@ -114,14 +114,14 @@ VIEW["atelier:draft"] = () => {
   const C = concurrents(o), U = unitsOf(o), ref = refAl(o);
   let body;
   if (st.editing) body = `<div class="edbox"><div class="mirror" id="mirror">${liveHTML(ref, m.texte)}​</div><textarea id="ta" spellcheck="false" aria-label="Texte du brouillon">${esc(m.texte)}</textarea></div>
-      <div class="edbtns"><button class="cta" data-cmd="valider">Valider <span class="kbd">Ctrl Entrée</span></button><button class="pill" data-cmd="annuler">Annuler <span class="kbd">Échap</span></button><span class="expl">Pendant la frappe : ajouts soulignés, suppressions marquées d'un trait rouge fin.</span></div>`;
+      <div class="edbtns"><button class="cta pri" data-cmd="valider">Valider <span class="kbd">Ctrl Entrée</span></button><button class="pill" data-cmd="annuler">Annuler <span class="kbd">Échap</span></button><span class="expl">Pendant la frappe : ajouts soulignés, suppressions marquées d'un trait rouge fin.</span></div>`;
   else if (st.diff === "side" && m.mode !== "inserer") body = `<div class="cols3" style="grid-template-columns:1fr 1fr;margin-top:20px"><div class="glass card ref"><span class="lbl">Référence · vierge</span>${textBlock(o, esc(ref))}</div><div class="glass card"><span class="lbl">Votre rédaction</span>${textBlock(o, m.mode === "rediger" ? NX.unitsOnDiff(NX.draftDiff(m), o, m.texte) : NX.draftDiff(m))}</div></div>`;
   else body = `<div title="${m.mode === "supprimer" ? "" : "Double-clic pour modifier"}" class="dbl">${textBlock(o, m.mode === "rediger" ? NX.unitsOnDiff(NX.draftDiff(m), o, m.texte) : NX.draftDiff(m), o)}</div>`;
   const ins = diffOps(ref, m.mode === "rediger" ? m.texte : "").filter(x => x.type === "ins").reduce((s, x) => s + x.text.trim().split(/\s+/).filter(Boolean).length, 0);
   const del = m.mode === "supprimer" ? ref.split(/\s+/).length : diffOps(ref, m.mode === "rediger" ? m.texte : ref).filter(x => x.type === "del").reduce((s, x) => s + x.text.trim().split(/\s+/).filter(Boolean).length, 0);
   return `<div class="wide">${back("Retour aux brouillons")}
     <div class="phead">${myLogo(m)}<div><h1>${esc(draftNum(m))} · alinéa ${o}</h1><div class="sub">${esc(draftLead(m))}</div></div><span class="sp"></span>${refSelect()}</div>
-    <div class="pgrid"><div class="glass card"><div class="chart-h"><div><span class="lbl">Votre rédaction, face à</span><div class="num" style="margin-top:4px">${esc(refLabel())}</div></div><span class="sp"></span>
+    <div class="pgrid"><div class="glass card mienne"><div class="chart-h"><div><span class="lbl">Votre rédaction, face à</span><div class="num" style="margin-top:4px">${esc(refLabel())}</div></div><span class="sp"></span>
         <div class="seg"><button class="${st.diff === "inline" ? "on" : ""}" data-diff="inline">Corrections apparentes</button><button class="${st.diff === "side" ? "on" : ""}" data-diff="side">Côte à côte</button></div></div>
       ${body}${st.editing ? "" : legend}
       <div style="margin-top:28px"><span class="lbl">Passages disputés de l'alinéa ${o}</span>${unitsPills(o)}</div></div>
@@ -178,7 +178,7 @@ VIEW["atelier:cmp"] = () => {
   if (c.shown && c.a && c.b){
     const A = sideOf(c.a, c.o), B = sideOf(c.b, c.o);
     const col = (S) => `<div class="glass card"><div class="who"><span class="logo s" style="--lg:${grad(S.color)}"></span><div><div class="num">${esc(S.label)}</div><div class="lbl">${esc(S.sub)}</div></div></div>${textBlock(c.o, S.html)}</div>`;
-    res = `<div class="cols3" id="cols3">${col(A)}<div class="glass card ref"><div class="who"><span class="logo s" style="--lg:linear-gradient(135deg,#c7c9ef,#ffffff)"></span><div><div class="num">Référence</div><div class="lbl">${esc(refLabel())} · vierge</div></div></div>${textBlock(c.o, esc(refAl(c.o)))}</div>${col(B)}</div><div class="col">${legend}</div>`;
+    res = `<div class="cols3" id="cols3">${col(A)}<div class="glass card ref"><div class="who"><span class="logo s" style="--lg:transparent"></span><div><div class="num">Référence</div><div class="lbl">${esc(refLabel())} · vierge</div></div></div>${textBlock(c.o, esc(refAl(c.o)))}</div>${col(B)}</div><div class="col">${legend}</div>`;
   }
   return `<div class="wide">${back("Retour aux brouillons", "home")}<div class="hero" style="padding-top:0"><div class="stats"><span class="stat"><span class="orb"></span>Alinéa ${c.o}</span><span class="stat"><span class="orb"></span>Face à : ${esc(refShort())}</span></div>
     <h1>Comparer deux rédactions</h1><p class="lede">Choisissez une rédaction de départ et une autre ; elles s'ouvrent en trois colonnes, la référence au centre, vierge. Les corrections apparentes sont portées sur chaque rédaction.</p></div>
@@ -195,7 +195,7 @@ VIEW["atelier:article"] = () => {
     out.push(l.kind === "del" ? textBlock(l.o, `<del>${esc(refAl(l.o))}</del>`, l.o) : l.kind === "mod" ? textBlock(l.o, inlineDiff(refAl(l.o), l.text), l.o) : textBlock(l.at, `<ins>${esc(l.text)}</ins>`, "+"));
   }
   flush();
-  return `<div class="wide">${back("Retour aux brouillons", "home")}<div class="phead"><span class="logo" style="--lg:linear-gradient(135deg,#2a197d,#6a6cfb)">§</span><div><h1>Article 4 · votre version</h1><div class="sub">Tous vos brouillons appliqués, face à : ${esc(refLabel())}</div></div><span class="sp"></span>${refSelect()}</div>
+  return `<div class="wide">${back("Retour aux brouillons", "home")}<div class="phead"><span class="logo" style="--lg:transparent">§</span><div><h1>Article 4 · votre version</h1><div class="sub">Tous vos brouillons appliqués, face à : ${esc(refLabel())}</div></div><span class="sp"></span>${refSelect()}</div>
     <div class="pgrid"><div class="glass card">${out.join("")}${legend}</div>
     <div class="glass card act"><div><span class="chip">${MINE.length} brouillons</span></div><h2>L'article tel que vos brouillons le rédigent</h2><p class="expl">Les alinéas que vous ne touchez pas sont repliés ; ceux que vous modifiez portent les corrections apparentes face à la référence.</p>
       <div class="metrics">${metric("Alinéas touchés", verTouched(myVer()).size)}${metric("Alinéas", NAL)}</div>
@@ -206,13 +206,13 @@ VIEW["atelier:code"] = () => {
   const C = NX.code;
   const blocks = C.lettres.map(l => { const av = (C.avant[l] || []).join("\n"), ap = (C.apresCommission[l] || []).join("\n"), same = sameText(av, ap);
     return `<div class="parole"><div class="w"><span class="al-n">${esc(l)})</span>${same ? `<span class="chip">inchangé</span>` : `<span class="chip s-attente">modifié par la commission</span>`}</div><div class="legal" style="margin-top:4px">${same ? esc(short(ap, 420)) : inlineDiff(av, ap)}</div></div>`; }).join("");
-  return `<div class="wide">${back("Retour à l'article", "article")}<div class="phead"><span class="logo" style="--lg:linear-gradient(135deg,#015c4c,#02c2a1)">CGI</span><div><h1>${esc(C.article)}</h1><div class="sub">En vigueur, puis après la commission : les instructions de l'article appliquées mécaniquement</div></div></div><div class="glass card">${blocks}</div></div>`;
+  return `<div class="wide">${back("Retour à l'article", "article")}<div class="phead"><span class="logo" style="--lg:transparent">CGI</span><div><h1>${esc(C.article)}</h1><div class="sub">En vigueur, puis après la commission : les instructions de l'article appliquées mécaniquement</div></div></div><div class="glass card">${blocks}</div></div>`;
 };
 
 /* ================= DOSSIER ================= */
 VIEW["dossier:home"] = () => {
   const G = NX.grid(), nmod = G.filter(r => r.cells.includes("mod")).length;
-  const arts = NX.plan.map(p => `<div class="glass card" style="padding:24px;cursor:pointer;${p.num === "4" ? "box-shadow:inset 0 0 0 2px var(--line-on)" : ""}" data-art="${esc(p.num)}"><div class="top" style="display:flex;gap:8px;align-items:center"><span class="logo s" style="--lg:${p.num === "4" ? "linear-gradient(135deg,#2a197d,#6a6cfb)" : "linear-gradient(135deg,#9ca0e5,#c9b6ff)"}">${esc(p.num)}</span><span class="sp"></span>${p.statut ? `<span class="chip w" title="${esc(p.statut)}">${esc(p.statut.split(" ")[0])}</span>` : ""}</div>
+  const arts = NX.plan.map(p => `<div class="glass card" style="padding:24px;cursor:pointer;${p.num === "4" ? "outline:2px solid var(--da-encre);outline-offset:-2px" : ""}" data-art="${esc(p.num)}"><div class="top" style="display:flex;gap:8px;align-items:center"><span class="logo s" style="--lg:transparent">${esc(p.num)}</span><span class="sp"></span>${p.statut ? `<span class="chip w" title="${esc(p.statut)}">${esc(p.statut.split(" ")[0])}</span>` : ""}</div>
       <h3 style="margin:16px 0 6px">Article ${esc(p.num)}</h3><p class="expl" style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${esc(p.intitule || "(sans intitulé)")}</p>
       <div class="metrics" style="margin-top:16px">${metric("Amendements", p.n)}</div></div>`).join("");
   const rows = G.map(r => `<div class="trow grille-grid${r.o === st.o ? " cur" : ""}" ${r.o ? `data-hist="${r.o}"` : ""}><span class="t1">${r.o ?? "+"}</span>${r.cells.map(c => `<span><span class="cell ${c}" title="${{mod:"modifié par rapport à l'étape précédente", same:"inchangé", absent:"absent à cette étape", origine:"première rédaction"}[c]}">${{mod:"modifié", same:"·", absent:"absent", origine:"origine"}[c]}</span></span>`).join("")}<span class="ob">${r.o ? esc(NX.alShort(r.o, 120)) : "<i>alinéa introduit puis retiré en cours de navette</i>"}</span><span class="t1" style="text-align:right">${r.n || ""}</span></div>`).join("");
@@ -242,12 +242,12 @@ VIEW["dossier:hist"] = p => {
 VIEW["enjeux:home"] = () => {
   const decl = THEMES.filter(t => t.src === "déclaré").length;
   const cards = THEMES.map((th, i) => { const als = themeAls(th), eps = NX.themeParoles(th);
-    return `<div class="glass card prod" style="min-height:0"><div class="top"><span class="logo m" style="--lg:${["linear-gradient(135deg,#2a197d,#6a6cfb)","linear-gradient(135deg,#015c4c,#1dd9ba)","linear-gradient(135deg,#d298ff,#504dff)","linear-gradient(135deg,#ff8a5c,#ffc738)"][i % 4]}">${i + 1}</span><div class="chips"><span class="chip w" title="${th.src === "déclaré" ? "thème déclaré par le rapport" : "thème calculé par mots-clés"}">${th.src === "déclaré" ? "Déclaré par le rapport" : "Calculé"}</span></div></div>
+    return `<div class="glass card prod" style="min-height:0"><div class="top"><span class="logo m" style="--lg:transparent;background:${["var(--da-int-1)","var(--da-int-2)","var(--da-int-3)","var(--da-int-4)"][i % 4]}">${i + 1}</span><div class="chips"><span class="chip w" title="${th.src === "déclaré" ? "thème déclaré par le rapport" : "thème calculé par mots-clés"}">${th.src === "déclaré" ? "Déclaré par le rapport" : "Calculé"}</span></div></div>
       <h2 style="margin-top:20px">${esc(th.label)}</h2><p class="expl" style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">${esc(th.doc || "Thème calculé à partir des mots-clés des amendements ; le rapport n'en dit rien.")}</p>
       <div class="metrics">${metric("Amendements", th.amendements.length)}${metric("Alinéas", als.length)}${metric("Places", eps.length)}</div>
       <button class="cta full" style="margin-top:22px" data-th="${th.id}">Ouvrir</button></div>`; }).join("");
   const M = NX.matrix(), max = Math.max(1, ...M.rows.flatMap(r => r.cells.map(c => c.length)));
-  const mx = `<table class="mx"><thead><tr><th>Thème</th>${M.gs.map(g => `<th title="${esc(GR[g].name)}"><span class="chip w" style="padding:0 7px"><span class="d" style="background:${GR[g].color}"></span>${g}</span></th>`).join("")}<th>Inst.</th></tr></thead><tbody>${M.rows.map(r => `<tr><td data-th="${r.th.id}">${esc(r.th.label)}</td>${r.cells.map(c => { const v = c.length, a = v / max; return `<td>${v ? `<span class="v" data-th="${r.th.id}" style="--a:${(.08 + a * .62).toFixed(2)};--c:${a > .5 ? "#fff" : "#2f2d40"}">${v}</span>` : ""}</td>`; }).join("")}<td>${r.inst.length ? `<span class="v" style="--a:.06">${r.inst.length}</span>` : ""}</td></tr>`).join("")}</tbody></table>`;
+  const mx = `<table class="mx"><thead><tr><th>Thème</th>${M.gs.map(g => `<th title="${esc(GR[g].name)}"><span class="chip w" style="padding:0 7px"><span class="d" style="background:${GR[g].color}"></span>${g}</span></th>`).join("")}<th>Inst.</th></tr></thead><tbody>${M.rows.map(r => `<tr><td data-th="${r.th.id}">${esc(r.th.label)}</td>${r.cells.map(c => { const v = c.length, a = v / max; return `<td>${v ? `<span class="v" data-th="${r.th.id}" style="--a:${(.08 + a * .62).toFixed(2)};--c:${a > .5 ? "#fdfcf9" : "#1a1a1a"}">${v}</span>` : ""}</td>`; }).join("")}<td>${r.inst.length ? `<span class="v" style="--a:.06">${r.inst.length}</span>` : ""}</td></tr>`).join("")}</tbody></table>`;
   return `<div class="col"><div class="hero"><div class="stats"><span class="stat"><span class="orb"></span>${THEMES.length} thèmes</span><span class="stat"><span class="orb"></span>${decl} déclarés · ${THEMES.length - decl} calculés</span></div>
     <h1>Ce qui se joue dans l'article 4</h1><p class="lede">Les thèmes déclarés viennent du rapport de la commission ; les thèmes calculés sont repérés par mots-clés dans les amendements, et dits comme tels. Chaque fiche dit ce qu'en dit le rapport, ce qui en a été dit en réunion, et ce qu'en fait votre texte.</p></div>
     <div class="cards three">${cards}</div>
@@ -331,12 +331,13 @@ function confirmModal(){
   modal(`<span class="chip">${esc(draftNum(m))} · alinéa ${m.al}</span><h2 style="margin:14px 0 6px">Suivez les étapes</h2><p class="expl">Confirmer marque le brouillon comme prêt dans cette maquette : rien n'est déposé, rien n'est envoyé.</p>
     <div class="steps">${step(1, s.relu, "Relire face à la référence", `Votre rédaction, corrections apparentes, face à : ${esc(refLabel())}.`, `<button class="pill" data-step="relu">Relire</button>`)}
     ${step(2, s.vu, "Voir les passages disputés", U.length ? `${U.length} passage${U.length > 1 ? "s" : ""} de l'alinéa ${m.al} ${U.length > 1 ? "sont" : "est"} modifié${U.length > 1 ? "s" : ""} par d'autres propositions.` : "Aucun passage de cet alinéa n'est disputé.", `<button class="pill" data-step="vu">${U.length ? "Voir" : "Noter"}</button>`)}
-    ${step(3, m.confirme, "Confirmer l'amendement", m.confirme ? "Confirmé." : "Disponible une fois les deux premières étapes faites.", `<button class="cta" data-step="ok"${s.relu && s.vu && !m.confirme ? "" : " disabled"}>${m.confirme ? "Confirmé" : "Confirmer"}</button>`)}</div>`, true);
+    ${step(3, m.confirme, "Confirmer l'amendement", m.confirme ? "Confirmé." : "Disponible une fois les deux premières étapes faites.", `<button class="cta pri" data-step="ok"${s.relu && s.vu && !m.confirme ? "" : " disabled"}>${m.confirme ? "Confirmé" : "Confirmer"}</button>`)}</div>`, true);
 }
 function readme(){
   MODAL = "readme";
   modal(`<div class="readme"><span class="chip">À propos</span><h2 style="margin:14px 0 8px">Maquette inspirée de Sky (app.sky.money)</h2>
   <p>La Boussole des amendements, article 4 du projet de loi logement : données réelles (143 amendements, 26 places de la réunion de commission), groupes politiques fictifs. Inspiration : l'application Sky (ex-MakerDAO), état 2026, identité visuelle de l'agence Clay. Aucun logo ni asset de marque n'est repris ; le ciel est recréé en dégradés CSS.</p>
+  <p>La forme suit désormais la direction artistique « Le bordereau » (<code>direction-artistique/DA.md</code>).</p>
   <h3>Ce qui est emprunté (forme et mécanismes)</h3><ul>
   <li><b>Squelette sans barre latérale</b> : marque à gauche, <b>quatre onglets en pilules de 40 px</b> avec pictogramme (ici Dossier, Atelier, Enjeux, Réunion), bouton en dégradé et bouton rond « menu » à droite. Sur mobile, les onglets défilent sous l'en-tête.</li>
   <li><b>Fond lavande</b> (rgb 220,223,252) et ciel nuageux ; <b>cartes en verre</b> (blanc 60 %, flou 20 px), rayon 28, aucune ombre ; bordures lavande 30 %.</li>

@@ -44,7 +44,8 @@ const ai = (svg, c) => `<span class="ai" style="--c:${c}">${svg}</span>`;
 const li = (svg, c) => `<span class="li"${c ? ` style="--c:${c}"` : ""}>${svg}</span>`;
 const dot = c => `<span class="dot" style="--c:${c}"></span>`;
 const numI = n => `<span class="num">${n}</span>`;
-const tag = (t, c, attr) => `<span class="tag" style="--c:${c || "var(--text2)"}"${attr || ""}>${esc(t)}</span>`;
+const tagCls = c => c && c[0] === "#" ? "tag g" : "tag";
+const tag = (t, c, attr) => `<span class="${tagCls(c)}" style="--c:${c || "var(--text2)"}"${attr || ""}>${esc(t)}</span>`;
 const KEYN = {mod:"⌘", alt:"⌥", shift:"⇧", ctrl:"⌃", enter:"↵", esc:"esc", backspace:"⌫", up:"↑", down:"↓"};
 const kc = sc => `<span class="kcs">${sc.split("+").map(k => `<span class="kc">${esc(KEYN[k] || k.toUpperCase())}</span>`).join("")}</span>`;
 const N = s => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
@@ -57,8 +58,8 @@ let CMP = store.get("cmp", []).filter(id => id && (id[0] === "M" ? MINE.some(m =
 const saveCmp = () => store.set("cmp", CMP);
 
 /* ---------- sorts, groupes ---------- */
-const SC = {adopte: "var(--green)", rejete: "var(--red)", tombe: "var(--text2)", retire: "var(--yellow)", ns: "var(--yellow)", ecarte: "var(--text3)", attente: "var(--blue)"};
-const sortTag = a => tag(cap(sortWord(a).split(" · ")[0]), SC[NX.sortKey(a)]);
+const SC = {adopte: "var(--da-encre)", rejete: "var(--da-encre-3)", tombe: "var(--da-encre-3)", retire: "var(--da-encre-3)", ns: "var(--da-encre-3)", ecarte: "var(--da-encre-3)", attente: "var(--da-encre-3)"};
+const sortTag = a => tag(cap(sortWord(a).split(" · ")[0]), SC[NX.sortKey(a)], ` data-sort="${NX.sortKey(a)}"`);
 const gcol = a => a.inst ? "var(--text2)" : (GR[a.groupe] || {}).color || "var(--text2)";
 const gabbr = a => a.inst ? (a.inst === "rapporteure" ? "Rapp." : "Rapp. avis") : a.groupe;
 const ME_C = GR[ME].color;
@@ -449,7 +450,7 @@ function formV(m, fresh){
 }
 
 /* — Enjeux — */
-const TH_COL = ["var(--magenta)", "var(--blue)", "var(--orange)", "var(--yellow)", "var(--green)", "var(--red)", "var(--purple)", "#2bb3b1", "#8a8f98"];
+const TH_COL = ["var(--da-int-1)", "var(--da-int-2)", "var(--da-int-3)", "var(--da-int-4)", "var(--da-int-5)", "var(--da-papier-2)", "var(--da-papier-2)", "var(--da-papier-2)", "var(--da-papier-2)"];
 const TH_GLY = {famille: "⌂", scpi: "◫", neuf: "↻", seuil: "▤", dpe: "◐", fossile: "▲", plafond: "%", maisons: "▦", supprimer: "✕"};
 const thColor = th => TH_COL[THEMES.indexOf(th) % TH_COL.length];
 function enjeuxV(focus){
@@ -460,7 +461,7 @@ function enjeuxV(focus){
     sections: () => [
       {title: "Déclarés par le rapport", items: THEMES.filter(t => t.src === "déclaré").map(cell)},
       {title: "Calculés par mots-clés (dit comme tel)", items: THEMES.filter(t => t.src !== "déclaré").map(cell)},
-      {title: "Tableau", items: [{key: "mx", title: "Thèmes × groupes", sub: "nombre d'amendements", tile: `<div class="tile" style="--c:#5b6170"><span class="g">▦</span><span><span class="k">MATRICE</span><div class="als">${THEMES.length} × ${NX.matrix().gs.length}</div></span></div>`, actions: () => [A("Ouvrir la matrice", I.table, () => push(matrixV()))]}]},
+      {title: "Tableau", items: [{key: "mx", title: "Thèmes × groupes", sub: "nombre d'amendements", tile: `<div class="tile" style="--c:var(--da-papier-2)"><span class="g">▦</span><span><span class="k">MATRICE</span><div class="als">${THEMES.length} × ${NX.matrix().gs.length}</div></span></div>`, actions: () => [A("Ouvrir la matrice", I.table, () => push(matrixV()))]}]},
     ]};
 }
 function themeV(id){
@@ -503,8 +504,8 @@ function matrixV(){
     md(){
       const M = NX.matrix(), max = Math.max(1, ...M.rows.flatMap(r => r.cells.map(c => c.length)));
       return `<h1>Thèmes × groupes</h1><div class="sub">Nombre d'amendements par thème et par groupe : une seule chose comptée. Cliquer une ligne ouvre le thème.</div>
-        <div class="tw"><table><tr><th>Thème</th>${M.gs.map(g => `<th class="c" title="${esc(GR[g].name)}"><span style="color:${GR[g].color}">●</span> ${g}</th>`).join("")}<th class="c">Rapp.</th></tr>
-        ${M.rows.map(r => `<tr data-th="${r.th.id}" style="cursor:pointer"><td>${esc(r.th.label)}</td>${r.cells.map(c => `<td class="c" style="background:color-mix(in srgb,var(--blue) ${Math.round(c.length / max * 45)}%,transparent)">${c.length || ""}</td>`).join("")}<td class="c">${r.inst.length || ""}</td></tr>`).join("")}</table></div>
+        <div class="tw"><table><tr><th>Thème</th>${M.gs.map(g => `<th class="c" title="${esc(GR[g].name)}"><span class="da-groupe" style="--g:${GR[g].color}"></span>${g}</th>`).join("")}<th class="c">Rapp.</th></tr>
+        ${M.rows.map(r => `<tr data-th="${r.th.id}" style="cursor:pointer"><td>${esc(r.th.label)}</td>${r.cells.map(c => `<td class="c" style="background:color-mix(in srgb,var(--da-encre-2) ${Math.round(c.length / max * 35)}%,transparent)">${c.length || ""}</td>`).join("")}<td class="c">${r.inst.length || ""}</td></tr>`).join("")}</table></div>
         <h3>Groupes (fictifs)</h3><p>${M.gs.map(g => tag(`${g} · ${GR[g].name}`, GR[g].color)).join(" ")}</p>`;
     }, actions: () => []};
 }
@@ -538,14 +539,15 @@ function placeDetail(e){
 function overviewDetail(){
   const E = NX.episodes, tot = E.reduce((s, e) => s + e.mots, 0), max = Math.max(...E.map(e => e.mots));
   return {md: `<h1>Les 26 places à l'échelle des mots</h1><div class="sub">${tot.toLocaleString("fr-FR")} mots prononcés · en vert, les places où un amendement a été adopté · cliquer une place</div>
-    <div style="display:flex;gap:2px;height:26px;margin:10px 0 18px">${E.map(e => `<div data-selplace="${e.place}" title="Place ${e.place} · ${e.mots} mots" style="flex:${e.mots} 1 0;min-width:3px;border-radius:4px;cursor:pointer;background:${adopted(e) ? "var(--green)" : "rgba(var(--tx),.22)"}"></div>`).join("")}</div>
-    ${E.map(e => `<div data-selplace="${e.place}" style="display:flex;align-items:center;gap:10px;height:24px;cursor:pointer;font-size:13px"><span class="mono" style="width:22px;text-align:right;color:var(--text3)">${e.place}</span><span class="bar${adopted(e) ? " ad" : ""}" style="width:${Math.max(3, e.mots / max * 60)}%;height:8px"></span><span style="color:var(--text2);white-space:nowrap">${e.mots}${adopted(e) ? ' <span style="color:var(--green)">✓</span>' : ""}</span></div>`).join("")}`};
+    <div style="display:flex;gap:2px;height:26px;margin:10px 0 18px">${E.map(e => `<div data-selplace="${e.place}" title="Place ${e.place} · ${e.mots} mots" style="flex:${e.mots} 1 0;min-width:3px;border-radius:0;cursor:pointer;background:${adopted(e) ? "var(--da-encre)" : "var(--da-filet-fort)"}"></div>`).join("")}</div>
+    ${E.map(e => `<div data-selplace="${e.place}" style="display:flex;align-items:center;gap:10px;height:24px;cursor:pointer;font-size:13px"><span class="mono" style="width:22px;text-align:right;color:var(--text3)">${e.place}</span><span class="bar${adopted(e) ? " ad" : ""}" style="width:${Math.max(3, e.mots / max * 60)}%;height:8px"></span><span style="color:var(--text2);white-space:nowrap">${e.mots}${adopted(e) ? ' <span style="color:var(--da-encre)">✓</span>' : ""}</span></div>`).join("")}`};
 }
 
 /* — Lisez-moi — */
 function readmeV(){
   return {kind: "detail", key: "readme", title: "Lisez-moi · à propos", icon: ai(I.info, "var(--text2)"), large: true,
     md: () => `<h1>Boussole</h1><div class="sub">Maquette inspirée de Raycast (lanceur macOS, v1 et v2 « Liquid Glass ») · article 4 du projet de loi logement · données réelles, groupes politiques fictifs</div>
+      <p>La forme suit désormais la direction artistique « Le bordereau » (<code>direction-artistique/DA.md</code>) : papier, encre, bordereau à cadre complet ; la structure Raycast est inchangée.</p>
       <h2>Comment s'en servir</h2><ul>
         <li>Tout se pilote au clavier : ${kc("up")} ${kc("down")} (ou ${kc("ctrl+n")} ${kc("ctrl+p")}) parcourir · ${kc("mod+up")} ${kc("mod+down")} section précédente / suivante · ${kc("alt+up")} ${kc("alt+down")} page · ${kc("enter")} action principale · ${kc("mod+enter")} action secondaire.</li>
         <li>${kc("mod+k")} ouvre le <b>panneau d'actions</b> de l'élément sélectionné : « press ⌘K whenever you're unsure ». Chaque action affiche son raccourci à droite, pour l'apprendre.</li>
@@ -614,7 +616,7 @@ function renderHead(v){
   if (v.dd) dd.innerHTML = esc(v.dd.options.find(o => o[0] === v.dd.value)[1]) + I.chev;
 }
 function rowHTML(it, on){
-  const acc = (it.acc || []).filter(Boolean).map(x => x.tag != null ? `<span class="tag" style="--c:${x.c}"${x.tip ? ` title="${esc(x.tip)}"` : ""}>${esc(x.tag)}</span>` : x.html ? x.html : x.icon ? `<span class="li" style="--c:${x.c || "var(--text2)"}"${x.tip ? ` title="${esc(x.tip)}"` : ""}>${x.icon}</span>` : `<span class="ax"${x.c ? ` style="color:${x.c}"` : ""}${x.tip ? ` title="${esc(x.tip)}"` : ""}>${esc(x.text)}</span>`).join("");
+  const acc = (it.acc || []).filter(Boolean).map(x => x.tag != null ? `<span class="${tagCls(x.c)}" style="--c:${x.c}"${x.tip ? ` title="${esc(x.tip)}"` : ""}>${esc(x.tag)}</span>` : x.html ? x.html : x.icon ? `<span class="li" style="--c:${x.c || "var(--text2)"}"${x.tip ? ` title="${esc(x.tip)}"` : ""}>${x.icon}</span>` : `<span class="ax"${x.c ? ` style="color:${x.c}"` : ""}${x.tip ? ` title="${esc(x.tip)}"` : ""}>${esc(x.text)}</span>`).join("");
   return `<div class="row${on ? " on" : ""}" data-i="${it._i}" role="option" aria-selected="${on}">${it.icon || ""}<span class="tt">${esc(it.title)}</span><span class="st">${esc(it.sub || "")}</span><span class="acc">${acc}</span></div>`;
 }
 const emptyView = v => `<div class="emptyv"><span class="ei">${I.search}</span><b>Aucun résultat</b><span>${v.q ? `Rien ne correspond à « ${esc(v.q)} ».` : "Rien à afficher avec ce filtre."} ${kc("esc")} pour effacer.</span></div>`;
@@ -677,7 +679,7 @@ function toast(style, title, msg, action){
 function renderFoot(){
   const v = cur();
   if (TOAST){
-    const ic = TOAST.style === "animated" ? `<span class="spin"></span>` : `<span class="tic" style="--c:${TOAST.style === "failure" ? "var(--red)" : "var(--green)"}">${TOAST.style === "failure" ? I.x : I.check}</span>`;
+    const ic = TOAST.style === "animated" ? `<span class="spin"></span>` : `<span class="tic" style="--c:${TOAST.style === "failure" ? "var(--da-del)" : "var(--da-encre)"}">${TOAST.style === "failure" ? I.x : I.check}</span>`;
     $("#fl").innerHTML = `<span class="toast">${ic}<span class="nm">${esc(TOAST.title)}</span>${TOAST.msg ? `<span class="msg">${esc(TOAST.msg)}</span>` : ""}${TOAST.action ? `<span class="ta" data-toastact>${esc(TOAST.action.t)}</span>` : ""}</span>`;
   } else $("#fl").innerHTML = `${v.icon || ""}<span class="nm">${esc(STACK.length > 1 ? STACK.slice(1).map(x => x.title).slice(-2).join(" › ") : "Boussole")}</span>`;
   const [p] = primaries(), isForm = v.kind === "form";

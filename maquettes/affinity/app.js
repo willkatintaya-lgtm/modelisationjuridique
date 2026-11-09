@@ -101,7 +101,7 @@ function renderTB(){
 function renderTools(){
   const p = PER[st.p];
   $("#tools").innerHTML = p.tools.map(t => t === "sep" ? `<span class="tsep"></span>` : `<button class="tool${tool() === t.id ? " on" : ""}" data-tool="${t.id}" title="${esc(t.label)} (${t.key})" aria-label="${esc(t.label)}">${t.ic}</button>`).join("")
-    + `<span class="sp"></span><span class="tsep"></span><div class="swatchpair" title="Couleurs : mon groupe et le concurrent ouvert"><i style="left:2px;top:2px;background:${GR[ME].color}"></i><i style="left:10px;top:12px;background:${st.am && AM[st.am] ? who(AM[st.am]).color : "#9a9a9a"}"></i></div>`;
+    + `<span class="sp"></span><span class="tsep"></span><div class="swatchpair" title="Couleurs : mon groupe et le concurrent ouvert"><i style="left:2px;top:2px;background:${GR[ME].color}"></i><i style="left:10px;top:12px;background:${st.am && AM[st.am] ? who(AM[st.am]).color : "#655e52"}"></i></div>`;
 }
 
 /* ---------- barre contextuelle (selon l'outil) ---------- */
@@ -140,7 +140,7 @@ const LEFT = {};
 LEFT.dossier = () => group("Ld", [{id:"art", label:"Articles"}, {id:"al", label:"Alinéas"}], "al", cur => {
   if (cur === "art") return NX.plan.map(p => `<div class="prow${st.art === p.num ? " on" : ""}" data-art="${esc(p.num)}"><span class="n">Art. ${esc(p.num)}</span><span class="t">${esc(short(p.intitule || p.statut || "", 60))}</span>${p.n ? `<span class="badge">${p.n}</span>` : ""}</div>`).join("");
   const G = NX.grid().filter(r => r.o);
-  return `<div class="pg-sub">Article 4 <span class="r"><span class="badge">${NAL}</span></span></div><div class="thumbs">` + G.map(r => thumb(r.o, `<b>${r.o}</b><span class="mini-t">${esc(short(TRANSMIS[r.o - 1], 260))}</span>${r.cells.includes("mod") ? `<span class="flag" style="background:#546984">M</span>` : ""}`, `Alinéa ${r.o}`, st.o === r.o, `data-o="${r.o}"`)).join("") + `</div>`;
+  return `<div class="pg-sub">Article 4 <span class="r"><span class="badge">${NAL}</span></span></div><div class="thumbs">` + G.map(r => thumb(r.o, `<b>${r.o}</b><span class="mini-t">${esc(short(TRANSMIS[r.o - 1], 260))}</span>${r.cells.includes("mod") ? `<span class="flag">M</span>` : ""}`, `Alinéa ${r.o}`, st.o === r.o, `data-o="${r.o}"`)).join("") + `</div>`;
 }, {f:"1 1 auto"});
 LEFT.atelier = () => group("La", [{id:"br", label:"Brouillons"}, {id:"al", label:"Alinéas"}], "br", cur => {
   if (cur === "br") return `<div class="pg-sub">Mes brouillons <span class="badge">${MINE.length}</span><span class="r"><button class="ib" data-cmd="new" title="Nouveau brouillon sur l'alinéa ${st.o}">${IC.plus}</button></span></div><div class="thumbs" style="--tc:1;--ar:4/3">`
@@ -183,7 +183,7 @@ RIGHT.atelier = () => {
     const L = [];
     if (a) L.push(`<div class="lrow${st.lay === "am" ? " on" : ""}${st.vis.am ? "" : " dim"}" data-lay="am"><span class="chev">›</span>${vg(who(a).color, 4)}<span class="nm">${a.num} · ${esc(who(a).name)}<small>concurrent, corrections apparentes</small></span><button class="eye${st.vis.am ? "" : " off"}" data-eye="am" title="Visibilité"></button></div>`);
     L.push(`<div class="lrow${st.lay === "mine" ? " on" : ""}${st.vis.mine ? "" : " dim"}" data-lay="mine"><span class="chev">›</span>${vg(GR[ME].color, 4)}<span class="nm">${m ? esc(draftNum(m)) : "Mon brouillon (aucun)"}<small>${GR[ME].name}, corrections apparentes</small></span><button class="eye${st.vis.mine ? "" : " off"}" data-eye="mine" title="Visibilité"></button></div>`);
-    L.push(`<div class="lrow${st.lay === "ref" ? " on" : ""}${st.vis.ref ? "" : " dim"}" data-lay="ref"><span class="chev">›</span>${vg("#9a9a9a", 4)}<span class="nm">Référence · ${esc(refShort())}<small>vierge, verrouillée</small></span><button class="eye${st.vis.ref ? "" : " off"}" data-eye="ref" title="Visibilité"></button></div>`);
+    L.push(`<div class="lrow${st.lay === "ref" ? " on" : ""}${st.vis.ref ? "" : " dim"}" data-lay="ref"><span class="chev">›</span>${vg("#655e52", 4)}<span class="nm">Référence · ${esc(refShort())}<small>vierge, verrouillée</small></span><button class="eye${st.vis.ref ? "" : " off"}" data-eye="ref" title="Visibilité"></button></div>`);
     return `<div class="slider"><span>Opacité</span><span class="tr" style="--x:100"><i></i></span><span class="v">100 %</span></div>` + L.join("") + (a ? "" : `<div class="empty" style="font-size:11px">Ouvrir un concurrent (onglet Concurrents) l'ajoute en calque sous votre brouillon.</div>`);
   };
   return group("Rc", [{id:"conc", label:`Concurrents <span class="badge">${C.units.length}</span>`}, {id:"pas", label:`Passages <span class="badge">${U.length}</span>`}], "conc", conc, {f:"1 1 45%"})
@@ -198,7 +198,7 @@ RIGHT.dossier = () => {
 };
 RIGHT.enjeux = () => {
   const th = THEMES.find(t => t.id === st.th), M = NX.matrix(), row = M.rows.find(r => r.th.id === th.id);
-  return group("Rs", [{id:"gr", label:"Groupes"}], "gr", () => `<div class="pg-sub">${esc(th.label)} · amendements par groupe</div><div class="swatches">${M.gs.map((g, i) => `<div class="swatch${row.cells[i].length ? "" : " zero"}" title="${esc(GR[g].name)}"><i style="background:${GR[g].color}">${row.cells[i].length || ""}</i>${g}</div>`).join("")}${row.inst.length ? `<div class="swatch" title="Rapporteurs"><i style="background:#5b5446">${row.inst.length}</i>Inst.</div>` : ""}</div>`, {f:"0 0 auto"})
+  return group("Rs", [{id:"gr", label:"Groupes"}], "gr", () => `<div class="pg-sub">${esc(th.label)} · amendements par groupe</div><div class="swatches">${M.gs.map((g, i) => `<div class="swatch${row.cells[i].length ? "" : " zero"}" title="${esc(GR[g].name)}"><i style="--g:${GR[g].color}">${row.cells[i].length || ""}</i>${g}</div>`).join("")}${row.inst.length ? `<div class="swatch" title="Rapporteurs"><i style="--g:#5b5446">${row.inst.length}</i>Inst.</div>` : ""}</div>`, {f:"0 0 auto"})
     + group("Rt", [{id:"al", label:"Alinéas du thème"}], "al", () => { const als = themeAls(th); return als.length ? als.map(o => `<div class="prow" data-go-al="${o}"><span class="n">Al. ${o}</span><span class="t">${esc(NX.alShort(o, 70))}</span></div>`).join("") : `<div class="empty">Aucun alinéa précis.</div>`; }, {f:"1 1 auto"});
 };
 RIGHT.reunion = () => {
@@ -206,7 +206,7 @@ RIGHT.reunion = () => {
   const sp = new Map(); e.paroles.forEach(p => { const k = NX.speaker(p); sp.set(k, (sp.get(k) || {mots:0, c:p.groupe ? NX.groupColor(p.groupe) : "#5b5446"})); sp.get(k).mots += p.mots; });
   return group("Rv", [{id:"am", label:"Amendements"}, {id:"in", label:"Intervenants"}], "am", cur => cur === "am" ? ams.map(a => `<div class="prow" data-am="${a.id}">${dot(who(a).color)}<span class="n">${a.num}</span><span class="t">${esc(who(a).name)}</span><span class="s ${sortCls(a)}">${esc(sortWord(a))}</span></div>`).join("") || `<div class="empty">Aucun amendement.</div>`
     : [...sp].map(([k, v]) => `<div class="prow">${dot(v.c, 1)}<span class="t" style="color:var(--fg)">${esc(k)}</span><span class="s">${v.mots} mots</span></div>`).join(""), {f:"1 1 auto"})
-    + group("Rn", [{id:"nav", label:"Navigateur"}], "nav", () => { const max = Math.max(...NX.episodes.map(x => x.mots)); return `<div class="navi"><div class="np" style="gap:3px">${NX.episodes.map(x => `<i class="${x.ams.some(id => AM[id] && AM[id].sort === "Adopté") ? "mod" : ""}${x.place === st.place ? " on" : ""}" style="width:${Math.max(4, x.mots / max * 100)}%;${x.ams.some(id => AM[id] && AM[id].sort === "Adopté") ? "background:#2AC7A5" : ""}" data-place="${x.place}" title="Place ${x.place} · ${x.mots} mots"></i>`).join("")}</div><div class="zoom"><span>place</span><span class="track" style="background:linear-gradient(90deg,var(--sys) ${st.place / 26 * 100}%,var(--field) 0)"></span><span class="val">${st.place} / 26</span></div></div>`; }, {f:"0 0 auto"});
+    + group("Rn", [{id:"nav", label:"Navigateur"}], "nav", () => { const max = Math.max(...NX.episodes.map(x => x.mots)); return `<div class="navi"><div class="np" style="gap:3px">${NX.episodes.map(x => `<i class="${x.ams.some(id => AM[id] && AM[id].sort === "Adopté") ? "mod" : ""}${x.place === st.place ? " on" : ""}" style="width:${Math.max(4, x.mots / max * 100)}%;${x.ams.some(id => AM[id] && AM[id].sort === "Adopté") ? "background:var(--da-encre)" : ""}" data-place="${x.place}" title="Place ${x.place} · ${x.mots} mots"></i>`).join("")}</div><div class="zoom"><span>place</span><span class="track" style="background:linear-gradient(90deg,var(--sys) ${st.place / 26 * 100}%,var(--field) 0)"></span><span class="val">${st.place} / 26</span></div></div>`; }, {f:"0 0 auto"});
 };
 
 /* ---------- la page : vues ---------- */
@@ -248,7 +248,7 @@ V.rediger = () => {
   const o = st.o, m = draft(), a = st.am && AM[st.am];
   const layer = (id, head, body, tag) => `<section class="lay ${id}${st.lay === id ? " picked" : ""}" data-lay="${id}">${selHandles(tag)}<div class="lay-h">${head}</div>${body}</section>`;
   let out = "";
-  if (st.vis.ref) out += layer("ref", `${dot("#9a9a9a", 1)} Référence · ${esc(refLabel())} · vierge`, `<p class="ref-t">${esc(refAl(o))}</p>`, "Référence");
+  if (st.vis.ref) out += layer("ref", `${dot("#655e52", 1)} Référence · ${esc(refLabel())} · vierge`, `<p class="ref-t">${esc(refAl(o))}</p>`, "Référence");
   if (st.vis.mine){
     if (!m) out += layer("mine", `${dot(GR[ME].color, 1)} Mon brouillon`, `<p class="small">Aucun brouillon sur l'alinéa ${o}.</p><p><button class="pbtn pri" data-cmd="new">${IC.plus.replace("<svg", '<svg style="width:14px;height:14px"')} Nouveau brouillon à partir de la référence</button></p>`, "Brouillon");
     else if (st.editing) out += layer("mine", `${dot(GR[ME].color, 1)} ${esc(draftNum(m))} · ${esc(GR[ME].name)} · édition`, `<p class="lead">${esc(draftLead(m))}</p><div class="edit"><textarea id="ta" spellcheck="false">${esc(m.texte)}</textarea><div class="livecap">Calque miroir · face à la référence</div><div class="live" id="live">${liveHTML(refAl(o), m.texte)}</div><p style="margin-top:12px;display:flex;gap:8px"><button class="pbtn pri" data-cmd="valider">Valider ${kb("Ctrl ↩")}</button><button class="pbtn" data-cmd="annuler">Annuler</button></p></div>`, "Édition");
@@ -271,7 +271,7 @@ V.inspecter = () => {
   const text = m && m.mode === "rediger" ? m.texte : refAl(o);
   let body = m && m.mode === "rediger" ? NX.unitsOnDiff(NX.draftDiff(m), o, m.texte) : unitMarks(o, refAl(o));
   if (u) body = body.replace(new RegExp(`(<mark class="pt[^"]*)(" data-u="${u.k}")`), "$1 cur$2");
-  const pg = page(runhead("Inspecter", `alinéa ${o}`) + `<div class="lay-h">${m && m.mode === "rediger" ? dot(GR[ME].color, 1) + " " + esc(draftNum(m)) + " · corrections apparentes" : dot("#9a9a9a", 1) + " Référence · " + esc(refLabel())}</div><p>${body}</p><p class="small" style="margin-top:14px">${U.length} passage${U.length > 1 ? "s" : ""} disputé${U.length > 1 ? "s" : ""} : soulignés en pointillé orangé, plus épais quand ils sont plus disputés. Cliquer un passage.</p>`);
+  const pg = page(runhead("Inspecter", `alinéa ${o}`) + `<div class="lay-h">${m && m.mode === "rediger" ? dot(GR[ME].color, 1) + " " + esc(draftNum(m)) + " · corrections apparentes" : dot("#655e52", 1) + " Référence · " + esc(refLabel())}</div><p>${body}</p><p class="small" style="margin-top:14px">${U.length} passage${U.length > 1 ? "s" : ""} disputé${U.length > 1 ? "s" : ""} : soulignés en pointillé orangé, plus épais quand ils sont plus disputés. Cliquer un passage.</p>`);
   if (!u) return art(`Alinéa ${o} · inspecter`) + pg;
   const C = clusters(u), ref = TRANSMIS[o - 1];
   const ctxA = short(ref.slice(Math.max(0, u.a - 70), u.a).split(" ").slice(1).join(" "), 80), ctxB = ref.slice(u.b, u.b + 70).split(" ").slice(0, -1).join(" ");
@@ -294,7 +294,7 @@ V.comparer = () => {
   const A = cmpSide(st.cmpL, o), B = cmpSide(st.cmpR, o);
   if (!A || !B) return art(`Comparer · alinéa ${o}`) + page(`<p class="small">Il faut deux rédactions sur l'alinéa ${o} (un brouillon ou des concurrents) pour comparer.</p>`);
   const pp = (X, cls) => `<div class="pp ${cls || ""}"><div class="lay-h">${dot(X.color, 1)} ${esc(X.sub)}</div><h3>${esc(X.label)}</h3><p class="lead">${esc(X.lead)}</p><p>${X.html}</p></div>`;
-  return `<div class="spreadlbl"><span>Gauche</span><span style="text-align:center">Référence au centre · vierge</span><span style="text-align:right">Droite</span></div><div class="spreadwrap" style="width:min(100%,1180px)"><div class="spread">${pp(A)}${pp({label:refLabel(), sub:"Référence · vierge", color:"#9a9a9a", lead:`Alinéa ${o}, tel qu'il est`, html:esc(refAl(o))}, "mid")}${pp(B)}</div></div><p style="font-size:11px;color:var(--fg2);margin-top:10px;width:min(100%,1180px)">Les corrections apparentes sont portées sur chaque rédaction, face à la référence du centre, qui reste vierge. Sur écran étroit, faire glisser la planche.</p>`;
+  return `<div class="spreadlbl"><span>Gauche</span><span style="text-align:center">Référence au centre · vierge</span><span style="text-align:right">Droite</span></div><div class="spreadwrap" style="width:min(100%,1180px)"><div class="spread">${pp(A)}${pp({label:refLabel(), sub:"Référence · vierge", color:"#655e52", lead:`Alinéa ${o}, tel qu'il est`, html:esc(refAl(o))}, "mid")}${pp(B)}</div></div><p style="font-size:11px;color:var(--fg2);margin-top:10px;width:min(100%,1180px)">Les corrections apparentes sont portées sur chaque rédaction, face à la référence du centre, qui reste vierge. Sur écran étroit, faire glisser la planche.</p>`;
 };
 V.article = () => {
   const L = verLines(myVer()), out = []; let run = [];
@@ -387,6 +387,7 @@ function renderModal(){
   if (st.modal === "prefs") M.innerHTML = `<div class="mh">Préférences · Interface</div><div class="mb"><p><b>Style de l'interface</b></p>${["dark", "light"].map(t => `<label class="opt${st.theme === t ? " on" : ""}"><input type="radio" name="ui" data-uistyle="${t}"${st.theme === t ? " checked" : ""}><span><b>${t === "dark" ? "Sombre" : "Clair"}</b><small>${t === "dark" ? "par défaut" : "la page du document reste blanche"}</small></span></label>`).join("")}</div><div class="mf"><button class="cb pri" data-cmd="close-modal">Fermer</button></div>`;
   if (st.modal === "about") M.innerHTML = `<div class="mh">Lisez-moi</div><div class="mb">
     <p><b>Maquette inspirée d'Affinity</b> (Photo, Designer, Publisher v2 de Serif ; « Affinity by Canva » v3, octobre 2025). Article 4 du projet de loi logement : données réelles, groupes politiques fictifs. Aucun logo ni nom de produit dans l'interface ; les glyphes des Personas sont dessinés pour la maquette.</p>
+    <p>La forme suit désormais la direction artistique « Le bordereau » (<code>direction-artistique/DA.md</code>) : thème clair unique, papier et encre ; la structure et les mécanismes décrits ci-dessous restent ceux de la maquette.</p>
     <h3>Ce qui est emprunté (forme et mécanismes)</h3><ul>
     <li><b>Personas</b> : les quatre espaces (Dossier, Atelier, Enjeux, Réunion) sont des façons de travailler sur le même document. L'icône active est saturée, les autres désaturées. Chacune change les outils, la barre contextuelle et le Studio, sans quitter l'article (« Think of Personas as different ways of working within your app »). Raccourcis Ctrl+Maj+1 à 4.</li>
     <li><b>Toolbar</b> avec le nom du document en pastille grise au centre ; un clic ouvre <b>Configuration du document…</b>, qui sert ici à choisir la référence.</li>
