@@ -72,15 +72,15 @@
 #cmp{width:100%}
 #cmp>.bandeau{margin:0 0 16px;background:rgba(217,181,106,.08);border-color:#3a3f4c;color:var(--fg)}
 #cmp>.bandeau button{color:var(--gold);text-decoration-color:var(--gold)}
-.fenetres{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px;align-items:start}
-.page.fen{width:100%;padding:28px 30px 30px;outline-width:8px;outline-offset:-8px}
+.fenetres{display:flex;flex-direction:column;gap:26px;align-items:center}
+.page.fen{width:min(100%,760px);padding:28px 30px 30px;outline-width:8px;outline-offset:-8px}
 .page.fen .runhead{margin-bottom:12px;align-items:baseline}
 .page.fen .x{font:400 18px/1 var(--ui);color:var(--muted-p);margin-left:auto;padding:0 2px}
 .page.fen .x:hover{color:var(--ink)}
 .fen-tit{font:600 16px/1.35 var(--serif);margin:0 0 10px}
-.fen-corps{max-height:calc(100vh - 230px);overflow:auto;scrollbar-width:none;-webkit-mask-image:linear-gradient(#000 calc(100% - 28px),transparent);mask-image:linear-gradient(#000 calc(100% - 28px),transparent);padding-bottom:20px}
+.fen-corps{}
 .fen-corps::-webkit-scrollbar{display:none}
-.fen-corps .al{font-size:15px}
+
 /* les petits modules sous l'article courant */
 .modules{margin:2px 0 14px;padding:10px 12px 8px;border:1px solid var(--rule);background:rgba(255,255,255,.3)}
 .modules .tt{font:600 9.5px var(--ui);letter-spacing:.14em;text-transform:uppercase;color:var(--muted-p);margin-bottom:8px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
