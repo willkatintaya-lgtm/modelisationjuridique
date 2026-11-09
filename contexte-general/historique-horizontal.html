@@ -481,7 +481,7 @@ const inZone=el=>!!(el&&el.closest&&el.closest(".sheet,.gap:not(.empty)"));
 var zoneAt=0; // dernier geste dans une zone : son élan ne déborde pas sur l'espace vide
 function hint(){
   const r=atRest();
-  document.getElementById("hint").textContent=r?"← → parcourir les étapes · ↑ ↓ changer d'article (sur les espaces vides)":"Échap ou × pour revenir à la frise";
+  document.getElementById("hint").textContent=r?"← → parcourir les étapes · ↑ ↓ changer d'article (sur les espaces vides)":"";
   document.getElementById("prev").disabled=!r||cur===0;
   document.getElementById("next").disabled=!r||cur===ARTICLES.length-1;
 }
