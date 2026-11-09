@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Historique d'un article</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Historique d'un article, sur le modèle de l'historique replié de Linear et du panneau de versions de Figma :
+   les feuilles sont les versions de l'article (une par étape) ; entre deux feuilles, deux plis :
+   les amendements adoptés, puis les rejetés ou retirés. Une ligne par amendement ; un clic ouvre sa fiche. */
+:root{
+  --bg:#0b0d12; --fg:#e8e6df; --muted:#8a8f9b; --dim:#5d6270; --accent:#d9b56a; --line:#232733; --line-2:#2f3443;
+  --paper:#f4f1e9; --paper-2:#e9e4d8; --paper-ink:#1d1a16; --paper-muted:#6b6457; --paper-line:#c9bfa6; --paper-frame:#ece7db;
+  --f-ui:"IBM Plex Sans",system-ui,sans-serif; --f-legal:"Source Serif 4",Georgia,serif;
+  --ease:cubic-bezier(.2,.8,.2,1); --ins:#1d4f91; --del:#a8452f;
+  --rail:22px; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--fg);font:14px/1.45 var(--f-ui);overflow:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 30%,#151924 0%,transparent 60%),
+    linear-gradient(var(--line) 1px,transparent 1px) 0 0/48px 48px,linear-gradient(90deg,var(--line) 1px,transparent 1px) 0 0/48px 48px;
+  opacity:.35;mask-image:radial-gradient(ellipse at 50% 45%,#000 15%,transparent 75%);-webkit-mask-image:radial-gradient(ellipse at 50% 45%,#000 15%,transparent 75%)}
+#scroller{position:fixed;inset:0;overflow-y:auto;scrollbar-width:none;scroll-behavior:smooth}
+#scroller::-webkit-scrollbar{display:none}
+.col{position:relative;max-width:700px;margin:0 auto;padding:28px 16px 40vh}
+.top{margin:0 0 22px;padding-left:2px}
+.top .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.top h1{margin:6px 0 0;font:400 22px/1.3 var(--f-legal);color:var(--fg)}
+
+/* --- feuilles : la même matière papier que le reste du prototype --- */
+.paper{position:relative;background:linear-gradient(135deg,var(--paper),var(--paper-2));color:var(--paper-ink);border:1px solid var(--paper-line);
+  outline:14px solid var(--paper-frame);outline-offset:-14px;box-shadow:0 24px 60px rgba(0,0,0,.55),0 0 0 1px rgba(217,181,106,.22);
+  transition:box-shadow .4s}
+.sheet{padding:26px 30px 16px}
+.sheet.pulse{box-shadow:0 24px 60px rgba(0,0,0,.55),0 0 0 2px rgba(217,181,106,.85)}
+.sheet .head{display:flex;justify-content:space-between;gap:4px 12px;flex-wrap:wrap;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-muted);
+  border-bottom:1px solid var(--paper-line);padding-bottom:8px}
+.sheet .title{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:10px 0 8px}
+.sheet .title h2{margin:0;font:600 19px/1.3 var(--f-legal)}
+.chip{flex:none;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--paper-muted);border:1px solid var(--paper-line);border-radius:99px;padding:2px 9px}
+.chip.now{color:#8a6a24;border-color:#d9b56a}
+.txt{position:relative;overflow:hidden;max-height:var(--h,6.1em);transition:max-height .42s var(--ease);
+  font:400 17px/1.55 var(--f-legal);scrollbar-width:none;
+  -webkit-mask-image:linear-gradient(#000 55%,transparent);mask-image:linear-gradient(#000 55%,transparent)}
+.txt::-webkit-scrollbar{display:none}
+.sheet.open .txt{-webkit-mask-image:linear-gradient(transparent 0,#000 18px,#000 calc(100% - 26px),transparent);mask-image:linear-gradient(transparent 0,#000 18px,#000 calc(100% - 26px),transparent)}
+.sheet.open.fits .txt{-webkit-mask-image:none;mask-image:none}
+.sheet.scrolling .txt{overflow-y:auto}
+.al{display:grid;grid-template-columns:22px 1fr;gap:0 6px;margin:0 0 .55em;border-radius:3px;transition:background .3s,box-shadow .3s}
+.al:first-child{padding-top:6px}
+.al .n{font:500 11px/2.2 var(--f-ui);color:var(--paper-muted);text-align:right}
+.al.lit{background:rgba(217,181,106,.2);box-shadow:-6px 0 0 rgba(217,181,106,.9)}
+.al.same{color:#5c564b}
+.sheet:not(.open) .al.same{display:none}
+.paper ins{color:var(--ins);font-weight:600;text-decoration:underline 1.5px;text-underline-offset:3px;background:none}
+.paper del{color:#7d7466;text-decoration:line-through 1.5px var(--del);background:none}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:6px;font-size:12px;color:var(--paper-muted)}
+.more{font:500 12px var(--f-ui);color:var(--paper-ink);background:none;border:1px solid var(--paper-line);border-radius:99px;padding:5px 12px;cursor:pointer}
+.more:hover{background:rgba(29,26,22,.05)}
+.sheet .hit{position:absolute;inset:0 0 44px;cursor:zoom-in}
+.sheet.open .hit{display:none}
+
+/* --- entre deux feuilles : le fil et les plis --- */
+.between{position:relative;padding:12px 0 12px;display:flex;flex-direction:column;gap:2px}
+.between::before{content:"";position:absolute;left:var(--rail);top:0;bottom:0;width:1px;background:var(--line-2)}
+.fold-head{position:relative;display:flex;align-items:center;gap:12px;width:100%;background:none;border:0;padding:7px 0;color:var(--fg);
+  font:500 13.5px var(--f-ui);text-align:left;cursor:pointer}
+.fold-head .pin{position:relative;z-index:1;flex:none;width:30px;height:30px;margin-left:calc(var(--rail) - 15px);border-radius:50%;
+  display:grid;place-items:center;background:#161a23;border:1px solid var(--line-2);color:var(--muted);transition:color .2s,border-color .2s}
+.fold-head .pin svg{transition:transform .32s var(--ease)}
+.fold.open > .fold-head .pin svg{transform:rotate(180deg)}
+.fold-head:hover .pin{color:var(--fg);border-color:#474d5e}
+.fold-head .lbl b{font-weight:600}
+.fold.rej .fold-head{color:var(--muted)}
+.fold.rej .fold-head .lbl b{color:#b9bcc4}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .34s var(--ease)}
+.slide > .inner{min-height:0;overflow:hidden;opacity:0;transition:opacity .14s}
+.open > .slide{grid-template-rows:1fr}
+.open > .slide > .inner{opacity:1;transition:opacity .22s .12s}
+
+.ev{position:relative}
+.ev-row{display:flex;align-items:flex-start;gap:12px;width:100%;background:none;border:0;padding:5px 0;cursor:pointer;text-align:left;color:var(--muted);font:13px/1.5 var(--f-ui)}
+.ev-row .ico{position:relative;z-index:1;flex:none;width:22px;height:22px;margin-left:calc(var(--rail) - 11px);margin-top:-1px;display:grid;place-items:center;
+  background:var(--bg);color:var(--dim)}
+.ev-row .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--g);margin-right:6px;vertical-align:1px}
+.ev-row b{color:var(--fg);font-weight:500}
+.ev-row .num{color:var(--dim)}
+.ev-row .sort{color:var(--dim)}
+.ev-row:hover b{text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line-2)}
+.ev.open > .ev-row .ico{color:var(--accent)}
+.fiche{margin:6px 0 12px calc(var(--rail) + 22px);padding:18px 22px 14px;outline-width:8px;outline-offset:-8px}
+.fiche .head{display:flex;justify-content:space-between;gap:4px 12px;flex-wrap:wrap;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--paper-muted);border-bottom:1px solid var(--paper-line);padding-bottom:7px}
+.fiche .head .g{display:inline-flex;align-items:center;gap:6px}
+.fiche .head .g i{width:7px;height:7px;border-radius:50%;background:var(--g)}
+.fiche .amd{font:400 15.5px/1.55 var(--f-legal);margin:10px 0 8px}
+.fiche .expo{font:italic 400 14px/1.5 var(--f-legal);color:var(--paper-muted);margin:0 0 10px}
+.fiche dl{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:0;font-size:12px;color:var(--paper-muted)}
+.fiche dt{text-transform:uppercase;letter-spacing:.08em;font-size:10.5px;padding-top:1px}
+.fiche dd{margin:0;color:var(--paper-ink)}
+@media (max-width:520px){
+  .sheet{padding:22px 22px 14px} .txt{font-size:16px} .fiche{margin-left:12px;padding:16px 18px 12px}
+  .al{grid-template-columns:16px 1fr}
+}
+</style>
+</head>
+<body>
+<div id="scroller"><div class="col" id="col"></div></div>
+<script>
+const GROUPS={
+  RAP:{name:"Rapporteur",color:"#b89a5a"}, SOL:{name:"Solidarité et logement",color:"#d13a30"}, ECO:{name:"Écologie urbaine",color:"#2a9d63"},
+  UT:{name:"Union des territoires",color:"#3b82d6"}, LL:{name:"Libertés locales",color:"#e0671d"}, RC:{name:"Rassemblement des communes",color:"#7c5cd6"},
+  GOUV:{name:"Gouvernement",color:"#9aa3b2"}, DC:{name:"Démocratie communale",color:"#2bb3b1"}, AR:{name:"Avenir rural",color:"#8fae3a"},
+  CP:{name:"Centre et progrès",color:"#d8699a"}, PR:{name:"Progrès républicain",color:"#c07a00"}
+};
+const CHAPEAU="Le chapitre II du titre préliminaire du livre III du code de la construction et de l'habitation est ainsi modifié :";
+// Versions successives de l'article 4 (données fictives). Clé = numéro d'alinéa.
+const V0={1:CHAPEAU,
+ 2:"Les communes de plus de 3 500 habitants doivent compter au moins 20 % de logements sociaux parmi les résidences principales d'ici 2032. En cas de manquement, le préfet peut prononcer un prélèvement sur les ressources fiscales de la commune.",
+ 3:"Le prélèvement mentionné à l'alinéa précédent est plafonné à 5 % des dépenses réelles de fonctionnement de la commune.",
+ 4:"Les communes nouvellement soumises à l'obligation disposent d'un délai de deux ans pour adopter un programme local de l'habitat compatible avec cet objectif.",
+ 5:"Le préfet peut exempter les communes dont plus de la moitié du territoire urbanisé est inconstructible."};
+const V1={...V0,
+ 2:"Les communes de plus de 3 500 habitants doivent compter au moins 25 % de logements sociaux parmi les résidences principales d'ici 2030. En cas de manquement, le préfet peut prononcer un prélèvement sur les ressources fiscales de la commune.",
+ 3:"Le prélèvement mentionné à l'alinéa précédent est plafonné à 5 % des dépenses réelles de fonctionnement de la commune et affecté au fonds national des aides à la pierre.",
+ 4:"Les communes nouvellement soumises à l'obligation disposent d'un délai de trois ans pour adopter un programme local de l'habitat compatible avec cet objectif.",
+ 5:"Le préfet peut, après avis du comité régional de l'habitat, exempter les communes dont plus de la moitié du territoire urbanisé est inconstructible.",
+ 6:"Les logements locatifs intermédiaires sont décomptés comme logements sociaux dans la limite de 10 % de l'objectif."};
+const V2={...V1,
+ 5:"Le préfet peut, après avis conforme du comité régional de l'habitat, exempter les communes dont plus de la moitié du territoire urbanisé est inconstructible.",
+ 6:"Les logements locatifs intermédiaires sont décomptés comme logements sociaux dans la limite de 15 % de l'objectif."};
+const V3={...V2,
+ 3:"Le prélèvement mentionné au deuxième alinéa est plafonné à 5 % des dépenses réelles de fonctionnement de la commune et affecté au fonds national des aides à la pierre.",
+ 6:"Les logements locatifs intermédiaires sont décomptés comme logements sociaux dans la limite de 10 % de l'objectif."};
+
+// a = amendement : g groupe, num, who, al alinéa visé, mode (rediger|completer|supprimer|ajouter), texte proposé (null = suppression), sort, expo, avis, vote
+const STAGES=[
+ {key:"depot", stage:"Dépôt au Sénat", date:"4 mars 2026", h:"Texte du Gouvernement", chip:"texte initial", v:V0},
+ {key:"comS", stage:"Commission des affaires économiques du Sénat", date:"25 mars 2026", h:"Texte adopté par la commission", chip:"adopté modifié", v:V1, amds:[
+   {g:"RAP",num:"COM-14",who:"M. Delorme",al:2,text:V0[2].replace("20 %","25 %"),sort:"adopté",expo:"Aligner le taux sur l'objectif national déjà applicable aux communes les plus tendues.",avis:"Gouvernement : sagesse",vote:"Adopté à main levée"},
+   {g:"ECO",num:"COM-31",who:"Mme Laurent",al:2,text:V0[2].replace("2032","2030"),sort:"adopté",expo:"Avancer l'échéance pour la faire coïncider avec la fin du prochain programme local de l'habitat.",avis:"Rapporteur : favorable · Gouvernement : défavorable",vote:"Adopté par 21 voix contre 17"},
+   {g:"SOL",num:"COM-7",who:"M. Ferrand",al:3,mode:"completer",text:V0[3].replace(" de la commune."," de la commune et affecté au fonds national des aides à la pierre."),sort:"adopté",expo:"Flécher le produit du prélèvement vers la construction plutôt que vers le budget général.",avis:"Rapporteur : favorable · Gouvernement : favorable",vote:"Adopté à l'unanimité"},
+   {g:"UT",num:"COM-52",who:"Mme Garnier",al:4,text:V0[4].replace("deux ans","trois ans"),sort:"adopté",expo:"Deux ans ne suffisent pas pour élaborer et faire approuver un programme local de l'habitat.",avis:"Rapporteur : favorable · Gouvernement : sagesse",vote:"Adopté à main levée"},
+   {g:"DC",num:"COM-23",who:"M. Royer",al:5,text:V1[5],sort:"adopté",expo:"Associer les acteurs locaux du logement avant toute exemption.",avis:"Rapporteur : favorable · Gouvernement : favorable",vote:"Adopté à main levée"},
+   {g:"CP",num:"COM-40",who:"Mme Vasseur",al:6,mode:"ajouter",text:V1[6],sort:"adopté",expo:"Tenir compte du logement intermédiaire, sans qu'il se substitue au logement social.",avis:"Rapporteur : sagesse · Gouvernement : favorable",vote:"Adopté par 19 voix contre 16"},
+   {g:"LL",num:"COM-3",who:"M. Perrin",al:2,mode:"supprimer",text:null,sort:"rejeté",expo:"Laisser aux communes la maîtrise de leur politique de logement.",avis:"Rapporteur : défavorable · Gouvernement : défavorable",vote:"Rejeté"},
+   {g:"RC",num:"COM-18",who:"Mme Aubert",al:2,text:V0[2].replace("3 500","10 000"),sort:"rejeté",expo:"Épargner les petites communes, qui manquent de foncier et d'ingénierie.",avis:"Rapporteur : défavorable · Gouvernement : défavorable",vote:"Rejeté"},
+   {g:"SOL",num:"COM-8",who:"M. Ferrand",al:2,text:V0[2].replace("20 %","30 %"),sort:"rejeté",expo:"Répondre à l'ampleur de la demande de logement social.",avis:"Rapporteur : défavorable · Gouvernement : défavorable",vote:"Rejeté"},
+   {g:"PR",num:"COM-27",who:"M. Lemaire",al:2,text:V0[2].replace(" de la commune."," de la commune, après mise en demeure."),sort:"retiré",expo:"Prévoir une mise en demeure avant tout prélèvement.",avis:"Rapporteur : demande de retrait",vote:"Retiré au profit d'une réécriture en séance"},
+   {g:"AR",num:"COM-61",who:"Mme Blanc",al:5,mode:"supprimer",text:null,sort:"rejeté",expo:"L'exemption crée une inégalité entre communes.",avis:"Rapporteur : défavorable · Gouvernement : défavorable",vote:"Rejeté"},
+   {g:"ECO",num:"COM-33",who:"Mme Laurent",al:4,text:V0[4].replace("deux ans","dix-huit mois"),sort:"retiré",expo:"Raccourcir le délai d'adoption du programme.",avis:"Rapporteur : demande de retrait",vote:"Retiré"},
+   {g:"LL",num:"COM-4",who:"M. Perrin",al:3,mode:"supprimer",text:null,sort:"rejeté",expo:"Supprimer le prélèvement, inefficace et punitif.",avis:"Rapporteur : défavorable · Gouvernement : défavorable",vote:"Rejeté"}
+ ]},
+ {key:"seanceS", stage:"Séance publique du Sénat", date:"8 avril 2026", h:"Texte adopté par le Sénat", chip:"adopté modifié", v:V2, amds:[
+   {g:"AR",num:"n° 203",who:"Mme Blanc",al:5,text:V2[5],sort:"adopté",expo:"Un avis simple ne protège pas assez contre les exemptions de complaisance.",avis:"Commission : favorable · Gouvernement : sagesse",vote:"Adopté par 172 voix contre 160"},
+   {g:"RC",num:"n° 118",who:"Mme Aubert",al:6,text:V2[6],sort:"adopté",expo:"Mieux reconnaître l'effort des communes qui développent le logement intermédiaire.",avis:"Commission : sagesse · Gouvernement : défavorable",vote:"Adopté par 168 voix contre 165"},
+   {g:"SOL",num:"n° 212",who:"M. Ferrand",al:2,text:V1[2].replace("25 %","30 %").replace("2030","2028"),sort:"rejeté",expo:"Accélérer le rattrapage dans les communes carencées.",avis:"Commission : défavorable · Gouvernement : défavorable",vote:"Rejeté par 98 voix contre 236"},
+   {g:"ECO",num:"n° 87",who:"Mme Laurent",al:2,text:V1[2].replace("25 %","30 %"),sort:"rejeté",expo:"Porter le taux à 30 %.",avis:"Commission : défavorable · Gouvernement : défavorable",vote:"Rejeté"},
+   {g:"UT",num:"n° 340",who:"Mme Garnier",al:2,text:V1[2].replace("25 %","20 %").replace("2030","2035"),sort:"rejeté",expo:"Tenir compte de la disponibilité foncière.",avis:"Commission : défavorable · Gouvernement : défavorable",vote:"Rejeté"},
+   {g:"LL",num:"n° 15",who:"M. Perrin",al:2,mode:"supprimer",text:null,sort:"rejeté",expo:"Supprimer l'obligation.",avis:"Commission : défavorable · Gouvernement : défavorable",vote:"Rejeté"},
+   {g:"RC",num:"n° 402",who:"Mme Aubert",al:2,text:V1[2].replace("3 500","10 000"),sort:"rejeté",expo:"Relever le seuil à 10 000 habitants.",avis:"Commission : défavorable · Gouvernement : défavorable",vote:"Rejeté"},
+   {g:"PR",num:"n° 198",who:"M. Lemaire",al:2,text:V1[2].replace("2030","2032"),sort:"retiré",expo:"Reporter l'échéance à 2032.",avis:"Commission : demande de retrait",vote:"Retiré"},
+   {g:"DC",num:"n° 77",who:"M. Royer",al:3,text:V1[3].replace("5 %","3 %"),sort:"rejeté",expo:"Abaisser le plafond du prélèvement.",avis:"Commission : défavorable · Gouvernement : défavorable",vote:"Rejeté"},
+   {g:"CP",num:"n° 260",who:"Mme Vasseur",al:4,text:V1[4].replace("trois ans","quatre ans"),sort:"retiré",expo:"Allonger le délai à quatre ans.",avis:"Commission : demande de retrait",vote:"Retiré"},
+   {g:"GOUV",num:"n° 301",who:"Gouvernement",al:6,mode:"supprimer",text:null,sort:"rejeté",expo:"Ne pas affaiblir l'objectif de logement social.",avis:"Commission : défavorable",vote:"Rejeté par 150 voix contre 184"}
+ ]},
+ {key:"comAN", stage:"Commission des affaires économiques de l'Assemblée", date:"13 mai 2026", h:"Texte adopté par la commission", chip:"en discussion", now:true, v:V3, amds:[
+   {g:"UT",num:"CE-88",who:"Mme Garnier",al:6,text:V3[6],sort:"adopté",expo:"Revenir à la limite de 10 % retenue par la commission du Sénat.",avis:"Rapporteure : favorable · Gouvernement : favorable",vote:"Adopté à main levée"},
+   {g:"RAP",num:"CE-301",who:"Mme Henry",al:3,text:V3[3],sort:"adopté",expo:"Amendement rédactionnel.",avis:"Gouvernement : favorable",vote:"Adopté à main levée"},
+   {g:"SOL",num:"CE-12",who:"Mme Diallo",al:2,text:V2[2].replace("25 %","30 %"),sort:"rejeté",expo:"Porter le taux à 30 %.",avis:"Rapporteure : défavorable · Gouvernement : défavorable",vote:"Rejeté"},
+   {g:"LL",num:"CE-40",who:"M. Caron",al:5,mode:"supprimer",text:null,sort:"rejeté",expo:"Supprimer l'avis conforme.",avis:"Rapporteure : défavorable",vote:"Rejeté"},
+   {g:"AR",num:"CE-55",who:"M. Noël",al:4,text:V2[4].replace("trois ans","cinq ans"),sort:"retiré",expo:"Allonger le délai pour les communes rurales.",avis:"Rapporteure : demande de retrait",vote:"Retiré"},
+   {g:"ECO",num:"CE-70",who:"M. Weber",al:6,mode:"supprimer",text:null,sort:"rejeté",expo:"Ne pas décompter le logement intermédiaire.",avis:"Rapporteure : défavorable · Gouvernement : défavorable",vote:"Rejeté"}
+ ]}
+];
+
+// --- différence mot à mot (portée sur la rédaction la plus récente ; l'ancienne reste vierge) ---
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+function diff(a,b){
+  if(a==null&&b==null) return "";
+  if(a==null) return `<ins>${esc(b)}</ins>`;
+  if(b==null) return `<del>${esc(a)}</del>`;
+  const A=a.split(/(\s+|[.,;:])/).filter(Boolean),B=b.split(/(\s+|[.,;:])/).filter(Boolean),n=A.length,m=B.length,L=Array.from({length:n+1},()=>new Int32Array(m+1));
+  for(let i=n-1;i>=0;i--)for(let j=m-1;j>=0;j--)L[i][j]=A[i]===B[j]?L[i+1][j+1]+1:Math.max(L[i+1][j],L[i][j+1]);
+  const out=[];let i=0,j=0;const push=(t,s)=>{const l=out[out.length-1];if(l&&l.t===t)l.s+=s;else out.push({t,s});};
+  while(i<n&&j<m){if(A[i]===B[j]){push("=",A[i]);i++;j++;}else if(L[i+1][j]>=L[i][j+1])push("-",A[i++]);else push("+",B[j++]);}
+  while(i<n)push("-",A[i++]);while(j<m)push("+",B[j++]);
+  // un blanc isolé entre deux changements rejoint le changement, pour des corrections lisibles
+  return out.map(o=>o.t==="="?esc(o.s):o.t==="-"?`<del>${esc(o.s)}</del>`:`<ins>${esc(o.s)}</ins>`).join("");
+}
+const VERB={rediger:"réécrit",completer:"complète",supprimer:"supprime",ajouter:"ajoute"};
+const ICO={
+  rediger:'<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10.5 2.5l3 3L6 13H3v-3z"/></svg>',
+  completer:'<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M3 8h10"/></svg>',
+  ajouter:'<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 3v10M3 8h10"/></svg>',
+  supprimer:'<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10"/></svg>'};
+const CHEV='<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4.5l3 3 3-3"/></svg>';
+const plural=(n,s,p)=>`${n} ${n>1?p:s}`;
+
+function sheetHTML(st,i){
+  const prev=i?STAGES[i-1].v:null, keys=[...new Set([...Object.keys(prev||{}),...Object.keys(st.v)])].map(Number).sort((a,b)=>a-b);
+  const als=keys.map(k=>{
+    const a=prev?prev[k]:undefined,b=st.v[k], same=prev&&a===b;
+    const body=!prev?esc(b):diff(a??null,b??null);
+    return `<div class="al${same?" same":""}" data-al="${k}"><span class="n">${k}</span><p style="margin:0">${body}</p></div>`;
+  }).join("");
+  return `<article class="paper sheet" data-i="${i}">
+    <div class="head"><span>Article 4 · ${st.stage}</span><span>${st.date}</span></div>
+    <div class="title"><h2>${st.h}</h2><span class="chip${st.now?" now":""}">${st.chip}</span></div>
+    <div class="txt">${als}</div>
+    <div class="foot"><span>${i?"Corrections apparentes par rapport à l'étape précédente":"Projet de loi n° 412"}</span><button class="more" type="button">Lire l'article en entier</button></div>
+    <div class="hit"></div>
+  </article>`;
+}
+function evHTML(a,prevV){
+  const mode=a.mode||"rediger", g=GROUPS[a.g];
+  const what=mode==="ajouter"?`ajoute l'alinéa ${a.al}`:`${VERB[mode]} l'alinéa ${a.al}`;
+  const amd=mode==="ajouter"?`<ins>${esc(a.text)}</ins>`:diff(prevV[a.al],a.text);
+  return `<div class="ev" data-al="${a.al}" data-sort="${a.sort}">
+    <button class="ev-row" type="button"><span class="ico">${ICO[mode]}</span>
+      <span><span class="dot" style="--g:${g.color}"></span><b>${g.name}</b> <span class="num">· ${a.num} · ${a.who}</span> ${what} <span class="sort">· ${a.sort}</span></span></button>
+    <div class="slide"><div class="inner"><div class="paper fiche">
+      <div class="head"><span class="g" style="--g:${g.color}"><i></i>${g.name} · ${a.num}</span><span>${a.sort}</span></div>
+      <div class="amd">${amd}</div>
+      <p class="expo">${esc(a.expo)}</p>
+      <dl><dt>Avis</dt><dd>${a.avis}</dd><dt>Vote</dt><dd>${a.vote}</dd></dl>
+    </div></div></div>
+  </div>`;
+}
+function foldHTML(list,label,cls,prevV){
+  if(!list.length) return "";
+  return `<div class="fold ${cls}"><button class="fold-head" type="button"><span class="pin">${CHEV}</span><span class="lbl">${label}</span></button>
+    <div class="slide"><div class="inner">${list.map(a=>evHTML(a,prevV)).join("")}</div></div></div>`;
+}
+const col=document.getElementById("col");
+col.innerHTML=`<header class="top"><div class="k">Historique de l'article · Projet de loi pour l'accès au logement</div><h1>Article 4 — Obligation de logements sociaux</h1></header>`+
+  STAGES.map((st,i)=>{
+    let h=sheetHTML(st,i);
+    const nx=STAGES[i+1];
+    if(nx){
+      const ad=nx.amds.filter(a=>a.sort==="adopté"), rr=nx.amds.filter(a=>a.sort!=="adopté");
+      h+=`<div class="between" data-i="${i}">`+
+        foldHTML(ad,`<b>${plural(ad.length,"amendement adopté","amendements adoptés")}</b>`,"adp",st.v)+
+        foldHTML(rr,`<b>${plural(rr.length,"amendement rejeté ou retiré","amendements rejetés ou retirés")}</b>`,"rej",st.v)+`</div>`;
+    }
+    return h;
+  }).join("");
+
+// --- comportements ---
+const scroller=document.getElementById("scroller");
+const sheets=[...document.querySelectorAll(".sheet")];
+const PEEK=34; // arête de la feuille suivante, toujours visible sous les plis
+function closeFoldsAfter(sheet){
+  const b=sheet.nextElementSibling; if(!b||!b.classList.contains("between")) return;
+  b.querySelectorAll(".open").forEach(o=>o.classList.remove("open"));
+}
+function openSheet(sheet){
+  sheets.forEach(s=>{ if(s!==sheet&&s.classList.contains("open")) closeSheet(s); });
+  closeFoldsAfter(sheet);
+  const txt=sheet.querySelector(".txt"), b=sheet.nextElementSibling;
+  const chrome=sheet.offsetHeight-txt.offsetHeight;
+  let below=0;
+  if(b&&b.classList.contains("between")){
+    const cs=getComputedStyle(b);
+    below=[...b.querySelectorAll(".fold-head")].reduce((s,h)=>s+h.offsetHeight+2,0)+parseFloat(cs.paddingTop)+parseFloat(cs.paddingBottom)+PEEK;
+  }
+  const top=16, avail=scroller.clientHeight-top-chrome-below;
+  sheet.classList.add("open");
+  const full=txt.scrollHeight, h=Math.max(120,Math.min(full,b?avail:full));
+  sheet.classList.toggle("fits",full<=h);
+  txt.style.setProperty("--h",h+"px");
+  sheet.querySelector(".more").textContent="Réduire";
+  setTimeout(()=>{ if(sheet.classList.contains("open")) sheet.classList.add("scrolling"); },420);
+  scroller.scrollTo({top:sheet.offsetTop-top,behavior:"smooth"});
+}
+function closeSheet(sheet){
+  const txt=sheet.querySelector(".txt");
+  sheet.classList.remove("open","scrolling","fits"); txt.scrollTop=0; txt.style.removeProperty("--h");
+  sheet.querySelector(".more").textContent="Lire l'article en entier";
+}
+document.addEventListener("click",e=>{
+  const more=e.target.closest(".more,.sheet .hit");
+  if(more){ const s=more.closest(".sheet"); s.classList.contains("open")?closeSheet(s):openSheet(s); return; }
+  const fh=e.target.closest(".fold-head");
+  if(fh){ const f=fh.parentElement; if(f.classList.contains("open")) f.querySelectorAll(".ev.open").forEach(x=>x.classList.remove("open")); f.classList.toggle("open"); clearLit(); return; }
+  const row=e.target.closest(".ev-row");
+  if(row){
+    const ev=row.parentElement, was=ev.classList.contains("open");
+    ev.parentElement.querySelectorAll(".ev.open").forEach(x=>x.classList.remove("open")); clearLit();
+    if(!was){ ev.classList.add("open"); light(ev); }
+  }
+});
+// le passage produit par l'amendement s'allume dans la version suivante
+function clearLit(){ document.querySelectorAll(".al.lit").forEach(x=>x.classList.remove("lit")); document.querySelectorAll(".sheet.pulse").forEach(x=>x.classList.remove("pulse")); }
+function light(ev){
+  if(ev.dataset.sort!=="adopté") return;
+  const next=ev.closest(".between").nextElementSibling; if(!next) return;
+  const p=next.querySelector(`.al[data-al="${ev.dataset.al}"]`); if(!p) return;
+  p.classList.add("lit"); next.classList.add("pulse");
+  if(!next.classList.contains("open")){ const t=next.querySelector(".txt"); t.scrollTop=0; }
+  setTimeout(()=>next.classList.remove("pulse"),900);
+}
+document.addEventListener("keydown",e=>{
+  if(e.key!=="Escape") return;
+  const ev=document.querySelector(".ev.open"); if(ev){ ev.classList.remove("open"); clearLit(); return; }
+  const s=document.querySelector(".sheet.open"); if(s){ closeSheet(s); return; }
+  const f=document.querySelector(".fold.open"); if(f) f.classList.remove("open");
+});
+</script>
+</body>
+</html>
