@@ -417,11 +417,12 @@ stage.addEventListener("wheel",e=>{
   if(e.ctrlKey) return;
   const fr=pages[cur].querySelector(".frise");
   if(Math.abs(e.deltaX)>Math.abs(e.deltaY)) return;
-  if(canScroll(e.target,e.deltaY)) return;
-  e.preventDefault(); const now=Date.now();
+  const now=Date.now();
+  if(canScroll(e.target,e.deltaY)){ zoneAt=now; return; }
+  e.preventDefault();
   if(e.shiftKey&&!inCmp()){ fr.scrollLeft+=e.deltaY; return; }
-  if(!atRest()){ wy=0; return; }
-  if(now-restSince<700){ wy=0; return; } // l'élan d'un défilement qui vient de finir ne change pas d'article
+  if(!atRest()||inZone(e.target)){ zoneAt=now; wy=0; return; }
+  if(now-zoneAt<500){ wy=0; return; }
   if(now<wlock) return; if(now-wt>250) wy=0; wt=now; wy+=e.deltaY;
   if(Math.abs(wy)>90){ go(cur+(wy>0?1:-1)); wy=0; wlock=now+650; }
 },{passive:false});
@@ -429,7 +430,7 @@ let t0=null;
 stage.addEventListener("touchstart",e=>{ const t=e.touches[0]; t0={x:t.clientX,y:t.clientY,el:e.target}; },{passive:true});
 stage.addEventListener("touchend",e=>{
   if(!t0) return; const t=e.changedTouches[0], dx=t.clientX-t0.x, dy=t.clientY-t0.y, el=t0.el; t0=null;
-  if(atRest()&&Math.abs(dy)>70&&Math.abs(dy)>Math.abs(dx)*1.4&&!canScroll(el,-dy)) go(cur+(dy<0?1:-1));
+  if(atRest()&&!inZone(el)&&Math.abs(dy)>70&&Math.abs(dy)>Math.abs(dx)*1.4&&!canScroll(el,-dy)) go(cur+(dy<0?1:-1));
 },{passive:true});
 let grab=null, moved=false;
 stage.addEventListener("pointerdown",e=>{ if(e.pointerType!=="mouse"||e.button!==0||inCmp()||e.target.closest("button,select,.txt,.list")) return; grab={x:e.clientX,l:pages[cur].querySelector(".frise").scrollLeft}; moved=false; });
@@ -472,16 +473,17 @@ function closeSheet(sheet){
 // Deux textes : toujours dans l'ordre chronologique, l'antérieur à gauche (vierge),
 // le postérieur à droite avec ses corrections apparentes par rapport à l'antérieur.
 // Fermer l'un : l'autre reste, à gauche, et la liste revient à sa droite. Fermer le dernier : retour à la frise.
-// Règle : on ne change d'article que depuis la frise au repos (rien d'ouvert : ni pli, ni article, ni comparaison).
-// Dès que quelque chose est ouvert, le geste vertical sert seulement à faire défiler ce qui est ouvert.
-function atRest(){ return !inCmp()&&!pages[cur].querySelector(".fold.open,.sheet.open"); }
-var restSince=0;
+// Règles du geste vertical (changer d'article) :
+// 1. il ne marche que sur les espaces vides, jamais sur une zone qu'on manipule : une carte, ou l'interstice qui porte les plis ;
+// 2. en mode comparer, il ne marche pas du tout : on referme d'abord.
+function atRest(){ return !inCmp(); }
+const inZone=el=>!!(el&&el.closest&&el.closest(".sheet,.gap:not(.empty)"));
+var zoneAt=0; // dernier geste dans une zone : son élan ne déborde pas sur l'espace vide
 function hint(){
   const r=atRest();
-  document.getElementById("hint").textContent=inCmp()?"Échap ou × pour revenir à la frise":r?"← → parcourir les étapes · ↑ ↓ changer d'article":"Échap pour refermer · le changement d'article reprend une fois tout refermé";
+  document.getElementById("hint").textContent=r?"← → parcourir les étapes · ↑ ↓ changer d'article (sur les espaces vides)":"Échap ou × pour revenir à la frise";
   document.getElementById("prev").disabled=!r||cur===0;
   document.getElementById("next").disabled=!r||cur===ARTICLES.length-1;
-  if(r) restSince=Date.now();
 }
 function cmpHead(i){
   const st=STEPS[i];
