@@ -124,7 +124,8 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 .nq{padding:9px 11px;border:1px solid var(--line);border-radius:8px;font-size:12.5px;color:var(--muted);min-height:60px}
 .nq b{color:var(--text);font-weight:500}
 .sk{display:block;height:10px;border-radius:5px;background:var(--line);margin:6px 0;animation:pulse 1.6s ease-in-out infinite}
-.sk.g{width:24px;height:16px;border-radius:4px;display:inline-block;vertical-align:-3px;margin:0 6px 0 0}
+.skr{display:flex;align-items:center;gap:6px}.skr .sk{margin:4px 0}
+.sk.g{flex:none;width:24px;height:16px;border-radius:4px}
 @keyframes pulse{50%{opacity:.45}}
 textarea{width:100%;min-height:220px;resize:vertical;line-height:1.6;padding:10px 12px}
 .dlbl{display:block;margin:18px 0 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
@@ -161,10 +162,12 @@ dialog .facts{margin-top:18px}
   .eb{padding-left:14px}
   .trail li{grid-template-columns:minmax(0,1fr);gap:2px}
   .tab{padding:0 10px;font-size:13.5px}
-  .chips legend{width:100%}
+  .chips legend{width:100%;line-height:1.5;margin-bottom:2px}
+  body.has-drawer .toasts{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+  dialog .facts .btn{flex:1}
   .rt{grid-template-columns:minmax(0,1fr) 84px} .rt .bar{display:none}
   .drawer{top:auto;height:92vh;height:92dvh;width:100vw;border-left:0;border-top:1px solid var(--line2);border-radius:14px 14px 0 0;transform:translateY(100%)}
-  .facts .btn.pri{flex:1}
+  .form .facts .btn.pri{flex:1}
 }
 @media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
 </style>
@@ -397,7 +400,7 @@ function openDrawer(id,trigger){
   // affiché seulement après 200 ms pour éviter le clignotement, autant de cartes que de résultats attendus.
   const n=$("#near");
   nearTimers.push(setTimeout(()=>{ if(P.drawer!==id||n.getAttribute("aria-busy")!=="true") return;
-    n.innerHTML=Array.from({length:Math.max(1,e.near.length)},()=>`<div class="nq" aria-hidden="true"><span class="sk g"></span><span class="sk" style="width:42%;display:inline-block"></span><span class="sk" style="width:78%"></span></div>`).join("");},200));
+    n.innerHTML=Array.from({length:Math.max(1,e.near.length)},()=>`<div class="nq" aria-hidden="true"><span class="skr"><span class="sk g"></span><span class="sk" style="width:42%"></span></span><span class="sk" style="width:78%"></span></div>`).join("");},200));
   nearTimers.push(setTimeout(()=>{ if(P.drawer!==id) return;
     n.innerHTML=e.near.length?e.near.map(q=>`<div class="nq"><span class="gp" style="background:${GROUPS[q.g].c}">${q.g}</span><b>n° ${q.n}</b> · ${q.who}, ${q.date}<br>${q.st}</div>`).join(""):`<p class="hint" style="margin:0">Aucune question écrite ne porte encore sur cet engagement : la vôtre sera la première.</p>`;
     n.setAttribute("aria-busy","false");},700));

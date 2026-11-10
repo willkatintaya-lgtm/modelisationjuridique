@@ -56,278 +56,517 @@ const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
 const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
 function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
 </script>
-
 <style>
-/* Angle « patterns » : cartes de programmes avec pas-à-pas tactiles (44 px), dépliage AE par carte,
-   barre de balance collée en bas, solde à glisser sur un programme (ou menu clavier « Équilibrer sur… »),
-   tableau de l'amendement dans un tiroir, toasts empilés avec « Annuler ». */
-body{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:12px;margin-top:6px}
-.card{padding:14px 14px 12px;display:grid;gap:10px;transition:border-color .2s,background .2s,box-shadow .2s;align-content:start}
-.card.drop{border-style:dashed;border-color:var(--line2)}
-.card.drop.hot{border-color:var(--accent);background:var(--lit)}
-.card.nodrop{opacity:.45}
-.card.bad{border-color:rgba(229,72,77,.55)}
-.hd{display:flex;align-items:baseline;gap:8px;min-width:0}
-.hd b{color:var(--fg);font-weight:600;font-size:13.5px}
-.hd span{color:var(--text);font-size:13.5px;min-width:0}
-.tag{margin-left:auto;flex:none;font-size:11px;color:var(--warn);border:1px solid rgba(227,163,63,.4);border-radius:999px;padding:1px 7px;align-self:center}
-.nums{font-size:12.5px;color:var(--muted)}
-.nums .up{color:var(--ins)} .nums .down{color:#f2a7a9}
-.vis{position:relative;height:6px;border-radius:3px;background:var(--s2);overflow:hidden}
-.vis i{position:absolute;top:0;height:100%;border-radius:3px}
-.vis .base{left:0;background:var(--line2)}
+/* Variante « patterns » (skill interaction-patterns, appliquée règle par règle).
+   Moteur et données identiques à la maquette : on déplace des crédits entre programmes
+   d'une même mission ; la somme doit rester nulle en AE comme en CP. */
+.skip{position:absolute;left:-9999px;top:8px;z-index:60;background:var(--s2);color:var(--fg);padding:10px 14px;border-radius:7px;border:1px solid var(--line2);text-decoration:none}
+.skip:focus{left:max(16px,env(safe-area-inset-left,0px))}
+.lead{min-height:48px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:18px;align-items:start}
+.head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 2px 8px}
+.head .sec{margin:0}
+.ghost{min-height:28px}
+.ghost[aria-disabled=true]{opacity:.4;cursor:default}
+.ghost[aria-disabled=true]:hover{background:none;color:var(--muted)}
+/* Divulgation progressive, niveau 2 : options de saisie */
+details.opts{margin:0 2px 10px;font-size:12.5px;color:var(--muted)}
+details.opts summary,.chk summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;min-height:28px;border-radius:6px}
+details.opts summary::-webkit-details-marker,.chk summary::-webkit-details-marker{display:none}
+details.opts summary::before,.chk summary::after{content:"";width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);transition:transform .2s var(--ease);flex:none;opacity:.7}
+details[open]>summary::before,.chk details[open]>summary::after{transform:rotate(45deg)}
+details.opts summary:hover{color:var(--fg)}
+.ob{padding:6px 0 2px 14px;display:grid;gap:4px;animation:fold .25s var(--ease)}
+@keyframes fold{from{opacity:0;transform:translateY(-4px)}}
+.ck{display:flex;align-items:center;gap:8px;color:var(--text);cursor:pointer;min-height:28px}
+.ck input{width:16px;height:16px;accent-color:var(--accent);margin:0}
+.hint{margin:0;color:var(--dim);font-size:12px;max-width:560px}
+/* Onglets AE / CP (2 onglets : pas de débordement) */
+.tabs{display:flex;gap:2px;margin:0 2px 10px;border-bottom:1px solid var(--line)}
+.tabs[hidden]{display:none}
+.tabs button{border:0;background:none;color:var(--muted);padding:8px 12px;min-height:36px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;font-size:13px;transition:color .2s,border-color .2s}
+.tabs button:hover{color:var(--fg)}
+.tabs button[aria-selected=true]{color:var(--fg);border-bottom-color:var(--accent)}
+/* Programmes */
+.progs{padding:6px}
+.pr{display:grid;grid-template-columns:minmax(0,1fr) 156px;gap:6px 14px;align-items:end;padding:12px}
+.pr+.pr{border-top:1px solid var(--line)}
+.pi b{display:block;color:var(--fg);font-weight:500;font-size:13.5px}
+.pi small{display:block;color:var(--dim);font-size:12px}
+.pi .pv{color:var(--muted);margin-top:2px}
+.pv .up{color:var(--ins)} .pv .dn{color:#f2a7a9}
+.fl{display:block;font-size:11.5px;color:var(--dim);margin:0 0 3px 2px}
+.vis{grid-column:1/-1;position:relative;height:8px;border-radius:4px;background:var(--s2);overflow:hidden;margin-top:4px}
+.vis i{position:absolute;top:0;height:100%;border-radius:4px;transition:left .25s var(--ease),width .25s var(--ease)}
+.vis .base{background:var(--line2);left:0}
 .vis .plus{background:var(--ins)}
 .vis .minus{background:repeating-linear-gradient(45deg,var(--del) 0 3px,transparent 3px 6px)}
-.row{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:10px}
-.row>span{font-size:12px;color:var(--dim);min-width:58px}
-.step{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;height:44px;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
-.step button{border:0;background:var(--s2);color:var(--text);cursor:pointer;font-size:18px;touch-action:manipulation}
+.step{display:grid;grid-template-columns:34px minmax(0,1fr) 34px;border:1px solid var(--line2);border-radius:7px;overflow:hidden;height:34px}
+.step button{border:0;background:var(--s2);color:var(--muted);cursor:pointer;font-size:16px;line-height:1}
 .step button:hover{color:var(--fg);background:#1f2227}
-.step input{border:0;border-radius:0;text-align:center;background:var(--bg);width:100%;min-width:0;font-size:15px}
+.step button[aria-disabled=true]{opacity:.35;cursor:not-allowed}
+.step button[aria-disabled=true]:hover{background:var(--s2);color:var(--muted)}
+.step input{border:0;border-radius:0;text-align:center;background:var(--bg);padding:6px 4px;width:100%;min-width:0;-moz-appearance:textfield}
+.step input::-webkit-inner-spin-button,.step input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 .step input.pos{color:var(--ins)} .step input.neg{color:#f2a7a9}
-.disc{display:flex;align-items:center;gap:6px;border:0;background:none;color:var(--muted);font-size:12.5px;cursor:pointer;padding:6px 0;min-height:32px}
-.disc:hover{color:var(--fg)}
-.disc i{display:inline-block;width:7px;height:7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);transition:transform .2s var(--ease)}
-.open>.disc i{transform:rotate(45deg)}
-.slide>div>.row{padding-top:6px}
-.note{font-size:12.5px;line-height:1.5;color:var(--muted);display:grid;grid-template-columns:12px minmax(0,1fr);gap:8px}
-.note .dot{margin-top:6px}
-.note b{color:var(--text);font-weight:500}
-.note button{border:0;background:none;color:var(--ins);padding:0;cursor:pointer;font-size:12.5px}
-.top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;margin:18px 2px 0}
-.top .sec{margin:0}
-/* barre de balance */
-.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(17,19,22,.94);backdrop-filter:blur(8px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
-.bar .in{max-width:1180px;margin:0 auto;padding:12px max(16px,env(safe-area-inset-right,0px)) 12px max(16px,env(safe-area-inset-left,0px));display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
-.bar .say{display:flex;align-items:center;gap:9px;color:var(--fg);font-size:14px;min-width:0;flex:1 1 260px}
-.bar .say small{display:block;color:var(--muted);font-size:12.5px}
-.bar .acts{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.bar .btn{min-height:44px;padding:0 14px}
-.chipdrag{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:999px;border:1px dashed var(--accent);background:var(--lit);color:var(--fg);cursor:grab;touch-action:none;user-select:none;font-size:13.5px}
-.chipdrag:active{cursor:grabbing}
-.chipdrag i{width:10px;height:14px;background:radial-gradient(circle,var(--muted) 1.2px,transparent 1.6px) 0 0/5px 5px;flex:none}
-.ghostchip{position:fixed;z-index:60;pointer-events:none;transform:translate(-50%,-50%);box-shadow:0 8px 24px rgba(0,0,0,.5)}
-.menu{position:fixed;z-index:40;min-width:260px;max-width:calc(100vw - 32px);background:var(--s2);border:1px solid var(--line2);border-radius:10px;padding:6px;box-shadow:0 12px 32px rgba(0,0,0,.5);animation:pop .16s var(--ease)}
-.menu .mh{font-size:12px;color:var(--dim);padding:6px 10px 4px}
-.menu button{display:flex;justify-content:space-between;gap:16px;width:100%;min-height:44px;border:0;background:none;border-radius:7px;padding:0 10px;cursor:pointer;text-align:left;font-size:13.5px;color:var(--text)}
-.menu button:hover,.menu button:focus-visible{background:#22262c;color:var(--fg);outline:none}
-.menu button small{color:var(--muted)}
-.menu button:disabled{opacity:.4;cursor:default}
-@keyframes pop{from{opacity:0;transform:translateY(4px)}}
-/* tiroir */
-.scrim{position:fixed;inset:0;z-index:45;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .2s}
-.drawer{position:fixed;z-index:50;top:0;right:0;bottom:0;width:min(480px,100vw);background:var(--s1);border-left:1px solid var(--line);transform:translateX(100%);transition:transform .3s var(--ease),opacity .2s;display:flex;flex-direction:column;visibility:hidden}
-.isopen .scrim{opacity:1;pointer-events:auto}
-.isopen .drawer{transform:none;visibility:visible}
-.closing .drawer{opacity:0;transform:none;transition:opacity .18s}
-.dh{display:flex;align-items:center;gap:10px;padding:16px 18px;border-bottom:1px solid var(--line)}
-.dh h2{margin:0;font:600 15px/1.3 var(--f);color:var(--fg)}
-.dh .x{margin-left:auto;width:44px;height:44px;border:0;border-radius:8px;background:none;color:var(--muted);font-size:22px;cursor:pointer}
-.dh .x:hover{background:var(--s2);color:var(--fg)}
-.db{overflow:auto;padding:16px 18px;flex:1;scrollbar-width:none}
+.step:has(input[aria-invalid=true]){border-color:var(--err)}
+.err:empty{display:none}
+.err{grid-column:1/-1}
+.err p{margin:4px 0 0;font-size:12.5px;color:#f2a7a9;line-height:1.5}
+.fix{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:6px;padding:2px 9px;min-height:28px;font-size:12px;cursor:pointer;margin-left:4px}
+.fix:hover{background:#1f2227}
+/* Balance et actions */
+.side{display:grid;gap:14px;position:sticky;top:16px}
+.act{padding:14px 16px;position:relative}
+.act .sec{margin:0}
+.bal-n{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:10px;text-align:center}
+.bal-n div{background:var(--s2);border-radius:7px;padding:8px 4px}
+.bal-n b{display:block;color:var(--fg);font-size:15px;font-weight:600}
+.bal-n span{font-size:11.5px;color:var(--dim)}
+.bal-n .z b{color:#7fd3a8} .bal-n .nz b{color:#f2a7a9}
+.acts{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.acts .btn{min-height:34px;flex:1 1 auto}
+.acts .btn[hidden]{display:none}
+.why{margin:8px 0 0;font-size:12px;color:var(--muted)}
+.why:empty{display:none}
+/* Menu « Compenser sur… » */
+.menu{position:absolute;left:12px;right:12px;top:calc(100% - 6px);z-index:22;background:var(--s2);border:1px solid var(--line2);border-radius:9px;padding:6px;box-shadow:0 12px 32px rgba(0,0,0,.45);animation:fold .18s var(--ease)}
+.menu[hidden]{display:none}
+.menu .mh{font-size:11.5px;color:var(--dim);padding:4px 8px 6px}
+.menu [role=menuitem]{display:flex;justify-content:space-between;gap:10px;width:100%;border:0;background:none;text-align:left;padding:8px;min-height:36px;border-radius:6px;cursor:pointer;font-size:13px;color:var(--fg);align-items:center}
+.menu [role=menuitem] small{color:var(--muted);font-size:12px;white-space:nowrap}
+.menu [role=menuitem]:hover,.menu [role=menuitem]:focus-visible{background:#22262c;outline:none}
+.menu [role=menuitem]:focus-visible{box-shadow:inset 0 0 0 2px var(--accent)}
+.menu [role=menuitem][aria-disabled=true]{color:var(--dim);cursor:not-allowed}
+/* Contrôles de recevabilité : accordéon natif */
+.chks{padding:14px 16px}
+.chks .sec{margin:0 0 6px}
+.chk details+details{border-top:1px solid var(--line)}
+.chk summary{padding:6px 0;justify-content:flex-start;font-size:12.5px;color:var(--text);min-height:36px}
+.chk summary .t{flex:1;min-width:0}
+.chk summary:hover .t{color:var(--fg)}
+.chk .cb{margin:0 0 8px 17px;font-size:12px;color:var(--muted);line-height:1.5;animation:fold .25s var(--ease)}
+/* Tiroir : tableau de l'amendement (non modal) */
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,100vw);z-index:25;background:var(--s1);border-left:1px solid var(--line2);display:flex;flex-direction:column;transform:translateX(100%);visibility:hidden;transition:transform .3s var(--ease),visibility 0s linear .3s;box-shadow:-18px 0 40px rgba(0,0,0,.35)}
+.drawer.on{transform:none;visibility:visible;transition:transform .3s var(--ease)}
+.drawer.out{opacity:0;transition:opacity .2s}
+.dh{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line)}
+.dh h2{margin:0;font:500 14px/1.4 var(--f);color:var(--fg)}
+.x{border:0;background:none;color:var(--muted);font-size:20px;width:36px;height:36px;border-radius:7px;cursor:pointer}
+.x:hover{color:var(--fg);background:var(--s2)}
+.db{padding:14px 16px;overflow:auto;scrollbar-width:none}
 .db::-webkit-scrollbar{display:none}
-.db p{margin:0 0 10px;font-size:13px}
-.db h3{margin:16px 0 6px;font:500 12.5px/1.4 var(--f);color:var(--muted)}
-.db table{width:100%;border-collapse:collapse;font-size:12.5px}
-.db th,.db td{border:1px solid var(--line2);padding:6px 8px;text-align:right;vertical-align:top}
-.db th:first-child,.db td:first-child{text-align:left}
-.db thead th{color:var(--dim);font-weight:400}
-.db tfoot td{color:var(--fg);font-weight:500}
-.unit{text-align:right;font-size:11.5px;color:var(--dim);margin-bottom:4px}
-.chk{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:8px}
-.chk li{display:grid;grid-template-columns:12px minmax(0,1fr);gap:9px;font-size:12.5px;line-height:1.5}
-.chk .dot{margin-top:6px}
-.df{padding:12px 18px calc(12px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
-.df .btn{min-height:44px}
-@media (max-width:600px){
- .bar .acts{gap:6px;flex-wrap:nowrap}.bar .btn,.chipdrag{padding:0 11px}
- .drawer{top:auto;left:0;width:100%;height:88vh;border-left:0;border-top:1px solid var(--line);border-radius:14px 14px 0 0;transform:translateY(100%)}
-}
-/* toasts empilés */
-.tstack{position:fixed;z-index:55;left:50%;transform:translateX(-50%);bottom:calc(var(--barh,72px) + 12px);display:grid;gap:8px;width:min(440px,calc(100vw - 32px))}
-.tst{display:flex;align-items:center;gap:12px;background:var(--s2);border:1px solid var(--line2);border-radius:9px;padding:8px 8px 8px 14px;font-size:13px;color:var(--fg);animation:pop .2s var(--ease);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.db p{margin:0 0 10px;font-size:12.5px;color:var(--muted)}
+.db .dnote{margin-top:12px;color:var(--dim);font-size:12px}
+.doc{width:100%;border-collapse:collapse;font-size:12.5px}
+.doc th,.doc td{border:1px solid var(--line2);padding:5px 7px;text-align:right;white-space:nowrap}
+.doc th:first-child,.doc td:first-child{text-align:left;white-space:normal;min-width:120px}
+.doc thead th{color:var(--dim);font-weight:400;text-align:center}
+.doc tfoot td{color:var(--fg);font-weight:500}
+.scrollx{-webkit-mask:linear-gradient(90deg,#000 calc(100% - 18px),transparent)}
+body.dr-open .scrollx{-webkit-mask:none}
+/* Fenêtre de confirmation (modale native) */
+dialog{background:var(--s1);color:var(--text);border:1px solid var(--line2);border-radius:12px;padding:20px;max-width:min(420px,calc(100vw - 32px));box-shadow:0 24px 60px rgba(0,0,0,.5)}
+dialog[open]{animation:pop .2s var(--ease)}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}}
+dialog::backdrop{background:rgba(5,6,8,.66)}
+dialog h2{margin:0 0 6px;font:500 15px/1.4 var(--f);color:var(--fg)}
+dialog p{margin:0;font-size:13px;color:var(--muted)}
+.dacts{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.dacts .btn{min-height:36px;min-width:120px}
+.btn.danger{border-color:#5a2a2c;color:#f2a7a9}
+.btn.danger:hover{background:#2a1517!important}
+/* Notifications */
+.tsts{position:fixed;top:16px;right:max(16px,env(safe-area-inset-right,0px));z-index:40;display:flex;flex-direction:column;gap:8px;width:min(380px,calc(100vw - 32px));pointer-events:none}
+.tst{pointer-events:auto;display:flex;align-items:center;gap:6px;background:var(--s2);border:1px solid var(--line2);border-left:3px solid var(--ok);border-radius:9px;padding:6px 6px 6px 12px;color:var(--fg);font-size:13px;box-shadow:0 10px 30px rgba(0,0,0,.4);animation:tin .25s var(--ease)}
+.tst.error{border-left-color:var(--err)}
+.tst.info{border-left-color:var(--accent)}
+@keyframes tin{from{opacity:0;transform:translateY(-6px)}}
 .tst.out{opacity:0;transition:opacity .2s}
-.tst span{flex:1;min-width:0}
-.tst button{border:0;background:none;cursor:pointer;min-height:36px;padding:0 8px;border-radius:6px;font-size:13px}
-.tst .u{color:var(--ins)} .tst .c{color:var(--dim);font-size:17px}
+.tst .tm{flex:1;min-width:0;line-height:1.45;padding:4px 0}
+.tst button{border:0;background:none;cursor:pointer;min-height:32px;min-width:32px;padding:0 8px;border-radius:6px;font-size:13px;flex:none}
+.tst .ta{color:var(--ins)}
+.tst .tx{color:var(--muted);font-size:18px}
 .tst button:hover{background:#22262c}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* Le tiroir ouvert sur grand écran ne masque rien : la page lui fait place. */
+@media (min-width:1100px){
+  body{transition:padding-right .3s var(--ease)}
+  body.dr-open{padding-right:420px}
+  body.dr-open .grid{grid-template-columns:minmax(0,1fr) 300px}
+  body.dr-open .pr{grid-template-columns:minmax(0,1fr) 140px}
+}
+@media (max-width:939px){
+  .grid{grid-template-columns:minmax(0,1fr)}
+  .side{position:static}
+  /* La balance devient une barre fixe en bas : solde + action principale toujours à portée du pouce. */
+  .act{position:fixed;left:0;right:0;bottom:0;z-index:20;border-radius:12px 12px 0 0;border-bottom:0;padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));box-shadow:0 -10px 30px rgba(0,0,0,.4)}
+  .act .sec{display:none}
+  .bal-n{display:flex;margin:0;gap:10px;align-items:baseline;text-align:left}
+  .bal-n div{background:none;padding:0;display:flex;gap:6px;align-items:baseline}
+  .bal-n div:not(.z):not(.nz){display:none}
+  .acts{margin-top:8px}
+  .menu{top:auto;bottom:calc(100% + 6px)}
+  .drawer{bottom:var(--barh,0px)}
+  .wrap{padding-bottom:calc(var(--barh,0px) + 24px)}
+}
+@media (max-width:639px){
+  .tsts{top:auto;bottom:calc(var(--barh,0px) + 12px);left:16px;right:16px;width:auto;flex-direction:column}
+  .drawer{width:100vw;border-left:0}
+}
+@media (max-width:480px){
+  .pr{grid-template-columns:minmax(0,1fr)}
+}
+/* Cibles tactiles : 44 px minimum au doigt (WCAG 2.5.5), 24 px minimum à la souris. */
+@media (pointer:coarse),(max-width:639px){
+  .step{height:44px;grid-template-columns:44px minmax(0,1fr) 44px}
+  .acts .btn,.tabs button,.dacts .btn{min-height:44px}
+  .ghost,.fix,.ck,details.opts summary,.chk summary,.menu [role=menuitem]{min-height:44px}
+  .tst button,.x{min-height:44px;min-width:44px}
+}
 </style>
 
-<div class="wrap" id="app">
+<a class="skip" href="#progs">Aller aux programmes</a>
+<div class="wrap">
   <div class="ctx">Projet de loi de finances pour 2027 · seconde partie · mission « Cohésion des territoires » (montants fictifs)</div>
   <h1>Amendement de crédits</h1>
-  <p class="lead" id="lead"></p>
-  <div class="top"><div class="sec">Programmes de la mission · mouvements en M€</div><button class="ghost" id="reset">Tout remettre à zéro</button></div>
-  <section class="cards" id="cards" aria-label="Programmes de la mission"></section>
+  <p class="lead" id="lead" aria-live="polite"></p>
+  <div class="grid">
+    <div>
+      <div class="head"><h2 class="sec" id="lt">Programmes de la mission</h2><button class="ghost" id="reset" type="button">Remettre à zéro…</button></div>
+      <details class="opts" id="opts"><summary>Options de saisie</summary>
+        <div class="ob">
+          <label class="ck"><input type="checkbox" id="split"> Saisir les autorisations d'engagement séparément</label>
+          <p class="hint" id="splith">Par défaut, le même mouvement s'applique en AE et en CP. En revenant au mouvement unique, les AE reprennent les montants des CP.</p>
+        </div>
+      </details>
+      <div class="tabs" id="tabs" role="tablist" aria-label="Type de crédits" hidden>
+        <button type="button" role="tab" id="t-cp" data-k="cp" aria-selected="true" aria-controls="progs" tabindex="0">Crédits de paiement</button>
+        <button type="button" role="tab" id="t-ae" data-k="ae" aria-selected="false" aria-controls="progs" tabindex="-1">Autorisations d'engagement</button>
+      </div>
+      <section class="panel progs" id="progs" tabindex="-1" aria-labelledby="lt"></section>
+    </div>
+    <aside class="side">
+      <section class="panel act" id="act" aria-label="Balance et actions">
+        <h2 class="sec" id="balt">Balance du mouvement, M€</h2>
+        <div class="bal-n" id="baln"></div>
+        <div class="acts">
+          <button class="btn pri" type="button" id="comp" aria-haspopup="menu" aria-expanded="false" aria-controls="menu" hidden></button>
+          <button class="btn" type="button" id="copy" aria-describedby="why">Copier le tableau</button>
+          <button class="btn" type="button" id="opendoc" aria-expanded="false" aria-controls="drawer">Voir le tableau</button>
+        </div>
+        <p class="why" id="why"></p>
+        <div class="menu" id="menu" role="menu" aria-labelledby="comp" hidden></div>
+      </section>
+      <section class="panel chks" aria-labelledby="ct"><h2 class="sec" id="ct">Recevabilité</h2><div class="chk" id="chk"></div></section>
+    </aside>
+  </div>
 </div>
 
-<div class="bar" id="bar" role="region" aria-label="Balance du mouvement"><div class="in">
-  <div class="say" id="say" aria-live="polite"></div>
-  <div class="acts" id="acts"></div>
-</div></div>
+<aside class="drawer" id="drawer" aria-labelledby="dwt">
+  <div class="dh"><h2 id="dwt">Tableau de l'amendement</h2><button class="x" type="button" id="dclose" aria-label="Fermer le tableau">×</button></div>
+  <div class="db"><p>Modifier ainsi les autorisations d'engagement et les crédits de paiement (en euros) :</p><div class="scrollx"><table class="doc" id="doc"></table></div><p class="dnote">Le tableau suit le mouvement en direct : modifiez un programme, il se met à jour ici.</p></div>
+</aside>
 
-<div id="dw" aria-hidden="true">
-  <div class="scrim" data-close></div>
-  <section class="drawer" role="dialog" aria-modal="true" aria-labelledby="dwt">
-    <div class="dh"><h2 id="dwt">Tableau de l'amendement</h2><button class="x" data-close aria-label="Fermer">×</button></div>
-    <div class="db" id="dbody"></div>
-    <div class="df"><button class="btn" data-close>Fermer</button><button class="btn pri" id="copy">Copier le tableau</button></div>
-  </section>
-</div>
-<div class="tstack" id="tstack" aria-live="polite"></div>
+<dialog id="dlg" aria-labelledby="dlt" aria-describedby="dld">
+  <h2 id="dlt">Remettre le mouvement à zéro ?</h2>
+  <p id="dld">Les montants saisis sur les cinq programmes seront effacés. Vous pourrez les rétablir depuis la notification pendant cinq secondes.</p>
+  <div class="dacts"><button class="btn" type="button" id="dno" autofocus>Annuler</button><button class="btn danger" type="button" id="dyes">Remettre à zéro</button></div>
+</dialog>
+
+<div class="tsts" id="tsts"></div>
 
 <script>
+/* ---------- Données et moteur : inchangés par rapport à la maquette ---------- */
 const P=[
  {n:177,s:"Hébergement et insertion",t:"Hébergement, parcours vers le logement et insertion des personnes vulnérables",ae:3020,cp:3010},
- {n:109,s:"Aide au logement",t:"Aide à l'accès au logement",ae:16240,cp:16240,oblig:true},
+ {n:109,s:"Aide au logement",t:"Aide à l'accès au logement",ae:16240,cp:16240},
  {n:135,s:"Urbanisme et habitat",t:"Urbanisme, territoires et amélioration de l'habitat",ae:820,cp:845},
  {n:147,s:"Politique de la ville",t:"Politique de la ville",ae:640,cp:635},
  {n:162,s:"Interventions territoriales",t:"Interventions territoriales de l'État",ae:110,cp:96},
 ];
-const STEP=5, byN=n=>P.find(x=>x.n===n);
-let mv={135:{ae:60,cp:60},177:{ae:20,cp:20},109:{ae:-60,cp:-60}};
-const splitOpen=new Set(), whyOpen=new Set();
-const get=(n,k)=>(mv[n]&&mv[n][k])||0;
-const isSplit=n=>splitOpen.has(n);
-function set(n,k,v){mv[n]=mv[n]||{ae:0,cp:0};mv[n][k]=v;if(!isSplit(n))mv[n][k==="ae"?"cp":"ae"]=v}
-function sums(k){let p=0,m=0;for(const x of P){const v=get(x.n,k);v>0?p+=v:m-=v}return {p,m,s:p-m}}
-const over=x=>-get(x.n,"ae")>x.ae||-get(x.n,"cp")>x.cp;
-const snap=()=>JSON.parse(JSON.stringify(mv));
+let mv={109:{ae:-60,cp:-60},135:{ae:60,cp:60}};
+const STEP=5;
+let split=false, tab="cp";
+function get(n,k){return (mv[n]&&mv[n][k])||0}
+function set(n,k,v){mv[n]=mv[n]||{ae:0,cp:0};mv[n][k]=v;if(!split)mv[n][k==="ae"?"cp":"ae"]=v}
+function sums(k){let p=0,m=0;for(const x of P){const v=get(x.n,k);if(v>0)p+=v;else m-=v}return {p,m,s:p-m}}
+const K={cp:"CP",ae:"AE"}, KL={cp:"crédits de paiement",ae:"autorisations d'engagement"};
+const key=()=>split?tab:"cp";
 const sgn=v=>v>0?"+"+nf(v):v<0?"−"+nf(-v):"0";
+const byN=n=>P.find(x=>x.n===+n);
+const overs=()=>P.filter(x=>-get(x.n,"ae")>x.ae||-get(x.n,"cp")>x.cp);
 
-function card(x){
-  const c=get(x.n,"cp"), a=get(x.n,"ae"), sp=isSplit(x.n);
-  const mx=Math.max(...P.map(y=>y.cp+Math.max(0,get(y.n,"cp")))), w=v=>Math.max(.5,100*v/mx);
-  const base=x.cp+Math.min(0,c);
-  const stepper=(k,lbl)=>`<div class="row"><span>${lbl}</span><div class="step"><button data-n="${x.n}" data-k="${k}" data-d="-1" aria-label="Minorer le programme ${x.n} de ${STEP} M€${sp?" en "+k.toUpperCase():""}">−</button><input type="number" inputmode="numeric" step="${STEP}" value="${get(x.n,k)}" data-n="${x.n}" data-k="${k}" class="${get(x.n,k)>0?"pos":get(x.n,k)<0?"neg":""}" aria-label="Mouvement du programme ${x.n} en M€${sp?" ("+k.toUpperCase()+")":""}"><button data-n="${x.n}" data-k="${k}" data-d="1" aria-label="Abonder le programme ${x.n} de ${STEP} M€${sp?" en "+k.toUpperCase():""}">+</button></div></div>`;
-  const notes=[];
-  if(over(x)){const k=-get(x.n,"cp")>x.cp?"cp":"ae";notes.push(`<div class="note" role="alert"><span class="dot err"></span><span><b>Minoration supérieure aux crédits (${nf(x[k])} M€ en ${k.toUpperCase()}).</b> <button data-max="${x.n}">Ramener à ${nf(x[k])} M€</button></span></div>`)}
-  if(x.oblig&&c<0) notes.push(`<div class="note"><span class="dot warn"></span><span class="${whyOpen.has(x.n)?"open":""}"><b>Gage sur des dépenses obligatoires.</b> <button data-why="${x.n}" aria-expanded="${whyOpen.has(x.n)}">${whyOpen.has(x.n)?"Masquer":"Pourquoi ?"}</button><span class="slide"><div>Les aides personnelles au logement sont dues de droit : la minoration reste un gage de forme, que le Gouvernement devra lever ou compenser en cours d'année.</div></span></span></div>`);
-  return `<article class="panel card${over(x)?" bad":""}" data-card="${x.n}" aria-label="Programme ${x.n}">
-    <div class="hd"><b>${x.n}</b><span>${x.s}</span>${x.oblig?`<span class="tag">dépenses obligatoires</span>`:""}</div>
-    <div class="nums">${nf(x.cp)} M€ en CP${c?` → <span class="${c>0?"up":"down"}">${nf(x.cp+c)} M€ (${c>0?"+":"−"}${nf(Math.abs(100*c/x.cp),1)} %)</span>`:""}${sp?` · ${nf(x.ae)} M€ en AE${a?` → <span class="${a>0?"up":"down"}">${nf(x.ae+a)}</span>`:""}`:""}</div>
-    <div class="vis" aria-hidden="true"><i class="base" style="width:${w(Math.max(0,base))}%"></i>${c>0?`<i class="plus" style="left:${w(x.cp)}%;width:${w(c)}%"></i>`:c<0?`<i class="minus" style="left:${w(Math.max(0,base))}%;width:${w(Math.min(-c,x.cp))}%"></i>`:""}</div>
-    ${stepper("cp",sp?"CP":"AE = CP")}
-    <div class="${sp?"open":""}"><button class="disc" data-split="${x.n}" aria-expanded="${sp}"><i></i>${sp?"Aligner les AE sur les CP":"Montant différent en AE"}</button><div class="slide"><div>${stepper("ae","AE")}</div></div></div>
-    ${notes.join("")}
-  </article>`;
+/* ---------- Lignes de programmes : construites une fois, mises à jour en place (le focus clavier n'est jamais perdu) ---------- */
+function buildRows(){
+  const k=key();
+  const lab=split?`${K[k]}, en M€`:"AE = CP, en M€";
+  $("#progs").innerHTML=P.map(x=>`<div class="pr" data-n="${x.n}">
+    <div class="pi"><b>Programme ${x.n}</b><small>${esc(x.t)}</small><small class="pv" id="pv-${x.n}"></small></div>
+    <div class="pf"><label class="fl" for="in-${x.n}">${lab}</label>
+      <div class="step"><button type="button" data-d="-1" aria-label="Minorer le programme ${x.n} de ${STEP} M€">−</button><input id="in-${x.n}" type="number" step="${STEP}" data-n="${x.n}"><button type="button" data-d="1" aria-label="Abonder le programme ${x.n} de ${STEP} M€">+</button></div></div>
+    <div class="vis" aria-hidden="true"><i class="base"></i><i class="minus"></i><i class="plus"></i></div>
+    <div class="err"></div></div>`).join("");
+  const tp=$("#progs");
+  if(split){tp.setAttribute("role","tabpanel");tp.setAttribute("aria-labelledby","t-"+tab)}
+  else{tp.removeAttribute("role");tp.setAttribute("aria-labelledby","lt")}
+  update();
 }
 
-function render(keep){
-  const A=sums("ae"),C=sums("cp");
-  const bad=P.filter(over), moved=A.p||A.m||C.p||C.m;
-  const ok=moved&&A.s===0&&C.s===0&&!bad.length;
-  const ups=P.filter(x=>get(x.n,"cp")>0).map(x=>x.n), downs=P.filter(x=>get(x.n,"cp")<0).map(x=>x.n);
-  $("#lead").innerHTML=!moved?`Aucun mouvement. <span>Abondez un programme avec +, puis gagez-le sur un autre avec −.</span>`
-   :`${nf(C.p)} M€ vers ${ups.length>1?"les programmes":"le programme"} ${ups.join(" et ")||"—"}${downs.length?`, pris sur ${downs.join(" et ")}`:""}. <span>${ok?"La mission reste à somme nulle.":C.s>0?"Il reste à gager une partie de l'abondement.":C.s<0?"Les minorations dépassent les abondements.":bad.length?"Une minoration dépasse les crédits.":"Les AE ne sont pas équilibrées."}</span>`;
-  const f=keep&&document.activeElement, fsel=f&&f.dataset&&f.dataset.n?`[data-card="${f.dataset.n}"] ${f.tagName.toLowerCase()}[data-k="${f.dataset.k}"]${f.dataset.d?`[data-d="${f.dataset.d}"]`:""}`:null;
-  $("#cards").innerHTML=P.map(card).join("");
-  if(fsel) $(fsel)?.focus();
-  // barre
-  const sol=C.s||A.s, which=C.s?"":" en AE";
-  let say, acts="";
-  if(!moved) say=`<span class="dot"></span><span>Balance à zéro<small>Aucun mouvement pour l'instant</small></span>`;
-  else if(sol===0&&!bad.length) say=`<span class="dot ok"></span><span>Équilibré : ${nf(C.p)} M€ déplacés<small>Somme nulle en AE et en CP (article 47 de la LOLF)</small></span>`;
-  else if(sol===0) say=`<span class="dot err"></span><span>Équilibré, mais une minoration dépasse les crédits<small>Programme ${bad.map(x=>x.n).join(", ")} : corrigez sur sa carte</small></span>`;
-  else {
-    say=`<span class="dot err"></span><span>${sol>0?`${nf(sol)} M€ à gager${which}`:`${nf(-sol)} M€ de minoration en trop${which}`}<small>${sol>0?"Glissez le solde sur le programme à minorer":"Glissez le solde sur le programme à abonder"}</small></span>`;
-    acts+=`<span class="chipdrag" id="chip" role="img" aria-label="Solde à glisser sur un programme"><i></i>${sgn(-sol)} M€</span><button class="btn" id="bal" aria-haspopup="menu">Équilibrer sur…</button>`;
+function update(){
+  const k=key(), other=split?(k==="cp"?"ae":"cp"):null;
+  const A=sums("ae"), C=sums("cp"), S=sums(k), ov=overs();
+  const ups=P.filter(x=>get(x.n,"cp")>0), downs=P.filter(x=>get(x.n,"cp")<0);
+  const empty=!A.p&&!A.m&&!C.p&&!C.m;
+  const ok=A.s===0&&C.s===0&&!ov.length&&(A.p||C.p);
+  const mx=Math.max(...P.map(x=>x[k]+Math.max(0,get(x.n,k))));
+  const w=v=>Math.max(.6,100*v/mx);
+  for(const x of P){
+    const row=$(`.pr[data-n="${x.n}"]`), v=get(x.n,k), inp=row.querySelector("input");
+    inp.value=v; inp.className=v>0?"pos":v<0?"neg":"";
+    const minus=row.querySelector('[data-d="-1"]'), blocked=-(v-STEP)>x[k];
+    minus.setAttribute("aria-disabled",String(blocked));
+    minus.title=blocked?`Crédits du programme atteints (${nf(x[k])} M€)`:"";
+    const o=other?get(x.n,other):0;
+    row.querySelector(".pv").innerHTML=`${nf(x[k])} M€ en ${K[k]}${v?` → <span class="${v>0?"up":"dn"}">${nf(x[k]+v)} M€ (${v>0?"+":"−"}${nf(Math.abs(100*v/x[k]),1)} %)</span>`:""}${other?` · ${K[other]} : ${o?sgn(o)+" M€":"aucun mouvement"}`:""}`;
+    const [b,mi,pl]=row.querySelectorAll(".vis i");
+    const base=x[k]+Math.min(0,v);
+    b.style.width=w(base)+"%";
+    mi.style.left=w(base)+"%"; mi.style.width=v<0?(100*-v/mx)+"%":"0";
+    pl.style.left=w(x[k])+"%"; pl.style.width=v>0?(100*v/mx)+"%":"0";
+    // Erreur en ligne : affichée après saisie (au blur / Entrée), jamais pendant la frappe ; formule champ — cause — correction.
+    const msg=-v>x[k]?`Programme ${x.n} — la minoration de ${nf(-v)} M€ dépasse les ${nf(x[k])} M€ de ${KL[k]} ouverts — ramenez-la à ${nf(x[k])} M€ au plus.`:"";
+    const slot=row.querySelector(".err");
+    if(slot.dataset.msg!==msg){
+      slot.dataset.msg=msg;
+      slot.innerHTML=msg?`<p role="alert" id="er-${x.n}">${msg} <button type="button" class="fix" data-fix="${x.n}">Ramener à −${nf(x[k])} M€</button></p>`:"";
+    }
+    inp.setAttribute("aria-invalid",String(!!msg));
+    inp.setAttribute("aria-describedby",(msg?`er-${x.n} `:"")+`pv-${x.n}`);
   }
-  acts+=`<button class="btn pri" id="see">Voir l'amendement</button>`;
-  $("#say").innerHTML=say; $("#acts").innerHTML=acts;
-  document.documentElement.style.setProperty("--barh",$("#bar").offsetHeight+"px");
-  renderDoc(ok,A,C,bad);
+  // Verdict
+  $("#lead").innerHTML=empty?`Aucun mouvement. <span>Utilisez + et − sur les programmes à abonder et à minorer.</span>`
+   :ok?`Transfert équilibré de ${nf(C.p)} M€ ${downs.length?`du programme ${downs.map(x=>x.n).join(" et ")}`:""} vers ${ups.length>1?"les programmes":"le programme"} ${ups.map(x=>x.n).join(" et ")}. <span>L'amendement est recevable au regard de l'équilibre de la mission.</span>`
+   :ov.length&&A.s===0&&C.s===0?`Mouvement équilibré mais irrecevable. <span>Le programme ${ov.map(x=>x.n).join(", ")} est minoré au-delà de ses crédits.</span>`
+   :`Mouvement déséquilibré. <span>${C.s>0?`Il manque ${nf(C.s)} M€ de minoration en CP.`:C.s<0?`Les minorations dépassent les abondements de ${nf(-C.s)} M€ en CP.`:""} ${A.s!==0&&A.s!==C.s?`Écart de ${nf(Math.abs(A.s))} M€ en AE.`:""}</span>`;
+  // Balance
+  $("#balt").textContent=split?`Balance du mouvement en ${K[k]}, M€`:"Balance du mouvement, M€";
+  const box=(l,v,c="")=>`<div class="${c}"><b>${l==="Solde"?sgn(v):nf(v)}</b><span>${l}${l==="Solde"&&split?" "+K[k]:""}</span></div>`;
+  $("#baln").innerHTML=box("Abondé",S.p)+box("Minoré",S.m)+box("Solde",S.s,S.s===0?"z":"nz");
+  // Actions : une seule action principale à la fois (loi de Hick)
+  const unb=[k,other].filter(Boolean).find(kk=>sums(kk).s!==0);
+  const comp=$("#comp"), copy=$("#copy");
+  if(unb){const s=sums(unb).s;comp.hidden=false;comp.textContent=`Compenser ${sgn(-s)} M€${split?" en "+K[unb]:""} sur…`;comp.dataset.k=unb;comp.dataset.s=s}
+  else{comp.hidden=true;closeMenu(false)}
+  copy.classList.toggle("pri",!unb);
+  copy.setAttribute("aria-disabled",String(!ok));
+  copy.disabled=false;
+  $("#why").textContent=ok?"":empty?"Aucun mouvement à copier.":unb?"La copie sera possible quand le solde sera nul.":`Corrigez d'abord la minoration du programme ${ov.map(x=>x.n).join(", ")}.`;
+  $("#reset").setAttribute("aria-disabled",String(empty));
+  renderChecks(A,C,ov);
+  renderDoc(A,C);
+}
+/* aria-disabled plutôt que disabled : le bouton garde le focus et reste annoncé avec sa raison. */
+const isOff=el=>el.getAttribute("aria-disabled")==="true";
+
+/* ---------- Contrôles : accordéon <details> natif, état ouvert conservé ---------- */
+function renderChecks(A,C,ov){
+  const chk=[];
+  const both=A.s===0&&C.s===0;
+  chk.push(both?["sum","ok","Somme nulle en AE et en CP","Article 47 de la LOLF : un amendement ne peut pas accroître les crédits d'une mission ; chaque abondement est gagé par une minoration du même montant."]
+    :["sum","err",`Solde non nul : ${[C.s?sgn(C.s)+" M€ en CP":"",A.s?sgn(A.s)+" M€ en AE":""].filter(Boolean).join(", ")}`,`Article 47 de la LOLF : un amendement ne peut pas accroître les crédits d'une mission. ${(C.s||A.s)>0?`Minorez un autre programme de ${nf(C.s||A.s)} M€`:`Réduisez les minorations de ${nf(-(C.s||A.s))} M€`}, ou utilisez « Compenser ».`]);
+  chk.push(ov.length?["over","err",`Minoration supérieure aux crédits du programme ${ov.map(x=>x.n).join(", ")}`,`On ne peut pas retirer à un programme plus que ce qu'il reçoit. ${ov.map(x=>{const kk=-get(x.n,"cp")>x.cp?"cp":"ae";return `Programme ${x.n} : ${nf(x[kk])} M€ au plus en ${K[kk]}.`}).join(" ")}`]
+    :["over","ok","Aucun programme minoré au-delà de ses crédits","Chaque minoration reste inférieure aux crédits ouverts du programme dans le projet de loi."]);
+  chk.push(["mission","ok","Programmes d'une même mission","Les transferts entre missions ne sont pas possibles par amendement."]);
+  if(get(109,"cp")<0||get(109,"ae")<0) chk.push(["oblig","warn","Minoration d'un programme de dépenses obligatoires","Le programme 109 finance les aides personnelles au logement, dues de droit : la minoration est un gage de forme, le Gouvernement devra le lever ou abonder en cours d'année."]);
+  const box=$("#chk"), open=new Set($$("#chk details[open]").map(d=>d.dataset.id));
+  const foc=document.activeElement?.closest?.("#chk details")?.dataset.id;
+  box.innerHTML=chk.map(([id,c,t,s])=>`<details data-id="${id}"${open.has(id)?" open":""}><summary><span class="dot ${c}" aria-hidden="true"></span><span class="t">${t}<span class="sr"> (${c==="ok"?"conforme":c==="warn"?"à noter":"à corriger"})</span></span></summary><div class="cb">${s}</div></details>`).join("");
+  if(foc) box.querySelector(`details[data-id="${foc}"] summary`)?.focus();
 }
 
-function table(k){
-  const rows=P.filter(x=>get(x.n,k)), S=sums(k), e=v=>v?nf(v*1e6):"0";
-  return `<div class="unit">(en euros)</div><table><thead><tr><th>Programmes</th><th>+</th><th>−</th></tr></thead><tbody>${rows.map(x=>{const v=get(x.n,k);return `<tr><td>${x.t}</td><td>${v>0?e(v):"0"}</td><td>${v<0?e(-v):"0"}</td></tr>`}).join("")||`<tr><td colspan="3" style="text-align:center;color:var(--dim)">Aucun mouvement</td></tr>`}</tbody><tfoot><tr><td>TOTAUX</td><td>${e(S.p)}</td><td>${e(S.m)}</td></tr><tr><td>SOLDE</td><td colspan="2" style="text-align:center">${S.s?(S.s>0?"+":"−")+e(Math.abs(S.s)):"0"}</td></tr></tfoot></table>`;
+/* ---------- Tableau de l'amendement ---------- */
+function renderDoc(A,C){
+  const cols=split?["ae","cp"]:["cp"];
+  const rows=P.filter(x=>get(x.n,"ae")||get(x.n,"cp"));
+  const e=v=>v?nf(v*1e6):"0";
+  const head=split?`<tr><th rowspan="2">Programmes</th><th colspan="2">Autorisations d'engagement</th><th colspan="2">Crédits de paiement</th></tr><tr><th>+</th><th>−</th><th>+</th><th>−</th></tr>`:`<tr><th>Programmes</th><th>+</th><th>−</th></tr>`;
+  const body=rows.map(x=>`<tr><td>${esc(x.t)}</td>${cols.map(k=>{const v=get(x.n,k);return `<td>${v>0?e(v):"0"}</td><td>${v<0?e(-v):"0"}</td>`}).join("")}</tr>`).join("")||`<tr><td colspan="${1+2*cols.length}" style="color:var(--dim);text-align:center">Aucun mouvement</td></tr>`;
+  const S={ae:A,cp:C};
+  $("#doc").innerHTML=`<thead>${head}</thead><tbody>${body}</tbody><tfoot><tr><td>TOTAUX</td>${cols.map(k=>`<td>${e(S[k].p)}</td><td>${e(S[k].m)}</td>`).join("")}</tr><tr><td>SOLDE</td>${cols.map(k=>`<td colspan="2" style="text-align:center">${S[k].s?(S[k].s>0?"+":"−")+e(Math.abs(S[k].s)):"0"}</td>`).join("")}</tr></tfoot>`;
 }
-function renderDoc(ok,A,C,bad){
-  const diff=P.some(x=>get(x.n,"ae")!==get(x.n,"cp"));
-  const chk=[[C.s===0&&A.s===0?"ok":"err",C.s===0&&A.s===0?"Somme nulle en AE et en CP":"La somme doit être nulle (article 47 de la LOLF) : un amendement ne peut pas augmenter les crédits d'une mission."],
-   [bad.length?"err":"ok",bad.length?`Minoration supérieure aux crédits du programme ${bad.map(x=>x.n).join(", ")}`:"Aucun programme minoré au-delà de ses crédits"],
-   ["ok","Programmes de la même mission"]];
-  if(get(109,"cp")<0) chk.push(["warn","Gage sur le programme 109 (dépenses obligatoires)"]);
-  $("#dbody").innerHTML=`<p>Modifier ainsi les autorisations d'engagement et les crédits de paiement :</p>${diff?`<h3>Autorisations d'engagement</h3>${table("ae")}<h3>Crédits de paiement</h3>${table("cp")}`:table("cp")}<ul class="chk">${chk.map(([c,t])=>`<li><span class="dot ${c}"></span><span>${t}</span></li>`).join("")}</ul>`;
-  $("#copy").disabled=!ok; $("#copy").title=ok?"":"Le tableau sera copiable une fois la balance à zéro.";
-}
+const tableText=()=>$$("#doc tr").map(r=>[...r.children].map(c=>c.textContent).join("\t")).join("\n");
 
-/* toasts empilés (3 au plus) */
-function toastU(msg,undo){
-  const st=$("#tstack");while(st.children.length>=3)st.firstChild.remove();
-  const t=document.createElement("div");t.className="tst";t.setAttribute("role","status");
-  t.innerHTML=`<span>${esc(msg)}</span>${undo?`<button class="u">Annuler</button>`:""}<button class="c" aria-label="Fermer">×</button>`;
-  const kill=()=>{t.classList.add("out");setTimeout(()=>t.remove(),200)};
-  if(undo)t.querySelector(".u").onclick=()=>{undo();kill()};
-  t.querySelector(".c").onclick=kill; st.append(t); setTimeout(kill,6000);
+/* ---------- Notifications : status/polite (5 s) ou alert/assertive (jamais auto-fermée) ; 3 au plus ---------- */
+function notify(msg,type="success",action){
+  const box=$("#tsts"), t=document.createElement("div");
+  t.className="tst "+type;
+  t.setAttribute("role",type==="error"?"alert":"status");
+  t.setAttribute("aria-live",type==="error"?"assertive":"polite");
+  t.innerHTML=`<span class="tm"></span>${action?`<button type="button" class="ta"></button>`:""}<button type="button" class="tx" aria-label="Fermer la notification">×</button>`;
+  t.querySelector(".tm").textContent=msg;
+  if(action){const a=t.querySelector(".ta");a.textContent=action.label;a.onclick=()=>{dismiss(t);action.fn()}}
+  t.querySelector(".tx").onclick=()=>dismiss(t,true);
+  t.addEventListener("keydown",e=>{if(e.key==="Escape"){e.stopPropagation();dismiss(t,true)}});
+  box.prepend(t);
+  while(box.children.length>3) dismiss(box.lastElementChild);
+  if(type!=="error"){
+    let left=5000, start, timer;
+    const run=()=>{start=Date.now();timer=setTimeout(()=>dismiss(t),left)};
+    const pause=()=>{clearTimeout(timer);left-=Date.now()-start};
+    t.addEventListener("mouseenter",pause);t.addEventListener("mouseleave",run);
+    t.addEventListener("focusin",pause);t.addEventListener("focusout",run);
+    run();
+  }
+  return t;
 }
-/* équilibrer : imputer le solde sur un programme */
-function eligible(x){const A=sums("ae"),C=sums("cp");for(const [k,S] of [["ae",A],["cp",C]]){const nv=get(x.n,k)-S.s;if(-nv>x[k])return false}return true}
-function absorb(n){
-  const before=snap(),A=sums("ae"),C=sums("cp");
-  mv[n]=mv[n]||{ae:0,cp:0};mv[n].ae-=A.s;mv[n].cp-=C.s;
-  if(mv[n].ae!==mv[n].cp)splitOpen.add(n);
-  render();toastU(`Solde imputé sur le programme ${n} : la balance est à zéro.`,()=>{mv=before;render()});
+function dismiss(t,refocus){
+  if(!t||t.classList.contains("out"))return;
+  const had=t.contains(document.activeElement);
+  t.classList.add("out");setTimeout(()=>t.remove(),200);
+  if(had&&refocus) primaryBtn().focus();
 }
-let menuEl=null,menuBack=null;
-function closeMenu(){if(menuEl){menuEl.remove();menuEl=null;menuBack?.focus()}}
-function openMenu(btn){
-  closeMenu();menuBack=btn;const C=sums("cp");
-  const m=document.createElement("div");m.className="menu";m.setAttribute("role","menu");m.setAttribute("aria-label","Équilibrer sur un programme");
-  m.innerHTML=`<div class="mh">${C.s>0?"Minorer":"Abonder"} de ${nf(Math.abs(C.s||sums("ae").s))} M€ :</div>`+P.map(x=>`<button role="menuitem" data-abs="${x.n}"${eligible(x)?"":" disabled"}><span>${x.n} · ${x.s}</span><small>${eligible(x)?`→ ${sgn(get(x.n,"cp")-C.s)} M€`:"crédits insuffisants"}</small></button>`).join("");
-  document.body.append(m);menuEl=m;
-  const r=btn.getBoundingClientRect(),w=m.offsetWidth,h=m.offsetHeight;
-  m.style.left=Math.max(16,Math.min(innerWidth-w-16,r.right-w))+"px";m.style.top=Math.max(8,r.top-h-8)+"px";
-  m.querySelector("button:not(:disabled)")?.focus();
+const primaryBtn=()=>$("#comp").hidden?$("#copy"):$("#comp");
+
+/* ---------- Tiroir non modal (role complementary) ---------- */
+let drawerTrigger=null;
+function openDrawer(from){
+  const d=$("#drawer");
+  drawerTrigger=from||$("#opendoc");
+  d.classList.remove("out");d.classList.add("on");d.removeAttribute("inert");
+  document.body.classList.add("dr-open");
+  $("#opendoc").setAttribute("aria-expanded","true");$("#opendoc").textContent="Masquer le tableau";
+  $("#dclose").focus({preventScroll:true});
 }
-/* glisser le solde (souris, doigt, stylet) */
-let drag=null;
-document.addEventListener("pointerdown",e=>{
-  const c=e.target.closest("#chip");if(!c)return;e.preventDefault();
-  const g=c.cloneNode(true);g.removeAttribute("id");g.classList.add("ghostchip");g.style.left=e.clientX+"px";g.style.top=e.clientY+"px";document.body.append(g);
-  $$("[data-card]").forEach(el=>el.classList.add(eligible(byN(+el.dataset.card))?"drop":"nodrop"));
-  drag={g,hot:null,y:e.clientY,x:e.clientX};
-  const tick=()=>{if(!drag)return;const bh=$("#bar").offsetHeight,y=drag.y;
-    const v=y>innerHeight-bh-50?12:y<60?-12:0;if(v){scrollBy(0,v);hover(drag.x,drag.y)}requestAnimationFrame(tick)};requestAnimationFrame(tick);
+function closeDrawer(){
+  const d=$("#drawer"); if(!d.classList.contains("on"))return;
+  const back=d.contains(document.activeElement);
+  d.classList.add("out");
+  document.body.classList.remove("dr-open");
+  $("#opendoc").setAttribute("aria-expanded","false");$("#opendoc").textContent="Voir le tableau";
+  setTimeout(()=>{d.style.transition="none";d.classList.remove("on","out");d.setAttribute("inert","");void d.offsetWidth;d.style.transition=""},200);
+  if(back) (drawerTrigger&&document.contains(drawerTrigger)?drawerTrigger:$("#opendoc")).focus();
+}
+function selectTable(){const r=document.createRange();r.selectNodeContents($("#doc"));const s=getSelection();s.removeAllRanges();s.addRange(r)}
+
+/* ---------- Menu « Compenser sur… » (bouton de menu WAI-ARIA) ---------- */
+function openMenu(focusLast){
+  const k=$("#comp").dataset.k, s=+$("#comp").dataset.s, m=$("#menu");
+  m.innerHTML=`<div class="mh" aria-hidden="true">${s>0?"Minorer":"Abonder"} de ${nf(Math.abs(s))} M€ en ${K[k]} :</div>`+P.map(x=>{
+    const nv=get(x.n,k)-s, okk=-nv<=x[k];
+    return `<button type="button" role="menuitem" tabindex="-1" data-n="${x.n}"${okk?"":` aria-disabled="true"`}><span>${x.s} (${x.n})</span><small>${okk?`${sgn(get(x.n,k))} → ${sgn(nv)} M€`:"crédits insuffisants"}</small></button>`}).join("");
+  m.hidden=false;$("#comp").setAttribute("aria-expanded","true");
+  const items=menuItems(); (focusLast?items.at(-1):items[0]).focus();
+}
+const menuItems=()=>$$("#menu [role=menuitem]");
+function closeMenu(refocus=true){
+  const m=$("#menu"); if(m.hidden)return;
+  m.hidden=true;$("#comp").setAttribute("aria-expanded","false");
+  if(refocus) primaryBtn().focus();
+}
+$("#comp").addEventListener("click",()=>{$("#menu").hidden?openMenu():closeMenu()});
+$("#comp").addEventListener("keydown",e=>{
+  if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();openMenu(e.key==="ArrowUp")}
 });
-function hover(x,y){const el=document.elementFromPoint(x,y)?.closest("[data-card].drop");if(drag.hot!==el){drag.hot?.classList.remove("hot");el?.classList.add("hot");drag.hot=el}}
-document.addEventListener("pointermove",e=>{
-  if(!drag)return;drag.x=e.clientX;drag.y=e.clientY;drag.g.style.left=e.clientX+"px";drag.g.style.top=e.clientY+"px";hover(e.clientX,e.clientY);
+$("#menu").addEventListener("keydown",e=>{
+  const items=menuItems(), i=items.indexOf(document.activeElement);
+  let j=null;
+  if(e.key==="ArrowDown") j=(i+1)%items.length;
+  else if(e.key==="ArrowUp") j=(i-1+items.length)%items.length;
+  else if(e.key==="Home") j=0;
+  else if(e.key==="End") j=items.length-1;
+  else if(e.key==="Escape"){e.preventDefault();e.stopPropagation();closeMenu();return}
+  else if(e.key==="Tab"){closeMenu(false);return}
+  else if(e.key.length===1&&/\S/.test(e.key)){
+    const c=e.key.toLowerCase(), n=items.length;
+    for(let d=1;d<=n;d++){const it=items[(i+d)%n];if(it.textContent.trim().toLowerCase().startsWith(c)){j=(i+d)%n;break}}
+  }
+  if(j!==null){e.preventDefault();items[j].focus()}
 });
-function endDrag(e){
-  if(!drag)return;const hot=drag.hot;drag.g.remove();$$("[data-card]").forEach(el=>el.classList.remove("drop","nodrop","hot"));drag=null;
-  if(hot&&e.type==="pointerup")absorb(+hot.dataset.card);
+$("#menu").addEventListener("click",e=>{
+  const it=e.target.closest("[role=menuitem]"); if(!it||isOff(it))return;
+  const k=$("#comp").dataset.k, s=+$("#comp").dataset.s, n=+it.dataset.n;
+  set(n,k,get(n,k)-s); closeMenu(false); update(); primaryBtn().focus();
+});
+document.addEventListener("pointerdown",e=>{if(!$("#menu").hidden&&!e.target.closest("#menu,#comp"))closeMenu(false)});
+
+/* ---------- Onglets AE / CP : flèches, Début, Fin, tabindex itinérant ---------- */
+function selectTab(k,focus){
+  tab=k;
+  $$("#tabs [role=tab]").forEach(b=>{const on=b.dataset.k===k;b.setAttribute("aria-selected",String(on));b.tabIndex=on?0:-1;if(on&&focus)b.focus()});
+  buildRows();
 }
-document.addEventListener("pointerup",endDrag);document.addEventListener("pointercancel",endDrag);
+$("#tabs").addEventListener("click",e=>{const b=e.target.closest("[role=tab]");if(b)selectTab(b.dataset.k,true)});
+$("#tabs").addEventListener("keydown",e=>{
+  const ks=["cp","ae"], i=ks.indexOf(tab); let j=null;
+  if(e.key==="ArrowRight") j=(i+1)%2; else if(e.key==="ArrowLeft") j=(i+1)%2;
+  else if(e.key==="Home") j=0; else if(e.key==="End") j=1;
+  if(j!==null){e.preventDefault();selectTab(ks[j],true)}
+});
 
-/* tiroir */
-let back=null;
-function openDrawer(){back=document.activeElement;const d=$("#dw");d.classList.remove("closing");d.classList.add("isopen");d.setAttribute("aria-hidden","false");$$(".wrap,.bar").forEach(el=>el.inert=true);setTimeout(()=>$("#dw .x").focus(),30)}
-function closeDrawer(){const d=$("#dw");if(!d.classList.contains("isopen"))return;d.classList.add("closing");$$(".wrap,.bar").forEach(el=>el.inert=false);setTimeout(()=>{d.classList.remove("isopen","closing");d.setAttribute("aria-hidden","true")},190);back?.focus()}
-
+/* ---------- Saisie ---------- */
 document.addEventListener("click",e=>{
-  if(menuEl&&!e.target.closest(".menu")&&!e.target.closest("#bal"))closeMenu();
-  const b=e.target.closest(".step button");if(b){const n=+b.dataset.n,k=b.dataset.k;set(n,k,get(n,k)+STEP*(+b.dataset.d));render(true);return}
-  const s=e.target.closest("[data-split]");if(s){const n=+s.dataset.split;if(isSplit(n)){splitOpen.delete(n);if(mv[n])mv[n].ae=mv[n].cp}else splitOpen.add(n);render();$(`[data-split="${n}"]`).focus();return}
-  const w=e.target.closest("[data-why]");if(w){const n=+w.dataset.why;whyOpen.has(n)?whyOpen.delete(n):whyOpen.add(n);render();$(`[data-why="${n}"]`).focus();return}
-  const mx=e.target.closest("[data-max]");if(mx){const x=byN(+mx.dataset.max),before=snap();for(const k of ["ae","cp"])if(-get(x.n,k)>x[k])mv[x.n][k]=-x[k];render();toastU(`Minoration du programme ${x.n} ramenée à ses crédits.`,()=>{mv=before;render()});return}
-  if(e.target.closest("#bal")){menuEl?closeMenu():openMenu(e.target.closest("#bal"));return}
-  const ab=e.target.closest("[data-abs]");if(ab){const n=+ab.dataset.abs;menuBack=null;closeMenu();absorb(n);$("#see")?.focus();return}
-  if(e.target.closest("#see")){openDrawer();return}
-  if(e.target.closest("[data-close]")){closeDrawer();return}
-  if(e.target.closest("#reset")){const before=snap(),so=new Set(splitOpen);mv={};splitOpen.clear();render();toastU("Tous les mouvements ont été remis à zéro.",()=>{mv=before;so.forEach(n=>splitOpen.add(n));render()});return}
-  if(e.target.closest("#copy")){const t=$$("#dbody table").map(tb=>[...tb.rows].map(r=>[...r.cells].map(c=>c.textContent).join("\t")).join("\n")).join("\n\n");navigator.clipboard?.writeText(t).then(()=>toastU("Tableau copié."),()=>toastU("Copie refusée : sélectionnez le tableau à la main."))}
+  const b=e.target.closest(".step button");
+  if(b){if(isOff(b))return;const n=+b.closest(".pr").dataset.n,k=key();set(n,k,get(n,k)+STEP*(+b.dataset.d));update();return}
+  const f=e.target.closest("[data-fix]");
+  if(f){const x=byN(f.dataset.fix),k=key();set(x.n,k,-x[k]);update();$("#in-"+x.n).focus();return}
 });
-document.addEventListener("change",e=>{const i=e.target.closest(".step input");if(i){set(+i.dataset.n,i.dataset.k,Math.round(+i.value||0));render()}});
+// Validation au changement (blur ou Entrée), jamais à la frappe.
+document.addEventListener("change",e=>{
+  const i=e.target.closest(".step input");
+  if(i){set(+i.dataset.n,key(),Math.round(+i.value||0));update();return}
+  if(e.target.id==="split"){
+    split=e.target.checked;
+    if(!split){for(const n in mv)mv[n].ae=mv[n].cp;tab="cp";selectTab("cp")}
+    $("#tabs").hidden=!split;
+    buildRows();
+  }
+});
+$("#copy").addEventListener("click",async()=>{
+  const btn=$("#copy"); if(isOff(btn))return;
+  // Seuil de Doherty : au-delà de 400 ms sans réponse, le bouton dit qu'il travaille.
+  const slow=setTimeout(()=>{btn.textContent="Copie…";btn.setAttribute("aria-busy","true")},400);
+  try{
+    if(!navigator.clipboard)throw 0;
+    await Promise.race([navigator.clipboard.writeText(tableText()),new Promise((_,r)=>setTimeout(r,3000))]);
+    notify("Tableau copié : il se colle tel quel dans un tableur ou un traitement de texte.","success");
+  }catch{
+    notify("Le navigateur n'a pas autorisé la copie. Ouvrez le tableau : il sera sélectionné, copiez-le avec Ctrl+C (⌘C).","error",{label:"Ouvrir et sélectionner",fn:()=>{openDrawer(btn);selectTable()}});
+  }finally{clearTimeout(slow);btn.textContent="Copier le tableau";btn.removeAttribute("aria-busy")}
+});
+$("#opendoc").addEventListener("click",e=>{$("#drawer").classList.contains("on")?closeDrawer():openDrawer(e.currentTarget)});
+$("#dclose").addEventListener("click",closeDrawer);
+
+/* ---------- Remise à zéro : action destructive → modale native, focus sur « Annuler », réversible ---------- */
+const dlg=$("#dlg");
+$("#reset").addEventListener("click",()=>{if(isOff($("#reset")))return;dlg.showModal();$("#dno").focus()});
+$("#dno").addEventListener("click",()=>dlg.close());
+$("#dyes").addEventListener("click",()=>{
+  const before=JSON.parse(JSON.stringify(mv));
+  mv={};dlg.close();update();
+  notify("Mouvement remis à zéro.","info",{label:"Rétablir",fn:()=>{mv=before;update();$("#reset").focus()}});
+});
+dlg.addEventListener("close",()=>$("#reset").focus());
+
+/* ---------- Échap : ferme ce qui est ouvert, du plus proche au plus lointain ---------- */
 document.addEventListener("keydown",e=>{
-  if(menuEl){const items=[...menuEl.querySelectorAll("button:not(:disabled)")],i=items.indexOf(document.activeElement);
-    if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();items[(i+(e.key==="ArrowDown"?1:-1)+items.length)%items.length]?.focus()}
-    if(e.key==="Escape"||e.key==="Tab"){e.preventDefault();closeMenu()}return}
-  if(e.key==="Escape"){if($("#dw").classList.contains("isopen"))closeDrawer();else $$(".tst").forEach(t=>t.remove())}
-  if(e.key==="Tab"&&$("#dw").classList.contains("isopen")){const f=$$("#dw button:not(:disabled)"),a=f[0],z=f[f.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus()}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus()}}
+  if(e.key!=="Escape"||dlg.open)return;
+  if(!$("#menu").hidden){closeMenu();return}
+  if($("#drawer").classList.contains("on")){closeDrawer();return}
 });
-addEventListener("resize",()=>document.documentElement.style.setProperty("--barh",$("#bar").offsetHeight+"px"));
-render();
+// Accordéon groupé : flèches haut / bas entre les en-têtes des contrôles.
+$("#chk").addEventListener("keydown",e=>{
+  if(e.key!=="ArrowDown"&&e.key!=="ArrowUp")return;
+  const s=$$("#chk summary"), i=s.indexOf(document.activeElement); if(i<0)return;
+  e.preventDefault(); s[(i+(e.key==="ArrowDown"?1:s.length-1))%s.length].focus();
+});
+
+/* Hauteur de la barre fixe (écran étroit) : le tiroir et les notifications s'arrêtent au-dessus. */
+const act=$("#act"), mq=matchMedia("(max-width:939px)");
+const syncBar=()=>document.documentElement.style.setProperty("--barh",mq.matches?act.offsetHeight+"px":"0px");
+new ResizeObserver(syncBar).observe(act); mq.addEventListener("change",syncBar);
+
+$("#drawer").setAttribute("inert","");
+buildRows();
 </script>
