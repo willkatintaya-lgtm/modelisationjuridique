@@ -111,7 +111,7 @@ mark.pend{background:var(--lit);color:var(--fg)}
 .comp input[type=text]{width:100%;min-height:40px;font-size:14px}
 .comp .e{color:#f2a7a9;font-size:12.5px;min-height:1.2em;margin:6px 0 0}
 .comp .note{font-size:12px;color:var(--dim);margin:8px 0 0}
-.fx{margin:12px 0 0;padding:10px 12px;border-radius:8px;background:var(--bg);border:1px solid var(--line);font-size:12.5px;color:var(--muted);display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;animation:vin .25s var(--ease)}
+.fx{margin:12px 0;padding:10px 12px;border-radius:8px;background:var(--bg);border:1px solid var(--line);font-size:12.5px;color:var(--muted);display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;animation:vin .25s var(--ease)}
 .fx ul{margin:0;padding:0;list-style:none;flex:1 1 240px}
 .fx li{margin:0 0 2px}
 .fx li b{color:var(--text);font-weight:500}
@@ -506,11 +506,12 @@ const NEWER=[{id:103,g:"SOL",al:6,op:"rep",w:"20 %",x:"18 %",occ:1},{id:104,g:"E
 
 /* ---------- Reprise du brouillon ---------- */
 try{const raw=localStorage.getItem(KEY); if(raw){const d=JSON.parse(raw); if(d&&Array.isArray(d.mods)){
-  if(d.dep==="done"){S.dep="done";S.depNo=d.depNo;S.depAt=d.depAt}
+  if(d.dep==="done"){S.dep="done";S.depNo=d.depNo;S.depAt=d.depAt;S.open=new Set([5])}
+  if(d.fresh){LIASSE=[...LIASSE,...NEWER];S.liasse="fresh";S.hideFresh=true}
   mine.mods=d.mods; mine.gage=!!d.gage; mine.expo=d.expo??""; uid=Math.max(uid,...d.mods.map(m=>m.id+1)); S.resumed=d.at;}}}catch(e){S.saveOk=false}
 function persist(){
   const at=hm(clock());
-  try{localStorage.setItem(KEY,JSON.stringify({mods:mine.mods,gage:mine.gage,expo:mine.expo,at,dep:S.dep,depNo:S.depNo,depAt:S.depAt}));S.saved=at;S.saveOk=true}catch(e){S.saveOk=false}
+  try{localStorage.setItem(KEY,JSON.stringify({mods:mine.mods,gage:mine.gage,expo:mine.expo,at,dep:S.dep,depNo:S.depNo,depAt:S.depAt,fresh:S.liasse==="fresh"}));S.saved=at;S.saveOk=true}catch(e){S.saveOk=false}
   renderSave();
 }
 function renderSave(){
@@ -545,7 +546,7 @@ function steps(){
   s.push({i:2,nm:"Relire le dispositif et l'exposé",cls:!n?"":expoOk?"ok":"warn",badge:!n?"En attente":expoOk?"Fait":"Exposé à compléter",sm:!n?"Le dispositif s'écrira tout seul à partir de vos modifications":expoOk?`${paragraphs().length} paragraphe${paragraphs().length>1?"s":""}, exposé de ${mine.expo.trim().split(/\s+/).length} mots`:"L'exposé sommaire est trop court pour être déposé"});
   let c3={i:3,nm:"Contrôler la recevabilité",cls:"",badge:"En attente",sm:"Après la première modification"};
   if(n){const a=D.a40.st, bad=a==="charge"||a==="perte";
-    c3={...c3,cls:bad?"err":stale||D.own.length||D.same.length?"warn":"ok",badge:a==="charge"?"À corriger":a==="perte"?"Gage manquant":S.liasse==="loading"?"Actualisation…":stale?"Liasse périmée":"Fait",
+    c3={...c3,cls:bad?"err":stale||D.own.length||D.same.length?"warn":"ok",badge:a==="charge"?"À corriger":a==="perte"?"Gage manquant":S.liasse==="loading"?"Actualisation…":stale?"Liasse périmée":D.own.length||D.same.length?"À examiner":"Fait",
       sm:a==="charge"?"Article 40 : la modification crée une charge publique":a==="perte"?"Article 40 : un gage est nécessaire":`Article 40 : ${A40L[a]} · ${D.near.length} amendement${D.near.length>1?"s":""} sur les mêmes passages`};}
   s.push(c3);
   s.push({i:4,nm:"Anticiper la séance",cls:n?(stale?"warn":"ok"):"",badge:!n?"En attente":stale?"Liasse périmée":"Fait",sm:n?`Appelé en ${nth(D.appel.pos)} position sur ${D.appel.total}${D.appel.killers.length?` · peut tomber (${orList(D.appel.killers)})`:""}`:`${simulate().flat.length} amendements déposés sur l'article`});
@@ -585,7 +586,7 @@ function refresh(){
     if(after.same>(before.same||0)) fx.push("Le n° 103 est identique au vôtre : ils seront mis aux voix ensemble");
     if(after.pos!==before.pos&&after.pos) fx.push(`votre position d'appel passe de ${nth(before.pos)} à ${nth(after.pos)} sur ${after.tot}`);
     S.newFx=fx.join(" ; ")+(fx.length?".":"");
-    render();
+    persist(); render();
   },RM.matches?300:1100);
 }
 
@@ -634,7 +635,7 @@ function body3(){
   else it.push({c:a.st==="att"?"warn":"ok",t:`Article 40 : ${A40L[a.st]}`,d:a.r.length?where(a.r):"Indication ; la décision appartient au président de la commission des finances.",acts:a.st==="inutile"&&!locked?`<button class="btn" data-a="ungage">Retirer le gage</button>`:""});
   const stale=S.liasse!=="fresh", sc=stale?" stale":"";
   if(D.own.length) it.push({c:"warn"+sc,t:`Votre groupe a déposé le n° ${D.own.map(n=>n.a.id).join(", ")} sur ce passage`,d:"Deux rédactions du même groupe se partagent les voix : cosigner l'une et retirer l'autre est l'usage."});
-  if(D.same.length) it.push({c:"warn",t:`Identique au n° ${D.same.map(n=>n.a.id).join(", ")}${D.same.some(n=>S.newIds.includes(n.a.id))?`<span class="new">nouveau</span>`:""}`,d:"Les amendements identiques sont mis aux voix ensemble."});
+  if(D.same.length) it.push({c:"warn",t:`Identique ${andList(D.same.map(n=>`au n° ${n.a.id}`))}${D.same.some(n=>S.newIds.includes(n.a.id))?`<span class="new">nouveau</span>`:""}`,d:"Les amendements identiques sont mis aux voix ensemble."});
   const others=D.near.filter(n=>n.a.g!==ME&&!n.same);
   if(others.length) it.push({c:"ok"+sc,t:`${others.length} autre${others.length>1?"s":""} amendement${others.length>1?"s":""} sur les mêmes passages`,d:others.map(n=>`n° ${n.a.id} (${n.a.g})${S.newIds.includes(n.a.id)?" · nouveau":""}`).join(", ")});
   if(D.fiche) it.push({c:"warn",t:"Même rédaction qu'une fiche reçue",d:`${D.fiche.org}, ${D.fiche.date}. La mention dans l'empreinte normative est l'usage.`});
@@ -648,7 +649,7 @@ function body4(){
   if(me){const pos=sim.flat.indexOf(me)+1, k=sim.flat.slice(0,pos-1).filter(a=>hits(a,me)), s=sim.st.get("mine");
     lead=`<p class="answer">${s.s==="fell"?`Avec ces hypothèses, votre amendement tombe : ${lab(s.by)} est adopté avant lui.`:`Appelé en ${nth(pos)} position sur ${sim.flat.length}.`}<small>${k.length?`Il tombe si ${orList(k)} est adopté avant lui.`:"Aucun amendement appelé avant lui ne peut le faire tomber."}</small></p>`;}
   let i=0;
-  const rows=sim.flat.map(a=>{i++;const s=sim.st.get(a.id);return `<button class="call ${s.s}${a.mine?" mine":""}" data-id="${a.id}" ${s.s==="fell"?'aria-disabled="true"':`aria-pressed="${s.s==="adopt"}"`}><span class="pos">${i}</span><span class="num">${a.mine?"Le vôtre":"n° "+a.id}${S.newIds.includes(a.id)?`<span class="new">nv</span>`:""}</span><span class="w">${esc(describe(a))}</span><span class="s">${s.s==="adopt"?"adopté":s.s==="fell"?`tombe (${lab(s.by)})`:""}</span></button>`}).join("");
+  const rows=sim.flat.map(a=>{i++;const s=sim.st.get(a.id);return `<button class="call ${s.s}${a.mine?" mine":""}" data-id="${a.id}" ${s.s==="fell"?'aria-disabled="true"':`aria-pressed="${s.s==="adopt"}"`}><span class="pos">${i}</span><span class="num">${a.mine?"Le vôtre":"n° "+a.id}</span><span class="w">${esc(describe(a))}${S.newIds.includes(a.id)?`<span class="new">nouveau</span>`:""}</span><span class="s">${s.s==="adopt"?"adopté":s.s==="fell"?`tombe (${lab(s.by)})`:""}</span></button>`}).join("");
   return `${lead}<div class="two"><div><div class="subh"><span>Ordre d'appel · touchez pour supposer adopté</span>${hyp.size?`<button class="ghost" data-a="clearHyp">Effacer</button>`:""}</div><div class="calls">${rows}</div></div>
     <div class="res"><div class="subh"><span>Texte qui en résulte</span></div>${resultText(sim)}</div></div>
     ${S.dep==="done"?"":`<div class="nextbar"><span class="sp"></span><button class="btn pri" data-next="5">Continuer</button></div>`}`;
