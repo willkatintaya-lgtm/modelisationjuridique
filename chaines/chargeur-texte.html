@@ -1,0 +1,118 @@
+<title>Chargeur de texte</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Brique de données : un numéro de texte → un fichier local prêt pour l'atelier.
+   La page dit ce qui a été récupéré, d'où, et ce qui reste à trancher à la main (et seulement cela). */
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --accent:#6e7bf2; --lit:rgba(110,123,242,.16); --ok:#46b37e; --warn:#e3a33f;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:720px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 16px;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+form{display:flex;gap:8px;padding:8px}
+form input{flex:1;min-width:0;background:var(--bg);border:1px solid var(--line2);border-radius:7px;padding:8px 11px;color:var(--fg)}
+form input:focus{outline:none;border-color:var(--accent)}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.sum{margin:18px 2px 10px;color:var(--fg);font-size:15px;line-height:1.55;min-height:1.55em;text-wrap:pretty}
+.sum span{color:var(--muted)}
+.src{list-style:none;margin:0;padding:4px}
+.src li{display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:10px;align-items:start;padding:9px 12px;border-radius:7px;opacity:0;transform:translateY(3px);transition:opacity .3s,transform .3s var(--ease)}
+.src li.in{opacity:1;transform:none}
+.src li+li{border-top:1px solid var(--line)}
+.dot{width:8px;height:8px;border-radius:50%;margin:7px 0 0 5px;background:var(--dim)}
+.ok .dot{background:var(--ok)} .warn .dot{background:var(--warn)}
+.src b{color:var(--fg);font-weight:500;font-size:13.5px}
+.src small{display:block;color:var(--muted);font-size:12.5px}
+.src .n{font-size:13px;color:var(--muted);white-space:nowrap;text-align:right}
+.sec{margin:22px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.fix{padding:14px 16px;display:grid;gap:10px}
+.fix+.fix{border-top:1px solid var(--line)}
+.fix-h{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.fix-h b{color:var(--fg);font-weight:500}
+.fix-h span{color:var(--muted);font-size:12.5px}
+.quote{font-size:13px;color:var(--text);padding:8px 10px;background:var(--s2);border-radius:7px}
+.quote mark{background:rgba(227,163,63,.18);color:var(--fg);border-radius:3px;padding:0 1px}
+.cands{display:grid;gap:6px}
+.cand{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:start;width:100%;text-align:left;border:1px solid var(--line);background:none;border-radius:7px;padding:8px 10px;cursor:pointer;color:var(--muted);font-size:12.5px;transition:background .2s,border-color .2s}
+.cand:hover{background:var(--s2);border-color:var(--line2)}
+.cand .al{color:var(--fg);font-weight:500;white-space:nowrap}
+.cand .sim{color:var(--dim);white-space:nowrap}
+.cand mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+.done{font-size:12.5px;color:#7fd3a8;display:flex;gap:10px;align-items:center}
+.done button{border:0;background:none;color:var(--dim);cursor:pointer;font-size:12.5px;text-decoration:underline}
+.end{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:18px}
+.end p{margin:0;font-size:12.5px;color:var(--dim)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px)}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important}}
+</style>
+
+<div class="wrap">
+  <div class="ctx">Brique de données · alimente l'atelier d'amendement</div>
+  <h1>Charger un texte</h1>
+  <form class="panel" id="f"><input id="num" value="Texte de la commission n° 512" aria-label="Numéro du texte" autocomplete="off"><button class="btn pri" id="go">Charger</button></form>
+  <p class="sum" id="sum"></p>
+  <ul class="panel src" id="src" hidden></ul>
+  <div id="rest"></div>
+</div>
+
+<script>
+const SRC=[
+ {t:"Texte de la commission",s:"Absent des données ouvertes de l'Assemblée : repris du site, puis découpé",n:"34 articles · 211 alinéas",st:"ok"},
+ {t:"Texte initial",s:"Projet de loi n° 412, pour comparer et suivre la renumérotation",n:"29 articles · 176 alinéas",st:"ok"},
+ {t:"Amendements de séance",s:"Données ouvertes de l'Assemblée, mises à jour il y a 12 minutes",n:"486",st:"ok"},
+ {t:"Place de chaque amendement",s:"Alinéa et mots visés, retrouvés dans le texte de la commission",n:"483 sur 486",st:"warn",id:"place"},
+ {t:"Sort des amendements de commission",s:"Adoptés, rejetés, retirés : pour reprendre les vôtres en séance",n:"1 204",st:"ok"},
+ {t:"Articles de code cités",s:"Version en vigueur au 10 novembre 2026, pour le droit avant et après",n:"23 articles",st:"ok"},
+];
+// Amendements dont le passage visé n'a pas été retrouvé : la machine propose, l'utilisateur tranche
+const FIX=[
+ {id:233,g:"Union des territoires",art:"Article 4",why:"Les mots cités ne figurent plus dans le texte de la commission (alinéa réécrit en commission).",
+  q:"À l'alinéa 3, substituer aux mots : « <mark>de la remise en location</mark> » les mots : « de la remise sur le marché locatif ».",
+  c:[{al:3,t:"…d'une aide à la <mark>remise sur le marché</mark> dont le montant…",sim:"proche à 82 %"},{al:4,t:"…des aides <mark>mobilisables</mark> dans un délai…",sim:"proche à 31 %"}]},
+ {id:310,g:"Avenir rural",art:"Article 7",why:"L'alinéa cité (alinéa 9) n'existe plus : l'article compte désormais 8 alinéas.",
+  q:"À l'alinéa 9, après le mot : « <mark>communes</mark> », insérer les mots : « et établissements publics de coopération intercommunale ».",
+  c:[{al:8,t:"…les <mark>communes</mark> mentionnées au premier alinéa…",sim:"ancien alinéa 9"},{al:5,t:"…dans les <mark>communes</mark> de moins de 3 500 habitants…",sim:"même mot"}]},
+ {id:418,g:"Centre et progrès",art:"Article 12",why:"Les mots cités figurent deux fois dans l'alinéa ; l'amendement ne dit pas laquelle.",
+  q:"À l'alinéa 2, substituer au mot : « <mark>annuel</mark> » le mot : « biennal ».",
+  c:[{al:2,t:"…un rapport <mark>annuel</mark> d'activité…",sim:"1ʳᵉ occurrence"},{al:2,t:"…le plafond <mark>annuel</mark> de ressources…",sim:"2ᵉ occurrence"}]},
+];
+const $=s=>document.querySelector(s), solved={};
+function toast(m){document.querySelectorAll(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3000)}
+function load(){
+  $("#go").disabled=true; $("#src").hidden=false; $("#rest").innerHTML=""; $("#sum").textContent="Chargement…";
+  $("#src").innerHTML=SRC.map(s=>`<li class="${s.st}"><span class="dot"></span><span><b>${s.t}</b><small>${s.s}</small></span><span class="n">${s.n}</span></li>`).join("");
+  const lis=[...document.querySelectorAll("#src li")], fast=matchMedia("(prefers-reduced-motion:reduce)").matches;
+  lis.forEach((li,i)=>setTimeout(()=>li.classList.add("in"),fast?0:180*i));
+  setTimeout(()=>{ $("#go").disabled=false; rest(); },fast?0:180*lis.length+120);
+}
+function rest(){
+  const left=FIX.filter(f=>solved[f.id]==null).length;
+  const pl=document.querySelector("#src li:nth-child(4)"); if(pl){pl.className=(left?"warn":"ok")+" in"; pl.querySelector(".n").textContent=`${486-left} sur 486`;}
+  $("#sum").innerHTML=left?`Le texte est prêt, sauf ${left} amendement${left>1?"s":""} à placer à la main. <span>Les ${486-left} autres sont placés ; la cascade et le texte résultant en dépendent.</span>`
+    :`Le texte est prêt : les 486 amendements sont placés. <span>Fichier local enregistré, utilisable hors ligne.</span>`;
+  $("#rest").innerHTML=`<div class="sec">À placer à la main</div><section class="panel">${FIX.map(f=>`<div class="fix"><div class="fix-h"><b>n° ${f.id}</b><span>${f.g} · ${f.art}</span></div>
+     ${solved[f.id]!=null?`<div class="done">Placé à l'alinéa ${f.c[solved[f.id]].al} (${f.c[solved[f.id]].sim}) <button data-undo="${f.id}">Annuler</button></div>`:`<div class="quote">${f.q}</div><span style="font-size:12.5px;color:var(--muted)">${f.why}</span><div class="cands">${f.c.map((c,i)=>`<button class="cand" data-id="${f.id}" data-i="${i}"><span class="al">Alinéa ${c.al}</span><span>${c.t}</span><span class="sim">${c.sim}</span></button>`).join("")}</div>`}</div>`).join("")}</section>
+   <div class="end"><p>Une seule connexion, au moment du chargement. Ensuite, tout se fait sur ce poste.</p><button class="btn ${left?"":"pri"}" id="open">Ouvrir dans l'atelier</button></div>`;
+}
+$("#f").onsubmit=e=>{e.preventDefault();load()};
+document.addEventListener("click",e=>{
+  const c=e.target.closest(".cand"); if(c){solved[c.dataset.id]=+c.dataset.i;rest();return}
+  const u=e.target.closest("[data-undo]"); if(u){delete solved[u.dataset.undo];rest();return}
+  if(e.target.closest("#open")){const left=FIX.filter(f=>solved[f.id]==null).length; toast(left?`Ouverture possible : ${left} amendement${left>1?"s":""} non placé${left>1?"s":""} resteront hors de la cascade.`:"Le texte s'ouvre dans l'atelier (simulation).");}
+});
+load();
+</script>
