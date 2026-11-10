@@ -381,7 +381,7 @@ function check(){
   $("#near").innerHTML=A.near.length?A.near.map(({x})=>`<button class="nm" data-go="${x.key}"><span class="dot ${S[x.s].c}" aria-hidden="true"></span> <b>${x.rep.own?"Rapport n° "+x.rep.id:x.rep.short} · n° ${x.n}</b> — ${S[x.s].l}<span class="tx">${esc(x.t)}</span></button>`).join(""):`<span class="kbd" style="margin:0">Aucune recommandation proche.</span>`;
   st.text=t; save();
 }
-function surface(){const t=$("#t").value, a=analyse(t), n=shown.size;
+function surface(){const t=$("#t").value, a=analyse(t), n=shown.size; if(!t.trim()) return;  // champ vide : rien à signaler
   if(!(a.verb&&!a.vague)) shown.add("acte"); if(!a.to) shown.add("to"); if(!a.due) shown.add("due");
   if(shown.size!==n) check()}   // ne re-rend que si un signalement apparaît
 /* au blur, attendre la fin du clic en cours : le signalement ne doit pas déplacer la cible sous le pointeur */
@@ -457,7 +457,7 @@ document.addEventListener("click",e=>{
     note("Recommandation retirée du brouillon.",{undo:()=>{st.drafts.splice(i,0,d);renderDrafts()}});return}
   if(e.target.closest("#open")){setPanel(true);return}
   if(e.target.closest("#close")){setPanel(false);return}
-  if(e.target.closest("#add")){ const t=$("#t").value.trim(); surface();
+  if(e.target.closest("#add")){ const t=$("#t").value.trim(); if(!t){$("#t").focus();return} surface();
     if(shown.size){ const first=$("#crit li.err,#crit li.warn"); $("#t").focus(); first?.scrollIntoView({block:"nearest"}); return }
     st.drafts.push({t}); renderDrafts(); const prev=$("#t").value; $("#t").value=""; shown=new Set(); check();
     note(`Ajoutée au brouillon, en position ${st.drafts.length}.`,{undo:()=>{st.drafts.pop();renderDrafts();$("#t").value=prev;check()}}); }

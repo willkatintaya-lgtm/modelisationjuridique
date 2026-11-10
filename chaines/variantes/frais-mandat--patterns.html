@@ -189,7 +189,7 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 }
 @media (max-width:640px){
   /* cibles tactiles ≥ 44 px */
-  .tabbar .ghost,.pc,.ex .chip,.acts .btn,.linkish,details.calc summary{min-height:44px}
+  .tabbar .ghost,.pc,.ex .chip,.acts .btn,.linkish,details.calc summary,.fld input[type=text]{min-height:44px}
   .x,.tst .tx{width:44px;height:44px}
   .tst .ghost{min-height:44px}
   .acts{flex-direction:column-reverse;align-items:stretch}
@@ -337,7 +337,7 @@ function openDrawer(i,pre){
 function closeDrawer(){
   if(cur==null)return;const i=cur;cur=null;const d=$("#drawer");d.classList.remove("on");d.classList.add("leaving");
   setTimeout(()=>{if(cur==null){d.hidden=true;d.classList.remove("leaving")}},200);
-  render();const t=trigger&&trigger.isConnected?trigger:document.querySelector(`[data-op="${i}"]`);t?.focus({preventScroll:true});trigger=null;
+  render();const t=(trigger&&trigger.isConnected?trigger:null)||document.querySelector(`[data-op="${i}"]`)||$("#tab-"+tab);t?.focus({preventScroll:true});trigger=null;
 }
 function drawerHtml(pre){
   const l=L[cur],s=status(l),fr=free();
@@ -395,7 +395,8 @@ function describe(i){const l=L[i],F=FILES.find(x=>x.f===held.f),s=score(F,l);ret
 function pickUp(f){const tg=targetsFor(f);if(!tg.length){live("Aucune opération sans justificatif dans cet onglet.");toastS("Aucune opération sans justificatif dans cet onglet : ouvrez « À traiter ».","info");return}
   held={f,targets:tg,k:0};render();live(`${f} saisie. Au-dessus de : ${describe(tg[0])} Flèches pour changer, Entrée pour déposer, Échap pour annuler.`)}
 function moveHeld(dir){if(!held)return;held.k=(held.k+dir+held.targets.length)%held.targets.length;render();live(`Au-dessus de : ${describe(held.targets[held.k])}`);document.querySelector(`[data-op="${held.targets[held.k]}"]`)?.scrollIntoView({block:"nearest"})}
-function dropHeld(i){const h=held;held=null;if(i==null)i=h.targets[h.k];attach(i,h.f)}
+function dropHeld(i,kb){const h=held;held=null;if(i==null)i=h.targets[h.k];const pcs=$$(".pc").map(x=>x.dataset.file),k=pcs.indexOf(h.f);
+  if(attach(i,h.f)&&kb){const rest=$$(".pc");(rest[Math.min(k,rest.length-1)]||document.querySelector(`[data-op="${i}"]`)||$("#tab-"+tab))?.focus({preventScroll:true})}}
 function cancelHeld(){if(!held)return;const f=held.f;held=null;render();live(`Annulé : ${f} reste dans les pièces reçues.`)}
 
 let drag=null, keyAct=0;
@@ -462,7 +463,7 @@ document.addEventListener("submit",e=>{e.preventDefault();
 /* ——— clavier ——— */
 document.addEventListener("keydown",e=>{
   const pc=e.target.closest?.(".pc");
-  if(pc&&(e.key==="Enter"||e.key===" ")){e.preventDefault();keyAct=Date.now();if(held&&held.f===pc.dataset.file&&held.k>=0)dropHeld();else pickUp(pc.dataset.file);return}
+  if(pc&&(e.key==="Enter"||e.key===" ")){e.preventDefault();keyAct=Date.now();if(held&&held.f===pc.dataset.file&&held.k>=0)dropHeld(null,true);else pickUp(pc.dataset.file);return}
   if(held&&!held.ptr&&pc&&["ArrowDown","ArrowUp","ArrowRight","ArrowLeft"].includes(e.key)){e.preventDefault();moveHeld(e.key==="ArrowDown"||e.key==="ArrowRight"?1:-1);return}
   if(e.key==="Escape"){
     if(drag&&drag.on){endDrag(e,true);return}
