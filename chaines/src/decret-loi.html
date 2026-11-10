@@ -1,0 +1,92 @@
+<title>Le décret face à la loi</title>
+<!--BASE-->
+<style>
+/* Chaque renvoi de la loi est une ligne : ce que la loi demande, ce que le décret en fait, et l'écart mesuré.
+   Ouvrir une ligne met les deux passages côte à côte, paramètres surlignés. */
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}
+.rows{padding:4px}
+.r{border-radius:8px}
+.r+.r{border-top:1px solid var(--line)}
+.rh{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) 170px 14px;gap:14px;align-items:center;width:100%;border:0;background:none;text-align:left;padding:11px 12px;cursor:pointer;border-radius:8px;transition:background .2s}
+.rh:hover{background:var(--s2)}
+.rh b{display:block;color:var(--fg);font-weight:500;font-size:13.5px}
+.rh small{display:block;color:var(--dim);font-size:12px}
+.pv{font-size:12.5px;color:var(--muted);display:grid;gap:2px}
+.pv span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pv em{font-style:normal;color:var(--text)}
+.pv .bad{color:#f2a7a9}
+.st{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--text)}
+.chev{color:var(--dim);transition:transform .3s var(--ease)}
+.r.open .chev{transform:rotate(90deg)}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 12px 14px}
+.side{background:var(--s2);border-radius:8px;padding:10px 12px}
+.side h3{margin:0 0 6px;font:500 11.5px/1.4 var(--f);color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.side p{margin:0;font-size:13.5px;line-height:1.7;color:var(--text)}
+.side .none{color:var(--dim);font-style:italic}
+.p{border-radius:3px;padding:0 2px;background:var(--lit);color:var(--fg)}
+.p.diff{background:rgba(227,163,63,.18)}
+.p.bad{background:rgba(229,72,77,.2)}
+.why{grid-column:1/-1;font-size:12.5px;color:var(--muted);line-height:1.6;margin:0}
+.why b{color:var(--text);font-weight:500}
+.foot{margin:12px 2px 0;font-size:12px;color:var(--dim)}
+@media (max-width:760px){ .rh{grid-template-columns:minmax(0,1fr) 14px} .rh .pv{display:none} .rh .st{grid-column:1} .rh .chev{grid-row:1;grid-column:2} .cmp{grid-template-columns:1fr} }
+</style>
+
+<div class="wrap narrow" style="max-width:980px">
+  <div class="ctx">Contrôle de l'application · loi n° 2026-214 du 2 avril 2026, article 4 · décret n° 2026-1032 du 27 octobre 2026</div>
+  <h1>Le décret face à la loi</h1>
+  <p class="lead" id="lead"></p>
+  <div class="filters" id="filters"></div>
+  <section class="panel rows" id="rows" aria-label="Renvois de la loi"></section>
+  <p class="foot">Les paramètres (seuils, taux, montants, délais, conditions) sont extraits des deux textes et comparés un à un. L'outil signale ; l'appréciation de la conformité reste juridique.</p>
+</div>
+
+<script>
+const ST={bad:{l:"Contraire à la loi",c:"err"},miss:{l:"Renvoi non traité",c:"err"},add:{l:"Condition ajoutée",c:"warn"},in:{l:"Dans les limites de la loi",c:"ok"},ok:{l:"Conforme",c:"ok"}};
+const P=[
+ {k:"champ",t:"Communes concernées",ref:"Art. L. 332-4, al. 1 → art. R. 332-1",st:"ok",
+  loi:`Dans les communes de plus de <span class="p">50 000 habitants</span> appartenant à une <span class="p">zone d'urbanisation continue</span>, le propriétaire d'un logement vacant…`,
+  dec:`La liste des communes mentionnées à l'article L. 332-4 est celle des communes de plus de <span class="p">50 000 habitants</span> appartenant à une <span class="p">zone d'urbanisation continue</span>, annexée au décret n° 2013-392 du 10 mai 2013.`,
+  pv:[["50 000 habitants","50 000 habitants"]],why:"Le décret reprend le seuil et renvoie à une liste existante."},
+ {k:"vac",t:"Durée de vacance",ref:"Art. L. 332-4, al. 1 → art. R. 332-2",st:"add",
+  loi:`…le propriétaire d'un logement vacant depuis plus de <span class="p">deux ans</span> le déclare au maire.`,
+  dec:`Est regardé comme vacant le logement inoccupé de manière continue depuis plus de <span class="p">vingt-quatre mois</span>. <span class="p diff">Une occupation inférieure à quatre-vingt-dix jours par an n'interrompt pas la vacance.</span>`,
+  pv:[["deux ans","vingt-quatre mois"],["—","occupation de moins de 90 jours ignorée"]],why:"La durée est la même. Mais le décret ajoute une règle que la loi ne prévoit pas : une courte occupation ne compte pas. Elle élargit le nombre de logements tenus de déclarer ; <b>à vérifier</b> au regard de l'habilitation."},
+ {k:"aide",t:"Montant de l'aide",ref:"Art. L. 332-4, al. 2 → art. R. 332-3",st:"in",
+  loi:`…une aide à la remise sur le marché dont le montant ne peut excéder <span class="p">30 %</span> du <span class="p">coût des travaux</span>, dans la limite de <span class="p">15 000 euros</span> par logement.`,
+  dec:`Le montant de l'aide est fixé à <span class="p diff">25 %</span> du <span class="p diff">coût hors taxes des travaux</span>, dans la limite de <span class="p diff">12 000 euros</span> par logement.`,
+  pv:[["30 % au plus","25 %"],["15 000 € au plus","12 000 €"]],why:"La loi fixe des plafonds ; le décret retient des valeurs plus basses, ce qui lui est permis. L'aide versée sera toutefois inférieure de 20 % au plafond voté, et calculée hors taxes."},
+ {k:"info",t:"Délai d'information du propriétaire",ref:"Art. L. 332-4, al. 3 → art. R. 332-4",st:"bad",
+  loi:`Le maire informe le propriétaire des aides mobilisables dans un délai d'<span class="p">un mois</span> suivant la déclaration.`,
+  dec:`Le maire adresse au propriétaire l'information prévue au troisième alinéa de l'article L. 332-4 dans un délai de <span class="p bad">deux mois</span> à compter de la réception de la déclaration.`,
+  pv:[["un mois","deux mois"]],why:"Le délai est fixé par la loi elle-même ; le décret ne peut pas le doubler. <b>Écart à signaler</b> : question écrite ou recours possible."},
+ {k:"forme",t:"Forme du décret",ref:"Art. L. 332-4, dernier alinéa",st:"ok",
+  loi:`Les conditions d'application du présent article sont fixées par <span class="p">décret en Conseil d'État</span>.`,
+  dec:`Le Premier ministre, […] <span class="p">le Conseil d'État (section de l'intérieur) entendu</span>, décrète :`,
+  pv:[["décret en Conseil d'État","Conseil d'État entendu"]],why:"La loi exige un décret en Conseil d'État : les visas le confirment."},
+ {k:"restit",t:"Restitution de l'aide",ref:"Art. L. 332-5 → aucun article",st:"miss",
+  loi:`Un décret précise les conditions dans lesquelles l'aide est <span class="p">restituée</span> lorsque le logement n'est pas remis en location dans un délai d'un an.`,
+  dec:null,pv:[["restitution prévue","—"]],why:"Aucun article du décret ne traite de la restitution. Sans ce texte, l'aide ne peut pas être récupérée. Un second décret est peut-être prévu : l'échéancier n'en mentionne pas."},
+];
+let f=null, open=new Set(["info"]);
+function render(){
+  const c=s=>P.filter(p=>p.st===s).length;
+  const bad=c("bad"), miss=c("miss"), add=c("add");
+  $("#lead").innerHTML=`Le décret traite ${P.length-miss} des ${P.length} points que la loi lui confie. <span>${[bad&&`${bad} point contraire à la loi`,miss&&`${miss} renvoi sans mesure`,add&&`${add} condition ajoutée`].filter(Boolean).join(", ")}.</span>`;
+  const order=["bad","miss","add","in","ok"];
+  $("#filters").innerHTML=`<button class="chip ${f==null?"on":""}" data-f="">Tous · ${P.length}</button>`+order.filter(s=>c(s)).map(s=>`<button class="chip ${f===s?"on":""}" data-f="${s}"><span class="dot ${ST[s].c}"></span>${ST[s].l} · ${c(s)}</button>`).join("");
+  const L=P.filter(p=>f==null||p.st===f).sort((a,b)=>order.indexOf(a.st)-order.indexOf(b.st));
+  $("#rows").innerHTML=L.map(p=>`<div class="r ${open.has(p.k)?"open":""}" data-k="${p.k}">
+    <button class="rh" aria-expanded="${open.has(p.k)}"><span><b>${p.t}</b><small>${p.ref}</small></span>
+      <span class="pv">${p.pv.map(([a,b])=>`<span><em>${a}</em> → <em class="${p.st==="bad"||p.st==="miss"?"bad":""}">${b}</em></span>`).join("")}</span>
+      <span class="st"><span class="dot ${ST[p.st].c}"></span>${ST[p.st].l}</span>
+      <svg class="chev" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3l5 5-5 5"/></svg></button>
+    <div class="slide"><div><div class="cmp"><div class="side"><h3>Loi</h3><p>${p.loi}</p></div><div class="side"><h3>Décret</h3><p>${p.dec??'<span class="none">Aucune disposition.</span>'}</p></div><p class="why">${p.why}</p></div></div></div></div>`).join("");
+}
+document.addEventListener("click",e=>{
+  const ch=e.target.closest("[data-f]"); if(ch){f=ch.dataset.f||null;render();return}
+  const rh=e.target.closest(".rh"); if(rh){const r=rh.parentElement,k=r.dataset.k; open.has(k)?open.delete(k):open.add(k); r.classList.toggle("open"); rh.setAttribute("aria-expanded",open.has(k));}
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){if(open.size){open.clear();render()}else if(f){f=null;render()}}});
+render();
+</script>

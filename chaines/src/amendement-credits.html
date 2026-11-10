@@ -1,0 +1,111 @@
+<title>Amendement de crédits</title>
+<!--BASE-->
+<style>
+/* On déplace des crédits entre programmes d'une même mission ; l'outil tient la balance
+   (la somme doit rester nulle, en AE comme en CP) et écrit le tableau de l'amendement. */
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:18px;align-items:start}
+.progs{padding:6px}
+.pr{display:grid;grid-template-columns:minmax(0,1fr) 150px;gap:12px;align-items:center;padding:12px}
+.pr+.pr{border-top:1px solid var(--line)}
+.pr b{display:block;color:var(--fg);font-weight:500;font-size:13.5px}
+.pr small{display:block;color:var(--dim);font-size:12px}
+.pr .vis{grid-column:1/-1;position:relative;height:8px;border-radius:4px;background:var(--s2);overflow:hidden}
+.pr .vis i{position:absolute;top:0;height:100%;border-radius:4px}
+.pr .vis .base{background:var(--line2);left:0}
+.pr .vis .plus{background:var(--ins)}
+.pr .vis .minus{background:repeating-linear-gradient(45deg,var(--del) 0 3px,transparent 3px 6px)}
+.step{display:grid;grid-template-columns:32px minmax(0,1fr) 32px;border:1px solid var(--line2);border-radius:7px;overflow:hidden}
+.step button{border:0;background:var(--s2);color:var(--muted);cursor:pointer;font-size:15px}
+.step button:hover{color:var(--fg);background:#1f2227}
+.step input{border:0;border-radius:0;text-align:center;background:var(--bg);padding:6px 4px;width:100%;min-width:0}
+.step input.pos{color:var(--ins)} .step input.neg{color:#f2a7a9}
+.opts{display:flex;align-items:center;gap:8px;margin:0 2px 10px;font-size:12.5px;color:var(--muted)}
+.side{display:grid;gap:14px;position:sticky;top:16px}
+.bal{padding:14px 16px}
+.bal-n{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:10px;text-align:center}
+.bal-n div{background:var(--s2);border-radius:7px;padding:8px 4px}
+.bal-n b{display:block;color:var(--fg);font-size:15px;font-weight:600}
+.bal-n span{font-size:11.5px;color:var(--dim)}
+.bal-n .z b{color:#7fd3a8} .bal-n .nz b{color:#f2a7a9}
+.chk{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px}
+.chk li{display:grid;grid-template-columns:12px minmax(0,1fr);gap:9px;font-size:12.5px;color:var(--text);line-height:1.5}
+.chk li .dot{margin-top:6px}
+.chk li small{display:block;color:var(--muted)}
+.doc{padding:14px 16px}
+.doc h2{margin:0 0 2px;font:500 13.5px/1.4 var(--f);color:var(--fg)}
+.doc p{margin:0 0 10px;font-size:12.5px;color:var(--muted)}
+.doc table{width:100%;border-collapse:collapse;font-size:12.5px}
+.doc th,.doc td{border:1px solid var(--line2);padding:5px 7px;text-align:right}
+.doc th:first-child,.doc td:first-child{text-align:left}
+.doc thead th{color:var(--dim);font-weight:400}
+.doc tfoot td{color:var(--fg);font-weight:500}
+@media (max-width:940px){ .grid{grid-template-columns:minmax(0,1fr)} .side{position:static} }
+@media (max-width:480px){ .pr{grid-template-columns:minmax(0,1fr)} }
+</style>
+
+<div class="wrap">
+  <div class="ctx">Projet de loi de finances pour 2027 · seconde partie · mission « Cohésion des territoires » (montants fictifs)</div>
+  <h1>Amendement de crédits</h1>
+  <p class="lead" id="lead"></p>
+  <div class="grid">
+    <div>
+      <div class="opts"><label><input type="checkbox" id="same" checked> Même mouvement en AE et en CP</label></div>
+      <section class="panel progs" id="progs" aria-label="Programmes de la mission"></section>
+    </div>
+    <aside class="side">
+      <section class="panel bal" aria-label="Balance"><div class="sec" style="margin:0">Balance du mouvement (M€)</div><div class="bal-n" id="baln"></div><ul class="chk" id="chk"></ul></section>
+      <section class="panel doc" aria-label="Tableau de l'amendement"><h2>Tableau de l'amendement</h2><p>Modifier ainsi les autorisations d'engagement et les crédits de paiement (en euros).</p><div class="scrollx"><table id="doc"></table></div>
+        <div style="margin-top:12px"><button class="btn" id="copy">Copier le tableau</button></div></section>
+    </aside>
+  </div>
+</div>
+
+<script>
+const P=[
+ {n:177,t:"Hébergement, parcours vers le logement et insertion des personnes vulnérables",ae:3020,cp:3010},
+ {n:109,t:"Aide à l'accès au logement",ae:16240,cp:16240},
+ {n:135,t:"Urbanisme, territoires et amélioration de l'habitat",ae:820,cp:845},
+ {n:147,t:"Politique de la ville",ae:640,cp:635},
+ {n:162,t:"Interventions territoriales de l'État",ae:110,cp:96},
+];
+const mv={109:{ae:-60,cp:-60},135:{ae:60,cp:60}};
+const STEP=5;
+function get(n,k){return (mv[n]&&mv[n][k])||0}
+function set(n,k,v){mv[n]=mv[n]||{ae:0,cp:0};mv[n][k]=v;if($("#same").checked)mv[n][k==="ae"?"cp":"ae"]=v}
+function sums(k){let p=0,m=0;for(const x of P){const v=get(x.n,k);if(v>0)p+=v;else m-=v}return {p,m,s:p-m}}
+function render(){
+  const A=sums("ae"), C=sums("cp"), same=$("#same").checked;
+  const ups=P.filter(x=>get(x.n,"cp")>0), downs=P.filter(x=>get(x.n,"cp")<0);
+  const over=P.filter(x=>-get(x.n,"ae")>x.ae||-get(x.n,"cp")>x.cp);
+  const ok=A.s===0&&C.s===0&&!over.length&&(A.p||C.p);
+  $("#lead").innerHTML=!A.p&&!A.m&&!C.p&&!C.m?`Aucun mouvement. <span>Utilisez + et − sur les programmes à abonder et à minorer.</span>`
+   :ok?`Transfert équilibré de ${nf(C.p)} M€ ${downs.length?`du programme ${downs.map(x=>x.n).join(" et ")}`:""} vers ${ups.length>1?"les programmes":"le programme"} ${ups.map(x=>x.n).join(" et ")}. <span>L'amendement est recevable au regard de l'équilibre de la mission.</span>`
+   :`Mouvement déséquilibré. <span>${C.s>0?`Il manque ${nf(C.s)} M€ de minoration en CP.`:C.s<0?`Les minorations dépassent les abondements de ${nf(-C.s)} M€ en CP.`:""} ${A.s!==C.s&&A.s!==0?`Écart de ${nf(Math.abs(A.s))} M€ en AE.`:""}</span>`;
+  const mx=Math.max(...P.map(x=>x.cp+Math.max(0,get(x.n,"cp"))));
+  $("#progs").innerHTML=P.map(x=>{
+    const c=get(x.n,"cp"), a=get(x.n,"ae"), w=v=>Math.max(.6,100*v/mx);
+    const base=x.cp+Math.min(0,c);
+    return `<div class="pr"><div><b>Programme ${x.n}</b><small>${x.t}</small><small>${nf(x.cp)} M€ en CP${c?` → <span style="color:${c>0?"var(--ins)":"#f2a7a9"}">${nf(x.cp+c)} M€ (${c>0?"+":"−"}${nf(Math.abs(100*c/x.cp),1)} %)</span>`:""}</small></div>
+     ${["cp"].concat(same?[]:["ae"]).map(k=>`<div class="step" aria-label="${k.toUpperCase()} programme ${x.n}"><button data-n="${x.n}" data-k="${k}" data-d="-1" aria-label="Minorer">−</button><input type="number" step="${STEP}" value="${get(x.n,k)}" data-n="${x.n}" data-k="${k}" class="${get(x.n,k)>0?"pos":get(x.n,k)<0?"neg":""}" aria-label="Mouvement en M€"><button data-n="${x.n}" data-k="${k}" data-d="1" aria-label="Abonder">+</button></div>`).join("")}
+     </div>`}).join("");
+  const box=(l,v)=>`<div class="${l==="Solde"?(v===0?"z":"nz"):""}"><b>${v>0&&l==="Solde"?"+":""}${nf(v)}</b><span>${l}</span></div>`;
+  $("#baln").innerHTML=box("Abondé",C.p)+box("Minoré",C.m)+box("Solde",C.s);
+  const chk=[];
+  chk.push(C.s===0&&A.s===0?["ok","Somme nulle en AE et en CP"]:["err","La somme doit être nulle",`Article 47 de la LOLF : un amendement ne peut pas augmenter les crédits d'une mission. ${C.s>0?"Minorez un autre programme de "+nf(C.s)+" M€.":"Réduisez les minorations de "+nf(-C.s)+" M€."}`]);
+  chk.push(over.length?["err",`Minoration supérieure aux crédits du programme ${over.map(x=>x.n).join(", ")}`]:["ok","Aucun programme minoré au-delà de ses crédits"]);
+  chk.push(["ok","Programmes de la même mission","Les transferts entre missions ne sont pas possibles par amendement."]);
+  if(P.some(x=>get(x.n,"cp")<0&&x.n===109)) chk.push(["warn","Minoration d'un programme de dépenses obligatoires","Le programme 109 finance les aides personnelles au logement, dues de droit : la minoration est un gage de forme, le Gouvernement devra le lever ou abonder en cours d'année."]);
+  $("#chk").innerHTML=chk.map(([c,t,s])=>`<li><span class="dot ${c}"></span><span>${t}${s?`<small>${s}</small>`:""}</span></li>`).join("");
+  const rows=P.filter(x=>get(x.n,"ae")||get(x.n,"cp"));
+  const e=v=>v?nf(v*1e6):"0";
+  $("#doc").innerHTML=`<thead><tr><th>Programmes</th><th>+</th><th>−</th></tr></thead><tbody>${rows.map(x=>{const v=get(x.n,"cp");return `<tr><td>${x.t}</td><td>${v>0?e(v):"0"}</td><td>${v<0?e(-v):"0"}</td></tr>`}).join("")||`<tr><td colspan="3" style="color:var(--dim);text-align:center">Aucun mouvement</td></tr>`}</tbody>
+   <tfoot><tr><td>TOTAUX</td><td>${e(C.p)}</td><td>${e(C.m)}</td></tr><tr><td>SOLDE</td><td colspan="2" style="text-align:center">${C.s?(C.s>0?"+":"−")+e(Math.abs(C.s)):"0"}</td></tr></tfoot>`;
+  $("#copy").disabled=!ok;
+}
+document.addEventListener("click",e=>{
+  const b=e.target.closest(".step button"); if(b){const n=+b.dataset.n,k=b.dataset.k;set(n,k,get(n,k)+STEP*(+b.dataset.d));render();return}
+  if(e.target.closest("#copy")){const t=$$("#doc tr").map(r=>[...r.children].map(c=>c.textContent).join("\t")).join("\n");navigator.clipboard?.writeText(t).then(()=>toast("Tableau copié."),()=>toast("Copie refusée : sélectionnez le tableau à la main."))}
+});
+document.addEventListener("change",e=>{const i=e.target.closest(".step input");if(i){set(+i.dataset.n,i.dataset.k,Math.round(+i.value||0));render()} if(e.target.id==="same"){if(e.target.checked)for(const n in mv)mv[n].ae=mv[n].cp;render()}});
+render();
+</script>

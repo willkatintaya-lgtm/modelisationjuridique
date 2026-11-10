@@ -1,0 +1,183 @@
+<title>Programme 135 en séries</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+
+<style>
+/* Un programme budgétaire lu dans la durée : les indicateurs en séries (réalisé, cible, ruptures),
+   les changements de maquette d'une année sur l'autre, et l'écart entre crédits votés et dépensés. */
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;align-items:start}
+.ind{padding:4px}
+.i{border-radius:8px}
+.i+.i{border-top:1px solid var(--line)}
+.ih{display:grid;grid-template-columns:minmax(0,1fr) 170px 140px 14px;gap:14px;align-items:center;width:100%;border:0;background:none;text-align:left;padding:11px 12px;border-radius:8px;cursor:pointer;transition:background .2s}
+.ih:hover{background:var(--s2)}
+.ih b{display:block;color:var(--fg);font-weight:500;font-size:13.5px}
+.ih small{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.flag{font-size:11.5px;border-radius:999px;padding:1px 8px;background:var(--s2);color:var(--muted);border:1px solid var(--line2)}
+.flag.warn{color:#f0c27a;border-color:rgba(227,163,63,.35)}
+.flag.err{color:#f2a7a9;border-color:rgba(229,72,77,.35)}
+.last{font-size:12.5px;color:var(--muted);text-align:right;white-space:nowrap}
+.last b{display:inline;color:var(--fg);font-size:13.5px}
+svg.sp{display:block;width:170px;height:40px;overflow:visible}
+.chev{color:var(--dim);transition:transform .3s var(--ease)}
+.i.open .chev{transform:rotate(90deg)}
+.det{padding:0 12px 14px;display:grid;gap:10px}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{padding:5px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+thead th{color:var(--dim);font-weight:400}
+td.miss{color:#f2a7a9}
+td.hit{color:#7fd3a8}
+tr.cut td{border-bottom:1px dashed var(--warn)}
+.def{font-size:13px;line-height:1.65;padding:9px 11px;background:var(--s2);border-radius:7px}
+.note{margin:0;font-size:12.5px;color:var(--muted);line-height:1.6}
+.cred{padding:14px 16px}
+.cred h2,.chg h2{margin:0 0 4px;font:500 13.5px/1.4 var(--f);color:var(--fg)}
+.cred p,.chg p{margin:0 0 12px;font-size:12.5px;color:var(--muted)}
+.bars{display:grid;gap:7px}
+.bar{display:grid;grid-template-columns:40px minmax(0,1fr) 64px;gap:8px;align-items:center;font-size:12px;color:var(--dim)}
+.bar .tr{position:relative;height:14px}
+.bar .v{position:absolute;left:0;top:0;height:14px;border-radius:3px;background:var(--line2)}
+.bar .e{position:absolute;left:0;top:4px;height:6px;border-radius:2px;background:var(--accent)}
+.bar .gap{color:#f0c27a;text-align:right}
+.legend{display:flex;gap:14px;margin-top:10px;font-size:11.5px;color:var(--dim)}
+.legend i{display:inline-block;width:12px;height:6px;border-radius:2px;margin-right:5px;vertical-align:1px}
+.chg{padding:14px 16px;margin-top:14px}
+.chg ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.chg li{font-size:12.5px;color:var(--text);display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;line-height:1.5}
+.chg li .dot{margin-top:6px}
+@media (max-width:980px){ .cols{grid-template-columns:minmax(0,1fr)} }
+@media (max-width:600px){ .ih{grid-template-columns:minmax(0,1fr) 14px} .ih .spw{grid-column:1;grid-row:2} .ih .last{grid-column:1;text-align:left} .ih .chev{grid-row:1;grid-column:2} }
+</style>
+
+<div class="wrap">
+  <div class="ctx">Mission « Cohésion des territoires » · données fictives au format des jeux ouverts PAP et RAP</div>
+  <h1>Programme 135 · amélioration de l'habitat</h1>
+  <p class="lead" id="lead"></p>
+  <div class="cols">
+    <section class="panel ind" id="ind" aria-label="Indicateurs de performance"></section>
+    <aside>
+      <section class="panel cred" aria-label="Crédits"><h2>Crédits de paiement : votés et dépensés</h2><p id="credp"></p><div class="bars" id="bars"></div>
+        <div class="legend"><span><i style="background:var(--line2)"></i>Voté en loi de finances</span><span><i style="background:var(--accent)"></i>Exécuté</span></div></section>
+      <section class="panel chg" aria-label="Changements de maquette"><h2>Ce qui change dans le PAP 2027</h2><p>Par rapport au PAP 2026.</p><ul id="chg"></ul></section>
+    </aside>
+  </div>
+</div>
+
+<script>
+const Y=[2021,2022,2023,2024,2025,2026,2027];
+const IND=[
+ {k:"1.1",t:"Délai moyen de paiement des aides à la rénovation",u:"jours",better:"low",
+  r:[74,68,95,102,88,null,null],c:[60,60,60,75,75,80,80],
+  flags:[["warn","Cible relâchée deux fois"],["err","Cible manquée 5 années sur 5"]],
+  note:"La cible est passée de 60 à 75 jours en 2024, puis à 80 jours en 2026, sans explication dans le PAP. Le réalisé n'a jamais atteint la cible initiale."},
+ {k:"1.2",t:"Logements rénovés avec l'aide de l'Agence",u:"logements",better:"high",cut:2024,
+  r:[640000,670000,569000,88000,96000,null,null],c:[600000,650000,700000,80000,100000,120000,110000],
+  flags:[["warn","Série rompue en 2024"],["warn","Cible 2027 abaissée"]],
+  def:{old:"Nombre de logements ayant bénéficié d'une aide à la rénovation énergétique.",neu:"Nombre de logements ayant bénéficié d'une aide à la rénovation énergétique <b>d'ampleur</b> (gain d'au moins deux classes du diagnostic de performance énergétique)."},
+  note:"Depuis 2024, seules les rénovations d'ampleur sont comptées : les valeurs avant et après ne se comparent pas. La cible 2027 (110 000) est inférieure à celle de 2026 (120 000)."},
+ {k:"2.1",t:"Logements vacants remis sur le marché après aide",u:"%",better:"high",
+  r:[null,null,31,34,36,null,null],c:[null,null,40,40,40,42,42],
+  flags:[["err","Cible manquée 3 années sur 3"]],note:"Progression régulière, mais l'écart à la cible reste de 4 à 9 points."},
+ {k:"2.2",t:"Coût moyen de l'aide par logement remis sur le marché",u:"€",better:"low",
+  r:[null,8900,9400,10100,10800,null,null],c:[null,9000,9000,9500,10000,10500,null],
+  flags:[["err","Supprimé dans le PAP 2027"]],note:"L'indicateur disparaît alors que le coût a augmenté de 21 % depuis 2022. Aucun indicateur ne le remplace."},
+ {k:"3.1",t:"Communes couvertes par un repérage des logements vacants",u:"%",better:"high",
+  r:[null,null,null,null,null,null,null],c:[null,null,null,null,null,35,50],flags:[["","Nouveau en 2026, sans historique"]],note:"Premier réalisé attendu dans le RAP 2026."},
+];
+const CP=[[2021,650,640],[2022,700,690],[2023,760,702],[2024,820,755],[2025,880,801],[2026,910,null],[2027,845,null]];
+let open=new Set(["1.2"]);
+const fmtv=(v,u)=>v==null?"—":u==="%"?nf(v)+" %":u==="€"?nf(v)+" €":nf(v);
+function spark(d){
+  const W=170,H=40,P=4, vals=[...d.r,...d.c].filter(v=>v!=null); if(!vals.length) return `<svg class="sp" viewBox="0 0 ${W} ${H}"></svg>`;
+  // une rupture de série : deux échelles, une par segment
+  const seg=i=>d.cut&&Y[i]>=d.cut?1:0;
+  const sc={}; [0,1].forEach(s=>{const v=Y.map((y,i)=>seg(i)===s?[d.r[i],d.c[i]]:[]).flat().filter(x=>x!=null); if(v.length) sc[s]=[Math.min(...v),Math.max(...v)]});
+  const x=i=>P+i*(W-2*P)/(Y.length-1), y=(v,i)=>{const [a,b]=sc[seg(i)]; return H-P-(b===a?.5:(v-a)/(b-a))*(H-2*P)};
+  let path="",prev=null;
+  d.r.forEach((v,i)=>{ if(v==null){prev=null;return} if(prev!=null&&seg(prev)===seg(i)) path+=`L${x(i)},${y(v,i)}`; else path+=`M${x(i)},${y(v,i)}`; prev=i; });
+  const cut=d.cut?`<line x1="${(x(Y.indexOf(d.cut))+x(Y.indexOf(d.cut)-1))/2}" x2="${(x(Y.indexOf(d.cut))+x(Y.indexOf(d.cut)-1))/2}" y1="0" y2="${H}" stroke="var(--warn)" stroke-dasharray="2 3"/>`:"";
+  const tg=d.c.map((v,i)=>v==null?"":`<circle cx="${x(i)}" cy="${y(v,i)}" r="2.6" fill="var(--s1)" stroke="var(--muted)" stroke-width="1.2"/>`).join("");
+  const last=d.r.map((v,i)=>[v,i]).filter(([v])=>v!=null).pop();
+  return `<svg class="sp" viewBox="0 0 ${W} ${H}" role="img" aria-label="Série ${d.t}">${cut}<path d="${path}" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linejoin="round"/>${tg}${last?`<circle cx="${x(last[1])}" cy="${y(last[0],last[1])}" r="3" fill="var(--accent)"/>`:""}</svg>`;
+}
+function hit(d,i){const r=d.r[i],c=d.c[i]; if(r==null||c==null) return ""; return (d.better==="low"?r<=c:r>=c)?"hit":"miss"}
+function render(){
+  $("#lead").innerHTML=`Quatre points à signaler dans ce programme. <span>Une série rompue, une cible relâchée deux fois, un indicateur supprimé, et 79 millions d'euros votés mais non dépensés en 2025.</span>`;
+  $("#ind").innerHTML=IND.map(d=>{
+    const li=d.r.map((v,i)=>[v,i]).filter(([v])=>v!=null).pop();
+    return `<div class="i ${open.has(d.k)?"open":""}" data-k="${d.k}"><button class="ih" aria-expanded="${open.has(d.k)}"><span><b>${d.k} · ${d.t}</b><small>${d.flags.map(([c,l])=>`<span class="flag ${c}">${l}</span>`).join("")}</small></span>
+     <span class="spw">${spark(d)}</span>
+     <span class="last">${li?`<b>${fmtv(li[0],d.u)}</b><br>en ${Y[li[1]]}, cible ${fmtv(d.c[li[1]],d.u)}`:"Pas encore de réalisé"}</span>
+     <svg class="chev" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3l5 5-5 5"/></svg></button>
+     <div class="slide"><div><div class="det">
+      ${d.def?`<div class="def"><span style="color:var(--dim)">Définition depuis ${d.cut} :</span> ${d.def.neu.replace(/<b>(.*?)<\/b>/,"<ins>$1</ins>").replace(/\(gain(.*?)\)/,"<ins>(gain$1)</ins>")}</div>`:""}
+      <div class="scrollx"><table><thead><tr><th></th>${Y.map(y=>`<th>${y}</th>`).join("")}</tr></thead><tbody>
+       <tr><td>Cible</td>${d.c.map(v=>`<td>${fmtv(v,d.u)}</td>`).join("")}</tr>
+       <tr><td>Réalisé</td>${d.r.map((v,i)=>`<td class="${hit(d,i)}">${fmtv(v,d.u)}</td>`).join("")}</tr></tbody></table></div>
+      <p class="note">${d.note}</p></div></div></div></div>`}).join("");
+  const mx=Math.max(...CP.map(c=>c[1]));
+  const g25=CP[4][1]-CP[4][2];
+  $("#credp").textContent=`En 2025, ${g25} M€ votés n'ont pas été dépensés (${Math.round(100*g25/CP[4][1])} %). Le PLF 2027 baisse de ${CP[5][1]-CP[6][1]} M€.`;
+  $("#bars").innerHTML=CP.map(([y,v,e])=>`<div class="bar"><span>${y}</span><span class="tr"><span class="v" style="width:${100*v/mx}%"></span>${e!=null?`<span class="e" style="width:${100*e/mx}%"></span>`:""}</span><span class="gap">${e!=null?`−${v-e} M€`:`<span style="color:var(--dim)">${v} M€</span>`}</span></div>`).join("");
+  $("#chg").innerHTML=[["err","Indicateur 2.2 supprimé : plus aucun suivi du coût par logement."],["warn","Cible 1.2 abaissée de 120 000 à 110 000 logements."],["warn","Crédits de paiement en baisse de 65 M€ (−7 %)."],["","Indicateur 3.1 maintenu, cible relevée de 35 à 50 %."]].map(([c,t])=>`<li><span class="dot ${c}"></span><span>${t}</span></li>`).join("");
+}
+document.addEventListener("click",e=>{const h=e.target.closest(".ih");if(!h)return;const i=h.parentElement,k=i.dataset.k;open.has(k)?open.delete(k):open.add(k);i.classList.toggle("open");h.setAttribute("aria-expanded",open.has(k))});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&open.size){open.clear();render()}});
+render();
+</script>

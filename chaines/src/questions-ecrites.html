@@ -1,0 +1,114 @@
+<title>Questions déjà posées</title>
+<!--BASE-->
+<style>
+/* À gauche, la question que l'on prépare ; à droite, ce que l'archive en dit déjà, recalculé à chaque frappe :
+   les questions proches (mots en commun surlignés) et la façon dont le ministère visé répond. */
+.grid{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:20px;align-items:start}
+.draft{padding:16px;position:sticky;top:16px;display:grid;gap:10px}
+.draft label{font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.draft textarea{width:100%;min-height:210px;resize:vertical;line-height:1.6;font-size:13.5px}
+.draft select{width:100%}
+.verdict{padding:12px 14px;border-radius:8px;background:var(--s2);font-size:13px;color:var(--text);line-height:1.55}
+.verdict b{color:var(--fg);font-weight:500}
+.res{display:grid;gap:8px}
+.q{padding:12px 14px;border:1px solid var(--line);border-radius:9px;background:var(--s1);display:grid;gap:6px;transition:border-color .2s}
+.q:hover{border-color:var(--line2)}
+.q-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+.q-h b{color:var(--fg);font-weight:500}
+.sim{margin-left:auto;display:flex;align-items:center;gap:8px;color:var(--muted);white-space:nowrap}
+.sim i{display:block;width:64px;height:4px;border-radius:2px;background:var(--line2);overflow:hidden}
+.sim i b{display:block;height:100%;background:var(--accent)}
+.q p{margin:0;font-size:13px;line-height:1.6;color:var(--text)}
+.q .ans{font-size:12.5px;color:var(--muted);border-left:2px solid var(--line2);padding-left:10px}
+.q .ans.none{color:#f2a7a9;border-color:rgba(229,72,77,.35)}
+.stats{padding:14px 16px;margin-bottom:12px;display:grid;grid-template-columns:auto auto minmax(0,1fr);gap:8px 24px;align-items:end}
+.kpi b{display:block;color:var(--fg);font-size:20px;font-weight:600;letter-spacing:-.01em}
+.kpi span{font-size:12px;color:var(--dim)}
+.hist{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;align-items:end;height:64px}
+.hist div{display:grid;gap:4px;justify-items:center;font-size:10.5px;color:var(--dim);height:100%;align-content:end}
+.hist i{display:block;width:100%;border-radius:3px 3px 0 0;background:var(--line2)}
+.hist i.ok{background:rgba(70,179,126,.55)}
+.st-h{grid-column:1/-1;font-size:12.5px;color:var(--muted)}
+.empty{padding:16px;color:var(--dim);font-size:13px;border:1px dashed var(--line2);border-radius:9px}
+@media (max-width:900px){ .grid{grid-template-columns:minmax(0,1fr)} .draft{position:static} }
+@media (max-width:520px){ .stats{grid-template-columns:auto auto} .hist{grid-column:1/-1} .sim i{width:40px} }
+</style>
+
+<div class="wrap">
+  <div class="ctx">Questions écrites · archive de l'Assemblée et du Sénat, législature en cours et précédente (export du 9 novembre 2026)</div>
+  <h1>Avant de poser une question</h1>
+  <p class="lead" id="lead"></p>
+  <div class="grid">
+    <section class="panel draft" aria-label="Votre question">
+      <label for="q">Votre projet de question</label>
+      <textarea id="q">Mme la députée attire l'attention de M. le ministre chargé du logement sur les délais de versement de l'aide à la rénovation énergétique des logements locatifs. De nombreux propriétaires bailleurs attendent plus de six mois le paiement de leur prime après la fin des travaux, ce qui retarde la remise en location. Elle lui demande quelles mesures il entend prendre pour réduire ces délais.</textarea>
+      <label for="min">Ministère interrogé</label>
+      <select id="min"></select>
+      <div class="verdict" id="verdict"></div>
+    </section>
+    <div>
+      <section class="panel stats" id="stats" aria-label="Le ministère et les questions écrites"></section>
+      <div class="sec" id="rh">Questions proches</div>
+      <div class="res" id="res"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const NOW=new Date(2026,10,10);
+const MIN={LOG:"Logement",TE:"Transition écologique",ECO:"Économie et finances",SOL:"Solidarités",INT:"Intérieur"};
+// délais de réponse observés par ministère (jours), législature en cours
+const DEL={LOG:{n:64,ok:9,med:148,bins:[9,7,12,10,8,18]},TE:{n:58,ok:11,med:121,bins:[11,9,10,8,6,14]},ECO:{n:131,ok:22,med:132,bins:[22,18,24,21,14,32]},SOL:{n:49,ok:6,med:167,bins:[6,5,8,9,7,14]},INT:{n:72,ok:17,med:97,bins:[17,14,13,9,6,13]}};
+const BINS=["≤ 2 mois","2–4","4–6","6–9","9–12","sans réponse"];
+const G={PR:"#c07a00",SOL:"#d13a30",ECO:"#2a9d63",UT:"#3b82d6",LL:"#e0671d",RC:"#7c5cd6",DC:"#2bb3b1",AR:"#8fae3a",CP:"#d8699a"};
+const Q=[
+ {n:"AN 3187",g:"PR",min:"TE",d:"2026-05-12",t:"Retards de versement de MaPrimeRénov' aux ménages modestes, dont certains attendent plus de huit mois le paiement de la prime après la fin des travaux.",a:null,mine:true},
+ {n:"AN 2954",g:"ECO",min:"LOG",d:"2026-03-03",t:"Délais de paiement des aides à la rénovation énergétique pour les propriétaires bailleurs et conséquences sur la remise en location des logements vacants.",a:null},
+ {n:"Sénat 10422",g:"UT",min:"LOG",d:"2025-12-11",t:"Délais d'instruction et de versement des aides à la rénovation énergétique dans les départements ruraux.",a:{d:"2026-04-02",t:"Le délai moyen de paiement a été ramené à 52 jours ; un plan de renfort de l'instruction a été engagé dans douze départements."}},
+ {n:"AN 2611",g:"PR",min:"LOG",d:"2025-12-16",t:"Publication du décret relatif à la décence énergétique des logements loués prévu par la loi relative au logement décent.",a:{d:"2026-03-17",t:"Le Gouvernement publiera le décret d'application avant la fin du premier semestre 2026."}},
+ {n:"AN 2208",g:"SOL",min:"LOG",d:"2025-09-23",t:"Situation des propriétaires bailleurs privés confrontés aux retards de paiement des primes de rénovation et à la hausse du coût des travaux.",a:{d:"2026-02-10",t:"Les retards constatés en 2025 tenaient à la lutte contre la fraude ; les contrôles ont été ciblés pour accélérer les paiements."}},
+ {n:"AN 3044",g:"ECO",min:"LOG",d:"2026-04-14",t:"Calendrier de publication du décret sur la décence énergétique des logements.",a:null},
+ {n:"AN 1880",g:"SOL",min:"TE",d:"2025-09-03",t:"Remise du rapport sur l'artificialisation liée aux résidences secondaires prévu par la loi relative aux zones tendues.",a:{d:"2025-12-02",t:"Le rapport est en cours de finalisation."}},
+ {n:"Sénat 9870",g:"RC",min:"ECO",d:"2025-10-02",t:"Fiscalité des logements vacants et produit de la taxe sur les logements vacants dans les communes moyennes.",a:{d:"2026-01-20",t:"Le produit de la taxe s'élevait à 168 millions d'euros en 2024."}},
+ {n:"AN 2733",g:"LL",min:"INT",d:"2026-01-27",t:"Conditions de mise en œuvre de la réquisition des logements vacants par les préfets.",a:{d:"2026-03-24",t:"Une instruction aux préfets sera diffusée après la publication du rapport de la mission flash."}},
+ {n:"AN 3402",g:"PR",min:"SOL",d:"2026-09-01",t:"Montant et conditions des aides au logement des étudiants boursiers.",a:null,mine:true},
+ {n:"AN 2412",g:"DC",min:"LOG",d:"2025-11-04",t:"Accompagnement des communes dans le repérage des logements vacants et accès aux fichiers fiscaux.",a:{d:"2026-01-13",t:"Le service « Zéro logement vacant » est ouvert à toutes les communes volontaires."}},
+ {n:"AN 2877",g:"CP",min:"ECO",d:"2026-02-17",t:"Crédit d'impôt pour la rénovation des logements locatifs : coût et nombre de bénéficiaires.",a:null},
+ {n:"Sénat 11205",g:"AR",min:"TE",d:"2026-06-05",t:"Versement tardif des primes de rénovation énergétique et trésorerie des artisans du bâtiment.",a:null},
+ {n:"AN 1544",g:"UT",min:"LOG",d:"2025-07-08",t:"Revalorisation du plafond de l'aide à la remise sur le marché des logements vacants.",a:{d:"2025-10-28",t:"Une revalorisation n'est pas envisagée à ce stade."}},
+];
+const STOP=new Set("le la les de des du d l un une et en au aux a à sur sa son ses leur leurs ce ces cette qui que quoi dont pour par plus moins dans avec il elle ils elles lui m mme ministre monsieur madame député députée attire attention demande quelles quels quelle mesures entend prendre afin ne pas est sont être ont été après avant entre tres très ainsi".split(" "));
+const norm=s=>s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9 ]/g," ");
+const stem=w=>w.length>6?w.slice(0,6):w.replace(/s$/,"");
+const toks=s=>norm(s).split(/\s+/).filter(w=>w.length>2&&!STOP.has(w)).map(stem);
+const DOCS=Q.map(q=>new Set(toks(q.t)));
+const IDF={}; DOCS.forEach(d=>d.forEach(w=>IDF[w]=(IDF[w]||0)+1)); for(const w in IDF) IDF[w]=Math.log(1+Q.length/IDF[w]);
+function sim(a,b){let num=0,na=0,nb=0;for(const w of a){const x=IDF[w]||Math.log(1+Q.length);na+=x*x;if(b.has(w))num+=x*x}for(const w of b){const x=IDF[w];nb+=x*x}return na&&nb?num/Math.sqrt(na*nb):0}
+const D=s=>{const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
+const fd=s=>D(s).toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"});
+const months=(a,b)=>Math.max(0,Math.round((b-a)/2629800000));
+function hl(text,set){return text.split(/(\s+)/).map(w=>{const t=toks(w)[0];return t&&set.has(t)?`<mark>${esc(w)}</mark>`:esc(w)}).join("")}
+const min=$("#min"); min.innerHTML=Object.entries(MIN).map(([k,v])=>`<option value="${k}">${v}</option>`).join(""); min.value="LOG";
+function run(){
+  const mine=new Set(toks($("#q").value)), m=min.value;
+  const R=Q.map((q,i)=>({q,s:sim(mine,DOCS[i])})).filter(r=>r.s>=.12).sort((a,b)=>b.s-a.s).slice(0,6);
+  const top=R[0], dup=top&&top.s>=.42?top:null;
+  $("#lead").innerHTML=R.length?`${R.length} question${R.length>1?"s":""} proche${R.length>1?"s":""} dans l'archive${dup?`, dont une très proche : <b style="font-weight:500">${dup.q.n}</b>`:""}. <span>${dup?(dup.q.a?"Elle a reçu une réponse : citez-la pour aller plus loin.":`Elle attend une réponse depuis ${months(D(dup.q.d),NOW)} mois.`):"Aucune ne pose exactement la même question."}</span>`:`Aucune question proche dans l'archive. <span>Le sujet semble neuf.</span>`;
+  // verdict sous la question
+  let v;
+  if(!dup) v=`<b>Sujet libre.</b> Vous pouvez déposer la question telle quelle.`;
+  else if(dup.q.mine) v=`<b>Vous l'avez déjà posée</b> (${dup.q.n}, ${fd(dup.q.d)}). ${dup.q.a?"":"Plutôt que de la redéposer, proposez au groupe de la signaler : le ministre doit alors répondre sous dix jours."}`;
+  else if(dup.q.a) v=`<b>Déjà posée et répondue</b> (${dup.q.n}). Citez la réponse du ${fd(dup.q.a.d)} et demandez ce qui a changé depuis : la question sera plus difficile à esquiver.`;
+  else v=`<b>Déjà posée par un autre groupe</b> (${dup.q.n}), sans réponse depuis ${months(D(dup.q.d),NOW)} mois. Une seconde question sur le même sujet souligne le silence du ministère ; mentionnez la première.`;
+  if(dup&&dup.q.min!==m) v+=` <span style="color:var(--muted)">Elle avait été adressée au ministère ${MIN[dup.q.min].toLowerCase()==="logement"?"du logement":"« "+MIN[dup.q.min]+" »"}.</span>`;
+  $("#verdict").innerHTML=v;
+  $("#res").innerHTML=R.length?R.map(({q,s})=>`<article class="q"><div class="q-h"><span class="gp" style="background:${G[q.g]}">${q.g}</span><b>${q.n}</b><span>${MIN[q.min]} · ${fd(q.d)}${q.mine?" · votre bureau":""}</span><span class="sim"><i><b style="width:${Math.round(Math.min(1,s/.7)*100)}%"></b></i>${s>=.42?"très proche":s>=.25?"proche":"voisine"}</span></div>
+    <p>${hl(q.t,mine)}</p>${q.a?`<div class="ans">Réponse du ${fd(q.a.d)}, après ${months(D(q.d),D(q.a.d))} mois : ${esc(q.a.t)}</div>`:`<div class="ans none">Sans réponse depuis ${months(D(q.d),NOW)} mois.</div>`}</article>`).join(""):`<div class="empty">Rien dans l'archive ne ressemble à ce projet.</div>`;
+  const S=DEL[m], mx=Math.max(...S.bins);
+  $("#stats").innerHTML=`<div class="st-h">Le ministère « ${MIN[m]} » et les questions écrites, depuis le début de la législature</div>
+   <div class="kpi"><b>${Math.round(100*S.ok/S.n)} %</b><span>réponses dans les 2 mois</span></div><div class="kpi"><b>${Math.round(S.med/30.4)} mois</b><span>délai médian</span></div>
+   <div class="hist" aria-label="Répartition des délais de réponse">${S.bins.map((b,i)=>`<div><i class="${i===0?"ok":""}" style="height:${Math.round(6+38*b/mx)}px"></i>${BINS[i]}</div>`).join("")}</div>`;
+}
+let tm; $("#q").addEventListener("input",()=>{clearTimeout(tm);tm=setTimeout(run,180)}); min.onchange=run;
+run();
+</script>
