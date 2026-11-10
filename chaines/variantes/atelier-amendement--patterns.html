@@ -612,7 +612,8 @@ function commit(change,label){
   toast(label,{act:"Annuler",fn:()=>{const s=JSON.parse(before);mine.mods=s.mods;mine.gage=s.gage;render();toast("Modification annulée.",{type:"info"})}});
   const st=a40St();
   if(st!==st0){
-    if(st==="charge") toast("Article 40 : cette rédaction crée une charge publique, l'amendement serait irrecevable. Réduisez sa portée ou annulez.",{type:"error",act:"Détails",fn:()=>openDrawer("a40")});
+    // l'état persistant est déjà porté par la pastille rouge et la ligne « Copie bloquée » : pas de toast en double
+    if(st==="charge") say("Article 40 : cette rédaction crée une charge publique, l'amendement serait irrecevable. Détails dans les contrôles.");
     else if(st==="perte") toast("Article 40 : perte de recettes, un gage est nécessaire.",{type:"warning",act:"Ajouter le gage",fn:()=>commit(()=>{mine.gage=true},"Gage ajouté au dispositif.")});
   }
 }
