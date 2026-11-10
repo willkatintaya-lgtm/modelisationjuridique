@@ -63,7 +63,6 @@ function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createEle
 .top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px 24px;flex-wrap:wrap}
 .flow{display:flex;flex-wrap:wrap;gap:6px 4px;margin:16px 0 0;padding:0;list-style:none}
 .flow li{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--dim);padding:4px 10px 4px 4px;border-radius:999px}
-.flow li+li::before{content:"";width:14px;height:1px;background:var(--line2);margin:0 4px 0 -8px}
 .flow .n{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1px solid var(--line2);font-size:11px;color:var(--muted);transition:background .2s,border-color .2s,color .2s}
 .flow li[data-s=cur]{color:var(--fg)}
 .flow li[data-s=cur] .n{border-color:var(--accent);background:var(--lit);color:var(--fg)}
@@ -234,7 +233,7 @@ function render(){
     ["Vérifier",w<8?"":needAck&&!acked?"cur":"done",w<8?"":needAck&&!acked?"à lire":""],
     ["Confirmer",P==="confirm"||P==="sending"?"cur":P==="error"?"err":P==="done"?"done":"",P==="error"?"échec":""],
     ["Déposée",P==="done"?"done":"",""]];
-  if(P!=="edit")steps[0][1]=steps[1][1]="done";
+  if(P!=="edit"){steps[0][1]=steps[1][1]="done";steps[0][2]=steps[1][2]=""}
   $("#flow").innerHTML=steps.map(([l,s,x],i)=>`<li data-s="${s}"${s==="cur"?' aria-current="step"':""}><span class="n">${s==="done"?"✓":s==="err"?"!":i+1}</span>${l}${x?` <small>${x}</small>`:""}</li>`).join("");
   // ligne d'état : fraîcheur des données, sauvegarde
   const A=S.archive,age=Math.round((NOW-D(A.date))/864e5);
@@ -266,7 +265,7 @@ function render(){
     V.innerHTML=`<div class="verdict"><span class="dot ${T[0]}"></span><b>${T[1]}</b><p>${cited&&k!=="vous"?"Elle est citée dans votre texte.":T[2]}${dup&&dup.q.min!==min.value?` Elle était adressée au ministre ${minLabel(dup.q.min)}.`:""}</p>
      ${dup&&k!=="vous"&&!cited&&P==="edit"?`<div class="row" style="grid-column:2"><button class="btn" data-a="cite">${dup.q.a?"Citer la réponse":"Mentionner"} ${dup.q.n}</button></div>`:""}
      ${needAck&&P==="edit"?`<label class="ack"><input type="checkbox" id="ack"${acked?" checked":""}> <span>J'ai lu la question ${dup.q.n} et je dépose quand même.</span></label>`:""}</div>`;
-    $("#res").innerHTML=list(R,mine);
+    $("#res").innerHTML=P==="edit"?list(R,mine):"";
   }
   // zone d'action selon la phase
   const Z=$("#act"),med=DEL[min.value].med,eta=new Date(NOW.getTime()+med*864e5).toLocaleDateString("fr-FR",{month:"long",year:"numeric"});
@@ -278,10 +277,10 @@ function render(){
   else if(P==="sending"){Z.innerHTML=`<div class="row"><span class="spin" aria-hidden="true"></span><span>Transmission au service de la séance…</span></div><span class="why">Rien n'est déposé tant que le numéro n'est pas affiché.</span>`}
   else if(P==="error"){Z.innerHTML=`<div class="irr" style="background:rgba(229,72,77,.06)"><b style="font-weight:500">Le dépôt n'a pas abouti.</b> Le service de la séance ne répond pas. Rien n'a été déposé ; votre texte est conservé.</div><div class="row"><button class="btn pri" data-a="send">Réessayer</button><button class="btn" data-a="back">Revenir au texte</button></div>`}
 }
-const T_short=(k,d)=>({vous:`doublon de votre question ${d.q.n}, lu`,repondue:`proche de ${d.q.n}, répondue`,autre:`proche de ${d.q.n}, sans réponse`})[k];
+const T_short=(k,d)=>({vous:`doublon de votre question ${d.q.n} (lu)`,repondue:`proche de ${d.q.n}, répondue`,autre:`proche de ${d.q.n}, sans réponse`})[k];
 function list(R,mine){if(!R.length)return words()>=8?`<div class="state">Rien dans l'archive ne ressemble à ce texte.</div>`:"";
   return R.map(({q,s})=>`<article class="q${q.dep?" me":q.n==="AN 3518"&&S.newSince?" new":""}"><div class="q-h">${q.mine||q.dep?"":`<span class="gp" style="background:${G[q.g]}">${q.g}</span>`}<b>${q.n}</b>${q.dep?'<span class="tag">déposée à l\'instant</span>':q.n==="AN 3518"&&S.newSince?'<span class="tag">nouvelle</span>':""}<span>${MIN[q.min]} · ${fd(q.d)}${q.mine?" · vous":""}</span><span class="r">${level(s)}</span></div>
-  <p>${hl(q.t.length>190?q.t.slice(0,190)+"…":q.t,mine)}</p>${q.dep?"":q.a?`<div class="ans">Répondue le ${fd(q.a.d)} : ${esc(q.a.t)}</div>`:`<div class="ans none">Sans réponse depuis ${months(D(q.d),NOW)} mois.</div>`}</article>`).join("")}
+  <p>${hl(q.t.length>190?q.t.slice(0,190)+"…":q.t,mine)}</p>${q.dep?"":q.a?`<div class="ans">Répondue le ${fd(q.a.d)} : ${esc(q.a.t)}</div>`:`<div class="ans none">${months(D(q.d),NOW)?`Sans réponse depuis ${months(D(q.d),NOW)} mois.`:`Sans réponse, déposée il y a ${Math.round((NOW-D(q.d))/864e5)} jours.`}</div>`}</article>`).join("")}
 function actDone(){const d=S.deposited,rem=new Date(NOW.getTime()+61*864e5).toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
   $("#verdict").innerHTML=`<div class="verdict"><span class="dot ok"></span><b>Question déposée sous le n° ${d.n}</b><p>Adressée au ministre ${minLabel(d.min)} ; publication au Journal officiel du 17 novembre.</p></div>`;
   $("#act").innerHTML=`<span class="lbl">Ce que le dépôt a changé</span><ul class="fx"><li>La question figure dans l'archive de votre bureau (ci-dessus).</li><li>Questions adressées au ministère : ${DEL[d.min].n} depuis le début de la législature.</li><li>Rappel programmé le ${rem} : si elle reste sans réponse, proposer son signalement.</li><li>Brouillon effacé de ce poste.</li></ul><div class="row"><button class="btn" data-a="new">Rédiger une nouvelle question</button></div>`}

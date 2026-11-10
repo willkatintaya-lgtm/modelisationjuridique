@@ -1,0 +1,774 @@
+<title>Atelier d'amendement · patterns</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+
+/* Variante « patterns » : feuille d'action ancrée en bas au lieu du menu flottant, pastilles de contrôle + tiroir latéral
+   au lieu de l'accordéon, toasts empilés avec « Annuler », tableau à glisser-déposer (avec boutons et clavier) pour les hypothèses,
+   texte résultant en dépliage sous le tableau, deux onglets au lieu de trois. */
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;margin-bottom:18px}
+.tabs{display:inline-flex;padding:3px;border:1px solid var(--line);border-radius:10px;background:var(--s1);gap:2px}
+.tab{border:0;background:none;padding:0 16px;min-height:36px;border-radius:7px;color:var(--muted);font-size:13.5px;cursor:pointer;white-space:nowrap;transition:background .2s,color .2s;display:inline-flex;align-items:center;gap:8px}
+.tab:hover{color:var(--text)}
+.tab[aria-selected="true"]{background:var(--s2);color:var(--fg);box-shadow:inset 0 0 0 1px var(--line2)}
+.tab .cnt{font-size:11.5px;color:var(--dim)}
+.view{animation:vin .26s var(--ease)}
+@keyframes vin{from{opacity:0;transform:translateY(4px)}}
+@media (pointer:coarse){.tab{min-height:44px}}
+/* rédiger */
+.desk{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:24px;align-items:start}
+.art{padding:18px 22px 22px}
+.hd{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.hd b{color:var(--fg);font-weight:600;font-size:15px}
+.hd span{color:var(--dim);font-size:12.5px}
+.hd .sp{flex:1}
+.al{display:grid;grid-template-columns:32px minmax(0,1fr);gap:0 8px;padding:5px 0}
+.al .n{border:0;background:none;height:28px;width:30px;border-radius:6px;color:var(--dim);font-size:11.5px;cursor:pointer;transition:color .2s,background .2s}
+.al .n:hover,.al .n.on{color:var(--fg);background:var(--s2)}
+.al .n.new{color:var(--ins);font-weight:600;cursor:default;display:grid;place-items:center}
+.t{margin:0;font-size:14.5px;line-height:1.72;color:var(--text);user-select:text;-webkit-user-select:text}
+del+ins{margin-left:.3em}
+mark.pend{background:var(--lit);color:var(--fg)}
+.lit{background:var(--lit);border-radius:3px}
+.gone .t{color:var(--dim)}
+.side{display:grid;gap:14px;position:sticky;top:16px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips .chip{min-height:30px}
+@media (pointer:coarse){.chips .chip{min-height:44px;padding:0 14px}}
+.amd{padding:16px 18px}
+.disp{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:6px}
+.disp li{display:grid;grid-template-columns:minmax(0,1fr) 32px;gap:6px;align-items:start;padding:8px 6px 8px 10px;border-radius:7px;background:var(--s2);font-size:13.5px;line-height:1.6;color:var(--fg);animation:vin .25s var(--ease)}
+.disp li.hl{box-shadow:inset 0 0 0 1px var(--accent)}
+.ico{width:32px;height:32px;border:0;background:none;color:var(--dim);border-radius:6px;cursor:pointer;display:grid;place-items:center}
+.ico:hover{color:var(--fg);background:var(--line)}
+@media (pointer:coarse){.ico{width:44px;height:44px}.disp li{grid-template-columns:minmax(0,1fr) 44px}}
+.empty{margin:12px 0 0;padding:14px;border:1px dashed var(--line2);border-radius:7px;color:var(--muted);font-size:13px}
+.disc{margin-top:12px;border-top:1px solid var(--line)}
+.disc>button{width:100%;display:grid;grid-template-columns:minmax(0,1fr) 14px;gap:10px;align-items:center;text-align:left;border:0;background:none;padding:12px 0 4px;cursor:pointer;color:var(--fg);min-height:44px}
+.disc>button small{display:block;color:var(--muted);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.disc .chev{transition:transform .3s var(--ease);color:var(--dim)}
+.disc.open .chev{transform:rotate(90deg)}
+.disc textarea{width:100%;min-height:110px;resize:vertical;margin:6px 0 2px;line-height:1.55}
+.acts{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.btn{min-height:36px}
+@media (pointer:coarse){.btn{min-height:44px}}
+/* feuille d'action (bas) */
+.sheet{position:fixed;left:50%;bottom:0;z-index:25;width:min(600px,100%);transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);border-bottom:0;border-radius:14px 14px 0 0;box-shadow:0 -12px 40px rgba(0,0,0,.5);padding:14px max(16px,env(safe-area-inset-left,0px)) calc(14px + env(safe-area-inset-bottom,0px));animation:up .22s var(--ease)}
+.sheet.out{animation:fade .16s ease forwards}
+@keyframes up{from{transform:translate(-50%,24px);opacity:0}}
+@keyframes fade{to{opacity:0}}
+.sheet-h{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.sheet-h p{margin:0;flex:1;min-width:0;font-size:13px;color:var(--muted)}
+.sheet-h p b{color:var(--fg);font-weight:500}
+.sheet .row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.sheet .row3 .btn{min-height:44px;white-space:normal;line-height:1.25}
+.sheet label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:6px}
+.sheet input[type=text]{width:100%;min-height:44px;font-size:15px}
+.sheet .err{color:#f2a7a9;font-size:12.5px;margin:6px 0 0;min-height:1em}
+.sheet .acts{margin-top:8px;justify-content:flex-end}
+.sheet .note{margin:8px 0 0;font-size:12px;color:var(--dim)}
+/* tiroir latéral */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:40;animation:fin .2s ease}
+.scrim.out{animation:fade .18s ease forwards}
+@keyframes fin{from{opacity:0}}
+.drawer{position:fixed;top:0;right:0;bottom:0;z-index:41;width:min(440px,100%);background:var(--s1);border-left:1px solid var(--line2);display:flex;flex-direction:column;animation:slin .26s var(--ease)}
+.drawer.out{animation:slout .2s ease forwards}
+@keyframes slin{from{transform:translateX(30px);opacity:0}}
+@keyframes slout{to{transform:translateX(30px);opacity:0}}
+.drawer-h{display:flex;align-items:center;gap:10px;padding:14px max(16px,env(safe-area-inset-right,0px)) 12px 18px;border-bottom:1px solid var(--line)}
+.drawer-h b{flex:1;color:var(--fg);font-weight:600;font-size:15px}
+.drawer-b{overflow:auto;padding:6px max(16px,env(safe-area-inset-right,0px)) 32px 18px;scrollbar-width:thin}
+.ck{padding:14px 0;border-top:1px solid var(--line);display:grid;grid-template-columns:12px minmax(0,1fr);gap:4px 12px;scroll-margin-top:8px}
+.ck:first-child{border-top:0}
+.ck .dot{margin-top:7px}
+.ck h3{margin:0;font:500 14px/1.45 var(--f);color:var(--fg)}
+.ck .bd{grid-column:2;font-size:13px;color:var(--muted);line-height:1.6}
+.ck .bd p{margin:0 0 6px}
+.ck .bd b{color:var(--text);font-weight:500}
+.ck .acts{grid-column:2;margin-top:6px}
+.ck.flash{animation:flash 1.2s ease}
+@keyframes flash{0%,40%{background:var(--lit)}}
+/* toasts empilés */
+.toasts{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:50;display:grid;gap:8px;width:min(380px,calc(100vw - 32px));pointer-events:none}
+.toasts.up{bottom:calc(var(--sheet,0px) + 12px)}
+.tst{pointer-events:auto;display:flex;align-items:center;gap:10px;background:var(--s2);border:1px solid var(--line2);border-radius:9px;padding:8px 8px 8px 12px;font-size:13px;color:var(--fg);box-shadow:0 8px 24px rgba(0,0,0,.4);animation:tin .22s var(--ease)}
+.tst.out{animation:fade .18s ease forwards}
+@keyframes tin{from{transform:translateY(8px);opacity:0}}
+.tst .dot{flex:none}
+.tst span{flex:1;min-width:0}
+.tst .btn{min-height:32px;padding:4px 10px;font-size:12.5px}
+@media (pointer:coarse){.tst .btn{min-height:44px}}
+/* séance : tableau */
+.answer{padding:16px 18px;margin-bottom:14px}
+.answer p{margin:0;color:var(--fg);font-size:15px;line-height:1.55;text-wrap:pretty}
+.answer .sub{margin-top:6px;color:var(--muted);font-size:13px}
+.board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:start}
+.colm{border:1px solid var(--line);border-radius:12px;background:var(--s1);padding:8px;min-height:120px;transition:border-color .2s,background .2s}
+.colm.over{border-color:var(--accent);background:rgba(110,123,242,.07)}
+.colm.nodrop.dragging{opacity:.55}
+.colm-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:4px 6px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.colm-h .ghost{text-transform:none;letter-spacing:0}
+.zone{display:grid;gap:6px}
+.hint{padding:16px 10px;border:1px dashed var(--line2);border-radius:8px;color:var(--dim);font-size:12.5px;text-align:center}
+.card{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:2px 8px;align-items:center;padding:8px 6px 8px 8px;border-radius:8px;background:var(--s2);border:1px solid transparent;font-size:13px;cursor:grab;transition:border-color .2s,opacity .2s,transform .2s}
+.card:hover{border-color:var(--line2)}
+.card.dragged{opacity:.4}
+.card.mine{border-color:rgba(110,123,242,.45)}
+.card.fell{cursor:default;background:none;border-color:var(--line)}
+.card.fell .what{color:var(--dim);text-decoration:line-through 1px var(--del)}
+.card .pos{color:var(--dim);font-size:11.5px;text-align:right}
+.card .num{color:var(--fg);font-weight:500}
+.card.mine .num{color:#b4bcff}
+.card .what{grid-column:2;color:var(--text);line-height:1.45;min-width:0}
+.card .why{grid-column:2;font-size:12px;color:#f2a7a9}
+.card .mv{grid-row:1/span 3;grid-column:3;align-self:center}
+.card .grip{color:var(--dim);font-size:11px}
+.card.hl{border-color:var(--accent)}
+.res{margin-top:16px}
+.res .al{grid-template-columns:40px minmax(0,1fr)}
+.res .al .n{width:36px;cursor:default;display:block;text-align:right;padding-right:6px}
+.ex{display:block;white-space:nowrap;font-size:10.5px;color:var(--dim);line-height:1}
+sup.by{font-size:10px;color:var(--muted);margin-left:2px}
+.res .body{padding:0 18px 18px}
+.res>.disc{border:0;margin:0}
+.res>.disc>button{padding:12px 18px;min-height:48px}
+.note{margin:12px 0 0;padding-top:10px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.disc.open>.slide{grid-template-rows:1fr}
+.disc.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+@media (max-width:960px){.desk{grid-template-columns:minmax(0,1fr)}.side{position:static;order:-1}.board{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:560px){.top{align-items:flex-start}.tabs{width:100%}.tab{flex:1;justify-content:center}.art{padding:14px 12px 18px}.al{grid-template-columns:28px minmax(0,1fr)}.t{font-size:14px}.sheet .row3 .btn{font-size:12.5px;padding:6px}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="ctx">Projet de loi pour l'accès au logement · séance publique du jeudi 19 novembre</div>
+      <h1>Article 4 · logements vacants</h1>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Vues">
+      <button class="tab" role="tab" id="tab-ecrire" data-v="ecrire">Rédiger</button>
+      <button class="tab" role="tab" id="tab-seance" data-v="seance">Séance <span class="cnt" id="cnt"></span></button>
+    </nav>
+  </header>
+  <main id="main"></main>
+</div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script>
+/* ---------- Données fictives ---------- */
+const GROUPS={PR:{name:"Progrès républicain",c:"#c07a00"},SOL:{name:"Solidarité et logement",c:"#d13a30"},ECO:{name:"Écologie urbaine",c:"#2a9d63"},
+ UT:{name:"Union des territoires",c:"#3b82d6"},LL:{name:"Libertés locales",c:"#e0671d"},RC:{name:"Rassemblement des communes",c:"#7c5cd6"},
+ GOUV:{name:"Gouvernement",c:"#7d8696"},DC:{name:"Démocratie communale",c:"#2bb3b1"},AR:{name:"Avenir rural",c:"#8fae3a"},CP:{name:"Centre et progrès",c:"#d8699a"}};
+const ME="PR";
+const ART=[null,
+ "I. – Le chapitre II du titre III du livre III du code de la construction et de l'habitation est complété par un article L. 332-4 ainsi rédigé :",
+ "« Art. L. 332-4. – Dans les communes de plus de 50 000 habitants appartenant à une zone d'urbanisation continue, le propriétaire d'un logement vacant depuis plus de deux ans le déclare au maire.",
+ "« Le logement déclaré peut faire l'objet, à la demande du propriétaire, d'une aide à la remise sur le marché dont le montant ne peut excéder 30 % du coût des travaux, dans la limite de 15 000 euros par logement.",
+ "« Le maire informe le propriétaire des aides mobilisables dans un délai d'un mois suivant la déclaration.",
+ "« Les conditions d'application du présent article sont fixées par décret en Conseil d'État. »",
+ "II. – Au premier alinéa du I de l'article 232 du code général des impôts, le taux : « 17 % » est remplacé par le taux : « 20 % ».",
+ "III. – Le présent article entre en vigueur le 1er janvier 2027."];
+const NAL=ART.length-1;
+// Liasse de séance sur l'article 4 (amendements des autres)
+let LIASSE=[
+ {id:12,g:"LL",op:"delArt"},
+ {id:31,g:"RC",al:2,op:"rep",w:"50 000",x:"20 000"},
+ {id:44,g:"ECO",al:2,op:"rep",w:"deux ans",x:"un an"},
+ {id:45,g:"SOL",al:2,op:"rep",w:"deux ans",x:"dix-huit mois"},
+ {id:58,g:"UT",al:3,op:"rep",w:"30 %",x:"20 %"},
+ {id:60,g:"AR",al:4,op:"delAl"},
+ {id:72,g:"DC",al:4,op:"rep",w:"un mois",x:"deux mois"},
+ {id:87,g:"PR",al:6,op:"rep",w:"20 %",x:"19 %",occ:1},
+ {id:90,g:"LL",al:6,op:"delAl"},
+ {id:95,g:"CP",al:6,op:"rep",w:"20 %",x:"25 %",occ:1},
+ {id:101,g:"GOUV",al:7,op:"rep",w:"1er janvier 2027",x:"1er juillet 2027"},
+];
+const FICHES=[
+ {org:"Union des propriétaires bailleurs (fictive)",date:"4 novembre",hatvp:true,al:6,w:"20 %",x:"18 %"},
+ {org:"Collectif Habitat vacant (fictif)",date:"6 novembre",hatvp:false,al:3,w:"30 %",x:"50 %"},
+];
+// Ce que le texte engage financièrement, passage par passage (base des contrôles de l'article 40)
+const FIN={
+ 2:[{m:"50 000",less:"charge",why:"abaisser le seuil étend l'aide à davantage de communes"},{m:"deux ans",less:"charge",why:"raccourcir la durée de vacance rend davantage de logements éligibles à l'aide"}],
+ 3:[{m:"30 %",more:"charge",why:"relever le plafond de l'aide aggrave une charge publique"},{m:"15 000 euros",more:"charge",why:"relever le plafond de l'aide aggrave une charge publique"},{m:"peut faire",chg:"charge",why:"rendre l'aide automatique crée une charge"}],
+ 4:[{m:"un mois",less:"charge",why:"raccourcir le délai alourdit l'obligation faite à la commune"}],
+ 6:[{m:"20 %",less:"perte",why:"une hausse moindre du taux réduit le produit attendu de la taxe sur les logements vacants"}],
+ 7:[{m:"1er janvier 2027",later:"perte",earlier:"charge",why:"la date commande à la fois la hausse de la taxe et l'ouverture de l'aide"}],
+};
+const GAGE="La perte de recettes pour l'État est compensée à due concurrence par la création d'une taxe additionnelle à l'accise sur les tabacs prévue au chapitre IV du titre Ier du livre III du code des impositions sur les biens et services.";
+const NOW=new Date(2026,10,10,11,20), SEANCE=new Date(2026,10,19), HOLI=["2026-11-11","2026-12-25"];
+
+/* ---------- Outils ---------- */
+const $=s=>document.querySelector(s), esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/(\d) (?=\d{3}\b)/g,"$1\u00a0").replace(/(\d) %/g,"$1\u00a0%").replace(/« /g,"«\u00a0").replace(/ »/g,"\u00a0»");
+const ORD=["première","deuxième","troisième","quatrième","cinquième"];
+const NUMW={un:1,une:1,deux:2,trois:3,quatre:4,cinq:5,six:6,huit:8,dix:10,douze:12,"dix-huit":18,"vingt-quatre":24};
+const MONTHS=["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+function qty(s){
+  if(!s) return null; s=s.toLowerCase();
+  const d=s.match(/(1er|\d{1,2})\s+(janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)\s+(\d{4})/);
+  if(d) return {v:+new Date(+d[3],MONTHS.indexOf(d[2]),d[1]==="1er"?1:+d[1]),u:"date"};
+  const m=s.match(/(\d[\d ]*(?:,\d+)?|dix-huit|vingt-quatre|une|un|deux|trois|quatre|cinq|six|huit|dix|douze)\s*(%|ans?|mois|euros|habitants)?/);
+  if(!m) return null;
+  let v=NUMW[m[1]]??parseFloat(m[1].replace(/ /g,"").replace(",","."));
+  const u=m[2]||"";
+  if(/^ans?$/.test(u)) return {v:v*12,u:"mois"};
+  return {v,u};
+}
+function noun(x){
+  if(/^\d[\d ]*(,\d+)?\s?%$/.test(x)) return {au:"au taux",le:"le taux",du:"du taux"};
+  if(/^\d[\d ]*$/.test(x)) return {au:"au nombre",le:"le nombre",du:"du nombre"};
+  if(/^(1er|\d{1,2}) \S+ \d{4}$/.test(x)) return {au:"à la date",le:"la date",du:"de la date"};
+  if(!/\s/.test(x.trim())) return {au:"au mot",le:"le mot",du:"du mot"};
+  return {au:"aux mots",le:"les mots",du:"des mots"};
+}
+function occInfo(al,start,end){
+  const t=ART[al], w=t.slice(start,end); let c=0,i=-1,idx=0;
+  while((i=t.indexOf(w,i+1))!==-1){c++; if(i<start) idx++;}
+  return {w,count:c,idx};
+}
+function findSpan(al,w,occ=1){let i=-1;for(let k=0;k<occ;k++){i=ART[al].indexOf(w,i+1);if(i<0)return null}return [i,i+w.length]}
+const overl=(a,b)=>a[0]<b[1]&&b[0]<a[1] || (a[0]===a[1]&&b[0]<=a[0]&&a[0]<=b[1]) || (b[0]===b[1]&&a[0]<=b[0]&&b[0]<=a[1]);
+const roman=n=>["I","II","III","IV","V","VI","VII","VIII"][n];
+const gp=g=>`<span class="gp" style="background:${GROUPS[g].c}">${g}</span>`;
+
+/* ---------- État ---------- */
+let uid=1;
+const mine={mods:[],gage:false,expo:"Amendement de repli : la hausse du taux de la taxe sur les logements vacants est limitée à 18 %, pour ne pas pénaliser les propriétaires engagés dans des travaux de remise sur le marché."};
+{const s=findSpan(6,"20 %");mine.mods.push({id:uid++,al:6,kind:"rep",start:s[0],end:s[1],text:"18 %",ce45:true});}
+let hyp=new Set();
+
+/* ---------- Rédaction automatique du dispositif ---------- */
+function sentence(m){
+  if(m.kind==="delArt") return "Supprimer cet article.";
+  if(m.kind==="delAl") return `Supprimer l'alinéa ${m.al}.`;
+  if(m.kind==="compAl") return `Compléter l'alinéa ${m.al} par la phrase suivante : « ${m.text.replace(/\.?$/,".")} »`;
+  if(m.kind==="insAl") return `Après l'alinéa ${m.al}, insérer l'alinéa suivant : « ${m.text.replace(/\.?$/,".")} »`;
+  const o=occInfo(m.al,m.start,m.end), N=noun(o.w), multi=o.count>1, ord=ORD[o.idx]||`${o.idx+1}e`;
+  if(m.kind==="rep"){
+    const T=multi?`à la ${ord} occurrence ${N.du} : « ${o.w} »`:`${N.au} : « ${o.w} »`;
+    return `À l'alinéa ${m.al}, substituer ${T} ${noun(m.text).le} : « ${m.text} ».`;
+  }
+  if(m.kind==="del"){
+    const T=multi?`la ${ord} occurrence ${N.du} : « ${o.w} »`:`${N.le} : « ${o.w} »`;
+    return `À l'alinéa ${m.al}, supprimer ${T}.`;
+  }
+  if(m.kind==="ins"){
+    const T=multi?`après la ${ord} occurrence ${N.du} : « ${o.w} »`:`après ${N.le} : « ${o.w} »`;
+    return `À l'alinéa ${m.al}, ${T}, insérer ${noun(m.text).le} : « ${m.text} ».`;
+  }
+}
+const sorted=()=>[...mine.mods].sort((a,b)=>(a.al||0)-(b.al||0)||(a.start||0)-(b.start||0));
+function paragraphs(){
+  const p=sorted().map(m=>({m,t:sentence(m)}));
+  if(mine.gage && p.length) p.push({gage:true,t:GAGE});
+  if(p.length>1) p.forEach((x,i)=>x.t=`${roman(i)}. – `+x.t);
+  return p;
+}
+
+/* ---------- Contrôles ---------- */
+function workingDays(){ // délai : 17 h le 3e jour ouvrable qui précède la discussion (jours ouvrés, hors fériés)
+  const d=new Date(SEANCE); let n=0;
+  while(n<3){d.setDate(d.getDate()-1); const iso=d.toISOString().slice(0,10), wd=d.getDay(); if(wd!==0&&wd!==6&&!HOLI.includes(iso)) n++;}
+  d.setHours(17,0,0,0); return d;
+}
+function fmtDay(d){return d.toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"})}
+function art40(){
+  const out=[]; const add=(lvl,why,where)=>out.push({lvl,why,where});
+  for(const m of mine.mods){
+    if(m.kind==="delArt"){add("perte","supprimer l'article supprime aussi la hausse de la taxe prévue à l'alinéa 6","l'article"); continue;}
+    if(m.kind==="delAl"){ if(m.al===6) add("perte","supprimer l'alinéa 6 supprime la hausse de la taxe",`l'alinéa 6`); if(m.al===7) add("att","sans date d'entrée en vigueur, l'aide s'ouvre plus tôt",`l'alinéa 7`); continue;}
+    if(m.kind==="compAl"||m.kind==="insAl"){
+      const t=m.text.toLowerCase();
+      if(/exonér|réduction d'impôt|crédit d'impôt|abattement|dégrèvement/.test(t)) add("perte","le texte ajouté crée un avantage fiscal",`l'alinéa ${m.al}`);
+      else if(/aide|prime|prend en charge|fonds|allocation|indemnit|subvention|gratuit/.test(t)) add("charge","le texte ajouté crée ou étend une dépense publique",`l'alinéa ${m.al}`);
+      continue;
+    }
+    const span=[m.start,m.end];
+    for(const r of FIN[m.al]||[]){
+      const s=findSpan(m.al,r.m); if(!s||!overl(span,s)) continue;
+      if(r.chg){add(r.chg,r.why,`l'alinéa ${m.al}`);continue;}
+      if(m.kind==="ins"){add("att",`ajouter des mots ici peut modifier le champ du dispositif : ${r.why}`,`l'alinéa ${m.al}`);continue;}
+      const a=qty(r.m), b=m.kind==="del"?null:qty(m.text);
+      if(!b||!a||a.u!==b.u){add("att",r.why,`l'alinéa ${m.al}`);continue;}
+      if(a.u==="date"){ if(b.v>a.v&&r.later) add(r.later,r.why,`l'alinéa ${m.al}`); if(b.v<a.v&&r.earlier) add(r.earlier,r.why,`l'alinéa ${m.al}`); continue;}
+      if(b.v<a.v&&r.less) add(r.less,r.why,`l'alinéa ${m.al}`);
+      if(b.v>a.v&&r.more) add(r.more,r.why,`l'alinéa ${m.al}`);
+    }
+  }
+  return out;
+}
+function nearby(){
+  const res=[];
+  for(const m of mine.mods){
+    for(const a of LIASSE){
+      if(a.op==="delArt"||a.al!==m.al) continue;
+      const sp=a.op==="delAl"?[0,ART[a.al].length]:findSpan(a.al,a.w,a.occ);
+      const ms=m.kind==="delAl"||m.kind==="compAl"?[0,ART[m.al].length]:[m.start,m.end];
+      if(!overl(ms,sp)) continue;
+      const same=m.kind==="rep"&&a.op==="rep"&&a.x===m.text;
+      res.push({a,same});
+    }
+  }
+  return res;
+}
+function fiche(){for(const m of mine.mods){if(m.kind!=="rep")continue;for(const f of FICHES){const s=findSpan(f.al,f.w);if(f.al===m.al&&s&&overl(s,[m.start,m.end])&&f.x===m.text)return f}}return null}
+
+/* ---------- Ordre d'appel et cascade ---------- */
+function mineAsAmd(){
+  if(!mine.mods.length) return null;
+  const f=sorted()[0];
+  return {id:"mine",g:ME,mine:true,al:f.al,op:f.kind==="delArt"?"delArt":f.kind==="delAl"?"delAl":"rep",spans:mine.mods.map(spanOf),x:f.text};
+}
+function spanOf(m){
+  if(m.kind==="delArt") return {al:0,s:[0,1e9]};
+  if(m.kind==="delAl"||m.kind==="compAl") return {al:m.al,s:[0,ART[m.al].length]};
+  if(m.kind==="insAl") return {al:m.al,s:[ART[m.al].length,ART[m.al].length]};
+  return {al:m.al,s:[m.start,m.end]};
+}
+function amdSpans(a){
+  if(a.spans) return a.spans;
+  if(a.op==="delArt") return [{al:0,s:[0,1e9]}];
+  if(a.op==="delAl") return [{al:a.al,s:[0,ART[a.al].length]}];
+  return [{al:a.al,s:findSpan(a.al,a.w,a.occ)}];
+}
+function hits(a,b){ // l'adoption de a fait tomber b ?
+  const A=amdSpans(a), B=amdSpans(b);
+  if(A.some(x=>x.al===0)) return true;
+  return A.some(x=>B.some(y=>y.al===x.al&&(a.op==="delAl"||overl(x.s,y.s))));
+}
+function distance(a){const base=amdSpans(a)[0]; if(a.op==="delAl"||a.op==="delArt") return 1e12; const w=ART[base.al].slice(base.s[0],base.s[1]); const p=qty(w),q=qty(a.x); return p&&q&&p.u===q.u?Math.abs(q.v-p.v):1e6}
+function order(){
+  const all=[...LIASSE]; const mm=mineAsAmd(); if(mm) all.push(mm);
+  const head=all.filter(a=>a.op==="delArt"), rest=all.filter(a=>a.op!=="delArt");
+  // regroupement en discussions communes : amendements qui se disputent le même passage
+  const groups=[];
+  for(const a of rest){
+    const g=groups.find(g=>g.items.some(b=>b.al===a.al&&(a.op==="delAl"||b.op==="delAl"||amdSpans(a).some(x=>amdSpans(b).some(y=>y.al===x.al&&overl(x.s,y.s))))));
+    if(g) g.items.push(a); else groups.push({items:[a]});
+  }
+  for(const g of groups){g.al=g.items[0].al;g.start=Math.min(...g.items.map(a=>a.op==="delAl"?-1:amdSpans(a)[0].s[0]));g.items.sort((a,b)=>distance(b)-distance(a)||(a.id==="mine"?0:a.id)-(b.id==="mine"?0:b.id))}
+  groups.sort((a,b)=>a.al-b.al||a.start-b.start);
+  if(head.length) groups.unshift({items:head,head:true});
+  return groups;
+}
+function simulate(){
+  const groups=order(), flat=groups.flatMap(g=>g.items), st=new Map(), adopted=[];
+  for(const a of flat){
+    const by=adopted.find(b=>hits(b,a));
+    if(by) st.set(a.id,{s:"fell",by:by.id});
+    else if(hyp.has(a.id)){st.set(a.id,{s:"adopt"});adopted.push(a);}
+    else st.set(a.id,{s:"open"});
+  }
+  return {groups,flat,st,adopted};
+}
+const lab=id=>id==="mine"?"le vôtre":`n° ${id}`;
+function describe(a){
+  if(a.mine) return sorted().map(m=>m.kind==="delArt"?"Supprimer l'article":m.kind==="delAl"?`Supprimer l'alinéa ${m.al}`:m.kind==="compAl"?`Alinéa ${m.al} : phrase ajoutée`:m.kind==="insAl"?`Alinéa ajouté après le ${m.al}`:`Alinéa ${m.al} : « ${ART[m.al].slice(m.start,m.end)} » → « ${m.kind==="del"?"":m.text} »`.replace("→ «  »","supprimé")).join(" · ");
+  if(a.op==="delArt") return "Supprimer l'article";
+  if(a.op==="delAl") return `Supprimer l'alinéa ${a.al}`;
+  return `Alinéa ${a.al} : « ${a.w} » → « ${a.x} »`;
+}
+
+/* ---------- Rendu d'un alinéa avec corrections apparentes ---------- */
+function renderAl(al,ops,{marks=true,pend=null}={}){
+  // ops : [{s,e,ins,id,kind}] sur le texte de la commission ; data-o = position d'origine pour la sélection
+  const t=ART[al]; let html="", i=0;
+  const list=[...ops].sort((a,b)=>a.s-b.s);
+  if(pend&&pend.al===al) list.push({s:pend.start,e:pend.end,pend:true}), list.sort((a,b)=>a.s-b.s);
+  for(const o of list){
+    if(o.s>i) html+=`<span data-o="${i}">${esc(t.slice(i,o.s))}</span>`;
+    const mid=o.id!=null?` data-mid="${o.id}"`:"";
+    if(o.pend) html+=`<mark class="pend" data-o="${o.s}">${esc(t.slice(o.s,o.e))}</mark>`;
+    else{
+      if(o.e>o.s) html+=`<del data-o="${o.s}"${mid}>${esc(t.slice(o.s,o.e))}</del>`;
+      if(o.ins) html+=`<ins${mid}>${o.s===o.e&&!/^[\s,.;:]/.test(o.ins)?" ":""}${esc(o.ins)}${o.e>o.s?"":""}</ins>`;
+      if(o.by!=null&&marks) html+=`<sup class="by" data-by="${o.by}">${o.by==="mine"?"vous":o.by}</sup>`;
+    }
+    i=Math.max(i,o.e);
+  }
+  if(i<t.length) html+=`<span data-o="${i}">${esc(t.slice(i))}</span>`;
+  return html;
+}
+function myOps(al){
+  const ops=[];
+  for(const m of mine.mods){
+    if(m.kind==="delArt"||(m.kind==="delAl"&&m.al===al)) ops.push({s:0,e:ART[al].length,id:m.id});
+    else if(m.al!==al) continue;
+    else if(m.kind==="rep") ops.push({s:m.start,e:m.end,ins:m.text,id:m.id});
+    else if(m.kind==="del") ops.push({s:m.start,e:m.end,id:m.id});
+    else if(m.kind==="ins") ops.push({s:m.end,e:m.end,ins:m.text,id:m.id});
+    else if(m.kind==="compAl") ops.push({s:ART[al].length,e:ART[al].length,ins:" "+m.text.replace(/\.?$/,"."),id:m.id});
+  }
+  return ops;
+}
+
+/* ---------- Sélection dans le texte de la commission ---------- */
+function offsetIn(p,node,off){
+  if(node===p){const c=p.childNodes[off];return c&&c.dataset&&c.dataset.o!=null?+c.dataset.o:ART[+p.dataset.al].length}
+  let el=node.nodeType===3?node.parentElement:node;
+  if(el.closest("ins")) return null;
+  el=el.closest("[data-o]"); if(!el) return null;
+  return +el.dataset.o+(node.nodeType===3?off:0);
+}
+function conflictWith(al,s,e){
+  return mine.mods.find(m=>m.kind==="delArt"||(m.al===al&&(m.kind==="delAl"||(m.start!=null&&overl([s,e],[m.start,m.end])))));
+}
+// renvoie {al,s,e,r} ou {err,mod?} ou null (rien de sélectionné)
+function readSelection(){
+  const sel=getSelection(); if(!sel.rangeCount||sel.isCollapsed) return null;
+  const r=sel.getRangeAt(0);
+  const up=n=>(n.nodeType===3?n.parentElement:n)?.closest?.("p.t[data-al]");
+  const pa=up(r.startContainer), pb=up(r.endContainer);
+  if(!pa&&!pb) return null;
+  if(!pa||pa!==pb) return {err:"multi"};
+  const al=+pa.dataset.al, t=ART[al];
+  let s=offsetIn(pa,r.startContainer,r.startOffset), e=offsetIn(pa,r.endContainer,r.endOffset);
+  if(s==null||e==null) return {err:"ins"};
+  if(s>e)[s,e]=[e,s];
+  const W=/[0-9A-Za-zÀ-ÖØ-öø-ÿ%’'\-]/;
+  while(s<e&&/\s/.test(t[s]))s++; while(e>s&&/\s/.test(t[e-1]))e--;
+  while(s>0&&W.test(t[s-1])&&W.test(t[s]))s--; while(e<t.length&&W.test(t[e])&&W.test(t[e-1]))e++;
+  {let m; while((m=t.slice(0,s).match(/\d{1,3} $/))&&/^\d{3}\b/.test(t.slice(s))) s-=m[0].length;
+   while(/^ \d{3}\b/.test(t.slice(e))&&/\d$/.test(t.slice(0,e))) e+=4;
+   if(/\d$/.test(t.slice(0,e))&&/^ (%|euros\b)/.test(t.slice(e))) e+=t.slice(e).match(/^ (%|euros\b)/)[0].length;}
+  if(e<=s) return null;
+  const c=conflictWith(al,s,e); if(c) return {err:"busy",mod:c,al};
+  return {al,s,e,rect:r.getBoundingClientRect(),w:t.slice(s,e)};
+}
+const plural=(n,a,b)=>n>1?b:a;
+/* ---------- Diagnostic structuré (base des contrôles) ---------- */
+function diagnose(){
+  const dl=workingDays(), h=Math.round((dl-NOW)/36e5);
+  const D={deadline:{date:dl,hours:h,days:Math.floor(h/24)},has:mine.mods.length>0};
+  if(!D.has) return D;
+  D.multi=mine.mods.filter(m=>m.start!=null&&occInfo(m.al,m.start,m.end).count>1).map(m=>({m,...occInfo(m.al,m.start,m.end)}));
+  const R=art40(), by=l=>R.filter(r=>r.lvl===l);
+  const charge=by("charge"), perte=by("perte"), att=by("att");
+  D.a40=charge.length?{st:"charge",r:charge}:perte.length&&!mine.gage?{st:"perte",r:perte}:perte.length?{st:"gagee",r:perte}:att.length?{st:"att",r:att}:{st:mine.gage?"inutile":"ok",r:[]};
+  const N=nearby(); D.near=N; D.own=N.filter(n=>n.a.g===ME); D.same=N.filter(n=>n.same);
+  D.fiche=fiche();
+  const sim=simulate(), me=mineAsAmd(), pos=sim.flat.findIndex(a=>a.id==="mine")+1;
+  D.appel={pos,total:sim.flat.length,killers:sim.flat.slice(0,pos-1).filter(a=>hits(a,me)),grp:sim.groups.find(g=>g.items.some(a=>a.id==="mine"))};
+  return D;
+}
+const orList=a=>a.map(x=>lab(x.id)).join(", ").replace(/, ([^,]*)$/," ou $1");
+const andList=a=>a.join(", ").replace(/, ([^,]*)$/," et $1");
+const nth=p=>`${p}${p===1?"ᵉʳ":"ᵉ"}`;
+
+const $$=s=>[...document.querySelectorAll(s)];
+const RM=matchMedia("(prefers-reduced-motion:reduce)");
+let view="ecrire", sheet=null, pending=null, expoOpen=false, resOpen=true, undo=[];
+const X=`<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4l8 8M12 4l-8 8"/></svg>`;
+const CHEV=`<svg class="chev" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3l5 5-5 5"/></svg>`;
+
+/* ---------- Sortie animée puis retrait ---------- */
+function leave(el,done){ if(!el) return done&&done(); if(RM.matches){el.remove();done&&done();return} el.classList.add("out"); setTimeout(()=>{el.remove();done&&done()},180); }
+
+/* ---------- Toasts empilés (3 au plus), avec action ---------- */
+function toast(text,{cls="",act,fn,ms=5000}={}){
+  const box=$("#toasts"); while(box.children.length>=3) box.firstElementChild.remove();
+  const t=document.createElement("div"); t.className="tst"; t.setAttribute("role",cls==="err"?"alert":"status");
+  t.innerHTML=`${cls?`<i class="dot ${cls}"></i>`:""}<span>${text}</span>${act?`<button class="btn">${act}</button>`:""}<button class="ico" aria-label="Fermer">${X}</button>`;
+  let tm=setTimeout(()=>leave(t),ms);
+  t.onmouseenter=()=>clearTimeout(tm); t.onmouseleave=()=>{tm=setTimeout(()=>leave(t),2500)};
+  t.onclick=e=>{const b=e.target.closest("button"); if(!b)return; if(b.classList.contains("btn")&&fn) fn(); leave(t)};
+  box.append(t);
+}
+
+/* ---------- Historique pour « Annuler » ---------- */
+const snap=()=>JSON.stringify({mods:mine.mods,gage:mine.gage});
+function commit(change,label){
+  const before=snap(), a40=diagnose().a40?.st; change(); const after=diagnose();
+  undo.push(before); render();
+  toast(label,{act:"Annuler",fn:()=>{const s=JSON.parse(before);mine.mods=s.mods;mine.gage=s.gage;render();toast("Annulé.")}});
+  const st=after.a40?.st;
+  if(st&&st!==a40){
+    if(st==="charge") toast("Article 40 : la modification crée une charge publique.",{cls:"err",act:"Détails",fn:()=>openDrawer("a40"),ms:8000});
+    else if(st==="perte") toast("Article 40 : un gage est nécessaire.",{cls:"warn",act:"Ajouter le gage",fn:()=>commit(()=>{mine.gage=true},"Gage ajouté."),ms:8000});
+  }
+}
+
+/* ---------- Contrôles : pastilles (5 au plus) et détail en tiroir ---------- */
+function controls(){
+  const D=diagnose(), C=[];
+  const dl=D.deadline;
+  C.push({k:"delai",cls:dl.hours<24?"warn":"ok",chip:`Dépôt : ${dl.days>=1?`${dl.days} j`:`${dl.hours} h`}`,t:`Dépôt avant ${fmtDay(dl.date)}, 17 h`,d:`<p>Discussion en séance le ${fmtDay(SEANCE)}. Le délai court jusqu'à 17 h le troisième jour ouvrable qui précède (article 99 du Règlement).</p>`});
+  if(!D.has) return {D,C};
+  const where=r=>r.map(x=>`<p>À ${x.where} : ${x.why}.</p>`).join(""), note=`<p>Indication seulement : la décision appartient au président de la commission des finances.</p>`;
+  const a=D.a40;
+  if(a.st==="charge") C.push({k:"a40",cls:"err",chip:"Article 40 : irrecevable",t:"Article 40 : charge publique",d:where(a.r)+`<p>Une charge nouvelle ou aggravée ne se compense pas : réduisez la portée de la modification.</p>`+note});
+  else if(a.st==="perte") C.push({k:"a40",cls:"warn",chip:"Article 40 : gage requis",t:"Article 40 : perte de recettes",d:where(a.r)+note,act:`<button class="btn pri" data-gage>Ajouter le gage</button>`});
+  else if(a.st==="gagee") C.push({k:"a40",cls:"ok",chip:"Article 40 : gagé",t:"Article 40 : perte de recettes gagée",d:where(a.r)+`<p>Gage sur l'accise sur les tabacs.</p>`+note});
+  else if(a.st==="att") C.push({k:"a40",cls:"warn",chip:"Article 40 : à vérifier",t:"Article 40 : effet financier possible",d:where(a.r)+note});
+  else C.push({k:"a40",cls:"ok",chip:"Article 40",t:"Article 40",d:`<p>${a.st==="inutile"?"Aucune perte de recettes : le gage est inutile.":"Aucune incidence financière détectée."}</p>`+note,act:a.st==="inutile"?`<button class="btn" data-ungage>Retirer le gage</button>`:""});
+  if(D.near.length){
+    const own=D.own.length, same=D.same.length;
+    C.push({k:"near",cls:own||same?"warn":"ok",chip:`${D.near.length} proche${D.near.length>1?"s":""}`,t:own?`Votre groupe a déposé le n° ${D.own.map(n=>n.a.id).join(", ")} sur ce passage`:same?`Identique au n° ${D.same[0].a.id}`:"Amendements sur le même passage",
+      d:D.near.map(n=>`<p>${gp(n.a.g)}<b>n° ${n.a.id}</b> · ${esc(describe(n.a))}${n.same?" · <b>identique</b>":""}</p>`).join("")+(own?`<p>Deux rédactions du même groupe se partagent les voix : cosigner l'une et retirer l'autre est l'usage.</p>`:"")});
+  }
+  if(D.fiche) C.push({k:"fiche",cls:"warn",chip:"Fiche identique",t:"Même rédaction qu'une fiche reçue",d:`<p>${D.fiche.org}, fiche du ${D.fiche.date}. ${D.fiche.hatvp?"Inscrit au répertoire des représentants d'intérêts.":"Absent du répertoire des représentants d'intérêts."}</p><p>La reprise est libre ; la mention dans l'empreinte normative est l'usage.</p>`});
+  const ap=D.appel;
+  C.push({k:"appel",cls:"",chip:`Appel : ${nth(ap.pos)}/${ap.total}`,t:`Appelé en ${nth(ap.pos)} position sur ${ap.total}`,d:`<p>${ap.killers.length?`Tombe si ${orList(ap.killers)} est adopté avant lui.`:"Aucun amendement appelé avant lui ne peut le faire tomber."}</p>`,act:`<button class="btn" data-go="seance">Simuler la séance</button>`});
+  return {D,C};
+}
+let drawerEl=null, lastFocus=null;
+function openDrawer(k){
+  closeSheet(); lastFocus=document.activeElement;
+  if(drawerEl) closeDrawer(true);
+  const {C}=controls();
+  const scrim=document.createElement("div"); scrim.className="scrim";
+  const d=document.createElement("aside"); d.className="drawer"; d.setAttribute("role","dialog"); d.setAttribute("aria-modal","true"); d.setAttribute("aria-label","Contrôles");
+  d.innerHTML=`<div class="drawer-h"><b>Contrôles</b><button class="ico" data-close aria-label="Fermer (Échap)">${X}</button></div><div class="drawer-b">${C.map(c=>`<section class="ck" id="ck-${c.k}"><i class="dot ${c.cls}"></i><h3>${c.t}</h3><div class="bd">${c.d}</div>${c.act?`<div class="acts">${c.act}</div>`:""}</section>`).join("")}</div>`;
+  document.body.append(scrim,d); drawerEl={scrim,d};
+  scrim.onclick=()=>closeDrawer();
+  d.onclick=e=>{const t=e.target;
+    if(t.closest("[data-close]")) closeDrawer();
+    else if(t.closest("[data-gage]")){closeDrawer();commit(()=>{mine.gage=true},"Gage ajouté au dispositif.");}
+    else if(t.closest("[data-ungage]")){closeDrawer();commit(()=>{mine.gage=false},"Gage retiré.");}
+    else if(t.closest("[data-go]")){closeDrawer();go(t.closest("[data-go]").dataset.go);}
+  };
+  d.onkeydown=e=>{ if(e.key!=="Tab")return; const f=[...d.querySelectorAll("button")]; if(!f.length)return; const i=f.indexOf(document.activeElement);
+    if(e.shiftKey&&i<=0){e.preventDefault();f.at(-1).focus()} else if(!e.shiftKey&&i===f.length-1){e.preventDefault();f[0].focus()} };
+  const target=k&&d.querySelector("#ck-"+k);
+  if(target){target.scrollIntoView({block:"start"});target.classList.add("flash")}
+  d.querySelector("[data-close]").focus({preventScroll:true});
+}
+function closeDrawer(now){ if(!drawerEl)return; const {scrim,d}=drawerEl; drawerEl=null; if(now){scrim.remove();d.remove()}else{leave(scrim);leave(d)} lastFocus?.focus?.({preventScroll:true}); }
+
+/* ---------- Feuille d'action (sélection, alinéa) ---------- */
+function openSheet(cfg){
+  // cfg : {title, actions:[{a,label,dis}], onAct(a)} ou {title,input:{label,val,ok}}
+  const old=$(".sheet"); if(old) old.remove();
+  sheet=cfg; const s=document.createElement("div"); s.className="sheet"; s.setAttribute("role","dialog"); s.setAttribute("aria-label",cfg.aria||"Modifier le passage");
+  s.innerHTML=`<div class="sheet-h"><p>${cfg.title}</p><button class="ico" data-close aria-label="Fermer (Échap)">${X}</button></div>`+
+   (cfg.input?`<label for="sh-in">${esc(cfg.input.label)}</label><input type="text" id="sh-in" autocomplete="off" value="${esc(cfg.input.val||"").replace(/"/g,"&quot;")}"><p class="err" id="sh-err" aria-live="assertive"></p><div class="acts"><button class="btn" data-close>Annuler</button><button class="btn pri" data-ok>Valider</button></div>`
+     :`<div class="row3">${cfg.actions.map(x=>`<button class="btn" data-a="${x.a}" ${x.dis?"disabled":""}>${x.label}</button>`).join("")}</div>${cfg.note?`<p class="note">${cfg.note}</p>`:""}`);
+  s.onmousedown=e=>{if(!e.target.closest("input"))e.preventDefault()};
+  s.onclick=e=>{const t=e.target;
+    if(t.closest("[data-close]")){closeSheet();return}
+    if(t.closest("[data-ok]")){submitSheet();return}
+    const b=t.closest("[data-a]"); if(b&&!b.disabled) cfg.onAct(b.dataset.a);
+  };
+  document.body.append(s);
+  document.documentElement.style.setProperty("--sheet",s.offsetHeight+"px"); $("#toasts").classList.add("up");
+  if(cfg.input){const i=s.querySelector("input"); i.focus(); i.select(); i.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();submitSheet()}}}
+  else s.querySelector("[data-a]:not(:disabled)")?.focus({preventScroll:true});
+}
+function submitSheet(){
+  const i=$("#sh-in"), v=i.value.trim(), err=$("#sh-err");
+  if(!v){err.textContent="Saisissez quelques mots, ou Annuler.";i.focus();return}
+  const r=sheet.input.ok(v); if(typeof r==="string"){err.textContent=r;i.focus();return}
+}
+function closeSheet(keep){
+  const s=$(".sheet"); sheet=null; $("#toasts").classList.remove("up");
+  if(s) leave(s);
+  $$(".al .n.on").forEach(n=>n.classList.remove("on"));
+  if(pending&&!keep){pending=null;render()}
+}
+function selectionSheet(R){
+  openSheet({title:`<b>« ${esc(R.w)} »</b> · alinéa ${R.al}`,actions:[{a:"del",label:"Supprimer"},{a:"rep",label:"Remplacer…"},{a:"ins",label:"Ajouter après…"}],
+    onAct:a=>{
+      if(a==="del"){closeSheet(true);commit(()=>addMod({al:R.al,kind:"del",start:R.s,end:R.e}),`« ${esc(R.w)} » supprimé.`);return}
+      pending={al:R.al,start:R.s,end:R.e}; getSelection().removeAllRanges(); render();
+      openSheet({title:`<b>« ${esc(R.w)} »</b> · alinéa ${R.al}`,input:{label:a==="rep"?"Nouvelle rédaction":"Mots ajoutés après le passage",val:a==="rep"?R.w:"",
+        ok:v=>{ if(a==="rep"&&v===R.w) return "C'est le texte actuel : saisissez la nouvelle rédaction.";
+          pending=null; closeSheet(true); commit(()=>addMod({al:R.al,kind:a,start:R.s,end:R.e,text:v}),a==="rep"?"Remplacement ajouté.":"Ajout enregistré."); }}});
+    }});
+}
+function alSheet(btn){
+  const al=+btn.dataset.al; $$(".al .n.on").forEach(n=>n.classList.remove("on")); btn.classList.add("on");
+  const busy=mine.mods.some(m=>m.kind==="delArt"||(m.al===al&&m.kind==="delAl"));
+  const inside=mine.mods.filter(m=>m.al===al&&m.kind!=="insAl"&&m.kind!=="delAl").length;
+  openSheet({title:`<b>Alinéa ${al}</b> entier`,aria:`Alinéa ${al}`,actions:[{a:"delAl",label:"Supprimer l'alinéa",dis:busy},{a:"compAl",label:"Compléter…",dis:busy},{a:"insAl",label:"Insérer après…"}],
+    note:inside&&!busy?`Supprimer l'alinéa remplace ${inside>1?`vos ${inside} modifications`:"votre modification"} de cet alinéa (annulable).`:busy?"Votre amendement supprime déjà cet alinéa.":"",
+    onAct:a=>{
+      if(a==="delAl"){closeSheet(true);commit(()=>{mine.mods=mine.mods.filter(m=>m.al!==al||m.kind==="insAl");addMod({al,kind:"delAl"})},`Alinéa ${al} supprimé.`);return}
+      openSheet({title:`<b>Alinéa ${al}</b>`,input:{label:a==="compAl"?"Phrase ajoutée à la fin de l'alinéa":"Texte du nouvel alinéa",val:"",ok:v=>{closeSheet(true);commit(()=>addMod({al,kind:a,text:v}),a==="compAl"?"Phrase ajoutée.":"Alinéa inséré.")}}});
+    }});
+}
+function addMod(m){ if(m.kind==="delArt") mine.mods=[]; m.id=uid++; mine.mods.push(m); getSelection().removeAllRanges(); }
+
+/* ---------- Vue Rédiger ---------- */
+function vEcrire(){
+  const delArt=mine.mods.some(m=>m.kind==="delArt");
+  let rows="";
+  for(let al=1;al<=NAL;al++){
+    rows+=`<div class="al"><button class="n" data-al="${al}" aria-label="Alinéa ${al} : actions sur l'alinéa entier">${al}</button><p class="t" data-al="${al}">${renderAl(al,myOps(al),{pend:pending})}</p></div>`;
+    for(const m of mine.mods.filter(m=>m.kind==="insAl"&&m.al===al)) rows+=`<div class="al"><span class="n new" aria-hidden="true">+</span><p class="t"><ins data-mid="${m.id}">${esc(m.text.replace(/\.?$/,"."))}</ins></p></div>`;
+  }
+  const ps=paragraphs(), {C}=controls(), blocking=C.some(c=>c.cls==="err");
+  const disp=ps.length?`<ol class="disp">${ps.map(p=>`<li ${p.m?`data-mid="${p.m.id}"`:""}><span>${esc(p.t)}</span><button class="ico" data-rm="${p.gage?"gage":p.m.id}" aria-label="Retirer" title="Retirer">${X}</button></li>`).join("")}</ol>`
+    :`<div class="empty">Sélectionnez des mots dans le texte : les actions s'ouvrent en bas de l'écran. Le dispositif s'écrit ici.</div>`;
+  const first=(mine.expo.split(/(?<=[.:;])\s/)[0]||"").slice(0,90);
+  return `<div class="desk view">
+   <section class="panel art${delArt?" gone":""}" aria-label="Texte de la commission">
+     <div class="hd"><b>Article 4</b><span>texte de la commission</span><span class="sp"></span><button class="ghost" id="delArt">${delArt?"Rétablir l'article":"Supprimer l'article"}</button></div>
+     ${rows}
+   </section>
+   <aside class="side">
+     <div class="chips" aria-label="Contrôles">${C.map(c=>`<button class="chip" data-ck="${c.k}"><i class="dot ${c.cls}"></i>${c.chip}</button>`).join("")}</div>
+     <section class="panel amd" aria-label="Mon amendement">
+       <div class="hd" style="margin:0"><b>Mon amendement</b><span>${GROUPS[ME].name}</span></div>
+       ${disp}
+       <div class="disc${expoOpen?" open":""}" id="expoD"><button aria-expanded="${expoOpen}" aria-controls="expoB"><span>Exposé sommaire<small>${esc(first)}${mine.expo.length>first.length?"…":""}</small></span>${CHEV}</button>
+         <div class="slide" id="expoB"><div><textarea id="expo" aria-label="Exposé sommaire">${esc(mine.expo)}</textarea></div></div></div>
+       <div class="acts"><button class="btn pri" id="copy" ${!ps.length||blocking?"disabled":""}>Copier pour le dépôt</button>${blocking?`<button class="ghost" data-ck="a40">Pourquoi ?</button>`:""}</div>
+     </section>
+   </aside></div>`;
+}
+
+/* ---------- Vue Séance : tableau à glisser-déposer ---------- */
+function vSeance(){
+  const sim=simulate(), me=sim.flat.find(a=>a.id==="mine");
+  let lead="",sub="";
+  if(!me) lead=`Vous n'avez pas d'amendement sur cet article : ${sim.flat.length} amendements sont déposés.`;
+  else{const pos=sim.flat.indexOf(me)+1, killers=sim.flat.slice(0,pos-1).filter(a=>hits(a,me)), s=sim.st.get("mine");
+    lead=s.s==="fell"?`Avec ces hypothèses, votre amendement tombe : ${lab(s.by)} est adopté avant lui.`:`Votre amendement est appelé en ${nth(pos)} position sur ${sim.flat.length}.`;
+    sub=killers.length?`Il tombe si ${orList(killers)} est adopté avant lui.`:"Aucun amendement appelé avant lui ne peut le faire tomber.";}
+  const idx=new Map(sim.flat.map((a,i)=>[a.id,i+1]));
+  const card=a=>{const s=sim.st.get(a.id), id=a.id;
+    const btn=s.s==="fell"?"":`<button class="ico mv" data-mv="${id}" aria-label="${s.s==="adopt"?"Remettre en discussion":"Supposer adopté"} ${a.mine?"votre amendement":"le n° "+id}" title="${s.s==="adopt"?"Remettre en discussion":"Supposer adopté"}">${s.s==="adopt"?"←":"→"}</button>`;
+    return `<div class="card ${s.s}${a.mine?" mine":""}" data-id="${id}" ${s.s!=="fell"?'draggable="true"':""}><span class="pos">${idx.get(id)}</span><span><span class="num">${a.mine?"Le vôtre":"n° "+id}</span> ${gp(a.g)}</span>${btn}<span class="what">${esc(describe(a))}</span>${s.s==="fell"?`<span class="why">Tombe : ${lab(s.by)} adopté</span>`:""}</div>`};
+  const open=sim.flat.filter(a=>sim.st.get(a.id).s==="open"), ad=sim.flat.filter(a=>sim.st.get(a.id).s==="adopt"), fell=sim.flat.filter(a=>sim.st.get(a.id).s==="fell");
+  return `<div class="view">
+   <section class="panel answer"><p>${lead}</p>${sub?`<p class="sub">${sub}</p>`:""}</section>
+   <div class="board">
+     <section class="colm" data-drop="open" aria-label="En discussion"><div class="colm-h"><span>En discussion · ${open.length}</span></div><div class="zone">${open.map(card).join("")||`<div class="hint">Tout est tranché.</div>`}</div></section>
+     <section class="colm" data-drop="adopt" aria-label="Supposés adoptés"><div class="colm-h"><span>Supposés adoptés · ${ad.length}</span>${ad.length?`<button class="ghost" id="clearHyp">Tout retirer</button>`:""}</div><div class="zone">${ad.map(card).join("")||`<div class="hint">Glissez un amendement ici, ou touchez sa flèche.</div>`}</div></section>
+     <section class="colm nodrop" aria-label="Tombés"><div class="colm-h"><span>Tombés · ${fell.length}</span></div><div class="zone">${fell.map(card).join("")||`<div class="hint">Calculé : ce qui tombe du fait des adoptions.</div>`}</div></section>
+   </div>
+   <section class="panel res"><div class="disc${resOpen?" open":""}" id="resD"><button aria-expanded="${resOpen}" aria-controls="resB"><span>Texte qui en résulte<small>${sim.adopted.length?`${sim.adopted.length} adopté${sim.adopted.length>1?"s":""}, ${fell.length} tombé${fell.length>1?"s":""}`:"Texte de la commission, sans hypothèse"}</small></span>${CHEV}</button>
+     <div class="slide" id="resB"><div><div class="body">${resultText(sim)}</div></div></div></div></section>
+  </div>`;
+}
+function resultText(sim){
+  const A=sim.adopted;
+  const opsFor=al=>{const ops=[];
+    for(const a of A){ if(a.mine){for(const o of myOps(al)) ops.push({...o,by:"mine"}); continue;}
+      if(a.op==="delArt"||(a.op==="delAl"&&a.al===al)) ops.push({s:0,e:ART[al].length,by:a.id});
+      else if(a.al===al){const s=findSpan(al,a.w,a.occ); ops.push({s:s[0],e:s[1],ins:a.x,by:a.id});}}
+    const whole=ops.find(o=>o.s===0&&o.e===ART[al].length&&!o.ins); return whole?[whole]:ops;};
+  let rows="",k=0,moved=0;
+  for(let al=1;al<=NAL;al++){
+    const ops=opsFor(al), gone=ops.some(o=>o.s===0&&o.e===ART[al].length&&!o.ins); if(!gone)k++;
+    const ex=!gone&&k!==al?`<span class="ex">ex-${al}</span>`:""; if(ex)moved++;
+    rows+=`<div class="al"><span class="n">${gone?"":k}${ex}</span><p class="t">${renderAl(al,ops)}</p></div>`;
+    if(A.some(a=>a.mine)) for(const m of mine.mods.filter(m=>m.kind==="insAl"&&m.al===al)){k++;rows+=`<div class="al"><span class="n">${k}</span><p class="t"><ins>${esc(m.text.replace(/\.?$/,"."))}</ins><sup class="by">vous</sup></p></div>`;}
+  }
+  return rows+(A.length?`<p class="note">Les marques renvoient à l'amendement qui a produit le changement.${moved?" « ex- » : ancien numéro, décalé par une suppression.":""}</p>`:"");
+}
+function toggleHyp(id,announce){
+  const was=hyp.has(id); was?hyp.delete(id):hyp.add(id); render();
+  const sim=simulate(), fell=[...sim.st].filter(([,s])=>s.by===id).map(([k])=>lab(k));
+  if(announce) toast(was?`${lab(id)==="le vôtre"?"Le vôtre":lab(id)} remis en discussion.`:`${lab(id)==="le vôtre"?"Le vôtre":lab(id)} supposé adopté${fell.length?` : ${andList(fell)} ${fell.length>1?"tombent":"tombe"}`:""}.`,{ms:3500});
+  requestAnimationFrame(()=>document.querySelector(`[data-mv="${id}"]`)?.focus({preventScroll:true}));
+}
+
+/* ---------- Rendu ---------- */
+function render(){
+  const y=scrollY;
+  $$(".tab").forEach(t=>{t.setAttribute("aria-selected",t.dataset.v===view);t.tabIndex=t.dataset.v===view?0:-1});
+  $("#cnt").textContent=hyp.size?`· ${hyp.size} hyp.`:"";
+  $("#main").innerHTML=view==="ecrire"?vEcrire():vSeance();
+  scrollTo(0,y);
+}
+function go(v){if(v===view)return;view=v;closeSheet();render();scrollTo(0,0)}
+$$(".tab").forEach(t=>t.onclick=()=>go(t.dataset.v));
+$(".tabs").addEventListener("keydown",e=>{if(e.key!=="ArrowRight"&&e.key!=="ArrowLeft")return;go(view==="ecrire"?"seance":"ecrire");$("#tab-"+view).focus()});
+
+/* ---------- Sélection → feuille d'action ---------- */
+function onSelect(){
+  if(view!=="ecrire"||$("#sh-in")||drawerEl) return;
+  const R=readSelection();
+  if(!R) return;
+  if(R.err==="multi"){toast("Une modification porte sur un seul alinéa : resserrez la sélection.",{cls:"warn"});return}
+  if(R.err==="ins"){toast("Ce passage est un ajout de votre amendement : retirez-le pour le réécrire.",{cls:"warn"});return}
+  if(R.err==="busy"){const m=R.mod;getSelection().removeAllRanges();toast(m.kind==="delArt"?"L'article entier est supprimé par votre amendement.":"Ce passage est déjà modifié.",{cls:"warn",act:"Retirer la modification",fn:()=>commit(()=>{mine.mods=mine.mods.filter(x=>x.id!==m.id)},"Modification retirée.")});return}
+  selectionSheet(R);
+}
+document.addEventListener("mouseup",e=>{if(!e.target.closest?.(".sheet,.drawer,.tst"))setTimeout(onSelect,10)});
+document.addEventListener("keyup",e=>{if(e.shiftKey)onSelect()});
+let selT; document.addEventListener("selectionchange",()=>{if(!matchMedia("(pointer:coarse)").matches)return;clearTimeout(selT);selT=setTimeout(onSelect,400)});
+document.addEventListener("keydown",e=>{
+  if(e.key!=="Escape") return;
+  if(drawerEl) closeDrawer(); else if($(".sheet")) closeSheet(); else if(view!=="ecrire") go("ecrire");
+});
+document.addEventListener("input",e=>{if(e.target.id==="expo")mine.expo=e.target.value});
+
+$("#main").addEventListener("click",e=>{
+  const t=e.target;
+  const n=t.closest(".al .n[data-al]"); if(n){alSheet(n);return}
+  const ck=t.closest("[data-ck]"); if(ck){openDrawer(ck.dataset.ck);return}
+  const rm=t.closest("[data-rm]"); if(rm){const v=rm.dataset.rm; commit(()=>{ if(v==="gage") mine.gage=false; else mine.mods=mine.mods.filter(m=>m.id!==+v); if(!mine.mods.length) mine.gage=false;}, v==="gage"?"Gage retiré.":"Modification retirée."); return;}
+  if(t.closest("#delArt")){const on=mine.mods.some(m=>m.kind==="delArt"); commit(()=>{ if(on) mine.mods=[]; else addMod({kind:"delArt"}); },on?"Article rétabli.":"Suppression de l'article ajoutée."); return;}
+  const d=t.closest(".disc>button"); if(d){const w=d.parentElement; w.classList.toggle("open"); const o=w.classList.contains("open"); d.setAttribute("aria-expanded",o); if(w.id==="expoD"){expoOpen=o; if(o) setTimeout(()=>$("#expo")?.focus({preventScroll:true}),200)} else resOpen=o; return;}
+  const g=t.closest("[data-go]"); if(g){go(g.dataset.go);return}
+  if(t.closest("#copy")){
+    const txt=paragraphs().map(p=>p.t).join("\n")+"\n\nEXPOSÉ SOMMAIRE\n"+mine.expo;
+    navigator.clipboard?navigator.clipboard.writeText(txt).then(()=>toast("Dispositif et exposé copiés. Le dépôt se fait dans Eloi.",{cls:"ok"}),()=>toast("Copie refusée par le navigateur.",{cls:"err"})):toast("Copie indisponible ici.",{cls:"err"});
+    return;}
+  if(t.closest("#clearHyp")){const before=[...hyp]; hyp.clear(); render(); toast("Hypothèses retirées.",{act:"Annuler",fn:()=>{before.forEach(h=>hyp.add(h));render()}}); return}
+  const mv=t.closest("[data-mv]"); if(mv){toggleHyp(mv.dataset.mv==="mine"?"mine":+mv.dataset.mv,true);return}
+});
+// survol : passage et ligne du dispositif s'allument ensemble
+document.addEventListener("mouseover",e=>{const el=e.target.closest?.("[data-mid]");$$(".lit").forEach(x=>x.classList.remove("lit"));$$(".disp li.hl").forEach(x=>x.classList.remove("hl"));if(el)$$(`[data-mid="${el.dataset.mid}"]`).forEach(x=>x.classList.add(x.tagName==="LI"?"hl":"lit"))});
+
+/* ---------- Glisser-déposer (souris) ; la flèche de chaque carte en est l'équivalent clavier et tactile ---------- */
+let dragId=null;
+document.addEventListener("dragstart",e=>{const c=e.target.closest?.(".card[draggable]"); if(!c)return; dragId=c.dataset.id==="mine"?"mine":+c.dataset.id; c.classList.add("dragged"); e.dataTransfer.effectAllowed="move"; e.dataTransfer.setData("text/plain",String(dragId)); $$(".colm.nodrop").forEach(x=>x.classList.add("dragging"))});
+document.addEventListener("dragend",()=>{dragId=null;$$(".dragged").forEach(x=>x.classList.remove("dragged"));$$(".colm").forEach(x=>x.classList.remove("over","dragging"))});
+document.addEventListener("dragover",e=>{const z=e.target.closest?.(".colm[data-drop]"); if(!z||dragId==null)return; e.preventDefault(); $$(".colm.over").forEach(x=>x!==z&&x.classList.remove("over")); z.classList.add("over")});
+document.addEventListener("dragleave",e=>{const z=e.target.closest?.(".colm[data-drop]"); if(z&&!z.contains(e.relatedTarget)) z.classList.remove("over")});
+document.addEventListener("drop",e=>{const z=e.target.closest?.(".colm[data-drop]"); if(!z||dragId==null)return; e.preventDefault(); const want=z.dataset.drop==="adopt"; if(want!==hyp.has(dragId)) toggleHyp(dragId,true); dragId=null});
+
+render();
+</script>
