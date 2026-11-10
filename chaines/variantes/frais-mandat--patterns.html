@@ -164,7 +164,8 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 .stat{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--fg)}
 .opt{display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:8px 12px;min-height:44px;font-size:13px;cursor:pointer;margin-bottom:6px;transition:border-color .2s,background .2s}
 .opt:has(input:checked){border-color:var(--accent);background:var(--lit)}
-.fld label.opt{display:grid;margin:0 0 6px;color:var(--text)}
+.fld label.opt{display:grid;margin:0 0 6px;padding:8px 12px;color:var(--fg)}
+.fld label.opt>span:not(.m){color:inherit}
 .opt input{accent-color:var(--accent);width:16px;height:16px;margin:0}
 .opt small{color:var(--dim)}
 .opt .m{color:#7fd3a8;font-size:12px;white-space:nowrap}
