@@ -109,6 +109,10 @@ function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createEle
 .bars .q i{background:var(--accent)}
 .bars em{font-style:normal;font-size:11px;color:var(--muted);text-align:center}
 .bars span{font-size:10px;color:var(--dim);text-align:center;overflow:hidden}
+.bars .q.part i{background:repeating-linear-gradient(135deg,var(--accent) 0 3px,rgba(110,123,242,.35) 3px 6px)}
+.ws{container-type:inline-size}
+@container (max-width:420px){.steps li+li::before{display:none}.steps{gap:2px 10px}}
+.fresh .msg>span{flex:1;min-width:0}
 .small{margin:6px 0 0;font-size:12px;color:var(--dim)}
 .cm{display:grid;gap:6px}
 .cr{display:grid;grid-template-columns:minmax(80px,118px) minmax(0,1fr) 28px;gap:8px;align-items:center;font-size:12.5px}
@@ -206,7 +210,7 @@ let S={sel:null,step:"constat",drafts:{},sent:[]};      // drafts[k]={txt,saved,
 let sync={state:"stale",when:"1er novembre",tries:0,changed:null}; // stale | busy | error | fresh
 let ui={confirm:null,sending:false,copied:null,sendErr:null};
 let storageOK=true;
-function load(){try{const r=localStorage.getItem(KEY);if(r){const o=JSON.parse(r);S.drafts=o.drafts||{};S.sent=o.sent||[];return true}}catch(e){storageOK=false}return false}
+function load(){try{const r=localStorage.getItem(KEY);if(r){const o=JSON.parse(r);S.drafts=o.drafts||{};for(const k in S.drafts)if(S.drafts[k].sentAt)delete S.drafts[k];S.sent=o.sent||[];return true}}catch(e){storageOK=false}return false}
 function save(){try{localStorage.setItem(KEY,JSON.stringify({drafts:S.drafts,sent:S.sent}));storageOK=true}catch(e){storageOK=false}}
 const parisSig=m=>m.paris.map(p=>p.n+p.st).join("|");
 const relanceOf=m=>{const q=m.paris.find(p=>p.who==="votre bureau");return q&&/^Sans réponse/.test(q.st)?q:null};
@@ -230,18 +234,18 @@ function renderFresh(){
   if(sync.state==="busy") b=`<span><span class="spin" aria-hidden="true"></span>Actualisation des questions écrites…</span>`;
   else if(sync.state==="fresh") b=`<span><i class="dot ok"></i>Questions écrites à jour (${sync.when})</span>`;
   else b=`<span><i class="dot warn"></i>Questions écrites : relevé du ${sync.when}, il y a 9 jours <button class="ghost" id="sync">Actualiser</button></span>`;
-  if(sync.state==="error") msg=`<div class="msg err" role="alert"><i class="dot err"></i>La base des questions de l'Assemblée n'a pas répondu. Les statuts du 1er novembre restent affichés. <button class="ghost" id="sync2">Réessayer</button></div>`;
-  if(sync.state==="fresh"&&sync.changed) msg=`<div class="msg ok"><i class="dot ok"></i>${sync.changed}</div>`;
+  if(sync.state==="error") msg=`<div class="msg err" role="alert"><i class="dot err"></i><span>La base des questions de l'Assemblée n'a pas répondu. Les statuts du 1er novembre restent affichés.</span> <button class="ghost" id="sync2">Réessayer</button></div>`;
+  if(sync.state==="fresh"&&sync.changed) msg=`<div class="msg ok"><i class="dot ok"></i><span>${sync.changed}</span></div>`;
   $("#fresh").innerHTML=a+b+msg}
 function renderList(){const T=M.map(m=>({m,...trend(m)})).sort((a,b)=>(b.q-b.p)-(a.q-a.p));
-  $("#list").innerHTML=T.map(({m,q,...t})=>{const mx=Math.max(...m.h),sent=S.sent.find(x=>x.k===m.k),dr=S.drafts[m.k];
+  $("#list").innerHTML=T.map(({m,q,...t})=>{const mx=Math.max(...m.h),sent=S.sent.find(x=>x.k===m.k),dr=S.drafts[m.k]&&!S.drafts[m.k].sentAt;
     return `<button class="row" data-k="${m.k}" aria-current="${S.sel===m.k}"><span><b>${esc(m.t)}</b><small>${m.paris.length?m.paris.map(p=>p.n).join(", ")+" · ":"Personne ne le porte à Paris · "}${sum(m.h)} sur 12 mois${sent?`<span class="tag ok">transmis</span>`:dr?`<span class="tag dr">brouillon</span>`:""}</small></span>
      <span class="spark" aria-hidden="true">${m.h.map((v,i)=>`<i class="${i===11?"q part":i>=9?"q":""}" style="height:${Math.round(2+26*v/mx)}px"></i>`).join("")}</span>
      <span class="tr ${t.cls}"><b>${q}</b> ce trimestre<br><span class="v">${trendWord(t)}</span></span></button>`}).join("")}
 function stepper(){const order=["constat","redaction","transmission"],lab={constat:"Constat",redaction:"Rédaction",transmission:"Transmission"},cur=order.indexOf(S.step);
   return `<ol class="steps" aria-label="Étapes">${order.map((s,i)=>`<li>${i<cur&&!ui.sending?`<button class="done" data-step="${s}">${lab[s]}</button>`:`<span ${i===cur?'aria-current="step"':""}>${lab[s]}</span>`}</li>`).join("")}</ol>`}
 function renderWS(){const ws=$("#ws");
-  if(!S.sel){const ks=Object.keys(S.drafts);
+  if(!S.sel){const ks=Object.keys(S.drafts).filter(k=>!S.drafts[k].sentAt);
     ws.innerHTML=ks.length?`<div class="empty"><div><p>Vous avez ${ks.length>1?"des brouillons en cours":"un brouillon en cours"}.</p>${ks.map(k=>{const d=S.drafts[k];return `<div class="box" style="text-align:left"><p><b style="font-weight:500">${esc(byK(k).t)}</b><br><span style="color:var(--muted)">Enregistré ${d.saved}</span></p><div class="acts" style="margin-top:6px"><button class="btn pri" data-resume="${k}">Reprendre</button><button class="lnk dng" data-drop="${k}">Abandonner</button></div></div>`}).join("")}<p style="margin-top:14px;color:var(--dim)">Ou choisissez un autre sujet dans la liste.</p></div></div>`
     :`<div class="empty"><p>Choisissez un sujet dans la liste : ses chiffres s'affichent ici, puis vous pourrez préparer une question écrite ou le signaler à l'équipe de Paris.</p></div>`;return}
   const m=byK(S.sel),t=trend(m);
@@ -272,7 +276,7 @@ function renderWS(){const ws=$("#ws");
   ws.innerHTML=`${stepper()}<h2>Transmettre · ${esc(m.court)}</h2>
    <div class="ch">
     ${direct?"":`<div class="opt"><span><b>Copier pour dépôt</b><small>Vous collerez la question sur l'espace de dépôt. Rien ne part d'ici.</small></span><button class="btn" id="copy">Copier</button>${ui.copied===m.k?`<span class="st ok" role="status">Copié à ${hm()}.</span>`:ui.copied==="fail"?`<span class="st" role="status" style="color:#f0a3a5">Copie bloquée par le navigateur : revenez à la rédaction et copiez le texte à la main (Ctrl+C).</span>`:""}</div>`}
-    <div class="opt"><span><b>Envoyer à l'équipe de Paris</b><small>Les trois collaborateurs législatifs reçoivent ${what}. Un envoi ne peut pas être rappelé.</small></span>${sent?"":`<button class="btn ${direct?"pri":""}" id="send" ${ui.confirm||ui.sending?"disabled":""}>Envoyer…</button>`}
+    <div class="opt"><span><b>Envoyer à l'équipe de Paris</b><small>${sent?`Reçu par les trois collaborateurs législatifs : ${sent.what}.`:`Les trois collaborateurs législatifs reçoivent ${what}. Un envoi ne peut pas être rappelé.`}</small></span>${sent?"":`<button class="btn ${direct?"pri":""}" id="send" ${ui.confirm||ui.sending?"disabled":""}>Envoyer…</button>`}
      ${sent?`<span class="st ok" role="status">Envoyé à ${sent.at}. Pour corriger, envoyez un complément depuis ce sujet.</span>`:""}</div>
    </div>
    ${ui.confirm==="send"?`<div class="box" role="alertdialog" aria-labelledby="sendq"><p id="sendq">Envoyer définitivement à l'équipe de Paris ?</p><ul><li>${t.q} dossiers ce trimestre, contre ${t.p} ; communes de trois dossiers ou plus seulement</li><li>Blocages : ${m.blk.length}</li>${direct?"":`<li>${d.relance?"La relance":"La question"} telle que rédigée (${d.txt.length} caractères)</li>`}</ul>
@@ -289,7 +293,7 @@ function doSend(){const m=byK(S.sel);ui.sending=true;ui.sendErr=null;renderWS();
   setTimeout(()=>{ui.sending=false;
     if(!navigator.onLine){ui.sendErr="Pas de connexion : rien n'a été envoyé. Le brouillon est conservé ; réessayez une fois la connexion revenue.";renderWS();return}
     const at=hm(), d=ui.direct?null:S.drafts[m.k]; S.sent.unshift({k:m.k,at,day:"Aujourd'hui",what:d?(d.relance?"relance + résumé chiffré":"question + résumé chiffré"):"résumé chiffré"});
-    ui.justSent=at; ui.confirm=null; if(d) delete S.drafts[m.k]; save(); renderWS(); renderList(); renderJournal(); $("#ws .st.ok")?.focus?.()},1100)}
+    ui.justSent=at; ui.confirm=null; if(d) d.sentAt=at; save(); renderWS(); renderList(); renderJournal(); $("#ws .st.ok")?.focus?.()},1100)}
 function doSync(){sync.state="busy";sync.tries++;renderFresh();
   setTimeout(()=>{if(sync.tries===1){sync.state="error";renderFresh();return}
     const m=byK("anef"),p=m.paris[0];p.st="Répondue le 6 novembre 2026";p.chg=true;
@@ -313,7 +317,7 @@ document.addEventListener("click",e=>{const g=x=>e.target.closest(x);
   const dp=g("[data-drop]"); if(dp){delete S.drafts[dp.dataset.drop];save();renderWS();renderList();return}
   const st=g("[data-step]"); if(st) return goStep(st.dataset.step);
   const go=g("[data-go]"); if(go){if(go.dataset.go==="transmission")ui.direct=!!go.dataset.direct;return goStep(go.dataset.go)}
-  if(g("[data-close]")){S.sel=null;ui={confirm:null,sending:false,copied:null,sendErr:null};S.step="constat";renderWS();renderList();return}
+  if(g("[data-close]")){if(S.drafts[S.sel]?.sentAt)delete S.drafts[S.sel];save();S.sel=null;ui={confirm:null,sending:false,copied:null,sendErr:null};S.step="constat";renderWS();renderList();return}
   if(g("#drop")){ui.confirm="drop";renderWS();$("#drop-no").focus();return}
   if(g("#drop-no")){ui.confirm=null;renderWS();$("#drop").focus();return}
   if(g("#drop-yes")){delete S.drafts[S.sel];save();ui.confirm=null;goStep("constat");return}
