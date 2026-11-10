@@ -53,3 +53,5 @@
 - structure : https://claude.ai/artifact/EDdCZ3UJhX6J8jYLC699sF — sujets rangés par ce qu'il reste à faire à Paris (personne ne le porte, porté par vous, par un autre groupe), fiche et étape par action, copie bloquée si l'anonymat est en défaut.
 - patterns : https://claude.ai/artifact/MURNvUZCxjDXSBDCj3BeMq — accordéon un sujet à la fois avec onglets Communes / Blocages / À Paris, squelette, rédaction en tiroir, signalement annulable.
 - parcours : https://claude.ai/artifact/EP6ZwfR7vDKVm67wdPtzxy — constat → rédaction → transmission dans un atelier à côté de la liste, relevé périmé, échec réessayable, envoi confirmé.
+
+> La colonne « patterns » a été refaite avec la skill interaction-patterns complète (`.claude/skills/interaction-patterns`), aux mêmes liens : voir PATTERNS-SKILL.md.
