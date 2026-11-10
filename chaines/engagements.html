@@ -1,0 +1,267 @@
+<title>Engagements du Gouvernement</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Balance âgée des engagements : qui doit quoi, depuis combien de temps (tableau ministères × ancienneté),
+   puis la liste filtrée et, à côté, le détail d'un engagement : d'où il vient, ce qui a été fait, quoi faire maintenant. */
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --a0:#5d636c; --a1:#e3a33f; --a2:#e8774a; --a3:#e5484d; --ok:#46b37e;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em}
+.lead{margin:14px 0 18px;max-width:760px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+
+/* balance âgée */
+.bal{overflow-x:auto;scrollbar-width:none;margin-bottom:18px}
+.bal::-webkit-scrollbar{display:none}
+table{border-collapse:separate;border-spacing:0;width:100%;min-width:720px}
+th,td{padding:0;text-align:center;font-weight:400}
+thead th{font-size:11.5px;color:var(--dim);letter-spacing:.03em;text-transform:uppercase;padding:12px 8px 8px;white-space:nowrap}
+thead th.l,tbody th{text-align:left;padding-left:16px}
+thead th button,tbody th button{border:0;background:none;color:inherit;font:inherit;letter-spacing:inherit;text-transform:inherit;cursor:pointer;padding:2px 4px;border-radius:5px}
+thead th button:hover,tbody th button:hover{color:var(--fg);background:var(--s2)}
+tbody th{font-size:13.5px;color:var(--text);white-space:nowrap;padding-right:12px}
+tbody tr+tr>*{border-top:1px solid var(--line)}
+td{padding:6px 4px}
+.cell{width:100%;min-width:64px;height:34px;border:0;border-radius:6px;background:none;cursor:pointer;font-size:14px;color:var(--fg);transition:background .2s,box-shadow .2s}
+.cell:hover{background:var(--s2)}
+.cell.z{color:var(--dim);cursor:default}
+.cell.z:hover{background:none}
+.cell.on,th button.on{box-shadow:inset 0 0 0 1px var(--accent);background:var(--lit)}
+.cell .bar{display:block;height:3px;border-radius:2px;margin:3px auto 0;background:currentColor;opacity:.9}
+.b1 .bar{color:var(--a1)} .b2 .bar{color:var(--a2)} .b3 .bar{color:var(--a3)} .b4 .bar{color:var(--ok)} .b0 .bar{color:var(--a0)}
+td.qe{font-size:13px;color:var(--muted);white-space:nowrap;padding-right:16px}
+td.qe small{color:var(--dim)}
+tfoot td{padding:8px 16px 12px;text-align:left;font-size:12px;color:var(--dim)}
+
+/* liste + détail */
+.split{display:grid;grid-template-columns:minmax(0,1fr) 470px;gap:18px;align-items:start}
+.lh{display:flex;align-items:center;gap:8px;min-height:30px;margin:0 2px 8px;font-size:12.5px;color:var(--dim)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:2px 4px 2px 10px;color:var(--text);font-size:12.5px}
+.chip button{border:0;background:none;color:var(--dim);width:20px;height:20px;border-radius:50%;cursor:pointer;display:grid;place-items:center}
+.chip button:hover{color:var(--fg);background:var(--line)}
+.list{padding:4px}
+.it{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 14px;align-items:start;width:100%;border:0;background:none;text-align:left;padding:10px 12px;border-radius:7px;cursor:pointer;transition:background .2s}
+.it:hover{background:var(--s2)}
+.it.on{background:var(--s2);box-shadow:inset 0 0 0 1px var(--line2)}
+.it .tt{color:var(--fg);font-size:13.5px;min-width:0}
+.it .mt{grid-column:1;font-size:12.5px;color:var(--muted)}
+.age{grid-row:1/3;grid-column:2;font-size:12.5px;white-space:nowrap;display:flex;align-items:center;gap:7px;color:var(--muted)}
+.age i{width:8px;height:8px;border-radius:50%;background:var(--a0)}
+.age.b1 i{background:var(--a1)} .age.b2 i{background:var(--a2)} .age.b3 i{background:var(--a3)} .age.b4 i{background:var(--ok)}
+.none{padding:18px;color:var(--dim);font-size:13px}
+
+.det{position:sticky;top:16px;padding:18px 20px 20px;animation:in .25s var(--ease)}
+@keyframes in{from{opacity:0;transform:translateY(4px)}}
+.det-h{display:flex;align-items:flex-start;gap:10px}
+.det-h .k{font-size:12px;color:var(--dim)}
+.det h2{margin:2px 0 0;font:600 16px/1.35 var(--f);color:var(--fg);text-wrap:balance}
+.det-h .sp{flex:1}
+.x{flex:none;width:28px;height:28px;border-radius:6px;border:1px solid var(--line2);background:none;color:var(--muted);cursor:pointer;display:none;place-items:center}
+.x:hover{color:var(--fg);background:var(--s2)}
+.due{margin:12px 0 0;padding:10px 12px;border-radius:8px;background:var(--s2);font-size:13px;color:var(--text);display:grid;gap:2px}
+.due b{color:var(--fg);font-weight:500}
+.due small{color:var(--dim);font-size:12px}
+.sec{margin:18px 0 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.trail{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.trail li{display:grid;grid-template-columns:76px minmax(0,1fr);gap:12px;padding:7px 0;font-size:13px;color:var(--text)}
+.trail li+li{border-top:1px solid var(--line)}
+.trail .d{font-size:12px;color:var(--dim);padding-top:1px}
+.trail q{display:block;margin-top:4px;color:var(--muted);quotes:"« " " »";font-size:12.5px;line-height:1.6}
+.trail mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+.trail .miss{color:#f2a7a9}
+.trail a,.lnk{color:#b4bcff;text-decoration:none;cursor:pointer;border:0;background:none;padding:0;font-size:inherit}
+.trail a:hover,.lnk:hover{text-decoration:underline}
+.near{display:grid;gap:6px}
+.nq{padding:9px 11px;border:1px solid var(--line);border-radius:8px;font-size:12.5px;color:var(--muted)}
+.nq b{color:var(--text);font-weight:500}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+textarea,input[type=text]{width:100%;background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:9px 11px;color:var(--text);font-size:13px;line-height:1.6}
+textarea{min-height:150px;resize:vertical}
+textarea:focus,input[type=text]:focus{outline:none;border-color:var(--line2)}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s}
+.btn:hover{background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover{background:#7b87f5}
+.hint{font-size:12.5px;color:var(--muted);margin:0 0 8px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:in .2s var(--ease)}
+
+@media (max-width:960px){
+  .split{grid-template-columns:minmax(0,1fr)}
+  .det{position:fixed;inset:0;z-index:10;border-radius:0;overflow-y:auto;padding:calc(16px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(32px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:none}
+  .det.show{display:block}
+  .x{display:grid}
+}
+.sh{display:none}
+@media (max-width:560px){
+  table{min-width:0} .lg{display:none} .sh{display:inline} .qh,td.qe{display:none}
+  thead th{padding:10px 2px 6px;font-size:10.5px;letter-spacing:0;text-transform:none} thead th.l,tbody th{padding-left:10px}
+  tbody th{font-size:12.5px;white-space:normal;padding-right:4px} .cell{min-width:0;height:32px}
+  tfoot td{padding:8px 10px 10px}
+  .it{grid-template-columns:minmax(0,1fr)} .age{grid-row:auto;grid-column:1;margin-top:2px}
+}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+  <div class="ctx">Bureau de la députée · suivi au mardi 10 novembre 2026</div>
+  <h1>Ce que le Gouvernement nous doit</h1>
+  <p class="lead" id="lead"></p>
+  <section class="panel bal" aria-label="Engagements par ministère et ancienneté"><table id="bal"></table></section>
+  <div class="split">
+    <div>
+      <div class="lh" id="lh"></div>
+      <section class="panel list" id="list" aria-label="Engagements"></section>
+    </div>
+    <aside class="panel det" id="det" aria-live="polite"></aside>
+  </div>
+</div>
+
+<script>
+const NOW=new Date(2026,10,10);
+const MIN={LOG:"Logement",ECO:"Économie et finances",TE:"Transition écologique",SOL:"Solidarités",INT:"Intérieur"};
+const MINLONG={LOG:"le ministre chargé du logement",ECO:"le ministre de l'économie et des finances",TE:"la ministre de la transition écologique",SOL:"la ministre des solidarités",INT:"le ministre de l'intérieur"};
+// Taux de réponse aux questions écrites dans le délai de deux mois (législature en cours, toutes questions)
+const QE={LOG:[9,64],ECO:[22,131],TE:[11,58],SOL:[6,49],INT:[17,72]};
+const GROUPS={PR:{c:"#c07a00"},CP:{c:"#d8699a"},ECO:{c:"#2a9d63"},SOL:{c:"#d13a30"}};
+const TYPES={decret:"Décret attendu",rapport:"Rapport dû",qe:"Réponse attendue",eng:"Promesse faite en réponse",reco:"Recommandation"};
+const D=s=>{const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
+const fmt=d=>d.toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
+const E=[
+ {id:"d9",type:"decret",min:"LOG",title:"Décret sur la décence énergétique des logements loués",due:"2025-09-03",calc:"Promulgation le 3 mars 2025 + 6 mois (délai fixé par la circulaire sur l'application des lois)",
+  trail:[
+   {d:"12 févr. 2025",t:`Votre amendement n° 214 est adopté en séance.`},
+   {d:"3 mars 2025",t:`Il devient l'article 9 de la loi n° 2025-187 relative au logement décent.`,q:"Un <mark>décret en Conseil d'État fixe</mark> les conditions dans lesquelles le bailleur justifie de la décence énergétique du logement."},
+   {d:"mars 2025",t:"L'échéancier de mise en application annonce une publication au deuxième trimestre 2025."},
+   {d:"17 mars 2026",t:`Le Gouvernement promet le décret « avant la fin du premier semestre 2026 ».`,link:"e2611"},
+   {d:"aujourd'hui",t:`Aucun décret publié au Journal officiel.`,miss:true}],
+  near:[{n:2611,g:"PR",who:"votre bureau",date:"16 déc. 2025",st:"Répondue le 17 mars 2026, avec une promesse de date non tenue"},{n:3044,g:"ECO",who:"Écologie urbaine",date:"14 avril 2026",st:"Sans réponse depuis 6 mois"}],
+  draft:"attire l'attention de M. le ministre chargé du logement sur l'absence de publication du décret en Conseil d'État prévu à l'article 9 de la loi n° 2025-187 du 3 mars 2025 relative au logement décent, attendu depuis le 3 septembre 2025. En réponse à la question écrite n° 2611, le Gouvernement s'était engagé à le publier avant la fin du premier semestre 2026. Cet engagement n'a pas été tenu. Elle lui demande à quelle date ce décret sera publié et quelles difficultés en retardent l'adoption."},
+ {id:"e2611",type:"eng",min:"LOG",title:"Promesse : publier le décret de l'article 9 avant juillet 2026",due:"2026-06-30",calc:"« Avant la fin du premier semestre 2026 » : échéance lue dans la réponse",
+  trail:[
+   {d:"16 déc. 2025",t:"Vous déposez la question écrite n° 2611."},
+   {d:"17 mars 2026",t:"Réponse publiée au Journal officiel, trois mois après.",q:"Les travaux de concertation sont en voie d'achèvement. Le Gouvernement <mark>publiera le décret d'application avant la fin du premier semestre 2026</mark>."},
+   {d:"aujourd'hui",t:"Promesse non tenue.",miss:true}],
+  rel:"d9",action:"same"},
+ {id:"r84",type:"rapport",min:"ECO",title:"Rapport sur le coût du crédit d'impôt pour la rénovation locative",due:"2026-06-30",calc:"Promulgation le 30 décembre 2025 + 6 mois, délai écrit dans l'article",
+  trail:[
+   {d:"nov. 2025",t:"L'amendement n° I-1520 de votre groupe est adopté en première partie."},
+   {d:"30 déc. 2025",t:"Il devient l'article 84 de la loi de finances pour 2026.",q:"<mark>Dans un délai de six mois</mark> à compter de la promulgation de la présente loi, le Gouvernement <mark>remet au Parlement un rapport</mark> évaluant le coût du crédit d'impôt pour la rénovation des logements locatifs."},
+   {d:"aujourd'hui",t:"Aucun rapport déposé.",miss:true}],
+  near:[],draft:"attire l'attention de M. le ministre de l'économie et des finances sur le rapport prévu à l'article 84 de la loi n° 2025-1302 du 30 décembre 2025 de finances pour 2026, qui devait être remis au Parlement avant le 30 juin 2026. Ce rapport, qui doit éclairer le coût du crédit d'impôt pour la rénovation des logements locatifs, est indispensable à l'examen du projet de loi de finances pour 2027. Elle lui demande à quelle date il sera remis."},
+ {id:"q3187",type:"qe",min:"TE",title:"Question n° 3187 : retards de versement de MaPrimeRénov'",due:"2026-07-12",calc:"Publication le 12 mai 2026 + 2 mois (article 135 du Règlement)",
+  trail:[{d:"12 mai 2026",t:"Votre question écrite n° 3187 est publiée."},{d:"aujourd'hui",t:"Sans réponse.",miss:true}],action:"signal"},
+ {id:"q3402",type:"qe",min:"SOL",title:"Question n° 3402 : aides au logement des étudiants",due:"2026-11-01",calc:"Publication le 1er septembre 2026 + 2 mois",
+  trail:[{d:"1er sept. 2026",t:"Votre question écrite n° 3402 est publiée."},{d:"aujourd'hui",t:"Sans réponse.",miss:true}],action:"signal"},
+ {id:"q3520",type:"qe",min:"INT",title:"Question n° 3520 : réquisition des logements vacants",due:"2026-12-06",calc:"Publication le 6 octobre 2026 + 2 mois",
+  trail:[{d:"6 oct. 2026",t:"Votre question écrite n° 3520 est publiée."}]},
+ {id:"reco3",type:"reco",min:"LOG",title:"Recommandation 3 : instruction aux préfets sur la réquisition",due:"2026-12-31",calc:"Échéance fixée par la mission dans sa recommandation",
+  trail:[{d:"24 juin 2026",t:"Rapport d'information n° 1402 de la mission flash sur la vacance des logements, dont vous étiez corapporteure.",q:"Recommandation n° 3 : <mark>publier, avant la fin de l'année 2026, une instruction aux préfets</mark> précisant les conditions de mise en œuvre de la réquisition des logements vacants."}]},
+ {id:"r7",type:"rapport",min:"TE",title:"Rapport sur l'artificialisation liée aux résidences secondaires",due:"2025-06-12",calc:"Promulgation le 12 juin 2024 + 1 an, délai écrit dans l'article",
+  trail:[{d:"12 juin 2024",t:"Article 7 de la loi n° 2024-532 relative aux zones tendues.",q:"<mark>Dans un délai d'un an</mark> à compter de la promulgation de la présente loi, le Gouvernement <mark>remet au Parlement un rapport</mark> sur l'artificialisation des sols liée aux résidences secondaires."},{d:"aujourd'hui",t:"Aucun rapport déposé.",miss:true}],
+  near:[{n:1880,g:"SOL",who:"Solidarité et logement",date:"3 sept. 2025",st:"Répondue le 2 déc. 2025 : « le rapport est en cours de finalisation »"}],
+  draft:"attire l'attention de Mme la ministre de la transition écologique sur le rapport prévu à l'article 7 de la loi n° 2024-532 du 12 juin 2024, qui devait être remis au Parlement avant le 12 juin 2025. Interrogé en décembre 2025, le Gouvernement indiquait que ce rapport était en cours de finalisation. Elle lui demande à quelle date il sera remis."},
+ {id:"d3",type:"decret",min:"SOL",title:"Décret fixant le montant de l'aide à la caution étudiante",due:"2026-01-15",calc:"Promulgation le 15 juillet 2025 + 6 mois",
+  trail:[{d:"15 juil. 2025",t:"Article 3 de la loi n° 2025-650 pour le logement des jeunes.",q:"Un <mark>décret fixe le montant</mark> de l'aide et les conditions de ressources applicables."},{d:"aujourd'hui",t:"Aucun décret publié au Journal officiel.",miss:true}],
+  near:[],draft:"attire l'attention de Mme la ministre des solidarités sur l'absence de publication du décret prévu à l'article 3 de la loi n° 2025-650 du 15 juillet 2025 pour le logement des jeunes, attendu depuis le 15 janvier 2026. Faute de ce décret, l'aide à la caution étudiante ne peut être versée. Elle lui demande à quelle date ce décret sera publié."},
+ {id:"d12",type:"decret",min:"LOG",title:"Arrêté fixant le modèle de déclaration de vacance",due:"2025-09-03",calc:"Promulgation le 3 mars 2025 + 6 mois",done:"2026-01-28",proof:"Arrêté du 28 janvier 2026, JO du 30 janvier 2026",
+  trail:[{d:"3 mars 2025",t:"Article 12 de la loi n° 2025-187.",q:"Un <mark>arrêté du ministre chargé du logement fixe</mark> le modèle de déclaration."},{d:"30 janv. 2026",t:"Arrêté publié au Journal officiel, quatre mois après l’échéance."}]},
+ {id:"d112",type:"decret",min:"ECO",title:"Décret sur la déclaration des logements vacants aux impôts",due:"2026-06-30",calc:"Promulgation le 30 décembre 2025 + 6 mois",done:"2026-04-02",proof:"Décret n° 2026-311 du 2 avril 2026",
+  trail:[{d:"30 déc. 2025",t:"Article 112 de la loi de finances pour 2026."},{d:"2 avr. 2026",t:"Décret publié, dans les délais."}]},
+ {id:"reco5",type:"reco",min:"ECO",title:"Recommandation 5 : évaluer la taxe sur les logements vacants dans le PLF",due:"2026-10-01",calc:"Échéance : dépôt du projet de loi de finances pour 2027",done:"2026-10-01",proof:"PLF 2027, annexe « Évaluation des voies et moyens », tome II",
+  trail:[{d:"24 juin 2026",t:"Rapport d'information n° 1402, recommandation n° 5."},{d:"1er oct. 2026",t:"L'évaluation figure dans le projet de loi de finances pour 2027."}]},
+];
+const BUCKETS=[{k:0,l:"À venir",s:"À venir"},{k:1,l:"Moins de 3 mois",s:"< 3 mois"},{k:2,l:"3 à 12 mois",s:"3–12 mois"},{k:3,l:"Plus d'un an",s:"> 1 an"},{k:4,l:"Tenus",s:"Tenus"}];
+function months(a,b){return (b.getFullYear()-a.getFullYear())*12+(b.getMonth()-a.getMonth())-(b.getDate()<a.getDate()?1:0)}
+function bucket(e){ if(e.done) return 4; const due=D(e.due); if(due>=NOW) return 0; const m=months(due,NOW); return m<3?1:m<12?2:3; }
+function age(e){
+  const due=D(e.due);
+  if(e.done){const late=months(due,D(e.done)); return late>0?`Tenu, ${late} mois après l'échéance`:"Tenu dans les délais"}
+  const days=Math.round((due-NOW)/864e5);
+  if(days>=0) return days<=31?`Échéance dans ${days} jour${days>1?"s":""}`:`Échéance le ${fmt(due).replace(/ \d{4}$/,"")}`;
+  const m=months(due,NOW); if(m<1){const d=-days;return `${d} jour${d>1?"s":""} de retard`}
+  return m>=12?`${Math.floor(m/12)} an${m>=24?"s":""}${m%12?` et ${m%12} mois`:""} de retard`:`${m} mois de retard`;
+}
+let filt={min:null,b:null}, sel=null;
+const $=s=>document.querySelector(s);
+function toast(m){document.querySelectorAll(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+
+function lead(){
+  const open=E.filter(e=>!e.done), late=open.filter(e=>D(e.due)<NOW).sort((a,b)=>D(a.due)-D(b.due));
+  const o=late[0];
+  $("#lead").innerHTML=`${open.length} engagements restent ouverts, dont ${late.length} en retard. <span>Le plus ancien : ${o.title.charAt(0).toLowerCase()+o.title.slice(1)}, ${age(o)}.</span>`;
+}
+function table(){
+  const mins=Object.keys(MIN);
+  let h=`<thead><tr><th class="l">Ministère</th>${BUCKETS.map(b=>`<th><button class="${filt.b===b.k&&filt.min==null?"on":""}" data-b="${b.k}"><span class="lg">${b.l}</span><span class="sh">${b.s}</span></button></th>`).join("")}<th class="qh">Réponse aux questions sous 2 mois</th></tr></thead><tbody>`;
+  const max=Math.max(...mins.flatMap(m=>BUCKETS.map(b=>E.filter(e=>e.min===m&&bucket(e)===b.k).length)));
+  for(const m of mins){
+    h+=`<tr><th><button class="${filt.min===m&&filt.b==null?"on":""}" data-m="${m}">${MIN[m]}</button></th>`;
+    for(const b of BUCKETS){
+      const n=E.filter(e=>e.min===m&&bucket(e)===b.k).length;
+      h+=`<td><button class="cell b${b.k}${n?"":" z"}${filt.min===m&&filt.b===b.k?" on":""}" ${n?`data-m="${m}" data-b="${b.k}"`:'tabindex="-1" aria-hidden="true"'}>${n||"·"}${n?`<span class="bar" style="width:${Math.round(10+26*n/max)}px"></span>`:""}</button></td>`;
+    }
+    const [r,t]=QE[m]; h+=`<td class="qe">${Math.round(100*r/t)} % <small>(${r} sur ${t})</small></td></tr>`;
+  }
+  h+=`</tbody><tfoot><tr><td colspan="7">Retard compté à partir de l'échéance écrite dans le texte, ou de six mois après la promulgation pour un décret.<span class="lg"> Dernière colonne : toutes les questions écrites de la législature.</span></td></tr></tfoot>`;
+  $("#bal").innerHTML=h;
+}
+function items(){return E.filter(e=>(filt.min==null||e.min===filt.min)&&(filt.b==null||bucket(e)===filt.b)).sort((a,b)=>(bucket(a)===4)-(bucket(b)===4)||D(a.due)-D(b.due))}
+function list(){
+  const L=items();
+  const lab=[filt.min&&MIN[filt.min],filt.b!=null&&BUCKETS[filt.b].l].filter(Boolean).join(" · ");
+  $("#lh").innerHTML=lab?`<span class="chip">${lab}<button id="clr" aria-label="Retirer le filtre"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></span><span>${L.length} engagement${L.length>1?"s":""}</span>`:`<span>Tous les engagements suivis · ${L.length}</span>`;
+  $("#list").innerHTML=L.length?L.map(e=>`<button class="it${sel===e.id?" on":""}" data-id="${e.id}"><span class="tt">${e.title}</span><span class="mt">${TYPES[e.type]} · ${MIN[e.min]}</span><span class="age b${bucket(e)}"><i></i>${age(e)}</span></button>`).join(""):`<div class="none">Aucun engagement dans cette case.</div>`;
+}
+function detail(){
+  const e=E.find(x=>x.id===sel), det=$("#det");
+  if(!e){det.innerHTML="";det.classList.remove("show");document.body.style.overflow="";return}
+  const b=bucket(e), due=D(e.due);
+  let act="";
+  if(e.done) act=`<div class="sec">Preuve</div><p class="hint">${e.proof}</p><div class="acts"><button class="btn" id="reopen">Rouvrir</button></div>`;
+  else if(e.action==="same"){const r=E.find(x=>x.id===e.rel); act=`<div class="sec">Que faire</div><p class="hint">Cette promesse porte sur le même décret que l'engagement « ${r.title} ». Une seule question couvre les deux.</p><div class="acts"><button class="btn" data-open="${r.id}">Ouvrir le décret attendu</button></div>`;}
+  else if(e.action==="signal") act=b===0?"":`<div class="sec">Que faire</div><p class="hint">Le délai de réponse est dépassé. Chaque président de groupe peut signaler des questions restées sans réponse : le ministre doit alors répondre sous dix jours.</p><div class="acts"><button class="btn pri" id="signal">Proposer au groupe de la signaler</button></div>`;
+  else if(e.draft&&b>0) act=`<div class="sec">Questions déjà posées sur ce sujet</div>${e.near.length?`<div class="near">${e.near.map(q=>`<div class="nq"><span class="gp" style="background:${GROUPS[q.g].c}">${q.g}</span><b>n° ${q.n}</b> · ${q.who}, ${q.date}<br>${q.st}</div>`).join("")}</div>`:`<p class="hint">Aucune question écrite ne porte sur cet engagement.</p>`}
+     <div class="sec">Projet de question écrite</div><p class="hint">Rédigé à partir des faits ci-dessus, à relire.</p><textarea id="draft">Mme [nom de la députée] ${e.draft}</textarea><div class="acts"><button class="btn pri" id="copy">Copier la question</button></div>`;
+  if(!e.done&&b>0||(!e.done&&e.type==="reco")) act+=`<div class="sec">Marquer comme tenu</div><input type="text" id="proof" placeholder="Référence de la preuve : Journal officiel, rapport…"><div class="acts"><button class="btn" id="done">Marquer comme tenu</button></div>`;
+  det.innerHTML=`<div class="det-h"><div><div class="k">${TYPES[e.type]} · ${MIN[e.min]}</div><h2>${e.title}</h2></div><span class="sp"></span><button class="x" id="close" aria-label="Fermer"><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></div>
+   <div class="due"><b>${age(e)}</b><span>Échéance : ${fmt(due)}</span><small>${e.calc}</small></div>
+   <div class="sec">D'où vient cet engagement</div>
+   <ol class="trail">${e.trail.map(s=>`<li><span class="d">${s.d}</span><span class="${s.miss?"miss":""}">${s.t}${s.link?` <a data-open="${s.link}">Voir la promesse</a>`:""}${s.q?`<q>${s.q}</q>`:""}</span></li>`).join("")}</ol>
+   ${act}`;
+  det.classList.add("show");
+  document.body.style.overflow=matchMedia("(max-width:960px)").matches?"hidden":"";
+  det.style.animation="none";det.offsetHeight;det.style.animation="";
+}
+function render(){lead();table();list();detail()}
+document.addEventListener("click",ev=>{
+  const t=ev.target;
+  const c=t.closest("[data-m],[data-b]");
+  if(c&&!c.classList.contains("z")){const m=c.dataset.m??null, bb=c.dataset.b!=null?+c.dataset.b:null; filt=(filt.min===m&&filt.b===bb)?{min:null,b:null}:{min:m,b:bb}; const L=items(); if(!L.find(e=>e.id===sel)&&matchMedia("(min-width:961px)").matches) sel=L[0]?.id||null; render(); return;}
+  if(t.closest("#clr")){filt={min:null,b:null};render();return}
+  const it=t.closest(".it"); if(it){sel=it.dataset.id;render();return}
+  const o=t.closest("[data-open]"); if(o){sel=o.dataset.open;filt={min:null,b:null};render();return}
+  if(t.closest("#close")){sel=null;render();return}
+  if(t.closest("#signal")){toast("Proposition envoyée au secrétariat du groupe (simulation).");return}
+  if(t.closest("#copy")){const v=$("#draft").value;navigator.clipboard?.writeText(v).then(()=>toast("Question copiée."),()=>toast("Copie refusée : sélectionnez le texte à la main."));return}
+  if(t.closest("#done")){const e=E.find(x=>x.id===sel),p=$("#proof").value.trim(); if(!p){toast("Indiquez d'abord la preuve : sans référence, l'engagement reste ouvert.");$("#proof").focus();return} e.done=NOW.toISOString().slice(0,10);e.proof=p;render();toast("Engagement marqué comme tenu : le tableau est à jour.");return}
+  if(t.closest("#reopen")){const e=E.find(x=>x.id===sel);delete e.done;delete e.proof;render();return}
+});
+document.addEventListener("keydown",e=>{if(e.key!=="Escape")return; if($("#det").classList.contains("show")&&!matchMedia("(min-width:961px)").matches){sel=null;render()} else if(filt.min!=null||filt.b!=null){filt={min:null,b:null};render()}});
+// À l'ouverture, sur grand écran : l'engagement le plus en retard est déjà ouvert
+if(matchMedia("(min-width:961px)").matches) sel=E.filter(e=>!e.done).sort((a,b)=>D(a.due)-D(b.due))[0].id;
+render();
+</script>
