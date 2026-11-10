@@ -58,182 +58,237 @@ function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createEle
 </script>
 
 <style>
-/* Variante « patterns » : onglets (3 volets, loi de Hick), cartes en petits multiples, tiroir latéral pour le détail,
-   squelette au changement d'exercice, note de séance à réordonner (glisser-déposer + clavier), toasts empilés avec Annuler. */
-.top{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px 20px;margin:16px 0 14px}
-.seg{display:inline-flex;border:1px solid var(--line2);border-radius:9px;padding:3px;gap:2px;background:var(--s1)}
-.seg button{border:0;background:none;color:var(--muted);border-radius:6px;padding:0 12px;min-height:36px;font-size:13px;cursor:pointer;transition:background .2s,color .2s}
-.seg button[aria-pressed="true"]{background:var(--s2);color:var(--fg)}
-.seglb{display:block;font-size:11.5px;color:var(--dim);margin-bottom:4px}
-.layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start}
-.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:14px;overflow-x:auto;scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
+/* Variante « patterns », refaite selon la skill interaction-patterns (10 règles) :
+   onglets WAI-ARIA (3 volets ≤ 5), cartes, panneau de détail NON modal (role=complementary, en place à droite,
+   en feuille basse sur écran étroit), squelette à la forme des cartes affiché après 200 ms, note de séance réordonnable
+   à la souris/au doigt ET au clavier (Entrée saisit, ↑↓ déplace, Entrée pose, Échap annule), toasts en haut à droite
+   (en bas au centre sur mobile), 3 au plus, bouton de fermeture visible, <dialog> réservé à « Vider la note ». */
+.skip{position:absolute;left:16px;top:-60px;z-index:80;background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:10px 14px;border-radius:8px;text-decoration:none;transition:top .2s}
+.skip:focus{top:12px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:20px;align-items:start;margin-top:4px}
+/* onglets */
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:14px}
 .tabs button{border:0;background:none;color:var(--muted);padding:0 14px;min-height:44px;font-size:13.5px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:color .2s,border-color .2s}
 .tabs button:hover{color:var(--fg)}
 .tabs button[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent)}
 .tabs .n{display:inline-grid;place-items:center;min-width:18px;height:18px;margin-left:6px;padding:0 5px;border-radius:9px;background:var(--s2);color:var(--muted);font-size:11px}
 [role=tabpanel]{animation:fade .2s var(--ease)}
+[role=tabpanel]:focus-visible{outline-offset:6px;border-radius:6px}
 @keyframes fade{from{opacity:0;transform:translateY(3px)}}
+/* choix de l'exercice : boutons radio natifs, libellé au-dessus */
+.bar1{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:10px 18px;margin:0 2px 12px}
+fieldset.seg{border:0;margin:0;padding:0;min-width:0}
+fieldset.seg legend{padding:0;margin-bottom:5px;font-size:12px;color:var(--muted)}
+.segs{display:inline-flex;border:1px solid var(--line2);border-radius:9px;padding:3px;gap:2px;background:var(--s1)}
+.segs label{position:relative;display:inline-grid;place-items:center;min-height:32px;padding:0 12px;border-radius:6px;font-size:13px;color:var(--muted);cursor:pointer;transition:background .2s,color .2s}
+.segs input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.segs label:has(input:checked){background:var(--s2);color:var(--fg)}
+.segs label:has(input:focus-visible){outline:2px solid var(--accent);outline-offset:1px}
+.seg .hint{display:block;margin-top:4px;font-size:11.5px;color:var(--dim)}
 /* cartes */
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
-.card{position:relative;background:var(--s1);border:1px solid var(--line);border-radius:10px;transition:border-color .2s,background .2s}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.card{position:relative;background:var(--s1);border:1px solid var(--line);border-radius:10px;transition:border-color .2s}
 .card:hover{border-color:var(--line2)}
-.card.drag{opacity:.45}
+.card.cur{border-color:var(--accent)}
 .card>button.open{display:grid;gap:10px;width:100%;height:100%;text-align:left;border:0;background:none;padding:14px 14px 12px;border-radius:10px;cursor:pointer;align-content:start}
 .card .k{font-size:11.5px;color:var(--dim)}
 .card b{display:block;color:var(--fg);font-weight:500;font-size:13.5px;line-height:1.4;padding-right:40px}
 .card .val{display:flex;justify-content:space-between;align-items:end;gap:10px;font-size:12.5px;color:var(--muted)}
 .card .val strong{color:var(--fg);font-size:17px;font-weight:500;display:block;line-height:1.2}
 .card .val strong.miss{color:#f2a7a9}
-.card .fl{display:flex;flex-wrap:wrap;gap:5px}
-.add{position:absolute;top:6px;right:6px;width:44px;height:44px;display:grid;place-items:center;border:0;border-radius:8px;background:none;color:var(--muted);cursor:pointer;transition:background .2s,color .2s}
+.fl{display:flex;flex-wrap:wrap;gap:5px}
+.add{position:absolute;top:8px;right:8px;width:32px;height:32px;display:grid;place-items:center;border:0;border-radius:8px;background:none;color:var(--muted);cursor:pointer;transition:background .2s,color .2s}
 .add:hover{background:var(--s2);color:var(--fg)}
 .add[aria-pressed="true"]{color:var(--ins)}
-/* squelette : même forme que les cartes */
-.sk{background:var(--s1);border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:10px}
-.sk i{display:block;height:11px;border-radius:4px;background:linear-gradient(90deg,var(--s2),#1d2025,var(--s2));background-size:200% 100%;animation:sh 1.1s linear infinite}
-@keyframes sh{to{background-position:-200% 0}}
-/* note de séance */
-.tray{position:sticky;top:16px;padding:14px;transition:border-color .2s,background .2s}
-.tray.over{border-color:var(--accent);background:#14161c}
-.tray h2{margin:0;font:500 13.5px/1.4 var(--f);color:var(--fg)}
-.tray .sub{margin:2px 0 10px;font-size:12px;color:var(--dim)}
-.tray ol{list-style:none;margin:0;padding:0;display:grid;gap:6px}
-.tray li{display:grid;grid-template-columns:28px minmax(0,1fr) auto;align-items:center;gap:4px;background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:4px 4px 4px 2px;font-size:12.5px;color:var(--text);animation:fade .2s var(--ease)}
-.tray li.drag{opacity:.4}
-.tray li.tgt{border-color:var(--accent)}
-.hdl{width:28px;height:36px;border:0;background:none;color:var(--dim);cursor:grab;border-radius:6px;display:grid;place-items:center}
-.hdl:focus-visible{color:var(--fg)}
-.tray li .t{line-height:1.4;padding:4px 2px}
-.tray li .t span{color:var(--dim)}
-.ib{width:32px;height:32px;border:0;background:none;color:var(--muted);border-radius:6px;cursor:pointer;display:inline-grid;place-items:center}
-.ib:hover:not(:disabled){background:#22252b;color:var(--fg)}
-.ib:disabled{opacity:.3;cursor:default}
-.empty{border:1px dashed var(--line2);border-radius:8px;padding:16px 12px;font-size:12.5px;color:var(--dim);text-align:center;line-height:1.5}
-.tray .hint{margin:10px 0 0;font-size:11.5px;color:var(--dim)}
-/* crédits */
+/* squelette : mêmes dimensions que la carte, pulsation (jamais de rotation) */
+.sk{background:var(--s1);border:1px solid var(--line);border-radius:10px;padding:14px 14px 12px;display:grid;gap:10px;align-content:start}
+.sk i{display:block;border-radius:4px;background:var(--s2);animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.45}}
+/* crédits et PAP */
 .panel.pad{padding:16px}
-.panel.pad p{margin:0 0 12px;font-size:13px}
-details.more{margin-top:14px;border-top:1px solid var(--line);padding-top:6px}
-details.more summary,.chgl summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;min-height:44px;color:var(--muted);font-size:13px}
+.panel.pad>p{margin:0 0 12px;font-size:13px}
+details.more{margin-top:14px;border-top:1px solid var(--line);padding-top:2px}
+details summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;min-height:44px;color:var(--muted);font-size:13px}
 details summary::-webkit-details-marker{display:none}
 details summary svg{transition:transform .25s var(--ease);flex:none;color:var(--dim)}
 details[open]>summary svg{transform:rotate(90deg)}
 table.cp{border-collapse:collapse;width:100%;font-size:12.5px}
-.cp th,.cp td{padding:6px 8px;text-align:right;border-bottom:1px solid var(--line)}
+.cp th,.cp td{padding:6px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
 .cp th:first-child,.cp td:first-child{text-align:left}
 .cp thead th{color:var(--dim);font-weight:400}
-/* changements de maquette */
 .chgl{display:grid;gap:8px}
 .chgl details{background:var(--s1);border:1px solid var(--line);border-radius:10px;padding:0 14px}
 .chgl summary{color:var(--text)}
 .chgl summary b{color:var(--fg);font-weight:500}
-.chgl .ba{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;padding:0 0 14px 26px;font-size:13px}
+.chgl .ba{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;margin:0;padding:0 0 14px 26px;font-size:13px}
 .chgl .ba dt{color:var(--dim)}
 .chgl .ba dd{margin:0}
-/* tiroir */
-.scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);opacity:0;transition:opacity .25s;z-index:40}
-.scrim.on{opacity:1}
-.drawer{position:fixed;top:0;right:0;bottom:0;width:min(560px,100vw);background:var(--s1);border-left:1px solid var(--line2);z-index:41;transform:translateX(100%);transition:transform .3s var(--ease),opacity .2s;display:flex;flex-direction:column;opacity:0}
-.drawer.on{transform:none;opacity:1}
-.drawer header{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:start;padding:16px 16px 12px;border-bottom:1px solid var(--line)}
-.drawer header .k{font-size:12px;color:var(--dim)}
-.drawer h2{margin:2px 0 0;font:600 16px/1.35 var(--f);color:var(--fg)}
-.drawer .body{flex:1 1 auto;min-height:0;grid-auto-rows:max-content;overflow:auto;padding:14px 16px 20px;display:grid;gap:14px;align-content:start;scrollbar-width:thin}
-.drawer footer{display:flex;gap:8px;justify-content:space-between;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line)}
-.drawer footer .btn{min-height:44px}
-.x{width:44px;height:44px;border:0;background:none;color:var(--muted);border-radius:8px;cursor:pointer;display:grid;place-items:center}
+.lnk{border:0;background:none;color:var(--ins);padding:0;min-height:24px;font-size:13px;cursor:pointer;text-decoration:underline 1px;text-underline-offset:3px}
+/* colonne de droite : détail (non modal) + note */
+.side{position:sticky;top:16px;display:grid;gap:14px;max-height:calc(100vh - 32px);overflow:auto;padding:3px;margin:-3px;scrollbar-width:none;border-radius:10px}
+.side::-webkit-scrollbar{display:none}
+#det{background:var(--s1);border:1px solid var(--line2);border-radius:10px;display:flex;flex-direction:column;max-height:calc(100vh - 38px);animation:slin .28s var(--ease)}
+#det[hidden]{display:none}
+#det.out{opacity:0;transition:opacity .18s}
+@keyframes slin{from{opacity:0;transform:translateX(14px)}}
+#det header{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:start;padding:12px 8px 10px 16px;border-bottom:1px solid var(--line)}
+#det header .k{font-size:12px;color:var(--dim)}
+#det h2{margin:2px 0 0;font:600 15px/1.35 var(--f);color:var(--fg)}
+#det .body{padding:12px 16px 14px;display:grid;gap:12px;min-height:0;overflow:auto}
+#det footer{display:flex;gap:8px;justify-content:space-between;align-items:center;padding:10px 16px;border-top:1px solid var(--line)}
+.x{width:36px;height:36px;border:0;background:none;color:var(--muted);border-radius:8px;cursor:pointer;display:grid;place-items:center;flex:none}
 .x:hover{background:var(--s2);color:var(--fg)}
 .def{font-size:13px;line-height:1.65;padding:10px 12px;background:var(--s2);border-radius:7px}
 .def .lb{display:block;color:var(--dim);font-size:12px;margin-bottom:3px}
 .note{margin:0;font-size:13px;line-height:1.6}
-/* toasts empilés */
-.toasts{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:grid;gap:8px;z-index:60;width:min(420px,calc(100vw - 32px))}
-.tst{display:flex;align-items:center;gap:10px;justify-content:space-between;background:var(--s2);border:1px solid var(--line2);border-radius:9px;padding:6px 6px 6px 14px;font-size:13px;color:var(--fg);box-shadow:0 8px 24px rgba(0,0,0,.4);animation:fade .2s var(--ease);transition:opacity .25s}
+.skc{height:210px;border-radius:8px;background:var(--s2);animation:pulse 1.4s ease-in-out infinite}
+/* note de séance */
+.tray{padding:14px}
+.tray h2{margin:0;font:500 13.5px/1.4 var(--f);color:var(--fg)}
+.tray .sub{margin:2px 0 10px;font-size:12px;color:var(--dim)}
+.tray ol{list-style:none;margin:0;padding:0;display:grid;gap:6px;position:relative}
+.tray li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:4px;background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:3px;font-size:12.5px;color:var(--text);position:relative;transition:transform .18s var(--ease),box-shadow .18s,border-color .18s}
+.tray li.grab{border-color:var(--accent);box-shadow:0 10px 26px rgba(0,0,0,.5);transform:scale(1.02);z-index:2}
+.tray li.drag{transition:box-shadow .18s,border-color .18s;opacity:.92}
+.hdl{width:32px;height:32px;border:0;background:none;color:var(--dim);cursor:grab;border-radius:6px;display:grid;place-items:center;touch-action:none}
+.hdl:hover,.hdl:focus-visible{color:var(--fg)}
+.hdl[aria-pressed="true"]{color:var(--ins);cursor:grabbing}
+.tray li .t{line-height:1.4;padding:4px 2px}
+.tray li .t span{color:var(--dim)}
+.ib{width:32px;height:32px;border:0;background:none;color:var(--muted);border-radius:6px;cursor:pointer;display:grid;place-items:center}
+.ib:hover{background:#22252b;color:var(--fg)}
+.empty{border:1px dashed var(--line2);border-radius:8px;padding:16px 12px;font-size:12.5px;color:var(--dim);text-align:center;line-height:1.5}
+.tray .hint{margin:10px 0 0;font-size:11.5px;color:var(--dim);line-height:1.5}
+.tray .foot{display:flex;justify-content:flex-start;margin-top:8px}
+.tray .foot .ghost{min-height:28px}
+/* confirmation (seule modale de la page) */
+dialog{background:var(--s1);color:var(--text);border:1px solid var(--line2);border-radius:12px;padding:18px;width:min(380px,calc(100vw - 32px))}
+dialog::backdrop{background:rgba(0,0,0,.55)}
+dialog[open]{animation:fade .2s var(--ease)}
+dialog h2{margin:0 0 6px;font:600 15px/1.35 var(--f);color:var(--fg)}
+dialog p{margin:0 0 16px;font-size:13px;color:var(--muted)}
+dialog .row{display:flex;justify-content:flex-end;gap:8px}
+dialog .btn{min-height:36px}
+.btn.danger{background:none;border-color:rgba(229,72,77,.5);color:#f2a7a9}
+.btn.danger:hover{background:rgba(229,72,77,.12)!important}
+/* toasts : haut-droite sur ordinateur, bas-centre sur mobile */
+.toasts{position:fixed;top:16px;right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:8px;z-index:60;width:min(380px,calc(100vw - 32px));pointer-events:none}
+.tst{pointer-events:auto;display:flex;align-items:center;gap:6px;background:var(--s2);border:1px solid var(--line2);border-radius:9px;padding:4px 4px 4px 14px;font-size:13px;color:var(--fg);box-shadow:0 8px 24px rgba(0,0,0,.4);animation:fade .2s var(--ease);transition:opacity .25s}
 .tst.out{opacity:0}
 .tst.ok{border-left:3px solid var(--ok)}
-.tst button{border:0;background:none;color:var(--ins);font-weight:500;min-height:36px;padding:0 10px;border-radius:6px;cursor:pointer}
-.tst button:hover{background:#22252b}
-@media (max-width:1000px){.layout{grid-template-columns:minmax(0,1fr)}.tray{position:static}}
+.tst.err{border-left:3px solid var(--err)}
+.tst span{flex:1;padding:6px 0}
+.tst .act{border:0;background:none;color:var(--ins);font-weight:500;min-height:32px;padding:0 10px;border-radius:6px;cursor:pointer}
+.tst .act:hover{background:#22252b}
+.tst .x{width:32px;height:32px}
+@media (max-width:1000px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  .side{position:static;max-height:none;overflow:visible}
+  /* feuille basse non modale : la page reste utilisable au-dessus */
+  #det{position:fixed;left:0;right:0;bottom:0;z-index:45;max-height:min(78vh,640px);border-radius:14px 14px 0 0;border-width:1px 0 0;box-shadow:0 -12px 40px rgba(0,0,0,.55);animation:slup .28s var(--ease)}
+  #det footer{padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))}
+  @keyframes slup{from{transform:translateY(40px);opacity:0}}
+  body.sheet .wrap{padding-bottom:calc(78vh + 24px)}
+}
 @media (max-width:640px){
-  .drawer{top:auto;left:0;width:100%;max-height:92vh;border-left:0;border-top:1px solid var(--line2);border-radius:14px 14px 0 0;transform:translateY(100%)}
+  .toasts{top:auto;right:auto;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);flex-direction:column-reverse}
+  .tabs button{padding:0 11px}
+}
+/* cibles tactiles : 44 × 44 px au doigt (WCAG 2.5.5), 24 px minimum à la souris */
+@media (pointer:coarse),(max-width:640px){
+  .segs label{min-height:44px;padding:0 14px}
+  .add,.x,.hdl,.ib,.tst .x{width:44px;height:44px}
+  .tst .act,.lnk,.tray .foot .ghost,dialog .btn,#det footer .btn{min-height:44px}
 }
 </style>
 
+<a class="skip" href="#p-ind">Aller aux indicateurs</a>
 <div class="wrap">
   <div class="ctx">Mission « Cohésion des territoires » · données fictives au format des PAP et RAP</div>
   <h1>Programme 135 · amélioration de l'habitat</h1>
-  <div class="top">
-    <p class="lead" id="lead" style="margin:0"></p>
-    <div><span class="seglb" id="exlb">Réalisé connu au</span><div class="seg" role="group" aria-labelledby="exlb" id="ex"></div></div>
-  </div>
+  <p class="lead" id="lead"></p>
   <div class="layout">
     <main>
       <div class="tabs" role="tablist" aria-label="Volets du programme" id="tabs"></div>
-      <div id="panel" role="tabpanel" tabindex="-1"></div>
+      <div role="tabpanel" id="p-ind" aria-labelledby="t-ind" tabindex="0">
+        <div class="bar1">
+          <fieldset class="seg"><legend>Réalisé connu au</legend>
+            <div class="segs" id="ex"></div>
+            <span class="hint">Par défaut : le dernier rapport annuel publié.</span></fieldset>
+          <div class="key" id="key"></div>
+        </div>
+        <div class="cards" id="cards" aria-busy="false" aria-label="Indicateurs de performance"></div>
+      </div>
+      <div role="tabpanel" id="p-cp" aria-labelledby="t-cp" tabindex="0" hidden></div>
+      <div role="tabpanel" id="p-pap" aria-labelledby="t-pap" tabindex="0" hidden></div>
     </main>
-    <aside class="panel tray" id="tray" aria-labelledby="trh">
-      <h2 id="trh">Note de séance</h2>
-      <p class="sub">Les points à soulever, dans l'ordre où vous les direz.</p>
-      <ol id="tl"></ol>
-      <p class="hint" id="thint">Réordonner : glisser la poignée, ou la sélectionner puis Alt + ↑ / ↓.</p>
-    </aside>
+    <div class="side" id="side">
+      <aside id="det" role="complementary" aria-labelledby="deth" hidden>
+        <header><div><div class="k" id="detk"></div><h2 id="deth"></h2></div><button class="x" data-close aria-label="Fermer le détail">✕</button></header>
+        <div class="body" id="detb"></div>
+        <footer><span style="display:flex;gap:6px"><button class="btn" data-nav="-1" aria-label="Indicateur précédent">‹ Préc.</button><button class="btn" data-nav="1" aria-label="Indicateur suivant">Suiv. ›</button></span><button class="btn pri" id="detAdd"></button></footer>
+      </aside>
+      <section class="panel tray" aria-labelledby="trh">
+        <h2 id="trh">Note de séance</h2>
+        <p class="sub">Les points à soulever, dans l'ordre où vous les direz.</p>
+        <ol id="tl"></ol>
+        <p class="hint" id="thint">Réordonner : glisser la poignée. Au clavier : Entrée sur la poignée pour saisir, ↑ ↓ pour déplacer, Entrée pour poser, Échap pour annuler.</p>
+        <div class="foot" id="tfoot"><button class="ghost" id="clr">Vider la note…</button></div>
+      </section>
+    </div>
   </div>
 </div>
-<div class="scrim" id="scrim" hidden></div>
-<section class="drawer" id="dr" role="dialog" aria-modal="true" aria-labelledby="drh" hidden>
-  <header><div><div class="k" id="drk"></div><h2 id="drh"></h2></div><button class="x" data-close aria-label="Fermer">✕</button></header>
-  <div class="body" id="drb"></div>
-  <footer><span style="display:flex;gap:6px"><button class="btn" data-nav="-1" aria-label="Indicateur précédent">‹ Préc.</button><button class="btn" data-nav="1" aria-label="Indicateur suivant">Suiv. ›</button></span><button class="btn pri" id="drAdd"></button></footer>
-</section>
-<div class="toasts" id="toasts" aria-live="polite"></div>
+<dialog id="dlg" aria-labelledby="dlgh" aria-describedby="dlgp">
+  <h2 id="dlgh">Vider la note de séance ?</h2>
+  <p id="dlgp"></p>
+  <div class="row"><button class="btn" id="dlgNo">Garder la note</button><button class="btn danger" id="dlgYes">Vider la note</button></div>
+</dialog>
+<div class="toasts" id="toasts"></div>
+<div class="sr" aria-live="polite" id="live"></div>
+<div class="sr" aria-live="assertive" id="dndlive"></div>
 
 <script>
 /* ---------- Données (reprises de la maquette d'origine, fictives) ---------- */
 const Y=[2021,2022,2023,2024,2025,2026,2027];
 const NOW=2025; /* dernier rapport annuel de performances publié */
-const OBJ={"1":"Accélérer la rénovation des logements privés","2":"Remettre sur le marché les logements vacants","3":"Mieux connaître le parc vacant"};
 const IND=[
  {k:"1.1",t:"Délai moyen de paiement des aides à la rénovation",u:"jours",better:"low",
   r:[74,68,95,102,88,null,null],c:[60,60,60,75,75,80,80],
-  flags:[["warn","Cible relâchée deux fois"],["err","Cible manquée 5 années sur 5"]],pap:["","Maintenu, cible inchangée (80 jours)"],
+  flags:[["warn","Cible relâchée deux fois"],["err","Cible manquée 5 années sur 5"]],
   note:"La cible est passée de 60 à 75 jours en 2024, puis à 80 jours en 2026, sans explication dans le PAP. Le réalisé n'a jamais atteint la cible initiale."},
  {k:"1.2",t:"Logements rénovés avec l'aide de l'Agence",u:"logements",better:"high",cut:2024,
   r:[640000,670000,569000,88000,96000,null,null],c:[600000,650000,700000,80000,100000,120000,110000],
-  flags:[["warn","Série rompue en 2024"],["warn","Cible 2027 abaissée"]],pap:["warn","Cible abaissée de 120 000 à 110 000"],
+  flags:[["warn","Série rompue en 2024"],["warn","Cible 2027 abaissée"]],
   def:{old:"Nombre de logements ayant bénéficié d'une aide à la rénovation énergétique.",neu:"Nombre de logements ayant bénéficié d'une aide à la rénovation énergétique <ins>d'ampleur (gain d'au moins deux classes du diagnostic de performance énergétique)</ins>."},
   note:"Depuis 2024, seules les rénovations d'ampleur sont comptées : les valeurs avant et après ne se comparent pas. La cible 2027 (110 000) est inférieure à celle de 2026 (120 000)."},
  {k:"2.1",t:"Logements vacants remis sur le marché après aide",u:"%",better:"high",
   r:[null,null,31,34,36,null,null],c:[null,null,40,40,40,42,42],
-  flags:[["err","Cible manquée 3 années sur 3"]],pap:["","Maintenu, cible inchangée (42 %)"],note:"Progression régulière, mais l'écart à la cible reste de 4 à 9 points."},
+  flags:[["err","Cible manquée 3 années sur 3"]],note:"Progression régulière, mais l'écart à la cible reste de 4 à 9 points."},
  {k:"2.2",t:"Coût moyen de l'aide par logement remis sur le marché",u:"€",better:"low",
   r:[null,8900,9400,10100,10800,null,null],c:[null,9000,9000,9500,10000,10500,null],
-  flags:[["err","Supprimé dans le PAP 2027"]],pap:["err","Supprimé, sans remplaçant"],note:"L'indicateur disparaît alors que le coût a augmenté de 21 % depuis 2022. Aucun indicateur ne le remplace."},
+  flags:[["err","Supprimé dans le PAP 2027"]],note:"L'indicateur disparaît alors que le coût a augmenté de 21 % depuis 2022. Aucun indicateur ne le remplace."},
  {k:"3.1",t:"Communes couvertes par un repérage des logements vacants",u:"%",better:"high",
-  r:[null,null,null,null,null,null,null],c:[null,null,null,null,null,35,50],flags:[["","Nouveau en 2026, sans historique"]],pap:["","Maintenu, cible relevée de 35 à 50 %"],note:"Premier réalisé attendu dans le RAP 2026."},
+  r:[null,null,null,null,null,null,null],c:[null,null,null,null,null,35,50],flags:[["","Nouveau en 2026, sans historique"]],note:"Premier réalisé attendu dans le RAP 2026."},
 ];
 /* crédits de paiement, M€ : [année, voté en loi de finances, exécuté] */
 const CP=[[2021,650,640],[2022,700,690],[2023,760,702],[2024,820,755],[2025,880,801],[2026,910,null],[2027,845,null]];
 const CHG=[
- {k:"2.2",sev:"err",kind:"Indicateur supprimé",t:"Plus aucun suivi du coût par logement remis sur le marché.",before:"2.2 · Coût moyen de l'aide par logement (cible 2026 : 10 500 €)",after:null},
- {k:"1.2",sev:"warn",kind:"Cible abaissée",t:"Logements rénovés : de 120 000 à 110 000.",before:"Cible : 120 000 logements (2026)",after:"Cible : 110 000 logements (2027)"},
- {k:"CP",sev:"warn",kind:"Crédits en baisse",t:"Crédits de paiement : −65 M€ (−7 %).",before:"910 M€ (LFI 2026)",after:"845 M€ (PLF 2027)"},
- {k:"3.1",sev:"",kind:"Cible relevée",t:"Repérage des logements vacants : de 35 à 50 %.",before:"Cible : 35 % (2026)",after:"Cible : 50 % (2027)"},
+ {k:"2.2",sev:"err",kind:"Indicateur supprimé",t:"plus aucun suivi du coût par logement remis sur le marché.",before:"2.2 · Coût moyen de l'aide par logement (cible 2026 : 10 500 €)",after:null},
+ {k:"1.2",sev:"warn",kind:"Cible abaissée",t:"logements rénovés, de 120 000 à 110 000.",before:"Cible : 120 000 logements (2026)",after:"Cible : 110 000 logements (2027)"},
+ {k:"CP",sev:"warn",kind:"Crédits en baisse",t:"crédits de paiement −65 M€ (−7 %).",before:"910 M€ (LFI 2026)",after:"845 M€ (PLF 2027)"},
+ {k:"3.1",sev:"",kind:"Cible relevée",t:"repérage des logements vacants, de 35 à 50 %.",before:"Cible : 35 % (2026)",after:"Cible : 50 % (2027)"},
 ];
 const IX=k=>IND.find(d=>d.k===k);
 
-/* ---------- Mise en forme ---------- */
+/* ---------- Mise en forme et graphiques (moteur de la maquette, à l'échelle) ---------- */
 const fmtv=(v,u)=>v==null?"—":u==="%"?nf(v)+" %":u==="€"?nf(v)+" €":nf(v);
-const unitTxt=(v,u)=>v==null?"—":u==="jours"?nf(v)+" jours":u==="logements"?nf(v)+" logements":fmtv(v,u);
 function lastR(d,upto=9999){let o=null;d.r.forEach((v,i)=>{if(v!=null&&Y[i]<=upto)o=[v,i]});return o}
 function hit(d,i){const r=d.r[i],c=d.c[i];if(r==null||c==null)return "";return (d.better==="low"?r<=c:r>=c)?"hit":"miss"}
 function niceMax(v){if(v<=0)return 1;const p=10**Math.floor(Math.log10(v)),m=v/p;return (m<=1?1:m<=2?2:m<=2.5?2.5:m<=5?5:10)*p}
 function fmtAxis(v,u){const s=v>=1e6?nf(v/1e6,1)+" M":v>=1e4?nf(v/1000)+" k":v>=1000?nf(v/1000,1)+" k":nf(v);return u==="%"?s+" %":u==="€"?s+" €":s}
 function segs(d){if(!d.cut)return [[0,Y.length-1]];const c=Y.indexOf(d.cut);return [[0,c-1],[c,Y.length-1]]}
-
-/* Graphique d'une série, toujours à partir de zéro.
-   Une rupture de série donne deux panneaux, chacun avec son axe gradué : on ne relie jamais les deux définitions.
-   o.W largeur réelle en px (pour que le texte reste lisible), o.H hauteur, o.upto dernière année de réalisé connue. */
+/* Graphique d'une série, axe toujours à zéro ; une rupture de série = deux panneaux, deux axes, jamais reliés. */
 function chart(d,o={}){
   const W=Math.max(240,Math.round(o.W||560)),H=o.H||190,upto=o.upto||9999;
   const padL=44,padT=d.cut?28:16,padB=24,gap=d.cut?18:0,S=segs(d);
@@ -244,16 +299,13 @@ function chart(d,o={}){
     const vals=[];for(let i=a;i<=b;i++){if(d.c[i]!=null)vals.push(d.c[i]);if(d.r[i]!=null&&Y[i]<=upto)vals.push(d.r[i])}
     const mx=niceMax(Math.max(1,...vals)),px=x0+padL,pw=(b-a+1)*band;
     const X=i=>px+(i-a+.5)*band, Yv=v=>padT+(1-v/mx)*(H-padT-padB);
-    /* zone des années sans réalisé (prévision) */
     if(fut>=0&&fut<=b){const f0=Math.max(fut,a);out+=`<rect x="${px+(f0-a)*band}" y="${padT-6}" width="${(b-f0+1)*band}" height="${H-padT-padB+6}" fill="rgba(255,255,255,.025)"/>`;
       if(si===S.length-1)out+=`<text x="${px+(f0-a)*band+4}" y="${padT-1}" class="cx">prévu</text>`}
     [0,.5,1].forEach(t=>{const yy=Yv(mx*t);out+=`<line x1="${px}" x2="${px+pw}" y1="${yy}" y2="${yy}" stroke="var(--line)" ${t?'stroke-dasharray="2 3"':""}/><text x="${px-6}" y="${yy+3.5}" text-anchor="end" class="cx">${fmtAxis(mx*t,d.u)}</text>`});
     for(let i=a;i<=b;i++)out+=`<text x="${X(i)}" y="${H-7}" text-anchor="middle" class="cx">${band<38?"’"+String(Y[i]).slice(2):Y[i]}</text>`;
-    /* cible : pointillé + cercles vides */
     let p="";for(let i=a;i<=b;i++){if(d.c[i]==null)continue;p+=(i>a&&d.c[i-1]!=null?"L":"M")+X(i)+","+Yv(d.c[i])}
     out+=`<path d="${p}" fill="none" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3"/>`;
     for(let i=a;i<=b;i++)if(d.c[i]!=null)out+=`<circle cx="${X(i)}" cy="${Yv(d.c[i])}" r="3.4" fill="var(--s1)" stroke="var(--muted)" stroke-width="1.3"><title>Cible ${Y[i]} : ${fmtv(d.c[i],d.u)}</title></circle>`;
-    /* réalisé : trait plein, point rouge si la cible est manquée */
     p="";for(let i=a;i<=b;i++){const v=d.r[i];if(v==null||Y[i]>upto)continue;p+=(i>a&&d.r[i-1]!=null&&Y[i-1]<=upto?"L":"M")+X(i)+","+Yv(v)}
     out+=`<path d="${p}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round"/>`;
     for(let i=a;i<=b;i++){const v=d.r[i];if(v==null||Y[i]>upto)continue;const h=hit(d,i);
@@ -264,7 +316,6 @@ function chart(d,o={}){
   });
   return `<svg class="chart" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(d.t)} : réalisé et cibles de ${Y[0]} à ${Y[Y.length-1]}${d.cut?", série rompue en "+d.cut:""}">${out}</svg>`;
 }
-/* Mini-courbe : même règle (zéro en bas), sans texte. Une rupture coupe le trait et change d'échelle. */
 function spark(d,W=150,H=36,upto=9999){
   const P=4,S=segs(d),band=(W-2*P)/(Y.length-1);let out="";
   S.forEach(([a,b])=>{const vals=[];for(let i=a;i<=b;i++){if(d.c[i]!=null)vals.push(d.c[i]);if(d.r[i]!=null&&Y[i]<=upto)vals.push(d.r[i])}
@@ -277,25 +328,23 @@ function spark(d,W=150,H=36,upto=9999){
   if(d.cut){const cx=P+(Y.indexOf(d.cut)-.5)*band;out+=`<line x1="${cx}" x2="${cx}" y1="0" y2="${H}" stroke="var(--warn)" stroke-dasharray="2 3"/>`}
   return `<svg class="sp" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true">${out}</svg>`;
 }
-/* Tableau des valeurs d'une série */
 function table(d,upto=9999){
   return `<div class="scrollx"><table class="vt"><thead><tr><th></th>${Y.map(y=>`<th${d.cut===y?' class="cutc"':""}>${y}</th>`).join("")}</tr></thead><tbody>
    <tr><td>Cible</td>${d.c.map((v,i)=>`<td${d.cut===Y[i]?' class="cutc"':""}>${fmtv(v,d.u)}</td>`).join("")}</tr>
    <tr><td>Réalisé</td>${d.r.map((v,i)=>{const vv=Y[i]<=upto?v:null;return `<td class="${vv!=null?hit(d,i):""}${d.cut===Y[i]?" cutc":""}">${fmtv(vv,d.u)}</td>`}).join("")}</tr></tbody></table></div>`;
 }
-/* Barres crédits votés / exécutés, à l'échelle (zéro à gauche) */
 function bars(mode="me"){
   const mx=Math.max(...CP.map(c=>c[1]));
   return `<div class="bars">${CP.map(([y,v,e])=>{const g=e!=null?v-e:null;
     const lab=e==null?`<span class="dimv">${nf(v)} M€ voté</span>`:mode==="pct"?`−${nf(100*g/v,1)} %`:`−${g} M€`;
     return `<div class="bar"><span>${y}</span><span class="tr" title="${y} : voté ${v} M€${e!=null?", exécuté "+e+" M€":""}"><span class="v" style="width:${100*v/mx}%"></span>${e!=null?`<span class="e" style="width:${100*e/mx}%"></span>`:""}</span><span class="gap">${lab}</span></div>`}).join("")}</div>
-   <div class="legend"><span><i style="background:var(--line2)"></i>Voté en loi de finances</span><span><i style="background:var(--accent)"></i>Exécuté</span><span class="dimv">Écart à droite</span></div>`;
+   <div class="legend"><span><i style="background:var(--line2)"></i>Voté en loi de finances</span><span><i style="background:var(--accent)"></i>Exécuté</span><span class="dimv">Non dépensé à droite</span></div>`;
 }
-const CHART_CSS=`
+document.head.insertAdjacentHTML("beforeend",`<style>
 svg.chart{display:block;max-width:100%;overflow:visible}
 svg.chart .cx{font-size:10.5px;fill:var(--dim)}
 svg.chart .cv{font-size:11px;fill:var(--fg);font-weight:500}
-svg.sp{display:block;overflow:visible;flex:none}
+svg.sp{display:block;overflow:visible;flex:none;max-width:100%}
 table.vt{border-collapse:collapse;width:100%;font-size:12.5px}
 .vt th,.vt td{padding:5px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
 .vt th:first-child,.vt td:first-child{text-align:left;color:var(--muted)}
@@ -316,124 +365,225 @@ table.vt{border-collapse:collapse;width:100%;font-size:12.5px}
 .flag{font-size:11.5px;border-radius:999px;padding:1px 8px;background:var(--s2);color:var(--muted);border:1px solid var(--line2);white-space:nowrap}
 .flag.warn{color:#f0c27a;border-color:rgba(227,163,63,.35)}
 .flag.err{color:#f2a7a9;border-color:rgba(229,72,77,.35)}
-`;
-document.head.insertAdjacentHTML("beforeend",`<style>${CHART_CSS}</style>`);
-const KEY=`<div class="key"><span><svg width="18" height="8"><line x1="0" x2="18" y1="4" y2="4" stroke="var(--accent)" stroke-width="2"/></svg>Réalisé</span><span><svg width="10" height="10"><circle cx="5" cy="5" r="3.4" fill="var(--err)"/></svg>Cible manquée</span><span><svg width="18" height="8"><line x1="0" x2="18" y1="4" y2="4" stroke="var(--muted)" stroke-dasharray="3 3"/><circle cx="9" cy="4" r="3" fill="var(--bg)" stroke="var(--muted)"/></svg>Cible</span></div>`;
-/* Redessine les graphiques à la largeur réelle de leur conteneur (texte lisible à 400 px) */
-function drawCharts(root=document,o={}){root.querySelectorAll("[data-chart]").forEach(el=>{const d=IX(el.dataset.chart);const w=el.clientWidth;if(!w)return;el.innerHTML=chart(d,{W:w,H:+el.dataset.h||190,upto:+el.dataset.upto||9999})})}
+</style>`);
+const KEY=`<span><svg width="18" height="8"><line x1="0" x2="18" y1="4" y2="4" stroke="var(--accent)" stroke-width="2"/></svg>Réalisé</span><span><svg width="10" height="10"><circle cx="5" cy="5" r="3.4" fill="var(--err)"/></svg>Cible manquée</span><span><svg width="18" height="8"><line x1="0" x2="18" y1="4" y2="4" stroke="var(--muted)" stroke-dasharray="3 3"/><circle cx="9" cy="4" r="3" fill="var(--bg)" stroke="var(--muted)"/></svg>Cible</span>`;
+function drawCharts(root=document){root.querySelectorAll("[data-chart]").forEach(el=>{const d=IX(el.dataset.chart);const w=el.clientWidth;if(!w)return;el.innerHTML=chart(d,{W:w,H:+el.dataset.h||190,upto:+el.dataset.upto||9999})})}
 let _rz;window.addEventListener("resize",()=>{clearTimeout(_rz);_rz=setTimeout(()=>drawCharts(),120)});
 
-const S={tab:"ind",ex:2025,loading:false,cur:null,note:["1.2","CP"],lastFocus:null};
+/* ---------- État ---------- */
+const S={tab:"ind",ex:NOW,loading:false,cur:null,trigger:null,note:["1.2","CP"],cpMode:"me"};
 const LABEL={CP:"Crédits : 79 M€ non dépensés en 2025",...Object.fromEntries(IND.map(d=>[d.k,d.k+" · "+d.t]))};
 const TABS=[["ind","Indicateurs",IND.length],["cp","Crédits",null],["pap","PAP 2027",CHG.length]];
-const PLUS=`<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M8 3v10M3 8h10"/></svg>`;
-const CHECK=`<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8.5l3.2 3L13 4.5"/></svg>`;
-const CHEV=`<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3l5 5-5 5"/></svg>`;
-let cpMode="me";
+const PLUS=`<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M8 3v10M3 8h10"/></svg>`;
+const CHECK=`<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 8.5l3.2 3L13 4.5"/></svg>`;
+const CHEV=`<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>`;
+const GRIP=`<svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor" aria-hidden="true"><circle cx="3" cy="3" r="1.3"/><circle cx="7" cy="3" r="1.3"/><circle cx="3" cy="7" r="1.3"/><circle cx="7" cy="7" r="1.3"/><circle cx="3" cy="11" r="1.3"/><circle cx="7" cy="11" r="1.3"/></svg>`;
+const live=m=>{$("#live").textContent="";setTimeout(()=>$("#live").textContent=m,30)};
+const shout=m=>{$("#dndlive").textContent="";setTimeout(()=>$("#dndlive").textContent=m,30)};
 
-/* --- toasts : trois au plus, le plus ancien part --- */
-function say(msg,undo){const box=$("#toasts");while(box.children.length>=3)box.firstElementChild.remove();
-  const t=document.createElement("div");t.className="tst ok";t.innerHTML=`<span>${esc(msg)}</span>${undo?"<button>Annuler</button>":""}`;box.append(t);
-  const kill=()=>{t.classList.add("out");setTimeout(()=>t.remove(),250)};const tm=setTimeout(kill,5000);
-  if(undo)t.querySelector("button").onclick=()=>{clearTimeout(tm);undo();kill()}}
+/* ---------- Toasts : 3 au plus, le plus récent en haut ; succès effacé après 5 s, erreur jamais ---------- */
+function toastMsg(msg,{type="success",action,onAction}={}){
+  const box=$("#toasts");while(box.children.length>=3)box.lastElementChild.remove();
+  const t=document.createElement("div");const err=type==="error";
+  t.className="tst "+(err?"err":"ok");t.setAttribute("role",err?"alert":"status");t.setAttribute("aria-live",err?"assertive":"polite");
+  t.innerHTML=`<span>${esc(msg)}</span>${action?`<button class="act">${esc(action)}</button>`:""}<button class="x" aria-label="Fermer la notification">✕</button>`;
+  box.prepend(t);
+  let tm=null;const kill=()=>{clearTimeout(tm);t.classList.add("out");setTimeout(()=>t.remove(),250)};
+  const arm=()=>{if(!err){clearTimeout(tm);tm=setTimeout(kill,5000)}};arm();
+  /* pause pendant le survol ou le focus, pour laisser le temps de lire */
+  t.addEventListener("mouseenter",()=>clearTimeout(tm));t.addEventListener("mouseleave",arm);
+  t.addEventListener("focusin",()=>clearTimeout(tm));t.addEventListener("focusout",arm);
+  t.querySelector(".x").onclick=kill;
+  if(action)t.querySelector(".act").onclick=()=>{onAction?.();kill()};
+  t.addEventListener("keydown",e=>{if(e.key==="Escape"){e.stopPropagation();kill();(S.trigger&&document.contains(S.trigger)?S.trigger:$("#tabs [aria-selected=true]")).focus()}});
+}
 
-/* --- note de séance --- */
-function inNote(k){return S.note.includes(k)}
-function addNote(k){if(inNote(k)){const i=S.note.indexOf(k);S.note.splice(i,1);renderNote();sync();say("Retiré de la note",()=>{S.note.splice(i,0,k);renderNote();sync()});return}
-  S.note.push(k);renderNote();sync();say(`Ajouté à la note (${S.note.length})`,()=>{S.note=S.note.filter(x=>x!==k);renderNote();sync()})}
+/* ---------- Note de séance ---------- */
+const inNote=k=>S.note.includes(k);
+function toggleNote(k){
+  if(inNote(k)){const i=S.note.indexOf(k);S.note.splice(i,1);renderNote();sync();
+    toastMsg("Retiré de la note",{action:"Annuler",onAction:()=>{S.note.splice(i,0,k);renderNote();sync()}});return}
+  S.note.push(k);renderNote();sync(); /* mise à jour immédiate (optimiste), puis confirmation */
+  toastMsg(`Ajouté à la note (${S.note.length} point${S.note.length>1?"s":""})`,{action:"Annuler",onAction:()=>{S.note=S.note.filter(x=>x!==k);renderNote();sync()}});
+}
+let kb=null; /* déplacement au clavier : {k, from} */
 function renderNote(focusK){
-  $("#tl").innerHTML=S.note.length?S.note.map((k,i)=>`<li draggable="true" data-n="${k}"><button class="hdl" aria-label="Déplacer « ${esc(LABEL[k])} », position ${i+1} sur ${S.note.length}" data-hdl="${k}"><svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="3" cy="3" r="1.3"/><circle cx="7" cy="3" r="1.3"/><circle cx="3" cy="7" r="1.3"/><circle cx="7" cy="7" r="1.3"/><circle cx="3" cy="11" r="1.3"/><circle cx="7" cy="11" r="1.3"/></svg></button>
+  const n=S.note.length;
+  $("#tl").innerHTML=n?S.note.map((k,i)=>`<li data-n="${k}" class="${kb&&kb.k===k?"grab":""}"><button class="hdl" data-hdl="${k}" aria-pressed="${!!(kb&&kb.k===k)}" aria-roledescription="poignée de déplacement" aria-label="Déplacer « ${esc(LABEL[k])} », position ${i+1} sur ${n}" aria-describedby="thint">${GRIP}</button>
    <span class="t"><span>${i+1}.</span> ${esc(LABEL[k])}</span>
-   <span><button class="ib" data-mv="-1" data-k="${k}" ${i?"":"disabled"} aria-label="Monter">↑</button><button class="ib" data-mv="1" data-k="${k}" ${i<S.note.length-1?"":"disabled"} aria-label="Descendre">↓</button><button class="ib" data-rm="${k}" aria-label="Retirer">✕</button></span></li>`).join("")
-   :`<li class="empty" style="display:block">Glissez une carte ici, ou utilisez le bouton + d'une carte.</li>`;
-  $("#thint").hidden=S.note.length<2;
+   <button class="ib" data-rm="${k}" aria-label="Retirer « ${esc(LABEL[k])} » de la note">✕</button></li>`).join("")
+   :`<li class="empty" style="display:block">Aucun point pour l'instant. Ajoutez-en avec le bouton + d'une carte ou depuis le détail d'un indicateur.</li>`;
+  $("#thint").hidden=n<2;$("#tfoot").hidden=n<1;
   if(focusK)$(`[data-hdl="${focusK}"]`)?.focus();
 }
-function move(k,dir){const i=S.note.indexOf(k),j=i+dir;if(j<0||j>=S.note.length)return;S.note.splice(i,1);S.note.splice(j,0,k);renderNote(k)}
-function sync(){$$(".add").forEach(b=>{const on=inNote(b.dataset.add);b.setAttribute("aria-pressed",on);b.innerHTML=on?CHECK:PLUS;b.setAttribute("aria-label",(on?"Retirer de":"Ajouter à")+" la note : "+LABEL[b.dataset.add])});
-  if(S.cur){$("#drAdd").textContent=inNote(S.cur)?"Retirer de la note":"Ajouter à la note";$("#drAdd").classList.toggle("pri",!inNote(S.cur))}}
-
-/* --- volets --- */
-function renderTabs(){$("#tabs").innerHTML=TABS.map(([id,l,n])=>`<button role="tab" id="t-${id}" aria-controls="panel" aria-selected="${S.tab===id}" tabindex="${S.tab===id?0:-1}" data-tab="${id}">${l}${n?`<span class="n">${n}</span>`:""}</button>`).join("");$("#panel").setAttribute("aria-labelledby","t-"+S.tab)}
-function card(d){const L=lastR(d,S.ex),h=L?hit(d,L[1]):"";
-  return `<div class="card" draggable="true" data-card="${d.k}"><button class="open" data-open="${d.k}" aria-haspopup="dialog"><span class="k">Indicateur ${d.k}</span><b>${d.t}</b>${spark(d,210,40,S.ex)}
-   <span class="val"><span>${L?`<strong class="${h}">${fmtv(L[0],d.u)}</strong>en ${Y[L[1]]}`:`<strong style="color:var(--muted);font-size:14px">Pas de réalisé</strong>avant le RAP 2026`}</span><span>${L&&d.c[L[1]]!=null?"cible "+fmtv(d.c[L[1]],d.u):""}</span></span>
-   <span class="fl">${S.ex===2025?d.flags.map(([c,l])=>`<span class="flag ${c}">${l}</span>`).join(""):`<span class="flag">Vue du RAP ${S.ex}</span>`}</span></button>
-   <button class="add" data-add="${d.k}"></button></div>`}
-function renderPanel(){
-  const p=$("#panel");
-  if(S.tab==="ind"){
-    p.innerHTML=S.loading?`<div class="cards" aria-busy="true" aria-label="Chargement">${IND.map(()=>`<div class="sk"><i style="width:30%"></i><i style="width:85%;height:13px"></i><i style="height:40px;border-radius:6px"></i><i style="width:45%;height:16px"></i><i style="width:60%"></i></div>`).join("")}</div>`
-     :`<div class="key" style="margin:0 2px 10px">${KEY.replace(/^<div class="key">|<\/div>$/g,"")}</div><div class="cards">${IND.map(card).join("")}</div>`;
-  } else if(S.tab==="cp"){
-    const g=CP[4][1]-CP[4][2];
-    p.innerHTML=`<div class="panel pad"><p>En 2025, <b style="color:var(--fg)">${g} M€ votés n'ont pas été dépensés</b> (${Math.round(100*g/CP[4][1])} %). Le PLF 2027 baisse de ${CP[5][1]-CP[6][1]} M€.</p>
-     <div style="display:flex;justify-content:flex-end;margin-bottom:10px"><div class="seg" role="group" aria-label="Unité de l'écart"><button data-cpm="me" aria-pressed="${cpMode==="me"}">Écart en M€</button><button data-cpm="pct" aria-pressed="${cpMode==="pct"}">en % du voté</button></div></div>
-     ${bars(cpMode)}
-     <details class="more"><summary>${CHEV}Voir les montants</summary><div class="scrollx"><table class="cp"><thead><tr><th>Année</th><th>Voté</th><th>Exécuté</th><th>Non dépensé</th></tr></thead><tbody>${CP.map(([y,v,e])=>`<tr><td>${y}</td><td>${v} M€</td><td>${e??"—"}${e?" M€":""}</td><td>${e?`${v-e} M€ · ${nf(100*(v-e)/v,1)} %`:"—"}</td></tr>`).join("")}</tbody></table></div></details>
-     <button class="btn" style="margin-top:12px;min-height:44px" data-add-cp>${inNote("CP")?"Retirer de la note":"Ajouter à la note"}</button></div>`;
-  } else {
-    p.innerHTML=`<div class="chgl">${CHG.map((c,i)=>`<details ${i===0?"open":""}><summary>${CHEV}<span class="dot ${c.sev}"></span><span><b>${c.kind}</b> · ${c.t}</span></summary>
-      <dl class="ba"><dt>PAP 2026</dt><dd>${c.after?`<del>${c.before}</del>`:`<del>${c.before}</del>`}</dd><dt>PAP 2027</dt><dd>${c.after?`<ins>${c.after}</ins>`:`<span style="color:#f2a7a9">Indicateur retiré, sans remplaçant</span>`}</dd>
-      ${c.k!=="CP"?`<dt></dt><dd><button class="ghost" data-open="${c.k}" aria-haspopup="dialog" style="min-height:32px">Voir la série ${c.k}</button></dd>`:""}</dl></details>`).join("")}</div>`;
-  }
-  sync();
+function sync(){
+  $$(".add").forEach(b=>{const on=inNote(b.dataset.add);b.setAttribute("aria-pressed",on);b.innerHTML=on?CHECK:PLUS;b.setAttribute("aria-label",(on?"Retirer de":"Ajouter à")+" la note : "+LABEL[b.dataset.add])});
+  if(S.cur){$("#detAdd").textContent=inNote(S.cur)?"Retirer de la note":"Ajouter à la note"}
+  const cpb=$("[data-add-cp]");if(cpb)cpb.textContent=inNote("CP")?"Retirer de la note":"Ajouter à la note";
 }
-function renderEx(){$("#ex").innerHTML=[2023,2024,2025].map(y=>`<button data-ex="${y}" aria-pressed="${S.ex===y}">RAP ${y}</button>`).join("")}
-function setEx(y){if(y===S.ex)return;S.ex=y;renderEx();S.loading=true;if(S.tab!=="ind")S.tab="ind",renderTabs();renderPanel();
-  /* chargement simulé au-delà de 400 ms : squelette à la forme des cartes */
-  setTimeout(()=>{S.loading=false;renderPanel();say(`Réalisé tel que publié au RAP ${y}`)},650)}
+const pos=k=>S.note.indexOf(k)+1;
+/* clavier : Entrée/Espace saisit et pose, ↑↓ déplace d'une position, Échap annule et rend la place d'origine */
+function kbKey(e,k){
+  const n=S.note.length;
+  if(e.key==="Enter"||e.key===" "){e.preventDefault();
+    if(!kb){kb={k,from:S.note.indexOf(k)};renderNote(k);shout(`« ${LABEL[k]} » saisi, position ${pos(k)} sur ${n}. Flèches haut et bas pour déplacer, Entrée pour poser, Échap pour annuler.`)}
+    else{const kk=kb.k;kb=null;renderNote(kk);shout(`« ${LABEL[kk]} » posé en position ${pos(kk)} sur ${n}.`)}
+    return true}
+  if(kb&&(e.key==="ArrowUp"||e.key==="ArrowDown")){e.preventDefault();const i=S.note.indexOf(kb.k),j=i+(e.key==="ArrowUp"?-1:1);
+    if(j<0||j>=n){shout(j<0?"Déjà en première position.":"Déjà en dernière position.");return true}
+    S.note.splice(i,1);S.note.splice(j,0,kb.k);renderNote(kb.k);shout(`Position ${j+1} sur ${n}.`);return true}
+  if(kb&&e.key==="Escape"){e.preventDefault();const kk=kb.k;S.note=S.note.filter(x=>x!==kk);S.note.splice(kb.from,0,kk);kb=null;renderNote(kk);shout(`Déplacement annulé, « ${LABEL[kk]} » revient en position ${pos(kk)}.`);return true}
+  return false;
+}
+/* souris et doigt : événements pointer (pas l'API HTML5 de glisser-déposer, sans clavier) */
+let pd=null;
+function pDown(e,k){
+  if(e.button!==0)return;const li=e.target.closest("li");const items=[...$("#tl").children];
+  pd={k,li,y0:e.clientY,on:false,from:S.note.indexOf(k),to:S.note.indexOf(k),items,rects:items.map(x=>x.getBoundingClientRect()),id:e.pointerId};
+  e.target.closest(".hdl").setPointerCapture(e.pointerId);
+}
+function pMove(e){
+  if(!pd||e.pointerId!==pd.id)return;const dy=e.clientY-pd.y0;
+  if(!pd.on){if(Math.abs(dy)<4)return;pd.on=true;pd.li.classList.add("grab","drag");shout(`« ${LABEL[pd.k]} » saisi, position ${pd.from+1} sur ${S.note.length}.`)}
+  e.preventDefault();pd.li.style.transform=`translateY(${dy}px) scale(1.02)`;
+  const r=pd.rects,c=r[pd.from].top+r[pd.from].height/2+dy;let to=pd.from;
+  r.forEach((q,i)=>{const m=q.top+q.height/2;if(i<pd.from&&c<m)to=Math.min(to,i);if(i>pd.from&&c>m)to=Math.max(to,i)});
+  const h=r[pd.from].height+6;
+  pd.items.forEach((x,i)=>{if(i===pd.from)return;let s=0;if(pd.from<to&&i>pd.from&&i<=to)s=-h;if(pd.from>to&&i<pd.from&&i>=to)s=h;x.style.transform=s?`translateY(${s}px)`:""});
+  if(to!==pd.to){pd.to=to;shout(`Position ${to+1} sur ${S.note.length}.`)}
+}
+function pEnd(cancel){
+  if(!pd)return;const {k,on,from,to}=pd;pd.items.forEach(x=>x.style.transform="");pd.li.classList.remove("grab","drag");pd=null;
+  if(!on)return;
+  if(cancel){shout(`Déplacement annulé, « ${LABEL[k]} » revient en position ${from+1}.`);return}
+  if(to!==from){S.note.splice(from,1);S.note.splice(to,0,k)}
+  renderNote(k);shout(`« ${LABEL[k]} » posé en position ${to+1} sur ${S.note.length}.`);
+}
 
-/* --- tiroir --- */
-function openDr(k){S.lastFocus=S.lastFocus||document.activeElement;S.cur=k;const d=IX(k);
-  $("#drk").textContent=`Indicateur ${k} · réalisé connu au RAP ${S.ex}`;$("#drh").textContent=d.t;
-  $("#drb").innerHTML=`<div class="fl" style="display:flex;flex-wrap:wrap;gap:5px">${d.flags.map(([c,l])=>`<span class="flag ${c}">${l}</span>`).join("")}</div>${KEY}<div data-chart="${k}" data-h="210" data-upto="${S.ex}"></div>${table(d,S.ex)}
-   ${d.def?`<div class="def"><span class="lb">Définition modifiée en ${d.cut}</span><del>${d.def.old}</del><br>${d.def.neu}</div>`:""}<p class="note">${d.note}</p>`;
-  const dr=$("#dr"),sc=$("#scrim");dr.hidden=false;sc.hidden=false;
-  requestAnimationFrame(()=>{dr.classList.add("on");sc.classList.add("on");drawCharts(dr)});
+/* ---------- Onglets (WAI-ARIA : tabindex itinérant, flèches, Début/Fin) ---------- */
+function renderTabs(){
+  $("#tabs").innerHTML=TABS.map(([id,l,n])=>`<button role="tab" id="t-${id}" aria-controls="p-${id}" aria-selected="${S.tab===id}" tabindex="${S.tab===id?0:-1}" data-tab="${id}">${l}${n?`<span class="n" aria-hidden="true">${n}</span><span class="sr"> (${n})</span>`:""}</button>`).join("");
+  TABS.forEach(([id])=>$("#p-"+id).hidden=S.tab!==id);
+}
+function setTab(id,focus){S.tab=id;renderTabs();renderPanel();if(focus)$("#t-"+id).focus()}
+
+/* ---------- Volets ---------- */
+function card(d){const L=lastR(d,S.ex),h=L?hit(d,L[1]):"";
+  return `<div class="card${S.cur===d.k?" cur":""}"><button class="open" data-open="${d.k}" aria-controls="det" aria-expanded="${S.cur===d.k}"><span class="k">Indicateur ${d.k}</span><b>${d.t}</b>${spark(d,210,40,S.ex)}
+   <span class="val"><span>${L?`<strong class="${h}">${fmtv(L[0],d.u)}</strong>en ${Y[L[1]]}`:`<strong style="color:var(--muted);font-size:14px">Pas de réalisé</strong>avant le RAP 2026`}</span><span>${L&&d.c[L[1]]!=null?"cible "+fmtv(d.c[L[1]],d.u):""}</span></span>
+   <span class="fl">${S.ex===NOW?d.flags.map(([c,l])=>`<span class="flag ${c}">${l}</span>`).join(""):`<span class="flag">Vue du RAP ${S.ex}</span>`}</span></button>
+   <button class="add" data-add="${d.k}"></button></div>`}
+/* squelette : même nombre (5) et même forme que les cartes */
+const SKEL=`<div class="sk" aria-hidden="true"><i style="width:30%;height:11px"></i><i style="width:85%;height:13px"></i><i style="width:210px;max-width:100%;height:40px;border-radius:6px"></i><i style="width:45%;height:20px"></i><i style="width:60%;height:16px;border-radius:999px"></i></div>`;
+function renderCards(skel){
+  const c=$("#cards");c.setAttribute("aria-busy",S.loading);
+  c.innerHTML=skel?IND.map(()=>SKEL).join(""):IND.map(card).join("");
+  if(!skel)sync();
+}
+function renderPanel(){
+  if(S.tab==="ind"){renderCards(false)}
+  else if(S.tab==="cp"){const g=CP[4][1]-CP[4][2];
+    $("#p-cp").innerHTML=`<div class="panel pad"><p>En 2025, <b style="color:var(--fg)">${g} M€ votés n'ont pas été dépensés</b> (${Math.round(100*g/CP[4][1])} %). Le PLF 2027 baisse de ${CP[5][1]-CP[6][1]} M€.</p>
+     <fieldset class="seg" style="margin-bottom:12px"><legend>Afficher le non-dépensé</legend><div class="segs">${[["me","en M€"],["pct","en % du voté"]].map(([v,l])=>`<label><input type="radio" name="cpm" value="${v}" ${S.cpMode===v?"checked":""}>${l}</label>`).join("")}</div></fieldset>
+     <div id="barsbox">${bars(S.cpMode)}</div>
+     <details class="more"><summary>${CHEV}Montants année par année</summary><div class="scrollx"><table class="cp"><thead><tr><th>Année</th><th>Voté</th><th>Exécuté</th><th>Non dépensé</th></tr></thead><tbody>${CP.map(([y,v,e])=>`<tr><td>${y}</td><td>${v} M€</td><td>${e??"—"}${e?" M€":""}</td><td>${e?`${v-e} M€ · ${nf(100*(v-e)/v,1)} %`:"—"}</td></tr>`).join("")}</tbody></table></div></details>
+     <button class="btn pri" style="margin-top:12px;min-height:44px" data-add-cp></button></div>`;sync();}
+  else{$("#p-pap").innerHTML=`<p class="note" style="color:var(--muted);margin:0 2px 10px">Par rapport au PAP 2026. Chaque ligne se déplie.</p><div class="chgl">${CHG.map((c,i)=>`<details ${i===0?"open":""}><summary>${CHEV}<span class="dot ${c.sev}"></span><span><b>${c.kind}</b> : ${c.t}</span></summary>
+      <dl class="ba"><dt>PAP 2026</dt><dd><del>${c.before}</del></dd><dt>PAP 2027</dt><dd>${c.after?`<ins>${c.after}</ins>`:`<span style="color:#f2a7a9">Indicateur retiré, sans remplaçant</span>`}</dd>
+      ${c.k!=="CP"?`<dt></dt><dd><button class="lnk" data-open="${c.k}" aria-controls="det">Voir la série ${c.k}</button></dd>`:`<dt></dt><dd><button class="lnk" data-goto="cp">Voir les crédits</button></dd>`}</dl></details>`).join("")}</div>`}
+}
+function renderEx(){$("#ex").innerHTML=[2023,2024,2025].map(y=>`<label><input type="radio" name="ex" value="${y}" ${S.ex===y?"checked":""}>RAP ${y}</label>`).join("")}
+
+/* ---------- Changement d'exercice : chargement simulé (650 ms).
+   Seuils : rien sous 200 ms ; squelette à la forme des cartes au-delà ; erreur + Réessayer après 30 s. ---------- */
+let loadTok=0;
+function fakeFetch(y){return new Promise(res=>setTimeout(()=>res(y),650))}
+function setEx(y){
+  if(y===S.ex&&!S.loading)return;S.ex=y;const tok=++loadTok;S.loading=true;$("#cards").setAttribute("aria-busy","true");live(`Chargement du RAP ${y}…`);
+  const sk=setTimeout(()=>{if(tok===loadTok&&S.loading){renderCards(true);if(S.cur)skelDet()}},200);
+  const to=new Promise((_,rej)=>setTimeout(()=>rej(new Error("délai")),30000));
+  Promise.race([fakeFetch(y),to]).then(()=>{if(tok!==loadTok)return;clearTimeout(sk);S.loading=false;renderCards(false);if(S.cur)fillDet(S.cur);
+      live(`Réalisé tel que publié au RAP ${y} : ${IND.length} indicateurs.`)})
+    .catch(()=>{if(tok!==loadTok)return;S.loading=false;renderCards(false);
+      toastMsg(`Le RAP ${y} n'a pas pu être chargé : le serveur ne répond pas. Réessayez dans un instant.`,{type:"error",action:"Réessayer",onAction:()=>setEx(y)})});
+}
+
+/* ---------- Détail : panneau latéral NON modal (role=complementary) ---------- */
+function skelDet(){const b=$("#detb .chartbox");if(b)b.innerHTML=`<div class="skc" aria-hidden="true"></div>`}
+function fillDet(k){const d=IX(k);
+  $("#detk").textContent=`Indicateur ${k} · réalisé connu au RAP ${S.ex}`;$("#deth").textContent=d.t;
+  $("#detb").innerHTML=`<div class="fl">${d.flags.map(([c,l])=>`<span class="flag ${c}">${l}</span>`).join("")}</div><div class="key">${KEY}</div>
+   <div class="chartbox"><div data-chart="${k}" data-h="200" data-upto="${S.ex}"></div></div>
+   ${d.def?`<div class="def"><span class="lb">Définition modifiée en ${d.cut}</span><del>${d.def.old}</del><br>${d.def.neu}</div>`:""}
+   <p class="note">${d.note}</p>
+   <details><summary>${CHEV}Valeurs année par année</summary>${table(d,S.ex)}</details>`;
   const i=IND.indexOf(d);$('[data-nav="-1"]').disabled=i===0;$('[data-nav="1"]').disabled=i===IND.length-1;
-  sync();$("#dr .x").focus();document.body.style.overflow="hidden"}
-function closeDr(){const dr=$("#dr"),sc=$("#scrim");dr.classList.remove("on");sc.classList.remove("on");S.cur=null;document.body.style.overflow="";
-  setTimeout(()=>{if(!S.cur){dr.hidden=true;sc.hidden=true}},300);S.lastFocus?.focus?.();S.lastFocus=null}
+  requestAnimationFrame(()=>drawCharts($("#det")));sync();
+}
+function openDet(k,trigger){
+  const det=$("#det"),was=!det.hidden;if(trigger)S.trigger=trigger;S.cur=k;det.classList.remove("out");det.hidden=false;document.body.classList.add("sheet");
+  if(was){det.style.animation="none";det.offsetWidth;det.style.animation=""}
+  fillDet(k);$$(".card").forEach(c=>{const b=c.querySelector("[data-open]");const on=b.dataset.open===k;c.classList.toggle("cur",on);b.setAttribute("aria-expanded",on)});
+  $("#side").scrollTop=0;
+  $("#det .x").focus({preventScroll:true});
+}
+function closeDet(){
+  if(!S.cur)return;const det=$("#det"),k=S.cur;S.cur=null;det.classList.add("out");document.body.classList.remove("sheet");
+  $$(".card").forEach(c=>{c.classList.remove("cur");c.querySelector("[data-open]").setAttribute("aria-expanded","false")});
+  setTimeout(()=>{if(!S.cur){det.hidden=true;det.classList.remove("out")}},180);
+  /* le focus revient à l'élément qui a ouvert le panneau */
+  let t=S.trigger;if(!t||!document.contains(t))t=$(`[data-open="${k}"]`);t?.focus();S.trigger=null;
+}
 
-/* --- événements --- */
+/* ---------- Confirmation : <dialog> natif, réservé à une action destructrice ---------- */
+let dlgFrom=null;
+function askClear(btn){dlgFrom=btn;const n=S.note.length;$("#dlgp").textContent=`Les ${n} point${n>1?"s":""} de la note seront retirés. Vous pourrez annuler juste après.`;$("#dlg").showModal();$("#dlgNo").focus()}
+$("#dlg").addEventListener("close",()=>{if($("#dlg").returnValue==="yes"){const old=[...S.note];S.note=[];renderNote();sync();
+    toastMsg("Note vidée",{action:"Annuler",onAction:()=>{S.note=old;renderNote();sync()}});$("#tl").closest("section").querySelector("h2").setAttribute("tabindex","-1");$("#trh").focus()}
+  else dlgFrom?.focus();$("#dlg").returnValue=""});
+$("#dlgNo").onclick=()=>$("#dlg").close("no");
+$("#dlgYes").onclick=()=>$("#dlg").close("yes");
+
+/* ---------- Événements ---------- */
 document.addEventListener("click",e=>{const t=e.target;let b;
-  if(b=t.closest("[data-tab]")){S.tab=b.dataset.tab;renderTabs();renderPanel();return}
-  if(b=t.closest("[data-ex]")){setEx(+b.dataset.ex);return}
-  if(b=t.closest("[data-add]")){addNote(b.dataset.add);return}
-  if(t.closest("[data-add-cp]")){addNote("CP");renderPanel();return}
-  if(b=t.closest("[data-open]")){S.lastFocus=b;openDr(b.dataset.open);return}
-  if(t.closest("[data-close]")||t===$("#scrim")){closeDr();return}
-  if(b=t.closest("[data-nav]")){const i=IND.findIndex(d=>d.k===S.cur)+ +b.dataset.nav;if(IND[i])openDr(IND[i].k);return}
-  if(t.closest("#drAdd")){addNote(S.cur);return}
-  if(b=t.closest("[data-mv]")){move(b.dataset.k,+b.dataset.mv);return}
-  if(b=t.closest("[data-rm]")){const k=b.dataset.rm,i=S.note.indexOf(k);S.note.splice(i,1);renderNote();sync();if(S.tab==="cp")renderPanel();
-    say("Retiré de la note",()=>{S.note.splice(i,0,k);renderNote();sync();if(S.tab==="cp")renderPanel()});return}
-  if(b=t.closest("[data-cpm]")){cpMode=b.dataset.cpm;renderPanel();return}
+  if(b=t.closest("[data-tab]")){setTab(b.dataset.tab);return}
+  if(b=t.closest("[data-goto]")){setTab(b.dataset.goto,true);return}
+  if(b=t.closest("[data-add]")){toggleNote(b.dataset.add);return}
+  if(t.closest("[data-add-cp]")){toggleNote("CP");return}
+  if(b=t.closest("[data-open]")){if(S.cur===b.dataset.open&&b.classList.contains("open")){closeDet();return}openDet(b.dataset.open,b);return}
+  if(t.closest("[data-close]")){closeDet();return}
+  if(b=t.closest("[data-nav]")){const i=IND.findIndex(d=>d.k===S.cur)+ +b.dataset.nav;if(IND[i]){openDet(IND[i].k);b.focus()}return}
+  if(t.closest("#detAdd")){toggleNote(S.cur);return}
+  if(b=t.closest("[data-rm]")){const k=b.dataset.rm,i=S.note.indexOf(k);S.note.splice(i,1);renderNote();sync();
+    const nx=$$("#tl [data-rm]")[Math.min(i,S.note.length-1)];(nx||$("#trh")).focus();
+    toastMsg("Retiré de la note",{action:"Annuler",onAction:()=>{S.note.splice(i,0,k);renderNote();sync()}});return}
+  if(t.closest("#clr")){askClear(t.closest("#clr"));return}
 });
+document.addEventListener("change",e=>{
+  if(e.target.name==="ex")setEx(+e.target.value);
+  if(e.target.name==="cpm"){S.cpMode=e.target.value;$("#barsbox").innerHTML=bars(S.cpMode)}
+});
+$("#tl").addEventListener("pointerdown",e=>{const h=e.target.closest(".hdl");if(h&&!kb)pDown(e,h.dataset.hdl)});
+document.addEventListener("pointermove",pMove,{passive:false});
+document.addEventListener("pointerup",()=>pEnd(false));
+document.addEventListener("pointercancel",()=>pEnd(true));
 document.addEventListener("keydown",e=>{
-  if(!$("#dr").hidden&&S.cur){
-    if(e.key==="Escape"){e.preventDefault();closeDr();return}
-    if(e.key==="Tab"){const f=[...$("#dr").querySelectorAll("button:not(:disabled),[tabindex='0'],summary")].filter(x=>x.offsetParent);const a=f[0],z=f[f.length-1];
-      if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus()}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus()}}
-    return}
+  if($("#dlg").open)return; /* le <dialog> gère Échap et le piège de focus */
+  if(pd&&pd.on&&e.key==="Escape"){e.preventDefault();pEnd(true);return}
+  const h=e.target.closest?.("[data-hdl]");
+  if(h&&kbKey(e,h.dataset.hdl))return;
   const tab=e.target.closest?.("[role=tab]");
   if(tab&&["ArrowLeft","ArrowRight","Home","End"].includes(e.key)){e.preventDefault();const i=TABS.findIndex(x=>x[0]===S.tab);
-    const j=e.key==="Home"?0:e.key==="End"?TABS.length-1:(i+(e.key==="ArrowRight"?1:-1)+TABS.length)%TABS.length;S.tab=TABS[j][0];renderTabs();renderPanel();$("#t-"+S.tab).focus();return}
-  const h=e.target.closest?.("[data-hdl]");
-  if(h&&e.altKey&&(e.key==="ArrowUp"||e.key==="ArrowDown")){e.preventDefault();move(h.dataset.hdl,e.key==="ArrowUp"?-1:1)}
+    const j=e.key==="Home"?0:e.key==="End"?TABS.length-1:(i+(e.key==="ArrowRight"?1:-1)+TABS.length)%TABS.length;setTab(TABS[j][0],true);return}
+  /* accordéon groupé : ↑ ↓ passent d'un en-tête à l'autre */
+  const sm=e.target.closest?.(".chgl summary");
+  if(sm&&(e.key==="ArrowDown"||e.key==="ArrowUp")){e.preventDefault();const all=$$(".chgl summary"),i=all.indexOf(sm);all[(i+(e.key==="ArrowDown"?1:-1)+all.length)%all.length].focus();return}
+  if(e.key==="Escape"&&S.cur){e.preventDefault();closeDet()}
 });
-/* glisser-déposer : carte -> note (ajout), élément de note -> autre position (réordonner) */
-let dragK=null,dragFrom=null;
-document.addEventListener("dragstart",e=>{const c=e.target.closest?.("[data-card],[data-n]");if(!c)return;dragK=c.dataset.card||c.dataset.n;dragFrom=c.dataset.card?"card":"note";c.classList.add("drag");e.dataTransfer.effectAllowed="move";e.dataTransfer.setData("text/plain",dragK)});
-document.addEventListener("dragend",()=>{$$(".drag,.tgt").forEach(x=>x.classList.remove("drag","tgt"));$("#tray").classList.remove("over");dragK=null});
-document.addEventListener("dragover",e=>{if(!dragK)return;const tr=e.target.closest?.("#tray");if(!tr)return;e.preventDefault();tr.classList.add("over");
-  $$(".tgt").forEach(x=>x.classList.remove("tgt"));const li=e.target.closest("[data-n]");if(li&&dragFrom==="note")li.classList.add("tgt")});
-document.addEventListener("dragleave",e=>{if(e.target===$("#tray"))$("#tray").classList.remove("over")});
-document.addEventListener("drop",e=>{if(!dragK)return;const tr=e.target.closest?.("#tray");if(!tr)return;e.preventDefault();
-  if(dragFrom==="card"){if(!inNote(dragK))addNote(dragK)}
-  else{const li=e.target.closest("[data-n]");if(li&&li.dataset.n!==dragK){const to=S.note.indexOf(li.dataset.n);S.note=S.note.filter(x=>x!==dragK);S.note.splice(to,0,dragK);renderNote(dragK)}}});
+/* si le focus quitte une poignée saisie au clavier, l'élément est posé où il est */
+$("#tl").addEventListener("focusout",e=>{if(kb&&e.target.matches(".hdl")&&!e.relatedTarget?.matches?.(".hdl")){setTimeout(()=>{if(kb&&!document.activeElement?.matches?.(".hdl")){const kk=kb.k;kb=null;renderNote();shout(`« ${LABEL[kk]} » posé en position ${pos(kk)}.`)}},0)}});
 
 $("#lead").innerHTML=`Quatre points à signaler. <span>Une série rompue, une cible relâchée deux fois, un indicateur supprimé, et 79 M€ votés mais non dépensés en 2025.</span>`;
+$("#key").innerHTML=KEY;
 renderEx();renderTabs();renderPanel();renderNote();sync();
 </script>

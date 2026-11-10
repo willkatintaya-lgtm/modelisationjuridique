@@ -164,6 +164,7 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 .stat{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--fg)}
 .opt{display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:8px 12px;min-height:44px;font-size:13px;cursor:pointer;margin-bottom:6px;transition:border-color .2s,background .2s}
 .opt:has(input:checked){border-color:var(--accent);background:var(--lit)}
+.fld label.opt{display:grid;margin:0 0 6px;color:var(--text)}
 .opt input{accent-color:var(--accent);width:16px;height:16px;margin:0}
 .opt small{color:var(--dim)}
 .opt .m{color:#7fd3a8;font-size:12px;white-space:nowrap}
@@ -180,6 +181,7 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
 .tst .tx{width:32px;height:32px;flex:none;border:0;background:none;color:var(--muted);font-size:17px;border-radius:6px;cursor:pointer}
 .tst .tx:hover{color:var(--fg);background:var(--s1)}
 .tst.out{opacity:0}
+html.dopen .toasts{right:436px;width:min(380px,calc(100vw - 452px))}
 @keyframes tin{from{opacity:0;transform:translateY(-6px)}}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
 @media (max-width:980px){.grid{grid-template-columns:minmax(0,1fr)}.side{position:static}}
@@ -196,6 +198,7 @@ fieldset{border:0;margin:0;padding:0;min-width:0}
   .acts .btn{width:100%}
   .toasts{top:auto;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:16px;right:16px;width:auto;margin:0 auto;max-width:520px}
   .tst{animation-name:tup}
+  html.dopen .toasts{right:16px;width:auto}
   .row{grid-template-columns:minmax(0,1fr) 84px;padding:8px 12px;row-gap:2px}
   .row .d{display:none}.row .s{grid-column:1}.row .a{grid-row:1;grid-column:2}
   .sk{grid-template-columns:minmax(0,1fr) 84px;min-height:72px}.sk>i:first-child,.sk>i:nth-child(3){display:none}
@@ -331,11 +334,11 @@ function render(){
 /* ——— tiroir non modal (détail d'une opération) ——— */
 function openDrawer(i,pre){
   if(cur==null)trigger=document.activeElement;
-  cur=i;drawerHtml(pre);const d=$("#drawer");d.hidden=false;d.classList.remove("leaving");
+  cur=i;drawerHtml(pre);document.documentElement.classList.add("dopen");const d=$("#drawer");d.hidden=false;d.classList.remove("leaving");
   requestAnimationFrame(()=>{d.classList.add("on");$("#drawer .x").focus({preventScroll:true})});render();
 }
 function closeDrawer(){
-  if(cur==null)return;const i=cur;cur=null;const d=$("#drawer");d.classList.remove("on");d.classList.add("leaving");
+  if(cur==null)return;const i=cur;cur=null;document.documentElement.classList.remove("dopen");const d=$("#drawer");d.classList.remove("on");d.classList.add("leaving");
   setTimeout(()=>{if(cur==null){d.hidden=true;d.classList.remove("leaving")}},200);
   render();const t=(trigger&&trigger.isConnected?trigger:null)||document.querySelector(`[data-op="${i}"]`)||$("#tab-"+tab);t?.focus({preventScroll:true});trigger=null;
 }
