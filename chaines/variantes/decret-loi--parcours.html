@@ -74,7 +74,7 @@ function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createEle
 .step .ic.run{border-color:var(--accent);border-top-color:transparent;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .step b{font-weight:500;color:var(--fg);font-size:.84rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.step small{color:var(--muted);font-size:.76rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.step small{color:var(--muted);font-size:.76rem;line-height:1.35}
 .banner{display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:center;justify-content:space-between;border:1px solid var(--line2);border-left:3px solid var(--warn);background:var(--s1);border-radius:9px;padding:.7rem .9rem;margin:0 0 14px;font-size:.86rem;color:var(--text);animation:in .25s var(--ease)}
 .banner.err{border-left-color:var(--err)}
 .banner.ok{border-left-color:var(--ok)}
@@ -260,7 +260,7 @@ function suites(){
   const T=P.filter(p=>NEEDS(finalSt(p.k)));
   const pending=P.filter(p=>NEEDS(p.st)&&(!S.rev[p.k]||S.rev[p.k].stale));
   if(!T.length){$("#view").innerHTML=`<div class="panel empty"><b>Aucune suite à préparer pour l'instant.</b>Les suites naissent des constats que vous confirmez. ${pending.length?`${pending.length} point${pending.length>1?"s":""} signalé${pending.length>1?"s":""} par l'outil reste${pending.length>1?"nt":""} à examiner.`:""}<div class="row" style="justify-content:center;margin-top:.8rem"><button class="btn pri" data-step="3">Reprendre l'examen</button></div></div>`;return}
-  $("#view").innerHTML=(pending.length?`<div class="banner" style="border-left-color:var(--line2)"><p><b>Liste partielle.</b> ${pending.map(p=>`« ${p.t} »`).join(", ")} reste${pending.length>1?"nt":""} à examiner ; ${pending.length>1?"ils":"il"} pourront s'ajouter ici.</p><div class="acts"><button class="btn" data-go="${pending[0].k}">Examiner</button></div></div>`:"")+
+  $("#view").innerHTML=(pending.length?`<div class="banner" style="border-left-color:var(--line2)"><p><b>Liste partielle.</b> ${pending.map(p=>`« ${p.t} »`).join(", ")} reste${pending.length>1?"nt":""} à examiner ; ${pending.length>1?"ils pourront":"il pourra"} s'ajouter ici.</p><div class="acts"><button class="btn" data-go="${pending[0].k}">Examiner</button></div></div>`:"")+
   T.map(p=>{const q=S.q[p.k]||(S.q[p.k]={txt:QDEF[p.k]||"",sent:null});const st=S.rev[p.k].stale;
    if(q.sent) return `<article class="panel q"><h3><span class="dot ${ST[finalSt(p.k)].c}"></span>${p.t}<span class="tag ok">Transmise</span></h3><div class="sent">${esc(q.txt)}</div><p class="meta" style="margin:0">Transmise au service de la séance le ${q.sent.at} · référence provisoire ${q.sent.ref}. Elle ne peut plus être modifiée ici ; pour la retirer, s'adresser au service de la séance.</p></article>`;
    return `<article class="panel q" data-q="${p.k}"><h3><span class="dot ${ST[finalSt(p.k)].c}"></span>${p.t}<span class="tag">${sending===p.k?"Transmission…":"Brouillon"}</span></h3>
@@ -271,7 +271,7 @@ function suites(){
      :`<div class="row"><button class="btn pri" data-act="ask-send" data-k="${p.k}" ${st||sending?"disabled":""}>Transmettre…</button><span class="meta">${nf(q.txt.length)} / 2 000 caractères · brouillon gardé automatiquement</span></div>`}
    </article>`}).join("");
 }
-function render(anim){steps();banner();S.step===4?suites():examen();if(anim){const f=$("#focus");f&&f.classList.add("anim")}save();}
+function render(anim){steps();banner();S.step===4?suites():examen();if(anim){const f=$("#focus");if(f){f.classList.add("anim");const r=f.getBoundingClientRect();if(r.top<0||r.top>innerHeight*.6)f.scrollIntoView({block:"start",behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth"})}}save();}
 
 function utoast(msg,undo){$$(".tt").forEach(e=>e.remove());clearTimeout(undoT);const t=document.createElement("div");t.className="tt";t.innerHTML=`<span>${esc(msg)}</span>${undo?"<button>Annuler</button>":""}`;document.body.append(t);
   if(undo)t.querySelector("button").onclick=()=>{undo();t.remove()};undoT=setTimeout(()=>t.remove(),5000);$("#live").textContent=msg;}
