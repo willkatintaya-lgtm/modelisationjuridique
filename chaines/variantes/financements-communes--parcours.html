@@ -79,7 +79,7 @@ function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createEle
 @keyframes sl{from{opacity:0;transform:translateY(-4px)}}
 /* avancement */
 .prog{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:6px;margin:16px 0 4px}
-.stage{border:1px solid var(--line);border-radius:9px;padding:9px 12px;background:none;text-align:left;cursor:pointer;color:var(--muted);transition:border-color .2s,background .2s,color .2s;min-height:44px}
+.stage{display:flex;flex-direction:column;justify-content:flex-start;border:1px solid var(--line);border-radius:9px;padding:9px 12px;background:none;text-align:left;cursor:pointer;color:var(--muted);transition:border-color .2s,background .2s,color .2s;min-height:44px}
 .stage b{display:block;font-size:20px;font-weight:600;color:var(--fg);line-height:1.2}
 .stage span{font-size:12.5px}
 .stage[aria-pressed=true]{border-color:var(--accent);background:var(--lit);color:var(--fg)}
