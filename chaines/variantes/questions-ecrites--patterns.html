@@ -475,7 +475,7 @@ $("#form").addEventListener("submit",e=>{e.preventDefault();if(!validate()){ta.f
 $("#dlg-no").onclick=()=>dlg.close();
 $("#dlg-ok").onclick=()=>{dlg.close("ok")};
 dlg.addEventListener("click",e=>{if(e.target===dlg){const r=dlg.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dlg.close()}});
-dlg.addEventListener("close",()=>{if(dlg.returnValue==="ok"){sent=true;$("#go").disabled=true;$("#sent").textContent="Transmise pour dépôt le 10 nov. 2026";toast("Question transmise au secrétariat du groupe pour dépôt.");$("#copy").focus()}
+dlg.addEventListener("close",()=>{if(dlg.returnValue==="ok"){sent=true;$("#go").disabled=true;$("#sent").textContent="Transmise le 10 nov.";toast("Question transmise au secrétariat du groupe pour dépôt.");$("#copy").focus()}
   else dlgFrom&&dlgFrom.focus&&dlgFrom.focus();dlg.returnValue=""});
 
 // ——— Frappe : recalcul en 150 ms (sous le seuil de 400 ms, aucun indicateur) ———
