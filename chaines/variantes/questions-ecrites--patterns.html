@@ -161,7 +161,7 @@ details[open] .s-sum{display:none}
 .c-act .fine{font-size:12px;color:var(--dim)}
 .empty{padding:16px;color:var(--dim);font-size:13px;border:1px dashed var(--line2);border-radius:9px}
 /* squelette */
-.sk{display:block;border-radius:5px;background:var(--s2);animation:pulse 1.4s ease-in-out infinite}
+.sk{display:block;border-radius:5px;background:var(--line2);animation:pulse 1.4s ease-in-out infinite}
 @keyframes pulse{50%{opacity:.45}}
 .skc{display:grid;grid-template-columns:36px minmax(0,1fr);border:1px solid var(--line);border-radius:9px;min-height:56px}
 .skc>div{display:grid;gap:8px;padding:12px 12px 12px 4px}
@@ -192,7 +192,7 @@ dialog .acts{margin-top:16px}
 @media (max-width:639px){
   .toasts{top:auto;right:auto;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px))}
   @keyframes tin{from{opacity:0;transform:translateY(6px)}}
-  .acts .btn.pri{width:100%}
+  .acts .btn.pri{flex:1}.acts .sent{flex-basis:100%}
   .s-top .lv{display:none}
 }
 /* Fitts : 44 px au tactile et sur petit écran */
@@ -230,7 +230,7 @@ dialog .acts{margin-top:16px}
       <div class="acts">
         <span class="sent" id="sent"></span>
         <button type="button" class="btn" id="copy">Copier le texte</button>
-        <button type="submit" class="btn pri" id="go">Déposer…</button>
+        <button type="submit" class="btn pri" id="go" disabled>Déposer…</button>
       </div>
     </form>
     <section aria-labelledby="res-h" id="res" tabindex="-1">
@@ -469,6 +469,7 @@ $("#form").addEventListener("submit",e=>{e.preventDefault();if(!validate()){ta.f
   const dup=R[0]&&R[0].s>=.42?R[0]:null,cited=citedIn(ta.value);
   $("#dlg-d").textContent=`Elle sera adressée au ministre ${MINDE[cur]} et publiée au Journal officiel : une fois déposée, elle ne peut plus être modifiée.`;
   $("#dlg-r").innerHTML=dup?`Rappel : très proche de <b>${dup.q.n}</b>${dup.q.mine?", que vous avez déjà posée":dup.q.a?", déjà répondue":", sans réponse"}${!dup.q.mine?(cited.has(dup.q.n)?" ; elle est citée dans votre texte.":" ; elle n'est pas citée dans votre texte."):"."}`:`Aucune question proche ne pose la même question.`;
+  if(!$("#suggest").hidden)$("#dlg-r").innerHTML+=`<br>${esc($("#suggest span").textContent)} Ministre choisi : ${MIN[cur]}.`;
   dlgFrom=document.activeElement;dlg.showModal();$("#dlg-no").focus()});
 $("#dlg-no").onclick=()=>dlg.close();
 $("#dlg-ok").onclick=()=>{dlg.close("ok")};
@@ -482,5 +483,5 @@ let tm;ta.addEventListener("input",()=>{clearTimeout(tm);tm=setTimeout(()=>{chan
 // ——— Premier chargement de l'archive : squelette seulement s'il dépasse 200 ms ———
 renderMini();checkMinistry();
 const skT=setTimeout(()=>{if(!loaded)skeleton()},200);
-setTimeout(()=>{clearTimeout(skT);loaded=true;run();say(`${R.length} questions proches trouvées dans l'archive.`)},650);
+setTimeout(()=>{clearTimeout(skT);loaded=true;$("#go").disabled=false;run();say(`${R.length} questions proches trouvées dans l'archive.`)},650);
 </script>
