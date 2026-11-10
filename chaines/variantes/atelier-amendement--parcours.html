@@ -1,0 +1,765 @@
+<title>Atelier d'amendement · parcours</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+
+/* Variante « parcours » : la tâche est un fil de cinq étapes observables (passage, rédaction, contrôles, séance, dépôt),
+   chacune avec son état ; le dépôt est l'action irréversible, confirmée dans la page ; le brouillon se reprend ;
+   la liasse peut être périmée, en cours d'actualisation ou en erreur ; la mise en page suit la largeur disponible (requêtes de conteneur). */
+.wrap{max-width:980px}
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:10px 20px;flex-wrap:wrap;margin-bottom:14px}
+.save{font-size:12.5px;color:var(--dim);display:flex;align-items:center;gap:8px}
+.bnr{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;padding:10px 14px;border-radius:10px;border:1px solid var(--line2);background:var(--s1);margin-bottom:10px;font-size:13px;color:var(--text);animation:vin .25s var(--ease)}
+.bnr .dot{margin-top:6px}
+.bnr p{margin:0;flex:1 1 260px}
+.bnr p small{display:block;color:var(--muted);font-size:12.5px}
+.bnr .acts{display:flex;gap:8px;flex-wrap:wrap}
+.bnr.err{border-color:rgba(229,72,77,.45)}
+.bnr.done{border-color:rgba(70,179,126,.45)}
+.view,.vin{animation:vin .26s var(--ease)}
+@keyframes vin{from{opacity:0;transform:translateY(4px)}}
+/* fil des étapes */
+.fil{list-style:none;margin:0;padding:0;display:grid;gap:10px;counter-reset:s}
+.st{border:1px solid var(--line);border-radius:12px;background:var(--s1);container-type:inline-size;transition:border-color .2s}
+.st.cur{border-color:var(--line2)}
+.st-h{width:100%;display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:2px 12px;align-items:center;border:0;background:none;text-align:left;padding:14px 16px;cursor:pointer;color:inherit;min-height:56px;border-radius:12px}
+.st-h:hover{background:var(--s2)}
+.st-h .k{grid-row:span 2;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:12px;border:1px solid var(--line2);color:var(--muted)}
+.st.ok .k{background:rgba(70,179,126,.16);border-color:transparent;color:#7fd3a8}
+.st.err .k{background:rgba(229,72,77,.16);border-color:transparent;color:#f2a7a9}
+.st.warn .k{background:rgba(227,163,63,.16);border-color:transparent;color:#efc27a}
+.st-h .nm{color:var(--fg);font-weight:500;font-size:14px}
+.st-h .sm{grid-column:2;font-size:12.5px;color:var(--muted);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.st.open .st-h .sm{white-space:normal}
+.badge{grid-row:span 2;font-size:12px;padding:3px 9px;border-radius:999px;border:1px solid var(--line2);color:var(--muted);white-space:nowrap}
+.ok .badge{color:#7fd3a8;border-color:rgba(70,179,126,.35)}
+.err .badge{color:#f2a7a9;border-color:rgba(229,72,77,.4)}
+.warn .badge{color:#efc27a;border-color:rgba(227,163,63,.4)}
+.st-b{padding:0 16px 18px 56px}
+.st .slide>div{min-width:0}
+.st.open>.slide{grid-template-rows:1fr}
+.st.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.nextbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+.nextbar .sp{flex:1}
+.btn{min-height:36px}
+@media (pointer:coarse){.btn,.ghost{min-height:44px}}
+/* étape 1 : passage */
+.how{margin:0 0 10px;font-size:12.5px;color:var(--dim)}
+.al{display:grid;grid-template-columns:30px minmax(0,1fr);gap:0 8px;padding:5px 0}
+.al .n{border:0;background:none;height:26px;width:28px;border-radius:6px;color:var(--dim);font-size:11.5px;cursor:pointer;transition:color .2s,background .2s}
+.al .n:hover,.al .n.on{color:var(--fg);background:var(--s2)}
+.al .n:disabled{cursor:default;background:none;color:var(--dim)}
+.al .n.new{color:var(--ins);font-weight:600;display:grid;place-items:center;cursor:default}
+.t{margin:0;font-size:clamp(14px,1.2vw + 9px,14.5px);line-height:1.72;color:var(--text);user-select:text;-webkit-user-select:text}
+.locked .t{user-select:none;-webkit-user-select:none}
+del+ins{margin-left:.3em}
+mark.pend{background:var(--lit);color:var(--fg)}
+.lit{background:var(--lit);border-radius:3px}
+.gone .t{color:var(--dim)}
+.comp{grid-column:2;margin:8px 0 6px;padding:12px;border:1px solid var(--accent);border-radius:9px;background:var(--s2);animation:vin .2s var(--ease)}
+.comp .q{font-size:12.5px;color:var(--muted);margin:0 0 8px}
+.comp .q b{color:var(--fg);font-weight:500}
+.comp .row{display:flex;gap:8px;flex-wrap:wrap}
+.comp label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:6px}
+.comp input[type=text]{width:100%;min-height:40px;font-size:14px}
+.comp .e{color:#f2a7a9;font-size:12.5px;min-height:1.2em;margin:6px 0 0}
+.comp .note{font-size:12px;color:var(--dim);margin:8px 0 0}
+.fx{margin:12px 0 0;padding:10px 12px;border-radius:8px;background:var(--bg);border:1px solid var(--line);font-size:12.5px;color:var(--muted);display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;animation:vin .25s var(--ease)}
+.fx ul{margin:0;padding:0;list-style:none;flex:1 1 240px}
+.fx li{margin:0 0 2px}
+.fx li b{color:var(--text);font-weight:500}
+.fx .h{color:var(--dim);font-size:11.5px;letter-spacing:.04em;text-transform:uppercase;display:block;margin-bottom:4px}
+.fx .msg{color:#f2a7a9}
+/* étape 2 */
+.disp{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.disp li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;align-items:start;padding:8px 6px 8px 10px;border-radius:7px;background:var(--s2);font-size:13.5px;line-height:1.6;color:var(--fg)}
+.disp li.hl{box-shadow:inset 0 0 0 1px var(--accent)}
+.ico{width:30px;height:30px;border:0;background:none;color:var(--dim);border-radius:6px;cursor:pointer;display:grid;place-items:center}
+.ico:hover{color:var(--fg);background:var(--line)}
+@media (pointer:coarse){.ico{width:44px;height:44px}}
+.lbl{display:flex;justify-content:space-between;margin:14px 0 6px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.lbl span{text-transform:none;letter-spacing:0}
+textarea{width:100%;min-height:100px;resize:vertical;line-height:1.55}
+textarea:disabled{opacity:.7}
+.empty{padding:14px;border:1px dashed var(--line2);border-radius:8px;color:var(--muted);font-size:13px}
+/* étape 3 */
+.ckl{list-style:none;margin:0;padding:0}
+.ckl li{display:grid;grid-template-columns:12px minmax(0,1fr);gap:2px 12px;padding:10px 0;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.ckl li:first-child{border-top:0;padding-top:0}
+.ckl .dot{margin-top:6px}
+.ckl b{color:var(--fg);font-weight:500;display:block}
+.ckl .acts{grid-column:2;margin-top:6px;display:flex;gap:8px;flex-wrap:wrap}
+.stale{opacity:.55}
+.new{font-size:11px;padding:1px 6px;border-radius:4px;background:rgba(138,180,255,.15);color:var(--ins);margin-left:4px}
+/* squelette */
+.sk{display:block;height:12px;border-radius:4px;background:linear-gradient(90deg,var(--s2),var(--line),var(--s2));background-size:200% 100%;animation:sk 1.2s linear infinite;margin:6px 0}
+@keyframes sk{to{background-position:-200% 0}}
+/* étape 4 */
+.answer{margin:0 0 10px;color:var(--fg);font-size:14.5px;line-height:1.55}
+.answer small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.calls{display:grid;gap:4px}
+.call{display:grid;grid-template-columns:22px 60px minmax(0,1fr) auto;gap:8px;align-items:center;width:100%;border:1px solid transparent;background:var(--s2);text-align:left;padding:7px 10px;border-radius:7px;cursor:pointer;color:var(--text);font-size:13px;min-height:40px;transition:border-color .2s}
+.call:hover{border-color:var(--line2)}
+.call .pos{color:var(--dim);font-size:11.5px;text-align:right}
+.call .num{color:var(--fg);font-weight:500;white-space:nowrap}
+.call.mine{border-color:rgba(110,123,242,.45)}
+.call.mine .num{color:#b4bcff}
+.call .s{font-size:12px;white-space:nowrap;color:var(--dim)}
+.call.adopt .s{color:#7fd3a8}
+.call.fell{cursor:default;background:none}
+.call.fell .w{color:var(--dim);text-decoration:line-through 1px var(--del)}
+.call.fell .s{color:#f2a7a9}
+.call .w{min-width:0}
+.two{display:grid;gap:16px}
+.res .al{grid-template-columns:40px minmax(0,1fr)}
+.res .al .n{width:36px;display:block;text-align:right;padding-right:6px;cursor:default}
+.res .t{font-size:13.5px}
+.ex{display:block;font-size:10.5px;color:var(--dim);line-height:1}
+sup.by{font-size:10px;color:var(--muted);margin-left:2px}
+.subh{font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase;margin:0 0 8px;display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:26px}
+.subh .ghost{text-transform:none;letter-spacing:0}
+/* étape 5 */
+.confirm{margin-top:12px;padding:14px;border-radius:9px;border:1px solid rgba(227,163,63,.45);background:rgba(227,163,63,.06);animation:vin .2s var(--ease)}
+.confirm p{margin:0 0 10px;font-size:13px;color:var(--text)}
+.confirm ul{margin:0 0 12px;padding-left:18px;font-size:13px;color:var(--muted)}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid var(--line2);border-top-color:var(--fg);border-radius:50%;animation:rot .8s linear infinite;vertical-align:-2px;margin-right:8px}
+@keyframes rot{to{transform:rotate(360deg)}}
+.pre{white-space:pre-wrap;margin:10px 0 0;padding:12px;background:var(--bg);border:1px solid var(--line);border-radius:7px;font-size:13px;line-height:1.6;color:var(--text)}
+/* reflow selon la place réellement disponible, pas selon l'appareil */
+@container (max-width:560px){.st-b{padding:0 14px 16px 14px}.st-h{padding:12px 14px}.badge{grid-row:auto;grid-column:2;justify-self:start;margin-top:4px}.st-h{grid-template-columns:28px minmax(0,1fr)}.call{grid-template-columns:20px 52px minmax(0,1fr)}.call .s{grid-column:3}.al{grid-template-columns:26px minmax(0,1fr)}}
+@container (min-width:780px){.two{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}}
+@media (prefers-reduced-motion:reduce){.sk{animation:none}.spin{animation:none;border-top-color:var(--muted)}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="ctx">Projet de loi pour l'accès au logement · séance publique du jeudi 19 novembre</div>
+      <h1>Article 4 · logements vacants</h1>
+    </div>
+    <div class="save" id="save" aria-live="polite"></div>
+  </header>
+  <div id="banners"></div>
+  <ol class="fil" id="fil"></ol>
+</div>
+
+<script>
+/* ---------- Données fictives ---------- */
+const GROUPS={PR:{name:"Progrès républicain",c:"#c07a00"},SOL:{name:"Solidarité et logement",c:"#d13a30"},ECO:{name:"Écologie urbaine",c:"#2a9d63"},
+ UT:{name:"Union des territoires",c:"#3b82d6"},LL:{name:"Libertés locales",c:"#e0671d"},RC:{name:"Rassemblement des communes",c:"#7c5cd6"},
+ GOUV:{name:"Gouvernement",c:"#7d8696"},DC:{name:"Démocratie communale",c:"#2bb3b1"},AR:{name:"Avenir rural",c:"#8fae3a"},CP:{name:"Centre et progrès",c:"#d8699a"}};
+const ME="PR";
+const ART=[null,
+ "I. – Le chapitre II du titre III du livre III du code de la construction et de l'habitation est complété par un article L. 332-4 ainsi rédigé :",
+ "« Art. L. 332-4. – Dans les communes de plus de 50 000 habitants appartenant à une zone d'urbanisation continue, le propriétaire d'un logement vacant depuis plus de deux ans le déclare au maire.",
+ "« Le logement déclaré peut faire l'objet, à la demande du propriétaire, d'une aide à la remise sur le marché dont le montant ne peut excéder 30 % du coût des travaux, dans la limite de 15 000 euros par logement.",
+ "« Le maire informe le propriétaire des aides mobilisables dans un délai d'un mois suivant la déclaration.",
+ "« Les conditions d'application du présent article sont fixées par décret en Conseil d'État. »",
+ "II. – Au premier alinéa du I de l'article 232 du code général des impôts, le taux : « 17 % » est remplacé par le taux : « 20 % ».",
+ "III. – Le présent article entre en vigueur le 1er janvier 2027."];
+const NAL=ART.length-1;
+// Liasse de séance sur l'article 4 (amendements des autres)
+let LIASSE=[
+ {id:12,g:"LL",op:"delArt"},
+ {id:31,g:"RC",al:2,op:"rep",w:"50 000",x:"20 000"},
+ {id:44,g:"ECO",al:2,op:"rep",w:"deux ans",x:"un an"},
+ {id:45,g:"SOL",al:2,op:"rep",w:"deux ans",x:"dix-huit mois"},
+ {id:58,g:"UT",al:3,op:"rep",w:"30 %",x:"20 %"},
+ {id:60,g:"AR",al:4,op:"delAl"},
+ {id:72,g:"DC",al:4,op:"rep",w:"un mois",x:"deux mois"},
+ {id:87,g:"PR",al:6,op:"rep",w:"20 %",x:"19 %",occ:1},
+ {id:90,g:"LL",al:6,op:"delAl"},
+ {id:95,g:"CP",al:6,op:"rep",w:"20 %",x:"25 %",occ:1},
+ {id:101,g:"GOUV",al:7,op:"rep",w:"1er janvier 2027",x:"1er juillet 2027"},
+];
+const FICHES=[
+ {org:"Union des propriétaires bailleurs (fictive)",date:"4 novembre",hatvp:true,al:6,w:"20 %",x:"18 %"},
+ {org:"Collectif Habitat vacant (fictif)",date:"6 novembre",hatvp:false,al:3,w:"30 %",x:"50 %"},
+];
+// Ce que le texte engage financièrement, passage par passage (base des contrôles de l'article 40)
+const FIN={
+ 2:[{m:"50 000",less:"charge",why:"abaisser le seuil étend l'aide à davantage de communes"},{m:"deux ans",less:"charge",why:"raccourcir la durée de vacance rend davantage de logements éligibles à l'aide"}],
+ 3:[{m:"30 %",more:"charge",why:"relever le plafond de l'aide aggrave une charge publique"},{m:"15 000 euros",more:"charge",why:"relever le plafond de l'aide aggrave une charge publique"},{m:"peut faire",chg:"charge",why:"rendre l'aide automatique crée une charge"}],
+ 4:[{m:"un mois",less:"charge",why:"raccourcir le délai alourdit l'obligation faite à la commune"}],
+ 6:[{m:"20 %",less:"perte",why:"une hausse moindre du taux réduit le produit attendu de la taxe sur les logements vacants"}],
+ 7:[{m:"1er janvier 2027",later:"perte",earlier:"charge",why:"la date commande à la fois la hausse de la taxe et l'ouverture de l'aide"}],
+};
+const GAGE="La perte de recettes pour l'État est compensée à due concurrence par la création d'une taxe additionnelle à l'accise sur les tabacs prévue au chapitre IV du titre Ier du livre III du code des impositions sur les biens et services.";
+const NOW=new Date(2026,10,10,11,20), SEANCE=new Date(2026,10,19), HOLI=["2026-11-11","2026-12-25"];
+
+/* ---------- Outils ---------- */
+const $=s=>document.querySelector(s), esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/(\d) (?=\d{3}\b)/g,"$1\u00a0").replace(/(\d) %/g,"$1\u00a0%").replace(/« /g,"«\u00a0").replace(/ »/g,"\u00a0»");
+const ORD=["première","deuxième","troisième","quatrième","cinquième"];
+const NUMW={un:1,une:1,deux:2,trois:3,quatre:4,cinq:5,six:6,huit:8,dix:10,douze:12,"dix-huit":18,"vingt-quatre":24};
+const MONTHS=["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+function qty(s){
+  if(!s) return null; s=s.toLowerCase();
+  const d=s.match(/(1er|\d{1,2})\s+(janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)\s+(\d{4})/);
+  if(d) return {v:+new Date(+d[3],MONTHS.indexOf(d[2]),d[1]==="1er"?1:+d[1]),u:"date"};
+  const m=s.match(/(\d[\d ]*(?:,\d+)?|dix-huit|vingt-quatre|une|un|deux|trois|quatre|cinq|six|huit|dix|douze)\s*(%|ans?|mois|euros|habitants)?/);
+  if(!m) return null;
+  let v=NUMW[m[1]]??parseFloat(m[1].replace(/ /g,"").replace(",","."));
+  const u=m[2]||"";
+  if(/^ans?$/.test(u)) return {v:v*12,u:"mois"};
+  return {v,u};
+}
+function noun(x){
+  if(/^\d[\d ]*(,\d+)?\s?%$/.test(x)) return {au:"au taux",le:"le taux",du:"du taux"};
+  if(/^\d[\d ]*$/.test(x)) return {au:"au nombre",le:"le nombre",du:"du nombre"};
+  if(/^(1er|\d{1,2}) \S+ \d{4}$/.test(x)) return {au:"à la date",le:"la date",du:"de la date"};
+  if(!/\s/.test(x.trim())) return {au:"au mot",le:"le mot",du:"du mot"};
+  return {au:"aux mots",le:"les mots",du:"des mots"};
+}
+function occInfo(al,start,end){
+  const t=ART[al], w=t.slice(start,end); let c=0,i=-1,idx=0;
+  while((i=t.indexOf(w,i+1))!==-1){c++; if(i<start) idx++;}
+  return {w,count:c,idx};
+}
+function findSpan(al,w,occ=1){let i=-1;for(let k=0;k<occ;k++){i=ART[al].indexOf(w,i+1);if(i<0)return null}return [i,i+w.length]}
+const overl=(a,b)=>a[0]<b[1]&&b[0]<a[1] || (a[0]===a[1]&&b[0]<=a[0]&&a[0]<=b[1]) || (b[0]===b[1]&&a[0]<=b[0]&&b[0]<=a[1]);
+const roman=n=>["I","II","III","IV","V","VI","VII","VIII"][n];
+const gp=g=>`<span class="gp" style="background:${GROUPS[g].c}">${g}</span>`;
+
+/* ---------- État ---------- */
+let uid=1;
+const mine={mods:[],gage:false,expo:"Amendement de repli : la hausse du taux de la taxe sur les logements vacants est limitée à 18 %, pour ne pas pénaliser les propriétaires engagés dans des travaux de remise sur le marché."};
+{const s=findSpan(6,"20 %");mine.mods.push({id:uid++,al:6,kind:"rep",start:s[0],end:s[1],text:"18 %",ce45:true});}
+let hyp=new Set();
+
+/* ---------- Rédaction automatique du dispositif ---------- */
+function sentence(m){
+  if(m.kind==="delArt") return "Supprimer cet article.";
+  if(m.kind==="delAl") return `Supprimer l'alinéa ${m.al}.`;
+  if(m.kind==="compAl") return `Compléter l'alinéa ${m.al} par la phrase suivante : « ${m.text.replace(/\.?$/,".")} »`;
+  if(m.kind==="insAl") return `Après l'alinéa ${m.al}, insérer l'alinéa suivant : « ${m.text.replace(/\.?$/,".")} »`;
+  const o=occInfo(m.al,m.start,m.end), N=noun(o.w), multi=o.count>1, ord=ORD[o.idx]||`${o.idx+1}e`;
+  if(m.kind==="rep"){
+    const T=multi?`à la ${ord} occurrence ${N.du} : « ${o.w} »`:`${N.au} : « ${o.w} »`;
+    return `À l'alinéa ${m.al}, substituer ${T} ${noun(m.text).le} : « ${m.text} ».`;
+  }
+  if(m.kind==="del"){
+    const T=multi?`la ${ord} occurrence ${N.du} : « ${o.w} »`:`${N.le} : « ${o.w} »`;
+    return `À l'alinéa ${m.al}, supprimer ${T}.`;
+  }
+  if(m.kind==="ins"){
+    const T=multi?`après la ${ord} occurrence ${N.du} : « ${o.w} »`:`après ${N.le} : « ${o.w} »`;
+    return `À l'alinéa ${m.al}, ${T}, insérer ${noun(m.text).le} : « ${m.text} ».`;
+  }
+}
+const sorted=()=>[...mine.mods].sort((a,b)=>(a.al||0)-(b.al||0)||(a.start||0)-(b.start||0));
+function paragraphs(){
+  const p=sorted().map(m=>({m,t:sentence(m)}));
+  if(mine.gage && p.length) p.push({gage:true,t:GAGE});
+  if(p.length>1) p.forEach((x,i)=>x.t=`${roman(i)}. – `+x.t);
+  return p;
+}
+
+/* ---------- Contrôles ---------- */
+function workingDays(){ // délai : 17 h le 3e jour ouvrable qui précède la discussion (jours ouvrés, hors fériés)
+  const d=new Date(SEANCE); let n=0;
+  while(n<3){d.setDate(d.getDate()-1); const iso=d.toISOString().slice(0,10), wd=d.getDay(); if(wd!==0&&wd!==6&&!HOLI.includes(iso)) n++;}
+  d.setHours(17,0,0,0); return d;
+}
+function fmtDay(d){return d.toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"})}
+function art40(){
+  const out=[]; const add=(lvl,why,where)=>out.push({lvl,why,where});
+  for(const m of mine.mods){
+    if(m.kind==="delArt"){add("perte","supprimer l'article supprime aussi la hausse de la taxe prévue à l'alinéa 6","l'article"); continue;}
+    if(m.kind==="delAl"){ if(m.al===6) add("perte","supprimer l'alinéa 6 supprime la hausse de la taxe",`l'alinéa 6`); if(m.al===7) add("att","sans date d'entrée en vigueur, l'aide s'ouvre plus tôt",`l'alinéa 7`); continue;}
+    if(m.kind==="compAl"||m.kind==="insAl"){
+      const t=m.text.toLowerCase();
+      if(/exonér|réduction d'impôt|crédit d'impôt|abattement|dégrèvement/.test(t)) add("perte","le texte ajouté crée un avantage fiscal",`l'alinéa ${m.al}`);
+      else if(/aide|prime|prend en charge|fonds|allocation|indemnit|subvention|gratuit/.test(t)) add("charge","le texte ajouté crée ou étend une dépense publique",`l'alinéa ${m.al}`);
+      continue;
+    }
+    const span=[m.start,m.end];
+    for(const r of FIN[m.al]||[]){
+      const s=findSpan(m.al,r.m); if(!s||!overl(span,s)) continue;
+      if(r.chg){add(r.chg,r.why,`l'alinéa ${m.al}`);continue;}
+      if(m.kind==="ins"){add("att",`ajouter des mots ici peut modifier le champ du dispositif : ${r.why}`,`l'alinéa ${m.al}`);continue;}
+      const a=qty(r.m), b=m.kind==="del"?null:qty(m.text);
+      if(!b||!a||a.u!==b.u){add("att",r.why,`l'alinéa ${m.al}`);continue;}
+      if(a.u==="date"){ if(b.v>a.v&&r.later) add(r.later,r.why,`l'alinéa ${m.al}`); if(b.v<a.v&&r.earlier) add(r.earlier,r.why,`l'alinéa ${m.al}`); continue;}
+      if(b.v<a.v&&r.less) add(r.less,r.why,`l'alinéa ${m.al}`);
+      if(b.v>a.v&&r.more) add(r.more,r.why,`l'alinéa ${m.al}`);
+    }
+  }
+  return out;
+}
+function nearby(){
+  const res=[];
+  for(const m of mine.mods){
+    for(const a of LIASSE){
+      if(a.op==="delArt"||a.al!==m.al) continue;
+      const sp=a.op==="delAl"?[0,ART[a.al].length]:findSpan(a.al,a.w,a.occ);
+      const ms=m.kind==="delAl"||m.kind==="compAl"?[0,ART[m.al].length]:[m.start,m.end];
+      if(!overl(ms,sp)) continue;
+      const same=m.kind==="rep"&&a.op==="rep"&&a.x===m.text;
+      res.push({a,same});
+    }
+  }
+  return res;
+}
+function fiche(){for(const m of mine.mods){if(m.kind!=="rep")continue;for(const f of FICHES){const s=findSpan(f.al,f.w);if(f.al===m.al&&s&&overl(s,[m.start,m.end])&&f.x===m.text)return f}}return null}
+
+/* ---------- Ordre d'appel et cascade ---------- */
+function mineAsAmd(){
+  if(!mine.mods.length) return null;
+  const f=sorted()[0];
+  return {id:"mine",g:ME,mine:true,al:f.al,op:f.kind==="delArt"?"delArt":f.kind==="delAl"?"delAl":"rep",spans:mine.mods.map(spanOf),x:f.text};
+}
+function spanOf(m){
+  if(m.kind==="delArt") return {al:0,s:[0,1e9]};
+  if(m.kind==="delAl"||m.kind==="compAl") return {al:m.al,s:[0,ART[m.al].length]};
+  if(m.kind==="insAl") return {al:m.al,s:[ART[m.al].length,ART[m.al].length]};
+  return {al:m.al,s:[m.start,m.end]};
+}
+function amdSpans(a){
+  if(a.spans) return a.spans;
+  if(a.op==="delArt") return [{al:0,s:[0,1e9]}];
+  if(a.op==="delAl") return [{al:a.al,s:[0,ART[a.al].length]}];
+  return [{al:a.al,s:findSpan(a.al,a.w,a.occ)}];
+}
+function hits(a,b){ // l'adoption de a fait tomber b ?
+  const A=amdSpans(a), B=amdSpans(b);
+  if(A.some(x=>x.al===0)) return true;
+  return A.some(x=>B.some(y=>y.al===x.al&&(a.op==="delAl"||overl(x.s,y.s))));
+}
+function distance(a){const base=amdSpans(a)[0]; if(a.op==="delAl"||a.op==="delArt") return 1e12; const w=ART[base.al].slice(base.s[0],base.s[1]); const p=qty(w),q=qty(a.x); return p&&q&&p.u===q.u?Math.abs(q.v-p.v):1e6}
+function order(){
+  const all=[...LIASSE]; const mm=mineAsAmd(); if(mm) all.push(mm);
+  const head=all.filter(a=>a.op==="delArt"), rest=all.filter(a=>a.op!=="delArt");
+  // regroupement en discussions communes : amendements qui se disputent le même passage
+  const groups=[];
+  for(const a of rest){
+    const g=groups.find(g=>g.items.some(b=>b.al===a.al&&(a.op==="delAl"||b.op==="delAl"||amdSpans(a).some(x=>amdSpans(b).some(y=>y.al===x.al&&overl(x.s,y.s))))));
+    if(g) g.items.push(a); else groups.push({items:[a]});
+  }
+  for(const g of groups){g.al=g.items[0].al;g.start=Math.min(...g.items.map(a=>a.op==="delAl"?-1:amdSpans(a)[0].s[0]));g.items.sort((a,b)=>distance(b)-distance(a)||(a.id==="mine"?0:a.id)-(b.id==="mine"?0:b.id))}
+  groups.sort((a,b)=>a.al-b.al||a.start-b.start);
+  if(head.length) groups.unshift({items:head,head:true});
+  return groups;
+}
+function simulate(){
+  const groups=order(), flat=groups.flatMap(g=>g.items), st=new Map(), adopted=[];
+  for(const a of flat){
+    const by=adopted.find(b=>hits(b,a));
+    if(by) st.set(a.id,{s:"fell",by:by.id});
+    else if(hyp.has(a.id)){st.set(a.id,{s:"adopt"});adopted.push(a);}
+    else st.set(a.id,{s:"open"});
+  }
+  return {groups,flat,st,adopted};
+}
+const lab=id=>id==="mine"?"le vôtre":`n° ${id}`;
+function describe(a){
+  if(a.mine) return sorted().map(m=>m.kind==="delArt"?"Supprimer l'article":m.kind==="delAl"?`Supprimer l'alinéa ${m.al}`:m.kind==="compAl"?`Alinéa ${m.al} : phrase ajoutée`:m.kind==="insAl"?`Alinéa ajouté après le ${m.al}`:`Alinéa ${m.al} : « ${ART[m.al].slice(m.start,m.end)} » → « ${m.kind==="del"?"":m.text} »`.replace("→ «  »","supprimé")).join(" · ");
+  if(a.op==="delArt") return "Supprimer l'article";
+  if(a.op==="delAl") return `Supprimer l'alinéa ${a.al}`;
+  return `Alinéa ${a.al} : « ${a.w} » → « ${a.x} »`;
+}
+
+/* ---------- Rendu d'un alinéa avec corrections apparentes ---------- */
+function renderAl(al,ops,{marks=true,pend=null}={}){
+  // ops : [{s,e,ins,id,kind}] sur le texte de la commission ; data-o = position d'origine pour la sélection
+  const t=ART[al]; let html="", i=0;
+  const list=[...ops].sort((a,b)=>a.s-b.s);
+  if(pend&&pend.al===al) list.push({s:pend.start,e:pend.end,pend:true}), list.sort((a,b)=>a.s-b.s);
+  for(const o of list){
+    if(o.s>i) html+=`<span data-o="${i}">${esc(t.slice(i,o.s))}</span>`;
+    const mid=o.id!=null?` data-mid="${o.id}"`:"";
+    if(o.pend) html+=`<mark class="pend" data-o="${o.s}">${esc(t.slice(o.s,o.e))}</mark>`;
+    else{
+      if(o.e>o.s) html+=`<del data-o="${o.s}"${mid}>${esc(t.slice(o.s,o.e))}</del>`;
+      if(o.ins) html+=`<ins${mid}>${o.s===o.e&&!/^[\s,.;:]/.test(o.ins)?" ":""}${esc(o.ins)}${o.e>o.s?"":""}</ins>`;
+      if(o.by!=null&&marks) html+=`<sup class="by" data-by="${o.by}">${o.by==="mine"?"vous":o.by}</sup>`;
+    }
+    i=Math.max(i,o.e);
+  }
+  if(i<t.length) html+=`<span data-o="${i}">${esc(t.slice(i))}</span>`;
+  return html;
+}
+function myOps(al){
+  const ops=[];
+  for(const m of mine.mods){
+    if(m.kind==="delArt"||(m.kind==="delAl"&&m.al===al)) ops.push({s:0,e:ART[al].length,id:m.id});
+    else if(m.al!==al) continue;
+    else if(m.kind==="rep") ops.push({s:m.start,e:m.end,ins:m.text,id:m.id});
+    else if(m.kind==="del") ops.push({s:m.start,e:m.end,id:m.id});
+    else if(m.kind==="ins") ops.push({s:m.end,e:m.end,ins:m.text,id:m.id});
+    else if(m.kind==="compAl") ops.push({s:ART[al].length,e:ART[al].length,ins:" "+m.text.replace(/\.?$/,"."),id:m.id});
+  }
+  return ops;
+}
+
+/* ---------- Sélection dans le texte de la commission ---------- */
+function offsetIn(p,node,off){
+  if(node===p){const c=p.childNodes[off];return c&&c.dataset&&c.dataset.o!=null?+c.dataset.o:ART[+p.dataset.al].length}
+  let el=node.nodeType===3?node.parentElement:node;
+  if(el.closest("ins")) return null;
+  el=el.closest("[data-o]"); if(!el) return null;
+  return +el.dataset.o+(node.nodeType===3?off:0);
+}
+function conflictWith(al,s,e){
+  return mine.mods.find(m=>m.kind==="delArt"||(m.al===al&&(m.kind==="delAl"||(m.start!=null&&overl([s,e],[m.start,m.end])))));
+}
+// renvoie {al,s,e,r} ou {err,mod?} ou null (rien de sélectionné)
+function readSelection(){
+  const sel=getSelection(); if(!sel.rangeCount||sel.isCollapsed) return null;
+  const r=sel.getRangeAt(0);
+  const up=n=>(n.nodeType===3?n.parentElement:n)?.closest?.("p.t[data-al]");
+  const pa=up(r.startContainer), pb=up(r.endContainer);
+  if(!pa&&!pb) return null;
+  if(!pa||pa!==pb) return {err:"multi"};
+  const al=+pa.dataset.al, t=ART[al];
+  let s=offsetIn(pa,r.startContainer,r.startOffset), e=offsetIn(pa,r.endContainer,r.endOffset);
+  if(s==null||e==null) return {err:"ins"};
+  if(s>e)[s,e]=[e,s];
+  const W=/[0-9A-Za-zÀ-ÖØ-öø-ÿ%’'\-]/;
+  while(s<e&&/\s/.test(t[s]))s++; while(e>s&&/\s/.test(t[e-1]))e--;
+  while(s>0&&W.test(t[s-1])&&W.test(t[s]))s--; while(e<t.length&&W.test(t[e])&&W.test(t[e-1]))e++;
+  {let m; while((m=t.slice(0,s).match(/\d{1,3} $/))&&/^\d{3}\b/.test(t.slice(s))) s-=m[0].length;
+   while(/^ \d{3}\b/.test(t.slice(e))&&/\d$/.test(t.slice(0,e))) e+=4;
+   if(/\d$/.test(t.slice(0,e))&&/^ (%|euros\b)/.test(t.slice(e))) e+=t.slice(e).match(/^ (%|euros\b)/)[0].length;}
+  if(e<=s) return null;
+  const c=conflictWith(al,s,e); if(c) return {err:"busy",mod:c,al};
+  return {al,s,e,rect:r.getBoundingClientRect(),w:t.slice(s,e)};
+}
+const plural=(n,a,b)=>n>1?b:a;
+/* ---------- Diagnostic structuré (base des contrôles) ---------- */
+function diagnose(){
+  const dl=workingDays(), h=Math.round((dl-NOW)/36e5);
+  const D={deadline:{date:dl,hours:h,days:Math.floor(h/24)},has:mine.mods.length>0};
+  if(!D.has) return D;
+  D.multi=mine.mods.filter(m=>m.start!=null&&occInfo(m.al,m.start,m.end).count>1).map(m=>({m,...occInfo(m.al,m.start,m.end)}));
+  const R=art40(), by=l=>R.filter(r=>r.lvl===l);
+  const charge=by("charge"), perte=by("perte"), att=by("att");
+  D.a40=charge.length?{st:"charge",r:charge}:perte.length&&!mine.gage?{st:"perte",r:perte}:perte.length?{st:"gagee",r:perte}:att.length?{st:"att",r:att}:{st:mine.gage?"inutile":"ok",r:[]};
+  const N=nearby(); D.near=N; D.own=N.filter(n=>n.a.g===ME); D.same=N.filter(n=>n.same);
+  D.fiche=fiche();
+  const sim=simulate(), me=mineAsAmd(), pos=sim.flat.findIndex(a=>a.id==="mine")+1;
+  D.appel={pos,total:sim.flat.length,killers:sim.flat.slice(0,pos-1).filter(a=>hits(a,me)),grp:sim.groups.find(g=>g.items.some(a=>a.id==="mine"))};
+  return D;
+}
+const orList=a=>a.map(x=>lab(x.id)).join(", ").replace(/, ([^,]*)$/," ou $1");
+const andList=a=>a.join(", ").replace(/, ([^,]*)$/," et $1");
+const nth=p=>`${p}${p===1?"ᵉʳ":"ᵉ"}`;
+
+const $$=s=>[...document.querySelectorAll(s)];
+const RM=matchMedia("(prefers-reduced-motion:reduce)");
+const T0=Date.now(), clock=()=>new Date(+NOW+(Date.now()-T0));
+const hm=d=>`${d.getHours()} h ${String(d.getMinutes()).padStart(2,"0")}`;
+const X=`<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4l8 8M12 4l-8 8"/></svg>`;
+const KEY="atelier-parcours-v1";
+const INITIAL=JSON.stringify({mods:mine.mods,gage:mine.gage,expo:mine.expo});
+
+/* ---------- État du flux ---------- */
+const S={open:new Set([1]), comp:null, pending:null, fx:null, hist:[], dep:"draft" /* draft | confirm | sending | done */, depNo:null, depAt:null,
+  liasse:"stale" /* stale | loading | error | fresh */, tries:0, newIds:[], saved:null, saveOk:true, resumed:null, reset:false};
+const NEWER=[{id:103,g:"SOL",al:6,op:"rep",w:"20 %",x:"18 %",occ:1},{id:104,g:"ECO",al:3,op:"rep",w:"15 000 euros",x:"20 000 euros"}];
+
+/* ---------- Reprise du brouillon ---------- */
+try{const raw=localStorage.getItem(KEY); if(raw){const d=JSON.parse(raw); if(d&&Array.isArray(d.mods)){
+  if(d.dep==="done"){S.dep="done";S.depNo=d.depNo;S.depAt=d.depAt}
+  mine.mods=d.mods; mine.gage=!!d.gage; mine.expo=d.expo??""; uid=Math.max(uid,...d.mods.map(m=>m.id+1)); S.resumed=d.at;}}}catch(e){S.saveOk=false}
+function persist(){
+  const at=hm(clock());
+  try{localStorage.setItem(KEY,JSON.stringify({mods:mine.mods,gage:mine.gage,expo:mine.expo,at,dep:S.dep,depNo:S.depNo,depAt:S.depAt}));S.saved=at;S.saveOk=true}catch(e){S.saveOk=false}
+  renderSave();
+}
+function renderSave(){
+  $("#save").innerHTML=S.dep==="done"?`<i class="dot ok"></i>Déposé à ${S.depAt}`:!S.saveOk?`<i class="dot warn"></i>Brouillon non enregistré sur cet appareil : gardez cet onglet ouvert`:S.saved?`<i class="dot ok"></i>Brouillon enregistré à ${S.saved}`:`<i class="dot"></i>Brouillon`;
+}
+
+/* ---------- Effets de bord visibles : ce qu'un geste a changé ailleurs ---------- */
+function summary(){const D=diagnose(); return D.has?{a40:D.a40.st,pos:D.appel.pos,tot:D.appel.total,near:D.near.length,same:D.same.length,fiche:!!D.fiche}:{a40:null}}
+const A40L={charge:"irrecevable (charge publique)",perte:"gage nécessaire",gagee:"perte gagée",att:"à vérifier",ok:"sans incidence",inutile:"gage devenu inutile",null:"—"};
+function act(change,label){
+  if(S.dep==="done") return;
+  const before=summary(), snap=JSON.stringify({mods:mine.mods,gage:mine.gage});
+  change(); const after=summary();
+  S.hist.push(snap); if(S.hist.length>20) S.hist.shift();
+  const fx=[];
+  if(before.a40!==after.a40) fx.push(`Article 40 : <b>${A40L[after.a40]}</b>`);
+  if(after.pos&&before.pos!==after.pos) fx.push(`Ordre d'appel : <b>${before.pos?`${nth(before.pos)} → `:""}${nth(after.pos)}</b> sur ${after.tot}`);
+  if((before.near||0)!==(after.near||0)) fx.push(`Amendements sur les mêmes passages : <b>${after.near||0}</b>`);
+  if(!before.fiche&&after.fiche) fx.push(`<b>Même rédaction qu'une fiche reçue</b>`);
+  if(before.same!==after.same&&after.same) fx.push(`<b>Identique à un amendement déposé</b>`);
+  S.fx={label,fx,step:fxStep}; persist(); render();
+}
+function undoLast(){const s=S.hist.pop(); if(!s)return; const d=JSON.parse(s); mine.mods=d.mods; mine.gage=d.gage; S.fx={label:"Dernière action annulée",fx:[],step:fxStep}; persist(); render();}
+function addMod(m){ if(m.kind==="delArt") mine.mods=[]; m.id=uid++; mine.mods.push(m); }
+
+/* ---------- États des étapes ---------- */
+function steps(){
+  const D=diagnose(), n=mine.mods.length, done=S.dep==="done", stale=S.liasse!=="fresh";
+  const s=[];
+  s.push({i:1,nm:"Modifier le passage",cls:n?"ok":"",badge:done?"Verrouillé":n?"Fait":"À faire",sm:n?`${n} modification${n>1?"s":""} : ${[...new Set(sorted().map(m=>m.kind==="delArt"?"article":`alinéa ${m.al}`))].join(", ")}`:"Rien de modifié : sélectionnez des mots dans le texte"});
+  const expoOk=mine.expo.trim().length>=40;
+  s.push({i:2,nm:"Relire le dispositif et l'exposé",cls:!n?"":expoOk?"ok":"warn",badge:!n?"En attente":expoOk?"Fait":"Exposé à compléter",sm:!n?"Le dispositif s'écrira tout seul à partir de vos modifications":expoOk?`${paragraphs().length} paragraphe${paragraphs().length>1?"s":""}, exposé de ${mine.expo.trim().split(/\s+/).length} mots`:"L'exposé sommaire est trop court pour être déposé"});
+  let c3={i:3,nm:"Contrôler la recevabilité",cls:"",badge:"En attente",sm:"Après la première modification"};
+  if(n){const a=D.a40.st, bad=a==="charge"||a==="perte";
+    c3={...c3,cls:bad?"err":stale||D.own.length||D.same.length?"warn":"ok",badge:a==="charge"?"À corriger":a==="perte"?"Gage manquant":S.liasse==="loading"?"Actualisation…":stale?"Liasse périmée":"Fait",
+      sm:a==="charge"?"Article 40 : la modification crée une charge publique":a==="perte"?"Article 40 : un gage est nécessaire":`Article 40 : ${A40L[a]} · ${D.near.length} amendement${D.near.length>1?"s":""} sur les mêmes passages`};}
+  s.push(c3);
+  s.push({i:4,nm:"Anticiper la séance",cls:n?(stale?"warn":"ok"):"",badge:!n?"En attente":stale?"Liasse périmée":"Fait",sm:n?`Appelé en ${nth(D.appel.pos)} position sur ${D.appel.total}${D.appel.killers.length?` · peut tomber (${orList(D.appel.killers)})`:""}`:`${simulate().flat.length} amendements déposés sur l'article`});
+  const blockers=depBlockers(s);
+  s.push({i:5,nm:"Déposer",cls:done?"ok":blockers.length?"":"warn",badge:done?"Déposé":S.dep==="sending"?"Envoi…":blockers.length?"Bloqué":"Prêt",sm:done?`N° ${S.depNo}, déposé à ${S.depAt}`:blockers.length?`Avant de déposer : ${blockers.join(" ; ")}`:`Avant ${fmtDay(D.deadline.date)}, 17 h · dans ${D.deadline.days} jours`});
+  return s;
+}
+function depBlockers(s){
+  const D=diagnose(), b=[];
+  if(!D.has) return ["modifier le passage"];
+  if(mine.expo.trim().length<40) b.push("compléter l'exposé");
+  if(D.a40.st==="charge") b.push("corriger la charge publique");
+  if(D.a40.st==="perte") b.push("ajouter le gage");
+  if(S.liasse==="loading") b.push("attendre l'actualisation de la liasse");
+  return b;
+}
+
+/* ---------- Bandeaux d'état global ---------- */
+function renderBanners(){
+  let h="";
+  if(S.dep==="done") h+=`<div class="bnr done"><i class="dot ok"></i><p>Amendement n° ${S.depNo} déposé à ${S.depAt}.<small>Il est en lecture seule. Une correction passe désormais par une rectification auprès du service de la séance.</small></p><div class="acts"><button class="btn" data-a="fresh">Préparer un autre amendement</button></div></div>`;
+  else if(S.resumed&&!S.reset) h+=`<div class="bnr"><i class="dot ok"></i><p>Brouillon repris là où vous l'aviez laissé (${S.resumed}).</p><div class="acts"><button class="ghost" data-a="restart">Repartir de la version initiale</button><button class="ico" data-a="hideResume" aria-label="Masquer">${X}</button></div></div>`;
+  if(S.reset) h+=`<div class="bnr err"><i class="dot err"></i><p>Revenir à la version initiale efface vos modifications et votre exposé.<small>Cette action ne peut pas être annulée.</small></p><div class="acts"><button class="btn" data-a="restartNo">Garder mon brouillon</button><button class="btn" data-a="restartYes">Effacer et repartir</button></div></div>`;
+  if(S.liasse==="stale") h+=`<div class="bnr"><i class="dot warn"></i><p>La liasse affichée date de 9 h 00 ; ${NEWER.length} amendements ont été déposés depuis.<small>Les contrôles et l'ordre d'appel peuvent être faux tant qu'elle n'est pas actualisée.</small></p><div class="acts"><button class="btn" data-a="refresh">Actualiser la liasse</button></div></div>`;
+  if(S.liasse==="loading") h+=`<div class="bnr"><span class="spin" aria-hidden="true"></span><p>Actualisation de la liasse…<small>Vous pouvez continuer à rédiger.</small></p></div>`;
+  if(S.liasse==="error") h+=`<div class="bnr err"><i class="dot err"></i><p>Le service de la liasse n'a pas répondu.<small>Rien n'est perdu : votre brouillon est intact, les contrôles restent calculés sur la liasse de 9 h 00.</small></p><div class="acts"><button class="btn" data-a="refresh">Réessayer</button></div></div>`;
+  if(S.liasse==="fresh"&&S.newIds.length&&!S.hideFresh) h+=`<div class="bnr"><i class="dot ok"></i><p>Liasse à jour (${S.freshAt}) : ${S.newIds.map(i=>`n° ${i}`).join(" et ")} ajoutés.${S.newFx?`<small>${S.newFx}</small>`:""}</p><div class="acts"><button class="ico" data-a="hideFresh" aria-label="Masquer">${X}</button></div></div>`;
+  $("#banners").innerHTML=h;
+}
+function refresh(){
+  S.liasse="loading"; S.tries++; render();
+  setTimeout(()=>{
+    if(S.tries===1){S.liasse="error";render();return} // premier essai en échec : montre la reprise après erreur
+    const before=summary();
+    LIASSE=[...LIASSE,...NEWER.filter(n=>!LIASSE.some(a=>a.id===n.id))]; S.newIds=NEWER.map(n=>n.id); S.liasse="fresh"; S.freshAt=hm(clock());
+    const after=summary(), fx=[];
+    if(after.same>(before.same||0)) fx.push("Le n° 103 est identique au vôtre : ils seront mis aux voix ensemble");
+    if(after.pos!==before.pos&&after.pos) fx.push(`votre position d'appel passe de ${nth(before.pos)} à ${nth(after.pos)} sur ${after.tot}`);
+    S.newFx=fx.join(" ; ")+(fx.length?".":"");
+    render();
+  },RM.matches?300:1100);
+}
+
+/* ---------- Corps des étapes ---------- */
+function body1(){
+  const locked=S.dep==="done", delArt=mine.mods.some(m=>m.kind==="delArt");
+  let rows="";
+  for(let al=1;al<=NAL;al++){
+    rows+=`<div class="al"><button class="n" data-al="${al}" ${locked?"disabled":""} aria-label="Alinéa ${al} : actions sur l'alinéa entier">${al}</button><p class="t" data-al="${al}">${renderAl(al,myOps(al),{pend:S.pending})}</p>${S.comp&&S.comp.al===al?compHtml():""}</div>`;
+    for(const m of mine.mods.filter(m=>m.kind==="insAl"&&m.al===al)) rows+=`<div class="al"><span class="n new" aria-hidden="true">+</span><p class="t"><ins data-mid="${m.id}">${esc(m.text.replace(/\.?$/,"."))}</ins></p></div>`;
+  }
+  return `<div class="${locked?"locked":""}${delArt?" gone":""}">
+    ${locked?`<p class="how">Lecture seule : l'amendement est déposé.</p>`:`<p class="how">Sélectionnez des mots pour les supprimer, les remplacer ou en ajouter ; touchez un numéro pour l'alinéa entier.</p>`}
+    ${rows}
+    ${fxHtml(1)}
+    ${locked?"":`<div class="nextbar"><button class="ghost" data-a="delArt">${delArt?"Rétablir l'article":"Supprimer l'article entier"}</button><span class="sp"></span><button class="btn pri" data-next="2" ${mine.mods.length?"":"disabled"}>Continuer</button></div>`}
+  </div>`;
+}
+function compHtml(){
+  const c=S.comp;
+  if(c.err) return `<div class="comp" role="alert"><p class="q">${c.err}</p><div class="row">${c.fix||""}<button class="btn" data-c="close">Fermer</button></div></div>`;
+  if(c.ask) return `<div class="comp"><label for="c-in">${esc(c.ask)}</label><input type="text" id="c-in" autocomplete="off" value="${esc(c.val||"").replace(/"/g,"&quot;")}"><p class="e" id="c-e" aria-live="assertive"></p><div class="row"><button class="btn pri" data-c="ok">Valider</button><button class="btn" data-c="close">Annuler</button></div></div>`;
+  if(c.whole){const busy=mine.mods.some(m=>m.kind==="delArt"||(m.al===c.al&&m.kind==="delAl")), inside=mine.mods.filter(m=>m.al===c.al&&!["insAl","delAl"].includes(m.kind)).length;
+    return `<div class="comp"><p class="q"><b>Alinéa ${c.al}</b> entier</p><div class="row"><button class="btn" data-c="delAl" ${busy?"disabled":""}>Supprimer l'alinéa</button><button class="btn" data-c="compAl" ${busy?"disabled":""}>Compléter…</button><button class="btn" data-c="insAl">Insérer un alinéa après…</button><button class="btn" data-c="close">Annuler</button></div>${inside&&!busy?`<p class="note">Supprimer l'alinéa remplace ${inside>1?`vos ${inside} modifications`:"votre modification"} de cet alinéa.</p>`:""}</div>`;}
+  return `<div class="comp"><p class="q"><b>« ${esc(c.w)} »</b></p><div class="row"><button class="btn" data-c="del">Supprimer</button><button class="btn" data-c="rep">Remplacer…</button><button class="btn" data-c="ins">Ajouter après…</button><button class="btn" data-c="close">Annuler</button></div></div>`;
+}
+function fxHtml(i){
+  if(!S.fx||S.fx.step!==i) return "";
+  return `<div class="fx" aria-live="polite"><ul><li><span class="h">Dernière action</span><b>${S.fx.label}</b></li>${S.fx.fx.map(f=>`<li>${f}</li>`).join("")}</ul>${S.hist.length&&S.dep!=="done"?`<button class="btn" data-a="undo">Annuler</button>`:""}</div>`;
+}
+function body2(){
+  const ps=paragraphs(), locked=S.dep==="done", words=mine.expo.trim()?mine.expo.trim().split(/\s+/).length:0;
+  return `${ps.length?`<ol class="disp">${ps.map(p=>`<li ${p.m?`data-mid="${p.m.id}"`:""}><span>${esc(p.t)}</span>${locked?"":`<button class="ico" data-rm="${p.gage?"gage":p.m.id}" aria-label="Retirer" title="Retirer">${X}</button>`}</li>`).join("")}</ol>`:`<div class="empty">Aucune modification : revenez à l'étape 1.</div>`}
+    <label class="lbl" for="expo">Exposé sommaire <span id="wc">${words} mot${words>1?"s":""}</span></label>
+    <textarea id="expo" ${locked?"disabled":""} placeholder="Ce que fait l'amendement et pourquoi, en quelques phrases.">${esc(mine.expo)}</textarea>
+    ${fxHtml(2)}
+    ${locked?"":`<div class="nextbar"><span class="sp"></span><button class="btn pri" data-next="3">Continuer</button></div>`}`;
+}
+function body3(){
+  const D=diagnose(); if(!D.has) return `<div class="empty">Les contrôles portent sur votre rédaction : commencez par modifier le passage.</div>`;
+  if(S.liasse==="loading") return `<div aria-busy="true"><span class="sk" style="width:70%"></span><span class="sk" style="width:90%"></span><span class="sk" style="width:55%"></span><span class="sk" style="width:80%"></span></div>`;
+  const it=[], where=r=>r.map(x=>`À ${x.where} : ${x.why}.`).join(" "), locked=S.dep==="done";
+  const a=D.a40;
+  if(a.st==="charge") it.push({c:"err",t:"Article 40 : charge publique",d:where(a.r)+" Un gage ne suffit pas : réduisez la portée de la modification.",acts:`<button class="btn" data-open="1">Revoir le passage</button>`});
+  else if(a.st==="perte") it.push({c:"err",t:"Article 40 : gage nécessaire",d:where(a.r),acts:locked?"":`<button class="btn pri" data-a="gage">Ajouter le gage</button>`});
+  else it.push({c:a.st==="att"?"warn":"ok",t:`Article 40 : ${A40L[a.st]}`,d:a.r.length?where(a.r):"Indication ; la décision appartient au président de la commission des finances.",acts:a.st==="inutile"&&!locked?`<button class="btn" data-a="ungage">Retirer le gage</button>`:""});
+  const stale=S.liasse!=="fresh", sc=stale?" stale":"";
+  if(D.own.length) it.push({c:"warn"+sc,t:`Votre groupe a déposé le n° ${D.own.map(n=>n.a.id).join(", ")} sur ce passage`,d:"Deux rédactions du même groupe se partagent les voix : cosigner l'une et retirer l'autre est l'usage."});
+  if(D.same.length) it.push({c:"warn",t:`Identique au n° ${D.same.map(n=>n.a.id).join(", ")}${D.same.some(n=>S.newIds.includes(n.a.id))?`<span class="new">nouveau</span>`:""}`,d:"Les amendements identiques sont mis aux voix ensemble."});
+  const others=D.near.filter(n=>n.a.g!==ME&&!n.same);
+  if(others.length) it.push({c:"ok"+sc,t:`${others.length} autre${others.length>1?"s":""} amendement${others.length>1?"s":""} sur les mêmes passages`,d:others.map(n=>`n° ${n.a.id} (${n.a.g})${S.newIds.includes(n.a.id)?" · nouveau":""}`).join(", ")});
+  if(D.fiche) it.push({c:"warn",t:"Même rédaction qu'une fiche reçue",d:`${D.fiche.org}, ${D.fiche.date}. La mention dans l'empreinte normative est l'usage.`});
+  return `${fxHtml(3)}${stale?`<p class="how">Calculé sur la liasse de 9 h 00${S.liasse==="error"?" (actualisation en échec)":""} : les lignes estompées peuvent changer.</p>`:""}<ul class="ckl">${it.map(x=>`<li><i class="dot ${x.c.split(" ")[0]}"></i><span class="${x.c.includes("stale")?"stale":""}"><b>${x.t}</b>${x.d}</span>${x.acts?`<div class="acts">${x.acts}</div>`:""}</li>`).join("")}</ul>
+  ${locked?"":`<div class="nextbar"><span class="sp"></span><button class="btn pri" data-next="4">Continuer</button></div>`}`;
+}
+function body4(){
+  if(S.liasse==="loading") return `<div aria-busy="true">${"<span class='sk'></span>".repeat(6)}</div>`;
+  const sim=simulate(), me=sim.flat.find(a=>a.id==="mine");
+  let lead="";
+  if(me){const pos=sim.flat.indexOf(me)+1, k=sim.flat.slice(0,pos-1).filter(a=>hits(a,me)), s=sim.st.get("mine");
+    lead=`<p class="answer">${s.s==="fell"?`Avec ces hypothèses, votre amendement tombe : ${lab(s.by)} est adopté avant lui.`:`Appelé en ${nth(pos)} position sur ${sim.flat.length}.`}<small>${k.length?`Il tombe si ${orList(k)} est adopté avant lui.`:"Aucun amendement appelé avant lui ne peut le faire tomber."}</small></p>`;}
+  let i=0;
+  const rows=sim.flat.map(a=>{i++;const s=sim.st.get(a.id);return `<button class="call ${s.s}${a.mine?" mine":""}" data-id="${a.id}" ${s.s==="fell"?'aria-disabled="true"':`aria-pressed="${s.s==="adopt"}"`}><span class="pos">${i}</span><span class="num">${a.mine?"Le vôtre":"n° "+a.id}${S.newIds.includes(a.id)?`<span class="new">nv</span>`:""}</span><span class="w">${esc(describe(a))}</span><span class="s">${s.s==="adopt"?"adopté":s.s==="fell"?`tombe (${lab(s.by)})`:""}</span></button>`}).join("");
+  return `${lead}<div class="two"><div><div class="subh"><span>Ordre d'appel · touchez pour supposer adopté</span>${hyp.size?`<button class="ghost" data-a="clearHyp">Effacer</button>`:""}</div><div class="calls">${rows}</div></div>
+    <div class="res"><div class="subh"><span>Texte qui en résulte</span></div>${resultText(sim)}</div></div>
+    ${S.dep==="done"?"":`<div class="nextbar"><span class="sp"></span><button class="btn pri" data-next="5">Continuer</button></div>`}`;
+}
+function resultText(sim){
+  const A=sim.adopted;
+  if(!A.length) return `<p class="how">Sans hypothèse, c'est le texte de la commission. Supposez un amendement adopté : le texte se recompose ici.</p>`;
+  const opsFor=al=>{const ops=[];for(const a of A){if(a.mine){for(const o of myOps(al)) ops.push({...o,by:"mine"});continue}
+      if(a.op==="delArt"||(a.op==="delAl"&&a.al===al)) ops.push({s:0,e:ART[al].length,by:a.id});
+      else if(a.al===al){const s=findSpan(al,a.w,a.occ); ops.push({s:s[0],e:s[1],ins:a.x,by:a.id});}}
+    const w=ops.find(o=>o.s===0&&o.e===ART[al].length&&!o.ins); return w?[w]:ops;};
+  let rows="",k=0;
+  for(let al=1;al<=NAL;al++){const ops=opsFor(al), gone=ops.some(o=>o.s===0&&o.e===ART[al].length&&!o.ins); if(!gone)k++;
+    rows+=`<div class="al"><span class="n">${gone?"":k}${!gone&&k!==al?`<span class="ex">ex-${al}</span>`:""}</span><p class="t">${renderAl(al,ops)}</p></div>`;}
+  return rows;
+}
+function body5(){
+  const s=steps(), b=depBlockers(s), D=diagnose();
+  const txt=paragraphs().map(p=>p.t).join("\n")+"\n\nEXPOSÉ SOMMAIRE\n"+mine.expo;
+  if(S.dep==="done") return `<p class="answer">Déposé à ${S.depAt} sous le n° ${S.depNo}.<small>Le texte déposé :</small></p><div class="pre">${esc(txt)}</div>`;
+  if(S.dep==="sending") return `<p class="answer"><span class="spin" aria-hidden="true"></span>Envoi au service de la séance…<small>Ne fermez pas la page ; rien n'est envoyé deux fois.</small></p>`;
+  if(b.length) return `<p class="answer">Le dépôt n'est pas encore possible.<small>Il reste : ${b.join(" ; ")}.</small></p><div class="nextbar"><span class="sp"></span><button class="btn" data-open="${b[0].includes("exposé")?2:b[0].includes("modifier")?1:3}">Y aller</button></div>`;
+  const warn=[]; if(S.liasse!=="fresh") warn.push("les contrôles sont calculés sur une liasse périmée"); if(D.own.length) warn.push(`votre groupe a déjà déposé le n° ${D.own.map(n=>n.a.id).join(", ")} sur ce passage`); if(D.same.length) warn.push(`il est identique au n° ${D.same.map(n=>n.a.id).join(", ")}`);
+  return `<p class="answer">Prêt à déposer avant ${fmtDay(D.deadline.date)}, 17 h.<small>Le texte ci-dessous est celui qui sera transmis.</small></p><div class="pre">${esc(txt)}</div>
+   ${S.dep==="confirm"?`<div class="confirm" role="group" aria-label="Confirmer le dépôt"><p><b>Le dépôt est définitif.</b> Une fois déposé, l'amendement ne peut plus être modifié ici ; une correction passe par une rectification.</p>${warn.length?`<ul>${warn.map(w=>`<li>Attention : ${w}.</li>`).join("")}</ul>`:""}<div class="nextbar" style="margin:0;padding:0;border:0"><button class="btn" data-a="depNo">Revenir</button><button class="btn pri" data-a="depYes">Confirmer le dépôt</button></div></div>`
+   :`<div class="nextbar"><span class="sp"></span><button class="btn pri" data-a="depAsk">Déposer…</button></div>`}`;
+}
+
+/* ---------- Rendu ---------- */
+function render(){
+  const y=scrollY, ae=document.activeElement?.id;
+  renderBanners(); renderSave();
+  const S5=steps(), B=[body1,body2,body3,body4,body5];
+  $("#fil").innerHTML=S5.map((s,k)=>{const o=S.open.has(s.i);return `<li class="st ${s.cls}${o?" open cur":""}" id="st-${s.i}"><button class="st-h" data-step="${s.i}" aria-expanded="${o}" aria-controls="sb-${s.i}"><span class="k">${s.cls==="ok"?"✓":s.i}</span><span class="nm">${s.nm}</span><span class="badge">${s.badge}</span><span class="sm">${s.sm}</span></button><div class="slide" id="sb-${s.i}"><div>${o?`<div class="st-b">${B[k]()}</div>`:""}</div></div></li>`}).join("");
+  scrollTo(0,y);
+  if(ae==="expo") {const t=$("#expo"); if(t){t.focus({preventScroll:true}); t.setSelectionRange(t.value.length,t.value.length)}}
+  if(S.comp&&S.comp.ask) {const i=$("#c-in"); if(i){i.focus({preventScroll:true}); if(!S.comp.focused){i.select();S.comp.focused=true}}}
+}
+function openStep(i,only){ if(only) S.open.clear(); S.open.add(i); render(); requestAnimationFrame(()=>$("#st-"+i)?.scrollIntoView({block:"start",behavior:RM.matches?"auto":"smooth"})); }
+
+/* ---------- Composeur en place (sous l'alinéa) ---------- */
+function compClose(){S.comp=null; S.pending=null; render()}
+function compOk(){
+  const i=$("#c-in"), v=i.value.trim(), e=$("#c-e"), c=S.comp;
+  if(!v){e.textContent="Saisissez quelques mots, ou Annuler.";i.focus();return}
+  if(c.kind==="rep"&&v===c.w){e.textContent="C'est le texte actuel : saisissez la nouvelle rédaction.";i.focus();return}
+  S.comp=null; S.pending=null;
+  if(c.kind==="rep"||c.kind==="ins") act(()=>addMod({al:c.al,kind:c.kind,start:c.s,end:c.e,text:v}),c.kind==="rep"?`« ${esc(c.w)} » remplacé par « ${esc(v)} »`:`Ajout après « ${esc(c.w)} »`);
+  else act(()=>addMod({al:c.al,kind:c.kind,text:v}),c.kind==="compAl"?`Phrase ajoutée à l'alinéa ${c.al}`:`Alinéa inséré après l'alinéa ${c.al}`);
+}
+function onSelect(){
+  if(S.dep==="done"||!S.open.has(1)||$("#c-in")) return;
+  const R=readSelection(); if(!R) return;
+  const al=R.al||+((getSelection().anchorNode?.parentElement?.closest("p.t[data-al]"))?.dataset.al||1);
+  if(R.err==="multi") S.comp={al,err:"La sélection déborde sur un autre alinéa. Une modification porte sur un seul alinéa : resserrez-la."};
+  else if(R.err==="ins") S.comp={al,err:"Ce passage est un ajout de votre amendement. Retirez-le à l'étape 2 pour le réécrire."};
+  else if(R.err==="busy"){const m=R.mod; S.comp={al:R.al||1,err:m.kind==="delArt"?"Votre amendement supprime l'article entier.":m.kind==="delAl"?`Votre amendement supprime déjà l'alinéa ${m.al}.`:"Ce passage est déjà modifié par votre amendement.",fix:`<button class="btn" data-rm="${m.id}">Retirer cette modification</button>`};}
+  else {S.comp={al:R.al,s:R.s,e:R.e,w:R.w}; S.pending={al:R.al,start:R.s,end:R.e};}
+  getSelection().removeAllRanges(); render();
+  $(".comp button")?.focus({preventScroll:true});
+}
+document.addEventListener("mouseup",e=>{if(!e.target.closest?.(".comp"))setTimeout(onSelect,10)});
+document.addEventListener("keyup",e=>{if(e.shiftKey)onSelect()});
+let fxStep=1, selT; document.addEventListener("selectionchange",()=>{if(!matchMedia("(pointer:coarse)").matches)return;clearTimeout(selT);selT=setTimeout(onSelect,450)});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Enter"&&e.target.id==="c-in"){e.preventDefault();compOk();return}
+  if(e.key!=="Escape") return;
+  if(S.comp) compClose(); else if(S.dep==="confirm"){S.dep="draft";render()} else if(S.reset){S.reset=false;render()}
+});
+let typingT;
+document.addEventListener("input",e=>{if(e.target.id!=="expo")return; mine.expo=e.target.value; const w=mine.expo.trim()?mine.expo.trim().split(/\s+/).length:0; $("#wc").textContent=`${w} mot${w>1?"s":""}`; clearTimeout(typingT); typingT=setTimeout(()=>{persist(); const y=scrollY; const keep=document.activeElement===e.target; const pos=e.target.selectionStart; render(); if(keep){const t=$("#expo"); t.focus({preventScroll:true}); t.setSelectionRange(pos,pos)} scrollTo(0,y)},700)});
+
+document.addEventListener("click",e=>{
+  const t=e.target, b=t.closest("button"); if(!b) return;
+  fxStep=+(b.closest(".st")?.id.slice(3))||1;
+  if(b.dataset.step){const i=+b.dataset.step; S.open.has(i)?S.open.delete(i):S.open.add(i); render(); return}
+  if(b.dataset.next){const i=+b.dataset.next; S.open.delete(i-1); openStep(i); return}
+  if(b.dataset.open){openStep(+b.dataset.open,true); return}
+  if(b.matches(".al .n[data-al]")){const al=+b.dataset.al; S.pending=null; S.comp=S.comp&&S.comp.whole&&S.comp.al===al?null:{al,whole:true}; render(); $(".comp button:not(:disabled)")?.focus({preventScroll:true}); return}
+  const c=b.dataset.c;
+  if(c){
+    if(c==="close") return compClose();
+    if(c==="ok") return compOk();
+    const C=S.comp;
+    if(c==="del"){S.comp=null;S.pending=null;act(()=>addMod({al:C.al,kind:"del",start:C.s,end:C.e}),`« ${esc(C.w)} » supprimé`);return}
+    if(c==="rep"||c==="ins"){S.comp={...C,kind:c,ask:c==="rep"?`Remplacer « ${C.w} » par`:`Ajouter après « ${C.w} »`,val:c==="rep"?C.w:""};render();return}
+    if(c==="delAl"){S.comp=null;act(()=>{mine.mods=mine.mods.filter(m=>m.al!==C.al||m.kind==="insAl");addMod({al:C.al,kind:"delAl"})},`Alinéa ${C.al} supprimé`);return}
+    if(c==="compAl"||c==="insAl"){S.comp={al:C.al,kind:c,ask:c==="compAl"?`Phrase ajoutée à la fin de l'alinéa ${C.al}`:`Nouvel alinéa après l'alinéa ${C.al}`,val:""};render();return}
+  }
+  if(b.dataset.rm){const v=b.dataset.rm; S.comp=null; act(()=>{if(v==="gage")mine.gage=false;else mine.mods=mine.mods.filter(m=>m.id!==+v); if(!mine.mods.length)mine.gage=false},v==="gage"?"Gage retiré":"Modification retirée"); return}
+  const id=b.closest(".call[data-id]")?.dataset.id;
+  if(id){ if(b.classList.contains("fell")) return; const k=id==="mine"?"mine":+id; hyp.has(k)?hyp.delete(k):hyp.add(k); render(); $(`.call[data-id="${id}"]`)?.focus({preventScroll:true}); return}
+  switch(b.dataset.a){
+    case "undo": undoLast(); break;
+    case "delArt": {const on=mine.mods.some(m=>m.kind==="delArt"); act(()=>{if(on)mine.mods=[];else addMod({kind:"delArt"})},on?"Article rétabli":"Suppression de l'article entier"); break;}
+    case "gage": act(()=>{mine.gage=true},"Gage ajouté au dispositif"); break;
+    case "ungage": act(()=>{mine.gage=false},"Gage retiré"); break;
+    case "refresh": refresh(); break;
+    case "hideFresh": S.hideFresh=true; render(); break;
+    case "hideResume": S.resumed=null; render(); break;
+    case "restart": S.reset=true; render(); break;
+    case "restartNo": S.reset=false; render(); break;
+    case "restartYes": {const d=JSON.parse(INITIAL); mine.mods=d.mods; mine.gage=d.gage; mine.expo=d.expo; S.reset=false; S.resumed=null; S.hist=[]; S.fx=null; hyp.clear(); persist(); render(); break;}
+    case "clearHyp": hyp.clear(); render(); break;
+    case "depAsk": S.dep="confirm"; render(); $("[data-a=depNo]")?.focus({preventScroll:true}); break;
+    case "depNo": S.dep="draft"; render(); break;
+    case "depYes": S.dep="sending"; render(); setTimeout(()=>{S.dep="done"; S.depNo=112; S.depAt=hm(clock()); S.comp=null; S.pending=null; persist(); S.open=new Set([5]); render(); scrollTo({top:0,behavior:RM.matches?"auto":"smooth"})},RM.matches?200:900); break;
+    case "fresh": {try{localStorage.removeItem(KEY)}catch(e){} mine.mods=[]; mine.gage=false; mine.expo=""; S.dep="draft"; S.depNo=null; S.hist=[]; S.fx=null; hyp.clear(); S.open=new Set([1]); persist(); render(); break;}
+  }
+});
+document.addEventListener("mouseover",e=>{const el=e.target.closest?.("[data-mid]");$$(".lit").forEach(x=>x.classList.remove("lit"));$$(".disp li.hl").forEach(x=>x.classList.remove("hl"));if(el)$$(`[data-mid="${el.dataset.mid}"]`).forEach(x=>x.classList.add(x.tagName==="LI"?"hl":"lit"))});
+
+render();
+</script>
