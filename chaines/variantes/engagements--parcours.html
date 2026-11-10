@@ -77,7 +77,8 @@ function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createEle
 .qi:hover{background:var(--s2)}
 .qi[aria-current="true"]{background:var(--s2);box-shadow:inset 0 0 0 1px var(--line2)}
 .qi .tt{color:var(--fg);font-size:13.5px}
-.qi .mt{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.qi .mt{font-size:12.5px;color:var(--muted)}
+.qi .mt .dot{margin-right:7px;vertical-align:1px}
 .qi .st{font-size:12px;color:var(--ins)}
 .qi .st.ok{color:#8fd6b0}
 .qi.new{animation:hl 2.4s var(--ease)}
@@ -144,7 +145,7 @@ textarea{width:100%;min-height:200px;resize:vertical;line-height:1.6;padding:10p
 input[type=text]{width:100%;min-height:44px;margin-top:6px}
 .lbl{display:block;font-size:12.5px;color:var(--text);margin-top:12px}
 .err-t{font-size:12.5px;color:#f2a7a9;margin-top:4px}
-@media (max-width:440px){.trail li{grid-template-columns:minmax(0,1fr);gap:2px}.steps .lab{display:none}}
+@media (max-width:440px){.trail li{grid-template-columns:minmax(0,1fr);gap:2px}.steps .lab{display:none}.steps li:has(.cur){flex:3}.steps .cur .lab{display:inline}}
 </style>
 <div class="wrap">
   <div class="ctx">Bureau de la députée · suivi au mardi 10 novembre 2026</div>
@@ -271,7 +272,7 @@ function queue(){
     ["À surveiller",E.filter(e=>!e.done&&!late(e)&&inM(e)).sort(byDue),null],
     ["Tenus",E.filter(e=>e.done&&inM(e)).sort((a,b)=>D(b.done)-D(a.done)),null]];
   $("#queue").innerHTML=`<div class="qh"><label for="minf" class="fk">Ministère</label><select id="minf"><option value="">Tous</option>${Object.keys(MIN).map(m=>`<option value="${m}" ${minF===m?"selected":""}>${MIN[m]}</option>`).join("")}</select></div>`+
-   G.map(([t,L,emp])=>(L.length||emp)?`<div class="qg">${t} · ${L.length}</div><div class="panel ql">${L.length?L.map(qrow).join(""):`<div class="qempty">${emp}</div>`}</div>`:"").join("");
+   G.map(([t,L,emp])=>(L.length||emp)?`<div class="qg">${t} · ${L.filter(e=>!covered(e)||e.relance).length}</div><div class="panel ql">${L.length?L.map(qrow).join(""):`<div class="qempty">${emp}</div>`}</div>`:"").join("");
 }
 function stepper(f,e){
   const locked=!!f.sent;
@@ -359,7 +360,8 @@ function pick(id){
   if(cur&&F[cur]){F[cur].confirm=false;F[cur].abandon=false}
   cur=id; flashId=null; render();
   const f=F[id]; if(f&&f.step===2&&!f.nearAll){setTimeout(()=>{f.nearAll=true;if(cur===id&&$("#near"))$("#near").innerHTML=nearHtml(E.find(x=>x.id===id),f)},900)}
-  if(matchMedia("(max-width:860px)").matches) $("#flow").scrollIntoView({block:"start",behavior:reduce()?"auto":"smooth"});
+  // si la file et le parcours sont empilés (pas assez de largeur), on amène le parcours à l'écran
+  if($(".flow").offsetTop>$(".queue").offsetTop+20) $("#flow").scrollIntoView({block:"start",behavior:reduce()?"auto":"smooth"});
 }
 function go(step){const f=fl(cur);f.step=step;f.confirm=false;f.abandon=false;save();pick(cur)}
 let saveT;
