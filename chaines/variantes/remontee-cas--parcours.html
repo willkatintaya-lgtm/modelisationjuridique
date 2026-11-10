@@ -1,0 +1,339 @@
+<title>Remontées de permanence · parcours</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+
+<style>
+/* Angle « parcours » : la tâche (repérer un sujet → constater → rédiger → transmettre) se déroule dans un atelier
+   à côté de la liste, sans quitter la page. Chaque état imposé par le flux ou les données est montré :
+   vide, brouillon à reprendre, mois partiel, relevé périmé, actualisation en cours / en échec, envoi en cours / terminé.
+   Mise en page fluide (auto-fit, requêtes de conteneur) plutôt que des points de rupture d'appareil. */
+.fresh{display:flex;flex-wrap:wrap;gap:6px 18px;margin:-4px 0 16px;font-size:12.5px;color:var(--muted)}
+.fresh>span{display:inline-flex;align-items:center;gap:7px}
+.fresh .ghost{margin-left:2px}
+.fresh .msg{flex-basis:100%;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 12px;border-radius:8px;border:1px solid var(--line2);color:var(--text);animation:in .25s var(--ease)}
+.fresh .msg.err{border-color:rgba(229,72,77,.45)}
+.fresh .msg.ok{border-color:rgba(70,179,126,.4)}
+@keyframes in{from{opacity:0;transform:translateY(4px)}}
+.layout{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,430px),1fr));gap:18px;align-items:start}
+.list{padding:4px;container-type:inline-size}
+.row{display:grid;grid-template-columns:minmax(0,1fr) 120px auto;gap:12px;align-items:center;width:100%;border:0;background:none;text-align:left;padding:11px 12px;min-height:56px;border-radius:8px;cursor:pointer;transition:background .2s}
+.row+.row{border-top:1px solid var(--line)}
+.row:hover{background:var(--s2)}
+.row[aria-current=true]{background:var(--s2);box-shadow:inset 0 0 0 1px var(--line2)}
+.row b{display:block;color:var(--fg);font-weight:500;font-size:13.5px}
+.row small{display:block;color:var(--dim);font-size:12px}
+.tag{display:inline-block;margin-left:6px;padding:0 6px;border-radius:4px;font-size:11px;line-height:17px;border:1px solid var(--line2);color:var(--muted)}
+.tag.ok{border-color:rgba(70,179,126,.45);color:var(--ok)}
+.tag.dr{border-color:rgba(110,123,242,.5);color:#aab2ff}
+.spark{display:grid;grid-template-columns:repeat(12,1fr);gap:2px;align-items:end;height:28px}
+.spark i{display:block;border-radius:2px 2px 0 0;background:var(--line2);min-height:2px}
+.spark i.q{background:var(--accent)}
+.spark i.part,.bars .part i{background:repeating-linear-gradient(135deg,var(--accent) 0 3px,rgba(110,123,242,.35) 3px 6px)}
+.tr{text-align:right;font-size:12.5px;color:var(--muted);white-space:nowrap}
+.tr b{display:inline;font-size:13.5px;font-weight:500}
+.up b,.up .v{color:#f0c27a} .flat b{color:var(--text)} .down b,.down .v{color:#7fd3a8}
+@container (max-width:470px){.row{grid-template-columns:minmax(0,1fr) auto}.row .spark{display:none}}
+.ws{padding:18px 20px;min-height:280px}
+.ws h2{margin:0;font:600 16px/1.35 var(--f);color:var(--fg)}
+.steps{display:flex;gap:4px;margin:0 0 14px;padding:0;list-style:none;counter-reset:s;flex-wrap:wrap}
+.steps li{counter-increment:s}
+.steps button,.steps span{display:inline-flex;align-items:center;gap:7px;border:0;background:none;padding:6px 8px 6px 0;font-size:12.5px;color:var(--dim);border-radius:6px;min-height:32px}
+.steps button{cursor:pointer;color:var(--muted)}
+.steps button:hover{color:var(--fg)}
+.steps li>*::before{content:counter(s);display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;border:1px solid var(--line2);font-size:11px}
+.steps [aria-current=step]{color:var(--fg)}
+.steps [aria-current=step]::before{border-color:var(--accent);background:var(--lit)}
+.steps .done::before{content:"✓";color:var(--ok);border-color:rgba(70,179,126,.5)}
+.steps li+li::before{content:"";display:inline-block;width:14px;height:1px;background:var(--line2);vertical-align:middle;margin-right:4px}
+.steps li{display:flex;align-items:center}
+.lead2{margin:6px 0 0;color:var(--fg);font-size:14px}
+.lead2 span{color:var(--muted)}
+.bars{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:3px;align-items:end;height:96px;margin-top:6px}
+.bars div{display:flex;flex-direction:column;justify-content:flex-end;height:100%;gap:3px}
+.bars i{display:block;background:var(--line2);border-radius:3px 3px 0 0;min-height:2px}
+.bars .q i{background:var(--accent)}
+.bars em{font-style:normal;font-size:11px;color:var(--muted);text-align:center}
+.bars span{font-size:10px;color:var(--dim);text-align:center;overflow:hidden}
+.small{margin:6px 0 0;font-size:12px;color:var(--dim)}
+.cm{display:grid;gap:6px}
+.cr{display:grid;grid-template-columns:minmax(80px,118px) minmax(0,1fr) 28px;gap:8px;align-items:center;font-size:12.5px}
+.cr .b{height:6px;border-radius:3px;background:var(--accent)}
+.cr .n{text-align:right;color:var(--muted)}
+.cr.other{color:var(--dim)} .cr.other .b{background:var(--line2)}
+.blk{margin:0;padding-left:16px;font-size:13px;display:grid;gap:4px}
+.pq{border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12.5px;color:var(--muted)}
+.pq+.pq{margin-top:6px}
+.pq b{color:var(--text);font-weight:500}
+.pq.chg{border-color:rgba(70,179,126,.45)}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;align-items:center}
+.acts .btn{min-height:40px}
+.acts .sp{flex:1}
+.lnk{border:0;background:none;color:var(--muted);font-size:12.5px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:8px 2px}
+.lnk:hover{color:var(--fg)}
+.lnk.dng:hover{color:#f0a3a5}
+textarea.q{width:100%;min-height:200px;line-height:1.6;font-size:14px;resize:vertical;margin-top:10px}
+.meta{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--dim);margin-top:6px}
+.meta .ok{color:var(--ok)} .meta .ko{color:#f0a3a5}
+.issues{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:6px}
+.issues li{display:flex;gap:8px;font-size:12.5px;color:var(--fg)}
+.issues li .dot{margin-top:6px}
+.issues small{display:block;color:var(--muted)}
+.box{margin-top:14px;padding:12px 14px;border-radius:9px;border:1px solid var(--line2);background:var(--s2);animation:in .25s var(--ease)}
+.box p{margin:0 0 8px;font-size:13px;color:var(--fg)}
+.box ul{margin:0 0 4px;padding-left:16px;font-size:12.5px;color:var(--text);display:grid;gap:3px}
+.box.warn{border-color:rgba(227,163,63,.45)}
+.box.err{border-color:rgba(229,72,77,.5)}
+.box.ok{border-color:rgba(70,179,126,.45)}
+.ch{display:grid;gap:10px;margin-top:12px}
+.opt{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 12px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:9px}
+.opt b{display:block;color:var(--fg);font-weight:500;font-size:13.5px}
+.opt small{display:block;color:var(--dim);font-size:12px}
+.opt .st{grid-column:1/-1;font-size:12.5px}
+.opt .st.ok{color:var(--ok)}
+.empty{display:grid;place-items:center;text-align:center;min-height:220px;color:var(--muted);font-size:13px}
+.empty p{margin:0;max-width:300px}
+.jr{margin-top:22px}
+.jr .pq{display:flex;gap:10px;justify-content:space-between;flex-wrap:wrap}
+.spin{display:inline-block;width:11px;height:11px;border:1.5px solid var(--line2);border-top-color:var(--fg);border-radius:50%;animation:rot .8s linear infinite;vertical-align:-1px}
+@keyframes rot{to{transform:rotate(1turn)}}
+</style>
+
+<div class="wrap">
+  <div class="ctx">Permanence de la 4ᵉ circonscription · dossiers ouverts de décembre 2025 à novembre 2026 · comptes anonymisés</div>
+  <h1>Ce qui revient à la permanence</h1>
+  <p class="lead" id="lead"></p>
+  <div class="fresh" id="fresh" aria-live="polite"></div>
+  <div class="layout">
+    <section aria-label="Sujets"><div class="panel list" id="list"></div>
+      <p class="small">Barres : douze mois ; trimestre en cours en couleur, novembre hachuré car en cours.</p></section>
+    <section class="panel ws" id="ws" aria-live="polite" aria-label="Atelier"></section>
+  </div>
+  <section class="jr" aria-labelledby="jr-t"><div class="sec" id="jr-t">Transmis à Paris ce trimestre</div><div id="journal"></div></section>
+</div>
+
+<script>
+const MOIS=["déc.","janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov."];
+const M=[
+ {k:"anef",t:"Titres de séjour bloqués (ANEF)",court:"titres de séjour bloqués",org:"Préfecture",min:"ministre de l'Intérieur",h:[4,5,3,6,5,7,6,8,9,13,15,17],dur:94,
+  com:{"Villeneuve":19,"Saint-Aubin":14,"Les Ormes":9,"Bréval":6,"Montfort":2,"Autres (moins de 3)":2},
+  blk:["Rendez-vous introuvable pour un renouvellement","Récépissé expiré pendant l'instruction : perte d'emploi","Dossier marqué « complet » sans suite depuis plus de quatre mois"],
+  paris:[{n:"AN 3355",who:"votre bureau",st:"Sans réponse depuis 3 mois"}],q:"les délais d'instruction des demandes de titre de séjour déposées sur l'administration numérique pour les étrangers en France dans le département"},
+ {k:"mpr",t:"Aides à la rénovation non versées",court:"aides à la rénovation non versées",org:"Agence nationale de l'habitat",min:"ministre chargé du Logement",h:[6,7,9,8,10,9,8,7,8,9,8,9],dur:142,
+  com:{"Villeneuve":22,"Les Ormes":18,"Saint-Aubin":17,"Bréval":11,"Montfort":10,"Autres (moins de 3)":20},
+  blk:["Prime attendue plus de six mois après les travaux","Demande de pièces déjà fournies","Artisan non payé, chantier arrêté"],
+  paris:[{n:"AN 3187",who:"votre bureau",st:"Sans réponse depuis 6 mois"},{n:"AN 2954",who:"Écologie urbaine",st:"Sans réponse depuis 8 mois"}],q:"les retards de versement des aides à la rénovation énergétique des logements instruites par l'Agence nationale de l'habitat"},
+ {k:"caf",t:"Trop-perçus d'aide au logement réclamés",court:"trop-perçus d'aide au logement réclamés",org:"Caisse d'allocations familiales",min:"ministre chargé des Solidarités",h:[3,2,4,3,2,3,9,11,10,8,7,6],dur:61,
+  com:{"Villeneuve":16,"Saint-Aubin":15,"Bréval":12,"Les Ormes":9,"Autres (moins de 3)":16},
+  blk:["Recalcul rétroactif après la réforme des ressources","Retenue de 100 % sur les prestations"],
+  paris:[],q:"les demandes de remboursement d'aides au logement nées du recalcul rétroactif des ressources depuis juin 2026"},
+ {k:"mdph",t:"Délais de la maison départementale des personnes handicapées",court:"délais de la maison départementale des personnes handicapées",org:"Département",min:"ministre chargée des Personnes handicapées",h:[5,4,6,5,6,5,6,5,6,5,6,5],dur:188,
+  com:{"Villeneuve":18,"Saint-Aubin":14,"Les Ormes":12,"Autres (moins de 3)":20},blk:["Délai de traitement supérieur à six mois","Renouvellement d'allocation interrompu"],paris:[{n:"AN 2190",who:"Solidarité et logement",st:"Répondue en mars 2026"}],q:"les délais de traitement des demandes adressées aux maisons départementales des personnes handicapées"},
+ {k:"hlm",t:"Demandes de logement social sans proposition",court:"demandes de logement social sans proposition",org:"Bailleurs, commission d'attribution",min:"ministre chargé du Logement",h:[7,6,8,7,6,7,6,5,7,6,5,6],dur:null,
+  com:{"Villeneuve":31,"Saint-Aubin":20,"Les Ormes":11,"Autres (moins de 3)":14},blk:["Ancienneté supérieure à trois ans","Mutation pour handicap non traitée"],paris:[],q:"l'absence de proposition de logement social pour les demandeurs inscrits depuis plus de trois ans"},
+ {k:"exp",t:"Menaces d'expulsion locative",court:"menaces d'expulsion locative",org:"Préfecture, commission de prévention",min:"ministre chargé du Logement",h:[2,3,4,3,1,1,1,2,3,4,5,4],dur:35,
+  com:{"Villeneuve":9,"Saint-Aubin":8,"Autres (moins de 3)":16},blk:["Commandement de quitter les lieux reçu sans accompagnement social"],paris:[],q:"l'accompagnement social des ménages menacés d'expulsion locative avant la délivrance du commandement de quitter les lieux"},
+];
+const sum=a=>a.reduce((x,y)=>x+y,0);
+const trend=m=>{const q=sum(m.h.slice(9)),p=sum(m.h.slice(6,9));return {q,p,r:p?q/p:9,cls:(p&&q/p<=.8)?"down":(!p||q/p>=1.3)?"up":"flat"}};
+/* Règle d'anonymat : une commune comptant moins de 3 dossiers n'est jamais nommée ; elle rejoint « autres communes ». */
+function communes(m){const named=[],hidden=[];let autres=0;for(const[c,n]of Object.entries(m.com)){if(c.startsWith("Autres"))autres+=n;else if(n<3){autres+=n;hidden.push(c)}else named.push([c,n])}named.sort((a,b)=>b[1]-a[1]);return{named,autres,hidden}}
+const ALLCOM=[...new Set(M.flatMap(m=>Object.keys(m.com).filter(c=>!c.startsWith("Autres"))))];
+
+const TODAY="10 novembre", SIGN="Mme Hélène Marchal", KEY="remontee-cas-parcours-v1";
+const lc=s=>s.charAt(0).toLowerCase()+s.slice(1);
+const byK=k=>M.find(m=>m.k===k);
+const hm=()=>new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"}).replace(":"," h ");
+const trendWord=t=>t.cls==="up"?`×${nf(t.r,1)}`:t.cls==="down"?"en baisse":"stable";
+const reduce=()=>matchMedia("(prefers-reduced-motion:reduce)").matches;
+
+/* ---------- état du flux ---------- */
+let S={sel:null,step:"constat",drafts:{},sent:[]};      // drafts[k]={txt,saved,paris,relance}
+let sync={state:"stale",when:"1er novembre",tries:0,changed:null}; // stale | busy | error | fresh
+let ui={confirm:null,sending:false,copied:null,sendErr:null};
+let storageOK=true;
+function load(){try{const r=localStorage.getItem(KEY);if(r){const o=JSON.parse(r);S.drafts=o.drafts||{};S.sent=o.sent||[];return true}}catch(e){storageOK=false}return false}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({drafts:S.drafts,sent:S.sent}));storageOK=true}catch(e){storageOK=false}}
+const parisSig=m=>m.paris.map(p=>p.n+p.st).join("|");
+const relanceOf=m=>{const q=m.paris.find(p=>p.who==="votre bureau");return q&&/^Sans réponse/.test(q.st)?q:null};
+function proposed(m){const t=trend(m),r=relanceOf(m);
+  return r?`${SIGN} rappelle à M. le ${m.min} les termes de sa question écrite ${r.n.replace("AN ","n° ")}, restée sans réponse, portant sur ${m.q}. Depuis, sa permanence a reçu ${t.q} sollicitations à ce sujet ces trois derniers mois, contre ${t.p} le trimestre précédent. Elle lui demande de bien vouloir y répondre.`
+  :`${SIGN} attire l'attention de M. le ${m.min} sur ${m.q}. Sa permanence a reçu ${t.q} sollicitations à ce sujet ces trois derniers mois, contre ${t.p} le trimestre précédent. Les difficultés les plus fréquentes sont : ${m.blk.map(lc).join(" ; ")}. Elle lui demande quelles mesures il entend prendre.`}
+function issues(m,txt){const c=communes(m),out=[];
+  const hid=c.hidden.filter(h=>new RegExp(h,"i").test(txt)); if(hid.length) out.push([`${hid.join(", ")} : moins de trois dossiers`,"Retirez ce nom ou écrivez « d'autres communes »."]);
+  const s=txt.replace(/n°\s*\d+|AN \d+|\b20\d\d\b/g,"").match(/\b[12]\b|\b(un|une|deux) (seul|seule|cas|personne|famille|ménage)\b/i); if(s) out.push([`« ${s[0]} » : effectif inférieur à trois`,"Écrivez « plusieurs » ou retirez-le."]);
+  if(txt.trim().length<80) out.push(["Texte trop court pour une question","Décrivez le sujet, les chiffres agrégés, puis la demande au Gouvernement."]);
+  else if(!/demande/i.test(txt)) out.push(["Aucune demande au Gouvernement","Terminez par « Elle lui demande… »."]);
+  return out}
+
+/* ---------- rendu ---------- */
+function render(){renderLead();renderFresh();renderList();renderWS();renderJournal()}
+function renderLead(){const T=M.map(m=>({m,...trend(m)})).filter(t=>t.cls==="up").sort((a,b)=>(b.q-b.p)-(a.q-a.p));
+  $("#lead").innerHTML=`${T.length>1?T.length+" sujets montent":"Un sujet monte"} ce trimestre. <span>${T.map((t,i)=>`${i?t.m.court:t.m.t} : ${t.q} dossiers, contre ${t.p}`).join(" ; ")}.</span>`}
+function renderFresh(){
+  const a=`<span><i class="dot ok"></i>Dossiers à jour au ${TODAY} · novembre en cours</span>`;
+  let b, msg="";
+  if(sync.state==="busy") b=`<span><span class="spin" aria-hidden="true"></span>Actualisation des questions écrites…</span>`;
+  else if(sync.state==="fresh") b=`<span><i class="dot ok"></i>Questions écrites à jour (${sync.when})</span>`;
+  else b=`<span><i class="dot warn"></i>Questions écrites : relevé du ${sync.when}, il y a 9 jours <button class="ghost" id="sync">Actualiser</button></span>`;
+  if(sync.state==="error") msg=`<div class="msg err" role="alert"><i class="dot err"></i>La base des questions de l'Assemblée n'a pas répondu. Les statuts du 1er novembre restent affichés. <button class="ghost" id="sync2">Réessayer</button></div>`;
+  if(sync.state==="fresh"&&sync.changed) msg=`<div class="msg ok"><i class="dot ok"></i>${sync.changed}</div>`;
+  $("#fresh").innerHTML=a+b+msg}
+function renderList(){const T=M.map(m=>({m,...trend(m)})).sort((a,b)=>(b.q-b.p)-(a.q-a.p));
+  $("#list").innerHTML=T.map(({m,q,...t})=>{const mx=Math.max(...m.h),sent=S.sent.find(x=>x.k===m.k),dr=S.drafts[m.k];
+    return `<button class="row" data-k="${m.k}" aria-current="${S.sel===m.k}"><span><b>${esc(m.t)}</b><small>${m.paris.length?m.paris.map(p=>p.n).join(", ")+" · ":"Personne ne le porte à Paris · "}${sum(m.h)} sur 12 mois${sent?`<span class="tag ok">transmis</span>`:dr?`<span class="tag dr">brouillon</span>`:""}</small></span>
+     <span class="spark" aria-hidden="true">${m.h.map((v,i)=>`<i class="${i===11?"q part":i>=9?"q":""}" style="height:${Math.round(2+26*v/mx)}px"></i>`).join("")}</span>
+     <span class="tr ${t.cls}"><b>${q}</b> ce trimestre<br><span class="v">${trendWord(t)}</span></span></button>`}).join("")}
+function stepper(){const order=["constat","redaction","transmission"],lab={constat:"Constat",redaction:"Rédaction",transmission:"Transmission"},cur=order.indexOf(S.step);
+  return `<ol class="steps" aria-label="Étapes">${order.map((s,i)=>`<li>${i<cur&&!ui.sending?`<button class="done" data-step="${s}">${lab[s]}</button>`:`<span ${i===cur?'aria-current="step"':""}>${lab[s]}</span>`}</li>`).join("")}</ol>`}
+function renderWS(){const ws=$("#ws");
+  if(!S.sel){const ks=Object.keys(S.drafts);
+    ws.innerHTML=ks.length?`<div class="empty"><div><p>Vous avez ${ks.length>1?"des brouillons en cours":"un brouillon en cours"}.</p>${ks.map(k=>{const d=S.drafts[k];return `<div class="box" style="text-align:left"><p><b style="font-weight:500">${esc(byK(k).t)}</b><br><span style="color:var(--muted)">Enregistré ${d.saved}</span></p><div class="acts" style="margin-top:6px"><button class="btn pri" data-resume="${k}">Reprendre</button><button class="lnk dng" data-drop="${k}">Abandonner</button></div></div>`}).join("")}<p style="margin-top:14px;color:var(--dim)">Ou choisissez un autre sujet dans la liste.</p></div></div>`
+    :`<div class="empty"><p>Choisissez un sujet dans la liste : ses chiffres s'affichent ici, puis vous pourrez préparer une question écrite ou le signaler à l'équipe de Paris.</p></div>`;return}
+  const m=byK(S.sel),t=trend(m);
+  if(S.step==="constat"){const c=communes(m),mxc=Math.max(...c.named.map(x=>x[1]),c.autres),mx=Math.max(...m.h),r=relanceOf(m),dr=S.drafts[m.k];
+    ws.innerHTML=`${stepper()}<span class="ctx">${esc(m.org)}</span><h2>${esc(m.t)}</h2>
+     <p class="lead2">${t.q} dossiers ce trimestre, contre ${t.p} <span>(${trendWord(t)}), dont ${m.h[11]} en novembre, mois en cours.</span></p>
+     <div class="bars" role="img" aria-label="${m.h.map((v,i)=>MOIS[i]+" "+v).join(", ")}">${m.h.map((v,i)=>`<div class="${i===11?"q part":i>=9?"q":""}"><em>${v}</em><i style="height:${Math.round(3+62*v/mx)}px"></i><span>${MOIS[i].replace(".","")}</span></div>`).join("")}</div>
+     <div class="sec">Par commune, sur 12 mois</div><div class="cm">${c.named.map(([n,v])=>`<div class="cr"><span>${n}</span><span class="b" style="width:${Math.round(100*v/mxc)}%"></span><span class="n">${v}</span></div>`).join("")}${c.autres?`<div class="cr other"><span>Autres communes</span><span class="b" style="width:${Math.round(100*c.autres/mxc)}%"></span><span class="n">${c.autres}</span></div>`:""}</div>
+     <p class="small">${c.hidden.length?`${c.hidden.length>1?"Des communes comptant":"Une commune comptant"} moins de trois dossiers ${c.hidden.length>1?"sont regroupées":"est regroupée"} dans « autres communes ».`:"Les communes de moins de trois dossiers sont regroupées dans « autres communes »."}</p>
+     <div class="sec">Blocages les plus fréquents</div><ul class="blk">${m.blk.map(b=>`<li>${esc(b)}</li>`).join("")}</ul>
+     <div class="sec">À Paris ${sync.state==="fresh"?"":`<span style="text-transform:none;letter-spacing:0">· relevé du ${sync.when}</span>`}</div>
+     ${m.paris.length?m.paris.map(p=>`<div class="pq ${p.chg?"chg":""}"><b>${p.n}</b> · ${p.who} · ${p.st}</div>`).join(""):`<div class="pq">Aucune question écrite : personne ne porte ce sujet.</div>`}
+     <div class="acts"><button class="btn pri" data-go="redaction">${dr?"Reprendre le brouillon":r?"Rédiger une relance":"Rédiger une question écrite"}</button><button class="btn" data-go="transmission" data-direct="1">Signaler sans question</button><span class="sp"></span><button class="lnk" data-close>Fermer</button></div>`;return}
+  if(S.step==="redaction"){const d=S.drafts[m.k]||(S.drafts[m.k]={txt:proposed(m),saved:"à l'instant",paris:parisSig(m),relance:!!relanceOf(m),edited:false});
+    const I=issues(m,d.txt), changed=d.paris!==parisSig(m);
+    ws.innerHTML=`${stepper()}<h2>${d.relance?"Relance":"Question écrite"} · ${esc(m.court)}</h2>
+     ${changed?`<div class="box warn"><p>Le suivi à Paris a changé depuis le début de ce brouillon : ${m.paris.filter(p=>p.chg).map(p=>`${p.n}, ${lc(p.st)}`).join(" ; ")||"statuts mis à jour"}.</p><div class="acts" style="margin-top:4px"><button class="btn" id="repropose">Repartir du texte proposé</button><button class="lnk" id="keep">Garder mon texte</button></div></div>`:""}
+     <label for="q" class="sr" style="position:absolute;left:-9999px">Texte de la question</label>
+     <textarea class="q" id="q">${esc(d.txt)}</textarea>
+     <div class="meta"><span id="saved">${storageOK?`<span class="ok">Brouillon enregistré</span> ${d.saved}`:`<span class="ko">Brouillon non enregistré</span> : ce navigateur bloque le stockage, gardez l'onglet ouvert`}</span><span>${d.txt.length} caractères</span></div>
+     <ul class="issues" id="iss">${I.map(([a,b])=>`<li><i class="dot err"></i><span>${esc(a)}<small>${esc(b)}</small></span></li>`).join("")}</ul>
+     ${ui.confirm==="drop"?`<div class="box err" role="alertdialog" aria-labelledby="dropq"><p id="dropq">Abandonner ce brouillon ? Le texte sera effacé de ce navigateur.</p><div class="acts" style="margin-top:4px"><button class="btn" id="drop-yes">Abandonner le brouillon</button><button class="btn pri" id="drop-no">Garder</button></div></div>`:""}
+     <div class="acts"><button class="btn pri" data-go="transmission" ${I.length?"disabled":""}>Continuer</button><button class="btn" data-go="constat">Retour au constat</button><span class="sp"></span>${d.edited?`<button class="lnk" id="reset">Texte proposé</button>`:""}<button class="lnk dng" id="drop">Abandonner</button></div>
+     ${I.length?`<p class="small" style="margin-top:8px">${I.length===1?"Un point empêche":I.length+" points empêchent"} de continuer : voir ci-dessus.</p>`:""}`;return}
+  /* transmission */
+  const direct=ui.direct||!S.drafts[m.k], d=direct?null:S.drafts[m.k], sent=S.sent.find(x=>x.k===m.k&&x.at===ui.justSent);
+  const what=direct?"le résumé chiffré du sujet":"la question et le résumé chiffré du sujet";
+  ws.innerHTML=`${stepper()}<h2>Transmettre · ${esc(m.court)}</h2>
+   <div class="ch">
+    ${direct?"":`<div class="opt"><span><b>Copier pour dépôt</b><small>Vous collerez la question sur l'espace de dépôt. Rien ne part d'ici.</small></span><button class="btn" id="copy">Copier</button>${ui.copied===m.k?`<span class="st ok" role="status">Copié à ${hm()}.</span>`:ui.copied==="fail"?`<span class="st" role="status" style="color:#f0a3a5">Copie bloquée par le navigateur : revenez à la rédaction et copiez le texte à la main (Ctrl+C).</span>`:""}</div>`}
+    <div class="opt"><span><b>Envoyer à l'équipe de Paris</b><small>Les trois collaborateurs législatifs reçoivent ${what}. Un envoi ne peut pas être rappelé.</small></span>${sent?"":`<button class="btn ${direct?"pri":""}" id="send" ${ui.confirm||ui.sending?"disabled":""}>Envoyer…</button>`}
+     ${sent?`<span class="st ok" role="status">Envoyé à ${sent.at}. Pour corriger, envoyez un complément depuis ce sujet.</span>`:""}</div>
+   </div>
+   ${ui.confirm==="send"?`<div class="box" role="alertdialog" aria-labelledby="sendq"><p id="sendq">Envoyer définitivement à l'équipe de Paris ?</p><ul><li>${t.q} dossiers ce trimestre, contre ${t.p} ; communes de trois dossiers ou plus seulement</li><li>Blocages : ${m.blk.length}</li>${direct?"":`<li>${d.relance?"La relance":"La question"} telle que rédigée (${d.txt.length} caractères)</li>`}</ul>
+     <div class="acts" style="margin-top:8px">${ui.sending?`<button class="btn pri" disabled><span class="spin" aria-hidden="true"></span> Envoi…</button>`:`<button class="btn pri" id="send-yes">Envoyer définitivement</button><button class="btn" id="send-no">Revenir</button>`}</div></div>`:""}
+   ${ui.sendErr?`<div class="box err" role="alert"><p>${ui.sendErr}</p><div class="acts" style="margin-top:4px"><button class="btn" id="send-retry">Réessayer</button></div></div>`:""}
+   <div class="acts"><button class="btn" data-go="${direct?"constat":"redaction"}" ${ui.sending?"disabled":""}>${direct?"Retour au constat":"Retour à la rédaction"}</button><span class="sp"></span>${sent?`<button class="btn pri" data-close>Terminer</button>`:`<button class="lnk" data-close>Fermer</button>`}</div>`}
+function renderJournal(){$("#journal").innerHTML=S.sent.length?S.sent.map(x=>`<div class="pq"><span><b>${esc(byK(x.k).t)}</b> · ${x.what}</span><span>${x.day} à ${x.at}</span></div>`).join(""):`<div class="pq">Rien de transmis depuis le 1er septembre.</div>`}
+
+/* ---------- transitions d'étape ---------- */
+function goStep(s){S.step=s;ui.confirm=null;ui.sendErr=null;if(s!=="transmission")ui.copied=null;renderWS();renderList();const f=$("#ws h2");if(f){f.tabIndex=-1;f.focus({preventScroll:true})}
+  const ws=$("#ws");const r=ws.getBoundingClientRect();if(r.top<0||r.top>innerHeight*.6)ws.scrollIntoView({behavior:reduce()?"auto":"smooth",block:"start"})}
+function choose(k){S.sel=k;ui={confirm:null,sending:false,copied:null,sendErr:null};goStep("constat")}
+function doSend(){const m=byK(S.sel);ui.sending=true;ui.sendErr=null;renderWS();
+  setTimeout(()=>{ui.sending=false;
+    if(!navigator.onLine){ui.sendErr="Pas de connexion : rien n'a été envoyé. Le brouillon est conservé ; réessayez une fois la connexion revenue.";renderWS();return}
+    const at=hm(), d=ui.direct?null:S.drafts[m.k]; S.sent.unshift({k:m.k,at,day:"Aujourd'hui",what:d?(d.relance?"relance + résumé chiffré":"question + résumé chiffré"):"résumé chiffré"});
+    ui.justSent=at; ui.confirm=null; if(d) delete S.drafts[m.k]; save(); renderWS(); renderList(); renderJournal(); $("#ws .st.ok")?.focus?.()},1100)}
+function doSync(){sync.state="busy";sync.tries++;renderFresh();
+  setTimeout(()=>{if(sync.tries===1){sync.state="error";renderFresh();return}
+    const m=byK("anef"),p=m.paris[0];p.st="Répondue le 6 novembre 2026";p.chg=true;
+    sync.state="fresh";sync.when=`${TODAY}, ${hm()}`;sync.changed=`Un statut a changé : AN 3355 (titres de séjour) a reçu une réponse le 6 novembre.${S.drafts.anef?" Votre brouillon de relance est à revoir.":""}`;
+    render()},1200)}
+
+/* ---------- gestes ---------- */
+let saveT;
+document.addEventListener("input",e=>{if(e.target.id!=="q")return;const m=byK(S.sel),d=S.drafts[m.k];d.txt=e.target.value;d.edited=true;
+  clearTimeout(saveT);$("#saved").innerHTML=`<span>Enregistrement…</span>`;
+  saveT=setTimeout(()=>{d.saved=`à ${hm()}`;save();const I=issues(m,d.txt);
+    $("#saved").innerHTML=storageOK?`<span class="ok">Brouillon enregistré</span> ${d.saved}`:`<span class="ko">Brouillon non enregistré</span> : ce navigateur bloque le stockage, gardez l'onglet ouvert`;
+    $("#iss").innerHTML=I.map(([a,b])=>`<li><i class="dot err"></i><span>${esc(a)}<small>${esc(b)}</small></span></li>`).join("");
+    const c=$('[data-go="transmission"]');c.disabled=!!I.length;$(".meta span:last-child").textContent=`${d.txt.length} caractères`;
+    const sm=$("#ws .acts + .small");if(sm)sm.remove();if(I.length)c.closest(".acts").insertAdjacentHTML("afterend",`<p class="small" style="margin-top:8px">${I.length===1?"Un point empêche":I.length+" points empêchent"} de continuer : voir ci-dessus.</p>`);
+    renderList()},350)});
+document.addEventListener("click",e=>{const g=x=>e.target.closest(x);
+  if(g("#sync")||g("#sync2")) return doSync();
+  const r=g(".row"); if(r) return choose(r.dataset.k);
+  const rs=g("[data-resume]"); if(rs){S.sel=rs.dataset.resume;return goStep("redaction")}
+  const dp=g("[data-drop]"); if(dp){delete S.drafts[dp.dataset.drop];save();renderWS();renderList();return}
+  const st=g("[data-step]"); if(st) return goStep(st.dataset.step);
+  const go=g("[data-go]"); if(go){if(go.dataset.go==="transmission")ui.direct=!!go.dataset.direct;return goStep(go.dataset.go)}
+  if(g("[data-close]")){S.sel=null;ui={confirm:null,sending:false,copied:null,sendErr:null};S.step="constat";renderWS();renderList();return}
+  if(g("#drop")){ui.confirm="drop";renderWS();$("#drop-no").focus();return}
+  if(g("#drop-no")){ui.confirm=null;renderWS();$("#drop").focus();return}
+  if(g("#drop-yes")){delete S.drafts[S.sel];save();ui.confirm=null;goStep("constat");return}
+  if(g("#reset")||g("#repropose")){const m=byK(S.sel);S.drafts[m.k]={txt:proposed(m),saved:`à ${hm()}`,paris:parisSig(m),relance:!!relanceOf(m),edited:false};save();renderWS();return}
+  if(g("#keep")){const m=byK(S.sel);S.drafts[m.k].paris=parisSig(m);save();renderWS();return}
+  if(g("#copy")){const m=byK(S.sel),d=S.drafts[m.k];const ok=()=>{ui.copied=m.k;renderWS()},ko=()=>{ui.copied="fail";renderWS()};navigator.clipboard?navigator.clipboard.writeText(d.txt).then(ok,ko):ko();return}
+  if(g("#send")){ui.confirm="send";renderWS();$("#send-yes").focus();return}
+  if(g("#send-no")){ui.confirm=null;renderWS();$("#send").focus();return}
+  if(g("#send-yes")||g("#send-retry")) return doSend();
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){if(ui.sending)return;
+    if(ui.confirm){ui.confirm=null;renderWS();return}
+    if(e.target.matches("textarea")){e.target.blur();return}
+    if(S.step==="transmission")return goStep(ui.direct||!S.drafts[S.sel]?"constat":"redaction");
+    if(S.step==="redaction")return goStep("constat");
+    if(S.sel){S.sel=null;renderWS();renderList()}return}
+  if((e.key==="ArrowDown"||e.key==="ArrowUp")&&document.activeElement?.classList.contains("row")){e.preventDefault();const L=$$(".row"),i=L.indexOf(document.activeElement);L[Math.max(0,Math.min(L.length-1,i+(e.key==="ArrowDown"?1:-1)))].focus()}
+});
+/* Données d'exemple : un brouillon commencé hier, pour montrer la reprise (remplacé par ce que le navigateur a gardé). */
+if(!load()){const m=byK("exp");S.drafts.exp={txt:proposed(m),saved:"hier à 18 h 40",paris:parisSig(m),relance:false,edited:false}}
+render();
+</script>
