@@ -351,7 +351,7 @@ function renderNote(focusK){
 }
 function move(k,dir){const i=S.note.indexOf(k),j=i+dir;if(j<0||j>=S.note.length)return;S.note.splice(i,1);S.note.splice(j,0,k);renderNote(k)}
 function sync(){$$(".add").forEach(b=>{const on=inNote(b.dataset.add);b.setAttribute("aria-pressed",on);b.innerHTML=on?CHECK:PLUS;b.setAttribute("aria-label",(on?"Retirer de":"Ajouter à")+" la note : "+LABEL[b.dataset.add])});
-  if(S.cur)$("#drAdd").textContent=inNote(S.cur)?"Retirer de la note":"Ajouter à la note"}
+  if(S.cur){$("#drAdd").textContent=inNote(S.cur)?"Retirer de la note":"Ajouter à la note";$("#drAdd").classList.toggle("pri",!inNote(S.cur))}}
 
 /* --- volets --- */
 function renderTabs(){$("#tabs").innerHTML=TABS.map(([id,l,n])=>`<button role="tab" id="t-${id}" aria-controls="panel" aria-selected="${S.tab===id}" tabindex="${S.tab===id?0:-1}" data-tab="${id}">${l}${n?`<span class="n">${n}</span>`:""}</button>`).join("");$("#panel").setAttribute("aria-labelledby","t-"+S.tab)}

@@ -114,6 +114,9 @@ textarea[aria-invalid="true"]{border-color:var(--err)}
 .qs .qt{font-size:13.5px;line-height:1.6;color:var(--fg)}
 .qs .src{display:block;font-size:12px;color:var(--dim);margin-top:4px}
 .qs .tools{display:flex;gap:2px}
+.qwrap{container-type:inline-size}
+@container (max-width:560px){.qs li{grid-template-columns:24px minmax(0,1fr)}.qs .tools{grid-column:2;margin-left:-8px}}
+.qt,textarea,.sh small,.ev p{font-variant-numeric:normal}
 .ib{width:36px;height:36px;border:0;background:none;color:var(--muted);border-radius:7px;cursor:pointer;display:grid;place-items:center}
 .ib:hover:not(:disabled){background:var(--s2);color:var(--fg)}
 .ib:disabled{opacity:.3;cursor:default}
@@ -147,7 +150,7 @@ textarea[aria-invalid="true"]{border-color:var(--err)}
   <details class="others"><summary><svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3l5 5-5 5"/></svg>Deux autres indicateurs, sans signal particulier</summary><div class="oth" id="oth"></div></details>
 
   <h2 class="st" id="s2">2 · Relire les questions <span id="s2c"></span></h2>
-  <div id="qwrap"></div>
+  <div id="qwrap" class="qwrap"></div>
 
   <h2 class="st" id="s3">3 · Envoyer au secrétariat de la commission</h2>
   <div class="send" id="send"></div>

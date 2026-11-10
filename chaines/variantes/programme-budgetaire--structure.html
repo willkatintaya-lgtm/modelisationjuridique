@@ -210,7 +210,7 @@ function segs(d){if(!d.cut)return [[0,Y.length-1]];const c=Y.indexOf(d.cut);retu
    o.W largeur réelle en px (pour que le texte reste lisible), o.H hauteur, o.upto dernière année de réalisé connue. */
 function chart(d,o={}){
   const W=Math.max(240,Math.round(o.W||560)),H=o.H||190,upto=o.upto||9999;
-  const padL=44,padT=16,padB=24,gap=d.cut?18:0,S=segs(d);
+  const padL=44,padT=d.cut?28:16,padB=24,gap=d.cut?18:0,S=segs(d);
   const band=(W-S.length*padL-gap*(S.length-1)-4)/Y.length;
   let x0=0,out="";
   const fut=Y.findIndex(y=>y>Math.min(upto,NOW));
@@ -234,7 +234,7 @@ function chart(d,o={}){
       out+=`<circle cx="${X(i)}" cy="${Yv(v)}" r="3.6" fill="${h==="miss"?"var(--err)":"var(--accent)"}" stroke="var(--s1)" stroke-width="1.2"><title>Réalisé ${Y[i]} : ${fmtv(v,d.u)}${h==="miss"?" (cible manquée)":""}</title></circle>`}
     const L=lastR(d,upto);if(L&&L[1]>=a&&L[1]<=b)out+=`<text x="${X(L[1])}" y="${Yv(L[0])-9}" text-anchor="middle" class="cv">${fmtAxis(L[0],d.u)}</text>`;
     x0=px+pw+gap;
-    if(si===0&&S.length>1){const cx=x0-gap/2;out+=`<line x1="${cx}" x2="${cx}" y1="2" y2="${H-padB}" stroke="var(--warn)" stroke-dasharray="3 3"/><text x="${cx+6}" y="${padT-1}" class="cx" fill="var(--warn)" style="fill:#f0c27a">nouvelle définition</text>`}
+    if(si===0&&S.length>1){const cx=x0-gap/2;out+=`<line x1="${cx}" x2="${cx}" y1="0" y2="${H-padB}" stroke="var(--warn)" stroke-dasharray="3 3"/><text x="${cx+6}" y="10" class="cx" style="fill:#f0c27a">nouvelle définition en ${d.cut}</text>`}
   });
   return `<svg class="chart" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(d.t)} : réalisé et cibles de ${Y[0]} à ${Y[Y.length-1]}${d.cut?", série rompue en "+d.cut:""}">${out}</svg>`;
 }
