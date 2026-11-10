@@ -1,0 +1,326 @@
+<title>Suivi des communes · parcours</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+
+<style>
+/* Angle « parcours » : la tâche réelle est de préparer les appels aux mairies en retrait.
+   Chaque commune suivie avance par étapes observables : vérifier auprès de la préfecture → attendre la réponse
+   → appeler la mairie → terminé. Une seule action proposée à la fois, l'envoi à la préfecture (irréversible)
+   se confirme dans la page, le reste s'annule. États montrés : données périmées, actualisation en cours,
+   échec et reprise, année 2025 partielle, liste vide, tout terminé, session reprise.
+   Mise en page sans points de rupture : grilles et flex qui se replient selon la place. */
+.wrap{max-width:900px}
+.fresh{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;padding:9px 12px;border-radius:9px;border:1px solid var(--line);background:var(--s1);font-size:13px;margin:0 0 10px}
+.fresh.stale{border-color:rgba(227,163,63,.4);background:rgba(227,163,63,.06)}
+.fresh.err{border-color:rgba(229,72,77,.45);background:rgba(229,72,77,.06)}
+.fresh .t{flex:1 1 240px;min-width:0}
+.fresh .acts{display:flex;gap:6px;flex-wrap:wrap}
+.spin{display:inline-block;width:12px;height:12px;border:2px solid var(--line2);border-top-color:var(--fg);border-radius:50%;animation:rot .8s linear infinite;vertical-align:-2px;margin-right:6px}
+@keyframes rot{to{transform:rotate(360deg)}}
+.resume{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;padding:9px 12px;border-radius:9px;background:var(--lit);font-size:13px;color:var(--fg);margin:0 0 10px}
+.resume .t{flex:1 1 240px}
+.ask{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px;padding:10px 12px;border-radius:8px;border:1px solid rgba(229,72,77,.4);background:rgba(229,72,77,.06);font-size:13px;color:var(--fg);animation:sl .25s var(--ease)}
+.ask .t{flex:1 1 100%}
+@keyframes sl{from{opacity:0;transform:translateY(-4px)}}
+/* avancement */
+.prog{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:6px;margin:16px 0 4px}
+.stage{border:1px solid var(--line);border-radius:9px;padding:9px 12px;background:none;text-align:left;cursor:pointer;color:var(--muted);transition:border-color .2s,background .2s,color .2s;min-height:44px}
+.stage b{display:block;font-size:20px;font-weight:600;color:var(--fg);line-height:1.2}
+.stage span{font-size:12.5px}
+.stage[aria-pressed=true]{border-color:var(--accent);background:var(--lit);color:var(--fg)}
+.stage:hover{color:var(--fg)}
+.hint{font-size:12.5px;color:var(--dim);margin:6px 2px 14px}
+/* cartes */
+.list{display:grid;gap:8px}
+.card{background:var(--s1);border:1px solid var(--line);border-radius:10px;transition:border-color .2s}
+.card.open{border-color:var(--line2)}
+.head{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;width:100%;border:0;background:none;text-align:left;cursor:pointer;padding:12px 14px;color:var(--text);border-radius:10px;min-height:56px}
+.head:hover{background:var(--s2)}
+.head .nm{flex:1 1 180px;min-width:0}
+.head .nm b{display:block;color:var(--fg);font-weight:500;font-size:14px}
+.head .nm small{color:var(--dim);font-size:12.5px}
+.head .band{flex:1 1 160px;max-width:260px;min-width:120px}
+.head .st{flex:none;font-size:12px;border-radius:999px;padding:2px 9px;border:1px solid var(--line2);color:var(--muted);white-space:nowrap}
+.st.wait{border-color:rgba(227,163,63,.5);color:#f0c27a}
+.st.call{border-color:rgba(138,180,255,.5);color:var(--ins)}
+.st.done{border-color:rgba(70,179,126,.5);color:#7fd3a8}
+.chev{flex:none;color:var(--dim);transition:transform .3s var(--ease)}
+.card.open .chev{transform:rotate(90deg)}
+.band{position:relative;height:18px}
+.band .ax{position:absolute;left:0;right:0;top:8px;height:2px;background:var(--line)}
+.band .gap{position:absolute;top:8px;height:2px;background:rgba(229,72,77,.5)}
+.band .md{position:absolute;top:2px;width:2px;height:14px;background:var(--muted)}
+.band .pt{position:absolute;top:3px;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--s1)}
+.band .pt.z{background:var(--s1);border:2px solid var(--err)}
+.body{padding:0 14px 14px;display:grid;gap:14px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:14px;font-size:13px}
+.facts p{margin:0 0 6px;color:var(--fg)}
+.facts .mu{color:var(--muted);font-size:12.5px}
+.pj{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:8px;padding:5px 0;border-top:1px solid var(--line);font-size:12.5px}
+.pj .y{color:var(--dim)} .pj .m{text-align:right;white-space:nowrap}
+.pj .part{color:#f0c27a;font-size:11.5px}
+.steps{display:flex;flex-wrap:wrap;gap:4px 0;list-style:none;margin:0;padding:0;font-size:12px;color:var(--dim)}
+.steps li{display:flex;align-items:center}
+.steps li+li::before{content:"";width:18px;height:1px;background:var(--line2);margin:0 6px}
+.steps .ok{color:#7fd3a8} .steps .now{color:var(--fg);font-weight:500}
+.action{border-top:1px solid var(--line);padding-top:12px;font-size:13px}
+.action h3{margin:0 0 6px;font-size:13.5px;font-weight:600;color:var(--fg)}
+.action p{margin:0 0 10px;color:var(--text)}
+.action .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.action .btn{min-height:40px}
+.opts{display:grid;gap:6px;margin:0 0 10px}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:9px 11px;border:1px solid var(--line);border-radius:8px;cursor:pointer;min-height:44px;transition:border-color .2s,background .2s}
+.opt:has(input:checked){border-color:var(--accent);background:var(--lit)}
+.opt input{margin-top:3px;accent-color:var(--accent)}
+.opt small{display:block;color:var(--dim)}
+textarea{width:100%;min-height:62px;resize:vertical;margin:0 0 8px}
+.log{margin:0;padding:0;list-style:none;font-size:12px;color:var(--dim)}
+.log li{padding:2px 0}
+.log b{color:var(--muted);font-weight:500}
+.empty{padding:22px 16px;border:1px dashed var(--line2);border-radius:10px;font-size:13px;color:var(--muted);text-align:center}
+.empty b{display:block;color:var(--fg);font-weight:500;margin-bottom:4px}
+.out{margin-top:18px}
+.out summary{cursor:pointer;font-size:13px;color:var(--muted);min-height:40px;display:flex;align-items:center;gap:8px;list-style:none}
+.out summary::-webkit-details-marker{display:none}
+.out summary::before{content:"›";display:inline-block;transition:transform .3s var(--ease);color:var(--dim)}
+.out[open] summary::before{transform:rotate(90deg)}
+.orow{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;padding:8px 4px;border-top:1px solid var(--line);font-size:13px}
+.orow .nm{flex:1 1 160px}
+.orow .nm small{color:var(--dim)}
+.skel{height:56px;border-radius:10px;background:linear-gradient(90deg,var(--s1) 0%,var(--s2) 50%,var(--s1) 100%);background-size:200% 100%;animation:sh 1.2s linear infinite;border:1px solid var(--line)}
+@keyframes sh{to{background-position:-200% 0}}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;margin:14px 2px 0;font-size:12px;color:var(--dim)}
+.legend i{display:inline-block;vertical-align:-1px;margin-right:6px}
+.toast{display:flex;gap:10px;align-items:center}
+.toast button{border:0;background:none;color:var(--ins);cursor:pointer;font-weight:500;padding:4px 6px}
+.slide2{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide2>div{min-height:0;overflow:hidden}
+.card.open .slide2{grid-template-rows:1fr}
+.card.open .body{animation:sl .25s var(--ease)}
+</style>
+
+<div class="wrap">
+  <div class="ctx">DETR, DSIL et Fonds vert · projets retenus de 2018 à 2025 · DGCL (communes fictives)</div>
+  <h1>Préparer les appels aux communes en retrait</h1>
+  <p class="lead" id="lead"></p>
+  <div id="resume"></div>
+  <div id="fresh"></div>
+  <div class="prog" id="prog" role="group" aria-label="Avancement"></div>
+  <p class="hint" id="hint"></p>
+  <div class="list" id="list" aria-live="polite"></div>
+  <details class="out" id="out"></details>
+  <div class="legend"><span><i class="dot" style="background:var(--accent)"></i>la commune, en € par habitant</span><span><i style="width:2px;height:11px;background:var(--muted)"></i>médiane des communes de même taille du département</span><span><i class="dot" style="background:none;border:2px solid var(--err);width:10px;height:10px"></i>aucun projet retenu</span></div>
+</div>
+
+<script>
+const STRATES=[{k:"<1000",l:"moins de 1 000 hab.",max:999,med:210},{k:"1000-3500",l:"1 000 à 3 500 hab.",max:3499,med:150},{k:"3500-10000",l:"3 500 à 10 000 hab.",max:9999,med:95},{k:">10000",l:"plus de 10 000 hab.",max:1e9,med:60}];
+const C=[
+ {n:"Villeneuve",p:24300,pj:[[2019,"DSIL","Rénovation thermique du groupe scolaire Jaurès",820000],[2021,"DETR","Voirie du quartier de la gare",410000],[2023,"Fonds vert","Renaturation des cours d'école",360000]]},
+ {n:"Saint-Aubin",p:11800,pj:[[2020,"DETR","Extension de la médiathèque",290000]]},
+ {n:"Les Ormes",p:6200,pj:[[2018,"DETR","Salle polyvalente",240000],[2022,"DSIL","Chaudière bois de l'école",180000],[2024,"Fonds vert","Éclairage public à LED",95000]]},
+ {n:"Bréval",p:4100,pj:[]},
+ {n:"Montfort",p:3900,pj:[[2023,"DETR","Accessibilité de la mairie",120000]]},
+ {n:"La Chapelle-sur-Vire",p:2650,pj:[[2019,"DETR","Cantine scolaire",310000],[2021,"DETR","Église : toiture",160000],[2024,"Fonds vert","Haies et mares",42000]]},
+ {n:"Garennes",p:1900,pj:[]},
+ {n:"Saint-Martin-des-Prés",p:1450,pj:[[2022,"DETR","Atelier municipal",95000]]},
+ {n:"Vernay",p:1120,pj:[[2020,"DETR","École : mise aux normes",190000],[2025,"DSIL","Maison de santé",260000]]},
+ {n:"Le Mesnil",p:780,pj:[]},
+ {n:"Ruelles",p:540,pj:[[2021,"DETR","Salle des fêtes",88000],[2024,"DETR","Voirie communale",64000]]},
+ {n:"Hautbois",p:390,pj:[]},
+ {n:"Foucarville",p:260,pj:[[2023,"Fonds vert","Désimperméabilisation de la place",58000]]},
+];
+const strate=p=>STRATES.find(s=>p<=s.max);
+C.forEach(c=>{c.st=strate(c.p);c.tot=c.pj.reduce((s,x)=>s+x[3],0);c.ph=c.tot/c.p;c.ratio=c.ph/c.st.med});
+const byName=n=>C.find(c=>c.n===n), eur=v=>nf(Math.round(v))+" €";
+const behind=c=>!c.pj.length||c.ratio<.5;
+const MAX=Math.max(...C.map(c=>Math.max(c.ph,c.st.med)))*1.08, X=v=>Math.min(100,100*v/MAX);
+const STAGES=[{k:"check",l:"À vérifier",s:"",d:"demander à la préfecture"},{k:"wait",l:"En attente",s:"wait",d:"réponse de la préfecture"},{k:"call",l:"À appeler",s:"call",d:"la mairie"},{k:"done",l:"Terminées",s:"done",d:"mairie contactée"}];
+const today=new Date(2026,10,10), fmt=d=>new Date(d).toLocaleDateString("fr-FR",{day:"numeric",month:"short"});
+const KEY="communes-parcours-v1";
+// état de démonstration : une session déjà commencée
+const seed=()=>({v:1,saved:+new Date(2026,10,6),data:+new Date(2026,2,31),track:{
+  "Hautbois":{stage:"wait",log:[[+new Date(2026,10,3),"Demande envoyée à la préfecture"]]},
+  "Le Mesnil":{stage:"call",answer:"none",log:[[+new Date(2026,9,20),"Demande envoyée à la préfecture"],[+new Date(2026,10,4),"Réponse : aucun dossier déposé"]]},
+  "Garennes":{stage:"check",log:[]},"Bréval":{stage:"check",log:[]},"Montfort":{stage:"check",log:[]},"Saint-Aubin":{stage:"check",log:[]},"Saint-Martin-des-Prés":{stage:"check",log:[]}}});
+let S, resumed=false;
+try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.v===1&&r.track){S=r;resumed=true}}catch(e){}
+if(!S){S=seed();resumed=true}
+const save=()=>{S.saved=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+let filter=null, openN=null, pending=null, fresh={state:S.data<+today-90*864e5?"stale":"ok",tries:0}, askReset=false;
+
+function lead(){
+  const T=Object.keys(S.track).length, z=C.filter(c=>!c.pj.length).length, l=C.filter(c=>c.pj.length&&c.ratio<.5).length;
+  $("#lead").innerHTML=`${z} communes n'ont obtenu aucun projet depuis 2018, ${l} moins de la moitié de la médiane de leur taille. <span>Avant d'appeler une mairie, on vérifie auprès de la préfecture : seuls les projets retenus sont publiés.</span>`;
+}
+function resumeBar(){
+  if(!resumed){$("#resume").innerHTML="";return}
+  const adv=Object.values(S.track).filter(t=>t.stage!=="check").length;
+  $("#resume").innerHTML=`<div class="resume"><span class="t">Reprise de votre suivi du ${fmt(S.saved)} : ${adv} commune${adv>1?"s":""} déjà avancée${adv>1?"s":""}.</span><button class="ghost" data-reset>Tout recommencer</button></div>
+   ${askReset?`<div class="ask" role="alertdialog" aria-label="Recommencer le suivi"><span class="t">Effacer l'avancement et l'historique de toutes les communes ? Les demandes déjà envoyées à la préfecture ne seront pas annulées.</span><button class="btn" data-reset-ok style="border-color:var(--err);color:#f2a7a9">Effacer l'avancement</button><button class="btn" data-reset-no>Garder</button></div>`:""}`;
+}
+function freshBar(){
+  const d=fmt(S.data)+" "+new Date(S.data).getFullYear(), st=fresh.state;
+  const months=Math.round((+today-S.data)/(30.4*864e5));
+  $("#fresh").innerHTML=`<div class="fresh ${st==="stale"?"stale":st==="err"?"err":""}" role="status">
+   ${st==="loading"?`<span class="t"><span class="spin"></span>Actualisation des données DGCL…</span>`:
+     st==="err"?`<span class="t"><b>Le serveur de la DGCL n'a pas répondu.</b> Vous travaillez toujours sur les données du ${d}. Réessayez dans un instant ; votre suivi n'est pas touché.</span><span class="acts"><button class="btn" data-refresh>Réessayer</button><button class="ghost" data-keep>Continuer avec ces données</button></span>`:
+     st==="stale"?`<span class="t">Données du ${d}, il y a ${months} mois. Des projets ont pu être retenus depuis.</span><span class="acts"><button class="btn" data-refresh>Actualiser</button></span>`:
+     `<span class="t">Données à jour au ${d}.${fresh.tries?" Aucun changement depuis le 31 mars.":""} Les projets 2025 ne sont connus que jusqu'au 30 juin.</span>`}</div>`;
+}
+const stageOf=n=>S.track[n]?.stage;
+function prog(){
+  $("#prog").innerHTML=STAGES.map(s=>{const k=Object.values(S.track).filter(t=>t.stage===s.k).length;return `<button class="stage" data-filter="${s.k}" aria-pressed="${filter===s.k}"><b>${k}</b><span>${s.l} · ${s.d}</span></button>`}).join("");
+  const T=Object.keys(S.track).length, done=Object.values(S.track).filter(t=>t.stage==="done").length;
+  $("#hint").textContent=!T?"":done===T?`Les ${T} communes suivies ont été contactées. Le suivi est terminé.`:filter?`Filtre : ${STAGES.find(s=>s.k===filter).l.toLowerCase()}. Cliquez à nouveau la case pour tout voir.`:`${T-done} commune${T-done>1?"s":""} à faire avancer. Les plus en retard sur leur taille d'abord.`;
+}
+function band(c){return `<span class="band" aria-hidden="true"><span class="ax"></span>${c.ph<c.st.med?`<span class="gap" style="left:${X(c.ph)}%;width:${X(c.st.med)-X(c.ph)}%"></span>`:""}<span class="md" style="left:${X(c.st.med)}%"></span><span class="pt ${c.pj.length?"":"z"}" style="left:${X(c.ph)}%"></span></span>`}
+function action(c,t){
+  const n=esc(c.n);
+  if(t.stage==="check"){
+    if(pending===c.n+":sending")return `<div class="action"><h3>Envoi de la demande…</h3><p><span class="spin"></span>Transmission au bureau des concours financiers de la préfecture.</p></div>`;
+    return `<div class="action"><h3>Étape suivante : vérifier auprès de la préfecture</h3><p>On ignore si ${n} a déposé des dossiers refusés ou n'en a déposé aucun. Demandez la liste des dossiers déposés depuis 2018.</p>
+     ${pending===c.n+":confirm"?`<div class="ask" role="alertdialog" aria-label="Confirmer l'envoi"><span class="t">La demande part au bureau des concours financiers de la préfecture, au nom de la permanence. <b>Elle ne pourra pas être retirée.</b></span><button class="btn pri" data-send="${n}">Envoyer la demande</button><button class="btn" data-cancel>Ne pas envoyer</button></div>`
+       :`<div class="row"><button class="btn pri" data-confirm="${n}">Demander les dossiers déposés…</button><button class="ghost" data-drop="${n}">Retirer du suivi</button></div>`}</div>`;
+  }
+  if(t.stage==="wait"){
+    const days=Math.round((+today-t.log.at(-1)[0])/864e5);
+    return `<div class="action"><h3>En attente de la préfecture</h3><p>Demande envoyée il y a ${days} jour${days>1?"s":""}. Quand la réponse arrive, notez-la :</p>
+     <div class="opts" role="radiogroup" aria-label="Réponse de la préfecture">
+      <label class="opt"><input type="radio" name="a-${n}" value="refused"><span>Des dossiers ont été déposés puis refusés<small>On cherchera à comprendre les motifs.</small></span></label>
+      <label class="opt"><input type="radio" name="a-${n}" value="none"><span>Aucun dossier déposé<small>On proposera de l'aide pour en monter un.</small></span></label></div>
+     <div class="row"><button class="btn pri" data-answer="${n}" disabled>Enregistrer la réponse</button><button class="ghost" data-back="${n}">Revenir à « à vérifier »</button></div></div>`;
+  }
+  if(t.stage==="call"){
+    const angle=t.answer==="refused"?"Des dossiers ont été refusés : demandez à la mairie les motifs et si elle compte les redéposer.":"Aucun dossier déposé : proposez une aide pour monter un dossier DETR avant la date limite départementale.";
+    return `<div class="action"><h3>Appeler la mairie</h3><p>${angle}</p><label for="note-${n}" style="display:block;font-size:12.5px;color:var(--dim);margin-bottom:4px">Note d'appel (facultatif)</label><textarea id="note-${n}" placeholder="Interlocuteur, suites prévues…"></textarea>
+     <div class="row"><button class="btn pri" data-called="${n}">Marquer comme contactée</button><button class="ghost" data-back="${n}">Revenir à l'étape précédente</button></div></div>`;
+  }
+  return `<div class="action"><h3>Mairie contactée</h3>${t.note?`<p>« ${esc(t.note)} »</p>`:""}<div class="row"><button class="ghost" data-back="${n}">Rouvrir</button></div></div>`;
+}
+function card(c){
+  const t=S.track[c.n], s=STAGES.find(x=>x.k===t.stage), i=STAGES.indexOf(s), op=openN===c.n;
+  const verdict=!c.pj.length?`Aucun projet retenu depuis 2018 ; les communes de même taille ont obtenu ${c.st.med} € par habitant en médiane.`:`${eur(c.ph)} par habitant, ${nf(c.ratio*100)} % de la médiane de sa taille (${c.st.med} €).`;
+  return `<article class="card ${op?"open":""}" data-n="${esc(c.n)}"><button class="head" aria-expanded="${op}" data-toggle="${esc(c.n)}">
+   <span class="nm"><b>${esc(c.n)}</b><small>${nf(c.p)} hab. · ${c.pj.length?eur(c.ph)+" / hab.":"aucun projet"}</small></span>${band(c)}
+   <span class="st ${s.s}">${s.l}</span><svg class="chev" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3l5 5-5 5"/></svg></button>
+   <div class="slide2"><div>${op?`<div class="body">
+    <ol class="steps" aria-label="Étapes">${STAGES.map((x,j)=>`<li class="${j<i?"ok":j===i?"now":""}">${j<i?"✓ ":""}${x.l.replace("Terminées","Terminé")}</li>`).join("")}</ol>
+    <div class="facts"><div><p>${verdict}</p><span class="mu">Commune de ${c.st.l}</span></div>
+     <div>${c.pj.length?c.pj.map(p=>`<div class="pj"><span class="y">${p[0]}</span><span>${esc(p[2])} · ${p[1]}${p[0]===2025?` <span class="part">2025 partielle</span>`:""}</span><span class="m">${nf(p[3])} €</span></div>`).join(""):`<span class="mu">Aucun projet retenu en DETR, DSIL ou Fonds vert. Les dossiers refusés ne sont pas publiés.</span>`}</div></div>
+    ${action(c,t)}
+    ${t.log.length?`<ul class="log" aria-label="Historique">${t.log.map(l=>`<li><b>${fmt(l[0])}</b> · ${esc(l[1])}</li>`).join("")}</ul>`:""}
+   </div>`:""}</div></div></article>`;
+}
+function list(){
+  if(fresh.state==="loading"){$("#list").innerHTML=Array.from({length:Math.min(5,Object.keys(S.track).length||3)},()=>`<div class="skel"></div>`).join("");return}
+  const order=n=>{const c=byName(n);return c.ratio-(c.pj.length?0:1)+c.p/1e7};
+  const L=Object.keys(S.track).filter(n=>!filter||S.track[n].stage===filter).sort((a,b)=>STAGES.findIndex(s=>s.k===S.track[a].stage)-STAGES.findIndex(s=>s.k===S.track[b].stage)||order(a)-order(b));
+  if(!Object.keys(S.track).length){$("#list").innerHTML=`<div class="empty"><b>Aucune commune suivie.</b>Ajoutez-en depuis « Autres communes » ci-dessous.</div>`;return}
+  if(!L.length){const s=STAGES.find(x=>x.k===filter);$("#list").innerHTML=`<div class="empty"><b>Aucune commune « ${s.l.toLowerCase()} » pour l'instant.</b>${filter==="done"?"Elles apparaîtront ici une fois la mairie contactée.":filter==="wait"?"Une commune passe ici quand la demande à la préfecture est envoyée.":filter==="call"?"Une commune passe ici quand la réponse de la préfecture est notée.":"Toutes les communes suivies ont déjà été vérifiées."}<br><button class="btn" style="margin-top:10px" data-filter="${filter}">Voir toutes les communes suivies</button></div>`;return}
+  $("#list").innerHTML=L.map(n=>card(byName(n))).join("");
+}
+function others(){
+  const O=C.filter(c=>!S.track[c.n]).sort((a,b)=>a.ratio-b.ratio);
+  const wasOpen=$("#out").open;
+  $("#out").innerHTML=`<summary>Autres communes de la circonscription (${O.length}) · non suivies</summary>${O.map(c=>`<div class="orow"><span class="nm">${esc(c.n)} <small>· ${nf(c.p)} hab. · ${eur(c.ph)} / hab., médiane ${c.st.med} €${behind(c)?" · en retrait":""}</small></span>${band(c).replace('class="band"','class="band" style="flex:1 1 140px;max-width:220px"')}<button class="ghost" data-add="${esc(c.n)}">Suivre</button></div>`).join("")||`<p class="hint">Toutes les communes sont suivies.</p>`}`;
+  $("#out").open=wasOpen;
+}
+function render(){lead();resumeBar();freshBar();prog();list();others()}
+function log(n,m){S.track[n].log.push([+today+(Date.now()%864e5),m])}
+function undoToast(msg,undo){
+  $$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.setAttribute("role","status");
+  t.innerHTML=`<span>${esc(msg)}</span>${undo?"<button>Annuler</button>":""}`;document.body.append(t);
+  if(undo)t.querySelector("button").onclick=()=>{undo();t.remove()};setTimeout(()=>t.remove(),6000);
+}
+function snapshot(){return JSON.stringify(S.track)}
+function restoreFrom(snap,n){return()=>{S.track=JSON.parse(snap);save();openN=n;render()}}
+document.addEventListener("click",e=>{
+  const g=e.target.closest("[data-toggle]");if(g){const n=g.dataset.toggle;openN=openN===n?null:n;pending=null;list();return}
+  const f=e.target.closest("[data-filter]");if(f){filter=filter===f.dataset.filter?null:f.dataset.filter;prog();list();return}
+  const cf=e.target.closest("[data-confirm]");if(cf){pending=cf.dataset.confirm+":confirm";list();setTimeout(()=>$("[data-send]")?.focus(),20);return}
+  if(e.target.closest("[data-cancel]")){const n=pending.split(":")[0];pending=null;list();$(`[data-confirm="${CSS.escape(n)}"]`)?.focus();return}
+  const sd=e.target.closest("[data-send]");if(sd){const n=sd.dataset.send;pending=n+":sending";list();
+    setTimeout(()=>{pending=null;S.track[n].stage="wait";log(n,"Demande envoyée à la préfecture");save();render();toast(`Demande envoyée pour ${n}. La commune passe « en attente ».`)},700);return}
+  const an=e.target.closest("[data-answer]");if(an){const n=an.dataset.answer,v=$(`input[name="a-${CSS.escape(n)}"]:checked`)?.value;if(!v)return;const snap=snapshot();
+    S.track[n].stage="call";S.track[n].answer=v;log(n,v==="none"?"Réponse : aucun dossier déposé":"Réponse : dossiers refusés");save();render();undoToast(`${n} passe « à appeler ».`,restoreFrom(snap,n));return}
+  const cl=e.target.closest("[data-called]");if(cl){const n=cl.dataset.called,note=$(`#note-${CSS.escape(n)}`)?.value.trim();const snap=snapshot();
+    S.track[n].stage="done";S.track[n].note=note||"";log(n,"Mairie contactée");save();openN=null;render();undoToast(`${n} : mairie contactée.`,restoreFrom(snap,n));return}
+  const bk=e.target.closest("[data-back]");if(bk){const n=bk.dataset.back,t=S.track[n],snap=snapshot();const i=STAGES.findIndex(s=>s.k===t.stage);
+    t.stage=STAGES[i-1].k;if(t.stage!=="call")delete t.answer;log(n,"Retour à « "+STAGES[i-1].l.toLowerCase()+" »");save();render();undoToast(`${n} revient à « ${STAGES[i-1].l.toLowerCase()} ».`,restoreFrom(snap,n));return}
+  const dr=e.target.closest("[data-drop]");if(dr){const n=dr.dataset.drop,snap=snapshot();delete S.track[n];openN=null;save();render();undoToast(`${n} retirée du suivi.`,restoreFrom(snap,n));return}
+  const ad=e.target.closest("[data-add]");if(ad){const n=ad.dataset.add;S.track[n]={stage:"check",log:[]};openN=n;save();render();toast(`${n} ajoutée au suivi, étape « à vérifier ».`);return}
+  if(e.target.closest("[data-refresh]")){fresh.state="loading";freshBar();list();fresh.tries++;
+    setTimeout(()=>{if(fresh.tries===1){fresh.state="err"}else{fresh.state="ok";S.data=+today;save()}freshBar();list()},1100);return}
+  if(e.target.closest("[data-keep]")){fresh.state="stale";freshBar();return}
+  if(e.target.closest("[data-reset]")){askReset=true;resumeBar();setTimeout(()=>$("[data-reset-no]")?.focus(),20);return}
+  if(e.target.closest("[data-reset-no]")){askReset=false;resumeBar();return}
+  if(e.target.closest("[data-reset-ok]")){askReset=false;const T={};C.filter(behind).forEach(c=>T[c.n]={stage:"check",log:[]});S.track=T;resumed=false;openN=null;filter=null;save();render();toast("Avancement effacé. Les 7 communes en retrait repartent de « à vérifier ».");return}
+});
+document.addEventListener("change",e=>{if(e.target.matches('.opts input')){const b=e.target.closest(".action").querySelector("[data-answer]");b.disabled=false}});
+document.addEventListener("keydown",e=>{
+  if(e.key!=="Escape")return;
+  if(e.target.matches("textarea")){e.target.blur();return}
+  if(askReset){askReset=false;resumeBar();return}
+  if(pending&&pending.endsWith(":confirm")){pending=null;list();return}
+  if(openN){const n=openN;openN=null;list();$(`[data-toggle="${CSS.escape(n)}"]`)?.focus();return}
+  if(filter){filter=null;prog();list()}
+});
+render();
+// ouvre la première commune qui attend une action de votre part
+openN=Object.keys(S.track).find(n=>S.track[n].stage==="call")||null;list();
+</script>

@@ -228,7 +228,7 @@ function render(){
   $("#status").innerHTML=phase==="done"?`<span>Brouillon verrouillé</span>`:`<span>Brouillon enregistré ${new Date(D.saved).toDateString()===new Date().toDateString()?"à "+hm(D.saved):"le "+dm(D.saved)+" à "+hm(D.saved)}</span>${history.length?`<button class="btn" id="undo" title="Ctrl+Z">Annuler : ${esc(history[history.length-1].label)}</button>`:""}<button class="ghost" id="discard"${lock?" disabled":""}>Repartir de zéro</button>`;
   // bandeaux
   let b="";
-  if(resumed==="sample"||resumed==="local") b+=`<div class="banner"><span class="dot"></span><div><b>Brouillon repris là où vous l'aviez laissé</b> (${dm(resumedAt)}, ${hm(resumedAt)}). <button class="link" data-x="resume">Compris</button></div></div>`;
+  if((resumed==="sample"||resumed==="local")&&phase!=="done") b+=`<div class="banner"><span class="dot"></span><div><b>Brouillon repris là où vous l'aviez laissé</b> (${dm(resumedAt)}, ${hm(resumedAt)}). <button class="link" data-x="resume">Compris</button></div></div>`;
   if(stale()&&phase!=="done"){const ch=PROG.filter(x=>CRED[D.basis][x.n].join()!==CRED[LATEST][x.n].join());
     b+=`<div class="banner warn" id="stale"><span class="dot warn"></span><div><b>Les crédits ont changé depuis votre brouillon.</b> La lettre rectificative du 8 novembre modifie ${ch.length} programme${ch.length>1?"s":""} ; le dépôt reste bloqué tant que les montants ne sont pas à jour.
       <table>${ch.map(x=>`<tr><td>${x.n} · ${x.s}</td><td>CP <del>${nf(CRED[D.basis][x.n][1])}</del> <ins>${nf(CRED[LATEST][x.n][1])}</ins></td><td>AE <del>${nf(CRED[D.basis][x.n][0])}</del> <ins>${nf(CRED[LATEST][x.n][0])}</ins></td></tr>`).join("")}</table>
