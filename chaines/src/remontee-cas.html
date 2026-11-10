@@ -1,0 +1,104 @@
+<title>Ce qui revient à la permanence</title>
+<!--BASE-->
+<style>
+/* Les dossiers de la permanence, comptés par motif et anonymisés : ce qui monte, où, depuis quand,
+   et si le sujet est déjà porté à Paris. Une ligne par motif ; le détail s'ouvre à côté. */
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:18px;align-items:start}
+.mt{padding:4px}
+.m{display:grid;grid-template-columns:minmax(0,1fr) 150px 110px;gap:14px;align-items:center;width:100%;border:0;background:none;text-align:left;padding:11px 12px;border-radius:8px;cursor:pointer;transition:background .2s}
+.m+.m{border-top:1px solid var(--line)}
+.m:hover{background:var(--s2)}
+.m.on{background:var(--s2);box-shadow:inset 0 0 0 1px var(--line2)}
+.m b{display:block;color:var(--fg);font-weight:500;font-size:13.5px}
+.m small{display:block;color:var(--dim);font-size:12px}
+.hist{display:grid;grid-template-columns:repeat(12,1fr);gap:2px;align-items:end;height:30px}
+.hist i{display:block;border-radius:2px 2px 0 0;background:var(--line2);min-height:2px}
+.hist i.q{background:var(--accent)}
+.tr{text-align:right;font-size:12.5px;color:var(--muted);white-space:nowrap}
+.tr b{display:inline;font-size:13.5px}
+.up b{color:#f0c27a} .flat b{color:var(--text)} .down b{color:#7fd3a8}
+.det{padding:18px 20px;position:sticky;top:16px;animation:in .25s var(--ease)}
+@keyframes in{from{opacity:0;transform:translateY(4px)}}
+.det h2{margin:0;font:600 16px/1.35 var(--f);color:var(--fg)}
+.det .k{font-size:12px;color:var(--dim)}
+.kp{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:12px 0 0}
+.kp div{background:var(--s2);border-radius:7px;padding:8px 10px}
+.kp b{display:block;color:var(--fg);font-size:16px;font-weight:600}
+.kp span{font-size:11.5px;color:var(--dim)}
+.cm{display:grid;gap:5px}
+.cr{display:grid;grid-template-columns:130px minmax(0,1fr) 30px;gap:8px;align-items:center;font-size:12.5px;color:var(--text)}
+.cr .b{height:6px;border-radius:3px;background:var(--accent)}
+.cr .n{text-align:right;color:var(--muted)}
+.cr.hide{color:var(--dim)}
+.cr.hide .b{background:var(--line2)}
+.blk{margin:0;padding-left:16px;font-size:12.5px;color:var(--text);display:grid;gap:4px}
+.paris{display:grid;gap:6px}
+.pq{border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12.5px;color:var(--muted)}
+.pq b{color:var(--text);font-weight:500}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.foot{margin:10px 2px 0;font-size:12px;color:var(--dim)}
+@media (max-width:960px){ .grid{grid-template-columns:minmax(0,1fr)} .det{position:static} }
+@media (max-width:560px){ .m{grid-template-columns:minmax(0,1fr) 90px} .m .hist{display:none} .cr{grid-template-columns:100px minmax(0,1fr) 26px} }
+</style>
+
+<div class="wrap">
+  <div class="ctx">Permanence de la 4ᵉ circonscription · dossiers ouverts de décembre 2025 à novembre 2026 · comptes anonymisés</div>
+  <h1>Ce qui revient à la permanence</h1>
+  <p class="lead" id="lead"></p>
+  <div class="grid">
+    <div><section class="panel mt" id="mt" aria-label="Motifs"></section>
+      <p class="foot">Trimestre récent en couleur. Une commune comptant moins de trois dossiers sur un motif n'est pas nommée.</p></div>
+    <aside class="panel det" id="det" aria-live="polite"></aside>
+  </div>
+</div>
+
+<script>
+const MOIS=["déc.","janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov."];
+const M=[
+ {k:"anef",t:"Titres de séjour bloqués (ANEF)",org:"Préfecture",h:[4,5,3,6,5,7,6,8,9,13,15,17],dur:94,
+  com:{"Villeneuve":19,"Saint-Aubin":14,"Les Ormes":9,"Bréval":6,"Montfort":2,"Autres (moins de 3)":2},
+  blk:["Rendez-vous introuvable pour un renouvellement","Récépissé expiré pendant l'instruction : perte d'emploi","Dossier marqué « complet » sans suite depuis plus de quatre mois"],
+  paris:[{n:"AN 3355",who:"votre bureau",st:"Sans réponse depuis 3 mois"}],q:"les délais d'instruction des demandes de titre de séjour déposées sur l'administration numérique pour les étrangers en France dans le département"},
+ {k:"mpr",t:"Aides à la rénovation non versées",org:"Agence nationale de l'habitat",h:[6,7,9,8,10,9,8,7,8,9,8,9],dur:142,
+  com:{"Villeneuve":22,"Les Ormes":18,"Saint-Aubin":17,"Bréval":11,"Montfort":10,"Autres (moins de 3)":20},
+  blk:["Prime attendue plus de six mois après les travaux","Demande de pièces déjà fournies","Artisan non payé, chantier arrêté"],
+  paris:[{n:"AN 3187",who:"votre bureau",st:"Sans réponse depuis 6 mois"},{n:"AN 2954",who:"Écologie urbaine",st:"Sans réponse depuis 8 mois"}]},
+ {k:"caf",t:"Trop-perçus d'aide au logement réclamés",org:"Caisse d'allocations familiales",h:[3,2,4,3,2,3,9,11,10,8,7,6],dur:61,
+  com:{"Villeneuve":16,"Saint-Aubin":15,"Bréval":12,"Les Ormes":9,"Autres (moins de 3)":16},
+  blk:["Recalcul rétroactif après la réforme des ressources","Retenue de 100 % sur les prestations"],
+  paris:[],q:"les demandes de remboursement d'aides au logement nées du recalcul rétroactif des ressources depuis juin 2026"},
+ {k:"mdph",t:"Délais de la maison départementale des personnes handicapées",org:"Département",h:[5,4,6,5,6,5,6,5,6,5,6,5],dur:188,
+  com:{"Villeneuve":18,"Saint-Aubin":14,"Les Ormes":12,"Autres (moins de 3)":20},blk:["Délai de traitement supérieur à six mois","Renouvellement d'allocation interrompu"],paris:[{n:"AN 2190",who:"Solidarité et logement",st:"Répondue en mars 2026"}]},
+ {k:"hlm",t:"Demandes de logement social sans proposition",org:"Bailleurs, commission d'attribution",h:[7,6,8,7,6,7,6,5,7,6,5,6],dur:null,
+  com:{"Villeneuve":31,"Saint-Aubin":20,"Les Ormes":11,"Autres (moins de 3)":14},blk:["Ancienneté supérieure à trois ans","Mutation pour handicap non traitée"],paris:[]},
+ {k:"exp",t:"Menaces d'expulsion locative",org:"Préfecture, commission de prévention",h:[2,3,4,3,1,1,1,2,3,4,5,4],dur:35,
+  com:{"Villeneuve":9,"Saint-Aubin":8,"Autres (moins de 3)":16},blk:["Commandement de quitter les lieux reçu sans accompagnement social"],paris:[]},
+];
+const sum=a=>a.reduce((x,y)=>x+y,0);
+const trend=m=>{const q=sum(m.h.slice(9)),p=sum(m.h.slice(6,9));return {q,p,r:p?q/p:9}};
+let sel=null;
+function render(){
+  const T=M.map(m=>({m,...trend(m)})).sort((a,b)=>(b.q-b.p)-(a.q-a.p));
+  const ups=T.filter(t=>t.r>=1.3);
+  $("#lead").innerHTML=`${ups.length} sujet${ups.length>1?"s montent":" monte"} ce trimestre. <span>${ups.map((t,i)=>`${i?t.m.t.charAt(0).toLowerCase()+t.m.t.slice(1):t.m.t} : ${t.q} dossiers, contre ${t.p}`).join(" ; ")}.</span>`;
+  if(!sel) sel=T[0].m.k;
+  $("#mt").innerHTML=T.map(({m,q,p,r})=>{const mx=Math.max(...m.h);const cls=r>=1.3?"up":r<=.8?"down":"flat";
+    return `<button class="m ${sel===m.k?"on":""}" data-k="${m.k}"><span><b>${m.t}</b><small>${m.org} · ${sum(m.h)} dossiers sur 12 mois</small></span>
+     <span class="hist" aria-hidden="true">${m.h.map((v,i)=>`<i class="${i>=9?"q":""}" style="height:${Math.round(2+28*v/mx)}px"></i>`).join("")}</span>
+     <span class="tr ${cls}"><b>${q}</b> ce trimestre<br>${r>=1.3?`×${nf(r,1)}`:r<=.8?`en baisse`:"stable"}</span></button>`}).join("");
+  const m=M.find(x=>x.k===sel), t=trend(m), mxc=Math.max(...Object.values(m.com));
+  $("#det").innerHTML=`<div class="k">${m.org}</div><h2>${m.t}</h2>
+   <div class="kp"><div><b>${t.q}</b><span>dossiers ce trimestre</span></div><div><b>${t.p}</b><span>le trimestre d'avant</span></div><div><b>${m.dur?Math.round(m.dur/30.4)+" mois":"—"}</b><span>pour résoudre (médiane)</span></div></div>
+   <div class="sec">Par commune, sur 12 mois</div><div class="cm">${Object.entries(m.com).map(([c,n])=>`<div class="cr ${c.startsWith("Autres")?"hide":""}"><span>${c}</span><span class="b" style="width:${Math.round(100*n/mxc)}%"></span><span class="n">${n}</span></div>`).join("")}</div>
+   <div class="sec">Blocages les plus fréquents</div><ul class="blk">${m.blk.map(b=>`<li>${b}</li>`).join("")}</ul>
+   <div class="sec">Déjà porté à Paris ?</div>${m.paris.length?`<div class="paris">${m.paris.map(p=>`<div class="pq"><b>${p.n}</b> · ${p.who} · ${p.st}</div>`).join("")}</div>`:`<p style="margin:0;font-size:12.5px;color:#f0c27a">Aucune question ni amendement sur ce sujet.</p>`}
+   <div class="acts">${m.q&&!m.paris.some(p=>p.who==="votre bureau")?`<button class="btn pri" id="qe">Préparer une question écrite</button>`:""}<button class="btn" id="send">Signaler à l'équipe de Paris</button></div>`;
+}
+document.addEventListener("click",e=>{
+  const b=e.target.closest(".m"); if(b){sel=b.dataset.k;render(); if(!matchMedia("(min-width:961px)").matches) $("#det").scrollIntoView({behavior:"smooth"}); return}
+  if(e.target.closest("#qe")){const m=M.find(x=>x.k===sel),t=trend(m);const txt=`Mme [nom de la députée] attire l'attention du Gouvernement sur ${m.q}. Sa permanence a reçu ${t.q} sollicitations à ce sujet ces trois derniers mois, contre ${t.p} le trimestre précédent. Elle lui demande quelles mesures il entend prendre.`;navigator.clipboard?.writeText(txt).then(()=>toast("Projet de question copié : chiffres agrégés, aucun cas individuel."),()=>toast(txt));return}
+  if(e.target.closest("#send")){toast("Signalé à l'équipe de Paris avec les chiffres agrégés (simulation).")}
+});
+document.addEventListener("keydown",e=>{if(e.key!=="ArrowDown"&&e.key!=="ArrowUp")return;if(!document.activeElement?.classList.contains("m"))return;e.preventDefault();const L=$$(".m"),i=L.indexOf(document.activeElement),n=L[Math.max(0,Math.min(L.length-1,i+(e.key==="ArrowDown"?1:-1)))];sel=n.dataset.k;render();document.querySelector(`.m[data-k="${sel}"]`).focus()});
+render();
+</script>
