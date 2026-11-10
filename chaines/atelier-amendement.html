@@ -1,0 +1,666 @@
+<title>Atelier d'amendement</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Poste de travail : le texte de la commission à gauche, que l'on modifie directement ;
+   à droite, l'amendement que la machine rédige et les contrôles qui s'allument.
+   Deux autres vues prolongent la chaîne : l'ordre d'appel (qui fait tomber qui) et le texte qui en résulte. */
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --lit:rgba(110,123,242,.18); --accent:#6e7bf2;
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* en-tête */
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px 24px;flex-wrap:wrap;margin-bottom:20px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.tabs{display:inline-flex;padding:3px;border:1px solid var(--line);border-radius:9px;background:var(--s1);gap:2px}
+.tab{border:0;background:none;padding:6px 12px;border-radius:6px;color:var(--muted);font-size:13px;cursor:pointer;white-space:nowrap;transition:background .2s,color .2s}
+.tab:hover{color:var(--text)}
+.tab[aria-selected="true"]{background:var(--s2);color:var(--fg);box-shadow:inset 0 0 0 1px var(--line2)}
+.view{animation:in .28s var(--ease)}
+@keyframes in{from{opacity:0;transform:translateY(4px)}}
+
+/* vue Rédiger */
+.desk{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:24px;align-items:start}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.art{padding:18px 22px 22px}
+.art-h{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
+.art-h b{color:var(--fg);font-weight:600;font-size:15px}
+.art-h span{color:var(--dim);font-size:12.5px}
+.art-h .sp{flex:1}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.how{font-size:12.5px;color:var(--dim);margin:0 0 14px}
+.al{display:grid;grid-template-columns:30px minmax(0,1fr);gap:0 8px;padding:5px 0}
+.al .n{border:0;background:none;padding:0;height:24px;width:26px;border-radius:5px;color:var(--dim);font-size:11.5px;cursor:pointer;text-align:right;padding-right:6px;transition:color .2s,background .2s}
+.al .n:hover,.al .n.on{color:var(--fg);background:var(--s2)}
+.al .n.new{color:var(--ins);font-weight:600;cursor:default}
+.t{margin:0;font-size:14.5px;line-height:1.72;color:var(--text);user-select:text;-webkit-user-select:text}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del+ins{margin-left:.3em}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark.pend{background:var(--lit);color:var(--fg);border-radius:3px}
+.lit{background:var(--lit);border-radius:3px;transition:background .2s}
+.art.gone .t{color:var(--dim)}
+.banner{margin:0 0 12px;padding:8px 12px;border-radius:7px;background:rgba(229,72,77,.08);color:#f2a7a9;font-size:12.5px;display:flex;gap:10px;align-items:center}
+
+/* amendement */
+.side{display:grid;gap:16px;position:sticky;top:16px}
+.amd{padding:16px 18px}
+.amd-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.amd-h b{color:var(--fg);font-weight:600}
+.amd-h span{font-size:12px;color:var(--dim)}
+.from{margin:6px 0 0;font-size:12.5px;color:var(--muted)}
+.from b{color:var(--text);font-weight:500}
+.disp{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:6px}
+.disp li{display:grid;grid-template-columns:minmax(0,1fr) 24px;gap:8px;align-items:start;padding:8px 10px;border-radius:7px;background:var(--s2);font-size:13.5px;line-height:1.6;color:var(--fg);transition:box-shadow .2s}
+.disp li:hover{box-shadow:inset 0 0 0 1px var(--line2)}
+.disp li.gage{color:var(--text)}
+.rm{width:24px;height:24px;border:0;background:none;color:var(--dim);border-radius:5px;cursor:pointer;display:grid;place-items:center}
+.rm:hover{color:var(--fg);background:var(--line)}
+.empty{margin:12px 0 0;padding:14px;border:1px dashed var(--line2);border-radius:7px;color:var(--dim);font-size:13px}
+.lbl{display:block;margin:14px 0 6px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+textarea{width:100%;min-height:100px;resize:vertical;background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:8px 10px;color:var(--text);font-size:13px;line-height:1.55}
+textarea:focus{outline:none;border-color:var(--line2)}
+.acts{display:flex;gap:8px;margin-top:12px}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+
+/* contrôles */
+.ctl{padding:6px 6px}
+.ctl-h{padding:8px 12px 4px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.ck{border-radius:7px}
+.ck-row{display:grid;grid-template-columns:18px minmax(0,1fr) 14px;gap:10px;align-items:start;width:100%;border:0;background:none;text-align:left;padding:8px 12px;cursor:pointer;border-radius:7px;transition:background .2s}
+.ck-row:hover{background:var(--s2)}
+.dot{width:8px;height:8px;border-radius:50%;margin:7px 0 0 5px;background:var(--dim)}
+.ok .dot{background:var(--ok)} .warn .dot{background:var(--warn)} .err .dot{background:var(--err)}
+.ck-t{color:var(--fg);font-size:13.5px}
+.ck-s{display:block;color:var(--muted);font-size:12.5px}
+.chev{color:var(--dim);margin-top:4px;transition:transform .3s var(--ease)}
+.ck.open .chev{transform:rotate(90deg)}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.ck.open .slide{grid-template-rows:1fr}
+.ck.open .slide>div{opacity:1;transition:opacity .2s .12s}
+.ck-d{padding:0 12px 12px 40px;font-size:12.5px;color:var(--muted);line-height:1.6}
+.ck-d p{margin:0 0 6px}
+.ck-d b{color:var(--text);font-weight:500}
+.ck-d .btn{font-size:12px;padding:5px 10px;margin-top:4px}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+
+/* outils flottants */
+.pop{position:absolute;z-index:20;background:var(--s2);border:1px solid var(--line2);border-radius:9px;box-shadow:0 10px 30px rgba(0,0,0,.45);padding:4px;display:flex;gap:2px;align-items:center;animation:pop .16s var(--ease)}
+@keyframes pop{from{opacity:0;transform:translateY(3px)}}
+.pop.col{flex-direction:column;align-items:stretch;min-width:220px}
+.pop button{border:0;background:none;color:var(--text);padding:6px 10px;border-radius:6px;font-size:13px;cursor:pointer;text-align:left;white-space:nowrap}
+.pop button:hover{background:var(--line);color:var(--fg)}
+.pop input{width:min(320px,70vw);background:var(--bg);border:1px solid var(--line2);border-radius:6px;padding:6px 9px;font-size:13px;color:var(--fg)}
+.pop input:focus{outline:none;border-color:var(--accent)}
+.pop .k{font-size:11.5px;color:var(--dim);padding:2px 8px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:pop .2s var(--ease)}
+
+/* vue Ordre d'appel */
+.col1{max-width:780px;margin:0 auto}
+.answer{padding:16px 18px;margin-bottom:16px}
+.answer p{margin:0;color:var(--fg);font-size:15px;line-height:1.55;text-wrap:pretty}
+.answer .sub{margin-top:6px;color:var(--muted);font-size:13px}
+.bar2{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 2px 8px;font-size:12.5px;color:var(--dim)}
+.list{display:grid;gap:6px}
+.grp{border:1px solid var(--line);border-radius:10px;background:var(--s1);padding:4px}
+.grp-h{font-size:11.5px;color:var(--dim);padding:6px 10px 2px;letter-spacing:.04em;text-transform:uppercase}
+.row{display:grid;grid-template-columns:28px 64px minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;border:0;background:none;text-align:left;padding:9px 10px;border-radius:7px;cursor:pointer;color:var(--text);transition:background .2s,opacity .25s}
+.row:hover{background:var(--s2)}
+.row .pos{color:var(--dim);font-size:12px;text-align:right}
+.row .num{color:var(--fg);font-weight:500;font-size:13px;white-space:nowrap}
+.row .what{min-width:0;font-size:13px}
+.row .what small{display:block;color:var(--dim);font-size:12px}
+.st{font-size:12px;padding:2px 8px;border-radius:999px;white-space:nowrap;color:var(--dim)}
+.row.adopt .st{background:rgba(70,179,126,.14);color:#7fd3a8}
+.row.fell{cursor:default}
+.row.fell .what,.row.fell .num{color:var(--dim)}
+.row.fell .what>span{text-decoration:line-through 1px var(--del)}
+.row.fell .st{color:#f2a7a9}
+.row.mine{box-shadow:inset 0 0 0 1px rgba(110,123,242,.45)}
+.row.mine .num{color:#b4bcff}
+.row.hl{background:var(--lit)}
+
+/* vue Texte */
+.res{padding:18px 22px 22px}
+.res .al .n{cursor:default}
+.res .al .n:hover{background:none;color:var(--dim)}
+.res .al{grid-template-columns:40px minmax(0,1fr)}
+.res .al .n{width:36px}
+.res .ex{display:block;white-space:nowrap;font-size:10.5px;color:var(--dim);text-align:right;padding-right:6px;line-height:1}
+sup.by{font-size:10px;color:var(--muted);margin-left:2px;cursor:pointer}
+sup.by:hover{color:var(--fg)}
+.note{margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+
+@media (max-width:920px){ .desk{grid-template-columns:minmax(0,1fr)} .side{position:static} }
+@media (max-width:520px){
+  .top{align-items:flex-start} .tabs{width:100%} .tab{flex:1;padding:6px 6px;font-size:12.5px}
+  .art,.res{padding:14px 14px 18px} .al{grid-template-columns:26px minmax(0,1fr)} .t{font-size:14px}
+  .row{grid-template-columns:22px 52px minmax(0,1fr);row-gap:2px} .row .st{grid-column:3;justify-self:start}
+}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <div class="ctx">Projet de loi pour l'accès au logement · séance publique du jeudi 19 novembre</div>
+      <h1>Article 4 · logements vacants</h1>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Étapes">
+      <button class="tab" role="tab" id="tab-ecrire" data-v="ecrire">Rédiger</button>
+      <button class="tab" role="tab" id="tab-appel" data-v="appel">Ordre d'appel</button>
+      <button class="tab" role="tab" id="tab-texte" data-v="texte">Texte qui en résulte</button>
+    </nav>
+  </header>
+  <main id="main"></main>
+</div>
+
+<script>
+/* ---------- Données fictives ---------- */
+const GROUPS={PR:{name:"Progrès républicain",c:"#c07a00"},SOL:{name:"Solidarité et logement",c:"#d13a30"},ECO:{name:"Écologie urbaine",c:"#2a9d63"},
+ UT:{name:"Union des territoires",c:"#3b82d6"},LL:{name:"Libertés locales",c:"#e0671d"},RC:{name:"Rassemblement des communes",c:"#7c5cd6"},
+ GOUV:{name:"Gouvernement",c:"#7d8696"},DC:{name:"Démocratie communale",c:"#2bb3b1"},AR:{name:"Avenir rural",c:"#8fae3a"},CP:{name:"Centre et progrès",c:"#d8699a"}};
+const ME="PR";
+const ART=[null,
+ "I. – Le chapitre II du titre III du livre III du code de la construction et de l'habitation est complété par un article L. 332-4 ainsi rédigé :",
+ "« Art. L. 332-4. – Dans les communes de plus de 50 000 habitants appartenant à une zone d'urbanisation continue, le propriétaire d'un logement vacant depuis plus de deux ans le déclare au maire.",
+ "« Le logement déclaré peut faire l'objet, à la demande du propriétaire, d'une aide à la remise sur le marché dont le montant ne peut excéder 30 % du coût des travaux, dans la limite de 15 000 euros par logement.",
+ "« Le maire informe le propriétaire des aides mobilisables dans un délai d'un mois suivant la déclaration.",
+ "« Les conditions d'application du présent article sont fixées par décret en Conseil d'État. »",
+ "II. – Au premier alinéa du I de l'article 232 du code général des impôts, le taux : « 17 % » est remplacé par le taux : « 20 % ».",
+ "III. – Le présent article entre en vigueur le 1er janvier 2027."];
+const NAL=ART.length-1;
+// Liasse de séance sur l'article 4 (amendements des autres)
+const LIASSE=[
+ {id:12,g:"LL",op:"delArt"},
+ {id:31,g:"RC",al:2,op:"rep",w:"50 000",x:"20 000"},
+ {id:44,g:"ECO",al:2,op:"rep",w:"deux ans",x:"un an"},
+ {id:45,g:"SOL",al:2,op:"rep",w:"deux ans",x:"dix-huit mois"},
+ {id:58,g:"UT",al:3,op:"rep",w:"30 %",x:"20 %"},
+ {id:60,g:"AR",al:4,op:"delAl"},
+ {id:72,g:"DC",al:4,op:"rep",w:"un mois",x:"deux mois"},
+ {id:87,g:"PR",al:6,op:"rep",w:"20 %",x:"19 %",occ:1},
+ {id:90,g:"LL",al:6,op:"delAl"},
+ {id:95,g:"CP",al:6,op:"rep",w:"20 %",x:"25 %",occ:1},
+ {id:101,g:"GOUV",al:7,op:"rep",w:"1er janvier 2027",x:"1er juillet 2027"},
+];
+const FICHES=[
+ {org:"Union des propriétaires bailleurs (fictive)",date:"4 novembre",hatvp:true,al:6,w:"20 %",x:"18 %"},
+ {org:"Collectif Habitat vacant (fictif)",date:"6 novembre",hatvp:false,al:3,w:"30 %",x:"50 %"},
+];
+// Ce que le texte engage financièrement, passage par passage (base des contrôles de l'article 40)
+const FIN={
+ 2:[{m:"50 000",less:"charge",why:"abaisser le seuil étend l'aide à davantage de communes"},{m:"deux ans",less:"charge",why:"raccourcir la durée de vacance rend davantage de logements éligibles à l'aide"}],
+ 3:[{m:"30 %",more:"charge",why:"relever le plafond de l'aide aggrave une charge publique"},{m:"15 000 euros",more:"charge",why:"relever le plafond de l'aide aggrave une charge publique"},{m:"peut faire",chg:"charge",why:"rendre l'aide automatique crée une charge"}],
+ 4:[{m:"un mois",less:"charge",why:"raccourcir le délai alourdit l'obligation faite à la commune"}],
+ 6:[{m:"20 %",less:"perte",why:"une hausse moindre du taux réduit le produit attendu de la taxe sur les logements vacants"}],
+ 7:[{m:"1er janvier 2027",later:"perte",earlier:"charge",why:"la date commande à la fois la hausse de la taxe et l'ouverture de l'aide"}],
+};
+const GAGE="La perte de recettes pour l'État est compensée à due concurrence par la création d'une taxe additionnelle à l'accise sur les tabacs prévue au chapitre IV du titre Ier du livre III du code des impositions sur les biens et services.";
+const NOW=new Date(2026,10,10,11,20), SEANCE=new Date(2026,10,19), HOLI=["2026-11-11","2026-12-25"];
+
+/* ---------- Outils ---------- */
+const $=s=>document.querySelector(s), esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/(\d) (?=\d{3}\b)/g,"$1\u00a0").replace(/(\d) %/g,"$1\u00a0%").replace(/« /g,"«\u00a0").replace(/ »/g,"\u00a0»");
+const ORD=["première","deuxième","troisième","quatrième","cinquième"];
+const NUMW={un:1,une:1,deux:2,trois:3,quatre:4,cinq:5,six:6,huit:8,dix:10,douze:12,"dix-huit":18,"vingt-quatre":24};
+const MONTHS=["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+function qty(s){
+  if(!s) return null; s=s.toLowerCase();
+  const d=s.match(/(1er|\d{1,2})\s+(janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)\s+(\d{4})/);
+  if(d) return {v:+new Date(+d[3],MONTHS.indexOf(d[2]),d[1]==="1er"?1:+d[1]),u:"date"};
+  const m=s.match(/(\d[\d ]*(?:,\d+)?|dix-huit|vingt-quatre|une|un|deux|trois|quatre|cinq|six|huit|dix|douze)\s*(%|ans?|mois|euros|habitants)?/);
+  if(!m) return null;
+  let v=NUMW[m[1]]??parseFloat(m[1].replace(/ /g,"").replace(",","."));
+  const u=m[2]||"";
+  if(/^ans?$/.test(u)) return {v:v*12,u:"mois"};
+  return {v,u};
+}
+function noun(x){
+  if(/^\d[\d ]*(,\d+)?\s?%$/.test(x)) return {au:"au taux",le:"le taux",du:"du taux"};
+  if(/^\d[\d ]*$/.test(x)) return {au:"au nombre",le:"le nombre",du:"du nombre"};
+  if(/^(1er|\d{1,2}) \S+ \d{4}$/.test(x)) return {au:"à la date",le:"la date",du:"de la date"};
+  if(!/\s/.test(x.trim())) return {au:"au mot",le:"le mot",du:"du mot"};
+  return {au:"aux mots",le:"les mots",du:"des mots"};
+}
+function occInfo(al,start,end){
+  const t=ART[al], w=t.slice(start,end); let c=0,i=-1,idx=0;
+  while((i=t.indexOf(w,i+1))!==-1){c++; if(i<start) idx++;}
+  return {w,count:c,idx};
+}
+function findSpan(al,w,occ=1){let i=-1;for(let k=0;k<occ;k++){i=ART[al].indexOf(w,i+1);if(i<0)return null}return [i,i+w.length]}
+const overl=(a,b)=>a[0]<b[1]&&b[0]<a[1] || (a[0]===a[1]&&b[0]<=a[0]&&a[0]<=b[1]) || (b[0]===b[1]&&a[0]<=b[0]&&b[0]<=a[1]);
+const roman=n=>["I","II","III","IV","V","VI","VII","VIII"][n];
+const gp=g=>`<span class="gp" style="background:${GROUPS[g].c}">${g}</span>`;
+function toast(m){document.querySelectorAll(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+
+/* ---------- État ---------- */
+let uid=1;
+const mine={mods:[],gage:false,expo:"Amendement de repli : la hausse du taux de la taxe sur les logements vacants est limitée à 18 %, pour ne pas pénaliser les propriétaires engagés dans des travaux de remise sur le marché."};
+{const s=findSpan(6,"20 %");mine.mods.push({id:uid++,al:6,kind:"rep",start:s[0],end:s[1],text:"18 %",ce45:true});}
+let view="ecrire", openCk=new Set(), hyp=new Set(), pending=null, menu=null;
+
+/* ---------- Rédaction automatique du dispositif ---------- */
+function sentence(m){
+  if(m.kind==="delArt") return "Supprimer cet article.";
+  if(m.kind==="delAl") return `Supprimer l'alinéa ${m.al}.`;
+  if(m.kind==="compAl") return `Compléter l'alinéa ${m.al} par la phrase suivante : « ${m.text.replace(/\.?$/,".")} »`;
+  if(m.kind==="insAl") return `Après l'alinéa ${m.al}, insérer l'alinéa suivant : « ${m.text.replace(/\.?$/,".")} »`;
+  const o=occInfo(m.al,m.start,m.end), N=noun(o.w), multi=o.count>1, ord=ORD[o.idx]||`${o.idx+1}e`;
+  if(m.kind==="rep"){
+    const T=multi?`à la ${ord} occurrence ${N.du} : « ${o.w} »`:`${N.au} : « ${o.w} »`;
+    return `À l'alinéa ${m.al}, substituer ${T} ${noun(m.text).le} : « ${m.text} ».`;
+  }
+  if(m.kind==="del"){
+    const T=multi?`la ${ord} occurrence ${N.du} : « ${o.w} »`:`${N.le} : « ${o.w} »`;
+    return `À l'alinéa ${m.al}, supprimer ${T}.`;
+  }
+  if(m.kind==="ins"){
+    const T=multi?`après la ${ord} occurrence ${N.du} : « ${o.w} »`:`après ${N.le} : « ${o.w} »`;
+    return `À l'alinéa ${m.al}, ${T}, insérer ${noun(m.text).le} : « ${m.text} ».`;
+  }
+}
+const sorted=()=>[...mine.mods].sort((a,b)=>(a.al||0)-(b.al||0)||(a.start||0)-(b.start||0));
+function paragraphs(){
+  const p=sorted().map(m=>({m,t:sentence(m)}));
+  if(mine.gage && p.length) p.push({gage:true,t:GAGE});
+  if(p.length>1) p.forEach((x,i)=>x.t=`${roman(i)}. – `+x.t);
+  return p;
+}
+
+/* ---------- Contrôles ---------- */
+function workingDays(){ // délai : 17 h le 3e jour ouvrable qui précède la discussion (jours ouvrés, hors fériés)
+  const d=new Date(SEANCE); let n=0;
+  while(n<3){d.setDate(d.getDate()-1); const iso=d.toISOString().slice(0,10), wd=d.getDay(); if(wd!==0&&wd!==6&&!HOLI.includes(iso)) n++;}
+  d.setHours(17,0,0,0); return d;
+}
+function fmtDay(d){return d.toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"})}
+function art40(){
+  const out=[]; const add=(lvl,why,where)=>out.push({lvl,why,where});
+  for(const m of mine.mods){
+    if(m.kind==="delArt"){add("perte","supprimer l'article supprime aussi la hausse de la taxe prévue à l'alinéa 6","l'article"); continue;}
+    if(m.kind==="delAl"){ if(m.al===6) add("perte","supprimer l'alinéa 6 supprime la hausse de la taxe",`l'alinéa 6`); if(m.al===7) add("att","sans date d'entrée en vigueur, l'aide s'ouvre plus tôt",`l'alinéa 7`); continue;}
+    if(m.kind==="compAl"||m.kind==="insAl"){
+      const t=m.text.toLowerCase();
+      if(/exonér|réduction d'impôt|crédit d'impôt|abattement|dégrèvement/.test(t)) add("perte","le texte ajouté crée un avantage fiscal",`l'alinéa ${m.al}`);
+      else if(/aide|prime|prend en charge|fonds|allocation|indemnit|subvention|gratuit/.test(t)) add("charge","le texte ajouté crée ou étend une dépense publique",`l'alinéa ${m.al}`);
+      continue;
+    }
+    const span=[m.start,m.end];
+    for(const r of FIN[m.al]||[]){
+      const s=findSpan(m.al,r.m); if(!s||!overl(span,s)) continue;
+      if(r.chg){add(r.chg,r.why,`l'alinéa ${m.al}`);continue;}
+      if(m.kind==="ins"){add("att",`ajouter des mots ici peut modifier le champ du dispositif : ${r.why}`,`l'alinéa ${m.al}`);continue;}
+      const a=qty(r.m), b=m.kind==="del"?null:qty(m.text);
+      if(!b||!a||a.u!==b.u){add("att",r.why,`l'alinéa ${m.al}`);continue;}
+      if(a.u==="date"){ if(b.v>a.v&&r.later) add(r.later,r.why,`l'alinéa ${m.al}`); if(b.v<a.v&&r.earlier) add(r.earlier,r.why,`l'alinéa ${m.al}`); continue;}
+      if(b.v<a.v&&r.less) add(r.less,r.why,`l'alinéa ${m.al}`);
+      if(b.v>a.v&&r.more) add(r.more,r.why,`l'alinéa ${m.al}`);
+    }
+  }
+  return out;
+}
+function nearby(){
+  const res=[];
+  for(const m of mine.mods){
+    for(const a of LIASSE){
+      if(a.op==="delArt"||a.al!==m.al) continue;
+      const sp=a.op==="delAl"?[0,ART[a.al].length]:findSpan(a.al,a.w,a.occ);
+      const ms=m.kind==="delAl"||m.kind==="compAl"?[0,ART[m.al].length]:[m.start,m.end];
+      if(!overl(ms,sp)) continue;
+      const same=m.kind==="rep"&&a.op==="rep"&&a.x===m.text;
+      res.push({a,same});
+    }
+  }
+  return res;
+}
+function fiche(){for(const m of mine.mods){if(m.kind!=="rep")continue;for(const f of FICHES){const s=findSpan(f.al,f.w);if(f.al===m.al&&s&&overl(s,[m.start,m.end])&&f.x===m.text)return f}}return null}
+
+/* ---------- Ordre d'appel et cascade ---------- */
+function mineAsAmd(){
+  if(!mine.mods.length) return null;
+  const f=sorted()[0];
+  return {id:"mine",g:ME,mine:true,al:f.al,op:f.kind==="delArt"?"delArt":f.kind==="delAl"?"delAl":"rep",spans:mine.mods.map(spanOf),x:f.text};
+}
+function spanOf(m){
+  if(m.kind==="delArt") return {al:0,s:[0,1e9]};
+  if(m.kind==="delAl"||m.kind==="compAl") return {al:m.al,s:[0,ART[m.al].length]};
+  if(m.kind==="insAl") return {al:m.al,s:[ART[m.al].length,ART[m.al].length]};
+  return {al:m.al,s:[m.start,m.end]};
+}
+function amdSpans(a){
+  if(a.spans) return a.spans;
+  if(a.op==="delArt") return [{al:0,s:[0,1e9]}];
+  if(a.op==="delAl") return [{al:a.al,s:[0,ART[a.al].length]}];
+  return [{al:a.al,s:findSpan(a.al,a.w,a.occ)}];
+}
+function hits(a,b){ // l'adoption de a fait tomber b ?
+  const A=amdSpans(a), B=amdSpans(b);
+  if(A.some(x=>x.al===0)) return true;
+  return A.some(x=>B.some(y=>y.al===x.al&&(a.op==="delAl"||overl(x.s,y.s))));
+}
+function distance(a){const base=amdSpans(a)[0]; if(a.op==="delAl"||a.op==="delArt") return 1e12; const w=ART[base.al].slice(base.s[0],base.s[1]); const p=qty(w),q=qty(a.x); return p&&q&&p.u===q.u?Math.abs(q.v-p.v):1e6}
+function order(){
+  const all=[...LIASSE]; const mm=mineAsAmd(); if(mm) all.push(mm);
+  const head=all.filter(a=>a.op==="delArt"), rest=all.filter(a=>a.op!=="delArt");
+  // regroupement en discussions communes : amendements qui se disputent le même passage
+  const groups=[];
+  for(const a of rest){
+    const g=groups.find(g=>g.items.some(b=>b.al===a.al&&(a.op==="delAl"||b.op==="delAl"||amdSpans(a).some(x=>amdSpans(b).some(y=>y.al===x.al&&overl(x.s,y.s))))));
+    if(g) g.items.push(a); else groups.push({items:[a]});
+  }
+  for(const g of groups){g.al=g.items[0].al;g.start=Math.min(...g.items.map(a=>a.op==="delAl"?-1:amdSpans(a)[0].s[0]));g.items.sort((a,b)=>distance(b)-distance(a)||(a.id==="mine"?0:a.id)-(b.id==="mine"?0:b.id))}
+  groups.sort((a,b)=>a.al-b.al||a.start-b.start);
+  if(head.length) groups.unshift({items:head,head:true});
+  return groups;
+}
+function simulate(){
+  const groups=order(), flat=groups.flatMap(g=>g.items), st=new Map(), adopted=[];
+  for(const a of flat){
+    const by=adopted.find(b=>hits(b,a));
+    if(by) st.set(a.id,{s:"fell",by:by.id});
+    else if(hyp.has(a.id)){st.set(a.id,{s:"adopt"});adopted.push(a);}
+    else st.set(a.id,{s:"open"});
+  }
+  return {groups,flat,st,adopted};
+}
+const lab=id=>id==="mine"?"le vôtre":`n° ${id}`;
+function describe(a){
+  if(a.mine) return sorted().map(m=>m.kind==="delArt"?"Supprimer l'article":m.kind==="delAl"?`Supprimer l'alinéa ${m.al}`:m.kind==="compAl"?`Alinéa ${m.al} : phrase ajoutée`:m.kind==="insAl"?`Alinéa ajouté après le ${m.al}`:`Alinéa ${m.al} : « ${ART[m.al].slice(m.start,m.end)} » → « ${m.kind==="del"?"":m.text} »`.replace("→ «  »","supprimé")).join(" · ");
+  if(a.op==="delArt") return "Supprimer l'article";
+  if(a.op==="delAl") return `Supprimer l'alinéa ${a.al}`;
+  return `Alinéa ${a.al} : « ${a.w} » → « ${a.x} »`;
+}
+
+/* ---------- Rendu d'un alinéa avec corrections apparentes ---------- */
+function renderAl(al,ops,{marks=true,pend=null}={}){
+  // ops : [{s,e,ins,id,kind}] sur le texte de la commission ; data-o = position d'origine pour la sélection
+  const t=ART[al]; let html="", i=0;
+  const list=[...ops].sort((a,b)=>a.s-b.s);
+  if(pend&&pend.al===al) list.push({s:pend.start,e:pend.end,pend:true}), list.sort((a,b)=>a.s-b.s);
+  for(const o of list){
+    if(o.s>i) html+=`<span data-o="${i}">${esc(t.slice(i,o.s))}</span>`;
+    const mid=o.id!=null?` data-mid="${o.id}"`:"";
+    if(o.pend) html+=`<mark class="pend" data-o="${o.s}">${esc(t.slice(o.s,o.e))}</mark>`;
+    else{
+      if(o.e>o.s) html+=`<del data-o="${o.s}"${mid}>${esc(t.slice(o.s,o.e))}</del>`;
+      if(o.ins) html+=`<ins${mid}>${o.s===o.e&&!/^[\s,.;:]/.test(o.ins)?" ":""}${esc(o.ins)}${o.e>o.s?"":""}</ins>`;
+      if(o.by!=null&&marks) html+=`<sup class="by" data-by="${o.by}">${o.by==="mine"?"vous":o.by}</sup>`;
+    }
+    i=Math.max(i,o.e);
+  }
+  if(i<t.length) html+=`<span data-o="${i}">${esc(t.slice(i))}</span>`;
+  return html;
+}
+function myOps(al){
+  const ops=[];
+  for(const m of mine.mods){
+    if(m.kind==="delArt"||(m.kind==="delAl"&&m.al===al)) ops.push({s:0,e:ART[al].length,id:m.id});
+    else if(m.al!==al) continue;
+    else if(m.kind==="rep") ops.push({s:m.start,e:m.end,ins:m.text,id:m.id});
+    else if(m.kind==="del") ops.push({s:m.start,e:m.end,id:m.id});
+    else if(m.kind==="ins") ops.push({s:m.end,e:m.end,ins:m.text,id:m.id});
+    else if(m.kind==="compAl") ops.push({s:ART[al].length,e:ART[al].length,ins:" "+m.text.replace(/\.?$/,"."),id:m.id});
+  }
+  return ops;
+}
+
+/* ---------- Vue 1 : Rédiger ---------- */
+function vEcrire(){
+  const delArt=mine.mods.some(m=>m.kind==="delArt");
+  let rows="";
+  for(let al=1;al<=NAL;al++){
+    rows+=`<div class="al"><button class="n" data-al="${al}" aria-label="Alinéa ${al} : options">${al}</button><p class="t" data-al="${al}">${renderAl(al,myOps(al),{pend:pending})}</p></div>`;
+    for(const m of mine.mods.filter(m=>m.kind==="insAl"&&m.al===al))
+      rows+=`<div class="al"><span class="n new" aria-hidden="true">+</span><p class="t"><ins data-mid="${m.id}">${esc(m.text.replace(/\.?$/,"."))}</ins></p></div>`;
+  }
+  const ps=paragraphs(), ce45=mine.mods.find(m=>m.ce45);
+  const disp=ps.length?`<ol class="disp">${ps.map(p=>`<li class="${p.gage?"gage":""}" ${p.m?`data-mid="${p.m.id}"`:""}><span>${esc(p.t)}</span><button class="rm" data-rm="${p.gage?"gage":p.m.id}" aria-label="Retirer">${X}</button></li>`).join("")}</ol>`
+    :`<div class="empty">Sélectionnez des mots dans le texte pour commencer. L'amendement s'écrit ici, avec les formules d'usage.</div>`;
+  const C=checks();
+  const blocking=C.some(c=>c.cls==="err");
+  return `<div class="desk view">
+   <section class="panel art${delArt?" gone":""}" aria-label="Texte de la commission">
+     <div class="art-h"><b>Article 4</b><span>texte de la commission</span><span class="sp"></span><button class="ghost" id="delArt">${delArt?"Rétablir l'article":"Supprimer l'article"}</button></div>
+     <p class="how">Sélectionnez des mots pour les supprimer, les remplacer ou en ajouter. Touchez un numéro pour l'alinéa entier.</p>
+     ${delArt?`<div class="banner">Votre amendement supprime l'article entier.</div>`:""}
+     ${rows}
+   </section>
+   <aside class="side">
+     <section class="panel amd" aria-label="Mon amendement">
+       <div class="amd-h"><b>Mon amendement</b><span>${GROUPS[ME].name}</span></div>
+       ${ce45?`<p class="from">Repris de <b>CE 45</b>, rejeté en commission. Il visait l'alinéa 5 du texte initial ; la commission a inséré un alinéa, le passage est désormais à l'<b>alinéa 6</b>.</p>`:""}
+       ${disp}
+       <label class="lbl" for="expo">Exposé sommaire</label>
+       <textarea id="expo">${esc(mine.expo)}</textarea>
+       <div class="acts"><button class="btn pri" id="copy" ${!ps.length||blocking?"disabled":""}>Copier pour le dépôt</button></div>
+     </section>
+     <section class="panel ctl" aria-label="Contrôles">
+       <div class="ctl-h">Contrôles</div>
+       ${C.map(c=>`<div class="ck ${c.cls}${openCk.has(c.k)?" open":""}" data-k="${c.k}"><button class="ck-row" aria-expanded="${openCk.has(c.k)}"><span class="dot"></span><span><span class="ck-t">${c.t}</span><span class="ck-s">${c.s}</span></span><svg class="chev" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3l5 5-5 5"/></svg></button><div class="slide"><div><div class="ck-d">${c.d}</div></div></div></div>`).join("")}
+     </section>
+   </aside></div>`;
+}
+const X=`<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4l8 8M12 4l-8 8"/></svg>`;
+function checks(){
+  const C=[], has=mine.mods.length;
+  // Délai
+  const dl=workingDays(), h=Math.round((dl-NOW)/36e5), days=Math.floor(h/24);
+  C.push({k:"delai",cls:h<24?"warn":"ok",t:`Dépôt avant ${fmtDay(dl)}, 17 h`,s:days>=1?`Dans ${days} jour${days>1?"s":""}`:`Dans ${h} heure${h>1?"s":""}`,
+    d:`<p>Discussion en séance le ${fmtDay(SEANCE)}. Le délai court jusqu'à 17 h le troisième jour ouvrable qui précède (article 99 du Règlement).</p>`});
+  if(!has) return C;
+  // Rédaction et placement
+  const multi=mine.mods.filter(m=>m.start!=null&&occInfo(m.al,m.start,m.end).count>1);
+  C.push({k:"redac",cls:"ok",t:"Rédaction et placement",s:"Formules d'usage, passages retrouvés dans le texte de la commission",
+    d:`<p>Chaque modification cite les mots exacts du texte de la commission et le numéro de l'alinéa.</p>${multi.length?`<p>${multi.map(m=>{const o=occInfo(m.al,m.start,m.end);return `« ${esc(o.w)} » figure ${o.count} fois à l'alinéa ${m.al} : la formule précise l'occurrence visée.`}).join(" ")}</p>`:""}`});
+  // Article 40
+  const R=art40(), charge=R.filter(r=>r.lvl==="charge"), perte=R.filter(r=>r.lvl==="perte"), att=R.filter(r=>r.lvl==="att");
+  const why=a=>a.map(r=>`<p>À ${r.where} : ${r.why}.</p>`).join("");
+  const note=`<p>Indication seulement : la décision appartient au président de la commission des finances.</p>`;
+  if(charge.length) C.push({k:"a40",cls:"err",t:"Article 40 : charge publique",s:"Irrecevable en l'état ; un gage ne suffit pas",d:why(charge)+`<p>Une charge nouvelle ou aggravée ne peut pas être compensée. Pistes : réduire la portée, ou en faire une expérimentation sans dépense.</p>`+note});
+  else if(perte.length&&!mine.gage) C.push({k:"a40",cls:"warn",t:"Article 40 : perte de recettes",s:"Un gage est nécessaire",d:why(perte)+`<button class="btn" id="addGage">Ajouter le gage</button>`+note});
+  else if(perte.length) C.push({k:"a40",cls:"ok",t:"Article 40 : perte de recettes gagée",s:"Gage sur l'accise sur les tabacs",d:why(perte)+note});
+  else if(att.length) C.push({k:"a40",cls:"warn",t:"Article 40 : à vérifier",s:"Effet financier possible",d:why(att)+note});
+  else C.push({k:"a40",cls:"ok",t:"Article 40",s:mine.gage?"Aucune perte de recettes : le gage est inutile":"Aucune incidence financière détectée",d:note});
+  // Amendements proches
+  const N=nearby();
+  if(N.length){
+    const own=N.filter(n=>n.a.g===ME), same=N.filter(n=>n.same);
+    const s=own.length?`Votre groupe a déposé le n° ${own.map(n=>n.a.id).join(", ")} sur le même passage`:same.length?`Identique au n° ${same[0].a.id}`:`${N.length} amendement${N.length>1?"s":""} sur le même passage`;
+    C.push({k:"near",cls:own.length||same.length?"warn":"ok",t:"Amendements proches",s,
+      d:N.map(n=>`<p>${gp(n.a.g)}<b>n° ${n.a.id}</b> · ${esc(describe(n.a))}${n.same?" · <b>identique</b>":""}${n.a.g===ME?" · votre groupe":""}</p>`).join("")+(own.length?`<p>Deux rédactions du même groupe sur le même passage se font concurrence : cosigner l'une et retirer l'autre évite de diviser les voix.</p>`:"")});
+  }
+  // Fiche reçue
+  const f=fiche();
+  if(f) C.push({k:"fiche",cls:"",t:"Même rédaction qu'une fiche reçue",s:`${f.org}, ${f.date}`,
+    d:`<p>${f.org} propose exactement cette modification à l'alinéa ${f.al}. ${f.hatvp?"L'organisme est inscrit au répertoire des représentants d'intérêts.":"L'organisme n'apparaît pas au répertoire des représentants d'intérêts."}</p><p>Rien n'interdit de la reprendre. La mentionner dans l'empreinte du député reste la bonne pratique.</p>`});
+  // Ordre d'appel
+  const sim=simulate(), pos=sim.flat.findIndex(a=>a.id==="mine")+1, grp=sim.groups.find(g=>g.items.some(a=>a.id==="mine"));
+  const killers=sim.flat.slice(0,pos-1).filter(a=>hits(a,mineAsAmd()));
+  C.push({k:"appel",cls:"",t:`Appelé en ${pos}${pos===1?"ᵉʳ":"ᵉ"} position sur ${sim.flat.length}`,s:killers.length?`Tombe si ${killers.map(a=>lab(a.id)).join(", ").replace(/, ([^,]*)$/," ou $1")} est adopté avant lui`:"Aucun amendement appelé avant lui ne peut le faire tomber",
+    d:`${grp&&grp.items.length>1?`<p>Discussion commune avec ${grp.items.filter(a=>a.id!=="mine").map(a=>lab(a.id)).join(", ")}.</p>`:""}<button class="btn" data-go="appel">Voir l'ordre d'appel</button>`});
+  return C;
+}
+
+/* ---------- Vue 2 : Ordre d'appel ---------- */
+function vAppel(){
+  const sim=simulate(), me=sim.flat.find(a=>a.id==="mine");
+  let answer;
+  if(!me) answer=`<p>Vous n'avez pas encore d'amendement sur cet article. Voici l'ordre d'appel des ${sim.flat.length} amendements déposés.</p>`;
+  else{
+    const pos=sim.flat.indexOf(me)+1, killers=sim.flat.slice(0,pos-1).filter(a=>hits(a,me)), s=sim.st.get("mine");
+    const lead=s.s==="fell"?`Avec ces hypothèses, votre amendement tombe : ${lab(s.by)} est adopté avant lui.`
+      :`Votre amendement est appelé en ${pos}${pos===1?"ᵉʳ":"ᵉ"} position.`;
+    answer=`<p>${lead}</p><p class="sub">${killers.length?`Il tomberait si l'un de ceux-ci était adopté avant lui : ${killers.map(a=>lab(a.id)).join(", ").replace(/, ([^,]*)$/," ou $1")}.`:"Aucun amendement appelé avant lui ne peut le faire tomber."}</p>`;
+  }
+  let pos=0;
+  const rowH=a=>{pos++;const s=sim.st.get(a.id);const g=GROUPS[a.g];
+    const st=s.s==="adopt"?"Supposé adopté":s.s==="fell"?`Tombe (${lab(s.by)})`:"";
+    return `<button class="row ${s.s} ${a.mine?"mine":""}" data-id="${a.id}" ${s.s==="fell"?'aria-disabled="true"':""}><span class="pos">${pos}</span><span class="num">${a.mine?"Le vôtre":"n° "+a.id}</span><span class="what"><span>${esc(describe(a))}</span><small>${gp(a.g)}${g.name}</small></span><span class="st">${st}</span></button>`};
+  const list=sim.groups.map(g=>g.items.length>1?`<div class="grp"><div class="grp-h">Discussion commune · ${g.head?"article":"alinéa "+g.al}</div>${g.items.map(rowH).join("")}</div>`:`<div class="grp">${rowH(g.items[0])}</div>`).join("");
+  return `<div class="col1 view"><section class="panel answer">${answer}</section>
+   <div class="bar2"><span>Touchez un amendement pour le supposer adopté.</span>${hyp.size?`<button class="ghost" id="clearHyp">Effacer les hypothèses</button>`:""}</div>
+   <div class="list">${list}</div></div>`;
+}
+
+/* ---------- Vue 3 : Texte qui en résulte ---------- */
+function vTexte(){
+  const sim=simulate(), A=sim.adopted;
+  if(!A.length) return `<div class="col1 view"><section class="panel answer"><p>Aucun amendement n'est supposé adopté : le texte est celui de la commission.</p><p class="sub">Choisissez vos hypothèses dans l'ordre d'appel ; le texte se recompose ici, avec l'origine de chaque changement.</p><div class="acts"><button class="btn" data-go="appel">Choisir des hypothèses</button></div></section></div>`;
+  const delArt=A.find(a=>a.op==="delArt");
+  const opsFor=al=>{const ops=[];
+    for(const a of A){
+      if(a.mine){ for(const o of myOps(al)) ops.push({...o,by:"mine"}); continue; }
+      if(a.op==="delArt"||(a.op==="delAl"&&a.al===al)) ops.push({s:0,e:ART[al].length,by:a.id});
+      else if(a.al===al){const s=findSpan(al,a.w,a.occ); ops.push({s:s[0],e:s[1],ins:a.x,by:a.id});}
+    }
+    // une suppression d'alinéa ou d'article ne garde qu'une marque
+    return ops.some(o=>o.s===0&&o.e===ART[al].length&&!o.ins)?[ops.find(o=>o.s===0&&o.e===ART[al].length&&!o.ins)]:ops;};
+  let rows="", k=0, moved=0;
+  for(let al=1;al<=NAL;al++){
+    const ops=opsFor(al), gone=ops.some(o=>o.s===0&&o.e===ART[al].length&&!o.ins);
+    if(!gone) k++;
+    const num=gone?"":k, ex=!gone&&k!==al?`<span class="ex">ex-${al}</span>`:"";
+    if(ex) moved++;
+    rows+=`<div class="al"><span class="n">${num}${ex}</span><p class="t">${renderAl(al,ops)}</p></div>`;
+    if(A.some(a=>a.mine)) for(const m of mine.mods.filter(m=>m.kind==="insAl"&&m.al===al)){k++;rows+=`<div class="al"><span class="n">${k}</span><p class="t"><ins>${esc(m.text.replace(/\.?$/,"."))}</ins><sup class="by" data-by="mine">vous</sup></p></div>`;}
+  }
+  const names=A.map(a=>lab(a.id)).join(", ").replace(/, ([^,]*)$/," et $1");
+  const fell=[...sim.st].filter(([,s])=>s.s==="fell").length;
+  return `<div class="col1 view">
+   <section class="panel answer"><p>${delArt?"L'article 4 est supprimé.":`Article 4 si ${A.length>1?"les amendements":"l'amendement"} ${names} ${A.length>1?"sont adoptés":"est adopté"}.`}</p>
+   <p class="sub">${fell?`${fell} amendement${fell>1?"s tombent":" tombe"} en conséquence. `:""}Les marques renvoient à l'amendement qui a produit chaque changement.</p></section>
+   <section class="panel res" aria-label="Texte résultant">${rows}
+   ${moved?`<p class="note">La suppression d'un alinéa décale la numérotation des suivants : les renvois « ex- » indiquent l'ancien numéro, à reporter dans les amendements qui les citent.</p>`:""}</section></div>`;
+}
+
+/* ---------- Rendu et événements ---------- */
+function render(){
+  const y=scrollY;
+  document.querySelectorAll(".tab").forEach(t=>t.setAttribute("aria-selected",t.dataset.v===view));
+  $("#main").innerHTML=view==="ecrire"?vEcrire():view==="appel"?vAppel():vTexte();
+  scrollTo(0,y);
+}
+function go(v){if(v===view)return;view=v;closePop();try{localStorage.setItem("atelier-vue",v)}catch(e){};render();scrollTo(0,0)}
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>go(t.dataset.v));
+$(".tabs").addEventListener("keydown",e=>{if(e.key!=="ArrowRight"&&e.key!=="ArrowLeft")return;const v=["ecrire","appel","texte"],i=v.indexOf(view);go(v[(i+(e.key==="ArrowRight"?1:2))%3]);$("#tab-"+view).focus()});
+
+function closePop(){document.querySelectorAll(".pop").forEach(p=>p.remove());if(pending){pending=null;if(view==="ecrire")render()}menu=null;document.querySelectorAll(".al .n.on").forEach(n=>n.classList.remove("on"))}
+function placePop(pop,rect){
+  document.body.append(pop);
+  const w=pop.offsetWidth, x=Math.min(Math.max(8,rect.left+rect.width/2-w/2+scrollX),scrollX+innerWidth-w-8);
+  pop.style.left=x+"px"; pop.style.top=(rect.bottom+scrollY+8)+"px";
+}
+function conflict(al,s,e){
+  return mine.mods.some(m=>m.kind==="delArt"||(m.al===al&&(m.kind==="delAl"||(m.start!=null&&overl([s,e],[m.start,m.end])))));
+}
+function offsetIn(p,node,off){
+  if(node===p){const c=p.childNodes[off];return c&&c.dataset&&c.dataset.o!=null?+c.dataset.o:ART[+p.dataset.al].length}
+  let el=node.nodeType===3?node.parentElement:node;
+  if(el.closest("ins")) return null;
+  el=el.closest("[data-o]"); if(!el) return null;
+  return +el.dataset.o+(node.nodeType===3?off:0);
+}
+function onSelect(){
+  if(view!=="ecrire"||document.querySelector(".pop input")) return;
+  const sel=getSelection(); if(!sel.rangeCount||sel.isCollapsed){ if(!document.querySelector(".pop.col")) document.querySelectorAll(".pop").forEach(p=>p.remove()); return;}
+  const r=sel.getRangeAt(0), pa=r.startContainer.parentElement?.closest("p.t[data-al]"), pb=r.endContainer.parentElement?.closest("p.t[data-al]")||(r.endContainer.closest&&r.endContainer.closest("p.t[data-al]"));
+  if(!pa||pa!==pb){ if(pa||pb) toast("Sélectionnez des mots dans un seul alinéa."); return;}
+  const al=+pa.dataset.al, t=ART[al];
+  let s=offsetIn(pa,r.startContainer,r.startOffset), e=offsetIn(pa,r.endContainer,r.endOffset);
+  if(s==null||e==null){toast("Ce passage contient déjà une modification.");return}
+  if(s>e)[s,e]=[e,s];
+  const W=/[0-9A-Za-zÀ-ÖØ-öø-ÿ%’'\-]/;
+  while(s<e&&/\s/.test(t[s]))s++; while(e>s&&/\s/.test(t[e-1]))e--;
+  while(s>0&&W.test(t[s-1])&&W.test(t[s]))s--; while(e<t.length&&W.test(t[e])&&W.test(t[e-1]))e++;
+  // un nombre se prend en entier : « 15 000 », « 30 % »
+  {let m; while((m=t.slice(0,s).match(/\d{1,3} $/))&&/^\d{3}\b/.test(t.slice(s))) s-=m[0].length;
+   while(/^ \d{3}\b/.test(t.slice(e))&&/\d$/.test(t.slice(0,e))) e+=4;
+   if(/\d$/.test(t.slice(0,e))&&/^ (%|euros\b)/.test(t.slice(e))) e+=t.slice(e).match(/^ (%|euros\b)/)[0].length;}
+  if(e<=s) return;
+  if(conflict(al,s,e)){toast("Ce passage est déjà modifié : retirez d'abord la modification.");return}
+  document.querySelectorAll(".pop").forEach(p=>p.remove());
+  const rect=r.getBoundingClientRect();
+  const pop=document.createElement("div"); pop.className="pop";
+  pop.innerHTML=`<button data-a="del">Supprimer</button><button data-a="rep">Remplacer…</button><button data-a="ins">Ajouter après…</button>`;
+  pop.onmousedown=ev=>ev.preventDefault();
+  pop.onclick=ev=>{const a=ev.target.dataset.a; if(!a)return;
+    if(a==="del"){addMod({al,kind:"del",start:s,end:e});return}
+    pending={al,start:s,end:e}; getSelection().removeAllRanges(); render();
+    askText(rect,a==="rep"?`Remplacer « ${t.slice(s,e)} » par`:`Ajouter après « ${t.slice(s,e)} »`,a==="rep"?t.slice(s,e):"",v=>addMod({al,kind:a,start:s,end:e,text:v}));
+  };
+  placePop(pop,rect);
+}
+function askText(rect,label,val,done){
+  document.querySelectorAll(".pop").forEach(p=>p.remove());
+  const pop=document.createElement("div"); pop.className="pop col";
+  pop.innerHTML=`<span class="k">${esc(label)}</span><input id="pop-in" value="${esc(val).replace(/"/g,"&quot;")}" autocomplete="off"><span class="k">Entrée pour valider · Échap pour annuler</span>`;
+  placePop(pop,rect);
+  const i=pop.querySelector("input"); i.focus(); i.select();
+  i.onkeydown=e=>{if(e.key==="Enter"){const v=i.value.trim(); if(v){pending=null;pop.remove();done(v)}} if(e.key==="Escape"){e.stopPropagation();closePop()}};
+}
+function addMod(m){
+  if(m.kind==="delArt") mine.mods=[];
+  m.id=uid++; mine.mods.push(m); pending=null; getSelection().removeAllRanges();
+  document.querySelectorAll(".pop").forEach(p=>p.remove()); render();
+}
+function alMenu(btn){
+  const al=+btn.dataset.al, rect=btn.getBoundingClientRect();
+  if(menu===al){closePop();return}
+  closePop(); menu=al; btn.classList.add("on");
+  const pop=document.createElement("div"); pop.className="pop col";
+  const busy=mine.mods.some(m=>m.kind==="delArt"||(m.al===al&&m.kind==="delAl"));
+  pop.innerHTML=`<span class="k">Alinéa ${al}</span><button data-a="delAl" ${busy?"disabled":""}>Supprimer l'alinéa</button><button data-a="compAl">Compléter l'alinéa…</button><button data-a="insAl">Insérer un alinéa après…</button>`;
+  pop.onclick=ev=>{const a=ev.target.dataset.a; if(!a)return;
+    if(a==="delAl"){ if(mine.mods.some(m=>m.al===al)) mine.mods=mine.mods.filter(m=>m.al!==al||m.kind==="insAl"); addMod({al,kind:"delAl"}); menu=null; return;}
+    askText(rect,a==="compAl"?`Phrase ajoutée à la fin de l'alinéa ${al}`:`Nouvel alinéa après l'alinéa ${al}`,"",v=>{menu=null;addMod({al,kind:a,text:v})});
+  };
+  placePop(pop,rect);
+}
+document.addEventListener("mouseup",e=>{if(!e.target.closest(".pop"))setTimeout(onSelect,10)});
+document.addEventListener("keyup",e=>{if(e.shiftKey)onSelect()});
+let selT; document.addEventListener("selectionchange",()=>{if(!matchMedia("(pointer:coarse)").matches)return;clearTimeout(selT);selT=setTimeout(onSelect,350)});
+document.addEventListener("mousedown",e=>{if(!e.target.closest(".pop")&&!e.target.closest(".al .n")&&document.querySelector(".pop")){const hadPend=!!pending; document.querySelectorAll(".pop").forEach(p=>p.remove()); menu=null; document.querySelectorAll(".al .n.on").forEach(n=>n.classList.remove("on")); if(hadPend){pending=null;render()}}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){ if(document.querySelector(".pop")) closePop(); else if(openCk.size){openCk.clear();render()} else if(view!=="ecrire") go("ecrire"); }});
+document.addEventListener("input",e=>{if(e.target.id==="expo")mine.expo=e.target.value});
+
+$("#main").addEventListener("click",e=>{
+  const t=e.target;
+  const n=t.closest(".al .n[data-al]"); if(n){alMenu(n);return}
+  const rm=t.closest("[data-rm]"); if(rm){ if(rm.dataset.rm==="gage") mine.gage=false; else mine.mods=mine.mods.filter(m=>m.id!==+rm.dataset.rm); render(); return;}
+  if(t.closest("#delArt")){ if(mine.mods.some(m=>m.kind==="delArt")) mine.mods=[]; else addMod({kind:"delArt"}); render(); return;}
+  if(t.closest("#addGage")){mine.gage=true;render();toast("Gage ajouté au dispositif.");return}
+  const gobtn=t.closest("[data-go]"); if(gobtn){go(gobtn.dataset.go);return}
+  const ck=t.closest(".ck-row"); if(ck){const k=ck.parentElement.dataset.k; openCk.has(k)?openCk.delete(k):openCk.add(k); ck.parentElement.classList.toggle("open"); ck.setAttribute("aria-expanded",openCk.has(k)); return;}
+  if(t.closest("#copy")){
+    const txt=paragraphs().map(p=>p.t).join("\n")+"\n\nEXPOSÉ SOMMAIRE\n"+mine.expo;
+    const ok=()=>toast("Dispositif et exposé copiés. Le dépôt se fait ensuite dans Eloi.");
+    navigator.clipboard?.writeText(txt).then(ok,()=>toast("Copie refusée par le navigateur : sélectionnez le texte à la main.")) ?? toast("Copie indisponible ici.");
+    return;}
+  if(t.closest("#clearHyp")){hyp.clear();render();return}
+  const row=t.closest(".row[data-id]"); if(row){ if(row.classList.contains("fell")) return; const id=row.dataset.id==="mine"?"mine":+row.dataset.id; hyp.has(id)?hyp.delete(id):hyp.add(id); render(); return;}
+  const by=t.closest("sup.by"); if(by){go("appel");requestAnimationFrame(()=>{const r=document.querySelector(`.row[data-id="${by.dataset.by}"]`);if(r){r.classList.add("hl");r.scrollIntoView({block:"center",behavior:"smooth"});setTimeout(()=>r.classList.remove("hl"),1600)}});}
+});
+// survol d'une ligne du dispositif → le passage s'allume dans le texte (et inversement)
+$("#main").addEventListener("mouseover",e=>{const el=e.target.closest("[data-mid]");document.querySelectorAll(".lit").forEach(x=>x.classList.remove("lit"));if(el)document.querySelectorAll(`[data-mid="${el.dataset.mid}"]`).forEach(x=>{if(x.tagName!=="LI")x.classList.add("lit");else x.style.boxShadow="inset 0 0 0 1px var(--accent)"});document.querySelectorAll(".disp li").forEach(li=>{if(!el||li.dataset.mid!==el.dataset.mid)li.style.boxShadow=""})});
+
+try{const v=localStorage.getItem("atelier-vue");if(v&&["ecrire","appel","texte"].includes(v))view=v}catch(e){}
+render();
+</script>
