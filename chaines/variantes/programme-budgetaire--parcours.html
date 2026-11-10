@@ -410,6 +410,6 @@ document.addEventListener("keydown",e=>{
 $("#stale").addEventListener("change",e=>{ui.stale=e.target.checked;renderAll()});
 
 /* reprise : un brouillon existant prend la place de l'exemple, avec un bandeau pour recommencer */
-const prev=load();if(prev&&!prev.sent){S=prev;ui.resume=prev;openId=SIG.find(s=>!S.st[s.id])?.id||null}
+const prev=load();if(prev){S=prev;if(!prev.sent)ui.resume=prev;openId=SIG.find(s=>!S.st[s.id])?.id||null}
 renderOthers();renderAll();
 </script>
