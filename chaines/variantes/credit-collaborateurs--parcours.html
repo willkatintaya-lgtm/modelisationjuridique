@@ -185,7 +185,7 @@ const SC=[
 ];
 // version arrêtée précédente (fictive) : l'équipe actuelle, sans changement
 const V1={n:1,date:"2 septembre 2026",on:{aug:false,rec:false,tps:false,prime:false},sal:{...SAL0}};
-const START=()=>({on:{aug:false,rec:true,tps:false,prime:false},sal:{...SAL0},verified:false,phase:"edit",fail:false,ver:1,savedAt:null,confirm:false,bad:{}});
+const START=()=>({on:{aug:false,rec:true,tps:false,prime:false},sal:{...SAL0},ref:{on:{...V1.on},sal:{...V1.sal}},verified:false,phase:"edit",fail:false,ver:1,savedAt:null,confirm:false,bad:{}});
 let S=START(), prev=null;
 
 function month(m,st=S){
@@ -212,7 +212,7 @@ try{const d=JSON.parse(localStorage.getItem(KEY)||"null");if(d&&d.on&&d.sal){S={
 function render(){
   const {M,tot,year}=calc(), over=year>cap, locked=S.phase!=="edit", nOn=Object.values(S.on).filter(Boolean).length;
   const badSal=Object.keys(S.bad).length>0;
-  const v1=calc(V1).year;
+  const v1=calc({...S,on:S.ref.on,sal:S.ref.sal}).year;
   document.body.classList.toggle("locked",locked);
   // ligne du brouillon
   const diff=year-v1;
@@ -294,7 +294,7 @@ document.addEventListener("click",e=>{
     case "verify": change(()=>S.verified=true); toast("Salaires marqués comme vérifiés"); break;
     case "unverify": change(()=>S.verified=false); break;
     case "resetSal": change(()=>{S.sal={...SAL0};S.bad={}}); $("#sal").innerHTML=""; render(); break;
-    case "discard": prev=JSON.parse(JSON.stringify(S)); change(()=>{S.on={...V1.on};S.sal={...V1.sal};S.bad={}}); $("#sal").innerHTML=""; render(); undoable(`Brouillon abandonné, retour à la version ${S.ver}`); break;
+    case "discard": prev=JSON.parse(JSON.stringify(S)); change(()=>{S.on={...S.ref.on};S.sal={...S.ref.sal};S.bad={}}); $("#sal").innerHTML=""; render(); undoable(`Brouillon abandonné, retour à la version ${S.ver}`); break;
     case "restart": resumed=null; prev=JSON.parse(JSON.stringify(S)); S=START(); S.on={...V1.on}; save(); $("#sal").innerHTML=""; render(); undoable("Brouillon abandonné"); break;
     case "keep": resumed=null; render(); break;
     case "ask": S.confirm=true; focusAfter="#doit"; render(); break;
@@ -305,14 +305,14 @@ document.addEventListener("click",e=>{
 });
 let failNext=false;
 function commit(){S.phase="saving";S.confirm=false;S.fail=false;render();
-  setTimeout(()=>{if(failNext){failNext=false;S.phase="edit";S.fail=true;focusAfter="#retry"}else{S.phase="done";S.ver+=1;focusAfter="#reopen"}save();render()},1200)}
+  setTimeout(()=>{if(failNext){failNext=false;S.phase="edit";S.fail=true;focusAfter="#retry"}else{S.phase="done";S.ver+=1;S.ref={on:{...S.on},sal:{...S.sal}};focusAfter="#reopen"}save();render()},1200)}
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&S.confirm){S.confirm=false;focusAfter="#ask";render()}});
 function setDemo(k){
   resumed=null; failNext=false; S=START();
   if(k==="vide"){S.on={...V1.on};S.verified=true}
   if(k==="erreur"){S.verified=true;S.on={aug:true,rec:true,tps:true,prime:true};S.sal={a:4400,b:3300,c:1420}}
   if(k==="echec"){S.verified=true;failNext=true;$("#sal").innerHTML="";commit();return}
-  if(k==="termine"){S.verified=true;S.phase="done";S.ver=2;S.savedAt=now()}
+  if(k==="termine"){S.verified=true;S.phase="done";S.ver=2;S.ref={on:{...S.on},sal:{...S.sal}};S.savedAt=now()}
   if(k==="partiel"){S.verified=true}
   $("#sal").innerHTML=""; save(); render();
 }

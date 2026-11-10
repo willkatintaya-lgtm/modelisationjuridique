@@ -244,7 +244,7 @@ function step4(running){
   const fb=S.src.code==="fb";
   const effects=`<ul>
     ${S.saved?"":`<li>+${TOTAL-OLD.n} amendements nouveaux <span>(${TOTAL} au total)</span></li>`}
-    <li>${l?`${l} ${pl(l,"amendement")} hors de la cascade, faute d'être ${pl(l,"placé")}`:outs()?`${outs()} hors de la cascade, à votre demande`:"tous les amendements dans la cascade"} <span>· modifiable plus tard dans l'atelier</span></li>
+    <li>${l+outs()?`${l+outs()} ${pl(l+outs(),"amendement")} hors de la cascade${l&&outs()?` (${l} non ${pl(l,"placé")}, ${outs()} à votre demande)`:l?`, faute d'être ${pl(l,"placé")}`:", à votre demande"}`:"tous les amendements dans la cascade"} <span>· modifiable plus tard dans l'atelier</span></li>
     ${fb?`<li>articles de code dans leur version du ${OLD.date} <span>· peut-être dépassée</span></li>`:""}
     <li>conservés : vos 4 brouillons et vos notes <span>· l'ancien fichier reste disponible 7 jours</span></li></ul>`;
   if(S.confirm) return ["cur","4","Enregistrer sur ce poste","à confirmer","",

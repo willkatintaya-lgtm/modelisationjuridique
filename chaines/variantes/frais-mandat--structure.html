@@ -204,7 +204,7 @@ function render(){
   const mo=[["10","Octobre"],["11","Novembre"]];
   $("#rel").innerHTML=mo.map(([m,n])=>{const ls=L.map((l,i)=>({l,i})).filter(x=>x.l.d.endsWith("/"+m));const s=ls.reduce((a,x)=>a+x.l.a,0);
     return `<details class="mo" ${m==="11"?"open":""}><summary><span>${n} · ${ls.length} opérations</span><span>${eur(s)}</span></summary>${ls.map(({l,i})=>{const t=T[i];
-      const st=!t?(l.refund?["ok","Remboursée"]:["ok",l.j?"Justifiée":""]):t==="refund"?["err","À rembourser"]:t==="attach"?["err","Sans pièce"]:t==="explain"?["warn","Écart"]:["warn","À compléter"];
+      const st=!t?(l.refund?["ok","Reversée"]:["ok",l.j?"Justifiée":""]):t==="refund"?["err","À rembourser"]:t==="attach"?["err","Sans pièce"]:t==="explain"?["warn","Écart"]:["warn","À compléter"];
       return `<div class="op"><span class="d">${l.d}</span><span class="t" title="${esc(l.t)}">${esc(l.t)}</span><span class="s"><span class="dot ${st[0]}"></span>${st[1]}</span><span class="a">${eur(l.a)}</span>${l.watch?`<span class="note">${l.watch}</span>`:""}${l.why?`<span class="note">Écart expliqué : ${esc(l.why)}</span>`:""}</div>`}).join("")}</details>`}).join("");
   // Budget
   $("#sol").textContent=eur(Math.round(sol));

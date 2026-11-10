@@ -1,0 +1,325 @@
+<title>Décret et loi · parcours</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+
+<style>
+/* Angle « parcours » : le contrôle d'un décret est une tâche en quatre étapes observables
+   (lecture → rapprochement → examen → suites). Chaque étape a ses états (en cours, partiel, erreur, terminé, périmé),
+   l'examen se reprend où on l'a laissé, la transmission d'une question est irréversible et se confirme dans la page.
+   Mise en page fluide (auto-fit, unités relatives) : elle se réorganise avec la largeur et le zoom, sans point de rupture d'appareil. */
+.steps{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 14px;padding:0;list-style:none;counter-reset:s}
+.step{flex:1 1 11rem;min-width:0}
+.step button{width:100%;text-align:left;border:1px solid var(--line);background:var(--s1);border-radius:9px;padding:.55rem .75rem;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr);gap:.15rem .6rem;align-items:center;transition:border-color .2s,background .2s;min-height:44px}
+.step button:hover{border-color:var(--line2)}
+.step button[aria-current=step]{border-color:var(--accent);background:var(--lit)}
+.step .ic{grid-row:span 2;width:1.4rem;height:1.4rem;border-radius:50%;display:grid;place-items:center;font-size:.72rem;font-weight:600;border:1px solid var(--line2);color:var(--muted)}
+.step .ic.done{background:var(--ok);border-color:var(--ok);color:#06150d}
+.step .ic.warn{background:var(--warn);border-color:var(--warn);color:#1a1205}
+.step .ic.err{background:var(--err);border-color:var(--err);color:#fff}
+.step .ic.run{border-color:var(--accent);border-top-color:transparent;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.step b{font-weight:500;color:var(--fg);font-size:.84rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.step small{color:var(--muted);font-size:.76rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.banner{display:flex;flex-wrap:wrap;gap:.5rem 1rem;align-items:center;justify-content:space-between;border:1px solid var(--line2);border-left:3px solid var(--warn);background:var(--s1);border-radius:9px;padding:.7rem .9rem;margin:0 0 14px;font-size:.86rem;color:var(--text);animation:in .25s var(--ease)}
+.banner.err{border-left-color:var(--err)}
+.banner.ok{border-left-color:var(--ok)}
+.banner.run{border-left-color:var(--accent)}
+.banner p{margin:0;flex:1 1 20rem;min-width:0}
+.banner b{color:var(--fg);font-weight:500}
+.banner .acts{display:flex;gap:6px;flex-wrap:wrap}
+@keyframes in{from{opacity:0;transform:translateY(4px)}}
+.cols{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start}
+.cols>.list{flex:1 1 15rem;min-width:0}
+.cols>.main{flex:999 1 26rem;min-width:min(100%,26rem)}
+.list{padding:6px}
+.li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:.1rem .6rem;width:100%;border:0;background:none;text-align:left;padding:.6rem .7rem;border-radius:7px;cursor:pointer;align-items:center;transition:background .2s;min-height:44px}
+.li:hover{background:var(--s2)}
+.li[aria-current=true]{background:var(--lit)}
+.li .dot{grid-row:span 2}
+.li b{font-weight:500;color:var(--fg);font-size:.86rem}
+.li small{color:var(--muted);font-size:.78rem}
+.li small.stale{color:#f0c27a}
+.li small.done{color:var(--ok)}
+.lh{display:flex;justify-content:space-between;padding:.5rem .7rem .3rem;font-size:.76rem;color:var(--dim)}
+.focus{padding:1.1rem 1.25rem;min-width:0}
+.focus.anim{animation:in .25s var(--ease)}
+.fh{display:flex;justify-content:space-between;align-items:flex-start;gap:.75rem;flex-wrap:wrap}
+.fh h2{margin:0;font:600 1.06rem/1.3 var(--f);color:var(--fg)}
+.fh small{display:block;color:var(--dim);font-size:.8rem;margin-top:2px}
+.kicker{font-size:.78rem;color:var(--muted)}
+.prop{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;font-size:.8rem;color:var(--fg);white-space:nowrap}
+.why{margin:.8rem 0 0;line-height:1.6;max-width:70ch}
+.why b{color:var(--fg);font-weight:500}
+.pt{width:100%;border-collapse:collapse;font-size:.84rem;margin:.9rem 0}
+.pt th{text-align:left;color:var(--dim);font-weight:400;font-size:.76rem;padding:0 .6rem .35rem 0}
+.pt td{border-top:1px solid var(--line);padding:.45rem .6rem .45rem 0;vertical-align:top}
+.pt .bad{color:#f2a7a9}
+.pt .chg{color:var(--ins)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr));gap:10px}
+.side{background:var(--s2);border-radius:8px;padding:.65rem .8rem}
+.side h3{margin:0 0 .35rem;font:500 .76rem/1.4 var(--f);color:var(--dim)}
+.side p{margin:0;font-size:.86rem;line-height:1.7}
+.side.none{background:none;border:1px dashed var(--line2)}
+.side.none p{color:var(--muted)}
+.p{border-radius:3px;padding:0 2px;background:var(--lit);color:var(--fg)}
+.p.diff{background:rgba(227,163,63,.18)} .p.bad{background:rgba(229,72,77,.2)}
+.decide{margin-top:1rem;border-top:1px solid var(--line);padding-top:.9rem;display:grid;gap:.6rem}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{min-height:36px}
+@media (pointer:coarse){.btn{min-height:44px}}
+.fix{display:grid;gap:.5rem;background:var(--s2);border-radius:8px;padding:.75rem}
+.fix label{font-size:.8rem;color:var(--muted)}
+.fix textarea{min-height:4.5rem;resize:vertical;width:100%}
+.fix select{width:100%}
+.errt{margin:0;font-size:.82rem;color:#f2a7a9}
+.errt[hidden]{display:none}
+[aria-invalid=true]{border-color:var(--err)!important}
+.verdict{display:flex;align-items:center;gap:.5rem;font-size:.86rem;color:var(--text)}
+.verdict .ghost{margin-left:auto}
+.q{padding:1rem 1.1rem;display:grid;gap:.6rem}
+.q+.q{margin-top:10px}
+.q h3{margin:0;font:500 .92rem/1.4 var(--f);color:var(--fg);display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.q textarea{width:100%;min-height:6.5rem;resize:vertical;line-height:1.55}
+.q .sent{font-size:.84rem;color:var(--text);background:var(--s2);border-radius:8px;padding:.65rem .8rem;line-height:1.6}
+.q .meta{font-size:.78rem;color:var(--muted)}
+.tag{font-size:.74rem;border:1px solid var(--line2);border-radius:999px;padding:1px 8px;color:var(--muted);font-weight:400}
+.tag.ok{border-color:rgba(70,179,126,.5);color:var(--ok)}
+.confirm{border:1px solid var(--err);border-radius:8px;padding:.7rem .8rem;display:grid;gap:.5rem;background:rgba(229,72,77,.06);animation:in .2s var(--ease)}
+.confirm p{margin:0;font-size:.86rem}
+.btn.danger{background:var(--err);border-color:var(--err);color:#fff}
+.empty{padding:1.6rem 1rem;text-align:center;color:var(--muted)}
+.empty b{display:block;color:var(--fg);font-weight:500;margin-bottom:.3rem}
+.sk{background:linear-gradient(90deg,var(--s2) 0,#1d2025 50%,var(--s2) 100%);background-size:200% 100%;animation:sh 1.2s linear infinite;border-radius:5px;display:block}
+@keyframes sh{to{background-position:-200% 0}}
+.tt{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:flex;align-items:center;gap:10px;background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:6px 6px 6px 14px;border-radius:8px;font-size:.84rem;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+.tt button{border:0;background:none;color:var(--ins);cursor:pointer;padding:6px 8px;border-radius:6px;min-height:32px}
+.foot{margin:14px 2px 0;font-size:.76rem;color:var(--dim)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+
+<div class="wrap">
+  <div class="ctx">Loi n° 2026-214 du 2 avril 2026, art. 4 · décret n° 2026-1032 du 27 octobre 2026</div>
+  <h1>Contrôle du décret d'application</h1>
+  <ol class="steps" id="steps" aria-label="Étapes du contrôle"></ol>
+  <div id="banner"></div>
+  <div id="view"></div>
+  <p class="foot">Données d'exemple. Valeurs extraites des deux textes et comparées une à une ; l'outil propose un constat, vous le confirmez ou le corrigez. Votre avancement est gardé dans ce navigateur.</p>
+</div>
+<p class="sr" id="live" aria-live="polite"></p>
+
+<script>
+const ST={bad:{l:"Contraire à la loi",c:"err"},miss:{l:"Point non traité",c:"err"},add:{l:"Condition ajoutée",c:"warn"},in:{l:"Dans les limites",c:"ok"},ok:{l:"Conforme",c:"ok"}};
+const NEEDS=s=>s==="bad"||s==="miss"||s==="add";
+const P0=[
+ {k:"champ",t:"Communes concernées",ref:"Art. L. 332-4, al. 1 → art. R. 332-1",st:"ok",
+  loi:`Dans les communes de plus de <span class="p">50 000 habitants</span> appartenant à une <span class="p">zone d'urbanisation continue</span>, le propriétaire d'un logement vacant…`,
+  dec:`La liste des communes mentionnées à l'article L. 332-4 est celle des communes de plus de <span class="p">50 000 habitants</span> appartenant à une <span class="p">zone d'urbanisation continue</span>, annexée au décret n° 2013-392 du 10 mai 2013.`,
+  pv:[["Seuil","50 000 habitants","50 000 habitants"]],why:"Le décret reprend le seuil et renvoie à une liste existante."},
+ {k:"vac",t:"Durée de vacance",ref:"Art. L. 332-4, al. 1 → art. R. 332-2",st:"add",
+  loi:`…le propriétaire d'un logement vacant depuis plus de <span class="p">deux ans</span> le déclare au maire.`,
+  dec:`Est regardé comme vacant le logement inoccupé de manière continue depuis plus de <span class="p">vingt-quatre mois</span>. <span class="p diff">Une occupation inférieure à quatre-vingt-dix jours par an n'interrompt pas la vacance.</span>`,
+  pv:[["Durée","deux ans","vingt-quatre mois"],["Occupation courte","non prévue","ignorée sous 90 jours"]],why:"La durée est la même. Mais le décret ajoute une règle que la loi ne prévoit pas : une courte occupation ne compte pas. Plus de logements devront être déclarés ; <b>à vérifier</b> au regard de l'habilitation."},
+ {k:"aide",t:"Montant de l'aide",ref:"Art. L. 332-4, al. 2 → art. R. 332-3",st:"in",
+  loi:`…une aide à la remise sur le marché dont le montant ne peut excéder <span class="p">30 %</span> du <span class="p">coût des travaux</span>, dans la limite de <span class="p">15 000 euros</span> par logement.`,
+  dec:`Le montant de l'aide est fixé à <span class="p diff">25 %</span> du <span class="p diff">coût hors taxes des travaux</span>, dans la limite de <span class="p diff">12 000 euros</span> par logement.`,
+  pv:[["Taux","30 % au plus","25 %"],["Plafond","15 000 € au plus","12 000 €"]],why:"La loi fixe des plafonds ; le décret retient des valeurs plus basses, ce qui lui est permis. L'aide versée sera toutefois inférieure de 20 % au plafond voté, et calculée hors taxes."},
+ {k:"info",t:"Délai d'information du propriétaire",ref:"Art. L. 332-4, al. 3 → art. R. 332-4",st:"bad",
+  loi:`Le maire informe le propriétaire des aides mobilisables dans un délai d'<span class="p">un mois</span> suivant la déclaration.`,
+  dec:`Le maire adresse au propriétaire l'information prévue au troisième alinéa de l'article L. 332-4 dans un délai de <span class="p bad">deux mois</span> à compter de la réception de la déclaration.`,
+  pv:[["Délai","un mois","deux mois"]],why:"Le délai est fixé par la loi elle-même ; le décret ne peut pas le doubler. <b>Écart à signaler</b> : question écrite ou recours possible."},
+ {k:"forme",t:"Forme du décret",ref:"Art. L. 332-4, dernier alinéa",st:"ok",
+  loi:`Les conditions d'application du présent article sont fixées par <span class="p">décret en Conseil d'État</span>.`,
+  dec:`Le Premier ministre, […] <span class="p">le Conseil d'État (section de l'intérieur) entendu</span>, décrète :`,
+  pv:[["Procédure","Conseil d'État","Conseil d'État entendu"]],why:"La loi exige un décret en Conseil d'État : les visas le confirment."},
+ {k:"restit",t:"Restitution de l'aide",ref:"Art. L. 332-5 → aucun article",st:"miss",
+  loi:`Un décret précise les conditions dans lesquelles l'aide est <span class="p">restituée</span> lorsque le logement n'est pas remis en location dans un délai d'un an.`,
+  dec:null,pv:[["Restitution","prévue","aucune disposition"]],why:"Aucun article du décret ne traite de la restitution. Sans ce texte, l'aide ne peut pas être récupérée. L'échéancier d'application ne mentionne pas de second décret."},
+];
+/* Rectificatif (données synthétiques) : le plafond de l'aide passe de 12 000 à 10 000 €. */
+const RECT={k:"aide",dec:`Le montant de l'aide est fixé à <span class="p diff">25 %</span> du <span class="p diff">coût hors taxes des travaux</span>, dans la limite de <span class="p diff">10 000 euros</span> par logement.`,
+  pv:[["Taux","30 % au plus","25 %"],["Plafond","15 000 € au plus","10 000 €",true]],why:"Après le rectificatif du 6 novembre, le plafond tombe à 10 000 € : toujours sous le plafond légal, mais l'aide versée sera inférieure d'un tiers au plafond voté."};
+const QDEF={
+ info:"M. le député attire l'attention du ministre chargé du logement sur l'article R. 332-4, qui porte à deux mois le délai d'information du propriétaire que l'article L. 332-4 fixe à un mois. Il lui demande s'il entend mettre ce décret en conformité avec la loi.",
+ restit:"M. le député interroge le ministre chargé du logement sur la date de publication du décret prévu à l'article L. 332-5, sans lequel l'aide à la remise sur le marché ne peut être restituée.",
+ vac:"M. le député demande au ministre chargé du logement sur quelle habilitation législative repose l'exclusion des occupations de moins de quatre-vingt-dix jours prévue à l'article R. 332-2."};
+const KEY="decret-loi-parcours-v1";
+const fresh=()=>({step:3,cur:"restit",rev:{champ:{st:"ok",by:"confirmé"},info:{st:"bad",by:"confirmé"},aide:{st:"in",by:"confirmé"}},
+  src:"stale",rectApplied:false,tries:0,q:{},saved:"7 novembre 2026"});
+let S; try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){} if(!S||!S.rev)S=fresh();
+const resumed=!!S.resumedOnce; S.resumedOnce=true;
+let P=JSON.parse(JSON.stringify(P0)); const applyRect=()=>{const p=P.find(x=>x.k===RECT.k);Object.assign(p,{dec:RECT.dec,pv:RECT.pv,why:RECT.why})}; if(S.rectApplied)applyRect();
+let busy=null, fixOpen=false, confirmK=null, sending=null, undoT;
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const byK=k=>P.find(p=>p.k===k);
+const reviewed=()=>P.filter(p=>S.rev[p.k]&&!S.rev[p.k].stale);
+const finalSt=k=>S.rev[k]?S.rev[k].st:null;
+const toDo=()=>P.filter(p=>NEEDS(finalSt(p.k))&&!S.rev[p.k].stale);
+const now=()=>new Date().toLocaleString("fr-FR",{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"}).replace(":"," h ");
+
+function steps(){
+  const nr=reviewed().length, tq=toDo(), sent=tq.filter(p=>S.q[p.k]?.sent).length;
+  const s1=busy==="fetch"?["run","Lecture du décret","interrogation de Légifrance…"]:S.src==="err"?["err","Lecture du décret","échec, examen conservé"]:S.src==="stale"?["warn","Lecture du décret","un rectificatif est paru"]:["done","Lecture du décret",S.rectApplied?"à jour, rectificatif inclus":"à jour"];
+  const s2=["done","Rapprochement",`${P.length} points, 1 sans article`];
+  const s3=[nr===P.length?"done":"",`Examen`,nr===P.length?"terminé":`${nr} sur ${P.length} points`];
+  const s4=[tq.length&&sent===tq.length?"done":"","Suites",tq.length?`${sent} sur ${tq.length} transmise${sent>1?"s":""}`:"rien à préparer encore"];
+  $("#steps").innerHTML=[s1,s2,s3,s4].map(([c,b,sm],i)=>`<li class="step"><button data-step="${i+1}" ${S.step===i+1?'aria-current="step"':""}><span class="ic ${c}">${c==="done"?"✓":c==="err"?"!":c==="warn"?"!":c==="run"?"":i+1}</span><b>${b}</b><small>${sm}</small></button></li>`).join("");
+}
+function banner(){
+  let h="";
+  if(busy==="fetch") h=`<div class="banner run" role="status"><p><b>Mise à jour en cours.</b> Lecture du rectificatif au Journal officiel… Vous pouvez continuer l'examen.</p><div class="acts"><button class="ghost" data-act="cancel-fetch">Interrompre</button></div></div>`;
+  else if(S.src==="stale") h=`<div class="banner"><p><b>Données périmées.</b> Un rectificatif au décret est paru au JO du 6 novembre 2026 ; votre examen date du ${S.saved}. Le mettre à jour peut rouvrir des points déjà examinés.</p><div class="acts"><button class="btn pri" data-act="fetch">Mettre à jour</button></div></div>`;
+  else if(S.src==="err") h=`<div class="banner err" role="alert"><p><b>Légifrance n'a pas répondu.</b> Rien n'est perdu : votre examen reste tel quel, sur la version du 27 octobre. Réessayez dans un instant.</p><div class="acts"><button class="btn pri" data-act="fetch">Réessayer</button><button class="ghost" data-act="later">Plus tard</button></div></div>`;
+  else if(S.justUpdated) h=`<div class="banner ok" role="status"><p><b>Décret à jour.</b> Le rectificatif modifie l'article R. 332-3 : « Montant de l'aide » repasse à examiner. Les autres points ne changent pas.</p><div class="acts"><button class="btn" data-go="aide">Revoir ce point</button><button class="ghost" data-act="dismiss" aria-label="Fermer">×</button></div></div>`;
+  else if(resumed&&S.step===3&&!S.dismissedResume) h=`<div class="banner ok"><p><b>Reprise.</b> Vous en étiez à « ${byK(S.cur).t} ».</p><div class="acts"><button class="ghost" data-act="restart">Recommencer l'examen</button><button class="ghost" data-act="dismissR" aria-label="Fermer">×</button></div></div>`;
+  $("#banner").innerHTML=h;
+}
+function stateLine(p){
+  const r=S.rev[p.k];
+  if(!r) return `<small>à examiner · l'outil propose : ${ST[p.st].l.toLowerCase()}</small>`;
+  if(r.stale) return `<small class="stale">à revoir : le texte a changé</small>`;
+  if(S.q[p.k]?.sent) return `<small class="done">question transmise</small>`;
+  return `<small class="done">${r.by} : ${ST[r.st].l.toLowerCase()}</small>`;
+}
+function examen(){
+  const p=byK(S.cur), r=S.rev[p.k], nr=reviewed().length;
+  const list=`<nav class="panel list" aria-label="Points à examiner"><div class="lh"><span>Points confiés au décret</span><span>${nr}/${P.length}</span></div>${P.map(q=>`<button class="li" data-go="${q.k}" aria-current="${q.k===S.cur}"><span class="dot ${S.rev[q.k]&&!S.rev[q.k].stale?ST[S.rev[q.k].st].c:""}" ${S.rev[q.k]&&!S.rev[q.k].stale?"":'style="background:none;border:1px solid var(--dim)"'}></span><b>${q.t}</b>${stateLine(q)}</button>`).join("")}</nav>`;
+  const dec=p.dec?`<div class="side"><h3>Décret${p.k===RECT.k&&S.rectApplied?" · version rectifiée":""}</h3><p>${p.dec}</p></div>`:`<div class="side none"><h3>Décret</h3><p>Aucun article ne traite ce point.</p></div>`;
+  let decide;
+  if(r&&!r.stale&&!fixOpen) decide=`<div class="verdict"><span class="dot ${ST[r.st].c}"></span>Constat ${r.by} : <b style="font-weight:500;color:var(--fg)">${ST[r.st].l}</b>${r.note?` — ${esc(r.note)}`:""}<button class="ghost" data-act="reopen">Modifier</button></div>`;
+  else if(fixOpen) decide=`<form class="fix" id="fix" novalidate><label for="fst">Votre constat</label><select id="fst">${Object.entries(ST).map(([k,v])=>`<option value="${k}" ${(r?.st||p.st)===k?"selected":""}>${v.l}</option>`).join("")}</select>
+     <label for="fnote">Pourquoi vous corrigez la proposition</label><textarea id="fnote" aria-describedby="ferr">${esc(r?.note||"")}</textarea><p class="errt" id="ferr" hidden></p>
+     <div class="row"><button class="btn pri" type="submit">Enregistrer le constat</button><button class="btn" type="button" data-act="nofix">Annuler</button></div></form>`;
+  else decide=`<div class="row"><button class="btn pri" data-act="confirm">Confirmer : ${ST[p.st].l.toLowerCase()}</button><button class="btn" data-act="fix">Corriger le constat</button><button class="ghost" data-act="skip">Plus tard</button></div>`;
+  const nrest=P.filter(q=>!S.rev[q.k]||S.rev[q.k].stale).length;
+  $("#view").innerHTML=`<div class="cols">${list}<section class="panel focus main" id="focus" aria-live="polite">
+    <div class="fh"><div><h2>${p.t}</h2><small>${p.ref}</small></div><span class="prop"><span class="dot ${ST[p.st].c}"></span>L'outil propose : ${ST[p.st].l.toLowerCase()}</span></div>
+    ${r?.stale?`<p class="why" style="color:#f0c27a">Le rectificatif a modifié ce passage : votre constat précédent (« ${ST[r.st].l.toLowerCase()} ») est à refaire.</p>`:""}
+    <p class="why">${p.why}</p>
+    <table class="pt"><thead><tr><th>Valeur</th><th>Loi</th><th>Décret</th></tr></thead><tbody>${p.pv.map(v=>`<tr><td>${v[0]}</td><td>${v[1]}</td><td class="${v[3]?"chg":(p.st==="bad"||p.st==="miss")?"bad":""}">${v[2]}${v[3]?" (était 12 000 €)":""}</td></tr>`).join("")}</tbody></table>
+    <div class="two"><div class="side"><h3>Loi</h3><p>${p.loi}</p></div>${dec}</div>
+    <div class="decide">${decide}</div>
+    ${nrest===0?`<div class="row" style="margin-top:.8rem"><span class="kicker">Tous les points sont examinés.</span><button class="btn pri" data-step="4">Préparer les suites</button></div>`:""}
+  </section></div>`;
+}
+function suites(){
+  const T=P.filter(p=>NEEDS(finalSt(p.k)));
+  const pending=P.filter(p=>NEEDS(p.st)&&(!S.rev[p.k]||S.rev[p.k].stale));
+  if(!T.length){$("#view").innerHTML=`<div class="panel empty"><b>Aucune suite à préparer pour l'instant.</b>Les suites naissent des constats que vous confirmez. ${pending.length?`${pending.length} point${pending.length>1?"s":""} signalé${pending.length>1?"s":""} par l'outil reste${pending.length>1?"nt":""} à examiner.`:""}<div class="row" style="justify-content:center;margin-top:.8rem"><button class="btn pri" data-step="3">Reprendre l'examen</button></div></div>`;return}
+  $("#view").innerHTML=(pending.length?`<div class="banner" style="border-left-color:var(--line2)"><p><b>Liste partielle.</b> ${pending.map(p=>`« ${p.t} »`).join(", ")} reste${pending.length>1?"nt":""} à examiner ; ${pending.length>1?"ils":"il"} pourront s'ajouter ici.</p><div class="acts"><button class="btn" data-go="${pending[0].k}">Examiner</button></div></div>`:"")+
+  T.map(p=>{const q=S.q[p.k]||(S.q[p.k]={txt:QDEF[p.k]||"",sent:null});const st=S.rev[p.k].stale;
+   if(q.sent) return `<article class="panel q"><h3><span class="dot ${ST[finalSt(p.k)].c}"></span>${p.t}<span class="tag ok">Transmise</span></h3><div class="sent">${esc(q.txt)}</div><p class="meta" style="margin:0">Transmise au service de la séance le ${q.sent.at} · référence provisoire ${q.sent.ref}. Elle ne peut plus être modifiée ici ; pour la retirer, s'adresser au service de la séance.</p></article>`;
+   return `<article class="panel q" data-q="${p.k}"><h3><span class="dot ${ST[finalSt(p.k)].c}"></span>${p.t}<span class="tag">${sending===p.k?"Transmission…":"Brouillon"}</span></h3>
+    ${st?`<p class="errt">Le texte du décret a changé depuis votre constat : réexaminez le point avant de transmettre.</p>`:""}
+    <label class="sr" for="q-${p.k}">Question écrite sur ${p.t}</label><textarea id="q-${p.k}" data-qtxt="${p.k}" ${sending===p.k?"disabled":""} aria-describedby="qe-${p.k}">${esc(q.txt)}</textarea>
+    <p class="errt" id="qe-${p.k}" hidden></p>
+    ${confirmK===p.k?`<div class="confirm" role="alertdialog" aria-labelledby="cf-${p.k}"><p id="cf-${p.k}"><b style="font-weight:500;color:var(--fg)">Transmettre cette question au service de la séance ?</b> Une fois transmise, elle ne pourra plus être modifiée ni retirée depuis cette page.</p><div class="row"><button class="btn danger" data-act="send" data-k="${p.k}">Transmettre définitivement</button><button class="btn" data-act="nosend">Revenir au brouillon</button></div></div>`
+     :`<div class="row"><button class="btn pri" data-act="ask-send" data-k="${p.k}" ${st||sending?"disabled":""}>Transmettre…</button><span class="meta">${nf(q.txt.length)} / 2 000 caractères · brouillon gardé automatiquement</span></div>`}
+   </article>`}).join("");
+}
+function render(anim){steps();banner();S.step===4?suites():examen();if(anim){const f=$("#focus");f&&f.classList.add("anim")}save();}
+
+function utoast(msg,undo){$$(".tt").forEach(e=>e.remove());clearTimeout(undoT);const t=document.createElement("div");t.className="tt";t.innerHTML=`<span>${esc(msg)}</span>${undo?"<button>Annuler</button>":""}`;document.body.append(t);
+  if(undo)t.querySelector("button").onclick=()=>{undo();t.remove()};undoT=setTimeout(()=>t.remove(),5000);$("#live").textContent=msg;}
+function next(){const i=P.findIndex(p=>p.k===S.cur);const L=[...P.slice(i+1),...P.slice(0,i)];const n=L.find(p=>!S.rev[p.k]||S.rev[p.k].stale);if(n)S.cur=n.k;}
+function setRev(k,val,msg){const prev=S.rev[k],prevCur=S.cur;S.rev[k]=val;fixOpen=false;next();render(true);
+  utoast(msg,()=>{if(prev)S.rev[k]=prev;else delete S.rev[k];S.cur=prevCur;render(true)});}
+
+function fetchDecree(){
+  busy="fetch";S.tries++;render();
+  const ok=S.tries>=2; /* démonstration : la première tentative échoue, la seconde réussit */
+  fetchTimer=setTimeout(()=>{busy=null;
+    if(!ok){S.src="err";render();return}
+    S.src="ok";S.rectApplied=true;S.justUpdated=true;applyRect();
+    if(S.rev.aide)S.rev.aide.stale=true;
+    S.saved=now();render();
+  },1100);
+}
+let fetchTimer=null;
+document.addEventListener("click",e=>{
+  const st=e.target.closest("[data-step]");if(st){const n=+st.dataset.step;S.step=n<3?3:n;if(n<3&&S.src!=="ok")$("#banner .btn")?.focus();render();return}
+  const go=e.target.closest("[data-go]");if(go){S.step=3;S.cur=go.dataset.go;fixOpen=false;render(true);return}
+  const a=e.target.closest("[data-act]");if(!a)return;const act=a.dataset.act,p=byK(S.cur);
+  if(act==="confirm")setRev(p.k,{st:p.st,by:"confirmé"},`« ${p.t} » : constat confirmé.`);
+  if(act==="fix"||act==="reopen"){fixOpen=true;render();$("#fst")?.focus()}
+  if(act==="nofix"){fixOpen=false;render()}
+  if(act==="skip"){next();render(true)}
+  if(act==="fetch")fetchDecree();
+  if(act==="cancel-fetch"){clearTimeout(fetchTimer);busy=null;S.tries--;render();utoast("Mise à jour interrompue. Votre examen n'a pas changé.")}
+  if(act==="later"){S.src="stale";render()}
+  if(act==="dismiss"){S.justUpdated=false;render()}
+  if(act==="dismissR"){S.dismissedResume=true;render()}
+  if(act==="restart"){const old=JSON.stringify(S);S.rev={};S.q={};S.cur=P[0].k;S.dismissedResume=true;render(true);utoast("Examen remis à zéro.",()=>{S=JSON.parse(old);render(true)})}
+  if(act==="ask-send"){const k=a.dataset.k,t=S.q[k].txt.trim(),er=$("#qe-"+k);let m="";
+    if(!t)m="La question est vide. Écrivez ce que vous demandez au ministre.";else if(t.length>2000)m=`La question dépasse de ${nf(t.length-2000)} caractères la limite de 2 000.`;
+    if(m){er.textContent=m;er.hidden=false;$("#q-"+k).setAttribute("aria-invalid","true");$("#q-"+k).focus();return}
+    confirmK=k;render();$(`[data-act="send"]`).focus()}
+  if(act==="nosend"){const k=confirmK;confirmK=null;render();$("#q-"+k)?.focus()}
+  if(act==="send"){const k=a.dataset.k;confirmK=null;sending=k;render();
+    setTimeout(()=>{sending=null;const n=String(410+Object.values(S.q).filter(q=>q.sent).length+7).padStart(4,"0");S.q[k].sent={at:now(),ref:"Q-2026-"+n};render();utoast(`Question transmise : « ${byK(k).t} ».`)},900)}
+});
+document.addEventListener("submit",e=>{e.preventDefault();const p=byK(S.cur),st=$("#fst").value,note=$("#fnote").value.trim(),er=$("#ferr");
+  if(note.length<10){er.textContent=note?"Précisez un peu : une phrase suffit, elle servira dans la suite à donner.":"Dites en une phrase pourquoi vous corrigez la proposition de l'outil.";er.hidden=false;$("#fnote").setAttribute("aria-invalid","true");$("#fnote").focus();return}
+  setRev(p.k,{st,by:st===p.st?"confirmé":"corrigé",note},`« ${p.t} » : constat enregistré.`)});
+document.addEventListener("input",e=>{const k=e.target.dataset.qtxt;if(k){S.q[k].txt=e.target.value;e.target.removeAttribute("aria-invalid");$("#qe-"+k).hidden=true;const m=e.target.closest(".q").querySelector(".meta");if(m)m.textContent=`${nf(e.target.value.length)} / 2 000 caractères · brouillon gardé automatiquement`;save()}
+  if(e.target.id==="fnote"){e.target.removeAttribute("aria-invalid");$("#ferr").hidden=true}});
+document.addEventListener("keydown",e=>{if(e.key!=="Escape")return;
+  if(confirmK){const k=confirmK;confirmK=null;render();$("#q-"+k)?.focus();return}
+  if(fixOpen){fixOpen=false;render();return}
+  if(S.step===4){S.step=3;render()}});
+render();
+</script>

@@ -1,0 +1,322 @@
+<title>Dépôt de crédits · parcours</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+
+<style>
+/* Angle « parcours » : la tâche en quatre étapes observables (abonder, gager, vérifier, déposer),
+   sur une seule page ; brouillon enregistré et repris, retour en arrière, données périmées,
+   dépôt irréversible confirmé dans la page, échec récupérable. Reflow par conteneur, pas par appareil. */
+.flow{container-type:inline-size;margin-top:8px}
+.fl{display:grid;gap:18px}
+@container (min-width:760px){.fl{grid-template-columns:200px minmax(0,1fr);gap:28px}.rail{position:sticky;top:16px;align-self:start}.rail ol{flex-direction:column}}
+.rail ol{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:4px 6px}
+.rail a{display:flex;align-items:center;gap:9px;padding:7px 10px;border-radius:8px;color:var(--muted);text-decoration:none;font-size:13px;min-height:2.6em}
+.rail a:hover{background:var(--s1);color:var(--fg)}
+.rail a.cur{background:var(--s1);color:var(--fg)}
+.rail a small{display:block;font-size:11.5px;color:var(--dim)}
+.rail .num{display:inline-grid;place-items:center;width:1.6em;height:1.6em;border-radius:50%;border:1px solid var(--line2);font-size:11px;flex:none;color:var(--muted)}
+.rail .num.ok{background:var(--ok);border-color:var(--ok);color:#06140c}
+.rail .num.warn{border-color:var(--warn);color:var(--warn)}
+.rail .num.err{border-color:var(--err);color:var(--err)}
+.stp{padding:16px 18px;scroll-margin-top:16px}
+.stp+.stp{margin-top:14px}
+.stp>header{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+.stp h2{margin:0;font:600 15px/1.35 var(--f);color:var(--fg)}
+.stp .state{font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
+.stp>p{margin:0 0 12px;font-size:13px;color:var(--muted);max-width:62ch}
+.stp.locked{opacity:.55}
+.rows{display:grid;gap:0}
+.r{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:10px 0;border-top:1px solid var(--line)}
+.r .who{flex:1 1 16em;min-width:0}
+.r .who b{color:var(--fg);font-weight:500;font-size:13.5px}
+.r .who small{display:block;color:var(--dim);font-size:12px}
+.r .who small .up{color:var(--ins)} .r .who small .down{color:#f2a7a9}
+.r .ins{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.f{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--dim)}
+.f input{width:6.5em;text-align:right;min-height:2.6em}
+.f input.on{color:var(--fg);border-color:var(--line2)}
+.f input.bad{border-color:var(--err);color:#f2a7a9}
+.r .msg{flex-basis:100%;font-size:12.5px;line-height:1.5;color:var(--muted);display:grid;grid-template-columns:12px minmax(0,1fr);gap:8px}
+.r .msg .dot{margin-top:6px}
+.r.dis{opacity:.5}
+.link{border:0;background:none;color:var(--ins);padding:0;cursor:pointer;font-size:12.5px}
+.link:hover{text-decoration:underline}
+.opt{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);margin:-4px 0 8px}
+.rest{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px;padding:10px 12px;border-radius:8px;background:var(--s2);font-size:13px;color:var(--fg)}
+.rest small{color:var(--muted)}
+.empty{padding:14px;border:1px dashed var(--line2);border-radius:8px;color:var(--muted);font-size:13px;text-align:center}
+.chk{list-style:none;margin:0 0 14px;padding:0;display:grid;gap:7px}
+.chk li{display:grid;grid-template-columns:12px minmax(0,1fr);gap:9px;font-size:13px;line-height:1.5}
+.chk .dot{margin-top:7px}
+.chk small{display:block;color:var(--muted);font-size:12.5px}
+.doc h3{margin:12px 0 6px;font:500 12.5px/1.4 var(--f);color:var(--muted)}
+.doc table{width:100%;border-collapse:collapse;font-size:12.5px}
+.doc th,.doc td{border:1px solid var(--line2);padding:5px 8px;text-align:right;vertical-align:top}
+.doc th:first-child,.doc td:first-child{text-align:left}
+.doc thead th{color:var(--dim);font-weight:400}
+.doc tfoot td{color:var(--fg);font-weight:500}
+.unit{text-align:right;font-size:11.5px;color:var(--dim);margin-bottom:4px}
+.banner{display:grid;grid-template-columns:12px minmax(0,1fr);gap:10px;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--s1);margin:0 0 10px;font-size:13px;animation:in .25s var(--ease)}
+.banner .dot{margin-top:6px}
+.banner b{color:var(--fg);font-weight:500}
+.banner .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.banner table{border-collapse:collapse;font-size:12.5px;margin-top:8px}
+.banner td{padding:3px 12px 3px 0;color:var(--text)}
+.banner.warn{border-color:rgba(227,163,63,.45)} .banner.err{border-color:rgba(229,72,77,.5)} .banner.ok{border-color:rgba(70,179,126,.45)}
+@keyframes in{from{opacity:0;transform:translateY(-4px)}}
+.status{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin:0 0 14px;font-size:12.5px;color:var(--dim)}
+.status .btn{padding:4px 10px;font-size:12.5px}
+.confirm{margin-top:12px;padding:14px;border-radius:9px;border:1px solid var(--line2);background:var(--s2)}
+.confirm ul{margin:6px 0 12px;padding-left:18px;color:var(--text);font-size:13px}
+.confirm .acts{display:flex;gap:8px;flex-wrap:wrap}
+.prog{height:4px;border-radius:2px;background:var(--line);overflow:hidden;margin:12px 0 6px}
+.prog i{display:block;height:100%;width:30%;background:var(--accent);animation:run 1.1s linear infinite}
+@keyframes run{from{transform:translateX(-100%)}to{transform:translateX(340%)}}
+.done{display:grid;gap:4px;padding:14px;border-radius:9px;border:1px solid rgba(70,179,126,.45);background:rgba(70,179,126,.07)}
+.done b{color:var(--fg);font-size:15px;font-weight:600}
+.demo{margin-top:28px;font-size:12.5px;color:var(--dim)}
+.demo summary{cursor:pointer;width:max-content;max-width:100%}
+.demo .acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.demo label{display:inline-flex;align-items:center;gap:6px;margin-top:8px}
+.stp .acts{display:flex;gap:8px;flex-wrap:wrap}
+</style>
+
+<div class="wrap">
+  <div class="ctx">Projet de loi de finances pour 2027 · seconde partie · mission « Cohésion des territoires » (montants fictifs)</div>
+  <h1>Amendement de crédits</h1>
+  <p class="lead" id="lead"></p>
+  <div class="status" id="status"></div>
+  <div id="banners"></div>
+
+  <div class="flow"><div class="fl">
+    <nav class="rail" aria-label="Étapes"><ol id="rail"></ol></nav>
+    <div>
+      <section class="panel stp" id="s1" aria-labelledby="h1s"><header><h2 id="h1s">1. Ce que vous financez</h2><span class="state" id="st1"></span></header>
+        <p>Les programmes à abonder, en millions d'euros.</p>
+        <label class="opt"><input type="checkbox" id="same" checked> Même montant en autorisations d'engagement (AE) et en crédits de paiement (CP)</label>
+        <div class="rows" id="r1"></div></section>
+
+      <section class="panel stp" id="s2" aria-labelledby="h2s"><header><h2 id="h2s">2. Le gage</h2><span class="state" id="st2"></span></header>
+        <p>La mission ne peut pas augmenter (article 47 de la LOLF) : chaque euro ajouté est pris sur un autre programme.</p>
+        <div id="b2"></div></section>
+
+      <section class="panel stp" id="s3" aria-labelledby="h3s"><header><h2 id="h3s">3. Vérification</h2><span class="state" id="st3"></span></header>
+        <ul class="chk" id="chk"></ul><div class="doc" id="doc"></div></section>
+
+      <section class="panel stp" id="s4" aria-labelledby="h4s"><header><h2 id="h4s">4. Dépôt</h2><span class="state" id="st4"></span></header>
+        <div id="b4"></div></section>
+
+      <details class="demo"><summary>États de démonstration</summary>
+        <div class="acts"><button class="ghost" data-demo="vide">Brouillon vide</button><button class="ghost" data-demo="partiel">Gage incomplet</button><button class="ghost" data-demo="erreur">Minoration excessive</button><button class="ghost" data-demo="perime">Crédits périmés</button></div>
+        <label><input type="checkbox" id="fail"> Le prochain dépôt échoue (service injoignable)</label>
+      </details>
+    </div>
+  </div></div>
+</div>
+
+<script>
+const PROG=[
+ {n:177,s:"Hébergement et insertion",t:"Hébergement, parcours vers le logement et insertion des personnes vulnérables"},
+ {n:109,s:"Aide au logement",t:"Aide à l'accès au logement",oblig:true},
+ {n:135,s:"Urbanisme et habitat",t:"Urbanisme, territoires et amélioration de l'habitat"},
+ {n:147,s:"Politique de la ville",t:"Politique de la ville"},
+ {n:162,s:"Interventions territoriales",t:"Interventions territoriales de l'État"},
+];
+// crédits du projet de loi : version déposée (1) puis après lettre rectificative (2)
+const CRED={1:{177:[3020,3010],109:[16240,16240],135:[820,845],147:[640,635],162:[110,96]},
+            2:{177:[3050,3040],109:[16240,16240],135:[800,815],147:[640,635],162:[110,96]}};
+const LATEST=2, KEY="credits-parcours-v1";
+const sample=()=>({basis:1,same:true,ab:{135:{ae:60,cp:60},177:{ae:20,cp:20}},mi:{109:{ae:60,cp:60}},saved:"2026-11-09T18:42:00"});
+let D, history=[], phase="draft", lastErr=null, dep=null, resumed=false;
+try{const raw=localStorage.getItem(KEY);if(raw){D=JSON.parse(raw);resumed="local"}}catch(e){}
+if(!D||!D.ab){D=sample();resumed="sample"}
+
+const cr=(n,k,b=D.basis)=>CRED[b][n][k==="ae"?0:1];
+const v=(o,n,k)=>(o[n]&&o[n][k])||0;
+const tot=(o,k)=>PROG.reduce((s,x)=>s+v(o,x.n,k),0);
+const rest=k=>tot(D.ab,k)-tot(D.mi,k);
+const over=x=>["ae","cp"].some(k=>v(D.mi,x.n,k)>cr(x.n,k));
+const stale=()=>D.basis!==LATEST;
+const hm=d=>new Date(d).toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"}).replace(":"," h ");
+const dm=d=>new Date(d).toLocaleDateString("fr-FR",{day:"numeric",month:"long"});
+
+function save(){D.saved=new Date().toISOString();try{localStorage.setItem(KEY,JSON.stringify(D))}catch(e){}}
+function commit(label,fn){history.push({label,snap:JSON.stringify(D)});if(history.length>50)history.shift();fn();save();render()}
+function undo(){const h=history.pop();if(!h)return;D=JSON.parse(h.snap);save();render();toast(`Annulé : ${h.label}.`)}
+function setAmt(o,n,k,val){o[n]=o[n]||{ae:0,cp:0};o[n][k]=Math.max(0,Math.round(val));if(D.same)o[n][k==="ae"?"cp":"ae"]=o[n][k];if(!o[n].ae&&!o[n].cp)delete o[n]}
+
+function states(){
+  const A=tot(D.ab,"cp")+tot(D.ab,"ae"), bad=PROG.filter(over), rC=rest("cp"), rA=rest("ae");
+  const s1=A?["ok","fait"]:["","à faire"];
+  const s2=!A?["","en attente de l'étape 1"]:bad.length?["err","minoration excessive"]:(rC||rA)?["warn",rC>0||rA>0?"gage incomplet":"gage en trop"]:["ok","fait"];
+  const s3=s1[0]!=="ok"||s2[0]!=="ok"?["","en attente"]:stale()?["warn","crédits à mettre à jour"]:["ok","recevable"];
+  const s4=phase==="done"?["ok","déposé"]:phase==="sending"?["warn","en cours"]:lastErr?["err","échec, à reprendre"]:s3[0]==="ok"?["","prêt"]:["","en attente"];
+  return [s1,s2,s3,s4];
+}
+
+function row(x,o,kind,dis,msg){
+  const ks=D.same?["cp"]:["ae","cp"], lock=phase==="done"||phase==="sending";
+  const c=v(D.ab,x.n,"cp")-v(D.mi,x.n,"cp"), base=cr(x.n,"cp");
+  return `<div class="r${dis?" dis":""}"><div class="who"><b>${x.n} · ${x.s}</b><small>${nf(base)} M€ en CP${c?` → <span class="${c>0?"up":"down"}">${nf(base+c)} M€</span>`:""}${dis?` · ${dis}`:""}</small></div>
+   <div class="ins">${ks.map(k=>`<label class="f">${kind} ${D.same?"":k.toUpperCase()}<input type="number" min="0" step="5" inputmode="numeric" value="${v(o,x.n,k)||""}" placeholder="0" data-o="${kind==="Abonder de"?"ab":"mi"}" data-n="${x.n}" data-k="${k}" class="${v(o,x.n,k)?"on":""}${kind!=="Abonder de"&&v(o,x.n,k)>cr(x.n,k)?" bad":""}"${dis||lock?" disabled":""} aria-label="${kind} ${D.same?"":k.toUpperCase()+" "}le programme ${x.n}, en M€"></label>`).join("")}</div>${msg||""}</div>`;
+}
+
+function render(){
+  const S=states(), lock=phase==="done"||phase==="sending";
+  const rC=rest("cp"), rA=rest("ae"), up=tot(D.ab,"cp");
+  // en-tête
+  const ups=PROG.filter(x=>v(D.ab,x.n,"cp")).map(x=>x.n), downs=PROG.filter(x=>v(D.mi,x.n,"cp")).map(x=>x.n);
+  $("#lead").innerHTML=phase==="done"?`Amendement déposé. <span>${nf(up)} M€ vers ${ups.join(" et ")}, gagés sur ${downs.join(" et ")}.</span>`
+   :!up?`Brouillon vide. <span>Commencez par le programme que vous voulez abonder.</span>`
+   :`${nf(up)} M€ vers ${ups.length>1?"les programmes":"le programme"} ${ups.join(" et ")}${downs.length?`, gagés sur ${downs.join(" et ")}`:""}. <span>${S[3][1]==="prêt"?"Prêt au dépôt.":S[1][0]==="warn"&&rC>0?`Il reste ${nf(rC)} M€ à gager.`:S[1][0]==="err"?"Une minoration dépasse les crédits.":stale()?"Les crédits ont changé depuis le brouillon.":S[1][0]==="warn"?"Le gage dépasse l'abondement.":""}</span>`;
+  $("#status").innerHTML=phase==="done"?`<span>Brouillon verrouillé</span>`:`<span>Brouillon enregistré ${new Date(D.saved).toDateString()===new Date().toDateString()?"à "+hm(D.saved):"le "+dm(D.saved)+" à "+hm(D.saved)}</span>${history.length?`<button class="btn" id="undo" title="Ctrl+Z">Annuler : ${esc(history[history.length-1].label)}</button>`:""}<button class="ghost" id="discard"${lock?" disabled":""}>Repartir de zéro</button>`;
+  // bandeaux
+  let b="";
+  if(resumed==="sample"||resumed==="local") b+=`<div class="banner"><span class="dot"></span><div><b>Brouillon repris là où vous l'aviez laissé</b> (${dm(D.saved)}, ${hm(D.saved)}). <button class="link" data-x="resume">Compris</button></div></div>`;
+  if(stale()&&phase!=="done"){const ch=PROG.filter(x=>CRED[D.basis][x.n].join()!==CRED[LATEST][x.n].join());
+    b+=`<div class="banner warn" id="stale"><span class="dot warn"></span><div><b>Les crédits ont changé depuis votre brouillon.</b> La lettre rectificative du 8 novembre modifie ${ch.length} programme${ch.length>1?"s":""} ; le dépôt reste bloqué tant que les montants ne sont pas à jour.
+      <table>${ch.map(x=>`<tr><td>${x.n} · ${x.s}</td><td>CP <del>${nf(CRED[D.basis][x.n][1])}</del> <ins>${nf(CRED[LATEST][x.n][1])}</ins></td><td>AE <del>${nf(CRED[D.basis][x.n][0])}</del> <ins>${nf(CRED[LATEST][x.n][0])}</ins></td></tr>`).join("")}</table>
+      <div class="acts"><button class="btn pri" data-x="refresh">Mettre à jour les crédits</button></div></div></div>`}
+  if(lastErr&&phase==="draft") b+=`<div class="banner err" role="alert"><span class="dot err"></span><div><b>Le dépôt n'a pas abouti : ${lastErr}.</b> Rien n'a été transmis et votre brouillon est intact. <div class="acts"><button class="btn" data-x="retry">Réessayer le dépôt</button></div></div></div>`;
+  $("#banners").innerHTML=b;
+  // rail
+  const names=["Financer","Gager","Vérifier","Déposer"];
+  $("#rail").innerHTML=names.map((nm,i)=>`<li><a href="#s${i+1}" data-step="${i+1}"><span class="num ${S[i][0]}">${S[i][0]==="ok"?"✓":i+1}</span><span>${nm}<small>${S[i][1]}</small></span></a></li>`).join("");
+  ["st1","st2","st3","st4"].forEach((id,i)=>$("#"+id).innerHTML=`<span class="dot ${S[i][0]}"></span>${S[i][1]}`);
+  // étape 1
+  $("#same").checked=D.same;$("#same").disabled=lock;
+  $("#r1").innerHTML=PROG.map(x=>row(x,D.ab,"Abonder de",v(D.mi,x.n,"cp")||v(D.mi,x.n,"ae")?"déjà gagé à l'étape 2":"")).join("");
+  // étape 2
+  const s2=$("#s2");s2.classList.toggle("locked",!up);
+  $("#b2").innerHTML=!up?`<div class="empty">Indiquez d'abord, à l'étape 1, ce que vous voulez financer.</div>`
+   :`<div class="rows">${PROG.map(x=>{const ab=v(D.ab,x.n,"cp")||v(D.ab,x.n,"ae");const m=[];
+      if(over(x)){const k=v(D.mi,x.n,"cp")>cr(x.n,"cp")?"cp":"ae";m.push(`<div class="msg" role="alert"><span class="dot err"></span><span>Le programme ne dispose que de ${nf(cr(x.n,k))} M€ en ${k.toUpperCase()}. <button class="link" data-cap="${x.n}">Ramener à ${nf(cr(x.n,k))} M€</button></span></div>`)}
+      else if(x.oblig&&v(D.mi,x.n,"cp")) m.push(`<div class="msg"><span class="dot warn"></span><span>Dépenses obligatoires : les aides au logement sont dues de droit ; ce gage restera de forme et le Gouvernement devra le lever ou le compenser.</span></div>`);
+      else if(!ab&&rC>0&&!lock&&rC<=cr(x.n,"cp")-v(D.mi,x.n,"cp")) m.push(`<div class="msg"><span></span><span><button class="link" data-fill="${x.n}">Prendre ici les ${nf(rC)} M€ restants</button></span></div>`);
+      return row(x,D.mi,"Minorer de",ab?"abondé à l'étape 1":"",m.join(""))}).join("")}</div>
+     <div class="rest" aria-live="polite">${rC===0&&rA===0?`<span class="dot ok"></span>Gage complet : ${nf(up)} M€ ajoutés, ${nf(tot(D.mi,"cp"))} M€ retirés.`:`<span class="dot warn"></span>${rC>0?`Reste à gager : ${nf(rC)} M€ en CP`:rC<0?`Gage en trop : ${nf(-rC)} M€ en CP`:""}${rA!==rC?` ${rC?"·":""} ${rA>0?`reste ${nf(rA)} M€ en AE`:rA<0?`${nf(-rA)} M€ de trop en AE`:"AE équilibrées"}`:""}<small>la somme doit être nulle</small>`}</div>`;
+  // étape 3
+  const bad=PROG.filter(over);
+  const chk=[[rC===0&&rA===0?"ok":"err","Somme nulle en AE et en CP",rC||rA?(rC>0?`Gagez encore ${nf(rC)} M€ à l'étape 2.`:rC<0?`Réduisez le gage de ${nf(-rC)} M€ à l'étape 2.`:"Équilibrez les AE à l'étape 2."):""],
+    [bad.length?"err":"ok",bad.length?`Minoration supérieure aux crédits (programme ${bad.map(x=>x.n).join(", ")})`:"Aucun programme minoré au-delà de ses crédits"],
+    ["ok","Programmes de la même mission"],
+    [stale()?"warn":"ok",stale()?"Crédits du brouillon périmés":"Crédits à jour (lettre rectificative du 8 novembre)",stale()?"Mettez-les à jour avec le bandeau en haut de page.":""]];
+  if(v(D.mi,109,"cp")) chk.push(["warn","Gage sur des dépenses obligatoires (programme 109)"]);
+  $("#chk").innerHTML=up?chk.map(([c,t,s])=>`<li><span class="dot ${c}"></span><span>${t}${s?`<small>${s}</small>`:""}</span></li>`).join(""):"";
+  const diff=PROG.some(x=>v(D.ab,x.n,"ae")!==v(D.ab,x.n,"cp")||v(D.mi,x.n,"ae")!==v(D.mi,x.n,"cp"));
+  $("#doc").innerHTML=!up?`<div class="empty">Le tableau de l'amendement s'écrira ici.</div>`:`<p style="margin:0 0 6px;font-size:13px">Modifier ainsi les autorisations d'engagement et les crédits de paiement :</p>${diff?`<h3>Autorisations d'engagement</h3>${table("ae")}<h3>Crédits de paiement</h3>${table("cp")}`:table("cp")}`;
+  // étape 4
+  const ready=S[2][0]==="ok";
+  let h4="";
+  if(phase==="done") h4=`<div class="done" role="status"><b>Amendement n° II-${dep.no} déposé</b><span>le ${dm(dep.at)} à ${hm(dep.at)} · transmis au service de la séance</span></div><p style="font-size:13px;color:var(--muted);margin:10px 0 12px">Le texte ne peut plus être modifié ; vous pourrez seulement le retirer. Les cosignataires ont été prévenus.</p><div class="acts"><button class="btn" data-x="new">Nouveau brouillon</button><button class="btn" data-x="copy">Copier le tableau</button></div>`;
+  else if(phase==="sending") h4=`<p style="margin:0;font-size:13px;color:var(--fg)">Dépôt en cours…</p><div class="prog"><i></i></div><p style="margin:0;font-size:12.5px;color:var(--muted)">Ne fermez pas la page ; le brouillon reste enregistré si la connexion tombe.</p>`;
+  else if(phase==="confirm") h4=`<div class="confirm" role="group" aria-labelledby="cft"><b id="cft" style="color:var(--fg)">Déposer cet amendement ?</b><ul><li>${nf(up)} M€ vers ${ups.join(" et ")}, gagés sur ${downs.join(" et ")}.</li><li>Le dépôt est définitif : un numéro est attribué et le texte est verrouillé.</li><li>Le service de la séance et vos cosignataires sont prévenus.</li></ul><div class="acts"><button class="btn pri" data-x="send">Confirmer le dépôt</button><button class="btn" data-x="back">Revenir au brouillon</button></div></div>`;
+  else h4=`<p style="margin:0 0 12px;font-size:13px;color:var(--muted)">${ready?"Tout est vérifié. Le dépôt vous sera confirmé ici même, sans fenêtre.":"Le dépôt s'ouvrira quand l'étape 3 sera entièrement verte."}</p><div class="acts"><button class="btn${ready?" pri":""}" data-x="ask"${ready?"":" disabled"}>Déposer…</button><button class="btn" data-x="copy"${up?"":" disabled"}>Copier le tableau</button></div>`;
+  $("#b4").innerHTML=h4;
+}
+
+function table(k){
+  const rows=PROG.filter(x=>v(D.ab,x.n,k)||v(D.mi,x.n,k)), e=n=>n?nf(n*1e6):"0", p=tot(D.ab,k), m=tot(D.mi,k), s=p-m;
+  return `<div class="unit">(en euros)</div><div class="scrollx"><table><thead><tr><th>Programmes</th><th>+</th><th>−</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${x.t}</td><td>${e(v(D.ab,x.n,k))}</td><td>${e(v(D.mi,x.n,k))}</td></tr>`).join("")}</tbody><tfoot><tr><td>TOTAUX</td><td>${e(p)}</td><td>${e(m)}</td></tr><tr><td>SOLDE</td><td colspan="2" style="text-align:center">${s?(s>0?"+":"−")+e(Math.abs(s)):"0"}</td></tr></tfoot></table></div>`;
+}
+
+function deposit(){
+  phase="sending";lastErr=null;render();
+  const failNow=$("#fail").checked;
+  setTimeout(()=>{
+    if(failNow){phase="draft";lastErr="le service de dépôt ne répond pas";$("#fail").checked=false;render();$("#banners .banner.err button")?.focus();return}
+    phase="done";dep={no:"CF"+(400+Math.floor(Math.random()*90)),at:new Date().toISOString()};history=[];render();$("#s4").scrollIntoView({block:"nearest"});
+  },1400);
+}
+
+const DEMO={
+  vide:()=>({ab:{},mi:{}}),
+  partiel:()=>({ab:{135:{ae:60,cp:60},177:{ae:20,cp:20}},mi:{109:{ae:60,cp:60}}}),
+  erreur:()=>({ab:{177:{ae:150,cp:150}},mi:{162:{ae:150,cp:150}}}),
+  perime:()=>({basis:1,ab:{135:{ae:60,cp:60}},mi:{147:{ae:60,cp:60}}}),
+};
+
+document.addEventListener("click",e=>{
+  const x=e.target.closest("[data-x]")?.dataset.x;
+  if(x==="resume"){resumed=false;render();return}
+  if(x==="refresh"){commit("mise à jour des crédits",()=>{D.basis=LATEST});toast("Crédits mis à jour.");return}
+  if(x==="ask"){phase="confirm";render();$("[data-x=send]").focus();return}
+  if(x==="back"){phase="draft";render();$("[data-x=ask]").focus();return}
+  if(x==="send"||x==="retry"){deposit();return}
+  if(x==="new"){phase="draft";dep=null;D={basis:LATEST,same:true,ab:{},mi:{}};save();render();$("#r1 input").focus();return}
+  if(x==="copy"){const t=$$("#doc table").map(tb=>[...tb.rows].map(r=>[...r.cells].map(c=>c.textContent).join("\t")).join("\n")).join("\n\n");navigator.clipboard?.writeText(t).then(()=>toast("Tableau copié."),()=>toast("Copie refusée : sélectionnez le tableau à la main."));return}
+  if(e.target.closest("#undo")){undo();return}
+  if(e.target.closest("#discard")){commit("repartir de zéro",()=>{D.ab={};D.mi={};lastErr=null;phase="draft"});return}
+  const f=e.target.closest("[data-fill]");if(f){const n=+f.dataset.fill;commit(`gage de ${nf(rest("cp"))} M€ sur le ${n}`,()=>{const rc=rest("cp"),ra=rest("ae");D.mi[n]=D.mi[n]||{ae:0,cp:0};D.mi[n].cp+=rc;D.mi[n].ae+=Math.max(0,ra)});return}
+  const c=e.target.closest("[data-cap]");if(c){const n=+c.dataset.cap;commit(`plafonnement du ${n}`,()=>{for(const k of ["ae","cp"])if(v(D.mi,n,k)>cr(n,k))D.mi[n][k]=cr(n,k)});return}
+  const d=e.target.closest("[data-demo]");if(d){const k=d.dataset.demo;phase="draft";lastErr=null;commit(`état « ${d.textContent.toLowerCase()} »`,()=>{Object.assign(D,{basis:LATEST,same:true},DEMO[k]())});return}
+  const a=e.target.closest(".rail a");if(a){e.preventDefault();$(a.getAttribute("href")).scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:"start"});$$(".rail a").forEach(l=>l.classList.toggle("cur",l===a))}
+});
+document.addEventListener("change",e=>{
+  const i=e.target.closest("input[data-o]");
+  if(i){const o=i.dataset.o,n=+i.dataset.n,k=i.dataset.k,val=+i.value||0,old=v(D[o],n,k);if(val===old)return;
+    const sel=`input[data-o="${o}"][data-n="${n}"][data-k="${k}"]`;
+    commit(`${o==="ab"?"abondement":"gage"} du ${n} (${nf(old)} → ${nf(Math.max(0,Math.round(val)))} M€)`,()=>{setAmt(D[o],n,k,val);if(phase==="confirm")phase="draft"});$(sel)?.focus();return}
+  if(e.target.id==="same"){commit(e.target.checked?"AE alignées sur les CP":"AE distinctes",()=>{D.same=e.target.checked;if(D.same)for(const o of [D.ab,D.mi])for(const n in o)o[n].ae=o[n].cp})}
+});
+document.addEventListener("keydown",e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key==="z"&&!e.shiftKey&&!/INPUT|TEXTAREA/.test(document.activeElement.tagName)&&phase!=="done"){e.preventDefault();undo()}
+  if(e.key==="Escape"&&phase==="confirm"){phase="draft";render();$("[data-x=ask]")?.focus()}
+});
+render();
+</script>

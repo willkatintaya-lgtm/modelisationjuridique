@@ -198,16 +198,16 @@ function render(){
   const st=states(), F=fin();
   $("#ctx").textContent=`Avance de frais de mandat · exercice 2026 · relevé du compte dédié au ${S.refreshed?"10":"7"} novembre (montants fictifs)`;
   const left=st.slice(0,4).filter(x=>x!=="done").length;
-  $("#lead").innerHTML=S.closed?`Dossier d'octobre et novembre clos. <span>Solde prévu au 31 décembre : ${eur(Math.round(F.sol))}.</span>`:`${left?`${left} étape${left>1?"s":""} sur 4 avant de pouvoir clore le dossier`:"Tout est en ordre : vous pouvez clore le dossier"}. <span>Dossier en ordre à ${pct()} %.</span>`;
+  $("#lead").innerHTML=S.closed?`Dossier d'octobre et novembre clos. <span>Solde prévu au 31 décembre : ${eur(Math.round(F.sol))}.</span>`:`${left?`${left} étape${left>1?"s":""} à terminer avant de pouvoir clore le dossier`:"Tout est en ordre : vous pouvez clore le dossier"}. <span>Dossier en ordre à ${pct()} %.</span>`;
   const T=[["Relevé du compte",sum1],["Pièces justificatives",sum2],["Écarts et compléments",sum3],["Dépense non éligible",sum4],["Clore le dossier",sum5]];
   $("#steps").innerHTML=T.map(([h,fn],k)=>{const n=k+1,s=st[k],o=S.open===n;
     const cls=s==="done"?"done":s==="err"?"err":s==="busy"?"busy":"";
-    return `<li class="step ${cls} ${o?"open":""}"><button class="sh" data-step="${n}" aria-expanded="${o}" aria-controls="sb${n}"><span class="num">${s==="done"?"✓":n}</span><span><b>${h}</b><small>${fn(s,true)}</small></span><span class="badge ${s==="blocked"?"":s}">${BADGE[s]}</span></button>${o?`<div class="sb" id="sb${n}">${fn(s,false)}</div>`:""}</li>`}).join("");
+    return `<li class="step ${cls} ${o?"open":""}"><button class="sh" data-step="${n}" aria-expanded="${o}" aria-controls="sb${n}"><span class="num">${s==="done"?"✓":n}</span><span><b>${h}</b><small>${fn(s,true)}</small></span><span class="badge ${s==="blocked"||s==="todo"?"":s}">${BADGE[s]}</span></button>${o?`<div class="sb" id="sb${n}">${fn(s,false)}</div>`:""}</li>`}).join("");
   $("#sol").textContent=eur(Math.round(F.sol));
   $("#solp").textContent=`Dotation ${eur(AN)}, dont ${eur(Math.round(F.spent))} dépensés ; ${eur(Math.round(F.rec))} prévus d'ici décembre (${RECUR.map(r=>r[0]).join(", ")}).`;
   const X=m=>10+m*(300/12), Yv=v=>92-84*v/AN, path=a=>a.map(([m,v],k)=>`${k?"L":"M"}${X(m)},${Yv(v)}`).join("");
   $("#cv").innerHTML=`<line x1="10" x2="310" y1="${Yv(AN)}" y2="${Yv(AN)}" stroke="var(--line2)" stroke-dasharray="3 3"/><text x="310" y="${Yv(AN)-3}" text-anchor="end" font-size="9" fill="var(--dim)">dotation</text><path d="${path([[0,0],[3,15600],[6,32100],[9,SPENT_BEFORE],[10.3,F.spent]])}" fill="none" stroke="var(--accent)" stroke-width="2"/><path d="${path([[10.3,F.spent],[12,F.proj]])}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="4 3" opacity=".7"/><circle cx="${X(12)}" cy="${Yv(F.proj)}" r="3" fill="var(--accent)"/><text x="12" y="99" font-size="9" fill="var(--dim)">janv.</text><text x="308" y="99" text-anchor="end" font-size="9" fill="var(--dim)">déc.</text>`;
-  $("#log").innerHTML=S.log.length?S.log.map(x=>`<li><time>${x.t}</time><span>${x.m}</span></li>`).join(""):`<li><span></span><span style="color:var(--dim)">Rien pour l'instant. Chaque action et son effet sur le dossier s'inscrivent ici.</span></li>`;
+  $("#log").innerHTML=S.log.length?S.log.map(x=>`<li><time>${x.t}</time><span>${x.m}</span></li>`).join(""):`<li style="display:block;color:var(--dim)">Rien pour l'instant. Chaque action et son effet sur le dossier s'inscrivent ici.</li>`;
   check(); save();
 }
 const lock=()=>S.closed?"disabled":"";

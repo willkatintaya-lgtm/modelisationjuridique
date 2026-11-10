@@ -149,6 +149,7 @@ function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createEle
 .tst.out{opacity:0}
 .tst .ghost{min-height:36px;padding:0 12px}
 @keyframes up{from{opacity:0;transform:translateY(6px)}}
+@media (pointer:coarse){.grip{visibility:hidden}.kbd{display:none}}
 @media (max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}.form{position:static}}
 @media (max-width:520px){.c-body{padding-left:14px}.c-r .lv,.c-meta .mn{display:none}.tab{padding:0 8px;font-size:12.5px}.tabs{overflow-x:auto;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}}
 </style>
@@ -264,9 +265,9 @@ function renderList(){
    <div class="c-h"><span class="grip" draggable="true" title="Glisser sur votre texte pour citer" aria-hidden="true"><svg viewBox="0 0 12 16" fill="currentColor"><circle cx="3" cy="3" r="1.4"/><circle cx="9" cy="3" r="1.4"/><circle cx="3" cy="8" r="1.4"/><circle cx="9" cy="8" r="1.4"/><circle cx="3" cy="13" r="1.4"/><circle cx="9" cy="13" r="1.4"/></svg></span>
    <button class="c-tg" aria-expanded="${o}" aria-controls="b-${q.n.replace(/\s/g,"")}"><span class="c-meta">${q.mine?"":`<span class="gp" style="background:${G[q.g]}">${q.g}</span>`}<b>${q.n}</b><span class="mn">${MIN[q.min]}${q.mine?" · votre bureau":""}</span></span><span class="c-sum">${esc(q.t)}</span></button>
    <span class="c-r"><span class="st ${q.a?"ok":"no"}">${q.a?"répondue":"sans réponse"}</span><span class="lv">· ${level(s)}</span><span class="chev"></span></span></div>
-   <div class="slide"><div><div class="c-body" id="b-${q.n.replace(/\s/g,"")}"><span class="c-sub">${MIN[q.min]} · posée le ${fd(q.d)}${q.mine?" · votre bureau":""}</span><p>${hl(q.t,mineSet)}</p>
+   <div class="slide"><div><div class="c-body" id="b-${q.n.replace(/\s/g,"")}"><span class="c-sub">${MIN[q.min]}${q.mine?" · votre bureau":""}</span><p>${hl(q.t,mineSet)}</p>
    ${q.a?`<div class="ans">Réponse du ${fd(q.a.d)}, après ${months(D(q.d),D(q.a.d))} mois : ${esc(q.a.t)}</div>`:`<div class="ans none">Posée le ${fd(q.d)}, sans réponse depuis ${months(D(q.d),NOW)} mois.</div>`}
-   ${q.mine?"":citedIn(ta.value).has(q.n)?`<div class="c-act"><span class="st ok">Citée dans votre texte</span></div>`:`<div class="c-act"><button class="btn" data-cite="${q.n}">Citer dans ma question</button><span class="kbd">ou <kbd>C</kbd>, ou glisser la poignée sur le texte</span></div>`}</div></div></div></article>`}).join("")}</div>
+   ${q.mine?"":citedIn(ta.value).has(q.n)?`<div class="c-act"><span class="st ok">Citée dans votre texte</span></div>`:`<div class="c-act"><button class="btn" data-cite="${q.n}">Citer dans ma question</button><span class="kbd">ou <kbd>C</kbd><span class="fine">, ou glisser la poignée sur le texte</span></span></div>`}</div></div></div></article>`}).join("")}</div>
    ${L.length>shown?`<button class="btn more" id="more">Afficher ${L.length-shown} de plus</button>`:""}`;
   const m=$("#more");if(m)m.onclick=()=>{shown=99;renderList()};
 }
