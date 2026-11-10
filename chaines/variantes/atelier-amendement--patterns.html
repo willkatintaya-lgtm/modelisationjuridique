@@ -125,7 +125,7 @@ mark.pend{background:var(--lit);color:var(--fg)}
 .drawer-h{display:flex;align-items:center;gap:10px;padding:14px max(16px,env(safe-area-inset-right,0px)) 12px 18px;border-bottom:1px solid var(--line)}
 .drawer-h b{flex:1;color:var(--fg);font-weight:600;font-size:15px}
 .drawer-b{overflow:auto;padding:6px max(16px,env(safe-area-inset-right,0px)) 32px 18px;scrollbar-width:thin}
-.ck{padding:14px 0;border-top:1px solid var(--line);display:grid;grid-template-columns:12px minmax(0,1fr);gap:4px 12px;scroll-margin-top:8px}
+.ck{padding:14px 10px;margin:0 -10px;border-radius:8px;border-top:1px solid var(--line);display:grid;grid-template-columns:12px minmax(0,1fr);gap:4px 12px;scroll-margin-top:8px}
 .ck:first-child{border-top:0}
 .ck .dot{margin-top:7px}
 .ck h3{margin:0;font:500 14px/1.45 var(--f);color:var(--fg)}
@@ -562,7 +562,7 @@ function controls(){
 }
 let drawerEl=null, lastFocus=null;
 function openDrawer(k){
-  closeSheet(); lastFocus=document.activeElement;
+  closeSheet(); lastFocus=document.activeElement; $$(".tst").forEach(t=>t.remove());
   if(drawerEl) closeDrawer(true);
   const {C}=controls();
   const scrim=document.createElement("div"); scrim.className="scrim";
@@ -648,7 +648,7 @@ function vEcrire(){
   const ps=paragraphs(), {C}=controls(), blocking=C.some(c=>c.cls==="err");
   const disp=ps.length?`<ol class="disp">${ps.map(p=>`<li ${p.m?`data-mid="${p.m.id}"`:""}><span>${esc(p.t)}</span><button class="ico" data-rm="${p.gage?"gage":p.m.id}" aria-label="Retirer" title="Retirer">${X}</button></li>`).join("")}</ol>`
     :`<div class="empty">Sélectionnez des mots dans le texte : les actions s'ouvrent en bas de l'écran. Le dispositif s'écrit ici.</div>`;
-  const first=(mine.expo.split(/(?<=[.:;])\s/)[0]||"").slice(0,90);
+  const first=mine.expo.length>64?mine.expo.slice(0,64).replace(/\s+\S*$/,""):mine.expo;
   return `<div class="desk view">
    <section class="panel art${delArt?" gone":""}" aria-label="Texte de la commission">
      <div class="hd"><b>Article 4</b><span>texte de la commission</span><span class="sp"></span><button class="ghost" id="delArt">${delArt?"Rétablir l'article":"Supprimer l'article"}</button></div>
