@@ -110,9 +110,9 @@ details.opts summary:hover{color:var(--fg)}
 .step input::-webkit-inner-spin-button,.step input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
 .step input.pos{color:var(--ins)} .step input.neg{color:#f2a7a9}
 .step:has(input[aria-invalid=true]){border-color:var(--err)}
-.err:empty{display:none}
-.err{grid-column:1/-1}
-.err p{margin:4px 0 0;font-size:12.5px;color:#f2a7a9;line-height:1.5}
+.perr:empty{display:none}
+.perr{grid-column:1/-1}
+.perr p{margin:4px 0 0;font-size:12.5px;color:#f2a7a9;line-height:1.5}
 .fix{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:6px;padding:2px 9px;min-height:28px;font-size:12px;cursor:pointer;margin-left:4px}
 .fix:hover{background:#1f2227}
 /* Balance et actions */
@@ -165,8 +165,7 @@ details.opts summary:hover{color:var(--fg)}
 .doc th:first-child,.doc td:first-child{text-align:left;white-space:normal;min-width:120px}
 .doc thead th{color:var(--dim);font-weight:400;text-align:center}
 .doc tfoot td{color:var(--fg);font-weight:500}
-.scrollx{-webkit-mask:linear-gradient(90deg,#000 calc(100% - 18px),transparent)}
-body.dr-open .scrollx{-webkit-mask:none}
+.db .scrollx.more{-webkit-mask:linear-gradient(90deg,#000 calc(100% - 24px),transparent);mask:linear-gradient(90deg,#000 calc(100% - 24px),transparent)}
 /* Fenêtre de confirmation (modale native) */
 dialog{background:var(--s1);color:var(--text);border:1px solid var(--line2);border-radius:12px;padding:20px;max-width:min(420px,calc(100vw - 32px));box-shadow:0 24px 60px rgba(0,0,0,.5)}
 dialog[open]{animation:pop .2s var(--ease)}
@@ -180,14 +179,15 @@ dialog p{margin:0;font-size:13px;color:var(--muted)}
 .btn.danger:hover{background:#2a1517!important}
 /* Notifications */
 .tsts{position:fixed;top:16px;right:max(16px,env(safe-area-inset-right,0px));z-index:40;display:flex;flex-direction:column;gap:8px;width:min(380px,calc(100vw - 32px));pointer-events:none}
-.tst{pointer-events:auto;display:flex;align-items:center;gap:6px;background:var(--s2);border:1px solid var(--line2);border-left:3px solid var(--ok);border-radius:9px;padding:6px 6px 6px 12px;color:var(--fg);font-size:13px;box-shadow:0 10px 30px rgba(0,0,0,.4);animation:tin .25s var(--ease)}
+.tst{pointer-events:auto;display:flex;flex-wrap:wrap;align-items:center;gap:6px;background:var(--s2);border:1px solid var(--line2);border-left:3px solid var(--ok);border-radius:9px;padding:6px 6px 6px 12px;color:var(--fg);font-size:13px;box-shadow:0 10px 30px rgba(0,0,0,.4);animation:tin .25s var(--ease)}
 .tst.error{border-left-color:var(--err)}
 .tst.info{border-left-color:var(--accent)}
 @keyframes tin{from{opacity:0;transform:translateY(-6px)}}
 .tst.out{opacity:0;transition:opacity .2s}
-.tst .tm{flex:1;min-width:0;line-height:1.45;padding:4px 0}
+.tst .tm{flex:1 1 calc(100% - 52px);min-width:0;line-height:1.45;padding:4px 0}
 .tst button{border:0;background:none;cursor:pointer;min-height:32px;min-width:32px;padding:0 8px;border-radius:6px;font-size:13px;flex:none}
-.tst .ta{color:var(--ins)}
+.tst .ta{color:var(--ins);order:3;margin-left:auto}
+.tst .tx{order:2}
 .tst .tx{color:var(--muted);font-size:18px}
 .tst button:hover{background:#22262c}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -309,7 +309,7 @@ function buildRows(){
     <div class="pf"><label class="fl" for="in-${x.n}">${lab}</label>
       <div class="step"><button type="button" data-d="-1" aria-label="Minorer le programme ${x.n} de ${STEP} M€">−</button><input id="in-${x.n}" type="number" step="${STEP}" data-n="${x.n}"><button type="button" data-d="1" aria-label="Abonder le programme ${x.n} de ${STEP} M€">+</button></div></div>
     <div class="vis" aria-hidden="true"><i class="base"></i><i class="minus"></i><i class="plus"></i></div>
-    <div class="err"></div></div>`).join("");
+    <div class="perr"></div></div>`).join("");
   const tp=$("#progs");
   if(split){tp.setAttribute("role","tabpanel");tp.setAttribute("aria-labelledby","t-"+tab)}
   else{tp.removeAttribute("role");tp.setAttribute("aria-labelledby","lt")}
@@ -339,7 +339,7 @@ function update(){
     pl.style.left=w(x[k])+"%"; pl.style.width=v>0?(100*v/mx)+"%":"0";
     // Erreur en ligne : affichée après saisie (au blur / Entrée), jamais pendant la frappe ; formule champ — cause — correction.
     const msg=-v>x[k]?`Programme ${x.n} — la minoration de ${nf(-v)} M€ dépasse les ${nf(x[k])} M€ de ${KL[k]} ouverts — ramenez-la à ${nf(x[k])} M€ au plus.`:"";
-    const slot=row.querySelector(".err");
+    const slot=row.querySelector(".perr");
     if(slot.dataset.msg!==msg){
       slot.dataset.msg=msg;
       slot.innerHTML=msg?`<p role="alert" id="er-${x.n}">${msg} <button type="button" class="fix" data-fix="${x.n}">Ramener à −${nf(x[k])} M€</button></p>`:"";
@@ -349,7 +349,7 @@ function update(){
   }
   // Verdict
   $("#lead").innerHTML=empty?`Aucun mouvement. <span>Utilisez + et − sur les programmes à abonder et à minorer.</span>`
-   :ok?`Transfert équilibré de ${nf(C.p)} M€ ${downs.length?`du programme ${downs.map(x=>x.n).join(" et ")}`:""} vers ${ups.length>1?"les programmes":"le programme"} ${ups.map(x=>x.n).join(" et ")}. <span>L'amendement est recevable au regard de l'équilibre de la mission.</span>`
+   :ok?`Transfert équilibré de ${nf(C.p)} M€ ${downs.length?`${downs.length>1?"des programmes":"du programme"} ${downs.map(x=>x.n).join(" et ")}`:""} vers ${ups.length>1?"les programmes":"le programme"} ${ups.map(x=>x.n).join(" et ")}. <span>L'amendement est recevable au regard de l'équilibre de la mission.</span>`
    :ov.length&&A.s===0&&C.s===0?`Mouvement équilibré mais irrecevable. <span>Le programme ${ov.map(x=>x.n).join(", ")} est minoré au-delà de ses crédits.</span>`
    :`Mouvement déséquilibré. <span>${C.s>0?`Il manque ${nf(C.s)} M€ de minoration en CP.`:C.s<0?`Les minorations dépassent les abondements de ${nf(-C.s)} M€ en CP.`:""} ${A.s!==0&&A.s!==C.s?`Écart de ${nf(Math.abs(A.s))} M€ en AE.`:""}</span>`;
   // Balance
@@ -397,7 +397,9 @@ function renderDoc(A,C){
   const body=rows.map(x=>`<tr><td>${esc(x.t)}</td>${cols.map(k=>{const v=get(x.n,k);return `<td>${v>0?e(v):"0"}</td><td>${v<0?e(-v):"0"}</td>`}).join("")}</tr>`).join("")||`<tr><td colspan="${1+2*cols.length}" style="color:var(--dim);text-align:center">Aucun mouvement</td></tr>`;
   const S={ae:A,cp:C};
   $("#doc").innerHTML=`<thead>${head}</thead><tbody>${body}</tbody><tfoot><tr><td>TOTAUX</td>${cols.map(k=>`<td>${e(S[k].p)}</td><td>${e(S[k].m)}</td>`).join("")}</tr><tr><td>SOLDE</td>${cols.map(k=>`<td colspan="2" style="text-align:center">${S[k].s?(S[k].s>0?"+":"−")+e(Math.abs(S[k].s)):"0"}</td>`).join("")}</tr></tfoot>`;
+  fade();
 }
+function fade(){const sx=$(".db .scrollx");sx.classList.toggle("more",sx.scrollLeft+sx.clientWidth<sx.scrollWidth-2)}
 const tableText=()=>$$("#doc tr").map(r=>[...r.children].map(c=>c.textContent).join("\t")).join("\n");
 
 /* ---------- Notifications : status/polite (5 s) ou alert/assertive (jamais auto-fermée) ; 3 au plus ---------- */
@@ -570,5 +572,6 @@ const syncBar=()=>document.documentElement.style.setProperty("--barh",mq.matches
 new ResizeObserver(syncBar).observe(act); mq.addEventListener("change",syncBar);
 
 $("#drawer").setAttribute("inert","");
+$(".db .scrollx").addEventListener("scroll",fade,{passive:true});new ResizeObserver(fade).observe($(".db .scrollx"));
 buildRows();
 </script>
