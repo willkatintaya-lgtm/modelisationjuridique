@@ -1,0 +1,137 @@
+<title>Avant l'élection</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+
+<style>
+/* Ce qui reste permis, à encadrer ou interdit, à une date donnée avant l'élection.
+   On fait glisser la date ; chaque activité dit son régime et le jour où il change. */
+.ctl{padding:14px 16px;display:grid;gap:10px;margin-bottom:14px}
+.row{display:flex;gap:14px;align-items:center;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.row label{display:flex;gap:8px;align-items:center}
+.row input[type=date]{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:6px 9px;color:var(--fg)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.when{display:flex;justify-content:space-between;font-size:12px;color:var(--dim)}
+.when b{color:var(--fg);font-weight:500}
+.acts{padding:4px}
+.a{display:grid;grid-template-columns:minmax(0,1fr) 170px;gap:14px;align-items:center;padding:12px}
+.a+.a{border-top:1px solid var(--line)}
+.a b{display:block;color:var(--fg);font-weight:500;font-size:13.5px}
+.a small{display:block;color:var(--muted);font-size:12.5px;line-height:1.5;margin-top:2px}
+.a small em{font-style:normal;color:var(--dim)}
+.reg{display:grid;gap:2px;justify-items:end;text-align:right}
+.reg span{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--text)}
+.reg i{font-style:normal;font-size:12px;color:var(--dim)}
+.a.chg{background:var(--lit);border-radius:8px}
+.foot{margin:10px 2px 0;font-size:12px;color:var(--dim)}
+@media (max-width:560px){ .a{grid-template-columns:minmax(0,1fr)} .reg{justify-items:start;text-align:left} }
+</style>
+
+<div class="wrap narrow">
+  <div class="ctx">Déontologie et droit électoral · moyens du mandat et moyens de campagne</div>
+  <h1>Avant l'élection</h1>
+  <p class="lead" id="lead"></p>
+  <section class="panel ctl" aria-label="Dates">
+    <div class="row"><label>Scrutin <input type="date" id="el" value="2027-06-13"></label><span id="ouv"></span></div>
+    <input type="range" id="day" min="0" value="0" aria-label="Date à examiner">
+    <div class="when"><span>Aujourd'hui</span><b id="dlab"></b><span>Jour du scrutin</span></div>
+  </section>
+  <section class="panel acts" id="acts" aria-label="Activités"></section>
+  <p class="foot">Repères simplifiés tirés du code électoral et des avis du déontologue. Ils ne remplacent ni le guide du candidat ni une saisine du déontologue.</p>
+</div>
+
+<script>
+const TODAY=new Date(2026,10,10);
+const DAY=864e5;
+const fd=d=>d.toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+const fs=d=>d.toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"}).replace(/^1 /,"1er ");
+// régimes : ok permis · warn à encadrer · err interdit ; chaque règle donne la date à laquelle le régime change
+function rules(E){
+  const six=new Date(E.getFullYear(),E.getMonth()-6,1), veille=new Date(E-DAY);
+  return {six,veille,list:[
+   {t:"Publications sponsorisées et encarts publicitaires",s:"Toute publicité commerciale à des fins de propagande électorale.",ref:"Code électoral, art. L. 52-1",at:[[six,"err"]]},
+   {t:"Lettre d'information payée par l'avance de frais de mandat",s:"Elle peut être requalifiée en dépense électorale si elle promeut le candidat.",ref:"Avis du déontologue",at:[[six,"warn"]]},
+   {t:"Bilan de mandat imprimé et diffusé",s:"Même risque ; un bilan neutre, déjà habituel, reste possible.",ref:"Code électoral, art. L. 52-1, al. 2 ; avis du déontologue",at:[[six,"warn"]]},
+   {t:"Numéro d'appel gratuit",s:"Interdit au profit d'un candidat pendant la même période.",ref:"Code électoral, art. L. 50-1",at:[[six,"err"]]},
+   {t:"Dépenses servant la campagne",s:"Elles entrent dans le compte de campagne, à payer par le mandataire.",ref:"Code électoral, art. L. 52-4",at:[[six,"warn"]]},
+   {t:"Messages et publications de propagande",s:"Plus aucun message de propagande, y compris sur les réseaux sociaux.",ref:"Code électoral, art. L. 49",at:[[veille,"err"]]},
+   {t:"Publication de sondages",s:"Interdite la veille et le jour du scrutin.",ref:"Loi du 19 juillet 1977, art. 11",at:[[veille,"err"]]},
+   {t:"Activité parlementaire courante",s:"Questions, amendements, interventions : rien ne change.",ref:"",at:[]},
+  ]};
+}
+const LAB={ok:"Permis",warn:"À encadrer",err:"Interdit"};
+function regime(r,d){let s="ok";for(const [dt,st] of r.at) if(d>=dt) s=st; return s}
+function render(prev){
+  const E=new Date($("#el").value+"T00:00"); if(isNaN(E)) return;
+  const R=rules(E), span=Math.max(1,Math.round((E-TODAY)/DAY));
+  const sl=$("#day"); sl.max=span; if(+sl.value>span) sl.value=span;
+  const d=new Date(TODAY.getTime()+(+sl.value)*DAY);
+  $("#dlab").textContent=+sl.value===0?"aujourd'hui":fs(d);
+  const toSix=Math.round((R.six-TODAY)/DAY);
+  $("#ouv").textContent=`Période de six mois ouverte le ${fs(R.six)}`;
+  const changing=R.list.filter(r=>regime(r,R.six)!==regime(r,new Date(R.six-DAY))).length;
+  $("#lead").innerHTML=toSix>0?`Dans ${toSix} jours, le ${fs(R.six)}, la période des six mois s'ouvre : ${changing} activités changent de régime. <span>Faites glisser la date pour voir ce qui vaut à chaque moment.</span>`
+    :`La période des six mois est ouverte depuis le ${fs(R.six)}. <span>Faites glisser la date pour voir la veille du scrutin.</span>`;
+  $("#acts").innerHTML=R.list.map(r=>{const s=regime(r,d), nxt=r.at.find(([dt])=>dt>d), was=prev?regime(r,prev):s;
+    return `<div class="a ${prev&&was!==s?"chg":""}"><div><b>${r.t}</b><small>${r.s}${r.ref?` <em>· ${r.ref}</em>`:""}</small></div>
+     <div class="reg"><span><span class="dot ${s==="ok"?"ok":s}"></span>${LAB[s]}</span>${nxt?`<i>${LAB[nxt[1]].toLowerCase()} à partir du ${fs(nxt[0])}</i>`:""}</div></div>`}).join("");
+}
+let last=null;
+$("#day").addEventListener("input",()=>{const E=new Date($("#el").value+"T00:00");const p=last;last=new Date(TODAY.getTime()+(+$("#day").value)*DAY);render(p)});
+$("#el").addEventListener("change",()=>{last=null;render()});
+render();
+</script>
