@@ -1,0 +1,316 @@
+<title>Question écrite · parcours</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+<style>
+/* Le dépôt comme une suite d'étapes observables : Rédiger → Vérifier → Confirmer → Déposée.
+   Chaque étape a un état visible ; le dépôt (irréversible) se confirme dans la page ;
+   les effets de bord sont listés après coup. Mise en page par reflow (auto-fit), sans point de rupture d'appareil. */
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px 24px;flex-wrap:wrap}
+.flow{display:flex;flex-wrap:wrap;gap:6px 4px;margin:16px 0 0;padding:0;list-style:none}
+.flow li{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--dim);padding:4px 10px 4px 4px;border-radius:999px}
+.flow li+li::before{content:"";width:14px;height:1px;background:var(--line2);margin:0 4px 0 -8px}
+.flow .n{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1px solid var(--line2);font-size:11px;color:var(--muted);transition:background .2s,border-color .2s,color .2s}
+.flow li[data-s=cur]{color:var(--fg)}
+.flow li[data-s=cur] .n{border-color:var(--accent);background:var(--lit);color:var(--fg)}
+.flow li[data-s=done]{color:var(--muted)}
+.flow li[data-s=done] .n{border-color:rgba(70,179,126,.5);background:rgba(70,179,126,.15);color:var(--ok)}
+.flow li[data-s=err] .n{border-color:rgba(229,72,77,.6);background:rgba(229,72,77,.14);color:var(--err)}
+.flow small{color:var(--dim);font-size:12px}
+.status{display:flex;gap:6px 16px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:14px}
+.status>span{display:inline-flex;align-items:center;gap:6px}
+.bar{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:4px 10px;align-items:center;padding:10px 12px;border-radius:8px;margin-top:12px;font-size:13px;border:1px solid var(--line2);background:var(--s1);animation:fade .25s var(--ease)}
+.bar.warn{border-color:rgba(227,163,63,.4)}
+.bar.err{border-color:rgba(229,72,77,.45)}
+.bar b{color:var(--fg);font-weight:500}
+.bar .acts{display:flex;gap:6px;flex-wrap:wrap}
+@keyframes fade{from{opacity:0;transform:translateY(-4px)}}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:20px;margin-top:18px;align-items:start}
+.card{padding:16px;display:grid;gap:12px}
+.card h2{margin:0;font:600 14px/1.3 var(--f);color:var(--fg);display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.card h2 small{font-weight:400;font-size:12.5px;color:var(--dim)}
+.lbl{font-size:12.5px;color:var(--muted);display:block;margin-bottom:6px}
+select,textarea{width:100%}
+textarea{min-height:220px;resize:vertical;line-height:1.6;font-size:13.5px;transition:opacity .2s,border-color .2s}
+textarea[readonly]{opacity:.75;border-style:dashed;cursor:default}
+.meta{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--dim)}
+.meta button{background:none;border:0;color:var(--muted);cursor:pointer;padding:4px 0;font-size:12px;text-decoration:underline 1px;text-underline-offset:3px}
+.meta button:hover{color:var(--fg)}
+.state{font-size:13px;color:var(--muted);padding:12px 14px;border:1px dashed var(--line2);border-radius:8px}
+.verdict{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;font-size:13px;line-height:1.5}
+.verdict .dot{margin-top:6px}
+.verdict b{color:var(--fg);font-weight:500}
+.verdict p{grid-column:2;margin:0;color:var(--text)}
+.ack{grid-column:2;display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--text);cursor:pointer;padding:6px 0;min-height:44px}
+.ack input{width:18px;height:18px;margin:2px 0 0;accent-color:var(--accent);flex:none}
+.res{display:grid;gap:6px;transition:opacity .2s}
+.res.busy{opacity:.45}
+.q{padding:10px 12px;border:1px solid var(--line);border-radius:8px;display:grid;gap:4px;font-size:13px}
+.q-h{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.q-h b{color:var(--fg);font-weight:500}
+.q-h .r{margin-left:auto}
+.q p{margin:0;line-height:1.55}
+.q .ans{font-size:12.5px;color:var(--muted)}
+.q .ans.none{color:#f2a7a9}
+.q.new{border-color:rgba(138,180,255,.45)}
+.q.me{border-color:rgba(70,179,126,.45)}
+.tag{font-size:11px;padding:1px 6px;border-radius:4px;background:var(--lit);color:var(--fg)}
+.actzone{display:grid;gap:10px;padding-top:12px;border-top:1px solid var(--line)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.row .btn{min-height:40px}
+.why{font-size:12.5px;color:var(--dim)}
+.sum{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 14px;font-size:13px;margin:0}
+.sum dt{color:var(--dim)}
+.sum dd{margin:0;color:var(--text)}
+.irr{font-size:13px;color:var(--fg);padding:10px 12px;border-radius:8px;background:rgba(229,72,77,.08);border:1px solid rgba(229,72,77,.3)}
+.btn.danger{background:#c23a3f;border-color:#c23a3f;color:#fff}
+.btn.danger:hover:not(:disabled){background:#d4474c}
+.spin{width:14px;height:14px;border-radius:50%;border:2px solid var(--line2);border-top-color:var(--fg);animation:rot .8s linear infinite;display:inline-block;vertical-align:-2px}
+@keyframes rot{to{transform:rotate(360deg)}}
+.fx{margin:0;padding:0;list-style:none;display:grid;gap:6px;font-size:13px}
+.fx li{display:flex;gap:8px;align-items:flex-start}
+.fx li::before{content:"✓";color:var(--ok);flex:none}
+.demo{margin-top:28px;font-size:12.5px;color:var(--dim)}
+.demo summary{cursor:pointer;padding:8px 0;color:var(--muted)}
+.demo .row{margin-top:6px}
+.demo .chip{min-height:36px}
+@media (prefers-reduced-motion:reduce){.spin{animation:none;border-top-color:var(--muted)}}
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <div><div class="ctx">Questions écrites · Assemblée et Sénat</div><h1>Déposer une question écrite</h1></div>
+  </div>
+  <ol class="flow" id="flow" aria-label="Étapes du dépôt"></ol>
+  <div class="status" id="status" aria-live="polite"></div>
+  <div id="bars"></div>
+  <div class="cols">
+    <section class="panel card" aria-labelledby="h1q">
+      <h2 id="h1q">Votre question <small id="lock"></small></h2>
+      <div><label class="lbl" for="min">Ministre interrogé</label><select id="min"></select></div>
+      <div><label class="lbl" for="q">Texte</label><textarea id="q"></textarea></div>
+      <div class="meta"><span id="count"></span><button id="clear">Effacer le texte</button></div>
+    </section>
+    <section class="panel card" aria-labelledby="h2q">
+      <h2 id="h2q">Vérification <small id="vstate"></small></h2>
+      <div id="verdict" aria-live="polite"></div>
+      <div class="res" id="res"></div>
+      <div class="actzone" id="act"></div>
+    </section>
+  </div>
+  <details class="demo"><summary>Maquette : simuler un état</summary>
+    <div class="row">
+      <button class="chip" id="d-stale">Archive vieille d'un mois</button>
+      <button class="chip" id="d-net" aria-pressed="false">Coupure réseau</button>
+      <button class="chip" id="d-empty">Texte vide</button>
+    </div>
+  </details>
+</div>
+
+<script>
+// Données et calcul repris tels quels de la maquette d'origine (questions-ecrites.html).
+const NOW=new Date(2026,10,10);
+const MIN={LOG:"Logement",TE:"Transition écologique",ECO:"Économie et finances",SOL:"Solidarités",INT:"Intérieur"};
+const DEL={LOG:{n:64,ok:9,med:148,bins:[9,7,12,10,8,18]},TE:{n:58,ok:11,med:121,bins:[11,9,10,8,6,14]},ECO:{n:131,ok:22,med:132,bins:[22,18,24,21,14,32]},SOL:{n:49,ok:6,med:167,bins:[6,5,8,9,7,14]},INT:{n:72,ok:17,med:97,bins:[17,14,13,9,6,13]}};
+const BINS=["≤ 2 mois","2–4","4–6","6–9","9–12","sans réponse"];
+const G={PR:"#c07a00",SOL:"#d13a30",ECO:"#2a9d63",UT:"#3b82d6",LL:"#e0671d",RC:"#7c5cd6",DC:"#2bb3b1",AR:"#8fae3a",CP:"#d8699a"};
+const Q=[
+ {n:"AN 3187",g:"PR",min:"TE",d:"2026-05-12",t:"Retards de versement de MaPrimeRénov' aux ménages modestes, dont certains attendent plus de huit mois le paiement de la prime après la fin des travaux.",a:null,mine:true},
+ {n:"AN 2954",g:"ECO",min:"LOG",d:"2026-03-03",t:"Délais de paiement des aides à la rénovation énergétique pour les propriétaires bailleurs et conséquences sur la remise en location des logements vacants.",a:null},
+ {n:"Sénat 10422",g:"UT",min:"LOG",d:"2025-12-11",t:"Délais d'instruction et de versement des aides à la rénovation énergétique dans les départements ruraux.",a:{d:"2026-04-02",t:"Le délai moyen de paiement a été ramené à 52 jours ; un plan de renfort de l'instruction a été engagé dans douze départements."}},
+ {n:"AN 2611",g:"PR",min:"LOG",d:"2025-12-16",t:"Publication du décret relatif à la décence énergétique des logements loués prévu par la loi relative au logement décent.",a:{d:"2026-03-17",t:"Le Gouvernement publiera le décret d'application avant la fin du premier semestre 2026."}},
+ {n:"AN 2208",g:"SOL",min:"LOG",d:"2025-09-23",t:"Situation des propriétaires bailleurs privés confrontés aux retards de paiement des primes de rénovation et à la hausse du coût des travaux.",a:{d:"2026-02-10",t:"Les retards constatés en 2025 tenaient à la lutte contre la fraude ; les contrôles ont été ciblés pour accélérer les paiements."}},
+ {n:"AN 3044",g:"ECO",min:"LOG",d:"2026-04-14",t:"Calendrier de publication du décret sur la décence énergétique des logements.",a:null},
+ {n:"AN 1880",g:"SOL",min:"TE",d:"2025-09-03",t:"Remise du rapport sur l'artificialisation liée aux résidences secondaires prévu par la loi relative aux zones tendues.",a:{d:"2025-12-02",t:"Le rapport est en cours de finalisation."}},
+ {n:"Sénat 9870",g:"RC",min:"ECO",d:"2025-10-02",t:"Fiscalité des logements vacants et produit de la taxe sur les logements vacants dans les communes moyennes.",a:{d:"2026-01-20",t:"Le produit de la taxe s'élevait à 168 millions d'euros en 2024."}},
+ {n:"AN 2733",g:"LL",min:"INT",d:"2026-01-27",t:"Conditions de mise en œuvre de la réquisition des logements vacants par les préfets.",a:{d:"2026-03-24",t:"Une instruction aux préfets sera diffusée après la publication du rapport de la mission flash."}},
+ {n:"AN 3402",g:"PR",min:"SOL",d:"2026-09-01",t:"Montant et conditions des aides au logement des étudiants boursiers.",a:null,mine:true},
+ {n:"AN 2412",g:"DC",min:"LOG",d:"2025-11-04",t:"Accompagnement des communes dans le repérage des logements vacants et accès aux fichiers fiscaux.",a:{d:"2026-01-13",t:"Le service « Zéro logement vacant » est ouvert à toutes les communes volontaires."}},
+ {n:"AN 2877",g:"CP",min:"ECO",d:"2026-02-17",t:"Crédit d'impôt pour la rénovation des logements locatifs : coût et nombre de bénéficiaires.",a:null},
+ {n:"Sénat 11205",g:"AR",min:"TE",d:"2026-06-05",t:"Versement tardif des primes de rénovation énergétique et trésorerie des artisans du bâtiment.",a:null},
+ {n:"AN 1544",g:"UT",min:"LOG",d:"2025-07-08",t:"Revalorisation du plafond de l'aide à la remise sur le marché des logements vacants.",a:{d:"2025-10-28",t:"Une revalorisation n'est pas envisagée à ce stade."}},
+];
+const DRAFT="Mme la députée attire l'attention de M. le ministre chargé du logement sur les délais de versement de l'aide à la rénovation énergétique des logements locatifs. De nombreux propriétaires bailleurs attendent plus de six mois le paiement de leur prime après la fin des travaux, ce qui retarde la remise en location. Elle lui demande quelles mesures il entend prendre pour réduire ces délais.";
+const STOP=new Set("le la les de des du d l un une et en au aux a à sur sa son ses leur leurs ce ces cette qui que quoi dont pour par plus moins dans avec il elle ils elles lui m mme ministre monsieur madame député députée attire attention demande quelles quels quelle mesures entend prendre afin ne pas est sont être ont été après avant entre tres très ainsi".split(" "));
+const norm=s=>s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9 ]/g," ");
+const stem=w=>w.length>6?w.slice(0,6):w.replace(/s$/,"");
+const toks=s=>norm(s).split(/\s+/).filter(w=>w.length>2&&!STOP.has(w)).map(stem);
+let DOCS=[],IDF={};
+function reindex(){DOCS=Q.map(q=>new Set(toks(q.t)));IDF={};DOCS.forEach(d=>d.forEach(w=>IDF[w]=(IDF[w]||0)+1));for(const w in IDF)IDF[w]=Math.log(1+Q.length/IDF[w])}
+reindex();
+function sim(a,b){let num=0,na=0,nb=0;for(const w of a){const x=IDF[w]||Math.log(1+Q.length);na+=x*x;if(b.has(w))num+=x*x}for(const w of b){const x=IDF[w];nb+=x*x}return na&&nb?num/Math.sqrt(na*nb):0}
+const D=s=>{const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
+const fd=s=>D(s).toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"});
+const months=(a,b)=>Math.max(0,Math.round((b-a)/2629800000));
+function hl(text,set){return text.split(/(\s+)/).map(w=>{const t=toks(w)[0];return t&&set.has(t)?`<mark>${esc(w)}</mark>`:esc(w)}).join("")}
+// Recherche : mêmes seuils que l'original (≥ .12 voisine, ≥ .25 proche, ≥ .42 très proche).
+function search(text,max=6){const mine=new Set(toks(text));const R=Q.map((q,i)=>({q,s:sim(mine,DOCS[i])})).filter(r=>r.s>=.12).sort((a,b)=>b.s-a.s).slice(0,max);return {mine,R,dup:R[0]&&R[0].s>=.42?R[0]:null}}
+const level=s=>s>=.42?"très proche":s>=.25?"proche":"voisine";
+// Verdict : les quatre cas de l'original.
+function verdictKind(dup){if(!dup)return "libre";if(dup.q.mine)return "vous";if(dup.q.a)return "repondue";return "autre"}
+const minLabel=k=>({LOG:"du logement",TE:"de la transition écologique",ECO:"de l'économie et des finances",SOL:"des solidarités",INT:"de l'intérieur"})[k];
+const pct=k=>Math.round(100*DEL[k].ok/DEL[k].n), medM=k=>Math.round(DEL[k].med/30.4);
+// Les citations insérées par l'outil ne doivent pas diluer la comparaison : on les retire avant de calculer.
+const CITE_RE=/ ?Dans sa réponse du [^«]*?à la question n° [^«]*?«[^»]*»\.| ?La question n° [^.]*?restée sans réponse\./g;
+const stripCites=t=>t.replace(CITE_RE,"");
+const citedIn=t=>new Set([...t.matchAll(/question n° ((?:AN|Sénat) \d+)/g)].map(m=>m[1]));
+
+// Une question récente, absente d'une archive périmée : montre ce que coûte une donnée pas à jour.
+Q.push({n:"AN 3518",g:"LL",min:"LOG",d:"2026-10-28",t:"Délais de versement des aides à la rénovation énergétique aux propriétaires bailleurs et vacance des logements locatifs en attente de paiement.",a:null});reindex();
+const KEY="qe-parcours-brouillon";
+const store={get(){try{return JSON.parse(localStorage.getItem(KEY)||"null")}catch(e){return null}},set(v){try{localStorage.setItem(KEY,JSON.stringify(v));return true}catch(e){return false}},del(){try{localStorage.removeItem(KEY)}catch(e){}}};
+const S={phase:"edit",archive:{date:"2026-11-09",st:"ok"},net:true,busy:false,ack:false,saved:null,resumed:false,deposited:null,newSince:null};
+const ta=$("#q"),min=$("#min");
+min.innerHTML=Object.entries(MIN).map(([k,v])=>`<option value="${k}">${v}</option>`).join("");
+const prev=store.get();
+if(prev&&prev.text&&prev.text!==DRAFT){ta.value=prev.text;min.value=prev.min||"LOG";S.saved=prev.ts;S.resumed=true}else{ta.value=DRAFT;min.value="LOG"}
+const hm=ts=>new Date(ts).toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
+const words=()=>ta.value.trim()?ta.value.trim().split(/\s+/).length:0;
+function pool(){return Q.map((q,i)=>i).filter(i=>Q[i].d<=S.archive.date||Q[i].dep)}
+function look(){const text=stripCites(ta.value),mine=new Set(toks(text));const R=pool().map(i=>({q:Q[i],s:sim(mine,DOCS[i])})).filter(r=>r.s>=.12).sort((a,b)=>b.s-a.s).slice(0,5);return {mine,R,dup:R[0]&&R[0].s>=.42?R[0]:null}}
+// petits utilitaires
+function bar(cls,html,acts=""){return `<div class="bar ${cls}" role="status"><span class="dot ${cls}"></span><span>${html}</span>${acts?`<span class="acts">${acts}</span>`:"<span></span>"}</div>`}
+function note(msg,undo){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.style.cssText="display:flex;gap:12px;align-items:center;padding:6px 6px 6px 14px";t.innerHTML=`<span>${msg}</span>${undo?'<button class="ghost" style="min-height:34px">Annuler</button>':""}`;document.body.append(t);const k=setTimeout(()=>t.remove(),5000);if(undo)t.querySelector("button").onclick=()=>{clearTimeout(k);t.remove();undo()}}
+function render(){
+  const w=words(),{mine,R,dup}=look(),k=verdictKind(dup),hasAsk=/\b(lui demande|demande au gouvernement|souhaite savoir)\b/i.test(ta.value);
+  const needAck=dup&&k!=="libre"&&!(k!=="vous"&&citedIn(ta.value).has(dup.q.n));
+  S.curDup=dup?dup.q.n:null;const acked=needAck&&S.ack===dup.q.n;const ready=w>=25&&hasAsk&&(!needAck||acked)&&S.archive.st!=="loading";
+  // fil des étapes
+  const P=S.phase,steps=[["Rédiger",w>=25&&hasAsk?"done":"cur",w<25?`${w}/25 mots`:hasAsk?"":"demande manquante"],
+    ["Vérifier",w<8?"":needAck&&!acked?"cur":"done",w<8?"":needAck&&!acked?"à lire":""],
+    ["Confirmer",P==="confirm"||P==="sending"?"cur":P==="error"?"err":P==="done"?"done":"",P==="error"?"échec":""],
+    ["Déposée",P==="done"?"done":"",""]];
+  if(P!=="edit")steps[0][1]=steps[1][1]="done";
+  $("#flow").innerHTML=steps.map(([l,s,x],i)=>`<li data-s="${s}"${s==="cur"?' aria-current="step"':""}><span class="n">${s==="done"?"✓":s==="err"?"!":i+1}</span>${l}${x?` <small>${x}</small>`:""}</li>`).join("");
+  // ligne d'état : fraîcheur des données, sauvegarde
+  const A=S.archive,age=Math.round((NOW-D(A.date))/864e5);
+  $("#status").innerHTML=`<span><span class="dot ${A.st==="loading"?"":age>7?"warn":"ok"}"></span>${A.st==="loading"?"Actualisation de l'archive…":`Archive du ${fd(A.date)}${age<=1?" · à jour":` · ${age} jours`}`}</span>
+   <span><span class="dot ${S.saved?"ok":""}"></span>${P==="done"?"Brouillon effacé après dépôt":S.saved?`Brouillon enregistré à ${hm(S.saved)}`:"Brouillon non enregistré"}</span>`;
+  // bandeaux : reprise, données périmées, erreur d'actualisation
+  let b="";
+  if(S.resumed&&P==="edit")b+=bar("ok",`<b>Brouillon repris</b>, tel que vous l'aviez laissé à ${hm(S.saved)}.`,`<button class="ghost" data-a="example">Repartir de l'exemple</button><button class="ghost" data-a="hide-resume" aria-label="Masquer">×</button>`);
+  if(A.st==="stale")b+=bar("warn",`<b>Archive vieille de ${age} jours.</b> Des questions déposées depuis le ${fd(A.date)} peuvent manquer à la comparaison.`,`<button class="btn" data-a="refresh">Actualiser</button>`);
+  if(A.st==="error")b+=bar("err",`<b>Actualisation impossible</b> : le serveur de l'archive ne répond pas. La comparaison reste celle du ${fd(A.date)}.`,`<button class="btn" data-a="refresh">Réessayer</button>`);
+  if(S.newSince&&P==="edit")b+=bar("ok",`<b>Archive actualisée.</b> ${S.newSince} nouvelle question depuis la dernière version, signalée ci-dessous.`,`<button class="ghost" data-a="hide-new" aria-label="Masquer">×</button>`);
+  $("#bars").innerHTML=b;
+  // carte question
+  ta.readOnly=P!=="edit";$("#lock").textContent=P==="confirm"?"verrouillée pendant la confirmation":P==="sending"?"envoi en cours":P==="done"?"déposée, non modifiable":"";
+  min.disabled=P!=="edit";$("#clear").hidden=P!=="edit"||!w;
+  $("#count").textContent=`${w} mot${w>1?"s":""}`;
+  // vérification : états vide / partiel / en cours / terminé
+  const V=$("#verdict");$("#res").classList.toggle("busy",S.busy||A.st==="loading");
+  if(P==="done"){$("#vstate").textContent="";V.innerHTML="";$("#res").innerHTML=list(R,mine);actDone();return}
+  if(!w){$("#vstate").textContent="en attente";V.innerHTML=`<div class="state">Écrivez ou collez votre question : les questions proches de l'archive apparaîtront ici.</div>`;$("#res").innerHTML="";}
+  else if(w<8){$("#vstate").textContent="partielle";V.innerHTML=`<div class="state">Encore quelques mots : la comparaison devient fiable à partir d'une phrase complète. Rapprochements provisoires :</div>`;$("#res").innerHTML=list(R,mine);}
+  else{
+    $("#vstate").textContent=S.busy?"recalcul…":A.st==="loading"?"actualisation…":"";
+    const T={libre:["ok","Sujet libre.","Aucune question de l'archive ne pose la même question."],
+      vous:["warn",`Vous l'avez déjà posée (${dup?.q.n}).`,dup?.q.a?"Elle a reçu une réponse.":`Sans réponse depuis ${dup?months(D(dup.q.d),NOW):0} mois. Un signalement par le groupe obtient une réponse sous dix jours, plus vite qu'un nouveau dépôt.`],
+      repondue:["",`Déjà posée et répondue (${dup?.q.n}).`,"Citez la réponse et demandez ce qui a changé : la question sera plus difficile à esquiver."],
+      autre:["warn",`Déjà posée par un autre groupe (${dup?.q.n}).`,`Sans réponse depuis ${dup?months(D(dup.q.d),NOW):0} mois. Une seconde question souligne le silence du ministère, si elle mentionne la première.`]}[k];
+    const cited=dup&&citedIn(ta.value).has(dup.q.n);
+    V.innerHTML=`<div class="verdict"><span class="dot ${T[0]}"></span><b>${T[1]}</b><p>${cited&&k!=="vous"?"Elle est citée dans votre texte.":T[2]}${dup&&dup.q.min!==min.value?` Elle était adressée au ministre ${minLabel(dup.q.min)}.`:""}</p>
+     ${dup&&k!=="vous"&&!cited&&P==="edit"?`<div class="row" style="grid-column:2"><button class="btn" data-a="cite">${dup.q.a?"Citer la réponse":"Mentionner"} ${dup.q.n}</button></div>`:""}
+     ${needAck&&P==="edit"?`<label class="ack"><input type="checkbox" id="ack"${acked?" checked":""}> <span>J'ai lu la question ${dup.q.n} et je dépose quand même.</span></label>`:""}</div>`;
+    $("#res").innerHTML=list(R,mine);
+  }
+  // zone d'action selon la phase
+  const Z=$("#act"),med=DEL[min.value].med,eta=new Date(NOW.getTime()+med*864e5).toLocaleDateString("fr-FR",{month:"long",year:"numeric"});
+  if(P==="edit"){const why=w<25?`Encore ${25-w} mots au moins.`:!hasAsk?"Terminez par la demande : « Elle lui demande … ».":needAck&&!acked?"Lisez la question proche et cochez la case, ou citez-la.":A.st==="loading"?"Attendez la fin de l'actualisation.":"";
+    Z.innerHTML=`<div class="row"><button class="btn pri" data-a="confirm"${ready?"":" disabled"}>Préparer le dépôt</button><span class="why">${why}</span></div>`}
+  else if(P==="confirm"){Z.innerHTML=`<dl class="sum"><dt>Destinataire</dt><dd>Ministre ${minLabel(min.value)}</dd><dt>Antériorité</dt><dd>${k==="libre"?"sujet libre":T_short(k,dup)}</dd><dt>Réponse probable</dt><dd>vers ${eta} (délai médian ${medM(min.value)} mois)</dd><dt>Publication</dt><dd>Journal officiel du mardi 17 novembre 2026</dd></dl>
+    <div class="irr">Le dépôt est définitif : une fois transmise, la question ne peut plus être modifiée.</div>
+    <div class="row"><button class="btn danger" data-a="send">Déposer définitivement</button><button class="btn" data-a="back">Revenir au texte</button></div>`;}
+  else if(P==="sending"){Z.innerHTML=`<div class="row"><span class="spin" aria-hidden="true"></span><span>Transmission au service de la séance…</span></div><span class="why">Rien n'est déposé tant que le numéro n'est pas affiché.</span>`}
+  else if(P==="error"){Z.innerHTML=`<div class="irr" style="background:rgba(229,72,77,.06)"><b style="font-weight:500">Le dépôt n'a pas abouti.</b> Le service de la séance ne répond pas. Rien n'a été déposé ; votre texte est conservé.</div><div class="row"><button class="btn pri" data-a="send">Réessayer</button><button class="btn" data-a="back">Revenir au texte</button></div>`}
+}
+const T_short=(k,d)=>({vous:`doublon de votre question ${d.q.n}, lu`,repondue:`proche de ${d.q.n}, répondue`,autre:`proche de ${d.q.n}, sans réponse`})[k];
+function list(R,mine){if(!R.length)return words()>=8?`<div class="state">Rien dans l'archive ne ressemble à ce texte.</div>`:"";
+  return R.map(({q,s})=>`<article class="q${q.dep?" me":q.n==="AN 3518"&&S.newSince?" new":""}"><div class="q-h">${q.mine||q.dep?"":`<span class="gp" style="background:${G[q.g]}">${q.g}</span>`}<b>${q.n}</b>${q.dep?'<span class="tag">déposée à l\'instant</span>':q.n==="AN 3518"&&S.newSince?'<span class="tag">nouvelle</span>':""}<span>${MIN[q.min]} · ${fd(q.d)}${q.mine?" · vous":""}</span><span class="r">${level(s)}</span></div>
+  <p>${hl(q.t.length>190?q.t.slice(0,190)+"…":q.t,mine)}</p>${q.dep?"":q.a?`<div class="ans">Répondue le ${fd(q.a.d)} : ${esc(q.a.t)}</div>`:`<div class="ans none">Sans réponse depuis ${months(D(q.d),NOW)} mois.</div>`}</article>`).join("")}
+function actDone(){const d=S.deposited,rem=new Date(NOW.getTime()+61*864e5).toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
+  $("#verdict").innerHTML=`<div class="verdict"><span class="dot ok"></span><b>Question déposée sous le n° ${d.n}</b><p>Adressée au ministre ${minLabel(d.min)} ; publication au Journal officiel du 17 novembre.</p></div>`;
+  $("#act").innerHTML=`<span class="lbl">Ce que le dépôt a changé</span><ul class="fx"><li>La question figure dans l'archive de votre bureau (ci-dessus).</li><li>Questions adressées au ministère : ${DEL[d.min].n} depuis le début de la législature.</li><li>Rappel programmé le ${rem} : si elle reste sans réponse, proposer son signalement.</li><li>Brouillon effacé de ce poste.</li></ul><div class="row"><button class="btn" data-a="new">Rédiger une nouvelle question</button></div>`}
+// actions
+function save(){const ok=store.set({text:ta.value,min:min.value,ts:Date.now()});S.saved=ok?Date.now():null}
+function act(a){
+  if(a==="confirm"){S.phase="confirm";render();$('[data-a="send"]').focus()}
+  else if(a==="back"){S.phase="edit";render();ta.focus()}
+  else if(a==="send"){S.phase="sending";render();setTimeout(()=>{if(!S.net){S.phase="error";render();return}
+    const n="AN "+(3560+Math.floor(Math.random()*9));const q={n,g:"PR",min:min.value,d:"2026-11-10",t:ta.value.trim(),a:null,mine:true,dep:true};Q.unshift(q);reindex();DEL[min.value].n++;
+    S.deposited=q;S.phase="done";store.del();S.saved=null;S.resumed=false;render();note(`Question ${n} déposée.`)},1200)}
+  else if(a==="new"){Q.forEach(q=>delete q.dep);S.phase="edit";S.ack=false;S.deposited=null;ta.value="";render();ta.focus()}
+  else if(a==="cite"){const {dup}=look();if(!dup)return;const before=ta.value,q=dup.q;const s=q.a?` Dans sa réponse du ${fd(q.a.d)} à la question n° ${q.n}, le Gouvernement indiquait : « ${q.a.t.replace(/\.$/,"")} ».`:` La question n° ${q.n} du ${fd(q.d)}, portant sur le même sujet, est restée sans réponse.`;
+    const i=before.search(/\s(Il|Elle) lui demande/);ta.value=i>0?before.slice(0,i)+s+before.slice(i):before+s;save();render();note(`Question ${q.n} citée dans votre texte.`,()=>{ta.value=before;save();render()})}
+  else if(a==="refresh"){S.archive.st="loading";render();setTimeout(()=>{if(!S.net){S.archive.st="error";render();return}
+    const before=pool().length;S.archive={date:"2026-11-09",st:"ok"};S.newSince=pool().length-before||null;S.ack=false;render()},1100)}
+  else if(a==="example"){const before={t:ta.value,m:min.value};ta.value=DRAFT;min.value="LOG";S.resumed=false;S.ack=false;save();render();note("Brouillon remplacé par l'exemple.",()=>{ta.value=before.t;min.value=before.m;save();render()})}
+  else if(a==="hide-resume"){S.resumed=false;render()}
+  else if(a==="hide-new"){S.newSince=null;render()}
+}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(b&&!b.disabled)act(b.dataset.a)});
+document.addEventListener("change",e=>{if(e.target.id==="ack"){S.ack=e.target.checked?S.curDup:false;render()}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&(S.phase==="confirm"||S.phase==="error")){act("back")}});
+$("#clear").onclick=()=>{const before=ta.value;ta.value="";S.ack=false;save();render();ta.focus();note("Texte effacé.",()=>{ta.value=before;save();render()})};
+let tm;ta.addEventListener("input",()=>{S.busy=true;clearTimeout(tm);render();tm=setTimeout(()=>{S.busy=false;save();render()},350)});
+min.onchange=()=>{save();render()};
+// démonstration des états
+$("#d-stale").onclick=()=>{S.archive={date:"2026-10-12",st:"stale"};S.newSince=null;S.phase="edit";render()};
+$("#d-net").onclick=e=>{S.net=!S.net;e.currentTarget.classList.toggle("on",!S.net);e.currentTarget.setAttribute("aria-pressed",!S.net)};
+$("#d-empty").onclick=()=>{if(S.phase!=="edit")return;ta.value="";save();render()};
+render();
+</script>

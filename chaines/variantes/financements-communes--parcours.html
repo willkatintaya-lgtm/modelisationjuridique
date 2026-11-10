@@ -200,6 +200,7 @@ const seed=()=>({v:1,saved:+new Date(2026,10,6),data:+new Date(2026,2,31),track:
 let S, resumed=false;
 try{const r=JSON.parse(localStorage.getItem(KEY));if(r&&r.v===1&&r.track){S=r;resumed=true}}catch(e){}
 if(!S){S=seed();resumed=true}
+const resumeDate=S.saved, resumeAdv=Object.values(S.track).filter(t=>t.stage!=="check").length;
 const save=()=>{S.saved=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 let filter=null, openN=null, pending=null, fresh={state:S.data<+today-90*864e5?"stale":"ok",tries:0}, askReset=false;
 
@@ -209,8 +210,8 @@ function lead(){
 }
 function resumeBar(){
   if(!resumed){$("#resume").innerHTML="";return}
-  const adv=Object.values(S.track).filter(t=>t.stage!=="check").length;
-  $("#resume").innerHTML=`<div class="resume"><span class="t">Reprise de votre suivi du ${fmt(S.saved)} : ${adv} commune${adv>1?"s":""} déjà avancée${adv>1?"s":""}.</span><button class="ghost" data-reset>Tout recommencer</button></div>
+  const adv=resumeAdv??Object.values(S.track).filter(t=>t.stage!=="check").length;
+  $("#resume").innerHTML=`<div class="resume"><span class="t">Reprise de votre suivi du ${fmt(resumeDate)} : ${adv} commune${adv>1?"s":""} déjà avancée${adv>1?"s":""} à ce moment-là.</span><button class="ghost" data-reset>Tout recommencer</button></div>
    ${askReset?`<div class="ask" role="alertdialog" aria-label="Recommencer le suivi"><span class="t">Effacer l'avancement et l'historique de toutes les communes ? Les demandes déjà envoyées à la préfecture ne seront pas annulées.</span><button class="btn" data-reset-ok style="border-color:var(--err);color:#f2a7a9">Effacer l'avancement</button><button class="btn" data-reset-no>Garder</button></div>`:""}`;
 }
 function freshBar(){

@@ -408,7 +408,6 @@ document.addEventListener("keydown",e=>{
   if(openId){const id=openId;openId=null;renderSigs();$(`[data-sig="${id}"] .sh`)?.focus()}
 });
 $("#stale").addEventListener("change",e=>{ui.stale=e.target.checked;renderAll()});
-$("#offline").addEventListener("change",()=>{if(!$("#offline").checked&&ui.err){ui.err=null;renderSend()}});
 
 /* reprise : un brouillon existant prend la place de l'exemple, avec un bandeau pour recommencer */
 const prev=load();if(prev&&!prev.sent){S=prev;ui.resume=prev;openId=SIG.find(s=>!S.st[s.id])?.id||null}
