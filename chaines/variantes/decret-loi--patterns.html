@@ -106,7 +106,7 @@ function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createEle
 .sk.h{height:13px}
 @keyframes pulse{50%{opacity:.45}}
 @container (max-width:620px){.skr{grid-template-columns:minmax(0,1fr) 120px}.skr>.skpv,.skr>.skc{display:none}}
-.err{padding:18px 16px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;color:var(--text)}
+.lerr{padding:18px 16px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;color:var(--text)}
 /* Dossier de suivi */
 .dos{margin-top:16px;padding:14px 14px 12px}
 .dos-h{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0 2px 4px}
@@ -318,7 +318,7 @@ function renderRows(){
     el.innerHTML=`<p class="sr" role="status">Lecture du décret en cours</p>`+P.map((_,i)=>`<div class="skr" aria-hidden="true"><span><span class="sk h" style="width:${[58,42,50,64,38,46][i]}%"></span><span class="sk" style="width:${[44,52,40,48,36,42][i]}%"></span></span><span class="skpv"><span class="sk" style="width:70%"></span></span><span class="skst"><span class="sk" style="width:80%"></span></span><span class="skc"></span></div>`).join("");return}
   if(S.phase==="error"){
     el.setAttribute("aria-busy","false");
-    el.innerHTML=`<div class="err" role="alert"><span>La lecture du décret n'a pas abouti en 30 secondes — le texte n'a pas pu être chargé — réessayez dans un instant.</span><button class="btn" data-retry>Réessayer</button></div>`;return}
+    el.innerHTML=`<div class="lerr" role="alert"><span>La lecture du décret n'a pas abouti en 30 secondes — le texte n'a pas pu être chargé — réessayez dans un instant.</span><button class="btn" data-retry>Réessayer</button></div>`;return}
   el.setAttribute("aria-busy","false");
   const L=list();
   el.innerHTML=L.length?L.map(p=>`<div class="r" data-k="${p.k}"><button class="rh" data-open="${p.k}" aria-controls="drawer" aria-expanded="${S.open===p.k}">

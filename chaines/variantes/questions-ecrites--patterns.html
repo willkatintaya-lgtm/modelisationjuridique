@@ -56,136 +56,214 @@ const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
 const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
 function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
 </script>
+
 <style>
-/* Patterns retenus (l'original : tout déplié, liste plate, statistiques toujours visibles, select natif) :
-   - choix du ministère en boutons radio segmentés (5 options visibles, cibles 44 px) ;
-   - verdict en bandeau dans le formulaire (inline : il qualifie le texte qu'on tape) ;
-   - résultats en onglets par statut, cartes repliées (divulgation progressive), 3 visibles puis « plus » ;
-   - citer : glisser une carte sur le texte, ou bouton / touche C (alternative clavier), toast avec Annuler ;
-   - le ministère en détail dans un tiroir latéral (overlay : consultation ponctuelle, ne pousse pas le texte) ;
-   - squelette au premier chargement de l'archive (> 400 ms), calcul ensuite instantané. */
-.grid{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:24px;align-items:start;margin-top:18px}
-.form{padding:16px;position:sticky;top:16px;display:grid;gap:14px}
-.lbl{font-size:12.5px;color:var(--muted);margin-bottom:6px;display:block}
+/* Variante « patterns » (skill interaction-patterns, appliquée règle par règle) :
+   - formulaire : ministère en boutons radio (fieldset/legend, 5 choix), libellés au-dessus, aide reliée, validation à la sortie du champ ;
+   - divulgation : délais du ministère dans un <details> en place ; questions proches repliées (<details>), la plus proche ouverte ;
+   - onglets par statut (4, rôle tablist, tabindex itinérant, flèches / Origine / Fin, flèches de défilement seulement en cas de débordement) ;
+   - citer : bouton « Citer » (position par défaut), ou poignée à glisser sur le texte pour choisir la phrase ; au clavier, Entrée saisit,
+     flèches déplacent, Entrée dépose, Échap annule ; chaque étape annoncée (aria-live assertive) ;
+   - dépôt : seule action principale ; confirmation dans un <dialog> natif (publication irréversible), focus sur Annuler ;
+   - toasts : en haut à droite sur ordinateur, en bas au centre sur mobile, 3 au plus, succès effacés après 5 s, erreurs jamais ;
+   - premier chargement de l'archive : squelette à la forme des cartes, affiché seulement après 200 ms ; ensuite calcul instantané (< 400 ms, aucun indicateur). */
+.skip{position:absolute;left:16px;top:-60px;z-index:50;background:var(--accent);color:#fff;padding:10px 14px;border-radius:8px;text-decoration:none;font-size:13px}
+.skip:focus{top:12px}
+.grid{display:grid;grid-template-columns:minmax(0,450px) minmax(0,1fr);gap:24px;align-items:start;margin-top:18px}
+.form{padding:16px;position:sticky;top:16px;display:grid;gap:16px}
+.lbl{display:block;font-size:12.5px;color:var(--muted);margin:0 0 6px;padding:0}
+fieldset{border:0;margin:0;padding:0;min-width:0}
 .seg{display:flex;flex-wrap:wrap;gap:6px}
-.seg input{position:absolute;opacity:0;pointer-events:none}
-.seg label{min-height:44px;display:inline-flex;align-items:center;padding:0 14px;border:1px solid var(--line2);border-radius:8px;cursor:pointer;color:var(--muted);font-size:13px;transition:color .2s,border-color .2s,background .2s}
+.seg input{position:absolute;opacity:0;width:1px;height:1px}
+.seg label{min-height:36px;display:inline-flex;align-items:center;padding:0 12px;border:1px solid var(--line2);border-radius:8px;cursor:pointer;color:var(--muted);font-size:13px;transition:color .2s,border-color .2s,background .2s}
 .seg label:hover{color:var(--fg)}
 .seg input:checked+label{color:var(--fg);border-color:var(--accent);background:var(--lit)}
 .seg input:focus-visible+label{outline:2px solid var(--accent);outline-offset:2px}
-.minline{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px;font-size:12.5px;color:var(--muted)}
-.minline b{color:var(--fg);font-weight:500}
-.link{background:none;border:0;padding:6px 0;color:var(--ins);cursor:pointer;font-size:12.5px;text-decoration:underline 1px;text-underline-offset:3px;min-height:32px}
-.drop{position:relative;border-radius:9px}
-.drop textarea{width:100%;min-height:210px;resize:vertical;line-height:1.6;font-size:13.5px;display:block}
-.drop::after{content:"Déposer ici pour citer cette question";position:absolute;inset:0;display:grid;place-items:center;border:1.5px dashed var(--accent);border-radius:9px;background:rgba(10,11,13,.82);color:var(--fg);font-size:13px;opacity:0;pointer-events:none;transition:opacity .15s}
-.drop.over::after{opacity:1}
-.banner{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;padding:12px 14px;border-radius:8px;background:var(--s2);font-size:13px;line-height:1.5}
-.banner .dot{margin-top:6px}
-.banner b{color:var(--fg);font-weight:500}
-.banner .x{grid-column:2;color:var(--muted)}
-/* onglets */
-.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:12px}
-.tab{min-height:44px;padding:0 14px;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--muted);cursor:pointer;font-size:13px;white-space:nowrap;transition:color .2s,border-color .2s}
-.tab:hover{color:var(--fg)}
-.tab[aria-selected=true]{color:var(--fg);border-color:var(--accent)}
-.tab span{color:var(--dim);margin-left:4px}
-.list{display:grid;gap:8px}
-.card{border:1px solid var(--line);border-radius:9px;background:var(--s1);transition:border-color .2s,opacity .2s}
-.card:hover,.card:focus-within{border-color:var(--line2)}
-.card.dragging{opacity:.4}
-.c-h{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 12px 10px 6px;min-height:52px}
-.grip{width:28px;height:36px;display:grid;place-items:center;color:var(--dim);cursor:grab;border-radius:6px}
-.grip:hover{color:var(--fg);background:var(--s2)}
-.grip svg{width:12px;height:16px}
-.c-tg{all:unset;cursor:pointer;display:grid;gap:2px;min-width:0;padding:4px 0}
-.c-tg:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:4px}
-.c-meta{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);flex-wrap:wrap}
-.c-meta b{color:var(--fg);font-weight:500}
-.c-sum{font-size:13px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.card.open .c-sum{display:none}
-.c-r{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted);white-space:nowrap}
-.chev{width:8px;height:8px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg) translate(-2px,-2px);transition:transform .2s}
-.card.open .chev{transform:rotate(225deg) translate(-2px,-2px)}
-.c-body{padding:0 14px 14px 46px;display:grid;gap:8px}
-.c-sub{font-size:12px;color:var(--dim)}
-.c-body p{margin:0;font-size:13px;line-height:1.6}
-.ans{font-size:12.5px;color:var(--muted);border-left:2px solid var(--line2);padding-left:10px}
-.ans.none{color:#f2a7a9;border-color:rgba(229,72,77,.35)}
-.st{font-size:12px}
-.st.ok{color:var(--ok)}.st.no{color:#f2a7a9}
-.c-act{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.c-act .btn{min-height:40px}
-.kbd{font-size:11.5px;color:var(--dim)}
-.kbd kbd{font:inherit;border:1px solid var(--line2);border-radius:4px;padding:0 5px;color:var(--muted)}
-.more{margin-top:8px;width:100%;min-height:44px}
-.empty{padding:16px;color:var(--dim);font-size:13px;border:1px dashed var(--line2);border-radius:9px}
-/* squelette */
-.sk{display:block;border-radius:6px;background:linear-gradient(90deg,var(--s2) 0%,#1d2025 50%,var(--s2) 100%);background-size:200% 100%;animation:sh 1.2s linear infinite}
-@keyframes sh{to{background-position:-200% 0}}
-.skc{border:1px solid var(--line);border-radius:9px;padding:14px 14px 14px 46px;display:grid;gap:8px}
-/* tiroir */
-.scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .25s;z-index:20}
-.scrim.on{opacity:1;pointer-events:auto}
-.drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,100vw);background:var(--s1);border-left:1px solid var(--line2);z-index:21;transform:translateX(100%);transition:transform .3s var(--ease),visibility 0s .3s;visibility:hidden;display:flex;flex-direction:column;padding:18px max(18px,env(safe-area-inset-right,0px)) 18px 18px;gap:16px;overflow:auto}
-.drawer.on{transform:none;visibility:visible;transition:transform .3s var(--ease)}
-.dr-h{display:flex;align-items:start;gap:12px}
-.dr-h h2{margin:0;font:600 15px/1.35 var(--f);color:var(--fg);flex:1}
-.close{width:44px;height:44px;flex:none;border-radius:8px;border:1px solid var(--line2);background:var(--s2);color:var(--fg);cursor:pointer;font-size:18px;line-height:1}
-.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.kpi{padding:12px;border-radius:8px;background:var(--s2)}
-.kpi b{display:block;color:var(--fg);font-size:20px;font-weight:600}
-.kpi span{font-size:12px;color:var(--dim)}
-.bars{display:grid;gap:6px;font-size:12.5px}
-.bars div{display:grid;grid-template-columns:96px minmax(0,1fr) 28px;gap:8px;align-items:center;color:var(--muted)}
-.bars i{display:block;height:8px;border-radius:4px;background:var(--line2)}
+.suggest{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px;font-size:12.5px;color:var(--muted)}
+.suggest[hidden]{display:none}
+.mini{margin-top:10px;font-size:12.5px;color:var(--muted)}
+.mini summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;min-height:32px;border-radius:6px}
+.mini summary::-webkit-details-marker{display:none}
+.mini summary b{color:var(--fg);font-weight:500}
+.mini summary .more{margin-left:auto;color:var(--ins);white-space:nowrap}
+.mini[open] summary .more{color:var(--muted)}
+.mini .in{padding:8px 0 2px;display:grid;gap:8px;animation:open .25s var(--ease)}
+@keyframes open{from{opacity:0;transform:translateY(-4px)}}
+.bars{display:grid;gap:5px}
+.bars div{display:grid;grid-template-columns:92px minmax(0,1fr) 26px;gap:8px;align-items:center}
+.bars i{display:block;height:7px;border-radius:4px;background:var(--line2)}
 .bars i.ok{background:rgba(70,179,126,.6)}
 .bars em{font-style:normal;text-align:right;color:var(--text)}
-.note{font-size:12.5px;color:var(--dim);margin:0}
-/* toasts empilés */
-.toasts{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:grid;gap:8px;z-index:30;width:min(440px,calc(100vw - 32px))}
-.tst{display:flex;align-items:center;gap:12px;background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:8px 8px 8px 14px;border-radius:8px;font-size:13px;animation:up .2s var(--ease);transition:opacity .2s}
-.tst span{flex:1}
+.note{margin:0;color:var(--dim);font-size:12.5px}
+.drop{position:relative}
+.drop textarea{display:block;width:100%;min-height:220px;resize:vertical;line-height:1.6;font-size:13.5px;padding:10px 12px}
+.drop textarea[aria-invalid=true]{border-color:var(--err)}
+.hint{margin:6px 0 0;font-size:12px;color:var(--dim)}
+.err{margin:6px 0 0;font-size:12.5px;color:#f2a7a9}
+.err:empty{display:none}
+/* carte des emplacements pendant le glisser */
+.map{position:absolute;inset:0;display:none;overflow:auto;scrollbar-width:none;background:var(--s2);border:1.5px dashed var(--accent);border-radius:7px;padding:0 12px 10px;font-size:13.5px;line-height:1.75;color:var(--text)}
+.map::-webkit-scrollbar{display:none}
+.lifting .map{display:block;animation:open .15s var(--ease)}
+.map-cap{position:sticky;top:0;margin:0 -12px 6px;padding:7px 12px;background:var(--s2);border-bottom:1px solid var(--line);font-size:12px;color:var(--muted)}
+.map-cap b{color:var(--fg);font-weight:500}
+.slot{display:inline-grid;place-items:center;width:22px;height:18px;margin:0 3px;vertical-align:-3px;border-radius:5px;border:1px dashed var(--line2);color:var(--dim);font-size:11px;line-height:1;transition:background .12s,border-color .12s,color .12s}
+.slot.on{background:var(--accent);border:1px solid var(--accent);color:#fff}
+.verdict{display:grid;grid-template-columns:auto minmax(0,1fr);gap:3px 10px;padding:12px 14px;border-radius:8px;background:var(--s2);font-size:13px;line-height:1.5}
+.verdict .dot{margin-top:6px}
+.verdict b{color:var(--fg);font-weight:500}
+.verdict .x{grid-column:2;color:var(--muted)}
+.acts{display:flex;justify-content:flex-end;align-items:center;gap:10px;flex-wrap:wrap}
+.acts .btn{min-height:36px;padding:0 16px}
+.acts .sent{margin-right:auto;font-size:12.5px;color:var(--ok)}
+.acts .sent:empty{display:none}
+/* onglets */
+.tabbar{position:relative;display:flex;align-items:center;border-bottom:1px solid var(--line);margin-bottom:12px}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;scroll-behavior:smooth;flex:1;min-width:0}
+.tabs::-webkit-scrollbar{display:none}
+.tab{min-height:40px;padding:0 12px;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--muted);cursor:pointer;font-size:13px;white-space:nowrap;transition:color .2s,border-color .2s}
+.tab:hover{color:var(--fg)}
+.tab[aria-selected=true]{color:var(--fg);border-color:var(--accent)}
+.tab span{color:var(--dim);margin-left:5px}
+.tab:focus-visible{outline-offset:-2px}
+.arr{position:absolute;top:0;bottom:1px;width:36px;border:0;color:var(--fg);cursor:pointer;font-size:15px;z-index:1}
+.arr[hidden]{display:none}
+.arr.l{left:0;background:linear-gradient(90deg,var(--bg) 55%,transparent)}
+.arr.r{right:0;background:linear-gradient(270deg,var(--bg) 55%,transparent)}
+.list{display:grid;gap:8px}
+.card{display:grid;grid-template-columns:36px minmax(0,1fr);border:1px solid var(--line);border-radius:9px;background:var(--s1);transition:border-color .2s,opacity .2s}
+.card:hover,.card:focus-within{border-color:var(--line2)}
+.card.lifted{opacity:.5;border-style:dashed}
+.grip{all:unset;box-sizing:border-box;width:28px;height:36px;margin:9px 0 0 6px;display:grid;place-items:center;color:var(--dim);cursor:grab;border-radius:6px;touch-action:none}
+.grip:hover{color:var(--fg);background:var(--s2)}
+.grip:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.grip svg{width:10px;height:16px}
+.nogrip{width:28px}
+.card details{min-width:0}
+.card summary{list-style:none;cursor:pointer;display:grid;gap:3px;padding:10px 12px 10px 4px;min-height:54px;border-radius:0 9px 9px 0}
+.card summary::-webkit-details-marker{display:none}
+.card summary:focus-visible{outline-offset:-2px}
+.s-top{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);min-width:0}
+.s-top b{color:var(--fg);font-weight:500;white-space:nowrap}
+.s-top .mn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.s-r{margin-left:auto;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.st.ok{color:var(--ok)}.st.no{color:#f2a7a9}
+.chev{width:7px;height:7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg) translate(-2px,-2px);transition:transform .2s;margin-left:2px}
+details[open] .chev{transform:rotate(225deg) translate(-2px,-2px)}
+.s-sum{font-size:13px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+details[open] .s-sum{display:none}
+.body{padding:0 14px 14px 4px;display:grid;gap:8px;animation:open .25s var(--ease)}
+.body p{margin:0;font-size:13px;line-height:1.6}
+.ans{font-size:12.5px;color:var(--muted);border-left:2px solid var(--line2);padding-left:10px}
+.ans.none{color:#f2a7a9;border-color:rgba(229,72,77,.35)}
+.c-act{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.c-act .btn{min-height:36px}
+.c-act .fine{font-size:12px;color:var(--dim)}
+.empty{padding:16px;color:var(--dim);font-size:13px;border:1px dashed var(--line2);border-radius:9px}
+/* squelette */
+.sk{display:block;border-radius:5px;background:var(--s2);animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.45}}
+.skc{display:grid;grid-template-columns:36px minmax(0,1fr);border:1px solid var(--line);border-radius:9px;min-height:56px}
+.skc>div{display:grid;gap:8px;padding:12px 12px 12px 4px}
+/* fantôme du glisser */
+.ghost-chip{position:fixed;left:0;top:0;z-index:60;pointer-events:none;padding:6px 10px;border-radius:7px;background:var(--accent);color:#fff;font-size:12.5px;box-shadow:0 6px 20px rgba(0,0,0,.45);white-space:nowrap}
+/* boîte de dialogue */
+dialog{background:var(--s1);color:var(--text);border:1px solid var(--line2);border-radius:12px;padding:20px;width:min(460px,calc(100vw - 32px));box-shadow:0 20px 60px rgba(0,0,0,.6)}
+dialog[open]{animation:open .2s var(--ease)}
+dialog::backdrop{background:rgba(0,0,0,.55)}
+dialog h2{margin:0 0 8px;font:600 16px/1.35 var(--f);color:var(--fg)}
+dialog p{margin:0 0 10px;font-size:13px;line-height:1.55}
+dialog .recap{padding:10px 12px;border-radius:8px;background:var(--s2);color:var(--muted);font-size:12.5px}
+dialog .recap b{color:var(--fg);font-weight:500}
+dialog .acts{margin-top:16px}
+/* toasts */
+.toasts{position:fixed;z-index:70;display:flex;flex-direction:column;gap:8px;top:16px;right:max(16px,env(safe-area-inset-right,0px));width:min(380px,calc(100vw - 32px))}
+.tst{display:flex;align-items:center;gap:8px;background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:6px 6px 6px 14px;border-radius:9px;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.4);animation:tin .2s var(--ease);transition:opacity .2s}
+.tst.error{border-color:rgba(229,72,77,.6)}
+.tst.error::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--err);flex:none}
 .tst.out{opacity:0}
-.tst .ghost{min-height:36px;padding:0 12px}
-@keyframes up{from{opacity:0;transform:translateY(6px)}}
-@media (pointer:coarse){.grip{visibility:hidden}.kbd{display:none}}
+.tst span{flex:1;padding:6px 0}
+.tst .ghost{min-height:32px;padding:0 10px}
+.tst .x{width:32px;height:32px;flex:none;border:0;background:none;color:var(--muted);cursor:pointer;font-size:17px;border-radius:6px}
+.tst .x:hover{color:var(--fg);background:#1f2227}
+@keyframes tin{from{opacity:0;transform:translateY(-6px)}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 @media (max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}.form{position:static}}
-@media (max-width:520px){.c-body{padding-left:14px}.c-r .lv,.c-meta .mn{display:none}.tab{padding:0 8px;font-size:12.5px}.tabs{overflow-x:auto;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}}
+@media (max-width:639px){
+  .toasts{top:auto;right:auto;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+  @keyframes tin{from{opacity:0;transform:translateY(6px)}}
+  .acts .btn.pri{width:100%}
+  .s-top .lv{display:none}
+}
+/* Fitts : 44 px au tactile et sur petit écran */
+@media (pointer:coarse),(max-width:639px){
+  .seg label,.acts .btn,.c-act .btn,.tab{min-height:44px}
+  .grip{width:36px;height:44px;margin:6px 0 0 2px}
+  .card,.skc{grid-template-columns:40px minmax(0,1fr)}
+  .tst .ghost,.tst .x{min-height:44px;min-width:44px}
+  .mini summary{min-height:44px}
+}
 </style>
 
+<a class="skip" href="#res">Aller aux questions proches</a>
 <div class="wrap">
-  <div class="ctx">Questions écrites · archive Assemblée et Sénat · export du 9 novembre 2026</div>
+  <div class="ctx">Questions écrites · archive Assemblée et Sénat, législature en cours et précédente · export du 9 novembre 2026</div>
   <h1>Avant de déposer une question</h1>
   <div class="grid">
-    <section class="panel form" aria-label="Votre question">
-      <div role="radiogroup" aria-labelledby="l-min">
-        <span class="lbl" id="l-min">Ministre interrogé</span>
+    <form class="panel form" id="form" novalidate aria-label="Votre question">
+      <fieldset>
+        <legend class="lbl">Ministre interrogé</legend>
         <div class="seg" id="seg"></div>
-        <div class="minline" id="minline"></div>
-      </div>
+        <div class="suggest" id="suggest" hidden></div>
+        <details class="mini" id="mini"></details>
+      </fieldset>
       <div>
         <label class="lbl" for="q">Votre question</label>
-        <div class="drop" id="drop"><textarea id="q"></textarea></div>
+        <div class="drop" id="drop">
+          <textarea id="q" aria-describedby="q-hint" spellcheck="true"></textarea>
+          <div class="map" id="map" aria-hidden="true"></div>
+        </div>
+        <p class="err" id="q-err" role="alert"></p>
+        <p class="hint" id="q-hint">Pour citer une question proche : bouton « Citer », ou glissez sa poignée sur la phrase voulue.</p>
       </div>
-      <div class="banner" id="banner" aria-live="polite"></div>
-    </section>
-    <section aria-label="Questions proches">
-      <div class="tabs" role="tablist" id="tabs" aria-label="Filtrer par statut"></div>
-      <div id="panel" role="tabpanel"></div>
+      <div class="verdict" id="verdict" role="status" aria-live="polite"></div>
+      <div class="acts">
+        <span class="sent" id="sent"></span>
+        <button type="button" class="btn" id="copy">Copier le texte</button>
+        <button type="submit" class="btn pri" id="go">Déposer…</button>
+      </div>
+    </form>
+    <section aria-labelledby="res-h" id="res" tabindex="-1">
+      <h2 class="sec" id="res-h" style="font-weight:400">Questions proches</h2>
+      <div class="tabbar">
+        <button class="arr l" id="arrL" aria-label="Faire défiler les onglets vers la gauche" hidden>‹</button>
+        <div class="tabs" role="tablist" id="tabs" aria-label="Filtrer par statut"></div>
+        <button class="arr r" id="arrR" aria-label="Faire défiler les onglets vers la droite" hidden>›</button>
+      </div>
+      <div id="panel" role="tabpanel" tabindex="0" aria-busy="true"></div>
     </section>
   </div>
 </div>
-<div class="scrim" id="scrim"></div>
-<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dr-t"></aside>
-<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<dialog id="dlg" aria-labelledby="dlg-t" aria-describedby="dlg-d">
+  <h2 id="dlg-t">Déposer cette question ?</h2>
+  <p id="dlg-d"></p>
+  <div class="recap" id="dlg-r"></div>
+  <div class="acts">
+    <button type="button" class="btn" id="dlg-no" autofocus>Annuler</button>
+    <button type="button" class="btn pri" id="dlg-ok">Déposer la question</button>
+  </div>
+</dialog>
+<div class="toasts" id="toasts"></div>
+<div class="sr" id="say-p" aria-live="polite"></div>
+<div class="sr" id="say-a" aria-live="assertive"></div>
 
 <script>
-// Données et calcul repris tels quels de la maquette d'origine (questions-ecrites.html).
+// ——— Données et moteur : identiques à la maquette d'origine ———
 const NOW=new Date(2026,10,10);
 const MIN={LOG:"Logement",TE:"Transition écologique",ECO:"Économie et finances",SOL:"Solidarités",INT:"Intérieur"};
 const DEL={LOG:{n:64,ok:9,med:148,bins:[9,7,12,10,8,18]},TE:{n:58,ok:11,med:121,bins:[11,9,10,8,6,14]},ECO:{n:131,ok:22,med:132,bins:[22,18,24,21,14,32]},SOL:{n:49,ok:6,med:167,bins:[6,5,8,9,7,14]},INT:{n:72,ok:17,med:97,bins:[17,14,13,9,6,13]}};
-const BINS=["≤ 2 mois","2–4","4–6","6–9","9–12","sans réponse"];
+const BINS=["≤ 2 mois","2 à 4 mois","4 à 6 mois","6 à 9 mois","9 à 12 mois","sans réponse"];
 const G={PR:"#c07a00",SOL:"#d13a30",ECO:"#2a9d63",UT:"#3b82d6",LL:"#e0671d",RC:"#7c5cd6",DC:"#2bb3b1",AR:"#8fae3a",CP:"#d8699a"};
 const Q=[
  {n:"AN 3187",g:"PR",min:"TE",d:"2026-05-12",t:"Retards de versement de MaPrimeRénov' aux ménages modestes, dont certains attendent plus de huit mois le paiement de la prime après la fin des travaux.",a:null,mine:true},
@@ -208,95 +286,201 @@ const STOP=new Set("le la les de des du d l un une et en au aux a à sur sa son 
 const norm=s=>s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9 ]/g," ");
 const stem=w=>w.length>6?w.slice(0,6):w.replace(/s$/,"");
 const toks=s=>norm(s).split(/\s+/).filter(w=>w.length>2&&!STOP.has(w)).map(stem);
-let DOCS=[],IDF={};
-function reindex(){DOCS=Q.map(q=>new Set(toks(q.t)));IDF={};DOCS.forEach(d=>d.forEach(w=>IDF[w]=(IDF[w]||0)+1));for(const w in IDF)IDF[w]=Math.log(1+Q.length/IDF[w])}
-reindex();
+const DOCS=Q.map(q=>new Set(toks(q.t)));
+const IDF={}; DOCS.forEach(d=>d.forEach(w=>IDF[w]=(IDF[w]||0)+1)); for(const w in IDF) IDF[w]=Math.log(1+Q.length/IDF[w]);
 function sim(a,b){let num=0,na=0,nb=0;for(const w of a){const x=IDF[w]||Math.log(1+Q.length);na+=x*x;if(b.has(w))num+=x*x}for(const w of b){const x=IDF[w];nb+=x*x}return na&&nb?num/Math.sqrt(na*nb):0}
 const D=s=>{const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
 const fd=s=>D(s).toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"});
 const months=(a,b)=>Math.max(0,Math.round((b-a)/2629800000));
 function hl(text,set){return text.split(/(\s+)/).map(w=>{const t=toks(w)[0];return t&&set.has(t)?`<mark>${esc(w)}</mark>`:esc(w)}).join("")}
-// Recherche : mêmes seuils que l'original (≥ .12 voisine, ≥ .25 proche, ≥ .42 très proche).
-function search(text,max=6){const mine=new Set(toks(text));const R=Q.map((q,i)=>({q,s:sim(mine,DOCS[i])})).filter(r=>r.s>=.12).sort((a,b)=>b.s-a.s).slice(0,max);return {mine,R,dup:R[0]&&R[0].s>=.42?R[0]:null}}
 const level=s=>s>=.42?"très proche":s>=.25?"proche":"voisine";
-// Verdict : les quatre cas de l'original.
-function verdictKind(dup){if(!dup)return "libre";if(dup.q.mine)return "vous";if(dup.q.a)return "repondue";return "autre"}
-const minLabel=k=>({LOG:"du logement",TE:"de la transition écologique",ECO:"de l'économie et des finances",SOL:"des solidarités",INT:"de l'intérieur"})[k];
+const MINDE={LOG:"du logement",TE:"de la transition écologique",ECO:"de l'économie et des finances",SOL:"des solidarités",INT:"de l'intérieur"};
 const pct=k=>Math.round(100*DEL[k].ok/DEL[k].n), medM=k=>Math.round(DEL[k].med/30.4);
-// Les citations insérées par l'outil ne doivent pas diluer la comparaison : on les retire avant de calculer.
+// Les citations insérées ne doivent pas déplacer la comparaison : on les retire avant de calculer.
 const CITE_RE=/ ?Dans sa réponse du [^«]*?à la question n° [^«]*?«[^»]*»\.| ?La question n° [^.]*?restée sans réponse\./g;
 const stripCites=t=>t.replace(CITE_RE,"");
 const citedIn=t=>new Set([...t.matchAll(/question n° ((?:AN|Sénat) \d+)/g)].map(m=>m[1]));
+const citeText=q=>q.a?`Dans sa réponse du ${fd(q.a.d)} à la question n° ${q.n}, le Gouvernement indiquait : « ${q.a.t.replace(/\.$/,"")} ».`:`La question n° ${q.n} du ${fd(q.d)}, sur le même sujet, est restée sans réponse.`;
+const qid=n=>n.replace(/\s/g,"");
 
-const ta=$("#q");ta.value=DRAFT;
-let cur="LOG",tab="all",shown=3,openSet=new Set(),loaded=false,R=[],mineSet=new Set();
-$("#seg").innerHTML=Object.entries(MIN).map(([k,v])=>`<input type="radio" name="min" id="m-${k}" value="${k}"${k===cur?" checked":""}><label for="m-${k}">${v}</label>`).join("");
-$$("#seg input").forEach(i=>i.onchange=()=>{cur=i.value;run()});
-// toasts empilés (3 au plus), avec action Annuler
-function note(msg,undo){const box=$("#toasts");while(box.children.length>=3)box.firstChild.remove();const t=document.createElement("div");t.className="tst";t.innerHTML=`<span>${msg}</span>${undo?'<button class="ghost">Annuler</button>':""}`;box.append(t);
-  let k=setTimeout(()=>{t.classList.add("out");setTimeout(()=>t.remove(),200)},5000);if(undo)t.querySelector("button").onclick=()=>{clearTimeout(k);undo();t.remove()}}
+// ——— État ———
+const ta=$("#q");
+const store={get(k){try{return sessionStorage.getItem(k)}catch(e){return null}},set(k,v){try{sessionStorage.setItem(k,v)}catch(e){}}};
+ta.value=store.get("qe-draft")||DRAFT;
+let cur=store.get("qe-min")||"LOG"; if(!MIN[cur])cur="LOG";
+let tab="all",loaded=false,R=[],mineSet=new Set(),openSet=null,sent=false;
 const TABS=[["all","Toutes",()=>true],["none","Sans réponse",r=>!r.q.a],["ans","Répondues",r=>!!r.q.a],["mine","Les vôtres",r=>r.q.mine]];
-function cite(n){const q=Q.find(x=>x.n===n);const before=ta.value;
-  const s=q.a?` Dans sa réponse du ${fd(q.a.d)} à la question n° ${q.n}, le Gouvernement indiquait : « ${q.a.t.replace(/\.$/,"")} ».`:` La question n° ${q.n} du ${fd(q.d)}, sur le même sujet, est restée sans réponse.`;
-  const i=before.search(/\s(Il|Elle) lui demande/);ta.value=i>0?before.slice(0,i)+s+before.slice(i):before+s;run();
-  note(`Question ${n} citée dans votre texte.`,()=>{ta.value=before;run();note("Citation retirée.")})}
-function skeleton(){$("#tabs").innerHTML=TABS.map(()=>`<span class="sk" style="width:90px;height:16px;margin:14px 10px"></span>`).join("");
-  $("#panel").innerHTML=`<div class="list">${[0,1,2].map(()=>`<div class="skc"><span class="sk" style="width:45%;height:12px"></span><span class="sk" style="width:92%;height:12px"></span></div>`).join("")}</div>`;
-  $("#banner").innerHTML=`<span class="dot"></span><span class="sk" style="width:70%;height:12px;margin-top:4px"></span>`}
+const say=(m,urgent)=>{const el=$(urgent?"#say-a":"#say-p");el.textContent="";setTimeout(()=>el.textContent=m,30)};
+
+// ——— Ministère : radios + détail en place ———
+$("#seg").innerHTML=Object.entries(MIN).map(([k,v])=>`<input type="radio" name="min" id="m-${k}" value="${k}"${k===cur?" checked":""}><label for="m-${k}">${v}</label>`).join("");
+$$("#seg input").forEach(i=>i.onchange=()=>{cur=i.value;store.set("qe-min",cur);checkMinistry();renderMini();run()});
+function renderMini(){const S=DEL[cur],mx=Math.max(...S.bins),open=$("#mini").open;
+  $("#mini").innerHTML=`<summary>Délai médian <b>${medM(cur)} mois</b> · <b>${pct(cur)} %</b> sous deux mois<span class="more">${open?"Masquer":"Détail"}</span></summary>
+  <div class="in"><div class="bars" role="list" aria-label="Délais de réponse des ${S.n} questions de la législature">${S.bins.map((b,i)=>`<div role="listitem"><span>${BINS[i]}</span><i class="${i===0?"ok":""}" style="width:${Math.round(100*b/mx)}%"></i><em>${b}</em></div>`).join("")}</div>
+  <p class="note">Sur ${S.n} questions de la législature. Au-delà de deux mois sans réponse, le groupe peut signaler une question : le ministre doit alors répondre sous dix jours.</p></div>`}
+$("#mini").addEventListener("toggle",()=>{const m=$("#mini .more");if(m)m.textContent=$("#mini").open?"Masquer":"Détail"});
+// valeur par défaut tirée du texte : si la question s'adresse à un autre ministre que celui choisi, on le propose (sans l'imposer)
+const MINRE=[["LOG",/chargée? du logement|ministre du logement/i],["TE",/transition écologique/i],["ECO",/économie|finances/i],["SOL",/solidarités/i],["INT",/intérieur/i]];
+function checkMinistry(){const m=ta.value.match(/ministre[^.]{0,60}/i),hit=m&&MINRE.find(([,re])=>re.test(m[0]));const box=$("#suggest");
+  if(hit&&hit[0]!==cur){box.hidden=false;box.innerHTML=`<span>Votre texte s'adresse au ministre ${MINDE[hit[0]]}.</span><button type="button" class="ghost" id="sg">Choisir ${MIN[hit[0]]}</button>`;
+    $("#sg").onclick=()=>{const r=$("#m-"+hit[0]);r.checked=true;r.dispatchEvent(new Event("change"));r.focus()}}
+  else{box.hidden=true;box.innerHTML=""}}
+
+// ——— Validation à la sortie du champ (jamais pendant la frappe) ———
+function validate(){const v=ta.value.trim();let m="";
+  if(!v)m="Votre question — le champ est vide — rédigez au moins la demande adressée au ministre.";
+  else if(!/lui demande|\?/i.test(v))m="Votre question — nous ne trouvons pas de demande adressée au ministre — terminez par une phrase du type « Elle lui demande quelles mesures… ».";
+  $("#q-err").textContent=m;ta.setAttribute("aria-invalid",m?"true":"false");ta.setAttribute("aria-describedby",m?"q-err q-hint":"q-hint");return !m}
+ta.addEventListener("blur",()=>{validate();checkMinistry()});
+
+// ——— Recherche et rendu ———
 function run(){
-  const S=DEL[cur];
-  $("#minline").innerHTML=`Délai médian <b>${medM(cur)} mois</b> · ${pct(cur)} % sous deux mois <button class="link" id="openDr">Détail</button>`;
-  $("#openDr").onclick=openDrawer;
   if(!loaded)return;
-  const r=search(stripCites(ta.value)),cited=citedIn(ta.value);R=r.R;mineSet=r.mine;const dup=r.dup,k=verdictKind(dup);
-  const B={libre:["ok","Sujet libre.","Vous pouvez déposer la question telle quelle."],
-    vous:["warn",`Vous l'avez déjà posée (${dup?.q.n}).`,dup&&!dup.q.a?`Sans réponse depuis ${months(D(dup.q.d),NOW)} mois : demandez au groupe de la signaler, le ministre doit alors répondre sous dix jours.`:"Elle a reçu une réponse."],
-    repondue:["",`Déjà posée et répondue (${dup?.q.n}).`,`Citez la réponse et demandez ce qui a changé depuis.`],
-    autre:["warn",`Déjà posée par un autre groupe (${dup?.q.n}).`,`Sans réponse depuis ${dup?months(D(dup.q.d),NOW):0} mois : mentionnez-la pour souligner le silence du ministère.`]}[k];
-  $("#banner").innerHTML=`<span class="dot ${B[0]}"></span><b>${B[1]}</b><span class="x">${dup&&cited.has(dup.q.n)&&k!=="vous"?"Elle est déjà citée dans votre texte : vous pouvez déposer.":B[2]}${dup&&dup.q.min!==cur?` Elle était adressée au ministre ${minLabel(dup.q.min)}.`:""}</span>`;
-  $("#tabs").innerHTML=TABS.map(([id,l,f])=>`<button class="tab" role="tab" id="t-${id}" aria-selected="${tab===id}" tabindex="${tab===id?0:-1}" data-t="${id}">${l}<span>${R.filter(f).length}</span></button>`).join("");
-  renderList();
+  const mine=new Set(toks(stripCites(ta.value)));mineSet=mine;
+  R=Q.map((q,i)=>({q,s:sim(mine,DOCS[i])})).filter(r=>r.s>=.12).sort((a,b)=>b.s-a.s).slice(0,6);
+  const dup=R[0]&&R[0].s>=.42?R[0]:null,cited=citedIn(ta.value);
+  if(openSet===null)openSet=new Set(dup?[dup.q.n]:[]);
+  let k,t1,t2;
+  if(!dup){k="ok";t1="Sujet libre.";t2="Aucune question de l'archive ne pose la même question : vous pouvez la déposer telle quelle."}
+  else if(dup.q.mine){k="warn";t1=`Vous l'avez déjà posée (${dup.q.n}, ${fd(dup.q.d)}).`;t2=dup.q.a?"Elle a reçu une réponse : citez-la plutôt que de redéposer.":"Plutôt que de la redéposer, proposez au groupe de la signaler : le ministre doit alors répondre sous dix jours."}
+  else if(dup.q.a){k="";t1=`Déjà posée et répondue (${dup.q.n}).`;t2=cited.has(dup.q.n)?"Sa réponse est citée dans votre texte : la question sera plus difficile à esquiver.":`Citez la réponse du ${fd(dup.q.a.d)} et demandez ce qui a changé depuis.`}
+  else{k="warn";t1=`Déjà posée par un autre groupe (${dup.q.n}).`;t2=cited.has(dup.q.n)?"Elle est citée dans votre texte : votre question souligne le silence du ministère.":`Sans réponse depuis ${months(D(dup.q.d),NOW)} mois : mentionnez-la pour souligner le silence du ministère.`}
+  if(dup&&dup.q.min!==cur)t2+=` Elle était adressée au ministre ${MINDE[dup.q.min]}.`;
+  $("#verdict").innerHTML=`<span class="dot ${k}"></span><b>${t1}</b><span class="x">${t2}</span>`;
+  renderTabs();renderList();
 }
+function renderTabs(){
+  $("#tabs").innerHTML=TABS.map(([id,l,f])=>`<button type="button" class="tab" role="tab" id="t-${id}" aria-selected="${tab===id}" aria-controls="panel" tabindex="${tab===id?0:-1}" data-t="${id}">${l}<span>${R.filter(f).length}</span></button>`).join("");
+  $("#panel").setAttribute("aria-labelledby","t-"+tab);arrows();
+}
+const GRIP=`<svg viewBox="0 0 10 16" fill="currentColor" aria-hidden="true"><circle cx="2.5" cy="3" r="1.3"/><circle cx="7.5" cy="3" r="1.3"/><circle cx="2.5" cy="8" r="1.3"/><circle cx="7.5" cy="8" r="1.3"/><circle cx="2.5" cy="13" r="1.3"/><circle cx="7.5" cy="13" r="1.3"/></svg>`;
 function renderList(){
-  const L=R.filter(TABS.find(t=>t[0]===tab)[2]);$("#panel").setAttribute("aria-labelledby","t-"+tab);
-  if(!L.length){$("#panel").innerHTML=`<div class="empty">${R.length?"Aucune question dans cet onglet.":"Rien dans l'archive ne ressemble à ce projet."}</div>`;return}
-  const V=L.slice(0,shown);
-  $("#panel").innerHTML=`<div class="list">${V.map(({q,s})=>{const o=openSet.has(q.n);return `<article class="card${o?" open":""}" data-n="${q.n}">
-   <div class="c-h"><span class="grip" draggable="true" title="Glisser sur votre texte pour citer" aria-hidden="true"><svg viewBox="0 0 12 16" fill="currentColor"><circle cx="3" cy="3" r="1.4"/><circle cx="9" cy="3" r="1.4"/><circle cx="3" cy="8" r="1.4"/><circle cx="9" cy="8" r="1.4"/><circle cx="3" cy="13" r="1.4"/><circle cx="9" cy="13" r="1.4"/></svg></span>
-   <button class="c-tg" aria-expanded="${o}" aria-controls="b-${q.n.replace(/\s/g,"")}"><span class="c-meta">${q.mine?"":`<span class="gp" style="background:${G[q.g]}">${q.g}</span>`}<b>${q.n}</b><span class="mn">${MIN[q.min]}${q.mine?" · votre bureau":""}</span></span><span class="c-sum">${esc(q.t)}</span></button>
-   <span class="c-r"><span class="st ${q.a?"ok":"no"}">${q.a?"répondue":"sans réponse"}</span><span class="lv">· ${level(s)}</span><span class="chev"></span></span></div>
-   <div class="slide"><div><div class="c-body" id="b-${q.n.replace(/\s/g,"")}"><span class="c-sub">${MIN[q.min]}${q.mine?" · votre bureau":""}</span><p>${hl(q.t,mineSet)}</p>
+  const L=R.filter(TABS.find(t=>t[0]===tab)[2]),cited=citedIn(ta.value);
+  $("#panel").setAttribute("aria-busy","false");
+  if(!L.length){$("#panel").innerHTML=`<div class="empty">${R.length?"Aucune question de ce statut parmi les questions proches.":"Rien dans l'archive ne ressemble à ce projet. Le sujet semble neuf."}</div>`;return}
+  $("#panel").innerHTML=`<div class="list">${L.map(({q,s})=>{const id=qid(q.n),can=!q.mine&&!cited.has(q.n);return `<article class="card" data-n="${q.n}">
+   ${can?`<button type="button" class="grip" data-n="${q.n}" aria-label="Citer ${q.n} à un endroit choisi" aria-describedby="grip-help" title="Glisser sur votre texte pour citer">${GRIP}</button>`:`<span class="nogrip"></span>`}
+   <details${openSet.has(q.n)?" open":""} data-n="${q.n}"><summary><span class="s-top">${q.mine?"":`<span class="gp" style="background:${G[q.g]}">${q.g}</span>`}<b>${q.n}</b><span class="mn">${MIN[q.min]}${q.mine?" · votre bureau":""}</span><span class="s-r"><span class="st ${q.a?"ok":"no"}">${q.a?"répondue":"sans réponse"}</span><span class="lv">· ${level(s)}</span><span class="chev" aria-hidden="true"></span></span></span><span class="s-sum">${esc(q.t)}</span></summary>
+   <div class="body"><p>${hl(q.t,mineSet)}</p>
    ${q.a?`<div class="ans">Réponse du ${fd(q.a.d)}, après ${months(D(q.d),D(q.a.d))} mois : ${esc(q.a.t)}</div>`:`<div class="ans none">Posée le ${fd(q.d)}, sans réponse depuis ${months(D(q.d),NOW)} mois.</div>`}
-   ${q.mine?"":citedIn(ta.value).has(q.n)?`<div class="c-act"><span class="st ok">Citée dans votre texte</span></div>`:`<div class="c-act"><button class="btn" data-cite="${q.n}">Citer dans ma question</button><span class="kbd">ou <kbd>C</kbd><span class="fine">, ou glisser la poignée sur le texte</span></span></div>`}</div></div></div></article>`}).join("")}</div>
-   ${L.length>shown?`<button class="btn more" id="more">Afficher ${L.length-shown} de plus</button>`:""}`;
-  const m=$("#more");if(m)m.onclick=()=>{shown=99;renderList()};
+   ${q.mine?`<div class="c-act"><span class="fine">Votre propre question : elle se signale au groupe, elle ne se cite pas.</span></div>`:cited.has(q.n)?`<div class="c-act"><span class="st ok">Citée dans votre texte</span><button type="button" class="ghost" data-uncite="${q.n}">Retirer la citation</button></div>`:`<div class="c-act"><button type="button" class="btn" data-cite="${q.n}">Citer</button><span class="fine">avant la phrase de demande</span></div>`}
+   </div></details></article>`}).join("")}</div><p class="sr" id="grip-help">Entrée pour saisir, flèches pour choisir la phrase, Entrée pour déposer, Échap pour annuler.</p>`;
 }
-// interactions de la liste
-$("#panel").addEventListener("click",e=>{const c=e.target.closest("[data-cite]");if(c)return cite(c.dataset.cite);
-  const t=e.target.closest(".c-tg");if(t){const card=t.closest(".card"),n=card.dataset.n,o=!openSet.has(n);o?openSet.add(n):openSet.delete(n);card.classList.toggle("open",o);t.setAttribute("aria-expanded",o)}});
-$("#panel").addEventListener("keydown",e=>{if((e.key==="c"||e.key==="C")&&!e.ctrlKey&&!e.metaKey){const card=e.target.closest(".card");if(card&&!Q.find(q=>q.n===card.dataset.n).mine&&!citedIn(ta.value).has(card.dataset.n)){e.preventDefault();cite(card.dataset.n)}}});
-$("#tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(!b)return;tab=b.dataset.t;shown=3;run();$("#t-"+tab).focus()});
-$("#tabs").addEventListener("keydown",e=>{const i=TABS.findIndex(t=>t[0]===tab);let j=e.key==="ArrowRight"?i+1:e.key==="ArrowLeft"?i-1:e.key==="Home"?0:e.key==="End"?TABS.length-1:null;if(j===null)return;e.preventDefault();tab=TABS[(j+TABS.length)%TABS.length][0];shown=3;run();$("#t-"+tab).focus()});
-// glisser-déposer (souris) ; le clavier passe par C ou le bouton
-const drop=$("#drop");let dragN=null;
-$("#panel").addEventListener("dragstart",e=>{const card=e.target.closest(".card");if(!card)return;dragN=card.dataset.n;card.classList.add("dragging");e.dataTransfer.setData("text/plain","");e.dataTransfer.effectAllowed="copy"});
-$("#panel").addEventListener("dragend",e=>{$$(".card.dragging").forEach(c=>c.classList.remove("dragging"));drop.classList.remove("over");dragN=null});
-drop.addEventListener("dragover",e=>{if(!dragN)return;e.preventDefault();drop.classList.add("over")});
-drop.addEventListener("dragleave",()=>drop.classList.remove("over"));
-drop.addEventListener("drop",e=>{if(!dragN)return;e.preventDefault();drop.classList.remove("over");const n=dragN;dragN=null;if(citedIn(ta.value).has(n))return note(`La question ${n} est déjà citée.`);if(Q.find(q=>q.n===n).mine)return note("Vos propres questions ne se citent pas : demandez plutôt leur signalement.");cite(n)});
-// tiroir du ministère
-let lastFocus=null;
-function openDrawer(){lastFocus=document.activeElement;const S=DEL[cur],mx=Math.max(...S.bins);
-  $("#drawer").innerHTML=`<div class="dr-h"><h2 id="dr-t">Comment répond le ministre ${minLabel(cur)}</h2><button class="close" id="cls" aria-label="Fermer">×</button></div>
-  <div class="kpis"><div class="kpi"><b>${pct(cur)} %</b><span>répondues dans les deux mois</span></div><div class="kpi"><b>${medM(cur)} mois</b><span>délai médian</span></div></div>
-  <div><span class="lbl">Délai de réponse des ${S.n} questions de la législature</span><div class="bars">${S.bins.map((b,i)=>`<div><span>${BINS[i]}</span><i class="${i===0?"ok":""}" style="width:${Math.round(100*b/mx)}%"></i><em>${b}</em></div>`).join("")}</div></div>
-  <p class="note">Au-delà de deux mois sans réponse, le groupe peut signaler la question : le ministre doit alors répondre sous dix jours.</p>`;
-  $("#drawer").classList.add("on");$("#scrim").classList.add("on");$("#cls").onclick=closeDrawer;setTimeout(()=>$("#cls").focus(),50)}
-function closeDrawer(){$("#drawer").classList.remove("on");$("#scrim").classList.remove("on");lastFocus&&lastFocus.focus&&lastFocus.focus()}
-$("#scrim").onclick=closeDrawer;
-document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("#drawer").classList.contains("on"))closeDrawer();
-  if(e.key==="Tab"&&$("#drawer").classList.contains("on")){const f=$$("#drawer button");if(f.length===1){e.preventDefault();f[0].focus()}}});
-let tm;ta.addEventListener("input",()=>{clearTimeout(tm);tm=setTimeout(()=>{shown=3;run()},150)});
-// premier chargement de l'archive : au-delà de 400 ms, on montre la forme du contenu
-skeleton();run();setTimeout(()=>{loaded=true;run()},700);
+function skeleton(){
+  $("#verdict").innerHTML=`<span class="dot"></span><span class="sk" style="width:62%;height:12px;margin-top:4px"></span><span class="sk" style="grid-column:2;width:88%;height:11px"></span>`;
+  $("#tabs").innerHTML=TABS.map(()=>`<span class="sk" style="width:78px;height:13px;margin:14px 10px"></span>`).join("");
+  $("#panel").innerHTML=`<div class="list">${[0,1,2,3].map(()=>`<div class="skc"><span class="sk" style="width:12px;height:18px;margin:18px 0 0 14px"></span><div><span class="sk" style="width:46%;height:11px"></span><span class="sk" style="width:90%;height:11px"></span></div></div>`).join("")}</div>`;
+}
+
+// ——— Onglets : tabindex itinérant, flèches, Origine/Fin ; flèches de défilement si débordement ———
+function selectTab(id){tab=id;renderTabs();renderList();const b=$("#t-"+id);b.focus();b.scrollIntoView({block:"nearest",inline:"nearest"})}
+$("#tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(b)selectTab(b.dataset.t)});
+$("#tabs").addEventListener("keydown",e=>{const i=TABS.findIndex(t=>t[0]===tab);const j={ArrowRight:i+1,ArrowLeft:i-1,Home:0,End:TABS.length-1}[e.key];if(j===undefined)return;e.preventDefault();selectTab(TABS[(j+TABS.length)%TABS.length][0])});
+function arrows(){const el=$("#tabs");$("#arrL").hidden=!(el.scrollLeft>0);$("#arrR").hidden=!(el.scrollLeft+el.clientWidth<el.scrollWidth-1)}
+$("#tabs").addEventListener("scroll",arrows);addEventListener("resize",arrows);
+$("#arrL").onclick=()=>$("#tabs").scrollBy({left:-200,behavior:"smooth"});
+$("#arrR").onclick=()=>$("#tabs").scrollBy({left:200,behavior:"smooth"});
+
+// ——— Cartes : dépliage natif, flèches haut/bas entre les en-têtes ———
+$("#panel").addEventListener("toggle",e=>{const d=e.target;if(d.tagName!=="DETAILS"||!openSet)return;d.open?openSet.add(d.dataset.n):openSet.delete(d.dataset.n)},true);
+$("#panel").addEventListener("keydown",e=>{
+  if(e.target.tagName==="SUMMARY"&&(e.key==="ArrowDown"||e.key==="ArrowUp")){const s=$$("#panel summary"),i=s.indexOf(e.target),j=i+(e.key==="ArrowDown"?1:-1);if(s[j]){e.preventDefault();s[j].focus()}}
+});
+$("#panel").addEventListener("click",e=>{
+  const c=e.target.closest("[data-cite]");if(c){insertCite(c.dataset.cite,defaultSlot());return}
+  const u=e.target.closest("[data-uncite]");if(u)uncite(u.dataset.uncite);
+});
+
+// ——— Citer : phrases et emplacements ———
+const sentences=t=>t.trim().split(/(?<=[.!?»])\s+(?=[A-ZÉÈÀÂÎÔÛÇ«])/).filter(Boolean);
+function defaultSlot(){const S=sentences(ta.value),i=S.findIndex(s=>/^(Il|Elle) lui demande/.test(s));return i>=0?i:S.length}
+function focusCard(n,sel){requestAnimationFrame(()=>{const c=$(`.card[data-n="${n}"]`);const el=c&&(c.querySelector(sel||"summary"));el&&el.focus()})}
+function insertCite(n,slot){const q=Q.find(x=>x.n===n),before=ta.value,S=sentences(before);S.splice(slot,0,citeText(q));ta.value=S.join(" ");
+  openSet.add(n);changed();focusCard(n,"[data-uncite]");
+  toast(`Question ${n} citée dans votre texte.`,"success",{label:"Annuler",fn:()=>{ta.value=before;changed();toast("Citation retirée.","success")}})}
+function uncite(n){const before=ta.value,q=Q.find(x=>x.n===n);ta.value=before.replace(" "+citeText(q),"").replace(citeText(q),"").trim();changed();focusCard(n,"[data-cite]");
+  toast(`Citation de ${n} retirée.`,"success",{label:"Annuler",fn:()=>{ta.value=before;changed()}})}
+function changed(){store.set("qe-draft",ta.value);if(sent){sent=false;$("#sent").textContent="";$("#go").disabled=false}run()}
+
+// ——— Glisser-déposer (pointeur, souris et tactile) avec équivalent clavier complet ———
+let drag=null; // {n, mode:'pointer'|'key', slot, start, ghost, origin}
+const map=$("#map"),drop=$("#drop");
+function slotLabel(S,i){return i>=S.length?"à la fin du texte":`avant « ${S[i].split(/\s+/).slice(0,4).join(" ")}… »`}
+function renderMap(){const S=sentences(ta.value),i=drag.slot;
+  map.innerHTML=`<div class="map-cap">${drag.mode==="key"?`Position <b>${i+1} sur ${S.length+1}</b> · ${esc(slotLabel(S,i))} · Entrée pour déposer, Échap pour annuler`:i===null?"Relâchez sur le texte pour citer à cet endroit":`Citer <b>${esc(slotLabel(S,i))}</b>`}</div>`+
+   S.map((s,k)=>`<span class="slot${k===i?" on":""}" data-i="${k}">+</span>${esc(s)} `).join("")+`<span class="slot${S.length===i?" on":""}" data-i="${S.length}">+</span>`;
+  const on=map.querySelector(".slot.on");if(on&&drag.mode==="key"){const r=on.getBoundingClientRect(),m=map.getBoundingClientRect();if(r.top<m.top+34||r.bottom>m.bottom)map.scrollTop+=r.top-m.top-60}}
+function lift(n,mode){const S=sentences(ta.value);drag={n,mode,slot:mode==="key"?defaultSlot():null,origin:document.activeElement};
+  drop.classList.add("lifting");$(`.card[data-n="${n}"]`).classList.add("lifted");renderMap();
+  if(mode==="key"){drop.scrollIntoView({block:"nearest",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+    say(`${n} saisie. Position ${drag.slot+1} sur ${S.length+1}, ${slotLabel(S,drag.slot)}. Flèches pour déplacer, Entrée pour déposer, Échap pour annuler.`,true)}
+  else say(`${n} saisie. Glissez sur la phrase voulue.`,true)}
+function endDrag(ok){if(!drag)return;const d=drag;drag=null;drop.classList.remove("lifting");map.innerHTML="";
+  $$(".card.lifted").forEach(c=>c.classList.remove("lifted"));if(d.ghost)d.ghost.remove();cancelAnimationFrame(scrollRaf);
+  if(ok&&d.slot!==null){insertCite(d.n,d.slot);say(`${d.n} citée, position ${d.slot+1}.`,true)}
+  else{say(`Citation de ${d.n} annulée.`,true);if(d.mode==="key")focusCard(d.n,".grip")}}
+function moveSlot(delta){const S=sentences(ta.value);drag.slot=Math.max(0,Math.min(S.length,drag.slot+delta));renderMap();say(`Position ${drag.slot+1} sur ${S.length+1}, ${slotLabel(S,drag.slot)}.`,true)}
+// clavier
+$("#panel").addEventListener("keydown",e=>{const g=e.target.closest(".grip");if(!g)return;
+  if(e.key==="Enter"||e.key===" "){e.preventDefault();if(!drag)lift(g.dataset.n,"key");else if(drag.mode==="key")endDrag(true);return}
+  if(!drag||drag.mode!=="key")return;
+  if(e.key==="ArrowUp"||e.key==="ArrowLeft"){e.preventDefault();moveSlot(-1)}
+  else if(e.key==="ArrowDown"||e.key==="ArrowRight"){e.preventDefault();moveSlot(1)}
+  else if(e.key==="Escape"){e.preventDefault();e.stopPropagation();endDrag(false)}
+  else if(e.key==="Tab"){endDrag(false)}});
+$("#panel").addEventListener("keyup",e=>{if(e.target.closest(".grip")&&e.key===" ")e.preventDefault()});
+$("#panel").addEventListener("focusout",e=>{if(drag&&drag.mode==="key"&&e.target.closest(".grip"))setTimeout(()=>{if(drag&&drag.mode==="key"&&!document.activeElement.closest?.(".grip"))endDrag(false)},0)});
+// pointeur
+let pd=null,scrollRaf=0,lastY=0;
+$("#panel").addEventListener("pointerdown",e=>{const g=e.target.closest(".grip");if(!g||e.button!==0||drag)return;pd={n:g.dataset.n,x:e.clientX,y:e.clientY,id:e.pointerId,el:g};g.setPointerCapture(e.pointerId)});
+$("#panel").addEventListener("pointermove",e=>{if(!pd||e.pointerId!==pd.id)return;
+  if(!drag){if(Math.hypot(e.clientX-pd.x,e.clientY-pd.y)<5)return;lift(pd.n,"pointer");const gh=document.createElement("div");gh.className="ghost-chip";gh.textContent=`Citer ${pd.n}`;document.body.append(gh);drag.ghost=gh;autoScroll()}
+  lastY=e.clientY;drag.ghost.style.transform=`translate(${e.clientX+12}px,${e.clientY+12}px)`;hit(e.clientX,e.clientY)});
+function hit(x,y){const m=map.getBoundingClientRect();let best=null;
+  if(x>m.left-24&&x<m.right+24&&y>m.top-24&&y<m.bottom+24){let bd=1e9;map.querySelectorAll(".slot").forEach(s=>{const r=s.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,dd=Math.hypot((x-cx)*.6,(y-cy)*1.6);if(dd<bd){bd=dd;best=+s.dataset.i}})}
+  if(best!==drag.slot){drag.slot=best;renderMap()}}
+function autoScroll(){scrollRaf=requestAnimationFrame(()=>{if(!drag)return;const edge=70;if(lastY&&lastY<edge)scrollBy(0,-14);else if(lastY>innerHeight-edge)scrollBy(0,14);autoScroll()})}
+function pointerEnd(e,ok){if(!pd||e.pointerId!==pd.id)return;pd=null;if(drag&&drag.mode==="pointer")endDrag(ok)}
+$("#panel").addEventListener("pointerup",e=>pointerEnd(e,true));
+$("#panel").addEventListener("pointercancel",e=>pointerEnd(e,false));
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&drag&&drag.mode==="pointer"){pd=null;endDrag(false)}});
+
+// ——— Toasts : rôle selon le type, 5 s pour les succès, jamais pour les erreurs, 3 au plus ———
+function toast(msg,type="success",action){const box=$("#toasts");while(box.children.length>=3)box.lastElementChild.remove();
+  const t=document.createElement("div");t.className="tst "+type;const err=type==="error";
+  t.setAttribute("role",err?"alert":"status");t.setAttribute("aria-live",err?"assertive":"polite");
+  t.innerHTML=`<span>${esc(msg)}</span>${action?`<button type="button" class="ghost">${esc(action.label)}</button>`:""}<button type="button" class="x" aria-label="Fermer la notification">×</button>`;
+  box.prepend(t);let timer=null;
+  const close=()=>{clearTimeout(timer);const had=t.contains(document.activeElement);t.classList.add("out");setTimeout(()=>t.remove(),200);if(had)ta.focus()};
+  if(!err)timer=setTimeout(close,5000);
+  t.addEventListener("pointerenter",()=>clearTimeout(timer));t.addEventListener("focusin",()=>clearTimeout(timer));
+  t.querySelector(".x").onclick=close;
+  if(action)t.querySelector(".ghost").onclick=()=>{close();action.fn()};
+  t.addEventListener("keydown",e=>{if(e.key==="Escape"){e.stopPropagation();close()}})}
+
+// ——— Copier (action secondaire) ———
+$("#copy").onclick=async()=>{try{await navigator.clipboard.writeText(ta.value);toast("Texte copié dans le presse-papiers.")}
+  catch(e){toast("Nous n'avons pas pu accéder au presse-papiers — sélectionnez le texte (Ctrl+A) puis copiez-le (Ctrl+C).","error")}};
+
+// ——— Dépôt : action principale, confirmée dans un <dialog> natif ———
+const dlg=$("#dlg");let dlgFrom=null;
+$("#form").addEventListener("submit",e=>{e.preventDefault();if(!validate()){ta.focus();return}
+  const dup=R[0]&&R[0].s>=.42?R[0]:null,cited=citedIn(ta.value);
+  $("#dlg-d").textContent=`Elle sera adressée au ministre ${MINDE[cur]} et publiée au Journal officiel : une fois déposée, elle ne peut plus être modifiée.`;
+  $("#dlg-r").innerHTML=dup?`Rappel : très proche de <b>${dup.q.n}</b>${dup.q.mine?", que vous avez déjà posée":dup.q.a?", déjà répondue":", sans réponse"}${!dup.q.mine?(cited.has(dup.q.n)?" ; elle est citée dans votre texte.":" ; elle n'est pas citée dans votre texte."):"."}`:`Aucune question proche ne pose la même question.`;
+  dlgFrom=document.activeElement;dlg.showModal();$("#dlg-no").focus()});
+$("#dlg-no").onclick=()=>dlg.close();
+$("#dlg-ok").onclick=()=>{dlg.close("ok")};
+dlg.addEventListener("click",e=>{if(e.target===dlg){const r=dlg.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dlg.close()}});
+dlg.addEventListener("close",()=>{if(dlg.returnValue==="ok"){sent=true;$("#go").disabled=true;$("#sent").textContent="Transmise pour dépôt le 10 nov. 2026";toast("Question transmise au secrétariat du groupe pour dépôt.");$("#copy").focus()}
+  else dlgFrom&&dlgFrom.focus&&dlgFrom.focus();dlg.returnValue=""});
+
+// ——— Frappe : recalcul en 150 ms (sous le seuil de 400 ms, aucun indicateur) ———
+let tm;ta.addEventListener("input",()=>{clearTimeout(tm);tm=setTimeout(()=>{changed();say(`${R.length} question${R.length>1?"s":""} proche${R.length>1?"s":""}.`)},150)});
+
+// ——— Premier chargement de l'archive : squelette seulement s'il dépasse 200 ms ———
+renderMini();checkMinistry();
+const skT=setTimeout(()=>{if(!loaded)skeleton()},200);
+setTimeout(()=>{clearTimeout(skT);loaded=true;run();say(`${R.length} questions proches trouvées dans l'archive.`)},650);
 </script>
