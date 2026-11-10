@@ -366,7 +366,7 @@ function check(){
   if(ok.to) r.push(row("to","ok","Destinataire",`« ${esc(A.to[1].split(/ (?:aux|sur|pour|avant|d'ici|afin|dans) /)[0].trim())} »`));
   else if(shown.has("to")) r.push(row("to","warn","Destinataire","Aucun destinataire n'est repéré dans le texte. Choisissez qui doit agir :",toFix));
   else r.push(idle("to","Destinataire","Qui doit agir : un ministre, le Gouvernement, une agence."));
-  const dueFix=`<div class="fix"><label class="sr" for="due-in">Échéance</label><input type="date" id="due-in" value="${defDue}" min="${iso(NOW)}"><button class="ghost" data-ins="due">Insérer</button></div>`;
+  const dueFix=`<div class="fix"><label class="sr" for="due-in">Échéance</label><input type="date" lang="fr" id="due-in" value="${defDue}" min="${iso(NOW)}"><button class="ghost" data-ins="due">Insérer</button></div>`;
   if(ok.due) r.push(row("due","ok","Échéance",`« ${esc(A.due[1])} »`));
   else if(shown.has("due")) r.push(row("due","warn","Échéance","Aucune date n'est repérée : le suivi à six mois n'aura pas de repère. Choisissez une date :",dueFix));
   else r.push(idle("due","Échéance","Une date, ou une loi de finances."));
@@ -384,7 +384,11 @@ function check(){
 function surface(){const t=$("#t").value, a=analyse(t), n=shown.size;
   if(!(a.verb&&!a.vague)) shown.add("acte"); if(!a.to) shown.add("to"); if(!a.due) shown.add("due");
   if(shown.size!==n) check()}   // ne re-rend que si un signalement apparaît
-$("#t").addEventListener("blur",()=>{if(tm){clearTimeout(tm);tm=null;check()} surface()});
+/* au blur, attendre la fin du clic en cours : le signalement ne doit pas déplacer la cible sous le pointeur */
+let ptrDown=false; addEventListener("pointerdown",()=>ptrDown=true,true);
+$("#t").addEventListener("blur",()=>{ const run=()=>{ if(tm){clearTimeout(tm);tm=null;check()} surface() };
+  if(ptrDown) addEventListener("pointerup",()=>setTimeout(run,0),{once:true,capture:true}); else run() });
+addEventListener("pointerup",()=>ptrDown=false);
 $("#t").addEventListener("input",()=>{clearTimeout(tm);tm=setTimeout(()=>{tm=null;check()},150)});
 function insert(kind){
   const ta=$("#t"); let v=ta.value.trim().replace(/\s*$/,""); if(v&&!/[.!?]$/.test(v)) v+=".";
