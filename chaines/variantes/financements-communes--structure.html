@@ -1,0 +1,282 @@
+<title>Communes et subventions · structure</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+
+<style>
+/* Angle « structure » : l'objet central devient la commune et sa situation.
+   Liste regroupée par situation (ou par taille) à gauche, fiche de la commune à droite :
+   verdict en une phrase, comparaison avec les communes de même taille, projets par dispositif,
+   ce que la donnée ne dit pas et ce qu'il faut faire avant d'appeler. */
+.top{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:flex-end;justify-content:space-between}
+.caveat{display:flex;gap:10px;align-items:flex-start;margin:0 0 16px;padding:10px 12px;border:1px solid rgba(227,163,63,.35);border-radius:9px;background:rgba(227,163,63,.06);font-size:13px;color:var(--text);max-width:780px}
+.caveat svg{flex:none;margin-top:2px;color:var(--warn)}
+.layout{display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:16px;align-items:start}
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px;border-bottom:1px solid var(--line)}
+.search{position:relative;flex:1 1 160px;min-width:0}
+.search input{width:100%;padding-left:30px;height:34px}
+.search svg{position:absolute;left:9px;top:9px;color:var(--dim);pointer-events:none}
+.seg{display:inline-flex;border:1px solid var(--line2);border-radius:7px;overflow:hidden;flex:none}
+.seg button{border:0;background:none;color:var(--muted);padding:0 10px;height:32px;font-size:12.5px;cursor:pointer;transition:background .2s,color .2s}
+.seg button[aria-pressed=true]{background:var(--lit);color:var(--fg)}
+.seg-l{font-size:12px;color:var(--dim)}
+.grp{padding:4px 6px 6px}
+.grp+.grp{border-top:1px solid var(--line)}
+.grp h3{margin:10px 8px 4px;font-size:11.5px;font-weight:500;color:var(--dim);letter-spacing:.04em;text-transform:uppercase;display:flex;justify-content:space-between;gap:8px}
+.grp h3 .n{color:var(--muted);letter-spacing:0}
+.grp h3 .d{display:block;text-transform:none;letter-spacing:0;font-size:12px;color:var(--dim);font-weight:400;margin-top:1px}
+.row{display:grid;grid-template-columns:minmax(0,1fr) 92px 64px;gap:10px;align-items:center;width:100%;min-height:44px;border:0;background:none;text-align:left;padding:6px 8px;border-radius:7px;cursor:pointer;color:var(--text);transition:background .2s}
+.row:hover{background:var(--s2)}
+.row[aria-current=true]{background:var(--lit)}
+.row b{display:block;color:var(--fg);font-weight:500;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row small{display:block;color:var(--dim);font-size:12px}
+.row .eu{text-align:right;font-size:13px;color:var(--fg)}
+.row .eu.zero{color:var(--err)}
+.mini{position:relative;height:14px}
+.mini .ax{position:absolute;left:0;right:0;top:6px;height:2px;background:var(--line);border-radius:1px}
+.mini .md{position:absolute;top:1px;width:2px;height:12px;background:var(--muted);border-radius:1px}
+.mini .pt{position:absolute;top:2px;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:var(--accent)}
+.mini .pt.z{background:var(--bg);border:2px solid var(--err)}
+.empty{margin:14px;padding:12px;border:1px dashed var(--line2);border-radius:8px;font-size:13px;color:var(--muted)}
+.empty b{color:var(--fg);font-weight:500}
+.empty .btn{margin-top:8px}
+/* fiche */
+.fiche{position:sticky;top:12px;padding:18px 20px 20px}
+.fiche-h{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+.fiche h2{margin:0;font:600 18px/1.3 var(--f);color:var(--fg)}
+.fiche .sub{font-size:12.5px;color:var(--dim)}
+.nav{display:flex;gap:6px;flex:none}
+.nav .btn{padding:0;width:34px;height:34px;display:grid;place-items:center}
+.back{display:none}
+.verdict{margin:14px 0 4px;font-size:15px;line-height:1.55;color:var(--fg);text-wrap:pretty}
+.verdict em{font-style:normal;color:#f2a7a9}
+.verdict em.ok{color:#7fd3a8}
+.why{font-size:12.5px;color:var(--muted);margin:0 0 6px}
+.h4{margin:20px 0 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.peer{position:relative;height:66px;margin:4px 6px 0}
+.peer .ax{position:absolute;left:0;right:0;top:30px;height:2px;background:var(--line)}
+.peer .md{position:absolute;top:18px;width:2px;height:26px;background:var(--muted)}
+.peer .mdl{position:absolute;top:0;font-size:11.5px;color:var(--muted);transform:translateX(-50%);white-space:nowrap}
+.peer .p{position:absolute;top:25px;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:var(--dim);border:0;padding:0;cursor:pointer}
+.peer .p.z{background:var(--s1);border:2px solid var(--dim)}
+.peer .p.me{background:var(--accent);box-shadow:0 0 0 3px var(--s1);z-index:2}
+.peer .p.me.z{background:var(--s1);border-color:var(--err)}
+.peer .pl{position:absolute;top:44px;font-size:11.5px;color:var(--muted);white-space:nowrap;transform:translateX(-50%)}
+.peer .pl.me{color:var(--fg)}
+.scale{display:flex;justify-content:space-between;font-size:11px;color:var(--dim);margin:0 6px}
+.disp{display:grid;gap:2px}
+.pj{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:10px;font-size:13px;padding:7px 0;border-top:1px solid var(--line)}
+.pj .y{color:var(--dim)}
+.pj .m{text-align:right;white-space:nowrap}
+.dh{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);padding:8px 0 2px}
+.dh b{color:var(--fg);font-weight:500}
+.tot{display:flex;justify-content:space-between;padding:9px 0 0;border-top:1px solid var(--line2);font-size:13px;color:var(--fg)}
+.unknown{margin-top:18px;padding:12px 14px;border-radius:9px;background:var(--s2);font-size:13px}
+.unknown p{margin:0 0 8px}
+.unknown ol{margin:0;padding-left:18px;color:var(--text)}
+.unknown li+li{margin-top:4px}
+abbr{text-decoration:underline dotted 1px var(--dim);text-underline-offset:3px;cursor:help}
+.foot{margin-top:14px;font-size:12px;color:var(--dim)}
+.fade{animation:fd .25s var(--ease)}
+@keyframes fd{from{opacity:0;transform:translateY(4px)}}
+@media (max-width:820px){
+  .layout{grid-template-columns:minmax(0,1fr)}
+  .fiche{position:static}
+  body.detail .listp{display:none}
+  body:not(.detail) .fiche{display:none}
+  .search{flex-basis:100%}
+  .back{display:inline-flex;align-items:center;gap:6px;margin:0 0 10px}
+}
+</style>
+
+<div class="wrap" style="max-width:1080px">
+  <div class="ctx">Circonscription (communes fictives) · <abbr title="Dotation d'équipement des territoires ruraux">DETR</abbr>, <abbr title="Dotation de soutien à l'investissement local">DSIL</abbr> et Fonds vert · projets retenus de 2018 à 2025 · source DGCL</div>
+  <h1>Quelles communes passent à côté des subventions ?</h1>
+  <p class="lead" id="lead"></p>
+  <div class="caveat" role="note"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="8" cy="8" r="6.5"/><path d="M8 4.5v4.2M8 11v.3"/></svg><span>Seuls les projets <b>retenus</b> sont publiés. Une commune sans financement a pu déposer des dossiers refusés : vérifiez auprès de la préfecture avant de l'appeler.</span></div>
+
+  <div class="layout">
+    <section class="panel listp" aria-label="Communes de la circonscription">
+      <div class="tools">
+        <label class="search"><span class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Chercher une commune</span>
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="7" cy="7" r="4.8"/><path d="M10.5 10.5L14 14"/></svg>
+          <input type="text" id="q" placeholder="Chercher une commune" autocomplete="off"></label>
+        <span class="seg-l" id="segl">Regrouper par</span>
+        <div class="seg" role="group" aria-labelledby="segl"><button data-g="sit" aria-pressed="true">situation</button><button data-g="taille" aria-pressed="false">taille</button></div>
+      </div>
+      <div id="list" role="list"></div>
+    </section>
+    <section class="panel fiche" id="fiche" aria-live="polite"></section>
+  </div>
+  <p class="foot">€ par habitant : total des subventions retenues de 2018 à 2025, divisé par la population. Médiane : la moitié des communes de même taille du département ont obtenu moins, l'autre moitié plus.</p>
+</div>
+
+<script>
+const STRATES=[{k:"<1000",l:"moins de 1 000 hab.",max:999,med:210},{k:"1000-3500",l:"1 000 à 3 500 hab.",max:3499,med:150},{k:"3500-10000",l:"3 500 à 10 000 hab.",max:9999,med:95},{k:">10000",l:"plus de 10 000 hab.",max:1e9,med:60}];
+const C=[
+ {n:"Villeneuve",p:24300,pj:[[2019,"DSIL","Rénovation thermique du groupe scolaire Jaurès",820000],[2021,"DETR","Voirie du quartier de la gare",410000],[2023,"Fonds vert","Renaturation des cours d'école",360000]]},
+ {n:"Saint-Aubin",p:11800,pj:[[2020,"DETR","Extension de la médiathèque",290000]]},
+ {n:"Les Ormes",p:6200,pj:[[2018,"DETR","Salle polyvalente",240000],[2022,"DSIL","Chaudière bois de l'école",180000],[2024,"Fonds vert","Éclairage public à LED",95000]]},
+ {n:"Bréval",p:4100,pj:[]},
+ {n:"Montfort",p:3900,pj:[[2023,"DETR","Accessibilité de la mairie",120000]]},
+ {n:"La Chapelle-sur-Vire",p:2650,pj:[[2019,"DETR","Cantine scolaire",310000],[2021,"DETR","Église : toiture",160000],[2024,"Fonds vert","Haies et mares",42000]]},
+ {n:"Garennes",p:1900,pj:[]},
+ {n:"Saint-Martin-des-Prés",p:1450,pj:[[2022,"DETR","Atelier municipal",95000]]},
+ {n:"Vernay",p:1120,pj:[[2020,"DETR","École : mise aux normes",190000],[2025,"DSIL","Maison de santé",260000]]},
+ {n:"Le Mesnil",p:780,pj:[]},
+ {n:"Ruelles",p:540,pj:[[2021,"DETR","Salle des fêtes",88000],[2024,"DETR","Voirie communale",64000]]},
+ {n:"Hautbois",p:390,pj:[]},
+ {n:"Foucarville",p:260,pj:[[2023,"Fonds vert","Désimperméabilisation de la place",58000]]},
+];
+const strate=p=>STRATES.find(s=>p<=s.max);
+C.forEach(c=>{c.st=strate(c.p);c.tot=c.pj.reduce((s,x)=>s+x[3],0);c.ph=c.tot/c.p;c.ratio=c.ph/c.st.med});
+const SIT=[
+  {k:"zero",l:"Aucun projet retenu",d:"Rien depuis 2018",t:c=>!c.pj.length},
+  {k:"low",l:"Moins de la moitié de la médiane",d:"Financées, mais loin derrière les communes de leur taille",t:c=>c.pj.length&&c.ratio<.5},
+  {k:"mid",l:"Autour de la médiane",d:"Entre la moitié et 1,2 fois la médiane",t:c=>c.ratio>=.5&&c.ratio<=1.2},
+  {k:"hi",l:"Au-dessus",d:"Plus de 1,2 fois la médiane",t:c=>c.ratio>1.2}];
+const sitOf=c=>SIT.find(s=>s.t(c));
+const MAX=Math.max(...C.map(c=>Math.max(c.ph,c.st.med)))*1.08, X=v=>Math.min(100,100*v/MAX);
+const eur=v=>nf(Math.round(v))+" €";
+const frac=r=>r===0?"rien":r<.3?"moins d'un tiers":r<.4?"environ un tiers":r<.5?"moins de la moitié":r<.9?"un peu moins":r<=1.1?"autant":r<1.5?"un peu plus":r<2.5?"deux fois plus":"plus de deux fois plus";
+let group="sit", sel=null, q="";
+const norm=s=>s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+
+function row(c){
+  return `<button class="row" role="listitem" data-n="${esc(c.n)}" aria-current="${sel===c?"true":"false"}"><span><b>${esc(c.n)}</b><small>${nf(c.p)} hab.</small></span>
+  <span class="mini" aria-hidden="true"><span class="ax"></span><span class="md" style="left:${X(c.st.med)}%"></span><span class="pt ${c.pj.length?"":"z"}" style="left:${X(c.ph)}%"></span></span>
+  <span class="eu ${c.pj.length?"":"zero"}">${eur(c.ph)}<small>/ ${c.st.med} €</small></span></button>`;
+}
+function renderList(){
+  const L=C.filter(c=>!q||norm(c.n).includes(norm(q)));
+  if(!L.length){
+    $("#list").innerHTML=`<div class="empty" role="status"><b>Aucune commune ne contient « ${esc(q)} ».</b><br>La liste ne compte que les ${C.length} communes de la circonscription. Vérifiez l'orthographe ou cherchez une partie du nom (« Martin », « Vire »).<br><button class="btn" data-clear>Effacer la recherche</button></div>`;return;
+  }
+  const groups=group==="sit"?SIT.map(s=>({l:s.l,d:s.d,items:L.filter(s.t).sort((a,b)=>a.ratio-b.ratio||a.p-b.p)}))
+    :[...STRATES].reverse().map(s=>({l:s.l,d:"Médiane du département : "+s.med+" € par habitant",items:L.filter(c=>c.st===s).sort((a,b)=>a.ratio-b.ratio)}));
+  $("#list").innerHTML=groups.filter(g=>g.items.length).map(g=>`<div class="grp"><h3><span>${g.l}<span class="d">${g.d}</span></span><span class="n">${g.items.length}</span></h3>${g.items.map(row).join("")}</div>`).join("");
+}
+function ordered(){return [...$$("#list .row")].map(b=>C.find(c=>c.n===b.dataset.n))}
+let animate=false;
+function renderFiche(){
+  const c=sel; if(!c){$("#fiche").innerHTML="";return}
+  const s=sitOf(c), peers=C.filter(x=>x.st===c.st);
+  const pmax=Math.max(c.st.med,...peers.map(x=>x.ph))*1.15, px=v=>4+92*v/pmax;
+  const verdict=!c.pj.length
+    ?`<em>Aucun projet retenu</em> depuis 2018. Les communes de même taille du département ont obtenu, en médiane, <b>${c.st.med} €</b> par habitant.`
+    :`${eur(c.ph)} par habitant, soit <em class="${c.ratio>=.9?"ok":""}">${frac(c.ratio)}</em> que la médiane des communes de même taille (${c.st.med} €).`;
+  const why=!c.pj.length?"Pour " + nf(c.p)+" habitants, atteindre la médiane représenterait environ "+eur(c.st.med*c.p)+" de projets.":
+    c.ratio<.5?"Il manque environ "+eur((c.st.med-c.ph)*c.p)+" pour atteindre la médiane, sur "+c.pj.length+" projet"+(c.pj.length>1?"s":"")+" retenu"+(c.pj.length>1?"s":"")+".":"";
+  const byD=["DETR","DSIL","Fonds vert"].map(d=>({d,items:c.pj.filter(p=>p[1]===d)})).filter(g=>g.items.length);
+  // placement des étiquettes de pairs : on évite les chevauchements simples
+  const pts=peers.map(x=>({x,l:px(x.ph)})).sort((a,b)=>a.l-b.l);
+  $("#fiche").innerHTML=`<div class="${animate?"fade":""}">
+   <button class="ghost back" data-back>← Toutes les communes</button>
+   <div class="fiche-h"><div><h2>${esc(c.n)}</h2><div class="sub">${nf(c.p)} habitants · communes de ${c.st.l} · ${s.l.toLowerCase()}</div></div>
+   <div class="nav"><button class="btn" data-step="-1" aria-label="Commune précédente" title="Commune précédente (↑)">↑</button><button class="btn" data-step="1" aria-label="Commune suivante" title="Commune suivante (↓)">↓</button></div></div>
+   <p class="verdict">${verdict}</p>${why?`<p class="why">${why}</p>`:""}
+   <div class="h4">Face aux communes de même taille de la circonscription</div>
+   <div class="peer" role="img" aria-label="${esc(peers.map(x=>x.n+" : "+eur(x.ph)).join(", "))} ; médiane départementale ${c.st.med} €">
+     <span class="ax"></span><span class="md" style="left:${px(c.st.med)}%"></span><span class="mdl" style="left:${px(c.st.med)}%">médiane ${c.st.med} €</span>
+     ${pts.map(({x,l})=>`<button class="p ${x===c?"me":""} ${x.pj.length?"":"z"}" style="left:${l}%" data-n="${esc(x.n)}" aria-label="${esc(x.n)}" title="${esc(x.n)} · ${eur(x.ph)}"></button>`).join("")}
+     <span class="pl me" style="left:${Math.min(88,Math.max(12,px(c.ph)))}%">${esc(c.n.length>14?c.n.split(/[- ]/)[0]+"…":c.n)}</span>
+   </div>
+   <div class="scale"><span>0 €</span><span>${eur(pmax)} par habitant</span></div>
+   <div class="h4">Projets retenus</div>
+   ${byD.length?`<div class="disp">${byD.map(g=>`<div class="dh"><b>${g.d}</b><span>${eur(g.items.reduce((s,p)=>s+p[3],0))}</span></div>${g.items.map(p=>`<div class="pj"><span class="y">${p[0]}</span><span>${esc(p[2])}</span><span class="m">${nf(p[3])} €</span></div>`).join("")}`).join("")}
+     <div class="tot"><span>Total 2018-2025</span><b>${eur(c.tot)}</b></div></div>`:`<p class="why">Aucun projet retenu au titre de la DETR, de la DSIL ou du Fonds vert.</p>`}
+   ${c.ratio<.5?`<div class="unknown"><p><b>Ce que la liste ne dit pas.</b> On ignore si ${esc(c.n)} a déposé des dossiers refusés, ou n'en a déposé aucun (souvent faute de service technique).</p>
+     <ol><li>Demander à la préfecture les dossiers déposés et refusés depuis 2018.</li><li>Selon la réponse : aider à monter un dossier, ou comprendre le motif des refus.</li><li>Appeler la mairie ensuite, avec ces éléments en main.</li></ol></div>`:""}
+  </div>`;
+}
+function select(c,{focus=false,push=true}={}){
+  sel=c; animate=true; renderList(); renderFiche();
+  document.body.classList.toggle("detail",!!c);
+  if(push){try{history.replaceState(null,"",c?"#"+encodeURIComponent(c.n):location.pathname+location.search)}catch(e){}}
+  if(focus&&c){const b=[...$$("#list .row")].find(b=>b.dataset.n===c.n);b&&b.focus()}
+  if(c&&matchMedia("(max-width:820px)").matches)window.scrollTo({top:0});
+}
+function step(d){const L=ordered();if(!L.length)return;const i=L.indexOf(sel);select(L[(i+d+L.length)%L.length],{focus:!document.body.classList.contains("detail")||!matchMedia("(max-width:820px)").matches})}
+function lead(){
+  const zero=C.filter(c=>!c.pj.length), low=C.filter(c=>c.pj.length&&c.ratio<.5);
+  const small=[...zero,...low].filter(c=>c.p<5000).length;
+  $("#lead").innerHTML=`<b>${zero.length+low.length} communes sur ${C.length}</b> sont loin derrière les communes de leur taille : ${zero.length} n'ont obtenu aucun projet depuis 2018, ${low.length} moins de la moitié de la médiane. <span>${small} d'entre elles ont moins de 5&nbsp;000 habitants.</span>`;
+}
+document.addEventListener("click",e=>{
+  const r=e.target.closest(".row,.peer .p"); if(r){select(C.find(c=>c.n===r.dataset.n));return}
+  const g=e.target.closest("[data-g]"); if(g){group=g.dataset.g;$$("[data-g]").forEach(b=>b.setAttribute("aria-pressed",b===g));renderList();return}
+  const s=e.target.closest("[data-step]"); if(s){step(+s.dataset.step);return}
+  if(e.target.closest("[data-back]")){document.body.classList.remove("detail");const b=[...$$("#list .row")].find(b=>b.dataset.n===sel?.n);b&&b.focus();return}
+  if(e.target.closest("[data-clear]")){q="";$("#q").value="";renderList();$("#q").focus()}
+});
+$("#q").addEventListener("input",e=>{q=e.target.value.trim();renderList();const L=ordered();if(L.length===1)select(L[0],{push:true})});
+document.addEventListener("keydown",e=>{
+  const typing=e.target.matches("input,textarea");
+  if(e.key==="Escape"){
+    if(typing&&q){q="";e.target.value="";renderList();return}
+    if(document.body.classList.contains("detail")&&matchMedia("(max-width:820px)").matches){document.body.classList.remove("detail");return}
+    return;
+  }
+  if(typing&&e.key!=="ArrowDown")return;
+  if(e.key==="ArrowDown"||e.key==="ArrowUp"){if(e.target.closest(".row,#q")||e.target===document.body||e.target.closest("[data-step]")){e.preventDefault();step(e.key==="ArrowDown"?1:-1)}}
+});
+lead();
+let start=null;try{const h=decodeURIComponent(location.hash.slice(1));start=C.find(c=>c.n===h)}catch(e){}
+renderList();
+const first=start||ordered()[0];
+sel=first;renderList();renderFiche();
+</script>

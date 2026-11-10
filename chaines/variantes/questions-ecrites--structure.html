@@ -1,0 +1,273 @@
+<title>Question écrite · structure</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+<style>
+/* Architecture : trois objets, dans l'ordre où on se pose les questions.
+   1. La question (destinataire puis texte : le destinataire fait partie de la question, il vient d'abord).
+   2. L'antériorité : un verdict qui répond « puis-je la poser ? », puis les questions proches rangées
+      par ce qu'elles impliquent pour vous (vos questions / à citer / restées sans réponse).
+   3. Le dépôt : contrôles qui disent quoi faire, puis l'action. */
+.steps{display:flex;gap:4px;margin:16px 0 18px;padding:0;list-style:none;counter-reset:s;flex-wrap:wrap}
+.steps a{display:flex;align-items:center;gap:8px;padding:6px 12px 6px 8px;border-radius:999px;color:var(--muted);text-decoration:none;font-size:13px;border:1px solid transparent;transition:color .2s,border-color .2s}
+.steps a:hover{color:var(--fg);border-color:var(--line2)}
+.steps a::before{counter-increment:s;content:counter(s);display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--s2);border:1px solid var(--line2);font-size:11px;color:var(--fg)}
+.steps a[data-st=ok]::before{content:"✓";background:rgba(70,179,126,.18);border-color:rgba(70,179,126,.5);color:var(--ok)}
+.steps a[data-st=warn]::before{content:"!";background:rgba(227,163,63,.15);border-color:rgba(227,163,63,.5);color:var(--warn)}
+.steps a[data-st=err]::before{content:"!";background:rgba(229,72,77,.15);border-color:rgba(229,72,77,.5);color:var(--err)}
+.layout{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:24px;align-items:start}
+.colL{position:sticky;top:16px;display:grid;gap:16px}
+.blk{padding:16px;display:grid;gap:12px;scroll-margin-top:16px}
+.blk>h2{margin:0;font:600 14px/1.3 var(--f);color:var(--fg);display:flex;align-items:baseline;gap:8px}
+.blk>h2 small{font-weight:400;color:var(--dim);font-size:12.5px}
+.field{display:grid;gap:6px}
+.field>label{font-size:12.5px;color:var(--muted)}
+.field select,.field textarea{width:100%}
+.field textarea{min-height:200px;resize:vertical;line-height:1.6;font-size:13.5px}
+.field .hint{font-size:12px;color:var(--dim)}
+.expect{font-size:12.5px;color:var(--muted);line-height:1.5}
+.expect b{color:var(--fg);font-weight:500}
+details.more>summary{cursor:pointer;color:var(--muted);font-size:12.5px;list-style:none;display:inline-flex;gap:6px;align-items:center}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary::before{content:"";width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);transition:transform .2s}
+details.more[open]>summary::before{transform:rotate(45deg)}
+.hist{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;align-items:end;height:64px;margin-top:10px}
+.hist div{display:grid;gap:4px;justify-items:center;font-size:10.5px;color:var(--dim);height:100%;align-content:end;text-align:center}
+.hist i{display:block;width:100%;border-radius:3px 3px 0 0;background:var(--line2)}
+.hist i.ok{background:rgba(70,179,126,.55)}
+/* verdict */
+.verdict{padding:16px 18px;border-radius:10px;border:1px solid var(--line2);background:var(--s1);display:grid;gap:8px;scroll-margin-top:16px}
+.verdict .vk{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.verdict h2{margin:0;font:600 17px/1.35 var(--f);color:var(--fg);letter-spacing:-.01em;text-wrap:balance}
+.verdict p{margin:0;color:var(--text);font-size:13.5px;max-width:640px;text-wrap:pretty}
+.verdict .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.verdict[data-k=libre]{border-color:rgba(70,179,126,.35)}
+.verdict[data-k=vous],.verdict[data-k=autre]{border-color:rgba(227,163,63,.4)}
+.verdict[data-k=repondue]{border-color:rgba(138,180,255,.35)}
+/* groupes */
+.grp{margin-top:20px}
+.grp-h{display:flex;align-items:baseline;gap:8px;margin:0 2px 8px}
+.grp-h h3{margin:0;font:500 13px/1.3 var(--f);color:var(--fg)}
+.grp-h span{font-size:12.5px;color:var(--dim)}
+.res{display:grid;gap:8px}
+.q{padding:12px 14px;border:1px solid var(--line);border-radius:9px;background:var(--s1);display:grid;gap:6px}
+.q-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+.q-h b{color:var(--fg);font-weight:500}
+.lvl{margin-left:auto;font-size:12px;color:var(--muted);white-space:nowrap}
+.lvl.hi{color:var(--fg)}
+.q p{margin:0;font-size:13px;line-height:1.6}
+.q .ans{font-size:12.5px;color:var(--muted);border-left:2px solid var(--line2);padding-left:10px}
+.q .ans.none{color:#f2a7a9;border-color:rgba(229,72,77,.35)}
+.q .ghost{justify-self:start}
+.empty{padding:16px;color:var(--dim);font-size:13px;border:1px dashed var(--line2);border-radius:9px}
+/* contrôles */
+.checks{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.checks li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;align-items:start;font-size:13px}
+.checks .dot{margin-top:7px}
+.checks b{color:var(--fg);font-weight:500}
+.checks .fix{grid-column:2;font-size:12.5px;color:var(--muted)}
+.checks .fix .ghost{margin-left:4px}
+.dep{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.dep .why{font-size:12.5px;color:var(--dim)}
+@media (max-width:900px){.layout{grid-template-columns:minmax(0,1fr)}.colL{display:contents}#s-q{order:1}#s-ant{order:2}#s-dep{order:3}}
+.q .ghost,.checks .ghost{padding:6px 12px;font-size:12.5px}
+</style>
+
+<div class="wrap">
+  <div class="ctx">Questions écrites · archive Assemblée et Sénat, législature en cours et précédente · export du 9 novembre 2026</div>
+  <h1>Préparer une question écrite</h1>
+  <nav aria-label="Étapes">
+    <ol class="steps" id="steps">
+      <li><a href="#s-q" data-k="q">La question</a></li>
+      <li><a href="#s-ant" data-k="ant">L'antériorité</a></li>
+      <li><a href="#s-dep" data-k="dep">Le dépôt</a></li>
+    </ol>
+  </nav>
+  <div class="layout">
+    <div class="colL">
+      <section class="panel blk" id="s-q" aria-labelledby="h-q">
+        <h2 id="h-q">La question</h2>
+        <div class="field">
+          <label for="min">Adressée au ministre</label>
+          <select id="min"></select>
+          <div class="expect" id="expect"></div>
+        </div>
+        <div class="field">
+          <label for="q">Texte</label>
+          <textarea id="q" aria-describedby="qhint"></textarea>
+          <div class="hint" id="qhint"></div>
+        </div>
+      </section>
+      <section class="panel blk" id="s-dep" aria-labelledby="h-dep">
+        <h2 id="h-dep">Le dépôt <small id="dep-n"></small></h2>
+        <ul class="checks" id="checks"></ul>
+        <div class="dep"><button class="btn pri" id="go">Transmettre au secrétariat</button><span class="why" id="why"></span></div>
+      </section>
+    </div>
+    <div id="s-ant">
+      <section class="verdict" id="verdict" aria-live="polite"></section>
+      <div id="groups"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Données et calcul repris tels quels de la maquette d'origine (questions-ecrites.html).
+const NOW=new Date(2026,10,10);
+const MIN={LOG:"Logement",TE:"Transition écologique",ECO:"Économie et finances",SOL:"Solidarités",INT:"Intérieur"};
+const DEL={LOG:{n:64,ok:9,med:148,bins:[9,7,12,10,8,18]},TE:{n:58,ok:11,med:121,bins:[11,9,10,8,6,14]},ECO:{n:131,ok:22,med:132,bins:[22,18,24,21,14,32]},SOL:{n:49,ok:6,med:167,bins:[6,5,8,9,7,14]},INT:{n:72,ok:17,med:97,bins:[17,14,13,9,6,13]}};
+const BINS=["≤ 2 mois","2–4","4–6","6–9","9–12","sans réponse"];
+const G={PR:"#c07a00",SOL:"#d13a30",ECO:"#2a9d63",UT:"#3b82d6",LL:"#e0671d",RC:"#7c5cd6",DC:"#2bb3b1",AR:"#8fae3a",CP:"#d8699a"};
+const Q=[
+ {n:"AN 3187",g:"PR",min:"TE",d:"2026-05-12",t:"Retards de versement de MaPrimeRénov' aux ménages modestes, dont certains attendent plus de huit mois le paiement de la prime après la fin des travaux.",a:null,mine:true},
+ {n:"AN 2954",g:"ECO",min:"LOG",d:"2026-03-03",t:"Délais de paiement des aides à la rénovation énergétique pour les propriétaires bailleurs et conséquences sur la remise en location des logements vacants.",a:null},
+ {n:"Sénat 10422",g:"UT",min:"LOG",d:"2025-12-11",t:"Délais d'instruction et de versement des aides à la rénovation énergétique dans les départements ruraux.",a:{d:"2026-04-02",t:"Le délai moyen de paiement a été ramené à 52 jours ; un plan de renfort de l'instruction a été engagé dans douze départements."}},
+ {n:"AN 2611",g:"PR",min:"LOG",d:"2025-12-16",t:"Publication du décret relatif à la décence énergétique des logements loués prévu par la loi relative au logement décent.",a:{d:"2026-03-17",t:"Le Gouvernement publiera le décret d'application avant la fin du premier semestre 2026."}},
+ {n:"AN 2208",g:"SOL",min:"LOG",d:"2025-09-23",t:"Situation des propriétaires bailleurs privés confrontés aux retards de paiement des primes de rénovation et à la hausse du coût des travaux.",a:{d:"2026-02-10",t:"Les retards constatés en 2025 tenaient à la lutte contre la fraude ; les contrôles ont été ciblés pour accélérer les paiements."}},
+ {n:"AN 3044",g:"ECO",min:"LOG",d:"2026-04-14",t:"Calendrier de publication du décret sur la décence énergétique des logements.",a:null},
+ {n:"AN 1880",g:"SOL",min:"TE",d:"2025-09-03",t:"Remise du rapport sur l'artificialisation liée aux résidences secondaires prévu par la loi relative aux zones tendues.",a:{d:"2025-12-02",t:"Le rapport est en cours de finalisation."}},
+ {n:"Sénat 9870",g:"RC",min:"ECO",d:"2025-10-02",t:"Fiscalité des logements vacants et produit de la taxe sur les logements vacants dans les communes moyennes.",a:{d:"2026-01-20",t:"Le produit de la taxe s'élevait à 168 millions d'euros en 2024."}},
+ {n:"AN 2733",g:"LL",min:"INT",d:"2026-01-27",t:"Conditions de mise en œuvre de la réquisition des logements vacants par les préfets.",a:{d:"2026-03-24",t:"Une instruction aux préfets sera diffusée après la publication du rapport de la mission flash."}},
+ {n:"AN 3402",g:"PR",min:"SOL",d:"2026-09-01",t:"Montant et conditions des aides au logement des étudiants boursiers.",a:null,mine:true},
+ {n:"AN 2412",g:"DC",min:"LOG",d:"2025-11-04",t:"Accompagnement des communes dans le repérage des logements vacants et accès aux fichiers fiscaux.",a:{d:"2026-01-13",t:"Le service « Zéro logement vacant » est ouvert à toutes les communes volontaires."}},
+ {n:"AN 2877",g:"CP",min:"ECO",d:"2026-02-17",t:"Crédit d'impôt pour la rénovation des logements locatifs : coût et nombre de bénéficiaires.",a:null},
+ {n:"Sénat 11205",g:"AR",min:"TE",d:"2026-06-05",t:"Versement tardif des primes de rénovation énergétique et trésorerie des artisans du bâtiment.",a:null},
+ {n:"AN 1544",g:"UT",min:"LOG",d:"2025-07-08",t:"Revalorisation du plafond de l'aide à la remise sur le marché des logements vacants.",a:{d:"2025-10-28",t:"Une revalorisation n'est pas envisagée à ce stade."}},
+];
+const DRAFT="Mme la députée attire l'attention de M. le ministre chargé du logement sur les délais de versement de l'aide à la rénovation énergétique des logements locatifs. De nombreux propriétaires bailleurs attendent plus de six mois le paiement de leur prime après la fin des travaux, ce qui retarde la remise en location. Elle lui demande quelles mesures il entend prendre pour réduire ces délais.";
+const STOP=new Set("le la les de des du d l un une et en au aux a à sur sa son ses leur leurs ce ces cette qui que quoi dont pour par plus moins dans avec il elle ils elles lui m mme ministre monsieur madame député députée attire attention demande quelles quels quelle mesures entend prendre afin ne pas est sont être ont été après avant entre tres très ainsi".split(" "));
+const norm=s=>s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9 ]/g," ");
+const stem=w=>w.length>6?w.slice(0,6):w.replace(/s$/,"");
+const toks=s=>norm(s).split(/\s+/).filter(w=>w.length>2&&!STOP.has(w)).map(stem);
+let DOCS=[],IDF={};
+function reindex(){DOCS=Q.map(q=>new Set(toks(q.t)));IDF={};DOCS.forEach(d=>d.forEach(w=>IDF[w]=(IDF[w]||0)+1));for(const w in IDF)IDF[w]=Math.log(1+Q.length/IDF[w])}
+reindex();
+function sim(a,b){let num=0,na=0,nb=0;for(const w of a){const x=IDF[w]||Math.log(1+Q.length);na+=x*x;if(b.has(w))num+=x*x}for(const w of b){const x=IDF[w];nb+=x*x}return na&&nb?num/Math.sqrt(na*nb):0}
+const D=s=>{const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
+const fd=s=>D(s).toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"});
+const months=(a,b)=>Math.max(0,Math.round((b-a)/2629800000));
+function hl(text,set){return text.split(/(\s+)/).map(w=>{const t=toks(w)[0];return t&&set.has(t)?`<mark>${esc(w)}</mark>`:esc(w)}).join("")}
+// Recherche : mêmes seuils que l'original (≥ .12 voisine, ≥ .25 proche, ≥ .42 très proche).
+function search(text,max=6){const mine=new Set(toks(text));const R=Q.map((q,i)=>({q,s:sim(mine,DOCS[i])})).filter(r=>r.s>=.12).sort((a,b)=>b.s-a.s).slice(0,max);return {mine,R,dup:R[0]&&R[0].s>=.42?R[0]:null}}
+const level=s=>s>=.42?"très proche":s>=.25?"proche":"voisine";
+// Verdict : les quatre cas de l'original.
+function verdictKind(dup){if(!dup)return "libre";if(dup.q.mine)return "vous";if(dup.q.a)return "repondue";return "autre"}
+const minLabel=k=>({LOG:"du logement",TE:"de la transition écologique",ECO:"de l'économie et des finances",SOL:"des solidarités",INT:"de l'intérieur"})[k];
+const pct=k=>Math.round(100*DEL[k].ok/DEL[k].n), medM=k=>Math.round(DEL[k].med/30.4);
+// Les citations insérées par l'outil ne doivent pas diluer la comparaison : on les retire avant de calculer.
+const CITE_RE=/ ?Dans sa réponse du [^«]*?à la question n° [^«]*?«[^»]*»\.| ?La question n° [^.]*?restée sans réponse\./g;
+const stripCites=t=>t.replace(CITE_RE,"");
+const citedIn=t=>new Set([...t.matchAll(/question n° ((?:AN|Sénat) \d+)/g)].map(m=>m[1]));
+
+// Repérage du destinataire écrit dans le texte (« ministre chargé du logement ») : sert à prévenir l'erreur
+// la plus coûteuse, une question adressée au mauvais ministère (elle est réattribuée, et le délai repart).
+const MKEY={LOG:/logement/,TE:/transition ecologique|ecologie|environnement/,ECO:/economie|finances|comptes publics|budget/,SOL:/solidarites|sante|famille/,INT:/interieur/};
+function addressedTo(text){const m=norm(text).match(/ministre(?: (?:charge|delegue|de|du|des|d|la|l))*\s+([a-z ]{3,40})/);if(!m)return null;const s=m[1];for(const k in MKEY)if(MKEY[k].test(s))return k;return null}
+const min=$("#min");min.innerHTML=Object.entries(MIN).map(([k,v])=>`<option value="${k}">${v}</option>`).join("");min.value="LOG";
+const ta=$("#q");ta.value=DRAFT;
+const CAT={vous:"Vos questions",cite:"Répondues : à citer",att:"Sans réponse, posées par d'autres groupes"};
+let last=null;
+function cite(n){const q=Q.find(x=>x.n===n);const s=q.a?` Dans sa réponse du ${fd(q.a.d)} à la question n° ${q.n}, le Gouvernement indiquait : « ${q.a.t.replace(/\.$/,"")} ».`:` La question n° ${q.n} du ${fd(q.d)}, portant sur le même sujet, est restée sans réponse.`;
+  const t=ta.value;const i=t.search(/\s(Il|Elle) lui demande/);ta.value=i>0?t.slice(0,i)+s+t.slice(i):t+s;run();toast(`Référence à la question ${n} ajoutée au texte.`);ta.focus()}
+function run(){
+  const text=ta.value,m=min.value,{mine,R,dup}=search(stripCites(text));last={R,dup};
+  const words=text.trim()?text.trim().split(/\s+/).length:0;
+  // 1. destinataire : ce qu'il faut attendre, en une phrase ; le détail se demande
+  const S=DEL[m],mx=Math.max(...S.bins);
+  $("#expect").innerHTML=`Une réponse sur ${Math.round(S.n/S.ok)} arrive sous deux mois ; comptez <b>${medM(m)} mois</b> en délai médian.
+   <details class="more"><summary>Répartition des ${S.n} questions de la législature</summary><div class="hist" aria-label="Délais de réponse">${S.bins.map((b,i)=>`<div><i class="${i===0?"ok":""}" style="height:${Math.round(6+38*b/mx)}px"></i>${BINS[i]}</div>`).join("")}</div></details>`;
+  $("#qhint").textContent=`${words} mot${words>1?"s":""}`;
+  // 2. verdict : une réponse, une raison, une action
+  const k=verdictKind(dup),V=$("#verdict");V.dataset.k=k;
+  const dot={libre:"ok",vous:"warn",autre:"warn",repondue:""}[k];
+  let h,p,acts="";
+  if(words<8){V.dataset.k="";h="Écrivez au moins une phrase";p="La comparaison avec l'archive devient fiable à partir d'une phrase complète.";}
+  else if(k==="libre"){h="Sujet libre : vous pouvez la poser";p=R.length?`${R.length} question${R.length>1?"s":""} voisine${R.length>1?"s":""} dans l'archive, aucune ne pose la même question.`:"Rien dans l'archive ne ressemble à ce texte.";}
+  else if(k==="vous"){h=`Vous l'avez déjà posée (${dup.q.n})`;p=`Déposée le ${fd(dup.q.d)}${dup.q.a?", elle a reçu une réponse.":`, toujours sans réponse après ${months(D(dup.q.d),NOW)} mois. Plutôt que de la redéposer, demandez au groupe de la signaler : le ministre doit alors répondre sous dix jours.`}`;if(!dup.q.a)acts=`<button class="btn" data-sig="${dup.q.n}">Demander le signalement de ${dup.q.n}</button>`;}
+  else if(k==="repondue"){h=`Déjà posée, et répondue (${dup.q.n})`;p=`Citez la réponse du ${fd(dup.q.a.d)} et demandez ce qui a changé depuis : la question sera plus difficile à esquiver.`;acts=`<button class="btn" data-cite="${dup.q.n}">Citer la réponse dans le texte</button>`;}
+  else{h=`Déjà posée par un autre groupe (${dup.q.n})`;p=`Sans réponse depuis ${months(D(dup.q.d),NOW)} mois. Une seconde question souligne le silence du ministère, à condition de mentionner la première.`;acts=`<button class="btn" data-cite="${dup.q.n}">Mentionner ${dup.q.n} dans le texte</button>`;}
+  if(dup&&words>=8&&dup.q.min!==m)p+=` Elle avait été adressée au ministre ${minLabel(dup.q.min)}.`;
+  V.innerHTML=`<div class="vk"><span class="dot ${words<8?"":dot}"></span>Antériorité</div><h2>${h}</h2><p>${p}</p>${acts?`<div class="acts">${acts}</div>`:""}`;
+  // groupes, par conséquence pour vous plutôt que par score
+  const by={vous:[],cite:[],att:[]};R.forEach(r=>by[r.q.mine?"vous":r.q.a?"cite":"att"].push(r));
+  $("#groups").innerHTML=!R.length?(words<8?"":`<div class="empty" style="margin-top:20px">Aucune question voisine.</div>`):Object.keys(by).filter(c=>by[c].length).map(c=>`<section class="grp"><div class="grp-h"><h3>${CAT[c]}</h3><span>${by[c].length}</span></div><div class="res">${by[c].map(({q,s})=>`<article class="q">
+    <div class="q-h">${q.mine?"":`<span class="gp" style="background:${G[q.g]}">${q.g}</span>`}<b>${q.n}</b><span>${MIN[q.min]} · ${fd(q.d)}</span><span class="lvl ${s>=.42?"hi":""}">${level(s)}</span></div>
+    <p>${hl(q.t,mine)}</p>${q.a?`<div class="ans">Réponse du ${fd(q.a.d)}, après ${months(D(q.d),D(q.a.d))} mois : ${esc(q.a.t)}</div>`:`<div class="ans none">Sans réponse depuis ${months(D(q.d),NOW)} mois.</div>`}
+    ${c!=="vous"?`<button class="ghost" data-cite="${q.n}">${q.a?"Citer la réponse":"Mentionner"}</button>`:""}</article>`).join("")}</div></section>`).join("");
+  // 3. contrôles : ce qui bloque, ce qui est conseillé, et quoi faire
+  const C=[];const to=addressedTo(text);
+  if(!words)C.push({l:"err",t:"Le texte est vide.",f:"Rédigez la question ou collez-la depuis votre traitement de texte."});
+  else if(words<25)C.push({l:"err",t:`Texte trop court (${words} mots).`,f:"Une question écrite expose la situation puis la demande ; visez au moins 25 mots."});
+  if(words&&!/\b(lui demande|demande au gouvernement|souhaite savoir|interroge)\b/i.test(text))C.push({l:"err",t:"La demande au ministre n'apparaît pas.",f:"Terminez par « Elle lui demande … » : c'est la phrase à laquelle le ministère doit répondre."});
+  if(to&&to!==m)C.push({l:"err",t:`Le texte s'adresse au ministre ${minLabel(to)}, le destinataire choisi est « ${MIN[m]} ».`,f:`Corrigez l'un ou l'autre. <button class="ghost" data-min="${to}">Adresser à « ${MIN[to]} »</button>`});
+  if(text.length>2400)C.push({l:"warn",t:`Texte long (${text.length} signes).`,f:"Au-delà de 2 400 signes, le ministère répond souvent sur un seul point. Gardez une seule demande."});
+  if(words>=8&&k==="vous"&&!dup.q.a)C.push({l:"warn",t:`Doublon de votre question ${dup.q.n}.`,f:"Le signalement obtient une réponse plus vite qu'un nouveau dépôt."});
+  if(words>=8&&k==="autre"&&!text.includes(dup.q.n))C.push({l:"warn",t:`La question ${dup.q.n} n'est pas mentionnée.`,f:`<button class="ghost" data-cite="${dup.q.n}">La mentionner</button>`});
+  if(words>=8&&k==="repondue"&&!text.includes(dup.q.n))C.push({l:"warn",t:`La réponse à ${dup.q.n} n'est pas citée.`,f:`<button class="ghost" data-cite="${dup.q.n}">La citer</button>`});
+  const errs=C.filter(c=>c.l==="err").length;
+  if(!C.length)C.push({l:"ok",t:"Rien à corriger.",f:""});
+  $("#checks").innerHTML=C.map(c=>`<li><span class="dot ${c.l}"></span><span><b>${c.t}</b></span>${c.f?`<span class="fix">${c.f}</span>`:""}</li>`).join("");
+  $("#dep-n").textContent=errs?`${errs} point${errs>1?"s":""} à corriger`:C[0].l==="ok"?"prête":"prête, avec des conseils";
+  $("#go").disabled=!!errs;$("#why").textContent=errs?"Corrigez d'abord les points en rouge.":"";
+  const st={q:!words||(to&&to!==m)?"err":words<25?"warn":"ok",ant:words<8?"":k==="libre"||k==="repondue"&&text.includes(dup.q.n)?"ok":"warn",dep:errs?"err":"ok"};
+  $$("#steps a").forEach(a=>a.dataset.st=st[a.dataset.k]||"");
+}
+document.addEventListener("click",e=>{const c=e.target.closest("[data-cite]");if(c)return cite(c.dataset.cite);const sg=e.target.closest("[data-sig]");if(sg)return toast(`Demande de signalement de la question ${sg.dataset.sig} envoyée au secrétariat du groupe.`);const mm=e.target.closest("[data-min]");if(mm){min.value=mm.dataset.min;run();toast(`Question adressée au ministre ${minLabel(mm.dataset.min)}.`)}});
+$("#go").onclick=()=>toast(`Question transmise au secrétariat du groupe pour dépôt (ministre ${minLabel(min.value)}).`);
+let tm;ta.addEventListener("input",()=>{clearTimeout(tm);tm=setTimeout(run,180)});min.onchange=run;
+run();
+</script>

@@ -1,0 +1,295 @@
+<title>Charger un texte · parcours</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+<style>
+/* Angle « parcours » : quatre étapes observables (identifier, récupérer, placer, enregistrer),
+   chacune avec ses états (en attente, en cours, interrompue, en erreur, partielle, terminée, périmée).
+   Interruption et reprise, confirmation dans la page avant de remplacer le fichier local, retour possible.
+   Mise en page fluide (flex-wrap, unités relatives) : elle se replie selon la largeur et le zoom, sans point de rupture. */
+.wrap{max-width:46rem}
+.bar{margin-top:14px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;padding:10px 14px;border-radius:9px;border:1px solid var(--line);background:var(--s1);font-size:13px}
+.bar b{color:var(--fg);font-weight:500}
+.bar .m{color:var(--muted)}
+.bar.stale{border-color:rgba(227,163,63,.35)}
+.bar.fresh{border-color:rgba(70,179,126,.35)}
+.resume{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:12.5px;color:var(--muted)}
+.steps{list-style:none;margin:18px 0 0;padding:0}
+.step{display:grid;grid-template-columns:1.75rem minmax(0,1fr);gap:0 14px;position:relative;padding-bottom:18px}
+.step::before{content:"";position:absolute;left:calc(.875rem - .5px);top:1.9rem;bottom:2px;width:1px;background:var(--line)}
+.step:last-child::before{display:none}
+.mk{width:1.75rem;height:1.75rem;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:600;border:1px solid var(--line2);color:var(--muted);background:var(--bg);position:relative;z-index:1}
+.step.done .mk{background:rgba(70,179,126,.14);border-color:rgba(70,179,126,.5);color:#7fd3a8}
+.step.warn .mk{background:rgba(227,163,63,.14);border-color:rgba(227,163,63,.5);color:var(--warn)}
+.step.err .mk{background:rgba(229,72,77,.14);border-color:rgba(229,72,77,.5);color:#f19a9d}
+.step.cur .mk{border-color:var(--accent);color:var(--fg);box-shadow:0 0 0 3px var(--lit)}
+.step.wait{opacity:.6}
+.spin{width:12px;height:12px;border-radius:50%;border:2px solid var(--line2);border-top-color:var(--accent);animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.sh{display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline;min-height:1.75rem;padding-top:.1rem}
+.sh h2{margin:0;font:600 14.5px/1.6 var(--f);color:var(--fg)}
+.sh .s{font-size:12.5px;color:var(--muted)}
+.sh .s.warn{color:#f0c27a} .sh .s.err{color:#f19a9d} .sh .s.ok{color:#7fd3a8}
+.sb{grid-column:2;margin-top:8px;display:grid;gap:10px}
+.acts{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.acts .btn{min-height:2.5rem}
+.note{margin:0;font-size:12.5px;color:var(--muted)}
+.note.warn{color:#f0c27a} .note.err{color:#f19a9d}
+.idrow{display:flex;flex-wrap:wrap;gap:8px}
+.idrow input{flex:1 1 12rem;min-width:0;min-height:2.5rem;background:var(--bg);border-color:var(--line2);font-size:14px}
+.idrow input:focus{border-color:var(--accent)}
+.srcl{list-style:none;margin:0;padding:4px 0;border-radius:9px;background:var(--s1);border:1px solid var(--line)}
+.srcl li{display:flex;flex-wrap:wrap;gap:2px 12px;align-items:baseline;padding:8px 14px}
+.srcl li+li{border-top:1px solid var(--line)}
+.srcl .t{flex:1 1 12rem;color:var(--fg);font-size:13px;display:flex;gap:9px;align-items:baseline}
+.srcl .t .dot,.srcl .t .spin{flex:none;transform:translateY(1px)}
+.srcl .r{font-size:12.5px;color:var(--muted)}
+.srcl .r.warn{color:#f0c27a} .srcl .r.err{color:#f19a9d}
+.srcl li .ghost{margin-left:auto}
+.prog{height:3px;border-radius:2px;background:var(--line);overflow:hidden}
+.prog i{display:block;height:100%;background:var(--accent);transition:width .35s var(--ease)}
+.fx{border:1px solid var(--line);border-radius:9px;background:var(--s1);padding:12px 14px;display:grid;gap:9px}
+.fx-h{display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline}
+.fx-h b{color:var(--fg);font-weight:500}
+.fx-h span{font-size:12.5px;color:var(--muted)}
+.fx-h .res{margin-left:auto;font-size:12.5px}
+.fx-h .res.ok{color:#7fd3a8} .fx-h .res.out{color:#f0c27a}
+.quote{font-size:13px;padding:8px 10px;background:var(--s2);border-radius:7px}
+.quote mark{background:rgba(227,163,63,.18)}
+.cands{display:grid;gap:6px}
+.cand{display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline;width:100%;text-align:left;border:1px solid var(--line);background:none;border-radius:7px;padding:9px 11px;min-height:2.75rem;cursor:pointer;color:var(--muted);font-size:12.5px;transition:background .2s,border-color .2s}
+.cand:hover{background:var(--s2);border-color:var(--line2)}
+.cand .al{color:var(--fg);font-weight:500}
+.cand .tx{flex:1 1 14rem}
+.cand .sim{color:var(--dim)}
+.cand.none{color:var(--muted);border-style:dashed}
+.confirm{border:1px solid rgba(227,163,63,.4);background:rgba(227,163,63,.06);border-radius:9px;padding:14px;display:grid;gap:10px}
+.confirm h3{margin:0;font:600 14px/1.4 var(--f);color:var(--fg)}
+.confirm ul{margin:0;padding-left:1.1rem;display:grid;gap:3px;font-size:13px}
+.confirm li span{color:var(--muted)}
+.fade{animation:fd .25s var(--ease)}
+@keyframes fd{from{opacity:0;transform:translateY(-3px)}}
+.linkb{border:0;background:none;padding:0;color:var(--ins);cursor:pointer;font-size:12.5px;text-decoration:underline;text-underline-offset:2px}
+</style>
+
+<div class="wrap">
+  <div class="ctx">Brique de données · alimente l'atelier d'amendement</div>
+  <h1>Charger un texte pour la séance</h1>
+  <div id="bar" aria-live="polite"></div>
+  <div id="resume"></div>
+  <ol class="steps" id="steps"></ol>
+</div>
+
+<script>
+const TOTAL=486, OLD={date:"7 novembre",n:455};
+const SRC=[
+ {k:"com",t:"Texte de la commission",ok:"34 articles · 211 alinéas, repris du site (absent des données ouvertes)"},
+ {k:"init",t:"Texte initial",ok:"projet de loi n° 412 · 29 articles"},
+ {k:"amd",t:"Amendements de séance",ok:"486 · données ouvertes, à jour il y a 12 min"},
+ {k:"sort",t:"Sort en commission",ok:"1 204 décisions"},
+ {k:"code",t:"Articles de code cités",ok:"23 · Légifrance, en vigueur au 10 novembre",fb:"Légifrance n'a pas répondu ; version du 7 novembre utilisée"},
+ {k:"place",t:"Place des amendements",ok:"483 sur 486 retrouvés seuls"},
+];
+const FIX=[
+ {id:233,g:"Union des territoires",art:"Art. 4",why:"Mots introuvables : l'alinéa a été réécrit en commission.",
+  q:"À l'alinéa 3, substituer aux mots : « <mark>de la remise en location</mark> » les mots : « de la remise sur le marché locatif ».",
+  c:[{al:3,t:"…d'une aide à la <mark>remise sur le marché</mark> dont le montant…",sim:"proche à 82 %"},{al:4,t:"…des aides <mark>mobilisables</mark> dans un délai…",sim:"proche à 31 %"}]},
+ {id:310,g:"Avenir rural",art:"Art. 7",why:"L'alinéa 9 n'existe plus : l'article en compte 8.",
+  q:"À l'alinéa 9, après le mot : « <mark>communes</mark> », insérer les mots : « et établissements publics de coopération intercommunale ».",
+  c:[{al:8,t:"…les <mark>communes</mark> mentionnées au premier alinéa…",sim:"ancien alinéa 9"},{al:5,t:"…dans les <mark>communes</mark> de moins de 3 500 habitants…",sim:"même mot"}]},
+ {id:418,g:"Centre et progrès",art:"Art. 12",why:"Le mot visé figure deux fois dans l'alinéa.",
+  q:"À l'alinéa 2, substituer au mot : « <mark>annuel</mark> » le mot : « biennal ».",
+  c:[{al:2,t:"…un rapport <mark>annuel</mark> d'activité…",sim:"1ʳᵉ occurrence"},{al:2,t:"…le plafond <mark>annuel</mark> de ressources…",sim:"2ᵉ occurrence"}]},
+];
+const KEY="chargeur-parcours-512";
+const fast=()=>matchMedia("(prefers-reduced-motion:reduce)").matches;
+const pl=(n,s,p)=>n>1?(p||s+"s"):s;
+const hhmm=()=>new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"}).replace(":"," h ");
+
+// État du flux. À l'ouverture : chargement terminé avec une réserve (code en repli), placements en cours, rien d'enregistré.
+const S={num:"512",editNum:false,numErr:"",
+  src:Object.fromEntries(SRC.map(s=>[s.k,s.k==="code"?"fb":"ok"])), run:null, paused:false, failOnce:true, showSrc:false,
+  dec:{}, resumed:0, confirm:false, saved:null, savedDec:null};
+try{const r=JSON.parse(localStorage.getItem(KEY)||"null");if(r&&r.dec){S.dec=r.dec;S.resumed=Object.keys(r.dec).length;S.resumedAt=r.at}}catch(e){}
+const persist=()=>{try{localStorage.setItem(KEY,JSON.stringify({dec:S.dec,at:hhmm()}))}catch(e){}};
+
+const left=()=>FIX.filter(f=>S.dec[f.id]==null).length;
+const outs=()=>FIX.filter(f=>S.dec[f.id]===-1).length;
+const fetched=()=>SRC.every(s=>S.src[s.k]==="ok"||S.src[s.k]==="fb");
+const nOk=()=>SRC.filter(s=>S.src[s.k]==="ok"||S.src[s.k]==="fb").length;
+const dirty=()=>S.saved&&JSON.stringify(S.dec)!==S.savedDec;
+
+/* ---------- Récupération : séquentielle, interruptible, reprise ---------- */
+function startFetch(fromScratch){
+  if(fromScratch) SRC.forEach(s=>S.src[s.k]="wait");
+  S.paused=false; S.saved&&(S.confirm=false); tick();
+}
+function tick(){
+  const s=SRC.find(x=>S.src[x.k]==="wait"||S.src[x.k]==="run");
+  if(!s){S.run=null;render();return}
+  S.src[s.k]="run"; render();
+  S.run=setTimeout(()=>{
+    if(s.k==="code"&&S.failOnce){S.src[s.k]="err";S.failOnce=false}else S.src[s.k]="ok";
+    tick();
+  },fast()?60:520);
+}
+function pause(){clearTimeout(S.run);S.run=null;S.paused=true;SRC.forEach(s=>{if(S.src[s.k]==="run")S.src[s.k]="wait"});render();}
+
+/* ---------- Rendu ---------- */
+function render(){
+  const running=!!S.run, l=left();
+  // Bandeau : l'état du fichier local, c'est-à-dire l'effet de bord durable de tout le parcours.
+  $("#bar").innerHTML=S.saved&&!dirty()
+    ?`<div class="bar fresh"><span class="dot ok"></span><b>Sur ce poste : texte n° 512, enregistré à ${S.saved}</b><span class="m">${TOTAL} amendements${l?` · ${l} hors de la cascade`:""}</span></div>`
+    :S.saved?`<div class="bar stale"><span class="dot warn"></span><b>Enregistré à ${S.saved}, modifié depuis</b><span class="m">vos derniers placements ne sont pas encore dans le fichier</span></div>`
+    :`<div class="bar stale"><span class="dot warn"></span><b>Sur ce poste : fichier du ${OLD.date}, périmé</b><span class="m">${TOTAL-OLD.n} amendements déposés depuis ; il reste utilisable tant que vous n'enregistrez pas.</span></div>`;
+  $("#resume").innerHTML=S.resumed?`<div class="resume fade"><span>Repris là où vous en étiez : ${S.resumed} ${pl(S.resumed,"placement")} de ${S.resumedAt||"votre dernière session"}.</span><button class="linkb" id="forget">Repartir de zéro</button></div>`:"";
+  const steps=[step1(),step2(running),step3(running),step4(running)];
+  $("#steps").innerHTML=steps.map(([cls,mk,h,s,sc,body],i)=>`<li class="step ${cls}"><span class="mk" aria-hidden="true">${mk}</span><div class="sh"><h2>${i+1}. ${h}</h2><span class="s ${sc||""}">${s}</span></div>${body?`<div class="sb">${body}</div>`:""}</li>`).join("");
+}
+function step1(){
+  if(S.editNum){
+    const n=Object.keys(S.dec).length;
+    return ["cur","1","Identifier le texte","saisissez le numéro du feuilleton","",
+     `<form class="idrow" id="idf" novalidate><input type="text" id="num" value="${esc(S.typed||S.num)}" inputmode="numeric" aria-label="Numéro du texte" aria-describedby="nerr" ${S.numErr?'aria-invalid="true"':""}><button class="btn pri">Charger</button><button type="button" class="btn" id="cancelNum">Annuler</button></form>
+      ${S.numErr?`<p class="note err" id="nerr">${S.numErr}</p>`:n?`<p class="note warn" id="nerr">Charger un autre texte efface vos ${n} ${pl(n,"placement")} sur le n° 512. Le fichier déjà enregistré sur ce poste n'est pas touché.</p>`:`<p class="note" id="nerr">Le numéro du projet initial (412) mène aussi au texte de la commission.</p>`}`];
+  }
+  return ["done","✓","Identifier le texte",`n° ${S.num} · projet de loi relatif au logement abordable`,"",`<div class="acts"><button class="ghost" id="editNum">Changer de texte</button></div>`];
+}
+function step2(running){
+  const n=nOk(), fb=S.src.code==="fb", er=SRC.filter(s=>S.src[s.k]==="err");
+  let cls,mk,s,sc,acts;
+  if(running){cls="cur";mk=`<span class="spin"></span>`;s=`${n} sur 6 reçues…`;acts=`<button class="btn" id="pause">Interrompre</button><span class="note">Ce qui est reçu est gardé.</span>`}
+  else if(S.paused){cls="warn";mk="‖";s=`interrompue : ${n} sur 6 reçues`;sc="warn";acts=`<button class="btn pri" id="resumeF">Reprendre</button><button class="btn" id="restart">Tout récupérer à nouveau</button>`}
+  else if(er.length){cls="err";mk="!";s=`${er[0].t.toLowerCase()} : échec`;sc="err";acts=`<button class="btn pri" id="retry">Réessayer</button><button class="btn" id="useOld">Garder la version du ${OLD.date}</button>`}
+  else if(fb){cls="warn";mk="!";s=`5 sur 6 à jour · articles de code du ${OLD.date}`;sc="warn";acts=`<button class="btn" id="retry">Réessayer Légifrance</button><button class="ghost" id="restart">Tout récupérer à nouveau</button>`}
+  else{cls="done";mk="✓";s="6 sur 6 à jour";sc="ok";acts=`<button class="ghost" id="restart">Tout récupérer à nouveau</button>`}
+  const show=running||S.paused||er.length||fb||S.showSrc;
+  const list=`<ul class="srcl">${SRC.map(x=>{const st=S.src[x.k];
+     const r=st==="ok"?x.ok:st==="fb"?x.fb:st==="err"?"pas de réponse au bout de 20 s":st==="run"?"en cours…":"en attente";
+     const rc=st==="fb"?"warn":st==="err"?"err":"";
+     return `<li><span class="t">${st==="run"?'<span class="spin"></span>':`<span class="dot ${st==="ok"?"ok":st==="fb"?"warn":st==="err"?"err":""}"></span>`}${x.t}</span><span class="r ${rc}">${r}</span></li>`}).join("")}</ul>`;
+  const body=(running||S.paused?`<div class="prog" role="progressbar" aria-valuemin="0" aria-valuemax="6" aria-valuenow="${n}"><i style="width:${n/6*100}%"></i></div>`:"")
+    +(show?list:"")+`<div class="acts">${acts}${!show?`<button class="linkb" id="showSrc">Voir les six sources</button>`:S.showSrc&&!running&&!S.paused&&!er.length&&!fb?`<button class="linkb" id="showSrc">Masquer</button>`:""}</div>`;
+  return [cls,mk,"Récupérer les sources",s,sc,body];
+}
+function step3(running){
+  if(S.src.amd!=="ok"||S.src.place!=="ok") return ["wait","3","Placer les amendements",running?"en attente des amendements":"disponible quand les amendements et leur place sont reçus","",""];
+  const l=left(), d=FIX.length-l;
+  const body=FIX.map(f=>{const v=S.dec[f.id];
+    return `<div class="fx"><div class="fx-h"><b>n° ${f.id}</b><span>${f.g} · ${f.art}</span>${v!=null?`<span class="res ${v===-1?"out":"ok"}">${v===-1?"hors de la cascade":"alinéa "+f.c[v].al}</span>`:""}</div>
+     ${v!=null?`<div class="acts"><button class="ghost" data-undo="${f.id}">Revenir sur ce choix</button></div>`
+      :`<div class="quote">${f.q}</div><p class="note">${f.why}</p><div class="cands">${f.c.map((c,i)=>`<button class="cand" data-id="${f.id}" data-i="${i}"><span class="al">Alinéa ${c.al}</span><span class="tx">${c.t}</span><span class="sim">${c.sim}</span></button>`).join("")}<button class="cand none" data-id="${f.id}" data-i="-1">Aucun : laisser hors de la cascade</button></div>`}</div>`}).join("");
+  return [l?"cur":"done",l?"3":"✓","Placer les amendements",l?`${d} sur ${FIX.length} tranchés`:"tous tranchés",l?"":"ok",body];
+}
+function step4(running){
+  const l=left(), ready=fetched()&&!running;
+  if(!ready) return ["wait","4","Enregistrer sur ce poste",S.paused?"récupération interrompue : reprenez-la d'abord":"après la récupération","",""];
+  if(S.saved&&!dirty()) return ["done","✓","Enregistrer sur ce poste",`enregistré à ${S.saved}`,"ok",
+    `<div class="acts"><button class="btn pri" id="open">Ouvrir dans l'atelier</button><button class="btn" id="revert">Revenir au fichier du ${OLD.date}</button></div><p class="note">L'ancien fichier est gardé 7 jours.</p>`];
+  const fb=S.src.code==="fb";
+  const effects=`<ul>
+    ${S.saved?"":`<li>+${TOTAL-OLD.n} amendements nouveaux <span>(${TOTAL} au total)</span></li>`}
+    <li>${l?`${l} ${pl(l,"amendement")} hors de la cascade, faute d'être ${pl(l,"placé")}`:outs()?`${outs()} hors de la cascade, à votre demande`:"tous les amendements dans la cascade"} <span>· modifiable plus tard dans l'atelier</span></li>
+    ${fb?`<li>articles de code dans leur version du ${OLD.date} <span>· peut-être dépassée</span></li>`:""}
+    <li>conservés : vos 4 brouillons et vos notes <span>· l'ancien fichier reste disponible 7 jours</span></li></ul>`;
+  if(S.confirm) return ["cur","4","Enregistrer sur ce poste","à confirmer","",
+    `<div class="confirm fade" role="group" aria-labelledby="ch"><h3 id="ch">${S.saved?`Remplacer l'enregistrement de ${S.saved} ?`:`Remplacer le fichier du ${OLD.date} ?`}</h3>${effects}
+     <div class="acts"><button class="btn pri" id="doSave">Remplacer</button><button class="btn" id="noSave">Garder l'ancien</button></div></div>`];
+  return ["cur","4","Enregistrer sur ce poste",dirty()?"modifié depuis le dernier enregistrement":l?`possible maintenant, ${l} non ${pl(l,"placé")}`:"prêt","",
+    `<div class="acts"><button class="btn ${l?"":"pri"}" id="save">${dirty()?"Enregistrer à nouveau":"Enregistrer…"}</button>${l?`<span class="note">Vous pouvez d'abord finir l'étape 3.</span>`:""}</div>`];
+}
+
+/* ---------- Gestes ---------- */
+function refocus(sel){requestAnimationFrame(()=>{const e=document.querySelector(sel);e&&e.focus()})}
+document.addEventListener("click",e=>{
+  const t=e.target, id=t.id;
+  const c=t.closest(".cand"); if(c){S.dec[c.dataset.id]=+c.dataset.i;S.confirm=false;persist();render();const nx=document.querySelector(".cand");nx&&nx.focus({preventScroll:true});return}
+  const u=t.closest("[data-undo]"); if(u){delete S.dec[u.dataset.undo];S.confirm=false;persist();render();return}
+  switch(id){
+    case "editNum": S.editNum=true;S.numErr="";render();refocus("#num");break;
+    case "cancelNum": S.editNum=false;S.numErr="";render();refocus("#editNum");break;
+    case "pause": pause();refocus("#resumeF");break;
+    case "resumeF": startFetch(false);refocus("#pause");break;
+    case "restart": startFetch(true);refocus("#pause");break;
+    case "retry": S.src.code="wait";startFetch(false);break;
+    case "useOld": S.src.code="fb";render();break;
+    case "showSrc": S.showSrc=!S.showSrc;render();break;
+    case "save": S.confirm=true;render();refocus("#noSave");break;
+    case "noSave": S.confirm=false;render();refocus("#save");break;
+    case "doSave": S.saved=hhmm();S.savedDec=JSON.stringify(S.dec);S.confirm=false;render();refocus("#open");break;
+    case "revert": S.saved=null;S.savedDec=null;render();toast(`Le fichier du ${OLD.date} est de nouveau celui de ce poste.`);break;
+    case "open": toast(left()?`Ouvert dans l'atelier ; ${left()} hors de la cascade (simulation).`:"Ouvert dans l'atelier (simulation).");break;
+    case "forget": S.dec={};S.resumed=0;try{localStorage.removeItem(KEY)}catch(e){};render();break;
+  }
+});
+document.addEventListener("submit",e=>{
+  if(e.target.id!=="idf")return; e.preventDefault();
+  const v=$("#num").value.trim(), n=(v.match(/\d+/)||[""])[0];
+  if(!n){S.numErr="Il faut un numéro, par exemple 512.";render();refocus("#num");return}
+  if(n!=="512"&&n!=="412"){S.typed=v;S.numErr=`Aucun texte n° ${esc(n)} en discussion. Vérifiez sur le feuilleton ; le n° 512 est celui de la séance du 17 novembre.`;render();refocus("#num");return}
+  S.num="512";S.typed="";S.numErr="";S.editNum=false; // un seul texte dans la simulation : les placements sont gardés
+  if(n==="412") toast("N° 412 est le projet initial : c'est le texte de la commission n° 512 qui est chargé.");
+  startFetch(true);
+});
+document.addEventListener("keydown",e=>{
+  if(e.key!=="Escape")return;
+  if(S.confirm){S.confirm=false;render();refocus("#save")}
+  else if(S.editNum){S.editNum=false;S.numErr="";render();refocus("#editNum")}
+});
+render();
+</script>

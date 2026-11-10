@@ -1,0 +1,305 @@
+<title>Clôture des frais · parcours</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+
+<style>
+/* Angle « parcours » : la tâche réelle (mettre le dossier en ordre puis le clore) en étapes observables,
+   chacune avec son état (périmé, en cours, erreur, partiel, terminé), ses effets visibles, l'annulation quand elle est possible
+   et une confirmation dans la page pour les deux actions irréversibles (déclarer un reversement, clore le dossier). */
+.resume{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin:14px 0 0;padding:10px 14px;border:1px solid var(--line2);border-radius:10px;background:var(--s1);font-size:13px;color:var(--text);animation:fade .3s var(--ease)}
+.resume span{flex:1 1 260px}
+.cols{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start;margin-top:18px}
+.cols>main{flex:1 1 520px;min-width:0}
+.cols>aside{flex:1 1 290px;max-width:100%;display:grid;gap:14px}
+@media (min-width:880px){.cols>aside{max-width:360px;position:sticky;top:16px}}
+ol.steps{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.step{background:var(--s1);border:1px solid var(--line);border-radius:10px;transition:border-color .2s}
+.step.open{border-color:var(--line2)}
+.sh{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:12px;align-items:center;width:100%;background:none;border:0;text-align:left;padding:12px 14px;min-height:56px;cursor:pointer;color:var(--text)}
+.num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line2);font-size:12.5px;color:var(--muted)}
+.step.done .num{background:var(--ok);border-color:var(--ok);color:#0a0b0d}
+.step.err .num{border-color:var(--err);color:#f2a7a9}
+.step.busy .num{border-color:var(--accent);border-top-color:transparent;animation:spin .9s linear infinite;color:transparent}
+.sh b{display:block;color:var(--fg);font-weight:500;font-size:14px}
+.sh small{display:block;color:var(--muted);font-size:12.5px;line-height:1.45;margin-top:1px}
+.badge{font-size:11.5px;border-radius:999px;padding:2px 9px;border:1px solid var(--line2);color:var(--muted);white-space:nowrap}
+.badge.done{color:#7fd3a8;border-color:rgba(70,179,126,.4)}
+.badge.err{color:#f2a7a9;border-color:rgba(229,72,77,.45)}
+.badge.stale,.badge.part{color:#f0c27a;border-color:rgba(227,163,63,.4)}
+.badge.busy{color:#b3baff;border-color:rgba(110,123,242,.5)}
+.sb{padding:0 14px 14px 56px;font-size:13px}
+.sb p{margin:0 0 10px;color:var(--text);line-height:1.55}
+.sb .mut{color:var(--muted)}
+.item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;padding:10px 0;border-top:1px solid var(--line)}
+.item:first-of-type{border-top:0}
+.item b{color:var(--fg);font-weight:500}
+.item .meta{color:var(--dim);font-size:12px}
+.item .am{color:var(--fg);text-align:right}
+.item .act{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;align-items:center;color:var(--muted);font-size:12.5px}
+.item .act input[type=text]{flex:1 1 180px;max-width:320px;min-height:36px}
+.chkrow{display:flex;gap:8px;align-items:center;cursor:pointer}
+.chkrow input{accent-color:var(--accent);width:16px;height:16px}
+.m{color:#7fd3a8}
+.effect{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:10px 0 0;padding:8px 12px;border-radius:8px;background:var(--s2);font-size:12.5px;color:var(--muted)}
+.effect b{color:var(--fg);font-weight:500}
+.effect.err{background:rgba(229,72,77,.08);color:#f2a7a9;border:1px solid rgba(229,72,77,.25)}
+.hint{flex-basis:100%;color:#f2a7a9;font-size:12.5px}
+.confirm{margin-top:10px;padding:12px 14px;border:1px solid rgba(229,72,77,.4);border-radius:9px;background:rgba(229,72,77,.06);animation:fade .2s var(--ease)}
+.confirm p{margin:0 0 10px}
+.confirm .row{display:flex;gap:8px;flex-wrap:wrap}
+.btn.danger{background:var(--err);border-color:var(--err);color:#fff}
+.btn,.ghost.l{min-height:36px}
+.card{padding:14px 16px}
+.card h2{margin:0 0 4px;font:600 13.5px/1.4 var(--f);color:var(--fg)}
+.card p{margin:0 0 8px;font-size:12.5px;color:var(--muted)}
+.big{font-size:22px;font-weight:600;color:var(--fg);letter-spacing:-.01em}
+svg.cv{display:block;width:100%;height:100px}
+.card textarea{width:100%;min-height:56px;resize:vertical}
+.card label{display:block;font-size:12px;color:var(--muted);margin:6px 0 4px}
+.ans{margin-top:8px;font-size:12.5px;line-height:1.55;color:var(--text);display:grid;grid-template-columns:12px minmax(0,1fr);gap:8px}
+.ans .dot{margin-top:6px}
+.ans small{display:block;color:var(--muted)}
+ul.log{list-style:none;margin:0;padding:0;font-size:12.5px}
+ul.log li{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:8px;align-items:baseline;padding:6px 0;border-top:1px solid var(--line);color:var(--text)}
+ul.log li:first-child{border-top:0}
+ul.log time{color:var(--dim);font-size:11.5px}
+.foot{margin-top:18px;font-size:12px;color:var(--dim)}
+.foot button{background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;padding:0;font-size:12px}
+.closed{padding:14px;border:1px solid rgba(70,179,126,.35);border-radius:10px;background:rgba(70,179,126,.06);color:var(--text);font-size:13px;margin-top:10px}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fade{from{opacity:0}}
+@media (max-width:520px){.sb{padding-left:14px}.sh{grid-template-columns:30px minmax(0,1fr)}.sh .badge{grid-column:2;justify-self:start}}
+</style>
+
+<div class="wrap">
+  <div class="ctx" id="ctx"></div>
+  <h1>Mise en ordre du dossier de frais</h1>
+  <p class="lead" id="lead" style="margin-bottom:0"></p>
+  <div id="resume"></div>
+  <div class="cols">
+    <main><ol class="steps" id="steps"></ol>
+      <div class="foot">Votre avancement est enregistré dans ce navigateur : vous pouvez fermer la page et reprendre plus tard. <button id="reset">Repartir de l'exemple</button></div></main>
+    <aside>
+      <section class="panel card"><h2>Solde prévu au 31 décembre</h2><div class="big" id="sol"></div><p id="solp" style="margin-top:4px"></p><svg class="cv" id="cv" viewBox="0 0 320 100" preserveAspectRatio="none" role="img" aria-label="Dépenses cumulées et projection jusqu'en décembre"></svg></section>
+      <section class="panel card"><h2>Avant de dépenser</h2><label for="dep">Dépense envisagée</label><textarea id="dep"></textarea><div id="ans" aria-live="polite"></div></section>
+      <section class="panel card"><h2>Ce qui a changé</h2><ul class="log" id="log"></ul></section>
+    </aside>
+  </div>
+</div>
+
+<script>
+const AN=70800, SPENT_BEFORE=48210, KEY="frais-mandat-parcours-v1";
+const L0=[
+ {d:"03/10",t:"Loyer de la permanence",r:"Permanence",a:1150,j:"bail-oct.pdf"},
+ {d:"05/10",t:"SNCF · Paris – Villeneuve",r:"Déplacements",a:86.4,j:"sncf-0510.pdf"},
+ {d:"08/10",t:"Imprimerie du Centre",r:"Communication",a:612,j:null},
+ {d:"12/10",t:"Orange Pro",r:"Télécommunications",a:74.99,j:"orange-oct.pdf"},
+ {d:"15/10",t:"Restaurant Le Relais",r:"Réception",a:148,j:null},
+ {d:"21/10",t:"Meta Platforms · publicité",r:"Communication",a:300,j:"meta-oct.pdf",watch:true},
+ {d:"28/10",t:"Cotisation association des élus",r:"Divers",a:250,j:"asso.pdf",need:true},
+ {d:"03/11",t:"Loyer de la permanence",r:"Permanence",a:1150,j:null},
+ {d:"04/11",t:"Fnac · ordinateur portable",r:"Équipement",a:1299,j:"fnac-1104.pdf",diff:1249},
+ {d:"06/11",t:"SNCF · Villeneuve – Paris",r:"Déplacements",a:86.4,j:null},
+ {d:"07/11",t:"Cagnotte · soutien aux sinistrés",r:"Divers",a:200,j:null,refund:true},
+];
+const F0=[{f:"imprimerie-1008.pdf",a:612,d:"08/10"},{f:"facture-relais-1510.pdf",a:148,d:"15/10"},{f:"bail-nov.pdf",a:1150,d:"03/11"},{f:"sncf-0611.pdf",a:86.4,d:"06/11"},{f:"scan-0947.jpg",a:null,d:"06/11"}];
+const RECUR=[["loyer",1150],["téléphone",75],["déplacements",480]];
+const RULES=[
+ [/wikip|e-réputation|référencement/i,"err","Non éligible","Le déontologue proscrit la rémunération d'une modification de page Wikipédia ou d'une gestion d'e-réputation."],
+ [/cagnotte|don |dons|soutien financier/i,"err","Non éligible","Un don n'est pas une dépense liée au mandat."],
+ [/sponsoris|publicité|boost/i,"warn","Éligible, sauf en période pré-électorale","Interdit dans les six mois précédant une élection à laquelle vous êtes candidate."],
+ [/vêtement|costume|coiffeur/i,"err","Non éligible","Dépense personnelle."],
+ [/restaurant|repas|déjeuner|dîner/i,"warn","Éligible si lié au mandat","Conservez la liste des convives et l'objet de la rencontre."],
+ [/loyer|permanence|bureau|ordinateur|téléphone|train|sncf|imprim/i,"ok","Éligible","Conservez la facture au nom de la députée."],
+];
+const eur=v=>nf(v,v%1?2:0)+" €";
+const clone=o=>JSON.parse(JSON.stringify(o));
+const now=()=>new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
+let S, run={refresh:null,tries:0,statuts:false,repay:false,confirm:null,undo:null,hint:{}};
+function fresh(){return{L:clone(L0),F:clone(F0),refreshed:false,closed:false,open:1,draft:"Mise à jour de ma page Wikipédia par un prestataire",log:[],ts:null}}
+function save(){S.ts=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY)||"null");if(s&&s.L)return s}catch(e){}return null}
+function note(msg){S.log.unshift({t:now(),m:msg});S.log=S.log.slice(0,5)}
+
+const free=()=>S.F.filter(F=>!S.L.some(x=>x.j===F.f));
+const score=(F,l)=>F.a==null?0:(F.a===l.a?2:0)+(F.d===l.d?1:0);
+const pieceOps=()=>S.L.filter(l=>!l.refund);
+const isOk=l=>l.refund?!!l.repaid:!!l.j&&(!l.diff||!!l.why)&&(!l.need||!!l.needOk);
+const pct=()=>Math.round(100*S.L.filter(isOk).length/S.L.length);
+function fin(){const rp=S.L.filter(l=>l.refund&&l.repaid).reduce((s,l)=>s+l.a,0),spent=SPENT_BEFORE+S.L.reduce((s,l)=>s+l.a,0)-rp,rec=RECUR.reduce((s,r)=>s+r[1],0)*1.7;return{spent,rec,proj:spent+rec,sol:AN-spent-rec}}
+
+/* état de chaque étape, déduit des données */
+function states(){
+  const s1=run.refresh==="busy"?"busy":run.refresh==="err"?"err":S.refreshed?"done":"stale";
+  const po=pieceOps(), withJ=po.filter(l=>l.j).length, s2=withJ===po.length?"done":withJ?"part":"todo";
+  const ex=S.L.filter(l=>(l.diff&&l.j)||l.need), exOk=ex.filter(l=>(!l.diff||l.why)&&(!l.need||l.needOk)).length, s3=run.statuts?"busy":exOk===ex.length?"done":exOk?"part":"todo";
+  const rf=S.L.find(l=>l.refund), s4=run.repay?"busy":rf.repaid?"done":"todo";
+  const ready=[s1,s2,s3,s4].every(x=>x==="done"), s5=S.closed?"done":ready?"todo":"blocked";
+  return [s1,s2,s3,s4,s5];
+}
+const BADGE={done:"Terminé",part:"En partie",todo:"À faire",stale:"Données périmées",err:"Erreur",busy:"En cours",blocked:"Pas encore possible"};
+
+function render(){
+  const st=states(), F=fin();
+  $("#ctx").textContent=`Avance de frais de mandat · exercice 2026 · relevé du compte dédié au ${S.refreshed?"10":"7"} novembre (montants fictifs)`;
+  const left=st.slice(0,4).filter(x=>x!=="done").length;
+  $("#lead").innerHTML=S.closed?`Dossier d'octobre et novembre clos. <span>Solde prévu au 31 décembre : ${eur(Math.round(F.sol))}.</span>`:`${left?`${left} étape${left>1?"s":""} sur 4 avant de pouvoir clore le dossier`:"Tout est en ordre : vous pouvez clore le dossier"}. <span>Dossier en ordre à ${pct()} %.</span>`;
+  const T=[["Relevé du compte",sum1],["Pièces justificatives",sum2],["Écarts et compléments",sum3],["Dépense non éligible",sum4],["Clore le dossier",sum5]];
+  $("#steps").innerHTML=T.map(([h,fn],k)=>{const n=k+1,s=st[k],o=S.open===n;
+    const cls=s==="done"?"done":s==="err"?"err":s==="busy"?"busy":"";
+    return `<li class="step ${cls} ${o?"open":""}"><button class="sh" data-step="${n}" aria-expanded="${o}" aria-controls="sb${n}"><span class="num">${s==="done"?"✓":n}</span><span><b>${h}</b><small>${fn(s,true)}</small></span><span class="badge ${s==="blocked"?"":s}">${BADGE[s]}</span></button>${o?`<div class="sb" id="sb${n}">${fn(s,false)}</div>`:""}</li>`}).join("");
+  $("#sol").textContent=eur(Math.round(F.sol));
+  $("#solp").textContent=`Dotation ${eur(AN)}, dont ${eur(Math.round(F.spent))} dépensés ; ${eur(Math.round(F.rec))} prévus d'ici décembre (${RECUR.map(r=>r[0]).join(", ")}).`;
+  const X=m=>10+m*(300/12), Yv=v=>92-84*v/AN, path=a=>a.map(([m,v],k)=>`${k?"L":"M"}${X(m)},${Yv(v)}`).join("");
+  $("#cv").innerHTML=`<line x1="10" x2="310" y1="${Yv(AN)}" y2="${Yv(AN)}" stroke="var(--line2)" stroke-dasharray="3 3"/><text x="310" y="${Yv(AN)-3}" text-anchor="end" font-size="9" fill="var(--dim)">dotation</text><path d="${path([[0,0],[3,15600],[6,32100],[9,SPENT_BEFORE],[10.3,F.spent]])}" fill="none" stroke="var(--accent)" stroke-width="2"/><path d="${path([[10.3,F.spent],[12,F.proj]])}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="4 3" opacity=".7"/><circle cx="${X(12)}" cy="${Yv(F.proj)}" r="3" fill="var(--accent)"/><text x="12" y="99" font-size="9" fill="var(--dim)">janv.</text><text x="308" y="99" text-anchor="end" font-size="9" fill="var(--dim)">déc.</text>`;
+  $("#log").innerHTML=S.log.length?S.log.map(x=>`<li><time>${x.t}</time><span>${x.m}</span></li>`).join(""):`<li><span></span><span style="color:var(--dim)">Rien pour l'instant. Chaque action et son effet sur le dossier s'inscrivent ici.</span></li>`;
+  check(); save();
+}
+const lock=()=>S.closed?"disabled":"";
+/* 1. relevé */
+function sum1(s,short){
+  if(short)return s==="stale"?"Dernier relevé le 7 novembre : trois jours de mouvements peuvent manquer.":s==="busy"?"Connexion à la banque…":s==="err"?"La banque n'a pas répondu.":"Relevé du 10 novembre, à jour.";
+  if(s==="stale")return `<p>Le relevé date du 7 novembre (11 opérations). Actualisez avant de rapprocher les pièces, sinon une dépense récente pourrait échapper au dossier.</p><button class="btn pri" data-do="refresh">Actualiser le relevé</button>`;
+  if(s==="busy")return `<p class="mut">Connexion à la banque… Vous pouvez passer à une autre étape en attendant.</p>`;
+  if(s==="err")return `<div class="effect err">La banque n'a pas répondu dans le délai. Rien n'est perdu : vos rapprochements restent enregistrés.</div><p></p><button class="btn pri" data-do="refresh">Réessayer</button> <button class="ghost l" data-step="2">Continuer sans actualiser</button>`;
+  return `<p>Relevé au 10 novembre : ${S.L.length} opérations.</p><div class="effect"><b>Effet</b> 1 opération nouvelle (Orange Pro, 09/11, 74,99 €) ajoutée à l'étape 2, avec sa pièce reçue.</div>`;
+}
+/* 2. pièces */
+function sum2(s,short){
+  const po=pieceOps(), miss=po.filter(l=>!l.j), fr=free();
+  if(short)return s==="done"?`Les ${po.length} opérations ont leur pièce.`:`${po.length-miss.length} opérations sur ${po.length} ont leur pièce.`;
+  const sure=miss.map(l=>({l,F:fr.find(F=>score(F,l)===3)})).filter(x=>x.F);
+  let h="";
+  if(sure.length){const sel=sure.filter(x=>!run.hint["no"+S.L.indexOf(x.l)]);const after=Math.round(100*(S.L.filter(isOk).length+sel.length)/S.L.length);
+    h+=`<p>${sure.length} pièce${sure.length>1?"s":""} reçue${sure.length>1?"s":""} correspond${sure.length>1?"ent":""} exactement (même date, même montant) :</p>${sure.map(({l,F})=>{const i=S.L.indexOf(l);return `<div class="item"><label class="chkrow"><input type="checkbox" data-sure="${i}" ${run.hint["no"+i]?"":"checked"} ${lock()}><span><b>${esc(l.t)}</b> <span class="meta">· ${l.d} · ${F.f}</span></span></label><span class="am">${eur(l.a)}</span></div>`}).join("")}
+    <div class="effect"><b>Effet</b> le dossier passera de ${pct()} % à ${after} % en ordre.</div><p></p><button class="btn pri" data-do="batch" ${sel.length&&!S.closed?"":"disabled"}>Rattacher ${sel.length} pièce${sel.length>1?"s":""}</button>`}
+  if(run.undo&&run.undo.k==="batch")h+=`<div class="effect"><b>${run.undo.n} pièce${run.undo.n>1?"s":""} rattachée${run.undo.n>1?"s":""}.</b><button class="ghost" data-do="undo">Annuler</button></div>`;
+  const rest=miss.filter(l=>!sure.some(x=>x.l===l));
+  if(rest.length)h+=`<p style="margin-top:12px">Sans pièce correspondante :</p>`+rest.map(l=>{const i=S.L.indexOf(l);return `<div class="item"><span><b>${esc(l.t)}</b> <span class="meta">· ${l.d}</span></span><span class="am">${eur(l.a)}</span><span class="act">${l.asked?`Facture demandée au fournisseur.`:`<button class="ghost" data-ask="${i}" ${lock()}>Noter la facture comme demandée</button>`}</span></div>`}).join("");
+  const scan=fr.find(F=>F.a==null);
+  if(scan)h+=`<div class="item"><span><b>${scan.f}</b> <span class="meta">· reçue le ${scan.d}</span></span><span class="am" style="color:#f2a7a9">illisible</span><span class="act">Le montant n'a pas pu être lu. Saisissez-le pour que la pièce soit proposée.<input type="text" id="scanv" inputmode="decimal" aria-label="Montant lu sur ${scan.f}" placeholder="montant en euros" ${lock()}><button class="btn" data-do="scan" ${lock()}>Valider</button>${run.hint.scan?`<span class="hint">${run.hint.scan}</span>`:""}</span></div>`;
+  if(!miss.length)h+=`<p class="mut">Toutes les opérations ont leur pièce.</p>`;
+  return h;
+}
+/* 3. écarts */
+function sum3(s,short){
+  const fn=S.L.find(l=>l.diff), as=S.L.find(l=>l.need), meta=S.L.find(l=>l.watch);
+  if(short)return s==="done"?"Écart expliqué, statuts joints.":s==="busy"?"Envoi des statuts…":`${[fn.diff&&!fn.why?"1 écart à expliquer":"",as.need&&!as.needOk?"statuts à joindre":""].filter(Boolean).join(", ")}.`;
+  const i=S.L.indexOf(fn);
+  return `<div class="item"><span><b>${esc(fn.t)}</b> <span class="meta">· ${fn.d}</span></span><span class="am">${eur(fn.a)}</span><span class="act">${fn.why?`Écart de ${eur(fn.a-fn.diff)} expliqué : « ${esc(fn.why)} ».`:`Relevé ${eur(fn.a)}, facture ${eur(fn.diff)} : ${eur(fn.a-fn.diff)} d'écart. Notez la raison ou joignez le bon de commande.<input type="text" id="whyv" aria-label="Raison de l'écart" placeholder="frais de livraison, acompte…" ${lock()}><button class="btn" data-do="why" ${lock()}>Enregistrer</button>${run.hint.why?`<span class="hint">${run.hint.why}</span>`:""}`}</span></div>
+  <div class="item"><span><b>${esc(as.t)}</b> <span class="meta">· ${as.d}</span></span><span class="am">${eur(as.a)}</span><span class="act">${as.needOk?"Statuts joints : l'association n'est pas un parti politique.":run.statuts?"Envoi de statuts-association.pdf…":`Éligible si l'association n'est pas un parti politique : joignez ses statuts.<button class="btn" data-do="statuts" ${lock()}>Joindre statuts-association.pdf</button>`}</span></div>
+  <div class="item"><span><b>${esc(meta.t)}</b> <span class="meta">· ${meta.d}</span></span><span class="am">${eur(meta.a)}</span><span class="act">Rien à faire : contenu sponsorisé éligible, la prochaine élection est dans plus de six mois.</span></div>`;
+}
+/* 4. reversement (irréversible) */
+function sum4(s,short){
+  const l=S.L.find(x=>x.refund);
+  if(short)return s==="done"?`Reversement de ${eur(l.a)} déclaré.`:s==="busy"?"Transmission de la déclaration…":`${esc(l.t)}, ${eur(l.a)} : à reverser sur vos deniers.`;
+  if(s==="done")return `<p>Reversement de ${eur(l.a)} déclaré le ${l.repaid}.</p><div class="effect"><b>Effet</b> solde prévu relevé de ${eur(l.a)} ; la déclaration figure au dossier.</div>`;
+  if(s==="busy")return `<p class="mut">Transmission de la déclaration…</p>`;
+  return `<p>Un don par le compte de l'avance n'est pas une dépense de mandat. Virez ${eur(l.a)} de votre compte personnel vers le compte dédié, puis déclarez-le.</p>`+
+    (run.confirm==="repay"?`<div class="confirm" role="group" aria-label="Confirmer la déclaration"><p>Vous déclarez avoir reversé <b>${eur(l.a)}</b>. La déclaration est versée au dossier et <b>ne pourra pas être retirée</b> ici. Le solde prévu remontera de ${eur(l.a)}.</p><div class="row"><button class="btn danger" data-do="repay-ok">Confirmer la déclaration</button><button class="btn" data-do="cancel">Revenir</button></div></div>`
+    :`<button class="btn pri" data-do="repay" ${lock()}>Déclarer le reversement…</button>`);
+}
+/* 5. clôture (irréversible) */
+function sum5(s,short){
+  const st=states();
+  if(short)return s==="done"?`Clos le ${S.closed} : lecture seule.`:s==="blocked"?"Possible une fois les étapes 1 à 4 terminées.":"Tout est prêt.";
+  if(s==="done")return `<div class="closed">Dossier d'octobre et novembre clos le ${S.closed}. Il est en lecture seule ; une correction passe désormais par le déontologue.</div>`;
+  if(s==="blocked"){const miss=["Relevé","Pièces","Écarts","Reversement"].filter((x,k)=>st[k]!=="done");return `<p>Encore à terminer : ${miss.join(", ").toLowerCase()}.</p><button class="btn" disabled>Clore le dossier</button>`}
+  return `<p>Les ${S.L.length} opérations sont en ordre.</p>`+(run.confirm==="close"?`<div class="confirm" role="group" aria-label="Confirmer la clôture"><p>Clore fige les rattachements et les explications d'octobre et novembre. <b>Ce n'est pas réversible</b> depuis cette page.</p><div class="row"><button class="btn danger" data-do="close-ok">Clore définitivement</button><button class="btn" data-do="cancel">Revenir</button></div></div>`:`<button class="btn pri" data-do="close">Clore le dossier…</button>`);
+}
+function check(){const v=$("#dep").value;const r=RULES.find(([re])=>re.test(v));
+  $("#ans").innerHTML=r?`<div class="ans"><span class="dot ${r[1]}"></span><span>${r[2]}<small>${r[3]}</small></span></div>`:v.trim()?`<div class="ans"><span class="dot"></span><span>Pas de règle connue<small>En cas de doute, saisissez le déontologue avant d'engager la dépense.</small></span></div>`:""}
+
+const ACT={
+  refresh(){run.refresh="busy";run.tries++;render();setTimeout(()=>{
+    if(run.tries===1){run.refresh="err";note("Actualisation du relevé : la banque n'a pas répondu.");render();return}
+    run.refresh=null;S.refreshed=true;S.L.push({d:"09/11",t:"Orange Pro",r:"Télécommunications",a:74.99,j:null});S.F.push({f:"orange-nov.pdf",a:74.99,d:"09/11"});
+    note("Relevé actualisé : 1 opération et 1 pièce nouvelles.");render()},1100)},
+  batch(){const fr=free();const ids=[];pieceOps().filter(l=>!l.j).forEach(l=>{const i=S.L.indexOf(l),F=fr.find(F=>score(F,l)===3);if(F&&!run.hint["no"+i]){l.j=F.f;ids.push(i)}});
+    const before=pct();run.undo={k:"batch",ids,n:ids.length};note(`${ids.length} pièce${ids.length>1?"s":""} rattachée${ids.length>1?"s":""}.`);render()},
+  undo(){if(!run.undo)return;run.undo.ids.forEach(i=>S.L[i].j=null);note(`Rattachement de ${run.undo.n} pièce${run.undo.n>1?"s":""} annulé.`);run.undo=null;render()},
+  scan(){const v=parseFloat(($("#scanv").value||"").replace(/\s/g,"").replace(",","."));if(isNaN(v)||v<=0){run.hint.scan="Saisissez un nombre, par exemple 86,40.";render();$("#scanv").focus();return}
+    delete run.hint.scan;const F=S.F.find(x=>x.a==null);F.a=v;note(`Montant de ${F.f} saisi : ${eur(v)}.`);render()},
+  why(){const v=$("#whyv").value.trim();if(!v){run.hint.why="Écrivez la raison, par exemple « frais de livraison ».";render();$("#whyv").focus();return}
+    delete run.hint.why;S.L.find(l=>l.diff).why=v;note("Écart de la Fnac expliqué.");render()},
+  statuts(){run.statuts=true;render();setTimeout(()=>{run.statuts=false;S.L.find(l=>l.need).needOk=true;note("Statuts joints à la cotisation.");render()},900)},
+  repay(){run.confirm="repay";render();$('[data-do="repay-ok"]').focus()},
+  "repay-ok"(){run.confirm=null;run.repay=true;render();setTimeout(()=>{run.repay=false;const l=S.L.find(x=>x.refund);l.repaid=new Date().toLocaleDateString("fr-FR");note(`Reversement de ${eur(l.a)} déclaré : solde prévu +${eur(l.a)}.`);render()},900)},
+  close(){run.confirm="close";render();$('[data-do="close-ok"]').focus()},
+  "close-ok"(){run.confirm=null;S.closed=new Date().toLocaleDateString("fr-FR");run.undo=null;note("Dossier clos.");render()},
+  cancel(){const k=run.confirm;run.confirm=null;render();$(`[data-do="${k==="close"?"close":"repay"}"]`)?.focus()},
+};
+document.addEventListener("click",e=>{let b;
+  if(b=e.target.closest("[data-step]")){const n=+b.dataset.step;S.open=S.open===n&&b.classList.contains("sh")?0:n;run.confirm=null;render();$(`[data-step="${n}"].sh`)?.focus();return}
+  if(b=e.target.closest("[data-do]")){ACT[b.dataset.do]();return}
+  if(b=e.target.closest("[data-ask]")){const l=S.L[+b.dataset.ask];l.asked=true;note(`Facture demandée : ${esc(l.t)}.`);render();return}
+  if(e.target.id==="reset"){try{localStorage.removeItem(KEY)}catch(_){}S=fresh();run={refresh:null,tries:0,statuts:false,repay:false,confirm:null,undo:null,hint:{}};$("#resume").innerHTML="";$("#dep").value=S.draft;render()}
+  if(e.target.id==="dismiss")$("#resume").innerHTML="";
+});
+document.addEventListener("change",e=>{if(e.target.dataset.sure!=null){const k="no"+e.target.dataset.sure;if(e.target.checked)delete run.hint[k];else run.hint[k]=1;render()}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){if(run.confirm)ACT.cancel();else if(S.open){const n=S.open;S.open=0;render();$(`[data-step="${n}"]`)?.focus()}}
+  if(e.key==="Enter"&&e.target.id==="whyv")ACT.why(); if(e.key==="Enter"&&e.target.id==="scanv")ACT.scan()});
+$("#dep").addEventListener("input",e=>{S.draft=e.target.value;check();save()});
+
+const saved=load();
+S=saved||fresh();
+$("#dep").value=S.draft;
+if(saved&&saved.ts){const t=new Date(saved.ts);$("#resume").innerHTML=`<div class="resume" role="status"><span>Reprise de votre session du ${t.toLocaleDateString("fr-FR")} à ${t.toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"})} : dossier en ordre à ${pct()} %${S.open?`, étape ${S.open} ouverte`:""}.</span><button class="ghost" id="dismiss">Continuer</button><button class="ghost" id="reset2" onclick="document.getElementById('reset').click()">Repartir de l'exemple</button></div>`}
+render();
+</script>

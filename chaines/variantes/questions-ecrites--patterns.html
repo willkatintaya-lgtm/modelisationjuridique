@@ -1,0 +1,301 @@
+<title>Question écrite · patterns</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+<style>
+/* Patterns retenus (l'original : tout déplié, liste plate, statistiques toujours visibles, select natif) :
+   - choix du ministère en boutons radio segmentés (5 options visibles, cibles 44 px) ;
+   - verdict en bandeau dans le formulaire (inline : il qualifie le texte qu'on tape) ;
+   - résultats en onglets par statut, cartes repliées (divulgation progressive), 3 visibles puis « plus » ;
+   - citer : glisser une carte sur le texte, ou bouton / touche C (alternative clavier), toast avec Annuler ;
+   - le ministère en détail dans un tiroir latéral (overlay : consultation ponctuelle, ne pousse pas le texte) ;
+   - squelette au premier chargement de l'archive (> 400 ms), calcul ensuite instantané. */
+.grid{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:24px;align-items:start;margin-top:18px}
+.form{padding:16px;position:sticky;top:16px;display:grid;gap:14px}
+.lbl{font-size:12.5px;color:var(--muted);margin-bottom:6px;display:block}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label{min-height:44px;display:inline-flex;align-items:center;padding:0 14px;border:1px solid var(--line2);border-radius:8px;cursor:pointer;color:var(--muted);font-size:13px;transition:color .2s,border-color .2s,background .2s}
+.seg label:hover{color:var(--fg)}
+.seg input:checked+label{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.seg input:focus-visible+label{outline:2px solid var(--accent);outline-offset:2px}
+.minline{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px;font-size:12.5px;color:var(--muted)}
+.minline b{color:var(--fg);font-weight:500}
+.link{background:none;border:0;padding:6px 0;color:var(--ins);cursor:pointer;font-size:12.5px;text-decoration:underline 1px;text-underline-offset:3px;min-height:32px}
+.drop{position:relative;border-radius:9px}
+.drop textarea{width:100%;min-height:210px;resize:vertical;line-height:1.6;font-size:13.5px;display:block}
+.drop::after{content:"Déposer ici pour citer cette question";position:absolute;inset:0;display:grid;place-items:center;border:1.5px dashed var(--accent);border-radius:9px;background:rgba(10,11,13,.82);color:var(--fg);font-size:13px;opacity:0;pointer-events:none;transition:opacity .15s}
+.drop.over::after{opacity:1}
+.banner{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;padding:12px 14px;border-radius:8px;background:var(--s2);font-size:13px;line-height:1.5}
+.banner .dot{margin-top:6px}
+.banner b{color:var(--fg);font-weight:500}
+.banner .x{grid-column:2;color:var(--muted)}
+/* onglets */
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.tab{min-height:44px;padding:0 14px;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--muted);cursor:pointer;font-size:13px;white-space:nowrap;transition:color .2s,border-color .2s}
+.tab:hover{color:var(--fg)}
+.tab[aria-selected=true]{color:var(--fg);border-color:var(--accent)}
+.tab span{color:var(--dim);margin-left:4px}
+.list{display:grid;gap:8px}
+.card{border:1px solid var(--line);border-radius:9px;background:var(--s1);transition:border-color .2s,opacity .2s}
+.card:hover,.card:focus-within{border-color:var(--line2)}
+.card.dragging{opacity:.4}
+.c-h{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 12px 10px 6px;min-height:52px}
+.grip{width:28px;height:36px;display:grid;place-items:center;color:var(--dim);cursor:grab;border-radius:6px}
+.grip:hover{color:var(--fg);background:var(--s2)}
+.grip svg{width:12px;height:16px}
+.c-tg{all:unset;cursor:pointer;display:grid;gap:2px;min-width:0;padding:4px 0}
+.c-tg:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:4px}
+.c-meta{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);flex-wrap:wrap}
+.c-meta b{color:var(--fg);font-weight:500}
+.c-sum{font-size:13px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card.open .c-sum{display:none}
+.c-r{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted);white-space:nowrap}
+.chev{width:8px;height:8px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg) translate(-2px,-2px);transition:transform .2s}
+.card.open .chev{transform:rotate(225deg) translate(-2px,-2px)}
+.c-body{padding:0 14px 14px 46px;display:grid;gap:8px}
+.c-sub{font-size:12px;color:var(--dim)}
+.c-body p{margin:0;font-size:13px;line-height:1.6}
+.ans{font-size:12.5px;color:var(--muted);border-left:2px solid var(--line2);padding-left:10px}
+.ans.none{color:#f2a7a9;border-color:rgba(229,72,77,.35)}
+.st{font-size:12px}
+.st.ok{color:var(--ok)}.st.no{color:#f2a7a9}
+.c-act{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.c-act .btn{min-height:40px}
+.kbd{font-size:11.5px;color:var(--dim)}
+.kbd kbd{font:inherit;border:1px solid var(--line2);border-radius:4px;padding:0 5px;color:var(--muted)}
+.more{margin-top:8px;width:100%;min-height:44px}
+.empty{padding:16px;color:var(--dim);font-size:13px;border:1px dashed var(--line2);border-radius:9px}
+/* squelette */
+.sk{display:block;border-radius:6px;background:linear-gradient(90deg,var(--s2) 0%,#1d2025 50%,var(--s2) 100%);background-size:200% 100%;animation:sh 1.2s linear infinite}
+@keyframes sh{to{background-position:-200% 0}}
+.skc{border:1px solid var(--line);border-radius:9px;padding:14px 14px 14px 46px;display:grid;gap:8px}
+/* tiroir */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .25s;z-index:20}
+.scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,100vw);background:var(--s1);border-left:1px solid var(--line2);z-index:21;transform:translateX(100%);transition:transform .3s var(--ease),visibility 0s .3s;visibility:hidden;display:flex;flex-direction:column;padding:18px max(18px,env(safe-area-inset-right,0px)) 18px 18px;gap:16px;overflow:auto}
+.drawer.on{transform:none;visibility:visible;transition:transform .3s var(--ease)}
+.dr-h{display:flex;align-items:start;gap:12px}
+.dr-h h2{margin:0;font:600 15px/1.35 var(--f);color:var(--fg);flex:1}
+.close{width:44px;height:44px;flex:none;border-radius:8px;border:1px solid var(--line2);background:var(--s2);color:var(--fg);cursor:pointer;font-size:18px;line-height:1}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kpi{padding:12px;border-radius:8px;background:var(--s2)}
+.kpi b{display:block;color:var(--fg);font-size:20px;font-weight:600}
+.kpi span{font-size:12px;color:var(--dim)}
+.bars{display:grid;gap:6px;font-size:12.5px}
+.bars div{display:grid;grid-template-columns:96px minmax(0,1fr) 28px;gap:8px;align-items:center;color:var(--muted)}
+.bars i{display:block;height:8px;border-radius:4px;background:var(--line2)}
+.bars i.ok{background:rgba(70,179,126,.6)}
+.bars em{font-style:normal;text-align:right;color:var(--text)}
+.note{font-size:12.5px;color:var(--dim);margin:0}
+/* toasts empilés */
+.toasts{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:grid;gap:8px;z-index:30;width:min(440px,calc(100vw - 32px))}
+.tst{display:flex;align-items:center;gap:12px;background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:8px 8px 8px 14px;border-radius:8px;font-size:13px;animation:up .2s var(--ease);transition:opacity .2s}
+.tst span{flex:1}
+.tst.out{opacity:0}
+.tst .ghost{min-height:36px;padding:0 12px}
+@keyframes up{from{opacity:0;transform:translateY(6px)}}
+@media (max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}.form{position:static}}
+@media (max-width:520px){.c-body{padding-left:14px}.c-r .lv,.c-meta .mn{display:none}.tab{padding:0 8px;font-size:12.5px}.tabs{overflow-x:auto;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}}
+</style>
+
+<div class="wrap">
+  <div class="ctx">Questions écrites · archive Assemblée et Sénat · export du 9 novembre 2026</div>
+  <h1>Avant de déposer une question</h1>
+  <div class="grid">
+    <section class="panel form" aria-label="Votre question">
+      <div role="radiogroup" aria-labelledby="l-min">
+        <span class="lbl" id="l-min">Ministre interrogé</span>
+        <div class="seg" id="seg"></div>
+        <div class="minline" id="minline"></div>
+      </div>
+      <div>
+        <label class="lbl" for="q">Votre question</label>
+        <div class="drop" id="drop"><textarea id="q"></textarea></div>
+      </div>
+      <div class="banner" id="banner" aria-live="polite"></div>
+    </section>
+    <section aria-label="Questions proches">
+      <div class="tabs" role="tablist" id="tabs" aria-label="Filtrer par statut"></div>
+      <div id="panel" role="tabpanel"></div>
+    </section>
+  </div>
+</div>
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dr-t"></aside>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script>
+// Données et calcul repris tels quels de la maquette d'origine (questions-ecrites.html).
+const NOW=new Date(2026,10,10);
+const MIN={LOG:"Logement",TE:"Transition écologique",ECO:"Économie et finances",SOL:"Solidarités",INT:"Intérieur"};
+const DEL={LOG:{n:64,ok:9,med:148,bins:[9,7,12,10,8,18]},TE:{n:58,ok:11,med:121,bins:[11,9,10,8,6,14]},ECO:{n:131,ok:22,med:132,bins:[22,18,24,21,14,32]},SOL:{n:49,ok:6,med:167,bins:[6,5,8,9,7,14]},INT:{n:72,ok:17,med:97,bins:[17,14,13,9,6,13]}};
+const BINS=["≤ 2 mois","2–4","4–6","6–9","9–12","sans réponse"];
+const G={PR:"#c07a00",SOL:"#d13a30",ECO:"#2a9d63",UT:"#3b82d6",LL:"#e0671d",RC:"#7c5cd6",DC:"#2bb3b1",AR:"#8fae3a",CP:"#d8699a"};
+const Q=[
+ {n:"AN 3187",g:"PR",min:"TE",d:"2026-05-12",t:"Retards de versement de MaPrimeRénov' aux ménages modestes, dont certains attendent plus de huit mois le paiement de la prime après la fin des travaux.",a:null,mine:true},
+ {n:"AN 2954",g:"ECO",min:"LOG",d:"2026-03-03",t:"Délais de paiement des aides à la rénovation énergétique pour les propriétaires bailleurs et conséquences sur la remise en location des logements vacants.",a:null},
+ {n:"Sénat 10422",g:"UT",min:"LOG",d:"2025-12-11",t:"Délais d'instruction et de versement des aides à la rénovation énergétique dans les départements ruraux.",a:{d:"2026-04-02",t:"Le délai moyen de paiement a été ramené à 52 jours ; un plan de renfort de l'instruction a été engagé dans douze départements."}},
+ {n:"AN 2611",g:"PR",min:"LOG",d:"2025-12-16",t:"Publication du décret relatif à la décence énergétique des logements loués prévu par la loi relative au logement décent.",a:{d:"2026-03-17",t:"Le Gouvernement publiera le décret d'application avant la fin du premier semestre 2026."}},
+ {n:"AN 2208",g:"SOL",min:"LOG",d:"2025-09-23",t:"Situation des propriétaires bailleurs privés confrontés aux retards de paiement des primes de rénovation et à la hausse du coût des travaux.",a:{d:"2026-02-10",t:"Les retards constatés en 2025 tenaient à la lutte contre la fraude ; les contrôles ont été ciblés pour accélérer les paiements."}},
+ {n:"AN 3044",g:"ECO",min:"LOG",d:"2026-04-14",t:"Calendrier de publication du décret sur la décence énergétique des logements.",a:null},
+ {n:"AN 1880",g:"SOL",min:"TE",d:"2025-09-03",t:"Remise du rapport sur l'artificialisation liée aux résidences secondaires prévu par la loi relative aux zones tendues.",a:{d:"2025-12-02",t:"Le rapport est en cours de finalisation."}},
+ {n:"Sénat 9870",g:"RC",min:"ECO",d:"2025-10-02",t:"Fiscalité des logements vacants et produit de la taxe sur les logements vacants dans les communes moyennes.",a:{d:"2026-01-20",t:"Le produit de la taxe s'élevait à 168 millions d'euros en 2024."}},
+ {n:"AN 2733",g:"LL",min:"INT",d:"2026-01-27",t:"Conditions de mise en œuvre de la réquisition des logements vacants par les préfets.",a:{d:"2026-03-24",t:"Une instruction aux préfets sera diffusée après la publication du rapport de la mission flash."}},
+ {n:"AN 3402",g:"PR",min:"SOL",d:"2026-09-01",t:"Montant et conditions des aides au logement des étudiants boursiers.",a:null,mine:true},
+ {n:"AN 2412",g:"DC",min:"LOG",d:"2025-11-04",t:"Accompagnement des communes dans le repérage des logements vacants et accès aux fichiers fiscaux.",a:{d:"2026-01-13",t:"Le service « Zéro logement vacant » est ouvert à toutes les communes volontaires."}},
+ {n:"AN 2877",g:"CP",min:"ECO",d:"2026-02-17",t:"Crédit d'impôt pour la rénovation des logements locatifs : coût et nombre de bénéficiaires.",a:null},
+ {n:"Sénat 11205",g:"AR",min:"TE",d:"2026-06-05",t:"Versement tardif des primes de rénovation énergétique et trésorerie des artisans du bâtiment.",a:null},
+ {n:"AN 1544",g:"UT",min:"LOG",d:"2025-07-08",t:"Revalorisation du plafond de l'aide à la remise sur le marché des logements vacants.",a:{d:"2025-10-28",t:"Une revalorisation n'est pas envisagée à ce stade."}},
+];
+const DRAFT="Mme la députée attire l'attention de M. le ministre chargé du logement sur les délais de versement de l'aide à la rénovation énergétique des logements locatifs. De nombreux propriétaires bailleurs attendent plus de six mois le paiement de leur prime après la fin des travaux, ce qui retarde la remise en location. Elle lui demande quelles mesures il entend prendre pour réduire ces délais.";
+const STOP=new Set("le la les de des du d l un une et en au aux a à sur sa son ses leur leurs ce ces cette qui que quoi dont pour par plus moins dans avec il elle ils elles lui m mme ministre monsieur madame député députée attire attention demande quelles quels quelle mesures entend prendre afin ne pas est sont être ont été après avant entre tres très ainsi".split(" "));
+const norm=s=>s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9 ]/g," ");
+const stem=w=>w.length>6?w.slice(0,6):w.replace(/s$/,"");
+const toks=s=>norm(s).split(/\s+/).filter(w=>w.length>2&&!STOP.has(w)).map(stem);
+let DOCS=[],IDF={};
+function reindex(){DOCS=Q.map(q=>new Set(toks(q.t)));IDF={};DOCS.forEach(d=>d.forEach(w=>IDF[w]=(IDF[w]||0)+1));for(const w in IDF)IDF[w]=Math.log(1+Q.length/IDF[w])}
+reindex();
+function sim(a,b){let num=0,na=0,nb=0;for(const w of a){const x=IDF[w]||Math.log(1+Q.length);na+=x*x;if(b.has(w))num+=x*x}for(const w of b){const x=IDF[w];nb+=x*x}return na&&nb?num/Math.sqrt(na*nb):0}
+const D=s=>{const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
+const fd=s=>D(s).toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"});
+const months=(a,b)=>Math.max(0,Math.round((b-a)/2629800000));
+function hl(text,set){return text.split(/(\s+)/).map(w=>{const t=toks(w)[0];return t&&set.has(t)?`<mark>${esc(w)}</mark>`:esc(w)}).join("")}
+// Recherche : mêmes seuils que l'original (≥ .12 voisine, ≥ .25 proche, ≥ .42 très proche).
+function search(text,max=6){const mine=new Set(toks(text));const R=Q.map((q,i)=>({q,s:sim(mine,DOCS[i])})).filter(r=>r.s>=.12).sort((a,b)=>b.s-a.s).slice(0,max);return {mine,R,dup:R[0]&&R[0].s>=.42?R[0]:null}}
+const level=s=>s>=.42?"très proche":s>=.25?"proche":"voisine";
+// Verdict : les quatre cas de l'original.
+function verdictKind(dup){if(!dup)return "libre";if(dup.q.mine)return "vous";if(dup.q.a)return "repondue";return "autre"}
+const minLabel=k=>({LOG:"du logement",TE:"de la transition écologique",ECO:"de l'économie et des finances",SOL:"des solidarités",INT:"de l'intérieur"})[k];
+const pct=k=>Math.round(100*DEL[k].ok/DEL[k].n), medM=k=>Math.round(DEL[k].med/30.4);
+// Les citations insérées par l'outil ne doivent pas diluer la comparaison : on les retire avant de calculer.
+const CITE_RE=/ ?Dans sa réponse du [^«]*?à la question n° [^«]*?«[^»]*»\.| ?La question n° [^.]*?restée sans réponse\./g;
+const stripCites=t=>t.replace(CITE_RE,"");
+const citedIn=t=>new Set([...t.matchAll(/question n° ((?:AN|Sénat) \d+)/g)].map(m=>m[1]));
+
+const ta=$("#q");ta.value=DRAFT;
+let cur="LOG",tab="all",shown=3,openSet=new Set(),loaded=false,R=[],mineSet=new Set();
+$("#seg").innerHTML=Object.entries(MIN).map(([k,v])=>`<input type="radio" name="min" id="m-${k}" value="${k}"${k===cur?" checked":""}><label for="m-${k}">${v}</label>`).join("");
+$$("#seg input").forEach(i=>i.onchange=()=>{cur=i.value;run()});
+// toasts empilés (3 au plus), avec action Annuler
+function note(msg,undo){const box=$("#toasts");while(box.children.length>=3)box.firstChild.remove();const t=document.createElement("div");t.className="tst";t.innerHTML=`<span>${msg}</span>${undo?'<button class="ghost">Annuler</button>':""}`;box.append(t);
+  let k=setTimeout(()=>{t.classList.add("out");setTimeout(()=>t.remove(),200)},5000);if(undo)t.querySelector("button").onclick=()=>{clearTimeout(k);undo();t.remove()}}
+const TABS=[["all","Toutes",()=>true],["none","Sans réponse",r=>!r.q.a],["ans","Répondues",r=>!!r.q.a],["mine","Les vôtres",r=>r.q.mine]];
+function cite(n){const q=Q.find(x=>x.n===n);const before=ta.value;
+  const s=q.a?` Dans sa réponse du ${fd(q.a.d)} à la question n° ${q.n}, le Gouvernement indiquait : « ${q.a.t.replace(/\.$/,"")} ».`:` La question n° ${q.n} du ${fd(q.d)}, sur le même sujet, est restée sans réponse.`;
+  const i=before.search(/\s(Il|Elle) lui demande/);ta.value=i>0?before.slice(0,i)+s+before.slice(i):before+s;run();
+  note(`Question ${n} citée dans votre texte.`,()=>{ta.value=before;run();note("Citation retirée.")})}
+function skeleton(){$("#tabs").innerHTML=TABS.map(()=>`<span class="sk" style="width:90px;height:16px;margin:14px 10px"></span>`).join("");
+  $("#panel").innerHTML=`<div class="list">${[0,1,2].map(()=>`<div class="skc"><span class="sk" style="width:45%;height:12px"></span><span class="sk" style="width:92%;height:12px"></span></div>`).join("")}</div>`;
+  $("#banner").innerHTML=`<span class="dot"></span><span class="sk" style="width:70%;height:12px;margin-top:4px"></span>`}
+function run(){
+  const S=DEL[cur];
+  $("#minline").innerHTML=`Délai médian <b>${medM(cur)} mois</b> · ${pct(cur)} % sous deux mois <button class="link" id="openDr">Détail</button>`;
+  $("#openDr").onclick=openDrawer;
+  if(!loaded)return;
+  const r=search(stripCites(ta.value)),cited=citedIn(ta.value);R=r.R;mineSet=r.mine;const dup=r.dup,k=verdictKind(dup);
+  const B={libre:["ok","Sujet libre.","Vous pouvez déposer la question telle quelle."],
+    vous:["warn",`Vous l'avez déjà posée (${dup?.q.n}).`,dup&&!dup.q.a?`Sans réponse depuis ${months(D(dup.q.d),NOW)} mois : demandez au groupe de la signaler, le ministre doit alors répondre sous dix jours.`:"Elle a reçu une réponse."],
+    repondue:["",`Déjà posée et répondue (${dup?.q.n}).`,`Citez la réponse et demandez ce qui a changé depuis.`],
+    autre:["warn",`Déjà posée par un autre groupe (${dup?.q.n}).`,`Sans réponse depuis ${dup?months(D(dup.q.d),NOW):0} mois : mentionnez-la pour souligner le silence du ministère.`]}[k];
+  $("#banner").innerHTML=`<span class="dot ${B[0]}"></span><b>${B[1]}</b><span class="x">${dup&&cited.has(dup.q.n)&&k!=="vous"?"Elle est déjà citée dans votre texte : vous pouvez déposer.":B[2]}${dup&&dup.q.min!==cur?` Elle était adressée au ministre ${minLabel(dup.q.min)}.`:""}</span>`;
+  $("#tabs").innerHTML=TABS.map(([id,l,f])=>`<button class="tab" role="tab" id="t-${id}" aria-selected="${tab===id}" tabindex="${tab===id?0:-1}" data-t="${id}">${l}<span>${R.filter(f).length}</span></button>`).join("");
+  renderList();
+}
+function renderList(){
+  const L=R.filter(TABS.find(t=>t[0]===tab)[2]);$("#panel").setAttribute("aria-labelledby","t-"+tab);
+  if(!L.length){$("#panel").innerHTML=`<div class="empty">${R.length?"Aucune question dans cet onglet.":"Rien dans l'archive ne ressemble à ce projet."}</div>`;return}
+  const V=L.slice(0,shown);
+  $("#panel").innerHTML=`<div class="list">${V.map(({q,s})=>{const o=openSet.has(q.n);return `<article class="card${o?" open":""}" data-n="${q.n}">
+   <div class="c-h"><span class="grip" draggable="true" title="Glisser sur votre texte pour citer" aria-hidden="true"><svg viewBox="0 0 12 16" fill="currentColor"><circle cx="3" cy="3" r="1.4"/><circle cx="9" cy="3" r="1.4"/><circle cx="3" cy="8" r="1.4"/><circle cx="9" cy="8" r="1.4"/><circle cx="3" cy="13" r="1.4"/><circle cx="9" cy="13" r="1.4"/></svg></span>
+   <button class="c-tg" aria-expanded="${o}" aria-controls="b-${q.n.replace(/\s/g,"")}"><span class="c-meta">${q.mine?"":`<span class="gp" style="background:${G[q.g]}">${q.g}</span>`}<b>${q.n}</b><span class="mn">${MIN[q.min]}${q.mine?" · votre bureau":""}</span></span><span class="c-sum">${esc(q.t)}</span></button>
+   <span class="c-r"><span class="st ${q.a?"ok":"no"}">${q.a?"répondue":"sans réponse"}</span><span class="lv">· ${level(s)}</span><span class="chev"></span></span></div>
+   <div class="slide"><div><div class="c-body" id="b-${q.n.replace(/\s/g,"")}"><span class="c-sub">${MIN[q.min]} · posée le ${fd(q.d)}${q.mine?" · votre bureau":""}</span><p>${hl(q.t,mineSet)}</p>
+   ${q.a?`<div class="ans">Réponse du ${fd(q.a.d)}, après ${months(D(q.d),D(q.a.d))} mois : ${esc(q.a.t)}</div>`:`<div class="ans none">Posée le ${fd(q.d)}, sans réponse depuis ${months(D(q.d),NOW)} mois.</div>`}
+   ${q.mine?"":citedIn(ta.value).has(q.n)?`<div class="c-act"><span class="st ok">Citée dans votre texte</span></div>`:`<div class="c-act"><button class="btn" data-cite="${q.n}">Citer dans ma question</button><span class="kbd">ou <kbd>C</kbd>, ou glisser la poignée sur le texte</span></div>`}</div></div></div></article>`}).join("")}</div>
+   ${L.length>shown?`<button class="btn more" id="more">Afficher ${L.length-shown} de plus</button>`:""}`;
+  const m=$("#more");if(m)m.onclick=()=>{shown=99;renderList()};
+}
+// interactions de la liste
+$("#panel").addEventListener("click",e=>{const c=e.target.closest("[data-cite]");if(c)return cite(c.dataset.cite);
+  const t=e.target.closest(".c-tg");if(t){const card=t.closest(".card"),n=card.dataset.n,o=!openSet.has(n);o?openSet.add(n):openSet.delete(n);card.classList.toggle("open",o);t.setAttribute("aria-expanded",o)}});
+$("#panel").addEventListener("keydown",e=>{if((e.key==="c"||e.key==="C")&&!e.ctrlKey&&!e.metaKey){const card=e.target.closest(".card");if(card&&!Q.find(q=>q.n===card.dataset.n).mine&&!citedIn(ta.value).has(card.dataset.n)){e.preventDefault();cite(card.dataset.n)}}});
+$("#tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(!b)return;tab=b.dataset.t;shown=3;run();$("#t-"+tab).focus()});
+$("#tabs").addEventListener("keydown",e=>{const i=TABS.findIndex(t=>t[0]===tab);let j=e.key==="ArrowRight"?i+1:e.key==="ArrowLeft"?i-1:e.key==="Home"?0:e.key==="End"?TABS.length-1:null;if(j===null)return;e.preventDefault();tab=TABS[(j+TABS.length)%TABS.length][0];shown=3;run();$("#t-"+tab).focus()});
+// glisser-déposer (souris) ; le clavier passe par C ou le bouton
+const drop=$("#drop");let dragN=null;
+$("#panel").addEventListener("dragstart",e=>{const card=e.target.closest(".card");if(!card)return;dragN=card.dataset.n;card.classList.add("dragging");e.dataTransfer.setData("text/plain","");e.dataTransfer.effectAllowed="copy"});
+$("#panel").addEventListener("dragend",e=>{$$(".card.dragging").forEach(c=>c.classList.remove("dragging"));drop.classList.remove("over");dragN=null});
+drop.addEventListener("dragover",e=>{if(!dragN)return;e.preventDefault();drop.classList.add("over")});
+drop.addEventListener("dragleave",()=>drop.classList.remove("over"));
+drop.addEventListener("drop",e=>{if(!dragN)return;e.preventDefault();drop.classList.remove("over");const n=dragN;dragN=null;if(citedIn(ta.value).has(n))return note(`La question ${n} est déjà citée.`);if(Q.find(q=>q.n===n).mine)return note("Vos propres questions ne se citent pas : demandez plutôt leur signalement.");cite(n)});
+// tiroir du ministère
+let lastFocus=null;
+function openDrawer(){lastFocus=document.activeElement;const S=DEL[cur],mx=Math.max(...S.bins);
+  $("#drawer").innerHTML=`<div class="dr-h"><h2 id="dr-t">Comment répond le ministre ${minLabel(cur)}</h2><button class="close" id="cls" aria-label="Fermer">×</button></div>
+  <div class="kpis"><div class="kpi"><b>${pct(cur)} %</b><span>répondues dans les deux mois</span></div><div class="kpi"><b>${medM(cur)} mois</b><span>délai médian</span></div></div>
+  <div><span class="lbl">Délai de réponse des ${S.n} questions de la législature</span><div class="bars">${S.bins.map((b,i)=>`<div><span>${BINS[i]}</span><i class="${i===0?"ok":""}" style="width:${Math.round(100*b/mx)}%"></i><em>${b}</em></div>`).join("")}</div></div>
+  <p class="note">Au-delà de deux mois sans réponse, le groupe peut signaler la question : le ministre doit alors répondre sous dix jours.</p>`;
+  $("#drawer").classList.add("on");$("#scrim").classList.add("on");$("#cls").onclick=closeDrawer;setTimeout(()=>$("#cls").focus(),50)}
+function closeDrawer(){$("#drawer").classList.remove("on");$("#scrim").classList.remove("on");lastFocus&&lastFocus.focus&&lastFocus.focus()}
+$("#scrim").onclick=closeDrawer;
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("#drawer").classList.contains("on"))closeDrawer();
+  if(e.key==="Tab"&&$("#drawer").classList.contains("on")){const f=$$("#drawer button");if(f.length===1){e.preventDefault();f[0].focus()}}});
+let tm;ta.addEventListener("input",()=>{clearTimeout(tm);tm=setTimeout(()=>{shown=3;run()},150)});
+// premier chargement de l'archive : au-delà de 400 ms, on montre la forme du contenu
+skeleton();run();setTimeout(()=>{loaded=true;run()},700);
+</script>

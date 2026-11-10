@@ -1,0 +1,333 @@
+<title>Balance des crédits · patterns</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+
+<style>
+/* Angle « patterns » : cartes de programmes avec pas-à-pas tactiles (44 px), dépliage AE par carte,
+   barre de balance collée en bas, solde à glisser sur un programme (ou menu clavier « Équilibrer sur… »),
+   tableau de l'amendement dans un tiroir, toasts empilés avec « Annuler ». */
+body{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:12px;margin-top:6px}
+.card{padding:14px 14px 12px;display:grid;gap:10px;transition:border-color .2s,background .2s,box-shadow .2s;align-content:start}
+.card.drop{border-style:dashed;border-color:var(--line2)}
+.card.drop.hot{border-color:var(--accent);background:var(--lit)}
+.card.nodrop{opacity:.45}
+.card.bad{border-color:rgba(229,72,77,.55)}
+.hd{display:flex;align-items:baseline;gap:8px;min-width:0}
+.hd b{color:var(--fg);font-weight:600;font-size:13.5px}
+.hd span{color:var(--text);font-size:13.5px;min-width:0}
+.tag{margin-left:auto;flex:none;font-size:11px;color:var(--warn);border:1px solid rgba(227,163,63,.4);border-radius:999px;padding:1px 7px;align-self:center}
+.nums{font-size:12.5px;color:var(--muted)}
+.nums .up{color:var(--ins)} .nums .down{color:#f2a7a9}
+.vis{position:relative;height:6px;border-radius:3px;background:var(--s2);overflow:hidden}
+.vis i{position:absolute;top:0;height:100%;border-radius:3px}
+.vis .base{left:0;background:var(--line2)}
+.vis .plus{background:var(--ins)}
+.vis .minus{background:repeating-linear-gradient(45deg,var(--del) 0 3px,transparent 3px 6px)}
+.row{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:10px}
+.row>span{font-size:12px;color:var(--dim);min-width:58px}
+.step{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;height:44px;border:1px solid var(--line2);border-radius:8px;overflow:hidden}
+.step button{border:0;background:var(--s2);color:var(--text);cursor:pointer;font-size:18px;touch-action:manipulation}
+.step button:hover{color:var(--fg);background:#1f2227}
+.step input{border:0;border-radius:0;text-align:center;background:var(--bg);width:100%;min-width:0;font-size:15px}
+.step input.pos{color:var(--ins)} .step input.neg{color:#f2a7a9}
+.disc{display:flex;align-items:center;gap:6px;border:0;background:none;color:var(--muted);font-size:12.5px;cursor:pointer;padding:6px 0;min-height:32px}
+.disc:hover{color:var(--fg)}
+.disc i{display:inline-block;width:7px;height:7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);transition:transform .2s var(--ease)}
+.open>.disc i{transform:rotate(45deg)}
+.slide>div>.row{padding-top:6px}
+.note{font-size:12.5px;line-height:1.5;color:var(--muted);display:grid;grid-template-columns:12px minmax(0,1fr);gap:8px}
+.note .dot{margin-top:6px}
+.note b{color:var(--text);font-weight:500}
+.note button{border:0;background:none;color:var(--ins);padding:0;cursor:pointer;font-size:12.5px}
+.top{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;margin:18px 2px 0}
+.top .sec{margin:0}
+/* barre de balance */
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:rgba(17,19,22,.94);backdrop-filter:blur(8px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.bar .in{max-width:1180px;margin:0 auto;padding:12px max(16px,env(safe-area-inset-right,0px)) 12px max(16px,env(safe-area-inset-left,0px));display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
+.bar .say{display:flex;align-items:center;gap:9px;color:var(--fg);font-size:14px;min-width:0;flex:1 1 260px}
+.bar .say small{display:block;color:var(--muted);font-size:12.5px}
+.bar .acts{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.bar .btn{min-height:44px;padding:0 14px}
+.chipdrag{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:999px;border:1px dashed var(--accent);background:var(--lit);color:var(--fg);cursor:grab;touch-action:none;user-select:none;font-size:13.5px}
+.chipdrag:active{cursor:grabbing}
+.chipdrag i{width:10px;height:14px;background:radial-gradient(circle,var(--muted) 1.2px,transparent 1.6px) 0 0/5px 5px;flex:none}
+.ghostchip{position:fixed;z-index:60;pointer-events:none;transform:translate(-50%,-50%);box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.menu{position:fixed;z-index:40;min-width:260px;max-width:calc(100vw - 32px);background:var(--s2);border:1px solid var(--line2);border-radius:10px;padding:6px;box-shadow:0 12px 32px rgba(0,0,0,.5);animation:pop .16s var(--ease)}
+.menu .mh{font-size:12px;color:var(--dim);padding:6px 10px 4px}
+.menu button{display:flex;justify-content:space-between;gap:16px;width:100%;min-height:44px;border:0;background:none;border-radius:7px;padding:0 10px;cursor:pointer;text-align:left;font-size:13.5px;color:var(--text)}
+.menu button:hover,.menu button:focus-visible{background:#22262c;color:var(--fg);outline:none}
+.menu button small{color:var(--muted)}
+.menu button:disabled{opacity:.4;cursor:default}
+@keyframes pop{from{opacity:0;transform:translateY(4px)}}
+/* tiroir */
+.scrim{position:fixed;inset:0;z-index:45;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .2s}
+.drawer{position:fixed;z-index:50;top:0;right:0;bottom:0;width:min(480px,100vw);background:var(--s1);border-left:1px solid var(--line);transform:translateX(100%);transition:transform .3s var(--ease),opacity .2s;display:flex;flex-direction:column;visibility:hidden}
+.isopen .scrim{opacity:1;pointer-events:auto}
+.isopen .drawer{transform:none;visibility:visible}
+.closing .drawer{opacity:0;transform:none;transition:opacity .18s}
+.dh{display:flex;align-items:center;gap:10px;padding:16px 18px;border-bottom:1px solid var(--line)}
+.dh h2{margin:0;font:600 15px/1.3 var(--f);color:var(--fg)}
+.dh .x{margin-left:auto;width:44px;height:44px;border:0;border-radius:8px;background:none;color:var(--muted);font-size:22px;cursor:pointer}
+.dh .x:hover{background:var(--s2);color:var(--fg)}
+.db{overflow:auto;padding:16px 18px;flex:1;scrollbar-width:none}
+.db::-webkit-scrollbar{display:none}
+.db p{margin:0 0 10px;font-size:13px}
+.db h3{margin:16px 0 6px;font:500 12.5px/1.4 var(--f);color:var(--muted)}
+.db table{width:100%;border-collapse:collapse;font-size:12.5px}
+.db th,.db td{border:1px solid var(--line2);padding:6px 8px;text-align:right;vertical-align:top}
+.db th:first-child,.db td:first-child{text-align:left}
+.db thead th{color:var(--dim);font-weight:400}
+.db tfoot td{color:var(--fg);font-weight:500}
+.unit{text-align:right;font-size:11.5px;color:var(--dim);margin-bottom:4px}
+.chk{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:8px}
+.chk li{display:grid;grid-template-columns:12px minmax(0,1fr);gap:9px;font-size:12.5px;line-height:1.5}
+.chk .dot{margin-top:6px}
+.df{padding:12px 18px calc(12px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
+.df .btn{min-height:44px}
+@media (max-width:600px){
+ .bar .acts{gap:6px;flex-wrap:nowrap}.bar .btn,.chipdrag{padding:0 11px}
+ .drawer{top:auto;left:0;width:100%;height:88vh;border-left:0;border-top:1px solid var(--line);border-radius:14px 14px 0 0;transform:translateY(100%)}
+}
+/* toasts empilés */
+.tstack{position:fixed;z-index:55;left:50%;transform:translateX(-50%);bottom:calc(var(--barh,72px) + 12px);display:grid;gap:8px;width:min(440px,calc(100vw - 32px))}
+.tst{display:flex;align-items:center;gap:12px;background:var(--s2);border:1px solid var(--line2);border-radius:9px;padding:8px 8px 8px 14px;font-size:13px;color:var(--fg);animation:pop .2s var(--ease);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.tst.out{opacity:0;transition:opacity .2s}
+.tst span{flex:1;min-width:0}
+.tst button{border:0;background:none;cursor:pointer;min-height:36px;padding:0 8px;border-radius:6px;font-size:13px}
+.tst .u{color:var(--ins)} .tst .c{color:var(--dim);font-size:17px}
+.tst button:hover{background:#22262c}
+</style>
+
+<div class="wrap" id="app">
+  <div class="ctx">Projet de loi de finances pour 2027 · seconde partie · mission « Cohésion des territoires » (montants fictifs)</div>
+  <h1>Amendement de crédits</h1>
+  <p class="lead" id="lead"></p>
+  <div class="top"><div class="sec">Programmes de la mission · mouvements en M€</div><button class="ghost" id="reset">Tout remettre à zéro</button></div>
+  <section class="cards" id="cards" aria-label="Programmes de la mission"></section>
+</div>
+
+<div class="bar" id="bar" role="region" aria-label="Balance du mouvement"><div class="in">
+  <div class="say" id="say" aria-live="polite"></div>
+  <div class="acts" id="acts"></div>
+</div></div>
+
+<div id="dw" aria-hidden="true">
+  <div class="scrim" data-close></div>
+  <section class="drawer" role="dialog" aria-modal="true" aria-labelledby="dwt">
+    <div class="dh"><h2 id="dwt">Tableau de l'amendement</h2><button class="x" data-close aria-label="Fermer">×</button></div>
+    <div class="db" id="dbody"></div>
+    <div class="df"><button class="btn" data-close>Fermer</button><button class="btn pri" id="copy">Copier le tableau</button></div>
+  </section>
+</div>
+<div class="tstack" id="tstack" aria-live="polite"></div>
+
+<script>
+const P=[
+ {n:177,s:"Hébergement et insertion",t:"Hébergement, parcours vers le logement et insertion des personnes vulnérables",ae:3020,cp:3010},
+ {n:109,s:"Aide au logement",t:"Aide à l'accès au logement",ae:16240,cp:16240,oblig:true},
+ {n:135,s:"Urbanisme et habitat",t:"Urbanisme, territoires et amélioration de l'habitat",ae:820,cp:845},
+ {n:147,s:"Politique de la ville",t:"Politique de la ville",ae:640,cp:635},
+ {n:162,s:"Interventions territoriales",t:"Interventions territoriales de l'État",ae:110,cp:96},
+];
+const STEP=5, byN=n=>P.find(x=>x.n===n);
+let mv={135:{ae:60,cp:60},177:{ae:20,cp:20},109:{ae:-60,cp:-60}};
+const splitOpen=new Set(), whyOpen=new Set();
+const get=(n,k)=>(mv[n]&&mv[n][k])||0;
+const isSplit=n=>splitOpen.has(n);
+function set(n,k,v){mv[n]=mv[n]||{ae:0,cp:0};mv[n][k]=v;if(!isSplit(n))mv[n][k==="ae"?"cp":"ae"]=v}
+function sums(k){let p=0,m=0;for(const x of P){const v=get(x.n,k);v>0?p+=v:m-=v}return {p,m,s:p-m}}
+const over=x=>-get(x.n,"ae")>x.ae||-get(x.n,"cp")>x.cp;
+const snap=()=>JSON.parse(JSON.stringify(mv));
+const sgn=v=>v>0?"+"+nf(v):v<0?"−"+nf(-v):"0";
+
+function card(x){
+  const c=get(x.n,"cp"), a=get(x.n,"ae"), sp=isSplit(x.n);
+  const mx=Math.max(...P.map(y=>y.cp+Math.max(0,get(y.n,"cp")))), w=v=>Math.max(.5,100*v/mx);
+  const base=x.cp+Math.min(0,c);
+  const stepper=(k,lbl)=>`<div class="row"><span>${lbl}</span><div class="step"><button data-n="${x.n}" data-k="${k}" data-d="-1" aria-label="Minorer le programme ${x.n} de ${STEP} M€${sp?" en "+k.toUpperCase():""}">−</button><input type="number" inputmode="numeric" step="${STEP}" value="${get(x.n,k)}" data-n="${x.n}" data-k="${k}" class="${get(x.n,k)>0?"pos":get(x.n,k)<0?"neg":""}" aria-label="Mouvement du programme ${x.n} en M€${sp?" ("+k.toUpperCase()+")":""}"><button data-n="${x.n}" data-k="${k}" data-d="1" aria-label="Abonder le programme ${x.n} de ${STEP} M€${sp?" en "+k.toUpperCase():""}">+</button></div></div>`;
+  const notes=[];
+  if(over(x)){const k=-get(x.n,"cp")>x.cp?"cp":"ae";notes.push(`<div class="note" role="alert"><span class="dot err"></span><span><b>Minoration supérieure aux crédits (${nf(x[k])} M€ en ${k.toUpperCase()}).</b> <button data-max="${x.n}">Ramener à ${nf(x[k])} M€</button></span></div>`)}
+  if(x.oblig&&c<0) notes.push(`<div class="note"><span class="dot warn"></span><span class="${whyOpen.has(x.n)?"open":""}"><b>Gage sur des dépenses obligatoires.</b> <button data-why="${x.n}" aria-expanded="${whyOpen.has(x.n)}">${whyOpen.has(x.n)?"Masquer":"Pourquoi ?"}</button><span class="slide"><div>Les aides personnelles au logement sont dues de droit : la minoration reste un gage de forme, que le Gouvernement devra lever ou compenser en cours d'année.</div></span></span></div>`);
+  return `<article class="panel card${over(x)?" bad":""}" data-card="${x.n}" aria-label="Programme ${x.n}">
+    <div class="hd"><b>${x.n}</b><span>${x.s}</span>${x.oblig?`<span class="tag">dépenses obligatoires</span>`:""}</div>
+    <div class="nums">${nf(x.cp)} M€ en CP${c?` → <span class="${c>0?"up":"down"}">${nf(x.cp+c)} M€ (${c>0?"+":"−"}${nf(Math.abs(100*c/x.cp),1)} %)</span>`:""}${sp?` · ${nf(x.ae)} M€ en AE${a?` → <span class="${a>0?"up":"down"}">${nf(x.ae+a)}</span>`:""}`:""}</div>
+    <div class="vis" aria-hidden="true"><i class="base" style="width:${w(Math.max(0,base))}%"></i>${c>0?`<i class="plus" style="left:${w(x.cp)}%;width:${w(c)}%"></i>`:c<0?`<i class="minus" style="left:${w(Math.max(0,base))}%;width:${w(Math.min(-c,x.cp))}%"></i>`:""}</div>
+    ${stepper("cp",sp?"CP":"AE = CP")}
+    <div class="${sp?"open":""}"><button class="disc" data-split="${x.n}" aria-expanded="${sp}"><i></i>${sp?"Aligner les AE sur les CP":"Montant différent en AE"}</button><div class="slide"><div>${stepper("ae","AE")}</div></div></div>
+    ${notes.join("")}
+  </article>`;
+}
+
+function render(keep){
+  const A=sums("ae"),C=sums("cp");
+  const bad=P.filter(over), moved=A.p||A.m||C.p||C.m;
+  const ok=moved&&A.s===0&&C.s===0&&!bad.length;
+  const ups=P.filter(x=>get(x.n,"cp")>0).map(x=>x.n), downs=P.filter(x=>get(x.n,"cp")<0).map(x=>x.n);
+  $("#lead").innerHTML=!moved?`Aucun mouvement. <span>Abondez un programme avec +, puis gagez-le sur un autre avec −.</span>`
+   :`${nf(C.p)} M€ vers ${ups.length>1?"les programmes":"le programme"} ${ups.join(" et ")||"—"}${downs.length?`, pris sur ${downs.join(" et ")}`:""}. <span>${ok?"La mission reste à somme nulle.":C.s>0?"Il reste à gager une partie de l'abondement.":C.s<0?"Les minorations dépassent les abondements.":bad.length?"Une minoration dépasse les crédits.":"Les AE ne sont pas équilibrées."}</span>`;
+  const f=keep&&document.activeElement, fsel=f&&f.dataset&&f.dataset.n?`[data-card="${f.dataset.n}"] ${f.tagName.toLowerCase()}[data-k="${f.dataset.k}"]${f.dataset.d?`[data-d="${f.dataset.d}"]`:""}`:null;
+  $("#cards").innerHTML=P.map(card).join("");
+  if(fsel) $(fsel)?.focus();
+  // barre
+  const sol=C.s||A.s, which=C.s?"":" en AE";
+  let say, acts="";
+  if(!moved) say=`<span class="dot"></span><span>Balance à zéro<small>Aucun mouvement pour l'instant</small></span>`;
+  else if(sol===0&&!bad.length) say=`<span class="dot ok"></span><span>Équilibré : ${nf(C.p)} M€ déplacés<small>Somme nulle en AE et en CP (article 47 de la LOLF)</small></span>`;
+  else if(sol===0) say=`<span class="dot err"></span><span>Équilibré, mais une minoration dépasse les crédits<small>Programme ${bad.map(x=>x.n).join(", ")} : corrigez sur sa carte</small></span>`;
+  else {
+    say=`<span class="dot err"></span><span>${sol>0?`${nf(sol)} M€ à gager${which}`:`${nf(-sol)} M€ de minoration en trop${which}`}<small>${sol>0?"Glissez le solde sur le programme à minorer":"Glissez le solde sur le programme à abonder"}</small></span>`;
+    acts+=`<span class="chipdrag" id="chip" role="img" aria-label="Solde à glisser sur un programme"><i></i>${sgn(-sol)} M€</span><button class="btn" id="bal" aria-haspopup="menu">Équilibrer sur…</button>`;
+  }
+  acts+=`<button class="btn pri" id="see">Voir l'amendement</button>`;
+  $("#say").innerHTML=say; $("#acts").innerHTML=acts;
+  document.documentElement.style.setProperty("--barh",$("#bar").offsetHeight+"px");
+  renderDoc(ok,A,C,bad);
+}
+
+function table(k){
+  const rows=P.filter(x=>get(x.n,k)), S=sums(k), e=v=>v?nf(v*1e6):"0";
+  return `<div class="unit">(en euros)</div><table><thead><tr><th>Programmes</th><th>+</th><th>−</th></tr></thead><tbody>${rows.map(x=>{const v=get(x.n,k);return `<tr><td>${x.t}</td><td>${v>0?e(v):"0"}</td><td>${v<0?e(-v):"0"}</td></tr>`}).join("")||`<tr><td colspan="3" style="text-align:center;color:var(--dim)">Aucun mouvement</td></tr>`}</tbody><tfoot><tr><td>TOTAUX</td><td>${e(S.p)}</td><td>${e(S.m)}</td></tr><tr><td>SOLDE</td><td colspan="2" style="text-align:center">${S.s?(S.s>0?"+":"−")+e(Math.abs(S.s)):"0"}</td></tr></tfoot></table>`;
+}
+function renderDoc(ok,A,C,bad){
+  const diff=P.some(x=>get(x.n,"ae")!==get(x.n,"cp"));
+  const chk=[[C.s===0&&A.s===0?"ok":"err",C.s===0&&A.s===0?"Somme nulle en AE et en CP":"La somme doit être nulle (article 47 de la LOLF) : un amendement ne peut pas augmenter les crédits d'une mission."],
+   [bad.length?"err":"ok",bad.length?`Minoration supérieure aux crédits du programme ${bad.map(x=>x.n).join(", ")}`:"Aucun programme minoré au-delà de ses crédits"],
+   ["ok","Programmes de la même mission"]];
+  if(get(109,"cp")<0) chk.push(["warn","Gage sur le programme 109 (dépenses obligatoires)"]);
+  $("#dbody").innerHTML=`<p>Modifier ainsi les autorisations d'engagement et les crédits de paiement :</p>${diff?`<h3>Autorisations d'engagement</h3>${table("ae")}<h3>Crédits de paiement</h3>${table("cp")}`:table("cp")}<ul class="chk">${chk.map(([c,t])=>`<li><span class="dot ${c}"></span><span>${t}</span></li>`).join("")}</ul>`;
+  $("#copy").disabled=!ok; $("#copy").title=ok?"":"Le tableau sera copiable une fois la balance à zéro.";
+}
+
+/* toasts empilés (3 au plus) */
+function toastU(msg,undo){
+  const st=$("#tstack");while(st.children.length>=3)st.firstChild.remove();
+  const t=document.createElement("div");t.className="tst";t.setAttribute("role","status");
+  t.innerHTML=`<span>${esc(msg)}</span>${undo?`<button class="u">Annuler</button>`:""}<button class="c" aria-label="Fermer">×</button>`;
+  const kill=()=>{t.classList.add("out");setTimeout(()=>t.remove(),200)};
+  if(undo)t.querySelector(".u").onclick=()=>{undo();kill()};
+  t.querySelector(".c").onclick=kill; st.append(t); setTimeout(kill,6000);
+}
+/* équilibrer : imputer le solde sur un programme */
+function eligible(x){const A=sums("ae"),C=sums("cp");for(const [k,S] of [["ae",A],["cp",C]]){const nv=get(x.n,k)-S.s;if(-nv>x[k])return false}return true}
+function absorb(n){
+  const before=snap(),A=sums("ae"),C=sums("cp");
+  mv[n]=mv[n]||{ae:0,cp:0};mv[n].ae-=A.s;mv[n].cp-=C.s;
+  if(mv[n].ae!==mv[n].cp)splitOpen.add(n);
+  render();toastU(`Solde imputé sur le programme ${n} : la balance est à zéro.`,()=>{mv=before;render()});
+}
+let menuEl=null,menuBack=null;
+function closeMenu(){if(menuEl){menuEl.remove();menuEl=null;menuBack?.focus()}}
+function openMenu(btn){
+  closeMenu();menuBack=btn;const C=sums("cp");
+  const m=document.createElement("div");m.className="menu";m.setAttribute("role","menu");m.setAttribute("aria-label","Équilibrer sur un programme");
+  m.innerHTML=`<div class="mh">${C.s>0?"Minorer":"Abonder"} de ${nf(Math.abs(C.s||sums("ae").s))} M€ :</div>`+P.map(x=>`<button role="menuitem" data-abs="${x.n}"${eligible(x)?"":" disabled"}><span>${x.n} · ${x.s}</span><small>${eligible(x)?`→ ${sgn(get(x.n,"cp")-C.s)} M€`:"crédits insuffisants"}</small></button>`).join("");
+  document.body.append(m);menuEl=m;
+  const r=btn.getBoundingClientRect(),w=m.offsetWidth,h=m.offsetHeight;
+  m.style.left=Math.max(16,Math.min(innerWidth-w-16,r.right-w))+"px";m.style.top=Math.max(8,r.top-h-8)+"px";
+  m.querySelector("button:not(:disabled)")?.focus();
+}
+/* glisser le solde (souris, doigt, stylet) */
+let drag=null;
+document.addEventListener("pointerdown",e=>{
+  const c=e.target.closest("#chip");if(!c)return;e.preventDefault();
+  const g=c.cloneNode(true);g.removeAttribute("id");g.classList.add("ghostchip");g.style.left=e.clientX+"px";g.style.top=e.clientY+"px";document.body.append(g);
+  $$("[data-card]").forEach(el=>el.classList.add(eligible(byN(+el.dataset.card))?"drop":"nodrop"));
+  drag={g,hot:null,y:e.clientY,x:e.clientX};
+  const tick=()=>{if(!drag)return;const bh=$("#bar").offsetHeight,y=drag.y;
+    const v=y>innerHeight-bh-50?12:y<60?-12:0;if(v){scrollBy(0,v);hover(drag.x,drag.y)}requestAnimationFrame(tick)};requestAnimationFrame(tick);
+});
+function hover(x,y){const el=document.elementFromPoint(x,y)?.closest("[data-card].drop");if(drag.hot!==el){drag.hot?.classList.remove("hot");el?.classList.add("hot");drag.hot=el}}
+document.addEventListener("pointermove",e=>{
+  if(!drag)return;drag.x=e.clientX;drag.y=e.clientY;drag.g.style.left=e.clientX+"px";drag.g.style.top=e.clientY+"px";hover(e.clientX,e.clientY);
+});
+function endDrag(e){
+  if(!drag)return;const hot=drag.hot;drag.g.remove();$$("[data-card]").forEach(el=>el.classList.remove("drop","nodrop","hot"));drag=null;
+  if(hot&&e.type==="pointerup")absorb(+hot.dataset.card);
+}
+document.addEventListener("pointerup",endDrag);document.addEventListener("pointercancel",endDrag);
+
+/* tiroir */
+let back=null;
+function openDrawer(){back=document.activeElement;const d=$("#dw");d.classList.remove("closing");d.classList.add("isopen");d.setAttribute("aria-hidden","false");$$(".wrap,.bar").forEach(el=>el.inert=true);setTimeout(()=>$("#dw .x").focus(),30)}
+function closeDrawer(){const d=$("#dw");if(!d.classList.contains("isopen"))return;d.classList.add("closing");$$(".wrap,.bar").forEach(el=>el.inert=false);setTimeout(()=>{d.classList.remove("isopen","closing");d.setAttribute("aria-hidden","true")},190);back?.focus()}
+
+document.addEventListener("click",e=>{
+  if(menuEl&&!e.target.closest(".menu")&&!e.target.closest("#bal"))closeMenu();
+  const b=e.target.closest(".step button");if(b){const n=+b.dataset.n,k=b.dataset.k;set(n,k,get(n,k)+STEP*(+b.dataset.d));render(true);return}
+  const s=e.target.closest("[data-split]");if(s){const n=+s.dataset.split;if(isSplit(n)){splitOpen.delete(n);if(mv[n])mv[n].ae=mv[n].cp}else splitOpen.add(n);render();$(`[data-split="${n}"]`).focus();return}
+  const w=e.target.closest("[data-why]");if(w){const n=+w.dataset.why;whyOpen.has(n)?whyOpen.delete(n):whyOpen.add(n);render();$(`[data-why="${n}"]`).focus();return}
+  const mx=e.target.closest("[data-max]");if(mx){const x=byN(+mx.dataset.max),before=snap();for(const k of ["ae","cp"])if(-get(x.n,k)>x[k])mv[x.n][k]=-x[k];render();toastU(`Minoration du programme ${x.n} ramenée à ses crédits.`,()=>{mv=before;render()});return}
+  if(e.target.closest("#bal")){menuEl?closeMenu():openMenu(e.target.closest("#bal"));return}
+  const ab=e.target.closest("[data-abs]");if(ab){const n=+ab.dataset.abs;menuBack=null;closeMenu();absorb(n);$("#see")?.focus();return}
+  if(e.target.closest("#see")){openDrawer();return}
+  if(e.target.closest("[data-close]")){closeDrawer();return}
+  if(e.target.closest("#reset")){const before=snap(),so=new Set(splitOpen);mv={};splitOpen.clear();render();toastU("Tous les mouvements ont été remis à zéro.",()=>{mv=before;so.forEach(n=>splitOpen.add(n));render()});return}
+  if(e.target.closest("#copy")){const t=$$("#dbody table").map(tb=>[...tb.rows].map(r=>[...r.cells].map(c=>c.textContent).join("\t")).join("\n")).join("\n\n");navigator.clipboard?.writeText(t).then(()=>toastU("Tableau copié."),()=>toastU("Copie refusée : sélectionnez le tableau à la main."))}
+});
+document.addEventListener("change",e=>{const i=e.target.closest(".step input");if(i){set(+i.dataset.n,i.dataset.k,Math.round(+i.value||0));render()}});
+document.addEventListener("keydown",e=>{
+  if(menuEl){const items=[...menuEl.querySelectorAll("button:not(:disabled)")],i=items.indexOf(document.activeElement);
+    if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();items[(i+(e.key==="ArrowDown"?1:-1)+items.length)%items.length]?.focus()}
+    if(e.key==="Escape"||e.key==="Tab"){e.preventDefault();closeMenu()}return}
+  if(e.key==="Escape"){if($("#dw").classList.contains("isopen"))closeDrawer();else $$(".tst").forEach(t=>t.remove())}
+  if(e.key==="Tab"&&$("#dw").classList.contains("isopen")){const f=$$("#dw button:not(:disabled)"),a=f[0],z=f[f.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus()}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus()}}
+});
+addEventListener("resize",()=>document.documentElement.style.setProperty("--barh",$("#bar").offsetHeight+"px"));
+render();
+</script>

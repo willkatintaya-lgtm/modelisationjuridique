@@ -1,0 +1,335 @@
+<title>Rapprochement des frais · patterns</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+
+<style>
+/* Angle « patterns » : onglets (3, pas 6 filtres), tiroir latéral pour le détail d'une opération (au lieu du dépliage en ligne),
+   glisser-déposer des pièces avec menu clavier équivalent, toasts empilés avec « Annuler », squelette pendant l'actualisation,
+   divulgation progressive du calcul du solde, formulaire « avant de dépenser » à champs étiquetés. */
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px 20px;flex-wrap:wrap}
+.meter{font-size:12.5px;color:var(--muted);min-width:200px}
+.meter b{color:var(--fg);font-weight:500}
+.meter .bar{height:6px;border-radius:3px;background:var(--s2);overflow:hidden;margin-top:6px}
+.meter .bar i{display:block;height:100%;background:var(--ok);transition:width .4s var(--ease)}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;align-items:start;margin-top:18px}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.tab{background:none;border:0;border-bottom:2px solid transparent;color:var(--muted);padding:10px 12px;min-height:44px;cursor:pointer;font-size:13.5px;transition:color .2s,border-color .2s;white-space:nowrap}
+.tab:hover{color:var(--fg)}
+.tab[aria-selected=true]{color:var(--fg);border-bottom-color:var(--accent)}
+.tab .c{color:var(--dim);margin-left:4px}
+.tabs .sp{flex:1}
+.tray{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:0 0 12px;position:relative}
+.tray .lbl{font-size:12px;color:var(--dim);flex-basis:100%;margin-bottom:2px}
+.pc{display:inline-flex;align-items:center;gap:6px;border:1px dashed var(--line2);background:var(--s1);border-radius:8px;padding:0 10px;min-height:36px;font-size:12.5px;color:var(--text);cursor:grab;transition:border-color .2s,background .2s}
+.pc:hover{border-color:var(--muted)}
+.pc small{color:var(--dim)}
+.pc.drag{opacity:.4}
+.menu{position:absolute;z-index:20;background:var(--s2);border:1px solid var(--line2);border-radius:9px;padding:4px;min-width:250px;max-width:calc(100vw - 32px);box-shadow:0 12px 30px rgba(0,0,0,.45);animation:pop .15s var(--ease)}
+.menu .h{font-size:11.5px;color:var(--dim);padding:6px 10px 4px}
+.menu button{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;width:100%;text-align:left;background:none;border:0;border-radius:6px;padding:0 10px;min-height:40px;font-size:12.5px;color:var(--text);cursor:pointer}
+.menu button:hover,.menu button:focus-visible{background:var(--lit);outline:none}
+.menu .m{color:#7fd3a8}
+.list{padding:4px}
+.row{display:grid;grid-template-columns:52px minmax(0,1fr) auto 92px;gap:12px;align-items:center;width:100%;text-align:left;background:none;border:1px solid transparent;border-radius:8px;padding:0 12px;min-height:56px;cursor:pointer;color:var(--text);transition:background .2s,border-color .2s}
+.row+.row{margin-top:2px}
+.row:hover{background:var(--s2)}
+.row.over{border-color:var(--accent);background:var(--lit)}
+.row .d{font-size:12px;color:var(--dim)}
+.row b{display:block;color:var(--fg);font-weight:500;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row small{display:block;color:var(--dim);font-size:12px}
+.row .s{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);white-space:nowrap}
+.row .a{text-align:right;color:var(--fg);font-size:13.5px}
+.none{padding:18px;color:var(--muted);font-size:13px}
+.sk{display:grid;grid-template-columns:52px minmax(0,1fr) 90px 92px;gap:12px;align-items:center;padding:0 12px;min-height:56px}
+.sk i{display:block;height:10px;border-radius:4px;background:linear-gradient(90deg,var(--s2),#20242a,var(--s2));background-size:200% 100%;animation:shim 1.1s linear infinite}
+.sk i.t{height:12px;width:70%}
+@keyframes shim{to{background-position:-200% 0}}
+@keyframes pop{from{opacity:0;transform:translateY(-4px)}}
+.side{display:grid;gap:14px;position:sticky;top:16px}
+.card{padding:14px 16px}
+.card h2{margin:0 0 4px;font:600 13.5px/1.4 var(--f);color:var(--fg)}
+.big{font-size:22px;font-weight:600;color:var(--fg);letter-spacing:-.01em}
+.disc{background:none;border:0;color:var(--muted);font-size:12.5px;padding:8px 0;min-height:36px;cursor:pointer;display:flex;gap:6px;align-items:center}
+.disc:hover{color:var(--fg)}
+.disc::before{content:"";width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);transition:transform .2s}
+.open>.disc::before{transform:rotate(45deg)}
+.calc{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;font-size:12.5px;color:var(--muted);margin:2px 0 8px}
+.calc span:nth-child(even){text-align:right;color:var(--text)}
+svg.cv{display:block;width:100%;height:110px}
+form.chk label{display:block;font-size:12px;color:var(--muted);margin:10px 0 4px}
+form.chk textarea{width:100%;min-height:60px;resize:vertical}
+form.chk input{width:100%;min-height:40px}
+.ex{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.ex .chip{min-height:32px}
+.ans{margin-top:12px;font-size:12.5px;line-height:1.55;color:var(--text);display:grid;grid-template-columns:12px minmax(0,1fr);gap:8px}
+.ans .dot{margin-top:6px}
+.ans small{display:block;color:var(--muted)}
+.hint{font-size:12px;color:#f2a7a9;margin-top:4px}
+/* tiroir */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:40;opacity:0;pointer-events:none;transition:opacity .25s}
+.scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100vw);background:var(--s1);border-left:1px solid var(--line2);z-index:41;transform:translateX(100%);transition:transform .3s var(--ease),visibility 0s .3s;visibility:hidden;display:flex;flex-direction:column}
+.drawer.on{transform:none;visibility:visible;transition:transform .3s var(--ease)}
+.dh{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:18px 20px 12px;border-bottom:1px solid var(--line)}
+.dh h2{margin:0;font:600 16px/1.35 var(--f);color:var(--fg)}
+.dh .ctx{margin-top:2px}
+.x{width:44px;height:44px;flex:none;border-radius:8px;border:1px solid var(--line2);background:none;color:var(--muted);font-size:20px;cursor:pointer;margin:-6px -8px 0 0}
+.x:hover{color:var(--fg);background:var(--s2)}
+.db{padding:16px 20px 24px;overflow:auto;flex:1}
+.db h3{margin:18px 0 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase;font-weight:500}
+.db h3:first-child{margin-top:0}
+.db p{margin:0 0 10px;font-size:13px;color:var(--text)}
+.stat{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--fg)}
+.opt{display:grid;grid-template-columns:20px minmax(0,1fr) auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:0 12px;min-height:48px;font-size:13px;cursor:pointer;margin-bottom:6px;transition:border-color .2s,background .2s}
+.opt:has(input:checked){border-color:var(--accent);background:var(--lit)}
+.opt input{accent-color:var(--accent);width:16px;height:16px;margin:0}
+.opt small{color:var(--dim)}
+.opt .m{color:#7fd3a8;font-size:12px}
+.db label.f{display:block;font-size:12px;color:var(--muted);margin:10px 0 4px}
+.db input[type=text],.db textarea{width:100%;min-height:40px}
+.db .btn{min-height:44px;margin-top:12px}
+/* toasts */
+.toasts{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px;z-index:50;width:min(380px,calc(100vw - 32px))}
+.tst{display:flex;align-items:center;gap:10px;background:var(--s2);border:1px solid var(--line2);border-left:3px solid var(--ok);border-radius:8px;padding:6px 6px 6px 12px;font-size:13px;color:var(--fg);animation:tin .22s var(--ease);transition:opacity .2s}
+.tst.err{border-left-color:var(--err)} .tst.warn{border-left-color:var(--warn)}
+.tst span{flex:1;padding:6px 0}
+.tst button{min-height:36px}
+.tst.out{opacity:0}
+@keyframes tin{from{opacity:0;transform:translateY(8px)}}
+@media (max-width:900px){.grid{grid-template-columns:minmax(0,1fr)}.side{position:static}}
+@media (max-width:600px){
+  .drawer{top:auto;left:0;width:100%;max-height:88vh;border-left:0;border-top:1px solid var(--line2);border-radius:14px 14px 0 0;transform:translateY(100%)}
+  .row{grid-template-columns:minmax(0,1fr) 84px;padding:8px 12px}
+  .row .d{display:none}.row .s{grid-column:1}.row .a{grid-row:1;grid-column:2}
+  .sk{grid-template-columns:minmax(0,1fr) 84px}.sk i:nth-child(1),.sk i:nth-child(3){display:none}
+  .tab{padding:10px 9px;font-size:13px}
+}
+</style>
+
+<div class="wrap">
+  <div class="ctx" id="ctx">Avance de frais de mandat · exercice 2026 · relevé du compte dédié au 7 novembre (montants fictifs)</div>
+  <div class="top">
+    <div><h1>Rapprochement des frais de mandat</h1><p class="lead" id="lead" style="margin-bottom:0"></p></div>
+    <div class="meter" id="meter"></div>
+  </div>
+  <div class="grid">
+    <main>
+      <div class="tabs" role="tablist" aria-label="Opérations" id="tabs"></div>
+      <div class="tray" id="tray"></div>
+      <section class="panel list" id="list" role="tabpanel" aria-labelledby="tab-todo"></section>
+    </main>
+    <aside class="side">
+      <section class="panel card" id="solcard"><h2>Solde prévu au 31 décembre</h2><div class="big" id="sol"></div>
+        <button class="disc" id="disc" aria-expanded="false" aria-controls="calcbox">Voir le calcul et la courbe</button>
+        <div class="slide" id="calcbox"><div><div class="calc" id="calc"></div><svg class="cv" id="cv" viewBox="0 0 320 110" preserveAspectRatio="none" role="img" aria-label="Dépenses cumulées et projection"></svg></div></div>
+      </section>
+      <section class="panel card"><h2>Avant de dépenser</h2>
+        <form class="chk" id="chk" novalidate>
+          <label for="dep">Nature de la dépense</label><textarea id="dep" name="dep">Mise à jour de ma page Wikipédia par un prestataire</textarea>
+          <div class="ex" aria-label="Exemples"></div>
+          <label for="mt">Montant, en euros</label><input type="text" id="mt" name="mt" inputmode="decimal" autocomplete="off" placeholder="facultatif">
+          <div class="hint" id="mth" hidden></div>
+          <div id="ans" aria-live="polite"></div>
+        </form>
+      </section>
+    </aside>
+  </div>
+</div>
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dtitle" aria-hidden="true"></aside>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script>
+const AN=70800, SPENT_BEFORE=48210;
+const L=[
+ {d:"03/10",t:"Loyer de la permanence",r:"Permanence",a:1150,j:"bail-oct.pdf"},
+ {d:"05/10",t:"SNCF · Paris – Villeneuve",r:"Déplacements",a:86.4,j:"sncf-0510.pdf"},
+ {d:"08/10",t:"Imprimerie du Centre",r:"Communication",a:612,j:null},
+ {d:"12/10",t:"Orange Pro",r:"Télécommunications",a:74.99,j:"orange-oct.pdf"},
+ {d:"15/10",t:"Restaurant Le Relais",r:"Réception",a:148,j:null},
+ {d:"21/10",t:"Meta Platforms · publicité",r:"Communication",a:300,j:"meta-oct.pdf",risk:"Contenu sponsorisé : éligible hors période pré-électorale. Les prochaines élections sont dans plus de six mois : rien à signaler aujourd'hui, mais à surveiller."},
+ {d:"28/10",t:"Cotisation association des élus",r:"Divers",a:250,j:"asso.pdf",risk:"Cotisation à une association d'élus : éligible si l'association n'est pas un parti politique. Joignez ses statuts.",need:true},
+ {d:"03/11",t:"Loyer de la permanence",r:"Permanence",a:1150,j:null},
+ {d:"04/11",t:"Fnac · ordinateur portable",r:"Équipement",a:1299,j:"fnac-1104.pdf",diff:1249},
+ {d:"06/11",t:"SNCF · Villeneuve – Paris",r:"Déplacements",a:86.4,j:null},
+ {d:"07/11",t:"Cagnotte · soutien aux sinistrés",r:"Divers",a:200,j:null,refund:true,risk:"Un don par le compte de l'avance n'est pas une dépense de mandat : à reverser depuis vos deniers personnels."},
+];
+const FILES=[{f:"imprimerie-1008.pdf",a:612,d:"08/10"},{f:"facture-relais-1510.pdf",a:148,d:"15/10"},{f:"bail-nov.pdf",a:1150,d:"03/11"},{f:"sncf-0611.pdf",a:86.4,d:"06/11"},{f:"scan-0947.jpg",a:null,d:"—"}];
+const RECUR=[["loyer",1150],["téléphone",75],["déplacements",480]];
+const RULES=[
+ [/wikip|e-réputation|référencement/i,"err","Non éligible","Le déontologue proscrit la rémunération d'une modification de page Wikipédia ou d'une gestion d'e-réputation."],
+ [/cagnotte|don |dons|soutien financier/i,"err","Non éligible","Un don n'est pas une dépense liée au mandat."],
+ [/sponsoris|publicité|boost/i,"warn","Éligible, sauf en période pré-électorale","Interdit dans les six mois précédant une élection à laquelle vous êtes candidate."],
+ [/vêtement|costume|coiffeur/i,"err","Non éligible","Dépense personnelle."],
+ [/restaurant|repas|déjeuner|dîner/i,"warn","Éligible si lié au mandat","Conservez la liste des convives et l'objet de la rencontre."],
+ [/loyer|permanence|bureau|ordinateur|téléphone|train|sncf|imprim/i,"ok","Éligible","Conservez la facture au nom de la députée."],
+];
+const EX=["Déjeuner avec des maires","Boost d'une publication","Costume pour une cérémonie","Imprimante pour la permanence"];
+const eur=v=>nf(v,v%1?2:0)+" €";
+let tab="todo", loading=false, refreshed=false, cur=null, lastFocus=null, menuFor=null;
+const status=l=>l.refund?(l.repaid?"ok":"err"):!l.j?"miss":l.diff&&!l.why?"diff":l.need&&!l.needOk?"warn":"ok";
+const SL={miss:"Sans pièce",diff:"Montant différent",warn:"À compléter",err:"Non éligible",ok:"Justifiée"};
+const dotc=s=>s==="ok"?"ok":s==="warn"||s==="diff"?"warn":"err";
+const free=()=>FILES.filter(F=>!L.some(x=>x.j===F.f));
+const score=(F,l)=>F.a==null?0:(F.a===l.a?2:0)+(F.d===l.d?1:0);
+const fin=()=>{const rp=L.filter(l=>l.refund&&l.repaid).reduce((s,l)=>s+l.a,0),spent=SPENT_BEFORE+L.reduce((s,l)=>s+l.a,0)-rp,rec=RECUR.reduce((s,r)=>s+r[1],0)*1.7;return{spent,rec,proj:spent+rec,sol:AN-spent-rec,rp}};
+
+function render(){
+  const st=L.map(status), n=k=>st.filter(s=>k.includes(s)).length, todo=n(["miss","diff","warn","err"]), ok=n(["ok"]);
+  const F=fin();
+  $("#lead").innerHTML=todo?`${todo} opération${todo>1?"s":""} à traiter avant un éventuel contrôle. <span>Solde prévu au 31 décembre : ${eur(Math.round(F.sol))}.</span>`:`Tout est justifié. <span>Solde prévu au 31 décembre : ${eur(Math.round(F.sol))}.</span>`;
+  $("#meter").innerHTML=`<b>${ok} sur ${L.length}</b> opérations justifiées<div class="bar"><i style="width:${Math.round(100*ok/L.length)}%"></i></div>`;
+  const T=[["todo","À traiter",todo],["ok","Justifiées",ok],["all","Toutes",L.length]];
+  $("#tabs").innerHTML=T.map(([k,h,c])=>`<button class="tab" role="tab" id="tab-${k}" aria-selected="${tab===k}" tabindex="${tab===k?0:-1}" data-tab="${k}">${h}<span class="c">${c}</span></button>`).join("")+`<span class="sp"></span><button class="ghost" id="refresh" style="align-self:center" ${loading||refreshed?"disabled":""}>${refreshed?"Relevé à jour":loading?"Actualisation…":"Actualiser"}</button>`;
+  $("#list").setAttribute("aria-labelledby","tab-"+tab);
+  const fr=free();
+  $("#tray").innerHTML=fr.length&&tab!=="ok"?`<span class="lbl">Pièces reçues : glissez-en une sur une opération, ou cliquez-la pour choisir.</span>`+fr.map(f=>`<button class="pc" draggable="true" data-file="${f.f}" aria-haspopup="menu" aria-expanded="${menuFor===f.f}">${f.f}<small>${f.a!=null?eur(f.a):"montant illisible"}</small></button>`).join("")+(menuFor?menuHtml(menuFor):""):"";
+  if(loading){$("#list").innerHTML=Array.from({length:6},()=>`<div class="sk" aria-hidden="true"><i style="width:36px"></i><span><i class="t"></i><i style="width:40%;margin-top:6px"></i></span><i></i><i style="width:60px;justify-self:end"></i></div>`).join("");$("#list").setAttribute("aria-busy","true")}
+  else{$("#list").removeAttribute("aria-busy");
+    const rows=L.map((l,i)=>({l,i,s:st[i]})).filter(x=>tab==="all"||(tab==="ok"?x.s==="ok":x.s!=="ok"));
+    $("#list").innerHTML=rows.map(({l,i,s})=>`<button class="row" data-op="${i}"><span class="d">${l.d}</span><span><b>${esc(l.t)}</b><small>${l.r}</small></span><span class="s"><span class="dot ${dotc(s)}"></span>${l.refund&&l.repaid?"Reversée":SL[s]}</span><span class="a">${eur(l.a)}</span></button>`).join("")||`<div class="none">${tab==="todo"?"Rien à traiter : toutes les opérations sont justifiées.":"Aucune opération justifiée pour l'instant."}</div>`;}
+  $("#sol").textContent=eur(Math.round(F.sol));
+  $("#calc").innerHTML=`<span>Dotation annuelle</span><span>${eur(AN)}</span><span>Déjà dépensé</span><span>− ${eur(Math.round(F.spent))}</span><span>Prévu d'ici décembre (${RECUR.map(r=>r[0]).join(", ")})</span><span>− ${eur(Math.round(F.rec))}</span>`;
+  const X=m=>10+m*(300/12), Yv=v=>100-90*v/AN, path=a=>a.map(([m,v],k)=>`${k?"L":"M"}${X(m)},${Yv(v)}`).join("");
+  $("#cv").innerHTML=`<line x1="10" x2="310" y1="${Yv(AN)}" y2="${Yv(AN)}" stroke="var(--line2)" stroke-dasharray="3 3"/><text x="310" y="${Yv(AN)-3}" text-anchor="end" font-size="9" fill="var(--dim)">dotation</text><path d="${path([[0,0],[3,15600],[6,32100],[9,SPENT_BEFORE],[10.3,F.spent]])}" fill="none" stroke="var(--accent)" stroke-width="2"/><path d="${path([[10.3,F.spent],[12,F.proj]])}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="4 3" opacity=".7"/><circle cx="${X(12)}" cy="${Yv(F.proj)}" r="3" fill="var(--accent)"/><text x="12" y="108" font-size="9" fill="var(--dim)">janv.</text><text x="308" y="108" text-anchor="end" font-size="9" fill="var(--dim)">déc.</text>`;
+  check();
+}
+function menuHtml(f){const F=FILES.find(x=>x.f===f);const ops=L.map((l,i)=>({l,i})).filter(x=>!x.l.j&&!x.l.refund).map(x=>({...x,s:score(F,x.l)})).sort((a,b)=>b.s-a.s);
+  return `<div class="menu" role="menu" id="menu" aria-label="Rattacher ${f} à"><div class="h">Rattacher ${f} à…</div>${ops.map(({l,i,s})=>`<button role="menuitem" data-drop="${i}" data-f="${f}"><span>${esc(l.t)} · ${l.d}</span><span class="${s>=2?"m":""}">${eur(l.a)}${s>=3?" · date et montant":s>=2?" · montant":""}</span></button>`).join("")||`<div class="h">Aucune opération sans pièce.</div>`}</div>`}
+
+/* tiroir */
+function openDrawer(i){cur=i;lastFocus=document.activeElement;drawerHtml();$("#drawer").classList.add("on");$("#drawer").setAttribute("aria-hidden","false");$("#scrim").classList.add("on");setTimeout(()=>$("#drawer .x").focus(),50)}
+function closeDrawer(){if(cur==null)return;cur=null;$("#drawer").classList.remove("on");$("#drawer").setAttribute("aria-hidden","true");$("#scrim").classList.remove("on");lastFocus&&lastFocus.isConnected&&lastFocus.focus()}
+function drawerHtml(pre){
+  const l=L[cur],s=status(l),fr=free();
+  let body=`<h3>État</h3><p class="stat"><span class="dot ${dotc(s)}"></span>${l.refund&&l.repaid?"Reversée":SL[s]}</p>`;
+  if(l.risk)body+=`<p style="color:var(--muted)">${l.risk}</p>`;
+  if(l.j)body+=`<h3>Pièce</h3><p>${l.j}${l.diff?` · facture de ${eur(l.diff)}`:""}</p>`;
+  if(s==="miss"){const c=fr.map(F=>({F,s:score(F,l)})).sort((a,b)=>b.s-a.s),sel=pre||c[0]?.F.f;
+    body+=`<h3>Choisir la pièce</h3>`+(c.length?`<form id="attf">${c.map(({F,s})=>`<label class="opt"><input type="radio" name="pf" value="${F.f}" ${F.f===sel?"checked":""}><span>${F.f}<br><small>${F.d} · ${F.a!=null?eur(F.a):"montant illisible"}</small></span><span class="m">${s>=3?"date et montant":s>=2?"même montant":""}</span></label>`).join("")}
+      <div id="scanf" ${FILES.find(x=>x.f===sel)?.a==null?"":"hidden"}><label class="f" for="scanv">Montant lu sur la pièce, en euros</label><input type="text" id="scanv" inputmode="decimal" value="${nf(l.a,l.a%1?2:0)}"></div>
+      <div class="hint" id="atth" hidden></div><button class="btn pri" type="submit">Rattacher la pièce choisie</button></form>`:`<p style="color:var(--muted)">Aucune pièce reçue. Demandez la facture au fournisseur.</p>`)}
+  if(s==="diff")body+=`<h3>Expliquer l'écart de ${eur(l.a-l.diff)}</h3><form id="whyf"><label class="f" for="whyv">Raison</label><input type="text" id="whyv" placeholder="Frais de livraison, acompte…"><div class="hint" id="whyh" hidden></div><button class="btn pri" type="submit">Enregistrer</button></form>`;
+  if(s==="warn")body+=`<h3>Document à joindre</h3><p>Statuts de l'association.</p><button class="btn pri" data-need="${cur}">Joindre statuts-association.pdf</button>`;
+  if(s==="err")body+=`<h3>Reverser</h3><p>Virez ${eur(l.a)} de votre compte personnel vers le compte dédié, puis notez-le ici.</p><button class="btn pri" data-repay="${cur}">Noter le reversement de ${eur(l.a)}</button>`;
+  $("#drawer").innerHTML=`<div class="dh"><div><h2 id="dtitle">${esc(l.t)}</h2><div class="ctx">${l.d} · ${l.r} · ${eur(l.a)}</div></div><button class="x" aria-label="Fermer">×</button></div><div class="db">${body}</div>`;
+}
+
+/* toasts */
+function toastS(msg,kind="ok",undo){const box=$("#toasts");while(box.children.length>=3)box.firstElementChild.remove();
+  const t=document.createElement("div");t.className="tst "+kind;t.setAttribute("role",kind==="err"?"alert":"status");t.innerHTML=`<span>${msg}</span>${undo?'<button class="ghost">Annuler</button>':""}<button class="ghost" aria-label="Fermer la notification">×</button>`;
+  const rm=()=>{t.classList.add("out");setTimeout(()=>t.remove(),200)};
+  t.querySelectorAll("button").forEach(b=>b.onclick=()=>{if(b.textContent==="Annuler"){undo();render();if(cur!=null)drawerHtml()}rm()});
+  box.append(t);setTimeout(rm,kind==="err"?7000:5000)}
+
+function attach(i,f,amount){const l=L[i],F=FILES.find(x=>x.f===f);
+  if(F.a==null&&amount==null){openDrawer(i);drawerHtml(f);toastS(`Le montant de ${f} est illisible : indiquez-le avant de rattacher.`,"warn");return false}
+  const a=F.a??amount, prevA=F.a;F.a=a;l.j=f;const d=a!==l.a;if(d)l.diff=a;render();
+  toastS(d?`${f} rattachée : montant différent (${eur(a)}), expliquez l'écart.`:`${f} rattachée à « ${esc(l.t)} ».`,d?"warn":"ok",()=>{l.j=null;delete l.diff;F.a=prevA});return true}
+const num=v=>parseFloat(String(v).replace(/\s/g,"").replace(",","."));
+
+document.addEventListener("click",e=>{
+  const g=k=>e.target.closest(`[data-${k}]`);let b;
+  if(!e.target.closest("#menu,.pc")&&menuFor){menuFor=null;render()}
+  if(b=g("tab")){tab=b.dataset.tab;render();$("#tab-"+tab).focus();return}
+  if(e.target.id==="refresh"){refresh();return}
+  if(b=e.target.closest(".pc")){menuFor=menuFor===b.dataset.file?null:b.dataset.file;render();const m=$("#menu");if(m){const p=$(`.pc[data-file="${menuFor}"]`);m.style.top=(p.offsetTop+p.offsetHeight+4)+"px";m.style.left=Math.min(p.offsetLeft,$("#tray").clientWidth-m.offsetWidth)+"px";m.querySelector("button")?.focus()}return}
+  if(b=g("drop")){menuFor=null;attach(+b.dataset.drop,b.dataset.f);return}
+  if(b=g("op")){openDrawer(+b.dataset.op);return}
+  if(e.target.closest(".x")||e.target.id==="scrim"){closeDrawer();return}
+  if(b=g("repay")){const l=L[+b.dataset.repay];l.repaid=true;render();drawerHtml();toastS(`Reversement de ${eur(l.a)} noté : le solde prévu remonte d'autant.`,"ok",()=>l.repaid=false);return}
+  if(b=g("need")){const l=L[+b.dataset.need];l.needOk=true;render();drawerHtml();toastS("Statuts joints à la cotisation.","ok",()=>l.needOk=false);return}
+  if(b=g("ex")){$("#dep").value=b.dataset.ex;check();return}
+  if(e.target.id==="disc"){const c=$("#solcard"),o=!c.classList.contains("open");c.classList.toggle("open",o);e.target.setAttribute("aria-expanded",o);e.target.textContent=o?"Masquer le calcul":"Voir le calcul et la courbe"}
+});
+document.addEventListener("change",e=>{if(e.target.name==="pf"){const F=FILES.find(x=>x.f===e.target.value);$("#scanf").hidden=F.a!=null}});
+document.addEventListener("submit",e=>{e.preventDefault();
+  if(e.target.id==="attf"){const f=new FormData(e.target).get("pf"),F=FILES.find(x=>x.f===f);let amt;
+    if(F.a==null){amt=num($("#scanv").value);if(isNaN(amt)||amt<=0){const h=$("#atth");h.hidden=false;h.textContent="Saisissez le montant lu sur la pièce, par exemple 86,40.";$("#scanv").focus();return}}
+    if(attach(cur,f,amt))drawerHtml()}
+  if(e.target.id==="whyf"){const v=$("#whyv").value.trim();if(!v){const h=$("#whyh");h.hidden=false;h.textContent="Écrivez la raison, par exemple « frais de livraison ».";$("#whyv").focus();return}
+    const l=L[cur];l.why=v;render();drawerHtml();toastS("Écart expliqué.","ok",()=>delete l.why)}
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){if(menuFor){const f=menuFor;menuFor=null;render();$(`.pc[data-file="${f}"]`)?.focus()}else closeDrawer();return}
+  const t=e.target.closest(".tab");if(t&&(e.key==="ArrowRight"||e.key==="ArrowLeft")){const ts=$$(".tab"),k=(ts.indexOf(t)+(e.key==="ArrowRight"?1:-1)+ts.length)%ts.length;tab=ts[k].dataset.tab;render();$("#tab-"+tab).focus()}
+  if(e.target.closest("#menu")&&(e.key==="ArrowDown"||e.key==="ArrowUp")){e.preventDefault();const bs=$$("#menu button"),k=bs.indexOf(document.activeElement);bs[(k+(e.key==="ArrowDown"?1:-1)+bs.length)%bs.length].focus()}
+  if(cur!=null&&e.key==="Tab"){const f=$$("#drawer button,#drawer input,#drawer textarea").filter(x=>!x.closest("[hidden]"));if(!f.length)return;if(e.shiftKey&&document.activeElement===f[0]){e.preventDefault();f.at(-1).focus()}else if(!e.shiftKey&&document.activeElement===f.at(-1)){e.preventDefault();f[0].focus()}}
+});
+/* glisser-déposer (souris) ; le menu de chaque pièce est l'équivalent clavier et tactile */
+document.addEventListener("dragstart",e=>{const p=e.target.closest?.(".pc");if(!p)return;e.dataTransfer.setData("text/plain",p.dataset.file);e.dataTransfer.effectAllowed="link";p.classList.add("drag")});
+document.addEventListener("dragend",e=>{$$(".pc.drag").forEach(p=>p.classList.remove("drag"));$$(".row.over").forEach(r=>r.classList.remove("over"))});
+document.addEventListener("dragover",e=>{const r=e.target.closest?.(".row");if(!r)return;const l=L[+r.dataset.op];if(l.j||l.refund)return;e.preventDefault();$$(".row.over").forEach(x=>x!==r&&x.classList.remove("over"));r.classList.add("over")});
+document.addEventListener("dragleave",e=>{const r=e.target.closest?.(".row");if(r&&!r.contains(e.relatedTarget))r.classList.remove("over")});
+document.addEventListener("drop",e=>{const r=e.target.closest?.(".row");if(!r)return;e.preventDefault();r.classList.remove("over");attach(+r.dataset.op,e.dataTransfer.getData("text/plain"))});
+
+function refresh(){loading=true;render();setTimeout(()=>{loading=false;refreshed=true;
+  L.push({d:"09/11",t:"Orange Pro",r:"Télécommunications",a:74.99,j:null});FILES.push({f:"orange-nov.pdf",a:74.99,d:"09/11"});
+  $("#ctx").textContent="Avance de frais de mandat · exercice 2026 · relevé du compte dédié au 10 novembre (montants fictifs)";
+  render();toastS("Relevé actualisé : 1 opération et 1 pièce nouvelles.")},900)}
+function check(){
+  const v=$("#dep").value, raw=$("#mt").value.trim(), m=num(raw), r=RULES.find(([re])=>re.test(v)), h=$("#mth");
+  h.hidden=!(raw&&(isNaN(m)||m<=0));h.textContent="Saisissez un nombre positif, par exemple 450 ou 450,50.";
+  let o=r?`<div class="ans"><span class="dot ${r[1]}"></span><span>${r[2]}<small>${r[3]}</small></span></div>`:v.trim()?`<div class="ans"><span class="dot"></span><span>Pas de règle connue<small>En cas de doute, saisissez le déontologue avant d'engager la dépense.</small></span></div>`:"";
+  if(raw&&m>0&&(!r||r[1]!=="err")){const after=fin().sol-m;o+=`<div class="ans"><span class="dot ${after<0?"err":"ok"}"></span><span>${after<0?`Dépasse le solde prévu de ${eur(Math.round(-after))}`:`Solde prévu ensuite : ${eur(Math.round(after))}`}</span></div>`}
+  $("#ans").innerHTML=o;
+}
+$(".ex").innerHTML=EX.map(x=>`<button type="button" class="chip" data-ex="${x}">${x}</button>`).join("");
+$("#dep").addEventListener("input",check);$("#mt").addEventListener("input",check);
+render();
+</script>

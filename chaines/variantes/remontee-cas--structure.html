@@ -1,0 +1,299 @@
+<title>Remontées de permanence · structure</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+
+<style>
+/* Angle « structure » : les sujets sont rangés selon ce qu'il reste à faire à Paris
+   (personne ne le porte / porté par votre bureau / porté par un autre groupe), chaque sujet a sa fiche,
+   et chaque action a sa propre étape, avec retour par le fil d'Ariane, Échap ou le bouton Précédent. */
+.crumbs{display:flex;flex-wrap:wrap;gap:4px 6px;align-items:center;margin-top:10px;font-size:12.5px;color:var(--dim);min-height:20px}
+.crumbs a{color:var(--muted);text-decoration:none;border-radius:4px}
+.crumbs a:hover{color:var(--fg);text-decoration:underline;text-underline-offset:3px}
+.crumbs span[aria-current]{color:var(--text)}
+.view{animation:in .25s var(--ease)}
+@keyframes in{from{opacity:0;transform:translateY(4px)}}
+.grp{margin-top:22px}
+.grp-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:0 2px 8px}
+.grp-h h2{margin:0;font:600 13.5px/1.4 var(--f);color:var(--fg)}
+.grp-h p{margin:0;font-size:12.5px;color:var(--dim)}
+.list{padding:4px}
+.row{display:grid;grid-template-columns:minmax(0,1fr) 132px 104px;gap:14px;align-items:center;padding:11px 12px;border-radius:8px;color:inherit;text-decoration:none;transition:background .2s}
+.row+.row{border-top:1px solid var(--line)}
+.row:hover{background:var(--s2)}
+.row b{display:block;color:var(--fg);font-weight:500;font-size:13.5px}
+.row small{display:block;color:var(--dim);font-size:12px}
+.row small .sent{color:var(--ok)}
+.empty{padding:14px 12px;font-size:12.5px;color:var(--dim)}
+.spark{display:grid;grid-template-columns:repeat(12,1fr);gap:2px;align-items:end;height:28px}
+.spark i{display:block;border-radius:2px 2px 0 0;background:var(--line2);min-height:2px}
+.spark i.q{background:var(--accent)}
+.tr{text-align:right;font-size:12.5px;color:var(--muted);white-space:nowrap}
+.row .tr b{display:inline;font-size:13.5px;font-weight:500}
+.up b,.up .v{color:#f0c27a} .flat b{color:var(--text)} .down b,.down .v{color:#7fd3a8}
+.cols{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px;align-items:start;margin-top:4px}
+.card{padding:16px 18px}
+.card .sec:first-child{margin-top:0}
+.bars{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px;align-items:end;height:110px;margin-top:6px}
+.bars div{display:flex;flex-direction:column;justify-content:flex-end;height:100%;align-items:stretch;gap:3px}
+.bars i{display:block;background:var(--line2);border-radius:3px 3px 0 0;min-height:2px}
+.bars .q i{background:var(--accent)}
+.bars span{font-size:10.5px;color:var(--dim);text-align:center}
+.bars em{font-style:normal;font-size:11px;color:var(--muted);text-align:center}
+.bars .q em{color:var(--fg)}
+.cm{display:grid;gap:6px}
+.cr{display:grid;grid-template-columns:118px minmax(0,1fr) 28px;gap:8px;align-items:center;font-size:12.5px}
+.cr .b{height:6px;border-radius:3px;background:var(--accent)}
+.cr .n{text-align:right;color:var(--muted)}
+.cr.other{color:var(--dim)} .cr.other .b{background:var(--line2)}
+.rule{margin:8px 0 0;font-size:12px;color:var(--dim)}
+.blk{margin:0;padding-left:16px;font-size:13px;display:grid;gap:4px}
+.pq{border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12.5px;color:var(--muted)}
+.pq+.pq{margin-top:6px}
+.pq b{color:var(--text);font-weight:500}
+.next{margin-top:14px;padding:14px;border-radius:9px;background:var(--s2);border:1px solid var(--line2)}
+.next p{margin:0 0 10px;color:var(--fg);font-size:13.5px}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.done{margin:0 0 12px;padding:9px 12px;border-radius:8px;border:1px solid rgba(70,179,126,.35);color:var(--fg);font-size:13px;display:flex;gap:8px;align-items:baseline}
+.form{display:grid;gap:14px}
+.field{display:grid;gap:5px}
+.field label{font-size:12.5px;color:var(--muted)}
+.field input,.field textarea{width:100%;font-size:14px}
+.field textarea{min-height:190px;line-height:1.55;resize:vertical}
+.field .hint{font-size:12px;color:var(--dim)}
+.checks{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.checks li{display:grid;grid-template-columns:16px minmax(0,1fr);gap:8px;font-size:12.5px;color:var(--text)}
+.checks li .dot{margin-top:6px}
+.checks li.ko{color:var(--fg)}
+.checks li small{display:block;color:var(--muted);font-size:12px}
+.status{min-height:20px;font-size:12.5px;color:var(--muted)}
+.status.ok{color:var(--ok)} .status.ko{color:#f0a3a5}
+.sent-box{font-size:13px;color:var(--text);display:grid;gap:4px}
+.sent-box b{color:var(--fg);font-weight:500}
+.count{font-size:12px;color:var(--dim);text-align:right}
+@media (max-width:860px){.cols{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:560px){.row{grid-template-columns:minmax(0,1fr) auto}.row .spark,.ov-note{display:none}.cr{grid-template-columns:96px minmax(0,1fr) 26px}.bars{gap:2px}.bars span{font-size:9.5px}}
+</style>
+
+<div class="wrap">
+  <div class="ctx">Permanence de la 4ᵉ circonscription · dossiers ouverts de décembre 2025 à novembre 2026 · comptes anonymisés</div>
+  <nav class="crumbs" id="crumbs" aria-label="Fil d'Ariane"></nav>
+  <main id="view"></main>
+</div>
+
+<script>
+const MOIS=["déc.","janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov."];
+const M=[
+ {k:"anef",t:"Titres de séjour bloqués (ANEF)",court:"titres de séjour bloqués",org:"Préfecture",min:"ministre de l'Intérieur",h:[4,5,3,6,5,7,6,8,9,13,15,17],dur:94,
+  com:{"Villeneuve":19,"Saint-Aubin":14,"Les Ormes":9,"Bréval":6,"Montfort":2,"Autres (moins de 3)":2},
+  blk:["Rendez-vous introuvable pour un renouvellement","Récépissé expiré pendant l'instruction : perte d'emploi","Dossier marqué « complet » sans suite depuis plus de quatre mois"],
+  paris:[{n:"AN 3355",who:"votre bureau",st:"Sans réponse depuis 3 mois"}],q:"les délais d'instruction des demandes de titre de séjour déposées sur l'administration numérique pour les étrangers en France dans le département"},
+ {k:"mpr",t:"Aides à la rénovation non versées",court:"aides à la rénovation non versées",org:"Agence nationale de l'habitat",min:"ministre chargé du Logement",h:[6,7,9,8,10,9,8,7,8,9,8,9],dur:142,
+  com:{"Villeneuve":22,"Les Ormes":18,"Saint-Aubin":17,"Bréval":11,"Montfort":10,"Autres (moins de 3)":20},
+  blk:["Prime attendue plus de six mois après les travaux","Demande de pièces déjà fournies","Artisan non payé, chantier arrêté"],
+  paris:[{n:"AN 3187",who:"votre bureau",st:"Sans réponse depuis 6 mois"},{n:"AN 2954",who:"Écologie urbaine",st:"Sans réponse depuis 8 mois"}],q:"les retards de versement des aides à la rénovation énergétique des logements instruites par l'Agence nationale de l'habitat"},
+ {k:"caf",t:"Trop-perçus d'aide au logement réclamés",court:"trop-perçus d'aide au logement réclamés",org:"Caisse d'allocations familiales",min:"ministre chargé des Solidarités",h:[3,2,4,3,2,3,9,11,10,8,7,6],dur:61,
+  com:{"Villeneuve":16,"Saint-Aubin":15,"Bréval":12,"Les Ormes":9,"Autres (moins de 3)":16},
+  blk:["Recalcul rétroactif après la réforme des ressources","Retenue de 100 % sur les prestations"],
+  paris:[],q:"les demandes de remboursement d'aides au logement nées du recalcul rétroactif des ressources depuis juin 2026"},
+ {k:"mdph",t:"Délais de la maison départementale des personnes handicapées",court:"délais de la maison départementale des personnes handicapées",org:"Département",min:"ministre chargée des Personnes handicapées",h:[5,4,6,5,6,5,6,5,6,5,6,5],dur:188,
+  com:{"Villeneuve":18,"Saint-Aubin":14,"Les Ormes":12,"Autres (moins de 3)":20},blk:["Délai de traitement supérieur à six mois","Renouvellement d'allocation interrompu"],paris:[{n:"AN 2190",who:"Solidarité et logement",st:"Répondue en mars 2026"}],q:"les délais de traitement des demandes adressées aux maisons départementales des personnes handicapées"},
+ {k:"hlm",t:"Demandes de logement social sans proposition",court:"demandes de logement social sans proposition",org:"Bailleurs, commission d'attribution",min:"ministre chargé du Logement",h:[7,6,8,7,6,7,6,5,7,6,5,6],dur:null,
+  com:{"Villeneuve":31,"Saint-Aubin":20,"Les Ormes":11,"Autres (moins de 3)":14},blk:["Ancienneté supérieure à trois ans","Mutation pour handicap non traitée"],paris:[],q:"l'absence de proposition de logement social pour les demandeurs inscrits depuis plus de trois ans"},
+ {k:"exp",t:"Menaces d'expulsion locative",court:"menaces d'expulsion locative",org:"Préfecture, commission de prévention",min:"ministre chargé du Logement",h:[2,3,4,3,1,1,1,2,3,4,5,4],dur:35,
+  com:{"Villeneuve":9,"Saint-Aubin":8,"Autres (moins de 3)":16},blk:["Commandement de quitter les lieux reçu sans accompagnement social"],paris:[],q:"l'accompagnement social des ménages menacés d'expulsion locative avant la délivrance du commandement de quitter les lieux"},
+];
+const sum=a=>a.reduce((x,y)=>x+y,0);
+const trend=m=>{const q=sum(m.h.slice(9)),p=sum(m.h.slice(6,9));return {q,p,r:p?q/p:9,cls:(p&&q/p<=.8)?"down":(!p||q/p>=1.3)?"up":"flat"}};
+/* Règle d'anonymat : une commune comptant moins de 3 dossiers n'est jamais nommée ; elle rejoint « autres communes ». */
+function communes(m){const named=[],hidden=[];let autres=0;for(const[c,n]of Object.entries(m.com)){if(c.startsWith("Autres"))autres+=n;else if(n<3){autres+=n;hidden.push(c)}else named.push([c,n])}named.sort((a,b)=>b[1]-a[1]);return{named,autres,hidden}}
+const ALLCOM=[...new Set(M.flatMap(m=>Object.keys(m.com).filter(c=>!c.startsWith("Autres"))))];
+
+const SIGN_DEFAULT="Mme Hélène Marchal";
+const GROUPS=[
+ {k:"none",t:"Personne ne le porte à Paris",p:"Une question écrite peut partir des chiffres agrégés."},
+ {k:"mine",t:"Porté par votre bureau",p:"Suivre la réponse ; relancer après deux mois de silence."},
+ {k:"other",t:"Porté par un autre groupe",p:"Signaler à l'équipe de Paris avant de déposer à son tour."},
+];
+const cover=m=>m.paris.some(p=>p.who==="votre bureau")?"mine":m.paris.length?"other":"none";
+const mineQ=m=>m.paris.find(p=>p.who==="votre bureau");
+const drafts={}, notes={}, sent={};
+const byK=k=>M.find(m=>m.k===k);
+const lc=s=>s.charAt(0).toLowerCase()+s.slice(1);
+const hm=()=>new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"}).replace(":"," h ");
+const trendWord=t=>t.cls==="up"?`×${nf(t.r,1)}`:t.cls==="down"?"en baisse":"stable";
+
+function route(){const h=location.hash.replace(/^#\/?/,"").split("/");return h[0]==="s"&&byK(h[1])?{m:byK(h[1]),step:h[2]||""}:{m:null,step:""}}
+function go(h){if(location.hash!==h)location.hash=h;else render()}
+
+function crumbs(r){const parts=[r.m?`<a href="#">Vue d'ensemble</a>`:`<span aria-current="page">Vue d'ensemble</span>`];
+  if(r.m){parts.push(r.step?`<a href="#s/${r.m.k}">${esc(r.m.t)}</a>`:`<span aria-current="page">${esc(r.m.t)}</span>`);
+    if(r.step)parts.push(`<span aria-current="page">${r.step==="question"?(cover(r.m)==="mine"?"Relance":"Question écrite"):"Signalement"}</span>`)}
+  $("#crumbs").innerHTML=parts.join(`<span aria-hidden="true">›</span>`)}
+
+/* ---------- Vue d'ensemble ---------- */
+function overview(){
+  const T=M.map(m=>({m,...trend(m)})).sort((a,b)=>(b.q-b.p)-(a.q-a.p));
+  const ups=T.filter(t=>t.cls==="up");
+  const lead=ups.length?`${ups.length===1?"Un sujet monte":nf(ups.length)+" sujets montent"} ce trimestre : <span>${ups.map(t=>`${t.m.court} (${t.q} dossiers contre ${t.p}${cover(t.m)==="none"?", porté par personne à Paris":cover(t.m)==="mine"?", votre question attend une réponse":""})`).join(" ; ")}.</span>`:"Aucun sujet ne monte ce trimestre.";
+  return `<h1>Ce qui revient à la permanence</h1><p class="lead">${lead}</p>
+   ${GROUPS.map(g=>{const L=T.filter(t=>cover(t.m)===g.k);return `<section class="grp" aria-labelledby="g-${g.k}"><div class="grp-h"><h2 id="g-${g.k}">${g.t} <span style="color:var(--dim);font-weight:400">· ${L.length}</span></h2><p>${g.p}</p></div>
+    <div class="panel list">${L.length?L.map(({m,q,cls,...t})=>{const mx=Math.max(...m.h);return `<a class="row" href="#s/${m.k}"><span><b>${esc(m.t)}</b><small>${esc(m.org)} · ${sum(m.h)} dossiers sur 12 mois${sent[m.k]?` · <span class="sent">signalé à ${sent[m.k]}</span>`:""}</small></span>
+      <span class="spark" aria-hidden="true">${m.h.map((v,i)=>`<i class="${i>=9?"q":""}" style="height:${Math.round(2+26*v/mx)}px"></i>`).join("")}</span>
+      <span class="tr ${cls}"><b>${q}</b> ce trimestre<br><span class="v">${trendWord({cls,...t})}</span></span></a>`}).join(""):`<div class="empty">Aucun sujet dans ce cas.</div>`}</div></section>`}).join("")}
+   <p class="rule ov-note">Barres : douze derniers mois, le trimestre en cours (septembre à novembre) en couleur.</p>`}
+
+/* ---------- Fiche d'un sujet ---------- */
+function fiche(m){
+  const t=trend(m), c=communes(m), mxc=Math.max(...c.named.map(x=>x[1]),c.autres), mx=Math.max(...m.h), cv=cover(m), mq=mineQ(m);
+  const next=cv==="none"?{p:"Personne ne porte ce sujet à Paris.",a:[["question","Préparer une question écrite",1],["signal","Signaler à l'équipe de Paris"]]}
+   :cv==="mine"?{p:/^Sans réponse/.test(mq.st)?"Plus de deux mois sans réponse : une relance est possible.":"Réponse attendue : rien à faire pour l'instant.",a:/^Sans réponse/.test(mq.st)?[["question","Préparer une relance",1],["signal","Signaler à l'équipe de Paris"]]:[["signal","Signaler à l'équipe de Paris",1]]}
+   :{p:"Déjà posé par un autre groupe : voyez avec l'équipe de Paris avant de déposer à votre tour.",a:[["signal","Signaler à l'équipe de Paris",1],["question","Préparer une question écrite"]]};
+  return `<div class="ctx">${esc(m.org)}</div><h1>${esc(m.t)}</h1>
+   <p class="lead">${t.q} dossiers ce trimestre, contre ${t.p} le trimestre précédent <span>(${trendWord(t)}).</span> <span>${m.dur?`Il faut ${Math.round(m.dur/30.4)} mois pour en résoudre un (médiane).`:"Aucun dossier résolu : pas de délai médian."}</span></p>
+   <div class="cols">
+    <section class="panel card"><div class="sec">Dossiers par mois</div>
+     <div class="bars" role="img" aria-label="${m.h.map((v,i)=>MOIS[i]+" "+v).join(", ")}">${m.h.map((v,i)=>`<div class="${i>=9?"q":""}"><em>${v}</em><i style="height:${Math.round(3+70*v/mx)}px"></i><span>${MOIS[i].replace(".","")}</span></div>`).join("")}</div>
+     <div class="sec">Par commune, sur 12 mois</div>
+     <div class="cm">${c.named.map(([n,v])=>`<div class="cr"><span>${n}</span><span class="b" style="width:${Math.round(100*v/mxc)}%"></span><span class="n">${v}</span></div>`).join("")}
+      ${c.autres?`<div class="cr other"><span>Autres communes</span><span class="b" style="width:${Math.round(100*c.autres/mxc)}%"></span><span class="n">${c.autres}</span></div>`:""}</div>
+     <p class="rule">Une commune comptant moins de trois dossiers n'est pas nommée : elle est comptée dans « autres communes ».</p>
+    </section>
+    <section class="panel card">
+     <div class="sec">Blocages les plus fréquents</div><ul class="blk">${m.blk.map(b=>`<li>${esc(b)}</li>`).join("")}</ul>
+     <div class="sec">À Paris</div>${m.paris.length?m.paris.map(p=>`<div class="pq"><b>${p.n}</b> · ${p.who} · ${p.st}</div>`).join(""):`<div class="pq">Aucune question écrite sur ce sujet.</div>`}
+     <div class="next">${sent[m.k]?`<p class="done"><span class="dot ok"></span><span>Signalé à l'équipe de Paris à ${sent[m.k]}.</span></p>`:""}<p>${esc(next.p)}</p>
+      <div class="acts">${next.a.map(([s,l,pri])=>`<a class="btn ${pri?"pri":""}" style="text-decoration:none" href="#s/${m.k}/${s}">${l}</a>`).join("")}</div></div>
+    </section>
+   </div>`}
+
+/* ---------- Vérifications d'anonymat (prévention d'erreur) ---------- */
+function checks(m,txt,sign,isNote){
+  const c=communes(m), out=[];
+  if(!isNote) out.push(sign.trim().length>3?{ok:1,t:"Signataire renseigné"}:{ok:0,t:"Signataire manquant",f:"Indiquez le nom de la députée dans le champ « Signataire »."});
+  const hid=c.hidden.filter(h=>new RegExp(h,"i").test(txt));
+  out.push(hid.length?{ok:0,t:`${hid.join(", ")} compte moins de trois dossiers`,f:"Retirez ce nom ou écrivez « d'autres communes » : le nommer permettrait de reconnaître la personne."}:{ok:1,t:"Aucune commune de moins de trois dossiers n'est nommée"});
+  const small=txt.replace(/n°\s*\d+|AN \d+|\b20\d\d\b/g,"").match(/\b[12]\b|\b(un|une|deux) (seul|personne|famille|ménage|cas|habitant)/i);
+  out.push(small?{ok:0,t:`« ${small[0]} » : un effectif inférieur à trois`,f:"Remplacez-le par une formulation agrégée, par exemple « plusieurs », ou retirez-le."}:{ok:1,t:"Uniquement des effectifs agrégés"});
+  if(!isNote) out.push(/demande/i.test(txt)?{ok:1,t:"La question se termine par une demande au Gouvernement"}:{ok:0,t:"Aucune demande au Gouvernement",f:"Terminez par « Elle lui demande… » : sans demande, la question n'est pas recevable."});
+  return out}
+const checksHTML=L=>L.map(x=>`<li class="${x.ok?"":"ko"}"><span class="dot ${x.ok?"ok":"err"}"></span><span>${esc(x.t)}${x.f?`<small>${esc(x.f)}</small>`:""}</span></li>`).join("");
+
+/* ---------- Étape : question écrite ou relance ---------- */
+function defaultText(m,sign){const t=trend(m), mq=mineQ(m), relance=mq&&/^Sans réponse/.test(mq.st);
+  return relance?`${sign} rappelle à M. le ${m.min} les termes de sa question écrite ${mq.n.replace("AN ","n° ")}, restée sans réponse, portant sur ${m.q}. Depuis son dépôt, la situation s'est aggravée : sa permanence a reçu ${t.q} sollicitations à ce sujet ces trois derniers mois, contre ${t.p} le trimestre précédent. Elle lui demande de bien vouloir lui apporter une réponse et de préciser les mesures envisagées.`
+  :`${sign} attire l'attention de M. le ${m.min} sur ${m.q}. Sa permanence a reçu ${t.q} sollicitations à ce sujet ces trois derniers mois, contre ${t.p} le trimestre précédent. Les difficultés les plus fréquentes sont : ${m.blk.map(lc).join(" ; ")}. Elle lui demande quelles mesures il entend prendre.`}
+function question(m){
+  const d=drafts[m.k]||(drafts[m.k]={sign:SIGN_DEFAULT,txt:defaultText(m,SIGN_DEFAULT),edited:false});
+  const mq=mineQ(m), relance=mq&&/^Sans réponse/.test(mq.st);
+  return `<h1>${relance?"Préparer une relance":"Préparer une question écrite"}</h1>
+   <p class="lead"><span>Le texte part des chiffres agrégés de la permanence ; aucun dossier individuel n'y figure.</span></p>
+   <div class="cols"><section class="panel card form">
+     <div class="field"><label for="sign">Signataire</label><input type="text" id="sign" value="${esc(d.sign)}" autocomplete="off"></div>
+     <div class="field"><label for="txt">Texte de la question</label><textarea id="txt">${esc(d.txt)}</textarea>
+      <div class="hint">${d.edited?`<button class="ghost" id="reset" type="button">Revenir au texte proposé</button>`:"Modifiable : les vérifications se refont à chaque frappe."}</div></div>
+     <div class="acts"><button class="btn pri" id="copy" type="button">Copier le texte</button><button class="btn" id="filed" type="button">Marquer comme déposée</button></div>
+     <div class="status" id="st" role="status"></div>
+    </section>
+    <section class="panel card"><div class="sec">Avant de copier</div><ul class="checks" id="ck" aria-live="polite"></ul></section></div>`}
+function refreshQ(m){const d=drafts[m.k], L=checks(m,d.txt,d.sign,false), bad=L.filter(x=>!x.ok);
+  $("#ck").innerHTML=checksHTML(L); $("#copy").disabled=!!bad.length; $("#filed").disabled=!!bad.length;
+  const st=$("#st"); if(bad.length){st.className="status ko";st.textContent=`${bad.length===1?"Un point bloque":bad.length+" points bloquent"} la copie : voir « Avant de copier ».`}else if(st.classList.contains("ko")){st.className="status";st.textContent=""}}
+
+/* ---------- Étape : signalement ---------- */
+function signal(m){const t=trend(m), c=communes(m), n=notes[m.k]||"";
+  return `<h1>Signaler à l'équipe de Paris</h1>
+   <p class="lead"><span>L'équipe reçoit le résumé ci-dessous, tel quel, et votre mot s'il y en a un.</span></p>
+   <div class="cols"><section class="panel card"><div class="sec">Ce qui sera transmis</div>
+     <div class="sent-box"><b>${esc(m.t)}</b><span>${t.q} dossiers ce trimestre, contre ${t.p} (${trendWord(t)}).</span>
+      <span>Communes : ${c.named.map(x=>`${x[0]} ${x[1]}`).join(", ")}${c.autres?`, autres communes ${c.autres}`:""}.</span>
+      <span>Blocages : ${m.blk.map(lc).join(" ; ")}.</span>
+      <span>À Paris : ${m.paris.length?m.paris.map(p=>`${p.n} (${p.who}, ${lc(p.st)})`).join(" ; "):"aucune question"}.</span></div>
+    </section>
+    <section class="panel card form"><div class="field"><label for="note">Un mot pour l'équipe <span style="color:var(--dim)">(facultatif)</span></label>
+      <textarea id="note" maxlength="400" style="min-height:110px" placeholder="Par exemple : à rapprocher du projet de loi logement.">${esc(n)}</textarea><div class="count" id="cnt"></div></div>
+     <ul class="checks" id="ck" aria-live="polite"></ul>
+     <div class="acts"><button class="btn pri" id="send" type="button">Envoyer à l'équipe de Paris</button><a class="btn" style="text-decoration:none" href="#s/${m.k}">Annuler</a></div>
+     <div class="status" id="st" role="status"></div></section></div>`}
+function refreshS(m){const n=notes[m.k]||"";$("#cnt").textContent=`${n.length} / 400`;const L=n.trim()?checks(m,n,"",true):[];$("#ck").innerHTML=checksHTML(L.filter(x=>!x.ok));$("#send").disabled=L.some(x=>!x.ok)}
+
+/* ---------- Rendu et gestes ---------- */
+function render(){const r=route();crumbs(r);
+  const v=$("#view");v.className="view";void v.offsetWidth;
+  if(!r.m){v.innerHTML=overview();document.title="Remontées de permanence · structure"}
+  else if(r.step==="question"){v.innerHTML=question(r.m);refreshQ(r.m)}
+  else if(r.step==="signal"){v.innerHTML=signal(r.m);refreshS(r.m)}
+  else v.innerHTML=fiche(r.m);
+  window.scrollTo({top:0});
+  const h=v.querySelector("h1");if(h&&r.m){h.tabIndex=-1;h.focus({preventScroll:true})}}
+window.addEventListener("hashchange",render);
+document.addEventListener("input",e=>{const r=route();if(!r.m)return;
+  if(e.target.id==="txt"||e.target.id==="sign"){const d=drafts[r.m.k];if(e.target.id==="sign"){const old=d.sign;d.sign=e.target.value;if(!d.edited){d.txt=defaultText(r.m,d.sign);$("#txt").value=d.txt}else if(old&&d.txt.startsWith(old)){d.txt=d.sign+d.txt.slice(old.length);$("#txt").value=d.txt}}else{d.txt=e.target.value;if(!d.edited){d.edited=true;$(".hint").innerHTML=`<button class="ghost" id="reset" type="button">Revenir au texte proposé</button>`}}refreshQ(r.m)}
+  if(e.target.id==="note"){notes[r.m.k]=e.target.value;refreshS(r.m)}});
+document.addEventListener("click",e=>{const r=route();if(!r.m)return;
+  if(e.target.closest("#reset")){const d=drafts[r.m.k];d.txt=defaultText(r.m,d.sign);d.edited=false;render();return}
+  if(e.target.closest("#copy")){const d=drafts[r.m.k],st=$("#st");
+    const fail=()=>{const ta=$("#txt");ta.focus();ta.select();st.className="status ko";st.textContent="Copie automatique impossible ici : le texte est sélectionné, faites Ctrl+C (ou ⌘+C)."};
+    if(!navigator.clipboard)return fail();
+    navigator.clipboard.writeText(d.txt).then(()=>{st.className="status ok";st.textContent="Copié. Une fois la question déposée, marquez-la comme déposée pour suivre la réponse ici."},fail);return}
+  if(e.target.closest("#filed")){r.m.paris.unshift({n:"Nouvelle question",who:"votre bureau",st:"Déposée aujourd'hui, réponse attendue sous deux mois"});delete drafts[r.m.k];go(`#s/${r.m.k}`);toast("Question marquée comme déposée : le sujet passe dans « Porté par votre bureau ».");return}
+  if(e.target.closest("#send")){const b=e.target.closest("#send");b.disabled=true;b.textContent="Envoi…";
+    setTimeout(()=>{sent[r.m.k]=hm();delete notes[r.m.k];go(`#s/${r.m.k}`)},500)}});
+document.addEventListener("keydown",e=>{if(e.key!=="Escape")return;if(e.target.matches("input,textarea")){e.target.blur();return}
+  const r=route();if(r.step)go(`#s/${r.m.k}`);else if(r.m)go("#")});
+render();
+</script>

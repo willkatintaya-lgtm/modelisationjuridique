@@ -1,0 +1,289 @@
+<title>Transferts de crédits · structure</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+
+<style>
+/* Angle « structure » : l'objet de travail n'est plus le programme mais le transfert
+   (de tel programme vers tel autre, tel montant). Chaque transfert est équilibré par
+   construction : la règle de l'article 47 est tenue en amont au lieu d'être signalée après coup. */
+.lay{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:22px;align-items:start}
+.lay>div{min-width:0}
+.tr{position:relative;padding:14px 48px 14px 16px;display:grid;gap:10px}
+.tr+.tr{border-top:1px solid var(--line)}
+.tr .no{position:absolute;left:-1px;top:14px;width:3px;height:22px;border-radius:2px;background:var(--line2)}
+.tr.okk .no{background:var(--ok)} .tr.bad .no{background:var(--err)} .tr.todo .no{background:var(--warn)}
+.sent{display:grid;grid-template-columns:62px minmax(0,1fr) auto;grid-template-areas:"l1 to amt" "l2 from ." ;align-items:center;gap:8px 10px;color:var(--muted);font-size:13.5px}
+.sent .l1{grid-area:l1}.sent .l2{grid-area:l2}.sent [data-f=to]{grid-area:to}.sent [data-f=from]{grid-area:from}.sent .amts{grid-area:amt;display:flex;flex-wrap:wrap;gap:6px 12px}
+.sent select{width:100%;min-width:0;padding:8px 10px;min-height:38px}
+@media (max-width:560px){.sent{grid-template-columns:62px minmax(0,1fr);grid-template-areas:"l1 to" ". amt" "l2 from"}}
+.sent select.empty{color:var(--muted);border-style:dashed;border-color:var(--line2)}
+.amt{display:inline-flex;align-items:center;gap:6px}
+.amt input{width:92px;text-align:right;padding:8px 10px;min-height:38px}
+.amt input:invalid{border-color:var(--err)}
+.x{position:absolute;right:8px;top:12px;width:32px;height:32px;border:0;border-radius:7px;background:none;color:var(--dim);cursor:pointer;font-size:18px;line-height:1}
+.x:hover{color:var(--fg);background:var(--s2)}
+.msg{display:grid;grid-template-columns:12px minmax(0,1fr);gap:8px;font-size:12.5px;line-height:1.5;color:var(--text)}
+.msg .dot{margin-top:6px}
+.msg small{display:block;color:var(--muted);font-size:12.5px}
+.more{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-size:12.5px;color:var(--muted)}
+.more label{display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.add{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px 10px 16px;border-top:1px solid var(--line)}
+.add span{font-size:12.5px;color:var(--dim)}
+.eff{width:100%;border-collapse:collapse;font-size:13px}
+.eff th,.eff td{padding:8px 10px;text-align:right;border-top:1px solid var(--line);white-space:nowrap}
+.eff th{color:var(--dim);font-weight:400;font-size:12px;border-top:0}
+.eff th:first-child,.eff td:first-child{text-align:left;white-space:normal}
+.eff td:first-child b{color:var(--fg);font-weight:500}
+.eff td:first-child small{display:block;color:var(--dim);font-size:12px}
+.up{color:var(--ins)} .down{color:#f2a7a9}
+.eff .z{color:var(--dim)}
+.doc{padding:18px;position:sticky;top:16px}
+.doc .st{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--fg);margin-bottom:12px}
+.doc .st button{margin-left:auto}
+.todo-l{list-style:none;margin:-4px 0 14px;padding:0;display:grid;gap:4px}
+.todo-l button{border:0;background:none;padding:2px 0;color:var(--muted);font-size:12.5px;cursor:pointer;text-align:left;text-decoration:underline 1px var(--line2);text-underline-offset:3px}
+.todo-l button:hover{color:var(--fg)}
+.paper{border:1px solid var(--line2);border-radius:8px;padding:16px;background:var(--bg)}
+.paper .art{font-size:12px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase;margin-bottom:8px}
+.paper p{margin:0 0 10px;font-size:13px;color:var(--text)}
+.paper h3{margin:14px 0 6px;font:500 12.5px/1.4 var(--f);color:var(--muted)}
+.paper table{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:6px}
+.paper th,.paper td{border:1px solid var(--line2);padding:5px 7px;text-align:right;vertical-align:top}
+.paper th:first-child,.paper td:first-child{text-align:left}
+.paper thead th{color:var(--dim);font-weight:400}
+.paper tfoot td{color:var(--fg);font-weight:500}
+.paper .unit{text-align:right;font-size:11.5px;color:var(--dim);margin-bottom:4px}
+.paper textarea{width:100%;min-height:118px;resize:vertical;background:none;border:1px dashed var(--line2);padding:8px;font-size:13px;line-height:1.55;color:var(--text)}
+.paper .hint{font-size:12px;color:var(--dim);margin-top:4px;display:flex;justify-content:space-between;gap:8px}
+.rules{margin:12px 2px 0;list-style:none;padding:0;display:grid;gap:6px;font-size:12.5px;color:var(--muted)}
+.rules li{display:grid;grid-template-columns:12px minmax(0,1fr);gap:8px}
+.rules .dot{margin-top:6px}
+.utoast{display:flex;align-items:center;gap:12px}
+.utoast button{border:0;background:none;color:var(--ins);cursor:pointer;padding:0;font-size:13px}
+.tr.new{animation:in .25s var(--ease)}
+@keyframes in{from{opacity:0;transform:translateY(-4px)}}
+@media (max-width:980px){.lay{grid-template-columns:minmax(0,1fr)}.doc{position:static}}
+</style>
+
+<div class="wrap">
+  <div class="ctx">Projet de loi de finances pour 2027 · seconde partie · mission « Cohésion des territoires » (montants fictifs)</div>
+  <h1>Amendement de crédits</h1>
+  <p class="lead" id="lead"></p>
+
+  <div class="lay">
+    <div>
+      <div class="sec">1 · Les transferts</div>
+      <section class="panel" aria-label="Transferts de crédits">
+        <div id="trs"></div>
+        <div class="add"><span>Chaque transfert prend sur un programme ce qu'il donne à un autre : la mission reste à somme nulle.</span><button class="btn" id="add">Ajouter un transfert</button></div>
+      </section>
+
+      <div class="sec">2 · Effet sur la mission <span id="effk" style="text-transform:none;letter-spacing:0"></span></div>
+      <section class="panel scrollx" aria-label="Effet sur les programmes"><table class="eff" id="eff"></table></section>
+    </div>
+
+    <aside class="panel doc" aria-label="Texte de l'amendement">
+      <div class="st" id="st"></div>
+      <ul class="todo-l" id="todo"></ul>
+      <div class="paper">
+        <div class="art">Article 32 · État B</div>
+        <p id="disp"></p>
+        <div id="tables"></div>
+        <h3>Exposé sommaire</h3>
+        <textarea id="expose" aria-label="Exposé sommaire"></textarea>
+        <div class="hint"><span id="exph">Brouillon rédigé d'après les transferts.</span><button class="ghost" id="regen" hidden>Rétablir le brouillon</button></div>
+      </div>
+      <ul class="rules" id="rules"></ul>
+    </aside>
+  </div>
+</div>
+
+<script>
+const P=[
+ {n:177,s:"Hébergement et insertion",t:"Hébergement, parcours vers le logement et insertion des personnes vulnérables",ae:3020,cp:3010},
+ {n:109,s:"Aide au logement",t:"Aide à l'accès au logement",ae:16240,cp:16240,oblig:true},
+ {n:135,s:"Urbanisme et habitat",t:"Urbanisme, territoires et amélioration de l'habitat",ae:820,cp:845},
+ {n:147,s:"Politique de la ville",t:"Politique de la ville",ae:640,cp:635},
+ {n:162,s:"Interventions territoriales",t:"Interventions territoriales de l'État",ae:110,cp:96},
+];
+const byN=n=>P.find(x=>x.n===n);
+let T=[{id:1,to:135,from:109,cp:60,ae:60,split:false}], seq=2, fresh=null, exposeEdited=false, lastRemoved=null;
+const amt=(t,k)=>k==="ae"&&t.split?t.ae:t.cp;
+const hasAmt=t=>t.cp>0||(t.split&&t.ae>0);
+const complete=t=>t.to&&t.from&&hasAmt(t);
+function taken(n,k){return T.filter(t=>t.from===n&&t.to).reduce((s,t)=>s+amt(t,k),0)}
+function mv(n,k){return T.filter(complete).reduce((s,t)=>s+(t.to===n?amt(t,k):0)-(t.from===n?amt(t,k):0),0)}
+const split=()=>T.some(t=>t.split&&t.ae!==t.cp);
+const opt=(n,sel,dis)=>{const x=byN(n);return `<option value="${n}"${n===sel?" selected":""}${dis?" disabled":""}>${n} · ${x.s}</option>`};
+
+function issues(t){
+  const r=[];
+  if(!t.to) r.push(["warn","Choisissez le programme à abonder."]);
+  if(!hasAmt(t)) r.push(["warn","Indiquez un montant supérieur à zéro."]);
+  if(!t.from) r.push(["warn","Choisissez le programme qui finance ce transfert.","C'est le gage : le programme minoré d'autant."]);
+  if(t.from){const x=byN(t.from);for(const k of ["cp","ae"]){const over=taken(t.from,k)-x[k];if(over>0&&amt(t,k)>0){r.push(["err",`Le programme ${x.n} ne dispose que de ${nf(x[k])} M€ en ${k.toUpperCase()}.`,`Les transferts qui le gagent le dépassent de ${nf(over)} M€ : réduisez ce montant ou prenez sur un autre programme.`]);break}}
+    if(x.oblig&&!r.some(i=>i[0]==="err")) r.push(["warn","Gage sur des dépenses obligatoires.","Le programme 109 finance les aides personnelles au logement, dues de droit : la minoration restera un gage de forme, que le Gouvernement devra lever ou compenser."]);}
+  return r;
+}
+
+function renderTransfers(){
+  $("#trs").innerHTML=T.map((t,i)=>{
+    const is=issues(t), bad=is.some(x=>x[0]==="err"), todo=!complete(t);
+    return `<div class="tr ${bad?"bad":todo?"todo":"okk"}${t.id===fresh?" new":""}" data-id="${t.id}">
+      <span class="no" aria-hidden="true"></span>
+      <div class="sent">
+        <span class="l1">Abonder</span>
+        <select data-f="to" aria-label="Programme abondé (transfert ${i+1})" class="${t.to?"":"empty"}"><option value="">programme…</option>${P.map(x=>opt(x.n,t.to,x.n===t.from)).join("")}</select>
+        <span class="amts"><span class="amt"><span>de</span><input type="number" min="0" step="5" inputmode="numeric" data-f="cp" value="${t.cp||""}" placeholder="0" aria-label="Montant en M€${t.split?" (CP)":""}"><span>M€${t.split?" en CP":""}</span></span>
+        ${t.split?`<span class="amt"><span>et</span><input type="number" min="0" step="5" inputmode="numeric" data-f="ae" value="${t.ae||""}" placeholder="0" aria-label="Montant en M€ (AE)"><span>M€ en AE</span></span>`:""}</span>
+        <span class="l2">pris sur</span>
+        <select data-f="from" aria-label="Programme qui finance (transfert ${i+1})" class="${t.from?"":"empty"}"><option value="">programme…</option>${P.map(x=>opt(x.n,t.from,x.n===t.to)).join("")}</select>
+      </div>
+      ${is.map(([c,m,s])=>`<div class="msg" role="${c==="err"?"alert":"note"}"><span class="dot ${c}"></span><span>${m}${s?`<small>${s}</small>`:""}</span></div>`).join("")}
+      <div class="more"><label><input type="checkbox" data-f="split"${t.split?" checked":""}> Montant différent en autorisations d'engagement</label></div>
+      <button class="x" data-del="${t.id}" aria-label="Supprimer le transfert ${i+1}" title="Supprimer">×</button>
+    </div>`}).join("")||`<div class="tr"><div class="msg"><span class="dot"></span><span>Aucun transfert.<small>Ajoutez-en un pour commencer.</small></span></div></div>`;
+  fresh=null;
+}
+
+function renderEffect(){
+  const sp=split(), ks=sp?["ae","cp"]:["cp"];
+  $("#effk").textContent=sp?"· AE et CP, en M€":"· en M€, identique en AE et en CP";
+  const cell=(x,k)=>{const v=mv(x.n,k);return v?`<span class="${v>0?"up":"down"}">${v>0?"+":"−"}${nf(Math.abs(v))}</span>`:`<span class="z">—</span>`};
+  $("#eff").innerHTML=`<thead><tr><th>Programme</th>${ks.map(k=>`<th>Crédits ${k.toUpperCase()}</th><th>Transfert</th><th>Après</th>`).join("")}</tr></thead><tbody>${P.map(x=>`<tr><td><b>${x.n}</b> ${x.s}${x.oblig?`<small>dépenses obligatoires</small>`:""}</td>${ks.map(k=>`<td>${nf(x[k])}</td><td>${cell(x,k)}</td><td>${mv(x.n,k)?`<span class="${mv(x.n,k)>0?"up":"down"}">${nf(x[k]+mv(x.n,k))}</span>`:`<span class="z">${nf(x[k])}</span>`}</td>`).join("")}</tr>`).join("")}</tbody>`;
+}
+
+function table(k){
+  const rows=P.filter(x=>mv(x.n,k));
+  const e=v=>v?nf(v*1e6):"0";
+  let p=0,m=0;rows.forEach(x=>{const v=mv(x.n,k);v>0?p+=v:m-=v});
+  return `<table><thead><tr><th>Programmes</th><th>+</th><th>−</th></tr></thead><tbody>${rows.map(x=>{const v=mv(x.n,k);return `<tr><td>${x.t}</td><td>${v>0?e(v):"0"}</td><td>${v<0?e(-v):"0"}</td></tr>`}).join("")||`<tr><td colspan="3" style="text-align:center;color:var(--dim)">Aucun mouvement</td></tr>`}</tbody><tfoot><tr><td>TOTAUX</td><td>${e(p)}</td><td>${e(m)}</td></tr><tr><td>SOLDE</td><td colspan="2" style="text-align:center">${e(p-m)}</td></tr></tfoot></table>`;
+}
+
+function draft(){
+  const ok=T.filter(complete); if(!ok.length) return "";
+  const parts=ok.map(t=>`${nf(t.cp)} M€ du programme ${t.from} « ${byN(t.from).t} » vers le programme ${t.to} « ${byN(t.to).t} »`);
+  let s=`Cet amendement transfère ${parts.join(", puis ")}.`;
+  s+=` Il ne modifie pas le montant total des crédits de la mission « Cohésion des territoires », conformément à l'article 47 de la loi organique relative aux lois de finances.`;
+  if(ok.some(t=>byN(t.from).oblig)) s+=` La minoration du programme 109 constitue un gage : les auteurs invitent le Gouvernement à le lever.`;
+  return s;
+}
+
+function render(){
+  renderTransfers(); renderEffect();
+  const all=T.map(t=>({t,is:issues(t)}));
+  const errs=all.filter(a=>a.is.some(i=>i[0]==="err")), inc=all.filter(a=>!complete(a.t));
+  const ok=T.length&&!errs.length&&!inc.length;
+  const done=T.filter(complete), tot=done.reduce((s,t)=>s+t.cp,0);
+  const ups=[...new Set(done.map(t=>t.to))], downs=[...new Set(done.map(t=>t.from))];
+  $("#lead").innerHTML=!done.length?`Aucun transfert complet. <span>Dites quel programme abonder, de combien, et sur quel programme le prendre.</span>`
+   :`${nf(tot)} M€ passent ${downs.length>1?"des programmes":"du programme"} ${downs.join(" et ")} ${ups.length>1?"aux programmes":"au programme"} ${ups.join(" et ")}. <span>${ok?"La mission reste à somme nulle ; le texte de l'amendement est prêt.":errs.length?"Un transfert dépasse les crédits disponibles.":"Un transfert reste à compléter."}</span>`;
+  $("#st").innerHTML=ok?`<span class="dot ok"></span>Prêt à déposer<button class="btn pri" id="copy">Copier le texte</button>`
+   :`<span class="dot ${errs.length?"err":"warn"}"></span>${errs.length+inc.length} point${errs.length+inc.length>1?"s":""} à régler<button class="btn" id="copy" disabled>Copier le texte</button>`;
+  if(!T.length) $("#st").innerHTML=`<span class="dot"></span>Aucun transfert<button class="btn" id="copy" disabled>Copier le texte</button>`;
+  $("#todo").innerHTML=[...new Set([...errs,...inc])].map(a=>`<li><button data-go="${a.t.id}">Transfert ${T.indexOf(a.t)+1} : ${esc(a.is.find(i=>i[0]==="err")?.[1]||a.is[0]?.[1]||"à compléter")}</button></li>`).join("");
+  const sp=split();
+  $("#disp").textContent="Modifier ainsi les autorisations d'engagement et les crédits de paiement :";
+  $("#tables").innerHTML=sp?`<h3>Autorisations d'engagement</h3><div class="unit">(en euros)</div><div class="scrollx">${table("ae")}</div><h3>Crédits de paiement</h3><div class="unit">(en euros)</div><div class="scrollx">${table("cp")}</div>`:`<div class="unit">(en euros)</div><div class="scrollx">${table("cp")}</div>`;
+  if(!exposeEdited) $("#expose").value=draft();
+  fit();
+  $("#regen").hidden=!exposeEdited;
+  $("#exph").textContent=exposeEdited?"Exposé modifié à la main : il ne suit plus les transferts.":"Brouillon rédigé d'après les transferts.";
+  const anyOblig=done.some(t=>byN(t.from).oblig);
+  $("#rules").innerHTML=[
+    ["ok","Somme nulle en AE et en CP (article 47 de la LOLF) : chaque transfert est équilibré par construction."],
+    [errs.length?"err":"ok",errs.length?"Une minoration dépasse les crédits d'un programme.":"Aucun programme minoré au-delà de ses crédits."],
+    ["ok","Transferts internes à la mission : les autres missions ne sont pas proposées."],
+  ].concat(anyOblig?[["warn","Gage sur le programme 109 (dépenses obligatoires)."]]:[]).map(([c,t])=>`<li><span class="dot ${c}"></span><span>${t}</span></li>`).join("");
+}
+
+function fit(){const a=$("#expose");a.style.height="auto";a.style.height=Math.max(118,a.scrollHeight+4)+"px"}
+function undoToast(msg,fn){
+  $$(".toast").forEach(e=>e.remove());
+  const t=document.createElement("div");t.className="toast utoast";t.setAttribute("role","status");
+  t.innerHTML=`<span>${esc(msg)}</span><button>Annuler</button>`;
+  t.querySelector("button").onclick=()=>{fn();t.remove()};
+  document.body.append(t);setTimeout(()=>t.remove(),6000);
+}
+
+document.addEventListener("click",e=>{
+  if(e.target.closest("#add")){const t={id:seq++,to:null,from:null,cp:0,ae:0,split:false};T.push(t);fresh=t.id;render();$(`.tr[data-id="${t.id}"] select`)?.focus();return}
+  const d=e.target.closest("[data-del]");
+  if(d){const id=+d.dataset.del,i=T.findIndex(t=>t.id===id),t=T[i];T.splice(i,1);render();undoToast(`Transfert ${i+1} supprimé.`,()=>{T.splice(i,0,t);render()});return}
+  const g=e.target.closest("[data-go]");
+  if(g){const row=$(`.tr[data-id="${g.dataset.go}"]`);row.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth",block:"center"});(row.querySelector("select.empty,input:invalid")||row.querySelector("input,select")).focus({preventScroll:true});return}
+  if(e.target.closest("#regen")){exposeEdited=false;render();return}
+  if(e.target.closest("#copy")){
+    const txt=$("#disp").textContent+"\n\n"+$$("#tables table").map(tb=>[...tb.rows].map(r=>[...r.cells].map(c=>c.textContent).join("\t")).join("\n")).join("\n\n")+"\n\nExposé sommaire\n"+$("#expose").value;
+    navigator.clipboard?.writeText(txt).then(()=>toast("Texte de l'amendement copié."),()=>toast("Copie refusée : sélectionnez le texte à la main."));
+  }
+});
+document.addEventListener("change",e=>{
+  const el=e.target.closest("[data-f]"); if(!el) return;
+  const t=T.find(t=>t.id===+el.closest(".tr").dataset.id), f=el.dataset.f;
+  if(f==="split"){t.split=el.checked;t.ae=t.cp}
+  else if(f==="to"||f==="from") t[f]=el.value?+el.value:null;
+  else t[f]=Math.max(0,Math.round(+el.value||0));
+  if(f==="cp"&&!t.split) t.ae=t.cp;
+  const focusSel=`.tr[data-id="${t.id}"] [data-f="${f}"]`;
+  render(); $(focusSel)?.focus();
+});
+$("#expose").addEventListener("input",()=>{fit();exposeEdited=true;$("#regen").hidden=false;$("#exph").textContent="Exposé modifié à la main : il ne suit plus les transferts."});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")$$(".toast").forEach(t=>t.remove())});
+render();
+</script>

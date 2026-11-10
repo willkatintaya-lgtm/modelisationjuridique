@@ -1,0 +1,269 @@
+<title>Dossier de frais · structure</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+
+<style>
+/* Angle « structure » : le dossier est organisé par ce qu'il y a à faire (rembourser, joindre, expliquer, compléter),
+   pas par statut. Trois objets nommés une fois pour toutes : opération (ligne du compte), pièce (justificatif), règle. */
+.top{display:flex;justify-content:space-between;gap:12px 24px;align-items:flex-end;flex-wrap:wrap}
+.state{min-width:220px;flex:0 1 280px;font-size:12.5px;color:var(--muted)}
+.state b{color:var(--fg);font-weight:500}
+.bar{height:6px;border-radius:3px;background:var(--s2);overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--ok);transition:width .4s var(--ease)}
+nav.toc{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 16px}
+nav.toc a{text-decoration:none}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:22px;align-items:start}
+.gh{display:flex;align-items:baseline;gap:6px 10px;margin:22px 2px 8px;flex-wrap:wrap}
+.gh:first-child{margin-top:0}
+.gh h2{font:600 14px/1.4 var(--f);color:var(--fg);margin:0}
+.gh .n{color:var(--dim);font-size:12.5px}
+.gh p{margin:0;color:var(--muted);font-size:12.5px;flex-basis:100%}
+.task{padding:12px 14px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 14px;animation:fade .25s var(--ease)}
+.task+.task{border-top:1px solid var(--line)}
+.task b{color:var(--fg);font-weight:500}
+.task .meta{color:var(--dim);font-size:12px}
+.task .amt{color:var(--fg);text-align:right}
+.task .do{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:12.5px;color:var(--muted);margin-top:8px}
+.task .do .why{flex-basis:100%;line-height:1.55}
+.task .do select,.task .do input{min-width:0;flex:1 1 200px;max-width:340px}
+.task .err{flex-basis:100%;color:#f2a7a9;font-size:12.5px}
+.match{color:#7fd3a8}
+.empty{padding:14px;color:var(--muted);font-size:13px}
+.empty b{color:var(--ok);font-weight:500}
+.side{display:grid;gap:14px;position:sticky;top:16px}
+.card{padding:14px 16px}
+.card h2{margin:0 0 4px;font:600 13.5px/1.4 var(--f);color:var(--fg)}
+.card p{margin:0 0 8px;font-size:12.5px;color:var(--muted)}
+.big{font-size:22px;font-weight:600;color:var(--fg);letter-spacing:-.01em}
+.calc{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;font-size:12.5px;color:var(--muted);margin:8px 0}
+.calc span:nth-child(even){text-align:right;color:var(--text)}
+svg.cv{display:block;width:100%;height:110px}
+label.f{display:block;font-size:12px;color:var(--muted);margin:8px 0 4px}
+.card textarea{width:100%;min-height:56px;resize:vertical}
+.card input[type=text]{width:100%}
+.ans{margin-top:10px;font-size:12.5px;line-height:1.55;color:var(--text);display:grid;grid-template-columns:12px minmax(0,1fr);gap:8px}
+.ans .dot{margin-top:6px}
+.ans small{display:block;color:var(--muted)}
+.inbox{list-style:none;margin:0;padding:0}
+.inbox li{padding:8px 0;border-top:1px solid var(--line);font-size:12.5px;display:grid;gap:4px}
+.inbox li:first-child{border-top:0}
+.inbox b{color:var(--text);font-weight:500}
+.inbox small{color:var(--dim)}
+.inbox .row{display:flex;gap:6px}
+.inbox .row input{flex:1;min-width:0}
+details.mo{border-top:1px solid var(--line)}
+details.mo:first-of-type{border-top:0}
+details.mo summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;padding:11px 14px;color:var(--fg);font-weight:500}
+details.mo summary::-webkit-details-marker{display:none}
+details.mo summary span:last-child{color:var(--muted);font-weight:400}
+
+.op{display:grid;grid-template-columns:48px minmax(0,1fr) auto 86px;gap:10px;padding:7px 14px;font-size:12.5px;align-items:center}
+.op .d{color:var(--dim)}
+.op .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text)}
+.op .s{color:var(--muted);display:flex;align-items:center;gap:6px;white-space:nowrap}
+.op .a{text-align:right;color:var(--fg)}
+.op .note{grid-column:2/-1;color:var(--dim);font-size:12px;margin-top:-4px}
+.utoast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:7px 8px 7px 14px;border-radius:8px;font-size:13px;z-index:30;width:max-content;max-width:calc(100vw - 32px);display:flex;gap:12px;align-items:center;animation:rise .2s var(--ease)}
+@keyframes fade{from{opacity:0}}
+@media (max-width:900px){.layout{grid-template-columns:minmax(0,1fr)}.side{position:static}}
+@media (max-width:520px){.op{grid-template-columns:44px minmax(0,1fr) 78px}.op .s{grid-column:2}.op .a{grid-row:1;grid-column:3}}
+</style>
+
+<div class="wrap">
+  <div class="ctx">Avance de frais de mandat · exercice 2026 · compte dédié au 10 novembre (montants fictifs)</div>
+  <div class="top">
+    <div><h1>Dossier de frais de mandat</h1><p class="lead" id="lead" style="margin-bottom:0"></p></div>
+    <div class="state" id="state"></div>
+  </div>
+  <nav class="toc" aria-label="Sections" style="margin-top:16px">
+    <a class="chip" href="#todo">À régulariser</a><a class="chip" href="#budget">Solde et dépenses à venir</a><a class="chip" href="#releve">Relevé complet</a>
+  </nav>
+  <div class="layout">
+    <main>
+      <section id="todo" aria-label="À régulariser"></section>
+      <div class="gh" id="releve"><h2>Relevé complet</h2><span class="n">octobre et novembre</span></div>
+      <section class="panel" id="rel"></section>
+    </main>
+    <aside class="side" id="budget">
+      <section class="panel card"><h2>Solde prévu au 31 décembre</h2><div class="big" id="sol"></div><div class="calc" id="calc"></div><svg class="cv" id="cv" viewBox="0 0 320 110" preserveAspectRatio="none" role="img" aria-label="Dépenses cumulées depuis janvier et projection jusqu'en décembre"></svg></section>
+      <section class="panel card"><h2>Avant de dépenser</h2>
+        <label class="f" for="dep">Dépense envisagée</label><textarea id="dep">Mise à jour de ma page Wikipédia par un prestataire</textarea>
+        <label class="f" for="mt">Montant estimé, en euros (facultatif)</label><input type="text" id="mt" inputmode="decimal" placeholder="par exemple 450">
+        <div id="ans" aria-live="polite"></div></section>
+      <section class="panel card"><h2>Pièces reçues, pas encore rattachées</h2><p>Déposées dans le dossier partagé. Une pièce est rattachée depuis la liste « À régulariser ».</p><ul class="inbox" id="inbox"></ul></section>
+    </aside>
+  </div>
+</div>
+
+<script>
+const AN=70800, SPENT_BEFORE=48210;
+const L=[
+ {d:"03/10",t:"Loyer de la permanence",r:"Permanence",a:1150,j:"bail-oct.pdf"},
+ {d:"05/10",t:"SNCF · Paris – Villeneuve",r:"Déplacements",a:86.4,j:"sncf-0510.pdf"},
+ {d:"08/10",t:"Imprimerie du Centre",r:"Communication",a:612,j:null},
+ {d:"12/10",t:"Orange Pro",r:"Télécommunications",a:74.99,j:"orange-oct.pdf"},
+ {d:"15/10",t:"Restaurant Le Relais",r:"Réception",a:148,j:null},
+ {d:"21/10",t:"Meta Platforms · publicité",r:"Communication",a:300,j:"meta-oct.pdf",watch:"Contenu sponsorisé : éligible hors période pré-électorale. Prochaine élection dans plus de six mois."},
+ {d:"28/10",t:"Cotisation association des élus",r:"Divers",a:250,j:"asso.pdf",need:"statuts"},
+ {d:"03/11",t:"Loyer de la permanence",r:"Permanence",a:1150,j:null},
+ {d:"04/11",t:"Fnac · ordinateur portable",r:"Équipement",a:1299,j:"fnac-1104.pdf",diff:1249},
+ {d:"06/11",t:"SNCF · Villeneuve – Paris",r:"Déplacements",a:86.4,j:null},
+ {d:"07/11",t:"Cagnotte · soutien aux sinistrés",r:"Divers",a:200,j:null,refund:true},
+];
+const FILES=[{f:"imprimerie-1008.pdf",a:612,d:"08/10"},{f:"facture-relais-1510.pdf",a:148,d:"15/10"},{f:"bail-nov.pdf",a:1150,d:"03/11"},{f:"sncf-0611.pdf",a:86.4,d:"06/11"},{f:"scan-0947.jpg",a:null,d:"—"}];
+const RECUR=[["loyer",1150],["téléphone",75],["déplacements",480]];
+const RULES=[
+ [/wikip|e-réputation|référencement/i,"err","Non éligible","Le déontologue proscrit la rémunération d'une modification de page Wikipédia ou d'une gestion d'e-réputation. Ne l'engagez pas sur le compte dédié."],
+ [/cagnotte|don |dons|soutien financier/i,"err","Non éligible","Un don n'est pas une dépense liée au mandat. Faites-le sur vos deniers personnels."],
+ [/sponsoris|publicité|boost/i,"warn","Éligible, sauf en période pré-électorale","Interdit dans les six mois précédant une élection à laquelle vous êtes candidate."],
+ [/vêtement|costume|coiffeur/i,"err","Non éligible","Dépense personnelle."],
+ [/restaurant|repas|déjeuner|dîner/i,"warn","Éligible si lié au mandat","Conservez la liste des convives et l'objet de la rencontre avec la facture."],
+ [/loyer|permanence|bureau|ordinateur|téléphone|train|sncf|imprim/i,"ok","Éligible","Demandez une facture au nom de la députée."],
+];
+const eur=v=>nf(v,v%1?2:0)+" €";
+const errs={};
+// État d'une opération : ce qu'il reste à faire, ou rien.
+const todo=l=>l.refund&&!l.repaid?"refund":l.refund?null:!l.j?"attach":l.diff&&!l.why?"explain":l.need&&!l.needOk?"complete":null;
+const free=()=>FILES.filter(F=>!L.some(x=>x.j===F.f));
+const score=(F,l)=>(F.a===l.a?2:0)+(F.d===l.d?1:0);
+const GROUPS=[
+ ["refund","Rembourser","Dépenses non éligibles : à reverser sur le compte dédié depuis vos deniers personnels."],
+ ["attach","Joindre la pièce","Opérations sans justificatif. Une pièce reçue est proposée quand le montant correspond."],
+ ["explain","Expliquer un écart","Le montant de la pièce ne correspond pas à celui du relevé."],
+ ["complete","Compléter","La pièce est là, mais une règle demande un document de plus."],
+];
+function render(){
+  const T=L.map(todo), done=T.filter(x=>!x).length, open=L.length-done;
+  const repaid=L.filter(l=>l.refund&&l.repaid).reduce((s,l)=>s+l.a,0);
+  const spentAll=SPENT_BEFORE+L.reduce((s,l)=>s+l.a,0), spent=spentAll-repaid, rec=RECUR.reduce((s,r)=>s+r[1],0), months=1.7, proj=spent+rec*months, sol=AN-proj;
+  window.SOL=sol;
+  $("#lead").innerHTML=open?`${open} point${open>1?"s":""} à régulariser pour un dossier présentable en cas de contrôle. <span>Solde prévu au 31 décembre : ${eur(Math.round(sol))}.</span>`:`Le dossier d'octobre et novembre est en ordre. <span>Solde prévu au 31 décembre : ${eur(Math.round(sol))}.</span>`;
+  $("#state").innerHTML=`<b>${done} opérations sur ${L.length}</b> en ordre<div class="bar"><i style="width:${Math.round(100*done/L.length)}%"></i></div>`;
+  // À régulariser, par action
+  const fr=free();
+  $("#todo").innerHTML=open?GROUPS.map(([k,h,p])=>{
+    const it=L.map((l,i)=>({l,i})).filter(x=>T[x.i]===k); if(!it.length)return"";
+    return `<div class="gh"><h2>${h}</h2><span class="n">${it.length}</span><p>${p}</p></div><div class="panel">${it.map(({l,i})=>task(k,l,i,fr)).join("")}</div>`}).join("")
+    :`<div class="gh"><h2>À régulariser</h2></div><div class="panel empty"><b>Rien à régulariser.</b> Chaque opération a sa pièce et un montant concordant.</div>`;
+  // Relevé, par mois
+  const mo=[["10","Octobre"],["11","Novembre"]];
+  $("#rel").innerHTML=mo.map(([m,n])=>{const ls=L.map((l,i)=>({l,i})).filter(x=>x.l.d.endsWith("/"+m));const s=ls.reduce((a,x)=>a+x.l.a,0);
+    return `<details class="mo" ${m==="11"?"open":""}><summary><span>${n} · ${ls.length} opérations</span><span>${eur(s)}</span></summary>${ls.map(({l,i})=>{const t=T[i];
+      const st=!t?(l.refund?["ok","Remboursée"]:["ok",l.j?"Justifiée":""]):t==="refund"?["err","À rembourser"]:t==="attach"?["err","Sans pièce"]:t==="explain"?["warn","Écart"]:["warn","À compléter"];
+      return `<div class="op"><span class="d">${l.d}</span><span class="t" title="${esc(l.t)}">${esc(l.t)}</span><span class="s"><span class="dot ${st[0]}"></span>${st[1]}</span><span class="a">${eur(l.a)}</span>${l.watch?`<span class="note">${l.watch}</span>`:""}${l.why?`<span class="note">Écart expliqué : ${esc(l.why)}</span>`:""}</div>`}).join("")}</details>`}).join("");
+  // Budget
+  $("#sol").textContent=eur(Math.round(sol));
+  $("#calc").innerHTML=`<span>Dotation annuelle</span><span>${eur(AN)}</span><span>Déjà dépensé${repaid?` (remboursements déduits)`:""}</span><span>− ${eur(Math.round(spent))}</span><span>Prévu d'ici décembre : ${RECUR.map(r=>r[0]).join(", ")}</span><span>− ${eur(Math.round(rec*months))}</span>`;
+  const X=m=>10+m*(300/12), Yv=v=>100-90*v/AN;
+  const pts=[[0,0],[3,15600],[6,32100],[9,SPENT_BEFORE],[10.3,spent]], pj=[[10.3,spent],[12,proj]];
+  const path=a=>a.map(([m,v],k)=>`${k?"L":"M"}${X(m)},${Yv(v)}`).join("");
+  $("#cv").innerHTML=`<line x1="10" x2="310" y1="${Yv(AN)}" y2="${Yv(AN)}" stroke="var(--line2)" stroke-dasharray="3 3"/><text x="310" y="${Yv(AN)-3}" text-anchor="end" font-size="9" fill="var(--dim)">dotation</text>
+   <path d="${path(pts)}" fill="none" stroke="var(--accent)" stroke-width="2"/><path d="${path(pj)}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-dasharray="4 3" opacity=".7"/>
+   <circle cx="${X(12)}" cy="${Yv(proj)}" r="3" fill="var(--accent)"/><text x="12" y="108" font-size="9" fill="var(--dim)">janv.</text><text x="${X(10.3)}" y="108" text-anchor="middle" font-size="9" fill="var(--dim)">auj.</text><text x="308" y="108" text-anchor="end" font-size="9" fill="var(--dim)">déc.</text>`;
+  // Pièces reçues
+  $("#inbox").innerHTML=fr.length?fr.map(F=>{const cand=L.filter(l=>!l.j&&!l.refund).find(l=>F.a!=null&&score(F,l)>=2);
+    return `<li><span><b>${F.f}</b> <small>· ${F.d} · ${F.a!=null?eur(F.a):"montant illisible"}</small></span>${F.a==null?`<small>Saisissez le montant lu sur la pièce pour qu'elle soit proposée.</small><span class="row"><input type="text" inputmode="decimal" id="sc" aria-label="Montant lu sur ${F.f}" placeholder="montant"><button class="ghost" data-scan="${F.f}">Valider</button></span>${errs.scan?`<small style="color:#f2a7a9">${errs.scan}</small>`:""}`:`<small>${cand?`Proposée pour : ${esc(cand.t)} (${cand.d})`:"Aucune opération ne correspond à ce montant."}</small>`}</li>`}).join(""):`<li><small>Toutes les pièces reçues sont rattachées.</small></li>`;
+  check();
+}
+function task(k,l,i,fr){
+  const head=`<span><b>${esc(l.t)}</b> <span class="meta">· ${l.d} · ${l.r}</span></span><span class="amt">${eur(l.a)}</span>`;
+  let body="";
+  if(k==="refund") body=`<span class="why">Un don par le compte de l'avance n'est pas une dépense de mandat.</span><button class="btn" data-repay="${i}">J'ai reversé ${eur(l.a)}</button>`;
+  if(k==="attach"){
+    const c=fr.map(F=>({F,s:score(F,l)})).sort((a,b)=>b.s-a.s), best=c[0]&&c[0].s>=2?c[0]:null;
+    body=best?`<span class="why">Pièce proposée : <b>${best.F.f}</b> · <span class="match">${best.s>=3?"même date et même montant":"même montant"}</span></span><button class="btn pri" data-att="${i}" data-file="${best.F.f}">Rattacher</button><button class="ghost" data-other="${i}">Une autre pièce</button>`
+      :`<span class="why">Aucune pièce reçue ne correspond à ${eur(l.a)}. Demandez la facture au fournisseur, ou choisissez une pièce reçue.</span>`;
+    if(!best||l.other) body+=fr.length?`<select id="sel${i}" aria-label="Choisir une pièce pour ${esc(l.t)}"><option value="">Choisir une pièce reçue…</option>${c.map(({F})=>`<option value="${F.f}">${F.f} · ${F.a!=null?eur(F.a):"montant illisible"}</option>`).join("")}</select><button class="btn" data-attsel="${i}">Rattacher</button>`:"";
+    if(errs[i]) body+=`<span class="err">${errs[i]}</span>`;
+  }
+  if(k==="explain") body=`<span class="why">Relevé : ${eur(l.a)}, facture : ${eur(l.diff)}, soit ${eur(l.a-l.diff)} d'écart. Joignez le bon de commande, ou notez la raison (frais de livraison, acompte…).</span><input type="text" id="why${i}" aria-label="Raison de l'écart" placeholder="Raison de l'écart"><button class="btn" data-why="${i}">Enregistrer</button>${errs[i]?`<span class="err">${errs[i]}</span>`:""}`;
+  if(k==="complete") body=`<span class="why">Cotisation à une association d'élus : éligible si l'association n'est pas un parti politique. Les statuts le prouvent.</span><button class="btn" data-need="${i}">Joindre statuts-association.pdf</button>`;
+  return `<div class="task">${head}<div class="do">${body}</div></div>`;
+}
+function check(){
+  const v=$("#dep").value, mtRaw=$("#mt").value.trim(), m=parseFloat(mtRaw.replace(/\s/g,"").replace(",","."));
+  const r=RULES.find(([re])=>re.test(v)); let h="";
+  if(r) h=`<div class="ans"><span class="dot ${r[1]}"></span><span>${r[2]}<small>${r[3]}</small></span></div>`;
+  else if(v.trim()) h=`<div class="ans"><span class="dot"></span><span>Aucune règle ne s'applique à cette description<small>Précisez la nature de la dépense, ou saisissez le déontologue avant de l'engager.</small></span></div>`;
+  if(mtRaw&&isNaN(m)) h+=`<div class="ans"><span class="dot err"></span><span>Montant non reconnu<small>Saisissez un nombre, par exemple 450 ou 450,50.</small></span></div>`;
+  else if(mtRaw&&(!r||r[1]!=="err")){const after=window.SOL-m;
+    h+=after<0?`<div class="ans"><span class="dot err"></span><span>Dépasse le solde prévu de ${eur(Math.round(-after))}<small>Reportez-la à l'an prochain, ou réduisez-la : le dépassement resterait à votre charge.</small></span></div>`
+      :`<div class="ans"><span class="dot ok"></span><span>Solde prévu après cette dépense : ${eur(Math.round(after))}</span></div>`;}
+  $("#ans").innerHTML=h;
+}
+let tt;
+function utoast(msg,undo){$$(".utoast,.toast").forEach(e=>e.remove());clearTimeout(tt);const t=document.createElement("div");t.className="utoast";t.setAttribute("role","status");t.innerHTML=`<span>${msg}</span>${undo?'<button class="ghost">Annuler</button>':""}`;
+  if(undo)t.querySelector("button").onclick=()=>{undo();t.remove();render()};document.body.append(t);tt=setTimeout(()=>t.remove(),5000)}
+document.addEventListener("click",e=>{
+  const g=k=>e.target.closest(`[data-${k}]`);let b;
+  if(b=g("att")){const l=L[+b.dataset.att];attach(l,b.dataset.file)}
+  else if(b=g("other")){L[+b.dataset.other].other=true;render();$("#sel"+b.dataset.other)?.focus()}
+  else if(b=g("attsel")){const i=+b.dataset.attsel,v=$("#sel"+i).value;if(!v){errs[i]="Choisissez d'abord une pièce dans la liste.";render();return}attach(L[i],v)}
+  else if(b=g("repay")){const l=L[+b.dataset.repay];l.repaid=true;render();utoast(`Reversement de ${eur(l.a)} noté : le solde prévu remonte d'autant.`,()=>l.repaid=false)}
+  else if(b=g("why")){const i=+b.dataset.why,v=$("#why"+i).value.trim();if(!v){errs[i]="Écrivez la raison de l'écart, par exemple « frais de livraison ».";render();$("#why"+i).focus();return}delete errs[i];L[i].why=v;render();utoast("Écart expliqué.",()=>delete L[i].why)}
+  else if(b=g("need")){const l=L[+b.dataset.need];l.needOk=true;render();utoast("Statuts joints à la cotisation.",()=>l.needOk=false)}
+  else if(b=g("scan")){const F=FILES.find(x=>x.f===b.dataset.scan),v=parseFloat(($("#sc").value||"").replace(",","."));if(isNaN(v)){errs.scan="Saisissez un nombre, par exemple 86,40.";render();return}delete errs.scan;F.a=v;render();utoast(`Montant de ${F.f} enregistré : ${eur(v)}.`,()=>F.a=null)}
+});
+function attach(l,file){const i=L.indexOf(l),F=FILES.find(x=>x.f===file);delete errs[i];
+  if(F.a==null){errs[i]=`Le montant de ${F.f} est illisible : saisissez-le d'abord dans « Pièces reçues ».`;render();return}
+  l.j=F.f;l.other=false;const hadDiff=F.a!==l.a;if(hadDiff)l.diff=F.a;render();
+  utoast(hadDiff?`${F.f} rattachée, mais son montant diffère : expliquez l'écart.`:`${F.f} rattachée à « ${esc(l.t)} ».`,()=>{l.j=null;delete l.diff})}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){const o=L.find(l=>l.other);if(o){o.other=false;render()}$$(".utoast").forEach(t=>t.remove())}});
+$("#dep").addEventListener("input",check);$("#mt").addEventListener("input",check);
+render();
+</script>

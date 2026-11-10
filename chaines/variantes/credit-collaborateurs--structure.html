@@ -1,0 +1,212 @@
+<title>Crédit collaborateurs · structure</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+
+<style>
+/* Angle « structure » : les changements sont rangés sous la personne qu'ils concernent ;
+   le verdict (règle annuelle) reste visible en haut pendant qu'on coche ; le graphique devient la preuve, à côté. */
+.verdict{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);margin-top:14px;padding-block:12px 14px;border-bottom:1px solid var(--line)}
+.v1{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;color:var(--fg);font-size:18px;font-weight:600;letter-spacing:-.01em}
+.v1 .dot{align-self:center}
+.v2{margin-top:2px;color:var(--muted);font-size:13px}
+.fix{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px;font-size:13px;color:var(--text)}
+.layout{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:22px;align-items:start;margin-top:6px}
+.layout>section{min-width:0}
+.right{position:sticky;top:var(--vh,120px)}
+.grp{padding:12px 14px;margin-bottom:10px}
+.who{display:grid;grid-template-columns:10px minmax(0,1fr) auto;gap:10px;align-items:baseline}
+.who i{width:10px;height:10px;border-radius:2px;align-self:center}
+.who b{color:var(--fg);font-weight:500}
+.who small,.chg small{display:block;color:var(--dim);font-size:12px}
+.who .amt{text-align:right;color:var(--text);font-size:13px;white-space:nowrap}
+.who .amt small{text-align:right}
+.chg{display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:8px;align-items:start;margin:10px 0 0 20px;padding:9px 10px;border:1px solid var(--line);border-radius:8px;cursor:pointer;font-size:13px;transition:border-color .2s,background .2s}
+.chg:hover{border-color:var(--line2)}
+.chg.on{border-color:var(--accent);background:var(--lit)}
+.chg input{margin:3px 0 0;accent-color:var(--accent);width:15px;height:15px}
+.chg .c{color:var(--muted);font-size:12.5px;white-space:nowrap}
+.chg .warn{color:var(--warn)}
+.chart{padding:14px 14px 12px}
+.bars{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:5px;align-items:end;height:200px;position:relative;margin-top:12px}
+.col{display:flex;flex-direction:column-reverse;height:100%;position:relative;border:0;padding:0;background:none;cursor:pointer;border-radius:3px}
+.col i{display:block;transition:height .35s var(--ease)}
+.col i:last-child{border-radius:3px 3px 0 0}
+.col:hover,.col.sel{background:rgba(255,255,255,.04)}
+.col.sel{outline:1px solid var(--line2);outline-offset:2px}
+.lim{position:absolute;left:0;right:0;border-top:1px dashed var(--muted);pointer-events:none}
+.key{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted)}
+.key i{width:18px;border-top:1px dashed var(--muted)}
+.mo{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:5px;margin-top:6px;font-size:11px;color:var(--dim);text-align:center}
+.mo .over{color:#f2a7a9}
+.det{margin-top:12px;padding-top:10px;border-top:1px solid var(--line);font-size:13px}
+.det .row{display:flex;justify-content:space-between;gap:10px;padding:2px 0}
+.det .row span:first-child{display:flex;gap:8px;align-items:center;min-width:0}
+.det .row i{width:8px;height:8px;border-radius:2px;flex:none}
+.det b{color:var(--fg);font-weight:500}
+.note{margin:10px 2px 0;font-size:12.5px;color:var(--muted)}
+.hyp{margin:14px 2px 0;padding:0;list-style:none;font-size:12px;color:var(--dim);display:grid;gap:4px}
+h2{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase;font-weight:500}
+@media (max-width:900px){.layout{grid-template-columns:minmax(0,1fr)}.right{position:static}}
+@media (max-width:480px){.bars,.mo{gap:2px}.bars{height:170px}.mo{font-size:9.5px}.chg{margin-left:0}.v1{font-size:16.5px}}
+</style>
+
+<div class="wrap">
+  <div class="ctx">Gestion du bureau · exercice 2027 · montants fictifs, salaires bruts</div>
+  <h1>Crédit collaborateurs 2027</h1>
+
+  <div class="verdict" id="verdict" aria-live="polite"></div>
+
+  <div class="layout">
+    <section aria-labelledby="h-eq">
+      <h2 id="h-eq">Équipe et changements envisagés</h2>
+      <div id="groups"></div>
+    </section>
+    <section class="right" aria-labelledby="h-mo">
+      <h2 id="h-mo">Mois par mois</h2>
+      <div class="panel chart">
+        <div class="key"><i></i>moyenne mensuelle du crédit · 11 100 €</div>
+        <div class="bars" id="bars" role="group" aria-label="Masse salariale par mois ; choisir un mois pour le détail"></div>
+        <div class="mo" id="mo" aria-hidden="true"></div>
+        <div class="det" id="det"></div>
+      </div>
+      <p class="note" id="peaks"></p>
+      <ul class="hyp">
+        <li>Treizième mois versé pour moitié en juin et pour moitié en décembre ; le renfort en CDD n'y a pas droit.</li>
+        <li>La prime n'entre pas dans le calcul du treizième mois.</li>
+        <li>Crédit apprécié sur l'année ; les règles de lissage et de report sont à vérifier pour 2027.</li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+<script>
+const CREDIT=11100;
+const MOIS=["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."];
+const MOISL=["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+const TEAM=[
+ {k:"a",n:"Attachée parlementaire",w:"Paris · temps plein",sal:3650,c:"#6e7bf2"},
+ {k:"b",n:"Collaborateur en circonscription",w:"temps plein",sal:2780,c:"#2bb3b1"},
+ {k:"c",n:"Assistante en circonscription",w:"mi-temps",sal:1420,c:"#c07a00"},
+];
+const SC=[
+ {k:"aug",who:"a",t:"Augmentation de 6 %",s:"au 1er janvier",on:false,apply:(m,p)=>p.k==="a"?p.sal*.06:0},
+ {k:"rec",who:"new",t:"Recruter un renfort à mi-temps (CDD)",s:"du 1er mars au 30 juin, pour le projet de loi de finances rectificative · 1 550 € par mois",on:true,extra:{k:"d",n:"Renfort (CDD)",w:"mi-temps · mars à juin",sal:1550,c:"#d8699a",from:2,to:5}},
+ {k:"tps",who:"c",t:"Passage à temps plein",s:"à partir du 1er septembre",on:false,apply:(m,p)=>p.k==="c"&&m>=8?p.sal:0},
+ {k:"prime",who:"all",t:"Prime exceptionnelle de fin d'année",s:"1 000 € par collaborateur, en décembre",on:false,apply:(m,p)=>m===11&&p.k!=="d"?1000:0},
+];
+const sc=k=>SC.find(s=>s.k===k);
+function month(m){
+  const team=[...TEAM]; if(sc("rec").on) team.push(sc("rec").extra);
+  return team.map(p=>{
+    if(p.from!=null&&(m<p.from||m>p.to)) return {p,v:0};
+    let v=p.sal; for(const s of SC) if(s.on&&s.apply) v+=s.apply(m,p);
+    if((m===5||m===11)&&p.from==null) v+=(v-(m===11&&sc("prime").on?1000:0))/2;
+    return {p,v};
+  });
+}
+function calc(){const M=MOIS.map((_,m)=>month(m)),tot=M.map(x=>x.reduce((s,y)=>s+y.v,0));return {M,tot,year:tot.reduce((a,b)=>a+b,0)}}
+function as(s,on,fn){const w=s.on;s.on=on;const r=fn();s.on=w;return r}
+const cap=CREDIT*12, R=n=>nf(Math.round(n));
+function effect(s){ // coût annuel du seul changement et mois qu'il fait passer au-dessus de la moyenne
+  const a=as(s,false,calc), b=as(s,true,calc);
+  return {cost:b.year-a.year, peaks:b.tot.map((v,i)=>v>CREDIT&&a.tot[i]<=CREDIT?i:-1).filter(i=>i>=0)};
+}
+const list=a=>a.length<2?a.join(""):a.slice(0,-1).join(", ")+" et "+a.at(-1);
+let sel=5;
+
+function render(){
+  const {M,tot,year}=calc(), over=year>cap, on=SC.filter(s=>s.on);
+  // verdict
+  let fix="";
+  if(over){
+    const need=year-cap, alone=on.map(s=>[s,effect(s).cost]).filter(([,c])=>c>=need);
+    fix=`<div class="fix">${alone.length?`Pour revenir sous le crédit, il suffit de retirer :`+alone.map(([s,c])=>`<button class="btn" data-off="${s.k}">${esc(s.t)} (−${R(c)} €)</button>`).join(""):`Aucun changement ne suffit à lui seul : retirez-en plusieurs, en commençant par le plus coûteux.`}</div>`;
+  }
+  $("#verdict").innerHTML=`<div class="v1"><span class="dot ${over?"err":"ok"}"></span>${over?`Dépassement de ${R(year-cap)} € sur l'année`:`Marge de ${R(cap-year)} € sur l'année`}</div>
+  <div class="v2">Masse salariale ${R(year)} € pour un crédit annuel de ${R(cap)} € · ${on.length?`${on.length} changement${on.length>1?"s":""} retenu${on.length>1?"s":""}`:"aucun changement retenu"}</div>${fix}`;
+  document.documentElement.style.setProperty("--vh",($("#verdict").offsetHeight+12)+"px");
+
+  // groupes : une personne et ses changements
+  const yearOf=k=>M.reduce((t,x)=>t+(x.find(y=>y.p.k===k)?.v||0),0);
+  const chg=s=>{const e=effect(s);return `<label class="chg ${s.on?"on":""}"><input type="checkbox" data-k="${s.k}" ${s.on?"checked":""}><span>${esc(s.t)}<small>${esc(s.s)}</small>${e.peaks.length?`<small class="warn">${s.on?"Fait":"Ferait"} passer ${list(e.peaks.map(i=>MOISL[i]))} au-dessus de la moyenne mensuelle</small>`:""}</span><span class="c">+${R(e.cost)} €/an</span></label>`};
+  const person=p=>`<div class="panel grp"><div class="who"><i style="background:${p.c}"></i><span><b>${esc(p.n)}</b><small>${esc(p.w)}</small></span><span class="amt">${nf(p.sal)} €/mois<small>${R(yearOf(p.k))} € en 2027</small></span></div>${SC.filter(s=>s.who===p.k).map(chg).join("")}</div>`;
+  const rec=sc("rec");
+  $("#groups").innerHTML=TEAM.map(person).join("")+
+   `<div class="panel grp"><div class="who"><i style="background:${rec.on?rec.extra.c:"var(--line2)"}"></i><span><b>Poste à créer</b><small>${rec.on?"retenu":"non retenu"}</small></span><span class="amt">${rec.on?`${R(yearOf("d"))} € en 2027`:""}</span></div>${chg(rec)}</div>`+
+   `<div class="panel grp"><div class="who"><i style="background:var(--line2)"></i><span><b>Toute l'équipe</b><small>changement commun aux collaborateurs</small></span><span class="amt"></span></div>${chg(sc("prime"))}</div>`;
+
+  // graphique
+  const mx=Math.max(CREDIT*1.25,...tot);
+  $("#bars").innerHTML=M.map((x,i)=>`<button class="col ${i===sel?"sel":""}" data-m="${i}" aria-pressed="${i===sel}" aria-label="${MOISL[i]} : ${R(tot[i])} €">${x.filter(y=>y.v).map(y=>`<i style="height:${100*y.v/mx}%;background:${y.p.c}"></i>`).join("")}</button>`).join("")+`<div class="lim" style="bottom:${100*CREDIT/mx}%"></div>`;
+  $("#mo").innerHTML=MOIS.map((m,i)=>`<span class="${tot[i]>CREDIT?"over":""}">${m}</span>`).join("");
+  const d=tot[sel]-CREDIT;
+  $("#det").innerHTML=`<div class="row"><b>${MOISL[sel][0].toUpperCase()+MOISL[sel].slice(1)}${sel===5||sel===11?" · demi-treizième mois":""}</b><b>${R(tot[sel])} €</b></div>`+
+    M[sel].filter(y=>y.v).map(y=>`<div class="row"><span><i style="background:${y.p.c}"></i>${esc(y.p.n)}</span><span>${R(y.v)} €</span></div>`).join("")+
+    `<div class="row" style="color:${d>0?"#f2a7a9":"var(--muted)"}"><span>${d>0?"Au-dessus de":"Sous"} la moyenne du crédit</span><span>${d>0?"+":"−"}${R(Math.abs(d))} €</span></div>`;
+  const pk=tot.map((v,i)=>[v,i]).filter(([v])=>v>CREDIT);
+  $("#peaks").textContent=pk.length?`${list(pk.map(([v,i])=>`${MOISL[i]} (+${R(v-CREDIT)} €)`)).replace(/^./,c=>c.toUpperCase())} ${pk.length>1?"dépassent":"dépasse"} la moyenne mensuelle. ${over?"":"La marge des autres mois les couvre si le crédit est bien apprécié sur l'année."}`:"Aucun mois ne dépasse la moyenne mensuelle du crédit.";
+}
+document.addEventListener("change",e=>{const i=e.target.closest("[data-k]");if(!i)return;sc(i.dataset.k).on=i.checked;render()});
+document.addEventListener("click",e=>{
+  const c=e.target.closest(".col"); if(c){sel=+c.dataset.m;render();$(`.col[data-m="${sel}"]`).focus();return}
+  const o=e.target.closest("[data-off]"); if(o){sc(o.dataset.off).on=false;render();toast("Changement retiré")}
+});
+$("#bars").addEventListener("keydown",e=>{const d={ArrowLeft:-1,ArrowRight:1}[e.key];if(!d)return;e.preventDefault();sel=(sel+d+12)%12;render();$(`.col[data-m="${sel}"]`).focus()});
+addEventListener("resize",()=>document.documentElement.style.setProperty("--vh",($("#verdict").offsetHeight+12)+"px"));
+render();
+</script>

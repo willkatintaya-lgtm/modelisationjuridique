@@ -1,0 +1,347 @@
+<title>Plan avant le scrutin</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+
+<style>
+/* Angle « parcours » : la tâche réelle n'est pas de consulter un calendrier mais de mettre ses activités en règle.
+   Quatre étapes sur une seule page ; une étape terminée se replie en une ligne de résumé, modifiable à tout moment.
+   États montrés : vide, partiel, en cours, erreur, périmé, terminé. */
+.wrap{max-width:820px}
+.lead2{margin:12px 0 18px;color:var(--muted);font-size:14px;max-width:62ch}
+.resume{display:flex;gap:10px 14px;align-items:center;flex-wrap:wrap;padding:12px 14px;margin-bottom:14px;border-color:var(--line2)}
+.resume p{margin:0;flex:1 1 260px;font-size:13px;color:var(--fg)}
+.step{margin-bottom:10px;overflow:hidden}
+.sh{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;cursor:default}
+.num{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:600;border:1px solid var(--line2);color:var(--muted);margin-top:1px}
+.step[data-st=done] .num{background:var(--ok);border-color:var(--ok);color:#06140d}
+.step[data-st=stale] .num,.step[data-st=partial] .num{background:var(--warn);border-color:var(--warn);color:#1a1205}
+.step[data-st=error] .num{background:var(--err);border-color:var(--err);color:#fff}
+.step[data-st=active] .num{border-color:var(--accent);color:var(--fg)}
+.sh .tt{flex:1;min-width:0}
+.sh h2{margin:0;font:500 14.5px/1.4 var(--f);color:var(--fg)}
+.sh .sum{margin:2px 0 0;font-size:12.5px;color:var(--muted);line-height:1.45}
+.sh .sum b{color:var(--text);font-weight:500}
+.sh .ghost{flex:none;min-height:32px}
+.step[data-st=locked] .sh{opacity:.45}
+.body{padding:0 16px 16px 52px;display:grid;gap:12px}
+.body>.slide{display:none}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.fld{display:grid;gap:5px}
+.fld>span{font-size:12.5px;color:var(--muted)}
+input[type=date]{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);min-height:40px}
+input[aria-invalid=true]{border-color:var(--err)}
+.msg{margin:0;font-size:12.5px;line-height:1.45}
+.msg.err{color:#f08a8d} .msg.warn{color:var(--warn)} .msg.ok{color:var(--muted)}
+/* inventaire */
+.inv{display:grid;border:1px solid var(--line);border-radius:9px}
+.it{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding:10px 12px}
+.it+.it{border-top:1px solid var(--line)}
+.it label.ck{display:flex;gap:10px;align-items:flex-start;flex:1 1 250px;min-width:0;cursor:pointer;color:var(--fg);font-size:13.5px;line-height:1.4}
+.it input[type=checkbox]{width:18px;height:18px;margin:1px 0 0;accent-color:var(--accent);flex:none}
+.it .when{display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--muted);flex-wrap:wrap}
+.it.off .when{display:none}
+.it .miss{color:var(--warn)}
+.it.flash{animation:flash 1.6s var(--ease)}
+@keyframes flash{0%,40%{background:var(--lit)}}
+.it select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 8px;min-height:40px}
+.empty{padding:16px;border:1px dashed var(--line2);border-radius:9px;color:var(--muted);font-size:13px;text-align:center}
+/* vérification */
+.sk{display:grid;gap:8px}
+.sk i{display:block;height:44px;border-radius:8px;background:linear-gradient(90deg,var(--s2) 0,#1d2025 40%,var(--s2) 80%);background-size:300% 100%;animation:shim 1.2s linear infinite}
+@keyframes shim{from{background-position:100% 0}to{background-position:-50% 0}}
+.res{display:grid;gap:6px}
+.rs{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;padding:10px 12px;border:1px solid var(--line);border-radius:9px;align-items:start}
+.rs .dot{margin-top:6px}
+.rs b{color:var(--fg);font-weight:500;font-size:13.5px}
+.rs p{grid-column:2;margin:0;font-size:12.5px;color:var(--muted);line-height:1.5}
+.rs .ref{color:var(--dim)}
+.res.stale{opacity:.5}
+.banner{display:flex;gap:10px 14px;align-items:center;flex-wrap:wrap;padding:10px 12px;border-radius:9px;font-size:13px;color:var(--fg);border:1px solid}
+.banner p{margin:0;flex:1 1 240px}
+.banner.warn{border-color:rgba(227,163,63,.45);background:rgba(227,163,63,.08)}
+.banner.err{border-color:rgba(229,72,77,.45);background:rgba(229,72,77,.08)}
+.banner.ok{border-color:rgba(70,179,126,.45);background:rgba(70,179,126,.08)}
+.banner .ghost{min-height:36px;padding:6px 12px;font-size:13px}
+.age{font-size:12px;color:var(--dim)}
+/* mesures */
+.ms{display:grid;gap:8px;padding:12px;border:1px solid var(--line);border-radius:9px}
+.ms .hd{display:flex;gap:10px;align-items:flex-start}
+.ms .hd .dot{margin-top:6px}
+.ms .hd div{flex:1;min-width:0}
+.ms b{color:var(--fg);font-weight:500;font-size:13.5px}
+.ms p{margin:2px 0 0;font-size:12.5px;color:var(--muted)}
+.ms .acts{display:flex;gap:8px;flex-wrap:wrap;padding-left:18px}
+.ms.done{border-color:rgba(70,179,126,.35)}
+.cf{display:grid;gap:8px;padding:10px 12px;margin-left:18px;border:1px solid rgba(229,72,77,.45);border-radius:8px;background:rgba(229,72,77,.06);font-size:13px;color:var(--fg)}
+.cf p{margin:0}
+.btn.danger{background:var(--err);border-color:var(--err);color:#fff}
+.btn.danger:hover:not(:disabled){background:#ee5d62}
+.ledger{padding:12px 14px;border:1px solid var(--line);border-radius:9px;display:grid;gap:4px;font-size:13px}
+.ledger .k{font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase;margin-bottom:2px}
+.ledger div.l{display:flex;justify-content:space-between;gap:12px}
+.ledger div.l span:last-child{color:var(--fg);white-space:nowrap}
+.ledger .tot{border-top:1px solid var(--line);padding-top:6px;margin-top:2px;color:var(--fg)}
+.foot{margin:14px 2px 0;font-size:12px;color:var(--dim);display:flex;gap:8px 16px;flex-wrap:wrap;align-items:center}
+.foot label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.foot .sp{flex:1}
+.undo{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:flex;gap:12px;align-items:center;background:var(--s2);border:1px solid var(--line2);border-radius:9px;padding:8px 8px 8px 14px;font-size:13px;color:var(--fg);z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@media (max-width:34em){.body{padding-left:16px}}
+</style>
+
+<div class="wrap">
+  <div class="ctx">Déontologie et droit électoral · moyens du mandat et moyens de campagne</div>
+  <h1>Mettre ses activités en règle avant le scrutin</h1>
+  <p class="lead2">Indiquez la date du scrutin et ce que vous faites ou prévoyez ; la page dit, pour chaque activité, si elle tombe sous une interdiction et quoi faire.</p>
+  <div id="resume"></div>
+  <div id="steps"></div>
+  <div class="foot">
+    <span>Repères simplifiés tirés du code électoral et des avis du déontologue ; ils ne remplacent pas une saisine du déontologue.</span>
+    <span class="sp"></span>
+    <label><input type="checkbox" id="fail"> Simuler une coupure réseau</label>
+    <button class="ghost" id="reset">Repartir de zéro</button>
+  </div>
+  <div id="resetcf"></div>
+</div>
+
+<script>
+const TODAY=new Date(2026,10,10,9,12), T0=new Date(2026,10,10), DAY=864e5;
+const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+const fs=d=>d.toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"}).replace(/^1 /,"1er ");
+const parse=v=>{if(!v)return null;const d=new Date(v+"T00:00");return isNaN(d)?null:d};
+const eur=n=>nf(n)+" €";
+const LAB={ok:"Permis",warn:"À encadrer",err:"Interdit"};
+// activités : « cont » = en continu jusqu'à une date de fin ; « ponct » = à une date prévue
+const ACTS=[
+ {id:"pub",kind:"cont",t:"Publications sponsorisées et encarts publicitaires",ref:"Code électoral, art. L. 52-1",why:"Toute publicité commerciale à des fins de propagande électorale est interdite.",at:R=>[[R.six,"err"]]},
+ {id:"vert",kind:"cont",t:"Numéro d'appel gratuit",ref:"Code électoral, art. L. 50-1",why:"Interdit au profit d'un candidat pendant la période des six mois.",at:R=>[[R.six,"err"]]},
+ {id:"lettre",kind:"ponct",t:"Lettre d'information payée par l'avance de frais de mandat",ref:"Avis du déontologue",why:"Peut être requalifiée en dépense électorale si elle promeut le candidat.",cost:1850,at:R=>[[R.six,"warn"]]},
+ {id:"bilan",kind:"ponct",t:"Bilan de mandat imprimé et diffusé",ref:"Code électoral, art. L. 52-1, al. 2 ; avis du déontologue",why:"Même risque ; un bilan neutre, déjà habituel, reste possible.",cost:3200,at:R=>[[R.six,"warn"]]},
+ {id:"dep",kind:"ponct",t:"Dépense servant la campagne (salle de réunion publique)",ref:"Code électoral, art. L. 52-4",why:"Elle entre dans le compte de campagne et doit être payée par le mandataire.",cost:2400,at:R=>[[R.six,"warn"]]},
+ {id:"prop",kind:"ponct",t:"Dernier message de propagande sur les réseaux sociaux",ref:"Code électoral, art. L. 49",why:"Plus aucun message de propagande la veille et le jour du scrutin.",at:R=>[[R.veille,"err"]]},
+ {id:"sond",kind:"ponct",t:"Relais d'un sondage",ref:"Loi du 19 juillet 1977, art. 11",why:"Publication interdite la veille et le jour du scrutin.",at:R=>[[R.veille,"err"]]},
+];
+const A=Object.fromEntries(ACTS.map(a=>[a.id,a]));
+const EXAMPLE={el:"2027-06-13",items:{pub:{on:true,end:""},vert:{on:true,end:""},lettre:{on:true,date:"2027-01-15"},bilan:{on:true,date:""},dep:{on:true,date:"2027-03-04"},prop:{on:true,date:"2027-06-12"},sond:{on:false,date:""}},
+  done:{el:true,inv:true},ver:null,fixes:{},paid:{},open:4};
+let S=JSON.parse(JSON.stringify(EXAMPLE)), phase="idle", pendingCf=null, undo=null, staleWhy="";
+const KEY="plan-scrutin-v1";
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify({...S,savedAt:Date.now()}))}catch(e){}};
+const load=()=>{try{return JSON.parse(localStorage.getItem(KEY)||"null")}catch(e){return null}};
+
+const rulesFor=E=>({six:new Date(E.getFullYear(),E.getMonth()-6,1),veille:new Date(E-DAY)});
+const reg=(at,d)=>{let s="ok";for(const [dt,st] of at) if(d>=dt) s=st;return s};
+const sig=()=>JSON.stringify([S.el,S.items]);
+// verdict d'une activité : régime au moment où elle a lieu (ou pire régime sur sa durée)
+function verdict(id){
+  const E=parse(S.el), R=rulesFor(E), a=A[id], it=S.items[id], at=a.at(R);
+  if(S.paid[id]) return {s:"ok",fixed:true,txt:"Payée par le mandataire : inscrite au compte de campagne."};
+  if(a.kind==="cont"){
+    const end=parse(it.end)||E;
+    const hit=at.find(([d,st])=>st!=="ok"&&d<=end);
+    return hit?{s:hit[1],txt:`Active jusqu'au ${it.end?fs(end):"scrutin"} : ${LAB[hit[1]].toLowerCase()} dès le ${fs(hit[0])}.`,when:hit[0]}
+              :{s:"ok",fixed:(id in S.fixes),txt:`Arrêt prévu le ${fs(end)}, avant le ${fs(at[0][0])}.`};
+  }
+  const d=parse(it.date), dd=d||E, s=reg(at,dd);
+  const base=d?`Prévue le ${fs(d)}`:"Date non renseignée : supposée au jour du scrutin, le cas le plus strict";
+  return {s,fixed:(id in S.fixes)&&s==="ok",missing:!d,txt:s==="ok"?`${base}, avant le ${fs(at[0][0])}.`:`${base} : ${LAB[s].toLowerCase()} à cette date.`};
+}
+const onIds=()=>ACTS.filter(a=>S.items[a.id].on).map(a=>a.id);
+
+function stepState(n){
+  const elOk=checkEl().ok;
+  if(n===1) return !elOk?"error":S.done.el?"done":"active";
+  if(n===2){ if(!S.done.el||!elOk) return "locked"; if(!onIds().length) return "active";
+    return S.done.inv?(onIds().some(id=>S.items[id].on&&A[id].kind==="ponct"&&!S.items[id].date)?"partial":"done"):"active"}
+  if(n===3){ if(!S.done.inv||!onIds().length) return "locked"; if(phase==="loading") return "active"; if(phase==="error") return "error";
+    if(!S.ver) return "active"; return S.ver.sig!==sig()?"stale":"done"}
+  if(n===4){ if(!S.ver||S.ver.sig!==sig()) return "locked"; return problems().length?"active":"done"}
+}
+function problems(){return onIds().filter(id=>verdict(id).s!=="ok")}
+function checkEl(){
+  const v=parse(S.el);
+  if(!v) return {ok:false,m:"Saisissez la date complète du scrutin (jour, mois, année)."};
+  if(v<=T0) return {ok:false,m:`Cette date est passée : choisissez un scrutin après le ${fs(T0)}.`};
+  const R=rulesFor(v), w=v.getDay()?` Le ${fs(v)} n'est pas un dimanche : vérifiez le décret de convocation.`:"";
+  const days=Math.round((R.six-T0)/DAY);
+  return {ok:true,R,warn:w,m:days>0?`La période des six mois s'ouvre le ${fs(R.six)}, dans ${days} jours.`:`La période des six mois est ouverte depuis le ${fs(R.six)}.`};
+}
+
+function render(){
+  const c=checkEl(); const st=[1,2,3,4].map(stepState);
+  let h="";
+  // 1 · scrutin
+  h+=step(1,st[0],"Date du scrutin",S.done.el&&c.ok?`<b>${fs(parse(S.el))}</b> · ${c.m}`:"",S.open===1||st[0]==="error"||st[0]==="active",
+   `<div class="row"><label class="fld"><span>Scrutin</span><input type="date" id="el" value="${S.el}" ${c.ok?"":'aria-invalid="true"'} aria-describedby="elm"></label></div>
+    <p class="msg ${c.ok?(c.warn?"warn":"ok"):"err"}" id="elm" aria-live="polite">${c.ok?c.m+c.warn:c.m}</p>
+    <div class="row"><button class="btn pri" data-go="el" ${c.ok?"":"disabled"}>Continuer</button></div>`);
+  // 2 · inventaire
+  const on=onIds(), miss=on.filter(id=>A[id].kind==="ponct"&&!S.items[id].date);
+  h+=step(2,st[1],"Ce que vous faites ou prévoyez",S.done.inv&&on.length?`<b>${on.length} activité${on.length>1?"s":""}</b>${miss.length?` · <span style="color:var(--warn)">${miss.length} date${miss.length>1?"s":""} manquante${miss.length>1?"s":""}</span>`:""}`:"",S.open===2,
+   `<div class="inv">${ACTS.map(a=>{const it=S.items[a.id];return `<div class="it ${it.on?"":"off"}" data-id="${a.id}">
+      <label class="ck"><input type="checkbox" ${it.on?"checked":""} data-on="${a.id}">${a.t}</label>
+      <span class="when">${a.kind==="cont"?`<label for="d-${a.id}">Active jusqu'au</label><input type="date" id="d-${a.id}" data-d="${a.id}" value="${it.end}"><span>${it.end?"":"vide = jusqu'au scrutin"}</span>`
+        :`<label for="d-${a.id}">Prévue le</label><input type="date" id="d-${a.id}" data-d="${a.id}" value="${it.date}">${it.date?"":`<span class="miss">date manquante</span>`}`}</span></div>`}).join("")}</div>
+    ${on.length?(miss.length?`<p class="msg warn">Sans date, la vérification suppose l'activité au jour du scrutin, le cas le plus strict. Vous pouvez continuer et compléter plus tard.</p>`:""):`<div class="empty">Aucune activité cochée : rien à vérifier. Cochez ce que vous faites ou prévoyez d'ici le scrutin.</div>`}
+    <div class="row"><button class="btn pri" data-go="inv" ${on.length?"":"disabled"}>${miss.length?"Continuer avec des dates manquantes":"Continuer"}</button></div>`);
+  // 3 · vérification
+  let b3="";
+  if(phase==="loading") b3=`<p class="msg ok" aria-live="polite">Chargement des avis du déontologue…</p><div class="sk">${on.map(()=>"<i></i>").join("")}</div><div class="row"><button class="ghost" data-act="cancel">Annuler</button></div>`;
+  else if(phase==="error") b3=`<div class="banner err" role="alert"><p>Les avis du déontologue n'ont pas pu être chargés. Vos réponses sont conservées.</p><button class="btn" data-act="verify">Réessayer</button><button class="ghost" data-act="cached">Utiliser les avis enregistrés le 3 novembre</button></div>`;
+  else if(!S.ver) b3=`<div class="row"><button class="btn pri" data-act="verify">Vérifier ${on.length} activité${on.length>1?"s":""}</button></div>`;
+  else{
+    const stale=S.ver.sig!==sig();
+    b3=(stale?`<div class="banner warn"><p>Résultat périmé : ${staleWhy||"vos réponses ont changé"} depuis la vérification.</p><button class="btn pri" data-act="verify">Vérifier à nouveau</button></div>`:"")
+     +(S.ver.cached&&!stale?`<div class="banner warn"><p>Vérifié avec les avis enregistrés le 3 novembre : un avis plus récent peut manquer.</p><button class="btn" data-act="verify">Recharger</button></div>`:"")
+     +`<div class="res ${stale?"stale":""}">${["err","warn","ok"].flatMap(s=>on.filter(id=>verdict(id).s===s).map(id=>{const v=verdict(id),a=A[id];
+        return `<div class="rs"><span class="dot ${v.s}"></span><b>${a.t}</b><p>${v.fixed?"Réglé · ":""}${v.txt}</p>${v.s!=="ok"?`<p>${a.why} <span class="ref">· ${a.ref}</span></p>`:""}</div>`})).join("")}</div>
+     <p class="age">Vérifié le ${new Date(S.ver.at).toLocaleDateString("fr-FR",{day:"numeric",month:"long"})} à ${new Date(S.ver.at).toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"})}${S.ver.cached?" · avis du 3 novembre":""}</p>`;
+  }
+  const P=S.ver?problems():[];
+  const sum3=S.ver&&phase==="idle"?(()=>{const e=on.filter(id=>verdict(id).s==="err").length,w=on.filter(id=>verdict(id).s==="warn").length;return e+w?`<b>${e} interdite${e>1?"s":""}</b> · ${w} à encadrer · ${on.length-e-w} en règle`:`<b>Tout est en règle</b>`})():"";
+  h+=step(3,st[2],"Vérification",sum3,S.open===3||phase!=="idle"||st[2]==="stale",b3);
+  // 4 · mesures
+  let b4="";
+  if(st[3]!=="locked"){
+    const items=on.filter(id=>verdict(id).s!=="ok"||(id in S.fixes)||S.paid[id]);
+    b4=items.map(id=>mesure(id)).join("")
+     +(P.length?"":`<div class="banner ok"><p>Plus aucune activité interdite ni à encadrer. Le plan est prêt ; il reste enregistré sur cet appareil.</p></div>`)
+     +ledger();
+  }
+  h+=step(4,st[3],"Mesures à prendre",st[3]==="done"?"<b>Plan prêt</b>":st[3]==="active"?`<b>${P.length} à traiter</b>`:"",st[3]!=="locked",b4);
+  $("#steps").innerHTML=h;
+}
+function step(n,st,title,sum,open,body){
+  const can=st!=="locked";
+  return `<section class="panel step" data-st="${st}" data-n="${n}" aria-label="Étape ${n} : ${title}">
+   <div class="sh"><span class="num">${st==="done"?"✓":st==="error"?"!":n}</span><div class="tt"><h2>${title}</h2>${sum&&!open?`<p class="sum">${sum}</p>`:""}${st==="locked"?`<p class="sum">${n===4?"Après la vérification":"Après l'étape précédente"}</p>`:""}</div>
+   ${can&&!open&&(n<3||st!=="locked")?`<button class="ghost" data-open="${n}">${n<3?"Modifier":"Voir"}</button>`:""}</div>
+   ${open&&can?`<div class="body">${body}</div>`:""}</section>`;
+}
+function mesure(id){
+  const a=A[id], v=verdict(id), E=parse(S.el), R=rulesFor(E), before=new Date(a.at(R)[0][0]-DAY);
+  let acts="";
+  if(S.paid[id]) acts=`<span class="msg ok">Inscrite au compte de campagne · irréversible</span>`;
+  else if(id in S.fixes) acts=`<button class="ghost" data-undo="${id}">Annuler cette mesure</button>`;
+  else{
+    if(a.kind==="cont") acts=`<button class="btn" data-fix="${id}" data-to="${iso(before)}">Arrêter le ${fs(before)}</button>`;
+    else if(id==="dep") acts=`<button class="btn" data-pay="${id}">Transmettre au mandataire</button>`;
+    else acts=`<button class="btn" data-fix="${id}" data-to="${iso(before)}">Avancer au ${fs(before)}</button>${a.cost?`<button class="btn" data-pay="${id}">Payer par le mandataire</button>`:""}`;
+  }
+  const cf=pendingCf===id?`<div class="cf" role="alert"><p>${eur(a.cost)} seront inscrits au compte de campagne et payés par le mandataire. Une dépense inscrite ne peut plus en être retirée.</p><div class="row"><button class="btn danger" data-cf="${id}">Inscrire au compte</button><button class="btn" data-cf-no>Annuler</button></div></div>`:"";
+  return `<div class="ms ${v.s==="ok"?"done":""}"><div class="hd"><span class="dot ${v.s}"></span><div><b>${a.t}</b><p>${v.s==="ok"?"Réglé · ":""}${v.txt}</p></div></div><div class="acts">${acts}</div>${cf}</div>`;
+}
+function ledger(){
+  const ids=Object.keys(S.paid);
+  const tot=ids.reduce((s,id)=>s+A[id].cost,0);
+  return `<div class="ledger" aria-live="polite"><div class="k">Effet sur le compte de campagne</div>${ids.length?ids.map(id=>`<div class="l"><span>${A[id].t}</span><span>${eur(A[id].cost)}</span></div>`).join("")+`<div class="l tot"><span>Total inscrit</span><span>${eur(tot)}</span></div>`:`<div class="l"><span style="color:var(--muted)">Rien d'inscrit pour l'instant.</span><span></span></div>`}</div>`;
+}
+// actions
+let timer=null;
+function verify(cached){
+  if(cached){S.ver={at:TODAY.getTime(),sig:sig(),cached:true};phase="idle";staleWhy="";S.open=4;save();render();return}
+  phase="loading";render();
+  timer=setTimeout(()=>{if($("#fail").checked){phase="error";render();return}
+    S.ver={at:TODAY.getTime(),sig:sig()};phase="idle";staleWhy="";S.open=4;save();render()},900);
+}
+function showUndo(m,fn){
+  $$(".undo,.toast").forEach(e=>e.remove());clearTimeout(undo);
+  const t=document.createElement("div");t.className="undo";t.setAttribute("role","status");t.innerHTML=`<span>${esc(m)}</span><button class="btn">Annuler</button>`;
+  t.querySelector("button").onclick=()=>{fn();t.remove()};document.body.append(t);undo=setTimeout(()=>t.remove(),5000);
+}
+function markChanged(why){if(S.ver&&S.ver.sig!==sig()) staleWhy=why;S.fixes={};}
+document.addEventListener("click",e=>{
+  const t=e.target.closest("button,[data-on]");if(!t)return;
+  if(t.dataset.open){S.open=+t.dataset.open;render();return}
+  if(t.dataset.go==="el"){S.done.el=true;S.open=S.done.inv?3:2;save();render();return}
+  if(t.dataset.go==="inv"){S.done.inv=true;S.open=3;save();render();return}
+  if(t.dataset.act==="verify")return verify(false);
+  if(t.dataset.act==="cached")return verify(true);
+  if(t.dataset.act==="cancel"){clearTimeout(timer);phase="idle";render();return}
+  if(t.dataset.fix){const id=t.dataset.fix,a=A[id],k=a.kind==="cont"?"end":"date",old=S.items[id][k];
+    S.items[id][k]=t.dataset.to;S.fixes[id]=old;S.ver.sig=sig();save();render();flash(id);
+    showUndo(`${a.kind==="cont"?"Arrêt":"Date"} reporté${a.kind==="cont"?"":"e"} dans l'inventaire.`,()=>undoFix(id));return}
+  if(t.dataset.undo){undoFix(t.dataset.undo);return}
+  if(t.dataset.pay){pendingCf=t.dataset.pay;render();$("[data-cf-no]").focus();return}
+  if(t.hasAttribute("data-cf-no")){const id=pendingCf;pendingCf=null;render();$(`[data-pay="${id}"]`)?.focus();return}
+  if(t.dataset.cf){S.paid[t.dataset.cf]=true;pendingCf=null;save();render();$$(".undo").forEach(e=>e.remove());toast("Inscrit au compte de campagne.");return}
+  if(t.id==="reset"){$("#resetcf").innerHTML=`<div class="cf" style="margin:10px 0 0" role="alert"><p>Effacer la date, l'inventaire, la vérification et les mesures enregistrés sur cet appareil ? Les inscriptions au compte de campagne déjà transmises ne sont pas annulées pour autant.</p><div class="row"><button class="btn danger" id="reset-yes">Tout effacer</button><button class="btn" id="reset-no">Garder</button></div></div>`;$("#reset-no").focus();return}
+  if(t.id==="reset-no"){$("#resetcf").innerHTML="";return}
+  if(t.id==="reset-yes"){S={el:"",items:Object.fromEntries(ACTS.map(a=>[a.id,a.kind==="cont"?{on:false,end:""}:{on:false,date:""}])),done:{el:false,inv:false},ver:null,fixes:{},paid:{},open:1};phase="idle";$("#resetcf").innerHTML="";$("#resume").innerHTML="";save();render();return}
+  if(t.dataset.resume==="yes"){S=saved;delete S.savedAt;$("#resume").innerHTML="";render();return}
+  if(t.dataset.resume==="no"){$("#resume").innerHTML="";save();return}
+});
+function undoFix(id){const a=A[id],k=a.kind==="cont"?"end":"date";if(!(id in S.fixes))return;S.items[id][k]=S.fixes[id];delete S.fixes[id];if(S.ver)S.ver.sig=sig();save();render();flash(id)}
+function flash(id){const el=$(`.it[data-id="${id}"]`);if(el){el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash")}}
+document.addEventListener("change",e=>{
+  const t=e.target;
+  if(t.id==="el"){S.el=t.value;markChanged("la date du scrutin a changé");if(!checkEl().ok)S.done.el=false;save();render();$("#el").focus();return}
+  if(t.dataset.on){S.items[t.dataset.on].on=t.checked;markChanged("l'inventaire a changé");save();render();$(`[data-on="${t.dataset.on}"]`).focus();return}
+  if(t.dataset.d){const id=t.dataset.d;S.items[id][A[id].kind==="cont"?"end":"date"]=t.value;markChanged("une date a changé");save();render();$(`#d-${id}`).focus();return}
+});
+document.addEventListener("keydown",e=>{if(e.key!=="Escape")return;
+  if(pendingCf){const id=pendingCf;pendingCf=null;render();$(`[data-pay="${id}"]`)?.focus()}
+  else if($("#resetcf").innerHTML){$("#resetcf").innerHTML=""}
+  else if(phase==="loading"){clearTimeout(timer);phase="idle";render()}});
+// reprise : un plan enregistré sur cet appareil est proposé, pas imposé
+const saved=load();
+if(saved&&saved.savedAt){const when=new Date(saved.savedAt).toLocaleString("fr-FR",{day:"numeric",month:"long",hour:"2-digit",minute:"2-digit"});
+  $("#resume").innerHTML=`<div class="panel resume"><p>Vous aviez commencé un plan le ${when}.</p><button class="btn pri" data-resume="yes">Reprendre</button><button class="ghost" data-resume="no">Garder l'exemple</button></div>`}
+// exemple chargé : vérification déjà faite, mesures en cours
+S.ver={at:TODAY.getTime(),sig:sig()};
+render();
+</script>

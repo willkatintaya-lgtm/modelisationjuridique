@@ -1,0 +1,220 @@
+<title>Règles avant le scrutin</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+
+<style>
+/* Angle « structure » : le régime ne change qu'à deux dates. Plutôt qu'un curseur sur 200 jours,
+   trois périodes en colonnes ; les activités regroupées par moyen employé ; une date précise se range dans sa période. */
+.set{padding:14px 16px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 18px;margin-bottom:12px}
+.f{display:grid;gap:5px;min-width:0;align-content:start}
+.f>span{font-size:12.5px;color:var(--muted)}
+.f input[type=date]{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);width:100%;min-height:38px}
+.f input[aria-invalid=true]{border-color:var(--err)}
+.jumps{display:flex;gap:6px;flex-wrap:wrap}
+.msg{font-size:12.5px;line-height:1.45;margin:0;min-height:0}
+.msg.err{color:#f08a8d} .msg.warn{color:var(--warn)} .msg.note{color:var(--dim)}
+.answer{margin:16px 2px 6px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.answer span{color:var(--muted)}
+/* matrice */
+.mx{padding:4px 0}
+.mh,.r{display:grid;grid-template-columns:minmax(0,1fr) repeat(3,132px);align-items:stretch}
+.mh{position:sticky;top:0;background:var(--s1);border-bottom:1px solid var(--line);border-radius:10px 10px 0 0;z-index:1}
+.mh>div{padding:10px 12px;font-size:12px;color:var(--muted);line-height:1.35}
+.mh>div b{display:block;color:var(--text);font-weight:500;font-size:12.5px}
+.mh .on{color:var(--fg);background:var(--lit)} .mh .on b{color:var(--fg)}
+.mh .past{opacity:.5}
+.fam{padding:14px 14px 4px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.r{border-top:1px solid var(--line);cursor:pointer;transition:background .2s}
+.fam+.r{border-top:none}
+.r:hover{background:rgba(255,255,255,.02)}
+.r .nm{padding:11px 14px;display:flex;gap:8px;align-items:flex-start;min-width:0;background:none;border:0;text-align:left;cursor:pointer;color:var(--fg);font-size:13.5px;font-weight:500;line-height:1.4}
+.r .nm::before{content:"";flex:none;width:6px;height:6px;margin-top:7px;border-right:1.5px solid var(--dim);border-bottom:1.5px solid var(--dim);transform:rotate(-45deg);transition:transform .25s var(--ease)}
+.r.open .nm::before{transform:rotate(45deg)}
+.c{padding:11px 12px;display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted)}
+.c.on{background:var(--lit);color:var(--fg)}
+.c.past{opacity:.45}
+.c .h{display:none}
+.c .v{display:flex;align-items:center;gap:7px}
+.det{grid-column:1/-1}
+.det>div>div{padding:0 14px 14px 28px;display:grid;gap:8px;max-width:680px}
+.det p{margin:0;font-size:13px;color:var(--text);line-height:1.55}
+.det .todo{color:var(--fg)}
+.det .todo::before{content:"Que faire · ";color:var(--muted)}
+.det .ref{font-size:12px;color:var(--dim)}
+.foot{margin:12px 2px 0;font-size:12px;color:var(--dim);max-width:680px}
+@media (max-width:720px){
+  .set{grid-template-columns:minmax(0,1fr)}
+  .mh{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .mh>div:first-child{display:none}
+  .mh>div{padding:9px 10px;font-size:11.5px}
+  .mh>div b{font-size:12px}
+  .r{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .r .nm{grid-column:1/-1;padding-bottom:4px}
+  .c{flex-direction:column;align-items:flex-start;gap:2px;padding:6px 10px 11px;font-size:12.5px}
+  .c .v{display:flex;align-items:center;gap:6px}
+  .det>div>div{padding-left:14px}
+}
+</style>
+
+<div class="wrap">
+  <div class="ctx">Déontologie et droit électoral · moyens du mandat et moyens de campagne</div>
+  <h1>Ce qui reste permis avant le scrutin</h1>
+
+  <section class="panel set" aria-label="Dates">
+    <label class="f"><span>Date du scrutin</span>
+      <input type="date" id="el" value="2027-06-13" aria-describedby="elmsg">
+      <p class="msg" id="elmsg" aria-live="polite"></p></label>
+    <div class="f"><label for="dx" style="font-size:12.5px;color:var(--muted)">Date à examiner</label>
+      <input type="date" id="dx" aria-describedby="dxmsg">
+      <div class="jumps" id="jumps"></div>
+      <p class="msg" id="dxmsg" aria-live="polite"></p></div>
+  </section>
+
+  <p class="answer" id="ans" aria-live="polite"></p>
+
+  <section class="panel mx" aria-label="Régime de chaque activité par période">
+    <div class="mh" id="mh"></div>
+    <div id="rows"></div>
+  </section>
+  <p class="foot">Repères simplifiés tirés du code électoral et des avis du déontologue. Ils ne remplacent ni le guide du candidat ni une saisine du déontologue.</p>
+</div>
+
+<script>
+const TODAY=new Date(2026,10,10), DAY=864e5;
+const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+const fs=d=>d.toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"}).replace(/^1 /,"1er ");
+const fsy=d=>d.toLocaleDateString("fr-FR",{day:"numeric",month:"long"}).replace(/^1 /,"1er ");
+const LAB={ok:"Permis",warn:"À encadrer",err:"Interdit"};
+const FAM=[["mandat","Moyens du mandat"],["com","Communication"],["argent","Argent de la campagne"],["parl","Travail parlementaire"]];
+// règles : chaque activité donne le régime en vigueur à partir de chaque date charnière
+function rules(E){
+  const six=new Date(E.getFullYear(),E.getMonth()-6,1), veille=new Date(E-DAY);
+  return {six,veille,list:[
+   {f:"mandat",t:"Lettre d'information payée par l'avance de frais de mandat",s:"Elle peut être requalifiée en dépense électorale si elle promeut le candidat.",todo:"gardez un contenu informatif sur le travail parlementaire, sans appel au vote ; en cas de doute, faites-la payer par le mandataire.",ref:"Avis du déontologue",at:[[six,"warn"]]},
+   {f:"mandat",t:"Bilan de mandat imprimé et diffusé",s:"Même risque de requalification ; un bilan neutre, déjà habituel, reste possible.",todo:"conservez le format et le rythme des années précédentes ; un numéro exceptionnel se paie sur le compte de campagne.",ref:"Code électoral, art. L. 52-1, al. 2 ; avis du déontologue",at:[[six,"warn"]]},
+   {f:"mandat",t:"Numéro d'appel gratuit",s:"Interdit au profit d'un candidat pendant la période des six mois.",todo:"suspendez-le, ou réservez-le aux demandes adressées à la permanence, sans lien avec la candidature.",ref:"Code électoral, art. L. 50-1",at:[[six,"err"]]},
+   {f:"com",t:"Publications sponsorisées et encarts publicitaires",s:"Toute publicité commerciale à des fins de propagande électorale.",todo:`arrêtez les campagnes payantes avant le ${fs(six)} ; les publications non sponsorisées restent possibles jusqu'à la veille.`,ref:"Code électoral, art. L. 52-1",at:[[six,"err"]]},
+   {f:"com",t:"Messages et publications de propagande",s:"Plus aucun message de propagande, y compris sur les réseaux sociaux.",todo:`programmez la dernière publication avant le ${fs(veille)} à zéro heure.`,ref:"Code électoral, art. L. 49",at:[[veille,"err"]]},
+   {f:"com",t:"Publication de sondages",s:"Interdite la veille et le jour du scrutin.",todo:"ne relayez aucun sondage, même publié ailleurs, à partir de la veille.",ref:"Loi du 19 juillet 1977, art. 11",at:[[veille,"err"]]},
+   {f:"argent",t:"Dépenses servant la campagne",s:"Elles entrent dans le compte de campagne.",todo:"faites-les régler par le mandataire et gardez les justificatifs.",ref:"Code électoral, art. L. 52-4",at:[[six,"warn"]]},
+   {f:"parl",t:"Activité parlementaire courante",s:"Questions, amendements, interventions : rien ne change.",todo:"rien à changer.",ref:"",at:[]},
+  ]};
+}
+const regime=(r,d)=>{let s="ok";for(const [dt,st] of r.at) if(d>=dt) s=st; return s};
+const parse=v=>{const d=new Date(v+"T00:00");return isNaN(d)?null:d};
+let E=null, X=new Date(TODAY), open=new Set();
+$("#dx").value=iso(TODAY);
+
+function checkEl(){
+  const v=parse($("#el").value), m=$("#elmsg"), inp=$("#el");
+  m.className="msg";m.textContent="";inp.removeAttribute("aria-invalid");
+  if(!v){m.className="msg err";m.textContent="Indiquez la date du scrutin au format jour/mois/année.";inp.setAttribute("aria-invalid","true");return null}
+  if(v<=TODAY){m.className="msg err";m.textContent=`Cette date est passée. Choisissez un scrutin après le ${fs(TODAY)}.`;inp.setAttribute("aria-invalid","true");return null}
+  if(v.getDay()!==0){m.className="msg warn";m.textContent=`Le ${fs(v)} n'est pas un dimanche : vérifiez le décret de convocation. Le calcul reste fait sur cette date.`}
+  return v;
+}
+function checkDx(){
+  const v=parse($("#dx").value), m=$("#dxmsg"), inp=$("#dx");
+  m.className="msg";m.textContent="";inp.removeAttribute("aria-invalid");
+  if(!v){m.className="msg err";m.textContent="Indiquez une date, ou choisissez un repère ci-dessus.";inp.setAttribute("aria-invalid","true");return null}
+  if(v<TODAY){m.className="msg err";m.textContent="Cette date est passée : les règles affichées valent à partir d'aujourd'hui.";inp.setAttribute("aria-invalid","true");return null}
+  if(E&&v>E){m.className="msg err";m.textContent=`Cette date suit le scrutin. Choisissez une date jusqu'au ${fs(E)}.`;inp.setAttribute("aria-invalid","true");return null}
+  return v;
+}
+function periods(R){
+  return [
+    {k:0,b:"Jusqu'au "+fsy(new Date(R.six-DAY)),h:"Avant la période",from:TODAY,to:new Date(R.six-DAY),at:TODAY},
+    {k:1,b:`Du ${fsy(R.six)} au ${fsy(new Date(R.veille-DAY))}`,h:"Période des six mois",from:R.six,to:new Date(R.veille-DAY),at:R.six},
+    {k:2,b:R.veille.getMonth()===E.getMonth()?`${R.veille.getDate()===1?"1er":R.veille.getDate()} et ${fsy(E)}`:`${fsy(R.veille)} et ${fsy(E)}`,h:"Veille et jour du scrutin",from:R.veille,to:E,at:R.veille},
+  ];
+}
+function render(){
+  const e=checkEl(); if(e) E=e;
+  if(!E){$("#ans").textContent="";return}
+  const R=rules(E), P=periods(R);
+  if(R.six<=TODAY){P[0].past=true}
+  const x=checkDx(); if(x) X=x; if(X>E) X=new Date(E); if(X<TODAY) X=new Date(TODAY);
+  const cur=X>=R.veille?2:X>=R.six?1:0;
+  const pick=[{l:"Aujourd'hui",d:TODAY},{l:"Ouverture des six mois",d:R.six},{l:"Veille du scrutin",d:R.veille}].filter(j=>j.d>=TODAY);
+  $("#jumps").innerHTML=pick.map(j=>`<button class="chip ${iso(j.d)===iso(X)?"on":""}" data-d="${iso(j.d)}">${j.l}</button>`).join("");
+  // réponse : ce qui vaut à la date examinée, puis le prochain changement
+  const L=R.list, count=(d,s)=>L.filter(r=>regime(r,d)===s).length;
+  const nextP=P.find(p=>p.k>cur&&!p.past);
+  const lim=L.filter(r=>regime(r,X)!=="ok").length;
+  let a=X.getTime()===TODAY.getTime()?`Aujourd'hui, ${fs(X)}, `:`Le ${fs(X)}, `;
+  a+=lim===0?"tout est encore permis.":`${count(X,"err")} activité${count(X,"err")>1?"s sont interdites":" est interdite"} et ${count(X,"warn")} à encadrer.`;
+  if(nextP){const ch=L.filter(r=>regime(r,nextP.at)!==regime(r,X)).length;a+=` <span>Le ${fs(nextP.at)}, ${ch} activité${ch>1?"s changent":" change"} de régime.</span>`}
+  else a+=" <span>Plus aucun changement jusqu'à la clôture du scrutin.</span>";
+  $("#ans").innerHTML=a;
+  $("#mh").innerHTML=`<div>Activité</div>`+P.map(p=>`<div class="${p.k===cur?"on":""} ${p.past?"past":""}"><b>${p.h}</b>${p.b}${p.past?" · passée":""}</div>`).join("");
+  $("#rows").innerHTML=FAM.map(([f,fl])=>{
+    const rs=L.map((r,i)=>[r,i]).filter(([r])=>r.f===f);
+    return `<div class="fam">${fl}</div>`+rs.map(([r,i])=>`<div class="r ${open.has(i)?"open":""}" data-i="${i}">
+      <button class="nm" aria-expanded="${open.has(i)}">${r.t}</button>
+      ${P.map(p=>{const s=regime(r,p.at);return `<div class="c ${p.k===cur?"on":""} ${p.past?"past":""}"><span class="h">${p.h}</span><span class="v"><span class="dot ${s}"></span>${LAB[s]}</span></div>`}).join("")}
+      <div class="det slide"><div><div><p>${r.s}</p><p class="todo">${r.todo}</p>${r.ref?`<p class="ref">${r.ref}</p>`:""}</div></div></div></div>`).join("");
+  }).join("");
+}
+$("#el").addEventListener("change",render);
+$("#dx").addEventListener("change",render);
+$("#jumps").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;$("#dx").value=b.dataset.d;render()});
+$("#rows").addEventListener("click",e=>{const r=e.target.closest(".r");if(!r)return;const i=+r.dataset.i;
+  open.has(i)?open.delete(i):open.add(i);r.classList.toggle("open");r.querySelector(".nm").setAttribute("aria-expanded",open.has(i))});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&open.size){open.clear();$$(".r.open").forEach(r=>{r.classList.remove("open");r.querySelector(".nm").setAttribute("aria-expanded","false")})}});
+render();
+</script>

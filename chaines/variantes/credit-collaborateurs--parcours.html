@@ -1,0 +1,320 @@
+<title>Prévision des collaborateurs · parcours</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+
+<style>
+/* Angle « parcours » : la prévision se construit en quatre étapes visibles d'un coup (vérifier, choisir, contrôler, arrêter).
+   Chaque étape affiche son état ; l'arrêt est confirmé dans la page, avec ses effets ; le brouillon survit à une interruption. */
+.draft{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;margin:12px 0 4px;font-size:12.5px;color:var(--muted)}
+.draft .ghost{min-height:32px}
+.banner{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:10px 12px;border-radius:9px;font-size:13px;margin-top:10px;border:1px solid var(--line2);background:var(--s2);color:var(--text)}
+.banner.warn{border-color:rgba(227,163,63,.45)} .banner.err{border-color:rgba(229,72,77,.5)} .banner.ok{border-color:rgba(70,179,126,.45)}
+.banner span{flex:1 1 240px;min-width:0}
+.banner .btn{white-space:normal;text-align:left;max-width:100%}
+.steps{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:12px;counter-reset:st}
+.step{display:grid;grid-template-columns:28px minmax(0,1fr);gap:0 14px}
+.rail{display:flex;flex-direction:column;align-items:center}
+.num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:12.5px;font-weight:600;border:1px solid var(--line2);color:var(--muted);background:var(--bg);transition:background .2s,border-color .2s,color .2s}
+.rail::after{content:"";flex:1;width:1px;background:var(--line);margin-top:6px}
+.step:last-child .rail::after{display:none}
+.step.done .num{background:var(--ok);border-color:var(--ok);color:#06140d}
+.step.block .num{border-color:var(--err);color:#f2a7a9}
+.step.cur .num{border-color:var(--accent);color:var(--fg)}
+.body{padding:14px 16px;min-width:0}
+.sh{display:flex;justify-content:space-between;align-items:baseline;gap:8px 12px;flex-wrap:wrap}
+.sh h2{margin:0;font:500 14.5px/1.4 var(--f);color:var(--fg)}
+.st{font-size:12px;color:var(--muted);display:inline-flex;gap:6px;align-items:center}
+.desc{margin:4px 0 10px;font-size:12.5px;color:var(--dim)}
+.sal{display:grid;grid-template-columns:10px minmax(0,1fr) 128px;gap:6px 10px;align-items:center;padding:6px 0;border-top:1px solid var(--line);font-size:13px}
+.sal i{width:10px;height:10px;border-radius:2px}
+.sal small{display:block;color:var(--dim);font-size:12px}
+.money{position:relative}
+.money input{width:100%;min-height:40px;text-align:right;padding-right:26px}
+.money::after{content:"€";position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--dim);font-size:13px}
+.sal.bad input{border-color:var(--err)}
+.sal .err{grid-column:2/4;color:#f2a7a9;font-size:12px}
+.row-act{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.sc{display:grid;gap:6px}
+.sc label{display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:8px;align-items:start;padding:10px;border:1px solid var(--line);border-radius:8px;cursor:pointer;font-size:13px;transition:border-color .2s,background .2s;min-height:44px}
+.sc label.on{border-color:var(--accent);background:var(--lit)}
+.sc input{margin:3px 0 0;accent-color:var(--accent);width:15px;height:15px}
+.sc small{display:block;color:var(--dim);font-size:12px}
+.sc .c{font-size:12.5px;color:var(--muted);white-space:nowrap}
+.empty{padding:10px 12px;border:1px dashed var(--line2);border-radius:8px;font-size:12.5px;color:var(--muted);margin-bottom:8px}
+.verd{font-size:16px;color:var(--fg);font-weight:600;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.verd small{font-size:12.5px;color:var(--muted);font-weight:400}
+/* graphique qui se recompose selon la place disponible, pas selon l'appareil */
+.chartbox{container-type:inline-size;margin-top:12px}
+.key{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted);margin-bottom:8px}
+.key i{width:18px;border-top:1px dashed var(--muted)}
+.bars{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:5px}
+.m{display:grid;grid-template-rows:190px auto;gap:6px;font-size:11px;color:var(--dim);text-align:center}
+.m.over .lb{color:#f2a7a9}
+.stk{display:flex;flex-direction:column-reverse;position:relative}
+.stk i{display:block;height:calc(var(--v)*100%);transition:height .35s var(--ease),width .35s var(--ease)}
+.stk i:last-child{border-radius:3px 3px 0 0}
+.stk::after{content:"";position:absolute;left:-3px;right:-3px;bottom:calc(var(--lim)*100%);border-top:1px dashed var(--muted)}
+.m .v{display:none}
+@container (max-width:520px){
+  .bars{grid-template-columns:minmax(0,1fr);gap:4px}
+  .m{grid-template-rows:none;grid-template-columns:40px minmax(0,1fr) 64px;align-items:center;text-align:left;font-size:12px}
+  .lb{order:-1}
+  .stk{flex-direction:row;height:14px}
+  .stk i{height:auto;width:calc(var(--v)*100%)}
+  .stk i:last-child{border-radius:0 3px 3px 0}
+  .stk::after{left:calc(var(--lim)*100%);right:auto;top:-3px;bottom:-3px;border-top:0;border-left:1px dashed var(--muted)}
+  .m .v{display:block;text-align:right;color:var(--muted)}
+  .m.over .v{color:#f2a7a9}
+}
+.leg{display:flex;gap:6px 14px;flex-wrap:wrap;margin-top:10px;font-size:12px;color:var(--muted)}
+.leg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.peaks{margin:10px 0 0;font-size:12.5px;color:var(--muted)}
+.todo{margin:0 0 10px;padding-left:18px;font-size:12.5px;color:var(--muted)}
+.confirm{margin-top:12px;padding:12px 14px;border:1px solid var(--line2);border-radius:9px;background:var(--s2)}
+.confirm p{margin:0 0 6px;color:var(--fg);font-size:13.5px}
+.confirm ul{margin:0 0 12px;padding-left:18px;font-size:12.5px;color:var(--muted);display:grid;gap:3px}
+.spin{width:14px;height:14px;border-radius:50%;border:2px solid var(--line2);border-top-color:var(--fg);animation:sp 0.8s linear infinite;flex:none}
+@keyframes sp{to{transform:rotate(360deg)}}
+.locked .sc label,.locked .money input{opacity:.55;cursor:not-allowed}
+.states{margin-top:28px;padding-top:12px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12px;color:var(--dim)}
+.btn{min-height:40px}
+.enter{animation:in .25s var(--ease)}
+@keyframes in{from{opacity:0;transform:translateY(-4px)}}
+@media (max-width:480px){.sal{grid-template-columns:10px minmax(0,1fr) 112px}.body{padding:12px}.step{gap:0 10px}}
+</style>
+
+<div class="wrap narrow">
+  <div class="ctx">Gestion du bureau · exercice 2027 · montants fictifs, salaires bruts</div>
+  <h1>Prévision du crédit collaborateurs 2027</h1>
+  <div class="draft" id="draft"></div>
+  <div id="resume"></div>
+
+  <ol class="steps" id="steps">
+    <li class="step" id="s1"><div class="rail"><span class="num">1</span></div>
+      <section class="panel body" aria-labelledby="h1s"><div class="sh"><h2 id="h1s">Vérifier les salaires</h2><span class="st" id="st1"></span></div>
+        <p class="desc">Salaires mensuels bruts actuels. Le reste du calcul part de ces montants.</p>
+        <div id="stale"></div><div id="sal"></div><div class="row-act" id="act1"></div></section></li>
+    <li class="step" id="s2"><div class="rail"><span class="num">2</span></div>
+      <section class="panel body" aria-labelledby="h2s"><div class="sh"><h2 id="h2s">Choisir les changements</h2><span class="st" id="st2"></span></div>
+        <p class="desc">Chaque coût est celui du seul changement, sur l'année.</p><div id="empty"></div><div class="sc" id="sc"></div></section></li>
+    <li class="step" id="s3"><div class="rail"><span class="num">3</span></div>
+      <section class="panel body" aria-labelledby="h3s"><div class="sh"><h2 id="h3s">Contrôler l'année</h2><span class="st" id="st3"></span></div>
+        <div id="verd" aria-live="polite" style="margin-top:8px"></div>
+        <div class="chartbox"><div class="key"><i></i>moyenne mensuelle du crédit · 11&#8239;100&nbsp;€</div><div class="bars" id="bars" role="img"></div><div class="leg" id="leg"></div></div>
+        <p class="peaks" id="peaks"></p></section></li>
+    <li class="step" id="s4"><div class="rail"><span class="num">4</span></div>
+      <section class="panel body" aria-labelledby="h4s"><div class="sh"><h2 id="h4s">Arrêter la prévision</h2><span class="st" id="st4"></span></div>
+        <div id="fin" style="margin-top:8px"></div></section></li>
+  </ol>
+
+  <div class="states" aria-label="Maquette : afficher un état"><span>Maquette, voir l'état :</span>
+    <button class="chip" data-demo="vide">vide</button><button class="chip" data-demo="partiel">partiel</button><button class="chip" data-demo="perime">salaires à vérifier</button><button class="chip" data-demo="erreur">dépassement</button><button class="chip" data-demo="echec">échec d'enregistrement</button><button class="chip" data-demo="termine">terminé</button>
+  </div>
+</div>
+
+<script>
+const CREDIT=11100, cap=CREDIT*12, R=n=>nf(Math.round(n));
+const MOIS=["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."];
+const MOISL=["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+const TEAM=[
+ {k:"a",n:"Attachée parlementaire",w:"Paris · temps plein",sal:3650,c:"#6e7bf2"},
+ {k:"b",n:"Collaborateur en circonscription",w:"temps plein",sal:2780,c:"#2bb3b1"},
+ {k:"c",n:"Assistante en circonscription",w:"mi-temps",sal:1420,c:"#c07a00"},
+];
+const SAL0=Object.fromEntries(TEAM.map(p=>[p.k,p.sal]));
+const SC=[
+ {k:"aug",t:"Augmenter l'attachée de 6 %",s:"au 1er janvier",apply:(m,p)=>p.k==="a"?p.sal*.06:0},
+ {k:"rec",t:"Recruter un renfort à mi-temps",s:"CDD du 1er mars au 30 juin, pour le projet de loi de finances rectificative",extra:{k:"d",n:"Renfort (CDD)",w:"mi-temps · mars à juin",sal:1550,c:"#d8699a",from:2,to:5}},
+ {k:"tps",t:"Passer l'assistante à temps plein",s:"à partir du 1er septembre",apply:(m,p)=>p.k==="c"&&m>=8?p.sal:0},
+ {k:"prime",t:"Prime exceptionnelle de fin d'année",s:"1 000 € par collaborateur, en décembre",apply:(m,p)=>m===11&&p.k!=="d"?1000:0},
+];
+// version arrêtée précédente (fictive) : l'équipe actuelle, sans changement
+const V1={n:1,date:"2 septembre 2026",on:{aug:false,rec:false,tps:false,prime:false},sal:{...SAL0}};
+const START=()=>({on:{aug:false,rec:true,tps:false,prime:false},sal:{...SAL0},verified:false,phase:"edit",fail:false,ver:1,savedAt:null,confirm:false,bad:{}});
+let S=START(), prev=null;
+
+function month(m,st=S){
+  const team=TEAM.map(p=>({...p,sal:st.sal[p.k]})); if(st.on.rec) team.push(SC[1].extra);
+  return team.map(p=>{
+    if(p.from!=null&&(m<p.from||m>p.to)) return {p,v:0};
+    let v=p.sal; for(const s of SC) if(st.on[s.k]&&s.apply) v+=s.apply(m,p);
+    if((m===5||m===11)&&p.from==null) v+=(v-(m===11&&st.on.prime?1000:0))/2;
+    return {p,v};
+  });
+}
+function calc(st=S){const M=MOIS.map((_,m)=>month(m,st)),tot=M.map(x=>x.reduce((s,y)=>s+y.v,0));return {M,tot,year:tot.reduce((a,b)=>a+b,0)}}
+function cost(k){const a={...S,on:{...S.on,[k]:false}},b={...S,on:{...S.on,[k]:true}};return calc(b).year-calc(a).year}
+const list=a=>a.length<2?a.join(""):a.slice(0,-1).join(", ")+" et "+a.at(-1);
+const pill=(cls,t)=>`<span class="dot ${cls}"></span>${t}`;
+const now=()=>new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"}).replace(":"," h ");
+
+// brouillon : conservé dans ce navigateur pour reprendre après une interruption
+const KEY="cc-prevision-2027";
+function save(){S.savedAt=now();try{localStorage.setItem(KEY,JSON.stringify({...S,confirm:false,bad:{}}))}catch(_){}}
+let resumed=null;
+try{const d=JSON.parse(localStorage.getItem(KEY)||"null");if(d&&d.on&&d.sal){S={...START(),...d,phase:d.phase==="saving"?"edit":d.phase};resumed=d.savedAt}}catch(_){}
+
+function render(){
+  const {M,tot,year}=calc(), over=year>cap, locked=S.phase!=="edit", nOn=Object.values(S.on).filter(Boolean).length;
+  const badSal=Object.keys(S.bad).length>0;
+  const v1=calc(V1).year;
+  document.body.classList.toggle("locked",locked);
+  // ligne du brouillon
+  const diff=year-v1;
+  $("#draft").innerHTML=S.phase==="done"
+    ?`Version ${S.ver} arrêtée aujourd'hui à ${S.savedAt}.`
+    :`Brouillon de la version ${S.ver+1}${S.savedAt?`, enregistré dans ce navigateur à ${S.savedAt}`:""} · ${diff?`${diff>0?"+":"−"}${R(Math.abs(diff))} € par rapport à la version ${S.ver}`:`identique à la version ${S.ver}`}${diff&&!locked?` <button class="ghost" id="discard">Revenir à la version ${S.ver}</button>`:""}`;
+  $("#resume").innerHTML=resumed?`<div class="banner enter"><span>Vous reprenez le brouillon laissé à ${esc(resumed)}.</span><button class="ghost" id="restart">Repartir de la version ${S.ver}</button><button class="ghost" id="keep" aria-label="Masquer">×</button></div>`:"";
+
+  // 1 · salaires
+  const s1done=S.verified&&!badSal;
+  $("#s1").className="step "+(badSal?"block":s1done?"done":"cur");
+  $("#st1").innerHTML=badSal?pill("err","à corriger"):s1done?pill("ok","vérifiés aujourd'hui"):pill("warn","à vérifier");
+  $("#stale").innerHTML=S.verified?"":`<div class="banner warn" style="margin:0 0 8px"><span>Saisis le 2 septembre 2026, il y a plus de deux mois. Vérifiez qu'aucun avenant n'a changé un salaire depuis.</span></div>`;
+  if(!$("#sal").children.length||locked!==$("#sal").dataset.l){ // ne pas recréer les champs pendant la frappe
+    $("#sal").dataset.l=locked;
+    $("#sal").innerHTML=TEAM.map(p=>`<div class="sal" data-p="${p.k}"><i style="background:${p.c}"></i><span><label for="sal-${p.k}">${esc(p.n)}</label><small>${esc(p.w)}</small></span><span class="money"><input type="text" inputmode="numeric" id="sal-${p.k}" value="${S.sal[p.k]}" ${locked?"disabled":""} aria-describedby="err-${p.k}"></span><span class="err" id="err-${p.k}" aria-live="polite"></span></div>`).join("");
+  }
+  TEAM.forEach(p=>{const r=$(`.sal[data-p="${p.k}"]`);r.classList.toggle("bad",!!S.bad[p.k]);$("#err-"+p.k).textContent=S.bad[p.k]||"";if(document.activeElement!==$("#sal-"+p.k))$("#sal-"+p.k).value=S.sal[p.k]});
+  $("#act1").innerHTML=locked?"":S.verified?`<button class="ghost" id="unverify">Signaler un salaire à revoir</button>`:`<button class="btn" id="verify" ${badSal?"disabled":""}>Les salaires sont à jour</button>${TEAM.some(p=>S.sal[p.k]!==SAL0[p.k])?`<button class="ghost" id="resetSal">Rétablir les montants saisis en septembre</button>`:""}`;
+
+  // 2 · changements
+  $("#s2").className="step "+(nOn?"done":"cur");
+  $("#st2").innerHTML=nOn?pill("ok",`${nOn} retenu${nOn>1?"s":""}`):pill("","aucun");
+  $("#empty").innerHTML=nOn?"":`<div class="empty">Aucun changement retenu : l'étape suivante montre l'équipe actuelle seule. Cochez un changement pour en voir l'effet.</div>`;
+  $("#sc").innerHTML=SC.map(s=>`<label class="${S.on[s.k]?"on":""}"><input type="checkbox" data-k="${s.k}" ${S.on[s.k]?"checked":""} ${locked?"disabled":""}><span>${esc(s.t)}<small>${esc(s.s)}</small></span><span class="c">+${R(cost(s.k))} €/an</span></label>`).join("");
+
+  // 3 · contrôle
+  $("#s3").className="step "+(over?"block":"done");
+  $("#st3").innerHTML=over?pill("err","dépassement"):pill("ok","dans le crédit");
+  let fix="";
+  if(over&&!locked){const need=year-cap, alone=SC.filter(s=>S.on[s.k]).map(s=>[s,cost(s.k)]).filter(([,c])=>c>=need);
+    fix=`<div class="banner err"><span>${alone.length?"Retirer un de ces changements suffit à revenir sous le crédit :":"Aucun changement ne suffit à lui seul. Revoyez les salaires de l'étape 1 ou retirez plusieurs changements."}</span>${alone.map(([s,c])=>`<button class="btn" data-off="${s.k}">Retirer « ${esc(s.t)} » (−${R(c)} €)</button>`).join("")}</div>`;}
+  $("#verd").innerHTML=`<div class="verd"><span class="dot ${over?"err":"ok"}"></span>${over?`Dépassement de ${R(year-cap)} €`:`Marge de ${R(cap-year)} €`}<small>${R(year)} € de masse salariale pour ${R(cap)} € de crédit annuel</small></div>${fix}`;
+  const mx=Math.max(CREDIT*1.25,...tot);
+  $("#bars").setAttribute("aria-label","Masse salariale par mois : "+MOIS.map((m,i)=>`${MOISL[i]} ${R(tot[i])} €`).join(", "));
+  $("#bars").innerHTML=M.map((x,i)=>`<div class="m ${tot[i]>CREDIT?"over":""}"><div class="stk" style="--lim:${CREDIT/mx}">${x.filter(y=>y.v).map(y=>`<i style="--v:${y.v/mx};background:${y.p.c}"></i>`).join("")}</div><span class="lb">${MOIS[i]}</span><span class="v">${R(tot[i])} €</span></div>`).join("");
+  $("#leg").innerHTML=M[0].map(y=>y.p).concat(S.on.rec&&!M[0].some(y=>y.p.k==="d")?[SC[1].extra]:[]).map(p=>`<span><i style="background:${p.c}"></i>${esc(p.n)}</span>`).join("");
+  const pk=tot.map((v,i)=>[v,i]).filter(([v])=>v>CREDIT);
+  $("#peaks").textContent=pk.length?`${list(pk.map(([v,i])=>`${MOISL[i]} (+${R(v-CREDIT)} €)`)).replace(/^./,c=>c.toUpperCase())} ${pk.length>1?"dépassent":"dépasse"} la moyenne mensuelle, à cause du demi-treizième mois${S.on.rec?" et du renfort":""}. Treizième mois versé pour moitié en juin et en décembre ; crédit apprécié sur l'année, règles de lissage et de report à vérifier pour 2027.`:"Aucun mois ne dépasse la moyenne mensuelle du crédit.";
+
+  // 4 · arrêt
+  const todo=[]; if(!s1done) todo.push(badSal?"corriger les salaires (étape 1)":"confirmer que les salaires sont à jour (étape 1)"); if(over) todo.push("revenir sous le crédit annuel (étape 3)");
+  $("#s4").className="step "+(S.phase==="done"?"done":todo.length?"":"cur");
+  $("#st4").innerHTML=S.phase==="done"?pill("ok","arrêtée"):S.phase==="saving"?`<span class="spin" aria-hidden="true"></span>enregistrement…`:S.fail?pill("err","non enregistrée"):todo.length?pill("","en attente"):pill("warn","prête");
+  let h="";
+  if(S.phase==="done") h=`<div class="banner ok enter"><span>Version ${S.ver} arrêtée à ${S.savedAt} : ${R(year)} € pour 2027, ${over?"dépassement":"marge"} de ${R(Math.abs(cap-year))} €. Elle sert désormais de référence.</span><button class="btn" id="reopen">Rouvrir pour modifier</button></div>`;
+  else if(S.phase==="saving") h=`<div class="banner"><span class="spin" aria-hidden="true"></span><span>Enregistrement de la version ${S.ver+1}… Les étapes sont verrouillées le temps de l'opération.</span></div>`;
+  else{
+    if(S.fail) h+=`<div class="banner err enter"><span>La version ${S.ver+1} n'a pas été enregistrée : la connexion a été interrompue. Vos choix sont conservés.</span><button class="btn pri" id="retry">Réessayer</button></div>`;
+    if(todo.length) h+=`<p class="desc" style="margin-top:0">Avant d'arrêter la prévision, il reste à :</p><ul class="todo">${todo.map(t=>`<li>${t}</li>`).join("")}</ul>`;
+    if(S.confirm&&!todo.length) h+=`<div class="confirm enter" role="group" aria-labelledby="cq"><p id="cq">Arrêter la version ${S.ver+1} ?</p><ul>
+      <li>${nOn?`Changements figés : ${list(SC.filter(s=>S.on[s.k]).map(s=>s.t.toLowerCase()))}.`:"Aucun changement : l'équipe actuelle seule."}</li>
+      <li>${R(year)} € pour 2027, ${diff?`${diff>0?"+":"−"}${R(Math.abs(diff))} € par rapport à la version ${S.ver}`:`comme la version ${S.ver}`}.</li>
+      <li>Elle remplace la version ${S.ver} comme référence. Pour la modifier ensuite, il faudra la rouvrir, ce qui crée une version ${S.ver+2}.</li></ul>
+      <div class="row-act" style="margin-top:0"><button class="btn pri" id="doit">Arrêter la version ${S.ver+1}</button><button class="btn" id="nope">Revenir</button></div></div>`;
+    else if(!S.fail) h+=`<button class="btn ${todo.length?"":"pri"}" id="ask" ${todo.length?"disabled":""}>Arrêter la prévision…</button>`;
+  }
+  $("#fin").innerHTML=h;
+  if(focusAfter){const el=$(focusAfter);focusAfter=null;el&&el.focus()}
+}
+let focusAfter=null;
+function change(fn){fn();S.confirm=false;S.fail=false;save();render()}
+function undoable(msg){const b=JSON.parse(JSON.stringify(prev));toastUndo(msg,()=>{S=b;save();render()})}
+function toastUndo(m,undo){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.style.cssText="display:flex;gap:10px;align-items:center;padding:6px 6px 6px 14px";t.innerHTML=`<span>${esc(m)}</span><button class="btn">Annuler</button>`;t.querySelector(".btn").onclick=()=>{undo();t.remove()};document.body.append(t);setTimeout(()=>t.remove(),6000)}
+
+document.addEventListener("change",e=>{const i=e.target.closest("[data-k]");if(i)change(()=>S.on[i.dataset.k]=i.checked)});
+document.addEventListener("input",e=>{
+  const m=e.target.id.match(/^sal-(\w)$/); if(!m) return; const k=m[1], raw=e.target.value.replace(/\s|€/g,"").replace(",","."), v=Number(raw);
+  if(raw===""||!isFinite(v)) S.bad[k]="Saisissez un montant en euros, sans lettres (par exemple 3650).";
+  else if(v<800||v>9000) S.bad[k]="Saisissez un salaire mensuel brut entre 800 et 9 000 €.";
+  else {delete S.bad[k]; S.sal[k]=Math.round(v)}
+  S.confirm=false; save(); render();
+});
+document.addEventListener("click",e=>{
+  const id=e.target.closest("button")?.id, off=e.target.closest("[data-off]"), demo=e.target.closest("[data-demo]");
+  if(off){prev=JSON.parse(JSON.stringify(S));change(()=>S.on[off.dataset.off]=false);undoable("Changement retiré");return}
+  if(demo){setDemo(demo.dataset.demo);return}
+  switch(id){
+    case "verify": change(()=>S.verified=true); toast("Salaires marqués comme vérifiés"); break;
+    case "unverify": change(()=>S.verified=false); break;
+    case "resetSal": change(()=>{S.sal={...SAL0};S.bad={}}); $("#sal").innerHTML=""; render(); break;
+    case "discard": prev=JSON.parse(JSON.stringify(S)); change(()=>{S.on={...V1.on};S.sal={...V1.sal};S.bad={}}); $("#sal").innerHTML=""; render(); undoable(`Brouillon abandonné, retour à la version ${S.ver}`); break;
+    case "restart": resumed=null; prev=JSON.parse(JSON.stringify(S)); S=START(); S.on={...V1.on}; save(); $("#sal").innerHTML=""; render(); undoable("Brouillon abandonné"); break;
+    case "keep": resumed=null; render(); break;
+    case "ask": S.confirm=true; focusAfter="#doit"; render(); break;
+    case "nope": S.confirm=false; focusAfter="#ask"; render(); break;
+    case "doit": case "retry": commit(); break;
+    case "reopen": change(()=>{S.phase="edit"}); toast(`Version ${S.ver} rouverte : vos modifications formeront la version ${S.ver+1}`); break;
+  }
+});
+let failNext=false;
+function commit(){S.phase="saving";S.confirm=false;S.fail=false;render();
+  setTimeout(()=>{if(failNext){failNext=false;S.phase="edit";S.fail=true;focusAfter="#retry"}else{S.phase="done";S.ver+=1;focusAfter="#reopen"}save();render()},1200)}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&S.confirm){S.confirm=false;focusAfter="#ask";render()}});
+function setDemo(k){
+  resumed=null; failNext=false; S=START();
+  if(k==="vide"){S.on={...V1.on};S.verified=true}
+  if(k==="erreur"){S.verified=true;S.on={aug:true,rec:true,tps:true,prime:true};S.sal={a:4400,b:3300,c:1420}}
+  if(k==="echec"){S.verified=true;failNext=true;$("#sal").innerHTML="";commit();return}
+  if(k==="termine"){S.verified=true;S.phase="done";S.ver=2;S.savedAt=now()}
+  if(k==="partiel"){S.verified=true}
+  $("#sal").innerHTML=""; save(); render();
+}
+render();
+</script>

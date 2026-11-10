@@ -1,0 +1,305 @@
+<title>Recommandations · patterns</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+<script>
+/* Données et règles reprises de la maquette d'origine (registre + vérification à la frappe). */
+const NOW=new Date(2026,10,10);
+const S={done:{l:"Mise en œuvre",c:"ok",col:"var(--ok)"},part:{l:"En partie",c:"warn",col:"var(--warn)"},no:{l:"Sans suite",c:"err",col:"var(--err)"},wait:{l:"Pas encore échue",c:"",col:"var(--dim)"}};
+const R=[
+ {id:"1402",short:"Vacance des logements",t:"Mission flash sur la vacance des logements",d:"Rapport d'information n° 1402, juin 2026",own:true,recos:[
+  {n:1,t:"Ouvrir à toutes les communes l'accès aux données fiscales sur la vacance, avant le 1er janvier 2027.",to:"Ministre de l'économie",due:"2027-01-01",s:"wait"},
+  {n:2,t:"Porter le plafond de l'aide à la remise sur le marché à 20 000 euros dans le projet de loi de finances pour 2027.",to:"Gouvernement",due:"2026-10-01",s:"no",proof:"PLF 2027 : plafond maintenu à 15 000 €"},
+  {n:3,t:"Publier, avant la fin de l'année 2026, une instruction aux préfets sur la réquisition des logements vacants.",to:"Ministre du logement",due:"2026-12-31",s:"wait"},
+  {n:4,t:"Créer un guichet unique départemental pour les propriétaires de logements vacants.",to:"Ministre du logement",due:"2026-12-31",s:"part",proof:"Expérimenté dans 6 départements (circulaire du 3 sept. 2026)"},
+  {n:5,t:"Intégrer au PLF pour 2027 une évaluation de la taxe sur les logements vacants.",to:"Ministre de l'économie",due:"2026-10-01",s:"done",proof:"PLF 2027, Évaluation des voies et moyens, tome II"}]},
+ {id:"987",short:"Logement décent",t:"Évaluation de la loi relative au logement décent",d:"Rapport d'information n° 987, mars 2025",own:true,recos:[
+  {n:1,t:"Publier le décret sur la décence énergétique avant le 30 juin 2025.",to:"Ministre du logement",due:"2025-06-30",s:"no",proof:"Non publié au 10 nov. 2026"},
+  {n:2,t:"Doubler les effectifs du service d'hygiène dans les communes de plus de 50 000 habitants d'ici 2027.",to:"Gouvernement",due:"2027-01-01",s:"wait"},
+  {n:3,t:"Rendre obligatoire le diagnostic de performance énergétique dans les annonces de location.",to:"Parlement",due:"2025-12-31",s:"done",proof:"Loi n° 2025-650, article 11"},
+  {n:4,t:"Informer chaque locataire de ses droits par un document type annexé au bail.",to:"Ministre du logement",due:"2025-12-31",s:"part",proof:"Arrêté du 28 janv. 2026 (bail type modifié, sans document annexé)"},
+  {n:5,t:"Mieux informer les propriétaires bailleurs sur les aides à la rénovation.",to:null,due:null,s:"no",proof:"Recommandation sans destinataire ni échéance : impossible à suivre"}]},
+ {id:"ccomptes",short:"Cour des comptes",t:"Cour des comptes · Les aides à la rénovation énergétique",d:"Rapport public thématique, octobre 2024",own:false,recos:[
+  {n:2,t:"Simplifier l'information des propriétaires sur les aides existantes par un point d'entrée unique.",to:"Ministre du logement",due:"2025-12-31",s:"part"},
+  {n:4,t:"Réduire à 60 jours le délai de paiement des primes de rénovation.",to:"Agence nationale de l'habitat",due:"2025-12-31",s:"no"}]},
+];
+const ALL=R.flatMap(r=>r.recos.map(x=>({...x,rep:r,key:r.id+"-"+x.n})));
+const fdate=d=>new Date(d+"T12:00").toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"});
+const days=d=>Math.round((new Date(d+"T12:00")-NOW)/864e5);
+function dueTxt(x){ if(!x.due) return "sans échéance"; const n=days(x.due);
+  if(n<0){const m=Math.round(-n/30.4); return `échue depuis ${m<1?"quelques jours":m+" mois"}`}
+  return n<45?`échéance dans ${n} jours`:`échéance ${fdate(x.due)}`; }
+const STOP=new Set("le la les de des du d l un une et en au aux a à sur pour par plus dans avec leur leurs ce ces cette qui que meilleure mieux".split(" "));
+const norm=s=>s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9 ]/g," ");
+const toks=s=>new Set(norm(s).split(/\s+/).filter(w=>w.length>2&&!STOP.has(w)).map(w=>w.slice(0,6)));
+const simil=(a,b)=>{let n=0;a.forEach(w=>{if(b.has(w))n++});return n/Math.sqrt((a.size||1)*(b.size||1))};
+/* Analyse d'une recommandation en cours d'écriture : quatre critères (mêmes règles que l'original) et les plus proches. */
+function analyse(t){
+  const T=t.toLowerCase();
+  const vague=T.match(/^\s*(réfléchir|étudier|envisager|engager une réflexion|mieux|veiller|favoriser|encourager|poursuivre)/);
+  const verb=T.match(/^\s*(publier|créer|porter|réduire|rendre|ouvrir|supprimer|doubler|fixer|intégrer|instaurer|abaisser|relever|transmettre|remettre|modifier|inscrire)/);
+  const to=T.match(/(ministre[^,.;]*|gouvernement|préfets?|agence[^,.;]*|anah|collectivités|communes|départements?|parlement)/);
+  const due=T.match(/(avant (le |la fin )?[^,.;]*\d{4}|d'ici (à )?(fin )?\d{4}|dans (un|le) délai[^,.;]*|en \d{4}|au \d{1,2}(er)? \w+ \d{4}|dans le projet de loi de finances pour \d{4}|plf (pour )?\d{4})/);
+  const vec=T.match(/(décret|arrêté|instruction|circulaire|loi|projet de loi de finances|plf|amendement|convention)/);
+  const crit={
+    acte: vague?{c:"err",l:"Formulation vague",m:vague[1],s:`« ${vague[1]} » ne permet pas de dire un jour si c'est fait. Commencez par l'acte attendu : publier, créer, fixer…`}
+         :verb?{c:"ok",l:"Acte vérifiable",m:verb[1]}:{c:"warn",l:"Acte à préciser",s:"Quel geste précis attend-on ?"},
+    to: to?{c:"ok",l:"Destinataire",m:to[1].split(/ (?:aux|sur|pour|avant|d'ici|afin|dans) /)[0]}:{c:"warn",l:"Destinataire absent",s:"Qui doit agir : un ministre, le Gouvernement, une agence ?"},
+    due: due?{c:"ok",l:"Échéance",m:due[1]}:{c:"warn",l:"Échéance absente",s:"Sans date, le suivi à six mois n'a pas de repère."},
+    vec: vec?{c:"ok",l:"Vecteur",m:vec[1]}:{c:"",l:"Vecteur non précisé",s:"Facultatif : décret, instruction, loi de finances…"}};
+  const mine=toks(t), near=ALL.map(x=>({x,s:simil(mine,toks(x.t))})).filter(m=>m.s>=.25).sort((a,b)=>b.s-a.s).slice(0,3);
+  return {crit,near,ready:crit.acte.c==="ok"&&crit.to.c==="ok"&&crit.due.c==="ok"};
+}
+const START="Réfléchir à une meilleure information des propriétaires de logements vacants sur les aides existantes.";
+</script>
+<style>
+/* Angle « patterns » : onglets par rapport au lieu d'une longue page ; dépliage par recommandation (le détail se demande) ;
+   l'écriture passe dans un tiroir latéral (overlay) qui garde le registre visible derrière ; brouillon réordonnable
+   au glisser-déposer ET au clavier ; toasts empilés avec « Annuler » pour tout geste qui écrase ou retire. */
+.head{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:end;justify-content:space-between}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin:18px 0 0;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 24px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 24px),transparent)}
+.tab{border:0;background:none;color:var(--muted);padding:10px 12px;font-size:13px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:color .2s,border-color .2s;min-height:44px}
+.tab:hover{color:var(--fg)}
+.tab[aria-selected=true]{color:var(--fg);border-bottom-color:var(--accent)}
+.tab span{color:var(--dim);margin-left:5px;font-size:12px}
+.tabs .end{flex:none;width:24px}
+.ph{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:16px;align-items:center;padding:16px 2px 12px}
+.ph b{color:var(--fg);font-weight:500}
+.ph small{display:block;color:var(--dim);font-size:12px}
+.stack{display:flex;height:6px;border-radius:3px;overflow:hidden;background:var(--s2)}
+.stack i{display:block;height:100%}
+.stack-l{font-size:11.5px;color:var(--dim);margin-top:4px;text-align:right}
+.seg{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.seg .chip{min-height:30px}
+.acc{list-style:none;margin:0;padding:0}
+.acc>li{border-top:1px solid var(--line)}
+.acc>li:first-child{border-top:0}
+.ah{all:unset;box-sizing:border-box;display:grid;grid-template-columns:12px minmax(0,1fr) auto 12px;gap:10px;align-items:start;width:100%;padding:12px 14px;cursor:pointer;min-height:44px;transition:background .2s}
+.ah:hover{background:rgba(255,255,255,.02)} .ah:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.ah .dot{margin-top:6px}
+.ah p{margin:0;font-size:13px;color:var(--text)}
+.ah .rp{display:block;font-size:12px;color:var(--dim);margin-top:2px}
+.ah .s{font-size:12px;color:var(--muted);white-space:nowrap;margin-top:1px}
+.ah .chev{color:var(--dim);font-size:10px;margin-top:5px;transition:transform .25s var(--ease)}
+.open>.ah .chev{transform:rotate(90deg)}
+.det{padding:0 14px 14px 36px;display:grid;gap:8px}
+.det dl{margin:0;display:grid;grid-template-columns:110px minmax(0,1fr);gap:4px 12px;font-size:12.5px}
+.det dt{color:var(--dim)} .det dd{margin:0;color:var(--text)}
+.det .ghost{justify-self:start;min-height:32px}
+.empty{padding:20px 14px;color:var(--dim);font-size:13px}
+/* tiroir */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .25s;z-index:20}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(460px,100vw);background:var(--s1);border-left:1px solid var(--line2);z-index:21;transform:translateX(100%);transition:transform .3s var(--ease),visibility 0s .3s;visibility:hidden;display:flex;flex-direction:column}
+body.dr .scrim{opacity:1;pointer-events:auto}
+body.dr .drawer{transform:none;visibility:visible;transition:transform .3s var(--ease)}
+.dh{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line)}
+.dh h2{margin:0;font:600 14px/1.3 var(--f);color:var(--fg)}
+.x{border:0;background:none;color:var(--muted);font-size:20px;line-height:1;width:44px;height:44px;border-radius:8px;cursor:pointer}
+.x:hover{background:var(--s2);color:var(--fg)}
+.db{flex:1;overflow-y:auto;padding:16px max(16px,env(safe-area-inset-right,0px)) 32px 16px;display:grid;gap:14px;align-content:start;scrollbar-width:thin}
+.db label,.lab{font-size:12px;color:var(--muted)}
+.db textarea{width:100%;min-height:110px;resize:vertical;line-height:1.6;font-size:13.5px;margin-top:5px}
+.crit{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.crit>li>button{all:unset;box-sizing:border-box;display:grid;grid-template-columns:12px minmax(0,1fr) 12px;gap:9px;align-items:center;width:100%;padding:6px 0;font-size:12.5px;color:var(--text);cursor:pointer;min-height:32px}
+.crit>li>button:focus-visible{outline:2px solid var(--accent)}
+.crit>li>button[disabled]{cursor:default}
+.crit .chev{color:var(--dim);font-size:9px;transition:transform .25s var(--ease)}
+.crit .open>button .chev{transform:rotate(90deg)}
+.crit .why{padding:0 0 6px 21px;font-size:12px;color:var(--muted)}
+.near{display:grid;gap:6px}
+.near details{border:1px solid var(--line);border-radius:8px;font-size:12.5px;color:var(--muted)}
+.near summary{padding:9px 10px;cursor:pointer;list-style:none;min-height:44px;box-sizing:border-box}
+.near summary::-webkit-details-marker{display:none}
+.near summary b{color:var(--text);font-weight:500}
+.near details>div{padding:0 10px 10px}
+.add{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.add .btn{min-height:40px}
+.add small{color:var(--warn);font-size:12px}
+.drafts{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.drafts li{display:grid;grid-template-columns:28px minmax(0,1fr) 32px;gap:6px;align-items:start;border:1px solid var(--line);border-radius:8px;padding:8px 6px;background:var(--s1);font-size:12.5px;color:var(--text);transition:border-color .2s,opacity .2s}
+.drafts li.drag{opacity:.4}
+.drafts li.over{border-color:var(--accent)}
+.drafts .n{color:var(--dim);margin-right:4px}
+.grip{border:0;background:none;color:var(--dim);cursor:grab;width:28px;height:28px;border-radius:6px;font-size:14px;letter-spacing:-2px}
+.grip:hover,.grip:focus-visible{color:var(--fg);background:var(--s2)}
+.grip[aria-pressed=true]{color:var(--fg);background:var(--lit)}
+.rm{border:0;background:none;color:var(--dim);width:32px;height:28px;border-radius:6px;cursor:pointer;font-size:16px}
+.rm:hover{color:var(--fg);background:var(--s2)}
+.kbd{font-size:11.5px;color:var(--dim)}
+/* toasts empilés */
+.toasts{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px;z-index:40;max-width:calc(100vw - 32px);width:340px}
+.ts{display:flex;align-items:center;gap:10px;background:var(--s2);border:1px solid var(--line2);border-left:3px solid var(--ok);color:var(--fg);padding:9px 10px 9px 12px;border-radius:8px;font-size:13px;animation:tin .25s var(--ease)}
+.ts.err{border-left-color:var(--err)}
+.ts span{flex:1}
+.ts button{border:0;background:none;color:var(--ins);cursor:pointer;font-size:13px;padding:4px 6px;min-height:32px}
+.ts.out{opacity:0;transition:opacity .2s}
+@keyframes tin{from{opacity:0;transform:translateY(6px)}}
+@media (pointer:coarse){.chip,.ghost,.btn,.grip,.rm{min-height:44px;min-width:44px}.crit>li>button{min-height:44px}}
+@media (max-width:640px){.ph{grid-template-columns:minmax(0,1fr)}.stack-l{text-align:left}.ah{grid-template-columns:12px minmax(0,1fr) 12px}.ah .s{display:none}.det{padding-left:14px}.det dl{grid-template-columns:minmax(0,1fr)}.det dt{margin-top:4px}.toasts{left:16px;right:16px;width:auto}}
+</style>
+
+<div class="wrap">
+  <div class="ctx">Rapports dont la députée a été rapporteure, et rapports externes sur les mêmes sujets</div>
+  <div class="head">
+    <div><h1>Registre des recommandations</h1></div>
+    <button class="btn pri" id="open" aria-haspopup="dialog" aria-controls="drawer">Rédiger une recommandation</button>
+  </div>
+  <p class="lead" id="lead"></p>
+  <div class="tabs scrollx" role="tablist" id="tabs" aria-label="Rapports"></div>
+  <div role="tabpanel" id="panel" aria-labelledby=""></div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dt">
+  <div class="dh"><h2 id="dt">Nouvelle recommandation</h2><button class="x" id="close" aria-label="Fermer">×</button></div>
+  <div class="db">
+    <div><label for="t">Texte</label><textarea id="t"></textarea></div>
+    <ul class="crit" id="crit" aria-label="Vérification"></ul>
+    <div class="add"><button class="btn pri" id="add">Ajouter au brouillon</button><small id="addm" role="status"></small></div>
+    <div><div class="lab">Déjà formulé ailleurs</div><div class="near" id="near" style="margin-top:6px"></div></div>
+    <div><div class="lab" id="drl">Brouillon du prochain rapport</div>
+      <ol class="drafts" id="drafts" aria-labelledby="drl" style="margin-top:6px"></ol>
+      <div class="kbd" id="kbd" role="status" style="margin-top:6px">Glisser la poignée pour réordonner, ou la sélectionner puis ↑ ↓.</div></div>
+  </div>
+</aside>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script>
+let tab="all", f=null; const openK=new Set(); let crOpen=new Set(["acte","to","due"]);
+const drafts=[
+ {t:"Publier avant le 30 juin 2027 le décret fixant les critères de la vacance structurelle.",to:"Ministre du logement"},
+ {t:"Réduire à 45 jours, d'ici fin 2027, le délai d'instruction des dossiers de l'Agence nationale de l'habitat.",to:"Agence nationale de l'habitat"}];
+/* toasts : empilés (3 au plus), 5 s, pause au survol, action facultative */
+function note(msg,{undo,err}={}){
+  const box=$("#toasts"); while(box.children.length>=3) box.firstChild.remove();
+  const t=document.createElement("div"); t.className="ts"+(err?" err":""); t.innerHTML=`<span>${esc(msg)}</span>`+(undo?`<button>Annuler</button>`:"");
+  box.append(t); let left=5000, st=Date.now(), id;
+  const kill=()=>{t.classList.add("out");setTimeout(()=>t.remove(),200)}; const arm=()=>{st=Date.now();id=setTimeout(kill,left)};
+  t.onmouseenter=()=>{clearTimeout(id);left-=Date.now()-st}; t.onmouseleave=arm; arm();
+  if(undo) t.querySelector("button").onclick=()=>{undo();kill()};
+}
+function render(){
+  const own=ALL.filter(x=>x.rep.own), c=k=>own.filter(x=>x.s===k).length;
+  $("#lead").innerHTML=`Sur ${own.length} recommandations de vos rapports, ${c("done")} sont mises en œuvre et ${c("part")} en partie. <span>${c("no")} restent sans suite, ${c("wait")} ne sont pas encore échues.</span>`;
+  const T=[{id:"all",l:"Toutes",n:ALL.length},...R.map(r=>({id:r.id,l:r.short,n:r.recos.length}))];
+  $("#tabs").innerHTML=T.map(x=>`<button class="tab" role="tab" id="tab-${x.id}" data-tab="${x.id}" aria-selected="${tab===x.id}" tabindex="${tab===x.id?0:-1}" aria-controls="panel">${esc(x.l)}<span>${x.n}</span></button>`).join("")+`<span class="end"></span>`;
+  $("#panel").setAttribute("aria-labelledby","tab-"+tab);
+  const rep=R.find(r=>r.id===tab), pool=rep?ALL.filter(x=>x.rep===rep):ALL, L=pool.filter(x=>!f||x.s===f), tot=pool.length;
+  const head=rep?`<div class="ph"><div><b>${esc(rep.t)}</b><small>${rep.d}${rep.own?"":" · rapport externe"}</small></div>
+    <div><div class="stack">${Object.keys(S).map(k=>{const n=pool.filter(x=>x.s===k).length;return n?`<i style="width:${100*n/tot}%;background:${S[k].col}"></i>`:""}).join("")}</div><div class="stack-l">${pool.filter(x=>x.s==="done").length} sur ${tot} mises en œuvre</div></div></div>`:`<div style="height:14px"></div>`;
+  const seg=`<div class="seg" role="group" aria-label="Filtrer par statut"><button class="chip ${!f?"on":""}" data-f="" aria-pressed="${!f}">Tous les statuts</button>${Object.entries(S).map(([k,v])=>{const n=pool.filter(x=>x.s===k).length;return n?`<button class="chip ${f===k?"on":""}" data-f="${k}" aria-pressed="${f===k}"><span class="dot ${v.c}"></span>${v.l} · ${n}</button>`:""}).join("")}</div>`;
+  $("#panel").innerHTML=head+seg+`<ul class="panel acc">${L.length?L.map(x=>`<li class="${openK.has(x.key)?"open":""}" data-key="${x.key}">
+    <button class="ah" aria-expanded="${openK.has(x.key)}"><span class="dot ${S[x.s].c}" aria-label="${S[x.s].l}"></span><span><p>${x.n}. ${esc(x.t)}</p>${rep?"":`<span class="rp">${esc(x.rep.short)}</span>`}</span><span class="s">${S[x.s].l}</span><span class="chev" aria-hidden="true">▶</span></button>
+    <div class="slide"><div><div class="det"><dl><dt>Statut</dt><dd>${S[x.s].l}</dd><dt>Destinataire</dt><dd>${x.to?esc(x.to):"—"}</dd><dt>Échéance</dt><dd>${x.due?fdate(x.due)+" · "+dueTxt(x):"aucune"}</dd><dt>Preuve</dt><dd>${x.proof?esc(x.proof):"—"}</dd></dl>
+    <button class="ghost" data-reuse="${x.key}">Reprendre dans une nouvelle recommandation</button></div></div></div></li>`).join(""):`<li class="empty">Aucune recommandation avec ce statut dans ce rapport.</li>`}</ul>`;
+}
+/* tiroir */
+let lastFocus=null;
+function openDrawer(){lastFocus=document.activeElement;document.body.classList.add("dr");$("#drawer").removeAttribute("inert");setTimeout(()=>$("#t").focus(),60)}
+function closeDrawer(){document.body.classList.remove("dr");$("#drawer").setAttribute("inert","");(lastFocus||$("#open")).focus()}
+$("#drawer").setAttribute("inert","");
+$("#drawer").addEventListener("keydown",e=>{ if(e.key!=="Tab") return;
+  const F=[...$("#drawer").querySelectorAll("button,textarea,summary,[tabindex]")].filter(el=>!el.disabled&&el.offsetParent); const a=F[0],z=F[F.length-1];
+  if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus()} else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus()} });
+let A=null;
+function check(){
+  A=analyse($("#t").value); const C=A.crit;
+  $("#crit").innerHTML=Object.entries(C).map(([k,v])=>{const op=v.c!=="ok"&&crOpen.has(k)&&v.s;
+    return `<li class="${op?"open":""}" data-cr="${k}"><button ${v.c==="ok"||!v.s?"disabled":""} aria-expanded="${!!op}"><span class="dot ${v.c}"></span><span>${v.l}${v.m?` : <mark>${esc(v.m.trim())}</mark>`:""}</span><span class="chev" aria-hidden="true">${v.c==="ok"||!v.s?"":"▶"}</span></button>
+    <div class="slide"><div><div class="why">${esc(v.s||"")}</div></div></div></li>`}).join("");
+  $("#near").innerHTML=A.near.length?A.near.map(({x})=>`<details><summary><span class="dot ${S[x.s].c}"></span> <b>${x.rep.own?"Rapport n° "+x.rep.id:x.rep.short} · reco. ${x.n}</b> — ${S[x.s].l}</summary><div>${esc(x.t)}${x.proof?`<br><span style="color:var(--dim)">${esc(x.proof)}</span>`:""}</div></details>`).join(""):`<span class="kbd">Rien de proche.</span>`;
+  $("#addm").textContent="";
+}
+/* brouillon : glisser-déposer + clavier */
+let grab=null, dragI=null;
+function renderDrafts(focusI){
+  $("#drafts").innerHTML=drafts.map((d,i)=>`<li draggable="true" data-i="${i}"><button class="grip" aria-label="Déplacer la recommandation ${i+1}" aria-pressed="${grab===i}" data-grip="${i}">⋮⋮</button><span><span class="n">${i+1}.</span>${esc(d.t)}</span><button class="rm" aria-label="Retirer la recommandation ${i+1}" data-rm="${i}">×</button></li>`).join("")||`<li style="grid-template-columns:1fr;color:var(--dim)">Vide.</li>`;
+  if(focusI!=null) $(`[data-grip="${focusI}"]`)?.focus();
+}
+function move(i,j){ if(j<0||j>=drafts.length) return i; const [d]=drafts.splice(i,1); drafts.splice(j,0,d); return j; }
+const D=$("#drafts");
+D.addEventListener("dragstart",e=>{const li=e.target.closest("li");dragI=+li.dataset.i;li.classList.add("drag");e.dataTransfer.effectAllowed="move";e.dataTransfer.setData("text/plain",dragI)});
+D.addEventListener("dragover",e=>{e.preventDefault();$$(".drafts li").forEach(l=>l.classList.remove("over"));e.target.closest("li")?.classList.add("over")});
+D.addEventListener("drop",e=>{e.preventDefault();const li=e.target.closest("li");if(li&&dragI!=null){move(dragI,+li.dataset.i);renderDrafts()}});
+D.addEventListener("dragend",()=>{dragI=null;renderDrafts()});
+D.addEventListener("keydown",e=>{const g=e.target.closest("[data-grip]"); if(!g) return; const i=+g.dataset.grip;
+  if(e.key===" "||e.key==="Enter"){e.preventDefault();grab=grab===i?null:i;renderDrafts(i);$("#kbd").textContent=grab!=null?"Sélectionnée : ↑ ↓ pour déplacer, Entrée pour poser, Échap pour lâcher.":"Posée en position "+(i+1)+".";return}
+  if(grab===i&&(e.key==="ArrowUp"||e.key==="ArrowDown")){e.preventDefault();grab=move(i,i+(e.key==="ArrowUp"?-1:1));renderDrafts(grab);$("#kbd").textContent="Position "+(grab+1)+" sur "+drafts.length+"."}
+  if(e.key==="Escape"&&grab!=null){e.stopPropagation();grab=null;renderDrafts(i)}});
+document.addEventListener("click",e=>{
+  const tb=e.target.closest("[data-tab]"); if(tb){tab=tb.dataset.tab;f=null;render();$("#tab-"+tab).focus();return}
+  const c=e.target.closest("[data-f]"); if(c){f=c.dataset.f||null;render();return}
+  const h=e.target.closest(".ah"); if(h){const li=h.parentElement,k=li.dataset.key;openK.has(k)?openK.delete(k):openK.add(k);li.classList.toggle("open");h.setAttribute("aria-expanded",openK.has(k));return}
+  const cr=e.target.closest("[data-cr]>button"); if(cr){const k=cr.parentElement.dataset.cr;crOpen.has(k)?crOpen.delete(k):crOpen.add(k);cr.parentElement.classList.toggle("open");cr.setAttribute("aria-expanded",crOpen.has(k));return}
+  const ru=e.target.closest("[data-reuse]"); if(ru){const x=ALL.find(y=>y.key===ru.dataset.reuse),prev=$("#t").value;$("#t").value=x.t;check();openDrawer();
+    note("Texte repris dans la recommandation en cours.",{undo:()=>{$("#t").value=prev;check()}});return}
+  const rm=e.target.closest("[data-rm]"); if(rm){const i=+rm.dataset.rm,[d]=drafts.splice(i,1);renderDrafts();note("Recommandation retirée du brouillon.",{undo:()=>{drafts.splice(i,0,d);renderDrafts()}});return}
+  if(e.target.closest("#open")){openDrawer();return}
+  if(e.target.closest("#close")||e.target===$("#scrim")){closeDrawer();return}
+  if(e.target.closest("#add")){ if(!A.ready){const miss=["acte","to","due"].filter(k=>A.crit[k].c!=="ok");miss.forEach(k=>crOpen.add(k));check();
+      $("#addm").textContent="À compléter : "+miss.map(k=>({acte:"l'acte attendu",to:"le destinataire",due:"l'échéance"})[k]).join(", ")+".";$("#t").focus();return}
+    drafts.push({t:$("#t").value.trim()});renderDrafts();const prev=$("#t").value;$("#t").value="";check();
+    note("Ajoutée au brouillon, en position "+drafts.length+".",{undo:()=>{drafts.pop();renderDrafts();$("#t").value=prev;check()}});}
+});
+$("#tabs").addEventListener("keydown",e=>{const T=$$(".tab"),i=T.findIndex(t=>t.dataset.tab===tab);let j=null;
+  if(e.key==="ArrowRight")j=(i+1)%T.length; if(e.key==="ArrowLeft")j=(i-1+T.length)%T.length; if(e.key==="Home")j=0; if(e.key==="End")j=T.length-1;
+  if(j!=null){e.preventDefault();tab=T[j].dataset.tab;f=null;render();$("#tab-"+tab).focus()}});
+document.addEventListener("keydown",e=>{ if(e.key!=="Escape") return;
+  if(document.body.classList.contains("dr")){closeDrawer();return} if(f){f=null;render()} });
+let tm; $("#t").addEventListener("input",()=>{clearTimeout(tm);tm=setTimeout(check,150)});
+$("#t").value=START; render(); check(); renderDrafts();
+</script>

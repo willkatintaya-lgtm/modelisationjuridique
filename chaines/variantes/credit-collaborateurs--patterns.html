@@ -1,0 +1,318 @@
+<title>Crédit collaborateurs · patterns</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+
+<style>
+/* Angle « patterns » : onglets pour les trois lectures (mois, personnes, cumul), dépliage en place pour le détail d'un mois
+   et le réglage d'un changement, interrupteurs à grandes cibles, toasts empilés avec « Annuler », tiroir latéral pour l'équipe. */
+.head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.kpi{display:flex;gap:10px 22px;flex-wrap:wrap;margin:14px 0 18px;align-items:baseline}
+.kpi div{display:grid}
+.kpi b{color:var(--fg);font-size:20px;font-weight:600;letter-spacing:-.01em}
+.kpi span{font-size:12px;color:var(--dim)}
+.kpi .pos b{color:#7fd3a8} .kpi .neg b{color:#f2a7a9}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:18px;align-items:start}
+.layout>*{min-width:0}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.tab{border:0;background:none;color:var(--muted);padding:10px 12px;min-height:44px;font-size:13.5px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .2s,border-color .2s;white-space:nowrap}
+.tab:hover{color:var(--fg)}
+.tab[aria-selected=true]{color:var(--fg);border-color:var(--accent)}
+.view{padding:14px}
+.view[hidden]{display:none}
+.key{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted)}
+.key i{width:18px;border-top:1px dashed var(--muted)}
+.bars{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:5px;align-items:end;height:210px;position:relative;margin-top:12px}
+.col{display:flex;flex-direction:column-reverse;height:100%;border:0;padding:0;background:none;cursor:pointer;border-radius:3px}
+.col i{display:block;transition:height .35s var(--ease)}
+.col i:last-child{border-radius:3px 3px 0 0}
+.col:hover,.col[aria-expanded=true]{background:rgba(255,255,255,.04)}
+.col[aria-expanded=true]{outline:1px solid var(--line2);outline-offset:2px}
+.lim{position:absolute;left:0;right:0;border-top:1px dashed var(--muted);pointer-events:none}
+.mo{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:5px;margin-top:6px;font-size:11px;color:var(--dim);text-align:center}
+.mo .over{color:#f2a7a9}
+.det .in{padding-top:12px;margin-top:12px;border-top:1px solid var(--line);font-size:13px}
+.row{display:flex;justify-content:space-between;gap:10px;padding:2px 0}
+.row span:first-child{display:flex;gap:8px;align-items:center;min-width:0}
+.row i{width:8px;height:8px;border-radius:2px;flex:none}
+.row b{color:var(--fg);font-weight:500}
+.hint{margin:10px 0 0;font-size:12px;color:var(--dim)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-weight:500;color:var(--dim);font-size:12px;text-align:right;padding:6px 8px;border-bottom:1px solid var(--line)}
+td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal}
+td i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:8px}
+tfoot td{color:var(--fg);font-weight:500;border-bottom:0}
+.cum svg{display:block;width:100%;height:auto}
+.leg{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:8px}
+.leg i{display:inline-block;width:16px;height:0;border-top:2px solid;vertical-align:3px;margin-right:6px}
+.side h2{margin:0 0 10px;font:500 13.5px/1.4 var(--f);color:var(--fg)}
+.side{padding:14px}
+.sw{border:1px solid var(--line);border-radius:9px;margin-bottom:8px;transition:border-color .2s,background .2s}
+.sw.on{border-color:var(--accent);background:var(--lit)}
+.swr{display:grid;grid-template-columns:minmax(0,1fr) 44px;align-items:center;min-height:56px}
+.tog{display:grid;grid-template-columns:38px minmax(0,1fr);gap:10px;align-items:center;text-align:left;border:0;background:none;padding:8px 4px 8px 12px;min-height:56px;cursor:pointer;color:var(--text);font-size:13px}
+.tog small{display:block;color:var(--dim);font-size:12px}
+.knob{width:34px;height:20px;border-radius:999px;background:var(--line2);position:relative;transition:background .2s}
+.knob::after{content:"";position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:var(--fg);transition:transform .2s var(--ease)}
+.on .knob{background:var(--accent)} .on .knob::after{transform:translateX(14px)}
+.cost{display:block;font-size:12px;color:var(--muted);margin-top:2px}
+.more{width:44px;height:44px;border:0;background:none;color:var(--muted);cursor:pointer;border-radius:8px;display:grid;place-items:center}
+.more:hover{color:var(--fg);background:var(--s2)}
+.more svg{transition:transform .25s var(--ease)}
+.sw.open .more svg{transform:rotate(180deg)}
+.form{display:grid;gap:10px;padding:2px 12px 14px}
+.f{display:grid;gap:4px;font-size:12.5px;color:var(--muted)}
+.f input,.f select{min-height:44px;width:100%}
+.f.bad input{border-color:var(--err)}
+.err{color:#f2a7a9;font-size:12px;min-height:0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.reset{justify-self:start}
+.toasts{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));display:grid;gap:8px;z-index:40;width:min(360px,calc(100vw - 32px))}
+.tst{display:flex;align-items:center;gap:10px;background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:8px 8px 8px 14px;border-radius:9px;font-size:13px;animation:up .2s var(--ease);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.tst span{flex:1;min-width:0}
+.tst .btn{min-height:36px}
+.tst.out{opacity:0;transition:opacity .2s}
+@keyframes up{from{opacity:0;transform:translateY(6px)}}
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;opacity:0;transition:opacity .2s}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(380px,100vw);background:var(--s1);border-left:1px solid var(--line);z-index:51;transform:translateX(100%);transition:transform .28s var(--ease);padding:calc(16px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 16px 18px;overflow:auto}
+body.dr .scrim{opacity:1} body.dr .drawer{transform:none}
+.drawer h2{margin:0;font:500 15px/1.4 var(--f);color:var(--fg)}
+.dh{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.x{width:44px;height:44px;border:0;background:none;color:var(--muted);font-size:22px;cursor:pointer;border-radius:8px}
+.x:hover{background:var(--s2);color:var(--fg)}
+.tm{display:grid;grid-template-columns:10px minmax(0,1fr) auto;gap:10px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px}
+.tm i{width:10px;height:10px;border-radius:2px;align-self:center}
+.tm small{display:block;color:var(--dim);font-size:12px}
+.foot{font-size:12px;color:var(--dim);margin-top:14px}
+@media (max-width:960px){.layout{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:480px){.bars,.mo{gap:2px}.bars{height:170px}.mo{font-size:9.5px}.tab{padding:10px 8px;font-size:13px}}
+</style>
+
+<div class="wrap">
+  <div class="head">
+    <div><div class="ctx">Gestion du bureau · exercice 2027 · montants fictifs, salaires bruts</div>
+    <h1>Crédit collaborateurs 2027</h1></div>
+    <button class="btn" id="openTeam" aria-haspopup="dialog">Voir l'équipe</button>
+  </div>
+  <div class="kpi" id="kpi" aria-live="polite"></div>
+
+  <div class="layout">
+    <section class="panel" style="padding:0 14px 14px">
+      <div class="tabs scrollx" role="tablist" aria-label="Lectures">
+        <button class="tab" role="tab" id="t-mois" aria-controls="v-mois">Par mois</button>
+        <button class="tab" role="tab" id="t-pers" aria-controls="v-pers">Par collaborateur</button>
+        <button class="tab" role="tab" id="t-cum" aria-controls="v-cum">Cumul annuel</button>
+      </div>
+      <div class="view" role="tabpanel" id="v-mois" aria-labelledby="t-mois" style="padding:0">
+        <div class="key"><i></i>moyenne mensuelle du crédit · 11&#8239;100&nbsp;€</div>
+        <div class="bars" id="bars"></div>
+        <div class="mo" id="mo" aria-hidden="true"></div>
+        <div class="det" id="detw"><div class="slide"><div><div class="in" id="det"></div></div></div></div>
+        <p class="hint" id="hint">Choisissez un mois pour voir sa composition (flèches gauche et droite au clavier).</p>
+      </div>
+      <div class="view" role="tabpanel" id="v-pers" aria-labelledby="t-pers" style="padding:0" hidden>
+        <div class="scrollx"><table><thead><tr><th>Collaborateur</th><th>Salaire mensuel</th><th>dont changements</th><th>Coût 2027</th></tr></thead><tbody id="tb"></tbody><tfoot id="tf"></tfoot></table></div>
+      </div>
+      <div class="view cum" role="tabpanel" id="v-cum" aria-labelledby="t-cum" style="padding:0" hidden>
+        <div class="leg"><span><i style="border-color:var(--accent)"></i>masse salariale cumulée</span><span><i style="border-color:var(--muted);border-top-style:dashed"></i>crédit cumulé</span></div>
+        <div id="cum"></div>
+        <div class="mo" aria-hidden="true"></div>
+        <p class="hint" id="cumtxt"></p>
+      </div>
+    </section>
+
+    <aside class="panel side" aria-labelledby="h-sc">
+      <h2 id="h-sc">Changements à essayer</h2>
+      <div id="sc"></div>
+      <p class="foot">Treizième mois versé pour moitié en juin et pour moitié en décembre, hors prime et hors CDD. Crédit apprécié sur l'année ; règles de lissage et de report à vérifier pour 2027.</p>
+    </aside>
+  </div>
+</div>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="h-team" hidden>
+  <div class="dh"><h2 id="h-team">Équipe en 2027</h2><button class="x" id="closeTeam" aria-label="Fermer">×</button></div>
+  <div id="team"></div>
+</aside>
+
+<script>
+const CREDIT=11100, cap=CREDIT*12, R=n=>nf(Math.round(n));
+const MOIS=["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."];
+const MOISL=["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+const TEAM=[
+ {k:"a",n:"Attachée parlementaire",w:"Paris · temps plein",sal:3650,c:"#6e7bf2"},
+ {k:"b",n:"Collaborateur en circonscription",w:"temps plein",sal:2780,c:"#2bb3b1"},
+ {k:"c",n:"Assistante en circonscription",w:"mi-temps",sal:1420,c:"#c07a00"},
+];
+const DEF={augPct:6,augFrom:0,recFrom:2,recTo:5,recSal:1550,tpsFrom:8,prime:1000};
+let P={...DEF};
+const ON={aug:false,rec:true,tps:false,prime:false};
+const SC=[
+ {k:"aug",t:()=>`Augmenter l'attachée de ${nf(P.augPct,P.augPct%1?1:0)} %`,s:()=>`à partir de ${MOISL[P.augFrom]}`,apply:(m,p)=>p.k==="a"&&m>=P.augFrom?p.sal*P.augPct/100:0},
+ {k:"rec",t:()=>"Recruter un renfort à mi-temps (CDD)",s:()=>`de ${MOISL[P.recFrom]} à ${MOISL[P.recTo]} · ${R(P.recSal)} € par mois`},
+ {k:"tps",t:()=>"Passer l'assistante à temps plein",s:()=>`à partir de ${MOISL[P.tpsFrom]}`,apply:(m,p)=>p.k==="c"&&m>=P.tpsFrom?p.sal:0},
+ {k:"prime",t:()=>"Prime exceptionnelle de fin d'année",s:()=>`${R(P.prime)} € par collaborateur, en décembre`,apply:(m,p)=>m===11&&p.k!=="d"?P.prime:0},
+];
+const extra=()=>({k:"d",n:"Renfort (CDD)",w:`mi-temps · ${MOIS[P.recFrom]} à ${MOIS[P.recTo]}`,sal:P.recSal,c:"#d8699a",from:P.recFrom,to:P.recTo});
+const team=()=>ON.rec?[...TEAM,extra()]:[...TEAM];
+function month(m){
+  return team().map(p=>{
+    if(p.from!=null&&(m<p.from||m>p.to)) return {p,v:0};
+    let v=p.sal; for(const s of SC) if(ON[s.k]&&s.apply) v+=s.apply(m,p);
+    if((m===5||m===11)&&p.from==null) v+=(v-(m===11&&ON.prime?P.prime:0))/2;
+    return {p,v};
+  });
+}
+function calc(){const M=MOIS.map((_,m)=>month(m)),tot=M.map(x=>x.reduce((s,y)=>s+y.v,0));return {M,tot,year:tot.reduce((a,b)=>a+b,0)}}
+function cost(k){const w=ON[k];ON[k]=false;const a=calc().year;ON[k]=true;const b=calc().year;ON[k]=w;return b-a}
+function baseOf(k){const w={...ON};for(const x in ON)ON[x]=x==="rec"&&k==="d";const r=calc().M.reduce((t,x)=>t+(x.find(y=>y.p.k===k)?.v||0),0);Object.assign(ON,w);return r}
+
+let sel=null, open=new Set();
+const chev=`<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>`;
+const opts=(v,from=0)=>MOISL.map((m,i)=>i<from?"":`<option value="${i}" ${i===v?"selected":""}>${m}</option>`).join("");
+const FORMS={
+ aug:()=>`<div class="two"><label class="f">Taux (%)<input type="number" id="augPct" inputmode="decimal" step="0.5" min="0.5" max="15" value="${P.augPct}"></label><label class="f">À partir de<select id="augFrom">${opts(P.augFrom)}</select></label></div><div class="err" id="e-augPct"></div>`,
+ rec:()=>`<div class="two"><label class="f">Début<select id="recFrom">${opts(P.recFrom)}</select></label><label class="f">Fin<select id="recTo">${opts(P.recTo)}</select></label></div><div class="err" id="e-recTo"></div><label class="f">Salaire mensuel brut (€)<input type="number" id="recSal" inputmode="numeric" step="50" min="500" max="4000" value="${P.recSal}"></label><div class="err" id="e-recSal"></div>`,
+ tps:()=>`<label class="f">À partir de<select id="tpsFrom">${opts(P.tpsFrom)}</select></label>`,
+ prime:()=>`<label class="f">Montant par collaborateur (€)<input type="number" id="prime" inputmode="numeric" step="100" min="0" max="3000" value="${P.prime}"></label><div class="err" id="e-prime"></div>`,
+};
+const KEYS={aug:["augPct","augFrom"],rec:["recFrom","recTo","recSal"],tps:["tpsFrom"],prime:["prime"]};
+function renderSC(){
+  $("#sc").innerHTML=SC.map(s=>`<div class="sw ${ON[s.k]?"on":""} ${open.has(s.k)?"open":""}" data-s="${s.k}">
+   <div class="swr"><button class="tog" role="switch" aria-checked="${ON[s.k]}" data-t="${s.k}"><span class="knob"></span><span>${esc(s.t())}<small>${esc(s.s())}</small><span class="cost" data-c="${s.k}"></span></span></button>
+   <button class="more" data-o="${s.k}" aria-expanded="${open.has(s.k)}" aria-controls="f-${s.k}" aria-label="Régler : ${esc(s.t())}">${chev}</button></div>
+   <div class="slide"><div><form class="form" id="f-${s.k}" data-f="${s.k}" novalidate>${FORMS[s.k]()}${KEYS[s.k].some(x=>P[x]!==DEF[x])?`<button type="button" class="ghost reset" data-r="${s.k}">Revenir aux valeurs par défaut</button>`:""}</form></div></div></div>`).join("");
+}
+function render(){
+  const {M,tot,year}=calc(), over=year>cap, pk=tot.filter(v=>v>CREDIT).length;
+  $("#kpi").innerHTML=`<div><b>${R(year)} €</b><span>masse salariale 2027</span></div><div class="${over?"neg":"pos"}"><b>${over?"−":"+"}${R(Math.abs(cap-year))} €</b><span>${over?"dépassement":"marge"} sur ${R(cap)} €</span></div><div><b>${pk}</b><span>mois au-dessus de la moyenne</span></div>`;
+  const mx=Math.max(CREDIT*1.25,...tot);
+  $("#bars").innerHTML=M.map((x,i)=>`<button class="col" data-m="${i}" tabindex="${(sel??5)===i?0:-1}" aria-expanded="${sel===i}" aria-controls="detw" aria-label="${MOISL[i]} : ${R(tot[i])} €">${x.filter(y=>y.v).map(y=>`<i style="height:${100*y.v/mx}%;background:${y.p.c}"></i>`).join("")}</button>`).join("")+`<div class="lim" style="bottom:${100*CREDIT/mx}%"></div>`;
+  $("#mo").innerHTML=MOIS.map((m,i)=>`<span class="${tot[i]>CREDIT?"over":""}">${m}</span>`).join("");
+  $("#detw").classList.toggle("open",sel!=null); $("#hint").hidden=sel!=null;
+  if(sel!=null){const d=tot[sel]-CREDIT;
+    $("#det").innerHTML=`<div class="row"><b>${MOISL[sel][0].toUpperCase()+MOISL[sel].slice(1)}${sel===5||sel===11?" · avec le demi-treizième mois":""}</b><b>${R(tot[sel])} €</b></div>`+M[sel].filter(y=>y.v).map(y=>`<div class="row"><span><i style="background:${y.p.c}"></i>${esc(y.p.n)}</span><span>${R(y.v)} €</span></div>`).join("")+`<div class="row" style="color:${d>0?"#f2a7a9":"var(--muted)"}"><span>${d>0?"Au-dessus de":"Sous"} la moyenne du crédit</span><span>${d>0?"+":"−"}${R(Math.abs(d))} €</span></div>`;}
+  // par collaborateur
+  const rows=team().map(p=>{const y=M.reduce((t,x)=>t+(x.find(z=>z.p.k===p.k)?.v||0),0), b=p.k==="d"?0:baseOf(p.k);return {p,y,ch:y-b}});
+  $("#tb").innerHTML=rows.map(r=>`<tr><td><i style="background:${r.p.c}"></i>${esc(r.p.n)}</td><td>${R(r.p.sal)} €</td><td>${r.p.k==="d"?"nouveau poste":r.ch?"+"+R(r.ch)+" €":"—"}</td><td>${R(r.y)} €</td></tr>`).join("");
+  $("#tf").innerHTML=`<tr><td>Total</td><td></td><td></td><td>${R(year)} €</td></tr>`;
+  // cumul
+  const W=600,H=220,pad=8; let c=0; const cu=tot.map(v=>c+=v); const top=Math.max(cap,cu[11])*1.05;
+  const X=i=>(i+.5)/12*W, Y=v=>H-v/top*(H-10);
+  const path=cu.map((v,i)=>`${i?"L":"M"}${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join("");
+  const cross=cu.findIndex((v,i)=>v>CREDIT*(i+1));
+  $("#cum").innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Masse salariale cumulée face au crédit cumulé"><line x1="${pad}" y1="${H}" x2="${W-pad}" y2="${H}" stroke="var(--line2)"/><path d="M${X(0)},${Y(CREDIT)} L${X(11)},${Y(cap)}" fill="none" stroke="var(--muted)" stroke-dasharray="4 4" stroke-width="1.5"/><path d="${path}" fill="none" stroke="var(--accent)" stroke-width="2.2"/>${cu.map((v,i)=>`<circle cx="${X(i)}" cy="${Y(v)}" r="${i===11?4:2.5}" fill="${i===11?"var(--fg)":"var(--accent)"}"/>`).join("")}</svg>`;
+  $("#cumtxt").textContent=`Fin décembre : ${R(year)} € engagés sur ${R(cap)} €. `+(cross<0?"La masse cumulée reste sous le crédit cumulé toute l'année.":`La masse cumulée passe au-dessus du crédit cumulé en ${MOISL[cross]}${over?" et y reste.":", puis repasse dessous."}`);
+  $("#v-cum .mo").innerHTML=MOIS.map(m=>`<span>${m}</span>`).join("");
+  // coûts des changements
+  SC.forEach(s=>{const el=$(`[data-c="${s.k}"]`);if(el)el.textContent="+"+R(cost(s.k))+" €/an"});
+  // tiroir
+  $("#team").innerHTML=team().map(p=>`<div class="tm"><i style="background:${p.c}"></i><span>${esc(p.n)}<small>${esc(p.w)}</small></span><span>${R(p.sal)} €/mois</span></div>`).join("")+`<p class="foot">Salaires mensuels bruts hors changements. Le renfort n'apparaît que s'il est retenu.</p>`;
+}
+function all(){renderSC();render()}
+
+// toasts empilés, au plus trois, avec annulation
+function note(msg,undo){
+  const box=$("#toasts"), t=document.createElement("div"); t.className="tst"; t.setAttribute("role","status");
+  t.innerHTML=`<span>${esc(msg)}</span>${undo?`<button class="btn">Annuler</button>`:""}`;
+  box.append(t); while(box.children.length>3) box.firstChild.remove();
+  let tm; const go=()=>{t.classList.add("out");setTimeout(()=>t.remove(),200)}, arm=()=>tm=setTimeout(go,5000);
+  t.addEventListener("mouseenter",()=>clearTimeout(tm)); t.addEventListener("mouseleave",arm); t.addEventListener("focusin",()=>clearTimeout(tm));
+  if(undo) t.querySelector(".btn").onclick=()=>{undo();go()};
+  arm();
+}
+const snap=()=>({P:{...P},ON:{...ON}}), restore=s=>{P=s.P;Object.assign(ON,s.ON);all()};
+
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-t]"); if(t){const k=t.dataset.t,b=snap();ON[k]=!ON[k];const s=SC.find(x=>x.k===k);all();$(`[data-t="${k}"]`).focus();note(`${ON[k]?"Ajouté":"Retiré"} : ${s.t()} (${ON[k]?"+":"−"}${R(cost(k))} €/an)`,()=>restore(b));return}
+  const o=e.target.closest("[data-o]"); if(o){const k=o.dataset.o;open.has(k)?open.delete(k):open.add(k);const w=o.closest(".sw");w.classList.toggle("open");o.setAttribute("aria-expanded",open.has(k));return}
+  const r=e.target.closest("[data-r]"); if(r){const k=r.dataset.r,b=snap();KEYS[k].forEach(x=>P[x]=DEF[x]);all();note("Valeurs par défaut rétablies",()=>restore(b));return}
+  const c=e.target.closest(".col"); if(c){const m=+c.dataset.m;sel=sel===m?null:m;render();$(`.col[data-m="${m}"]`).focus();return}
+});
+$("#bars").addEventListener("keydown",e=>{const d={ArrowLeft:-1,ArrowRight:1}[e.key];if(!d)return;e.preventDefault();const m=((sel??5)+d+12)%12;sel=m;render();$(`.col[data-m="${m}"]`).focus()});
+// réglages : on n'applique qu'une valeur valide ; sinon message qui dit quoi saisir, et la dernière valeur valide reste en vigueur
+const RULES={augPct:[.5,15,"Saisissez un taux entre 0,5 et 15 %."],recSal:[500,4000,"Saisissez un salaire mensuel entre 500 et 4 000 €."],prime:[0,3000,"Saisissez un montant entre 0 et 3 000 €."]};
+document.addEventListener("input",e=>{
+  const id=e.target.id; if(!(id in P)) return; const f=e.target.closest(".f"), k=e.target.closest("[data-f]").dataset.f;
+  let v=e.target.type==="number"?parseFloat(String(e.target.value).replace(",",".")):+e.target.value, msg="";
+  if(RULES[id]){const [lo,hi,m]=RULES[id]; if(!(v>=lo&&v<=hi)) msg=m;}
+  if(id==="recFrom"&&v>P.recTo||id==="recTo"&&v<P.recFrom) msg="La fin du contrat doit venir après son début.";
+  const err=$("#e-"+(id==="recFrom"?"recTo":id)); if(f) f.classList.toggle("bad",!!msg); if(err) err.textContent=msg;
+  if(msg) return; P[id]=v;
+  const sw=e.target.closest(".sw"); sw.querySelector(".tog>span:last-child").innerHTML=`${esc(SC.find(s=>s.k===k).t())}<small>${esc(SC.find(s=>s.k===k).s())}</small><span class="cost" data-c="${k}"></span>`;
+  render();
+});
+document.addEventListener("submit",e=>e.preventDefault());
+
+// onglets : flèches, Début/Fin ; l'onglet choisi est retenu dans ce navigateur
+const TABS=$$(".tab");
+function pick(t,focus){TABS.forEach(x=>{const on=x===t;x.setAttribute("aria-selected",on);x.tabIndex=on?0:-1;$("#"+x.getAttribute("aria-controls")).hidden=!on});if(focus)t.focus();try{localStorage.setItem("cc-tab",t.id)}catch(_){}}
+TABS.forEach((t,i)=>{t.onclick=()=>pick(t);t.onkeydown=e=>{const n={ArrowRight:i+1,ArrowLeft:i-1,Home:0,End:TABS.length-1}[e.key];if(n==null)return;e.preventDefault();pick(TABS[(n+TABS.length)%TABS.length],true)}});
+let st=null;try{st=localStorage.getItem("cc-tab")}catch(_){}
+pick($("#"+st)||TABS[0]);
+
+// tiroir de l'équipe : × ou Échap ou clic sur le voile, le focus revient au bouton
+let last;
+function dOpen(){last=document.activeElement;$("#scrim").hidden=false;$("#drawer").hidden=false;requestAnimationFrame(()=>requestAnimationFrame(()=>document.body.classList.add("dr")));setTimeout(()=>$("#closeTeam").focus(),50)}
+function dClose(){document.body.classList.remove("dr");setTimeout(()=>{$("#scrim").hidden=true;$("#drawer").hidden=true},280);last&&last.focus()}
+$("#openTeam").onclick=dOpen; $("#closeTeam").onclick=dClose; $("#scrim").onclick=dClose;
+document.addEventListener("keydown",e=>{if(e.key!=="Escape")return; if(document.body.classList.contains("dr"))dClose(); else if(sel!=null){sel=null;render()}});
+$("#drawer").addEventListener("keydown",e=>{if(e.key==="Tab"){e.preventDefault();$("#closeTeam").focus()}});
+all();
+</script>

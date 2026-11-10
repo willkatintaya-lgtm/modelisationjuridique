@@ -1,0 +1,334 @@
+<title>Communes par taille · patterns</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+
+<style>
+/* Angle « patterns » : onglets par taille de commune (la médiane ne vaut qu'à l'intérieur d'une taille),
+   un axe commun par onglet, la fiche dans un tiroir latéral (feuille du bas sur écran étroit),
+   l'avertissement en divulgation progressive, une liste « à contacter » remplie par glisser-déposer
+   ou au clavier, des toasts empilés avec Annuler. */
+.lead{margin-bottom:10px}
+.why{margin:0 0 18px;max-width:780px;font-size:13px;color:var(--muted)}
+.why summary{cursor:pointer;list-style:none;display:block;position:relative;padding:6px 0 6px 26px;color:var(--text)}
+.why summary .i{position:absolute;left:0;top:7px}
+.why summary::-webkit-details-marker{display:none}
+.why summary .i{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;border:1px solid var(--warn);color:var(--warn);font-size:11px;font-weight:600}
+.why summary .more{color:var(--ins);font-size:12.5px;margin-left:6px;white-space:nowrap}
+.why[open] summary .more{display:none}
+.why .body{padding:4px 0 2px 26px;line-height:1.6;animation:sl .25s var(--ease)}
+@keyframes sl{from{opacity:0;transform:translateY(-4px)}}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:16px;align-items:start}
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin:0 0 0;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+@media (max-width:620px){.tabs{-webkit-mask-image:linear-gradient(90deg,transparent,#000 18px,#000 calc(100% - 18px),transparent);mask-image:linear-gradient(90deg,transparent,#000 18px,#000 calc(100% - 18px),transparent);padding:0 10px}}
+.tab{flex:none;border:0;background:none;color:var(--muted);padding:0 14px;min-height:44px;cursor:pointer;font-size:13px;border-bottom:2px solid transparent;margin-bottom:-1px;display:inline-flex;align-items:center;gap:8px;transition:color .2s,border-color .2s}
+.tab:hover{color:var(--fg)}
+.tab[aria-selected=true]{color:var(--fg);border-bottom-color:var(--accent)}
+.tab .cnt{font-size:11.5px;color:var(--dim)}
+.tab .al{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:rgba(229,72,77,.18);color:#f2a7a9;font-size:11px;font-weight:600}
+.tp{padding:16px 16px 8px}
+.tp-h{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-bottom:6px}
+.tp-h b{color:var(--fg);font-weight:500}
+.plot{position:relative;margin:6px 4px 4px}
+.plot .ax{position:absolute;left:0;right:0;height:2px;background:var(--line)}
+.plot .md{position:absolute;width:2px;background:var(--muted)}
+.plot .mdl{position:absolute;top:0;font-size:11.5px;color:var(--muted);white-space:nowrap}
+.plot .pt{position:absolute;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--accent);border:0;padding:0;cursor:pointer;box-shadow:0 0 0 3px var(--s1)}
+.plot .pt.z{background:var(--s1);border:2px solid var(--err)}
+.plot .pt.lo{background:#f2a7a9}
+.plot .lb{position:absolute;font-size:12px;color:var(--text);white-space:nowrap;border:0;background:none;padding:0;cursor:pointer}
+.plot .lb:hover{color:var(--fg);text-decoration:underline}
+.plot .tick{position:absolute;width:1px;background:var(--line2)}
+.scale{display:flex;justify-content:space-between;font-size:11px;color:var(--dim);margin:0 4px 10px}
+.rows{border-top:1px solid var(--line)}
+.r{display:grid;grid-template-columns:22px minmax(0,1fr) 120px 44px;gap:10px;align-items:center;padding:4px 4px 4px 2px;border-bottom:1px solid var(--line);transition:background .2s,opacity .2s}
+.r:last-child{border-bottom:0}
+.r.drag{opacity:.45}
+.grip{width:22px;height:30px;display:grid;place-items:center;color:var(--dim);cursor:grab}
+.r .open{display:block;width:100%;min-height:44px;border:0;background:none;text-align:left;cursor:pointer;padding:5px 6px;border-radius:7px;transition:background .2s}
+.r .open:hover{background:var(--s2)}
+.r .open b{display:block;color:var(--fg);font-weight:500;font-size:13.5px}
+.r .open small{display:block;color:var(--dim);font-size:12px}
+.r .v{text-align:right;font-size:13px;color:var(--fg);white-space:nowrap}
+.r .v small{display:block;font-size:12px;color:var(--dim)}
+.r .v .z{color:var(--err)} .r .v .lo{color:#f2a7a9} .r .v .hi{color:#7fd3a8}
+.add{width:44px;height:44px;border-radius:8px;border:1px solid var(--line2);background:var(--s2);color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:background .2s,color .2s,border-color .2s}
+.add:hover{color:var(--fg)}
+.add[aria-pressed=true]{color:var(--ins);border-color:rgba(138,180,255,.5);background:rgba(138,180,255,.08)}
+/* liste à contacter */
+.tray{position:sticky;top:12px;padding:14px}
+.tray h2{margin:0 0 2px;font:600 14px/1.3 var(--f);color:var(--fg);display:flex;justify-content:space-between}
+.tray h2 span{color:var(--dim);font-weight:500}
+.tray p{margin:0 0 10px;font-size:12.5px;color:var(--dim)}
+.drop{min-height:92px;border:1.5px dashed var(--line2);border-radius:9px;padding:6px;display:grid;gap:4px;align-content:start;transition:border-color .2s,background .2s}
+.drop.over{border-color:var(--accent);background:var(--lit)}
+.drop .ph{font-size:12.5px;color:var(--dim);padding:22px 8px;text-align:center}
+.it{display:flex;align-items:center;gap:8px;padding:4px 4px 4px 10px;background:var(--s2);border-radius:7px;font-size:13px;color:var(--fg);animation:sl .2s var(--ease)}
+.it span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.it small{color:var(--dim);font-size:11.5px}
+.it button{width:32px;height:32px;border:0;background:none;color:var(--dim);cursor:pointer;border-radius:6px}
+.it button:hover{color:var(--fg);background:var(--line)}
+.tray .btn{width:100%;margin-top:10px;min-height:40px}
+/* tiroir */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .25s;z-index:20}
+.scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100vw);background:var(--s1);border-left:1px solid var(--line2);z-index:21;transform:translateX(102%);transition:transform .3s var(--ease),visibility 0s .3s;visibility:hidden;display:flex;flex-direction:column}
+.drawer.on{transform:none;visibility:visible;transition:transform .3s var(--ease)}
+.dh{display:flex;align-items:flex-start;gap:10px;padding:18px 18px 12px;border-bottom:1px solid var(--line)}
+.dh h2{margin:0;font:600 17px/1.3 var(--f);color:var(--fg)}
+.dh .sub{font-size:12.5px;color:var(--dim)}
+.dh .x{margin-left:auto;flex:none;width:40px;height:40px;border-radius:8px;border:1px solid var(--line2);background:none;color:var(--muted);cursor:pointer;font-size:18px}
+.dh .x:hover{color:var(--fg);background:var(--s2)}
+.db{padding:16px 18px 24px;overflow-y:auto;flex:1;overscroll-behavior:contain}
+.db .say{font-size:14.5px;color:var(--fg);margin:0 0 14px;line-height:1.55}
+.db .say em{font-style:normal;color:#f2a7a9}
+.kv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 16px}
+.kv div{background:var(--s2);border-radius:8px;padding:8px 10px}
+.kv small{display:block;font-size:11.5px;color:var(--dim)}
+.kv b{font-weight:500;color:var(--fg);font-size:14px}
+.pj{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:13px}
+.pj .y{color:var(--dim)} .pj .m{text-align:right;white-space:nowrap} .pj small{display:block;color:var(--dim);font-size:11.5px}
+.note{margin-top:14px;padding:10px 12px;border-radius:8px;background:rgba(227,163,63,.07);border:1px solid rgba(227,163,63,.3);font-size:12.5px}
+.df{padding:12px 18px calc(12px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);display:flex;gap:8px}
+.df .btn{min-height:44px;flex:1}
+/* toasts empilés */
+.toasts{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:flex;flex-direction:column;gap:6px;z-index:40;width:min(420px,calc(100vw - 32px));pointer-events:none}
+.ts{pointer-events:auto;display:flex;align-items:center;gap:10px;background:var(--s2);border:1px solid var(--line2);border-radius:9px;padding:8px 8px 8px 12px;font-size:13px;color:var(--fg);box-shadow:0 8px 24px rgba(0,0,0,.4);animation:up .22s var(--ease);transition:opacity .2s}
+.ts.err{border-color:rgba(229,72,77,.5)}
+.ts.out{opacity:0}
+.ts span{flex:1}
+.ts button{border:0;background:none;color:var(--ins);cursor:pointer;min-height:32px;padding:0 8px;border-radius:6px;font-weight:500}
+.ts button:hover{background:var(--line)}
+.drawer.on~.toasts{bottom:auto;top:calc(16px + env(safe-area-inset-top,0px))}
+@keyframes up{from{opacity:0;transform:translateY(6px)}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media (max-width:860px){
+  .grid{grid-template-columns:minmax(0,1fr)}
+  .tray{position:static}
+  .grip{display:none}
+  .r{grid-template-columns:minmax(0,1fr) 96px 44px;padding-left:4px}
+  .drawer{top:auto;left:0;width:100%;max-height:88vh;border-left:0;border-top:1px solid var(--line2);border-radius:14px 14px 0 0;transform:translateY(102%)}
+}
+@media (prefers-reduced-motion:reduce){.drawer{transition:none}}
+</style>
+
+<div class="wrap" style="max-width:1080px">
+  <div class="ctx">DETR, DSIL et Fonds vert · projets retenus de 2018 à 2025 · DGCL (communes fictives)</div>
+  <h1>Subventions des communes, par taille</h1>
+  <p class="lead" id="lead"></p>
+  <details class="why"><summary><span class="i">!</span>Seuls les projets retenus sont connus. <span class="more">Pourquoi c'est important</span></summary>
+    <div class="body">La DGCL publie les projets financés, pas les dossiers refusés. Une commune à 0 € a pu déposer des dossiers sans succès, ou n'en déposer aucun, souvent faute de service technique pour les monter. Avant d'appeler une mairie, demandez à la préfecture la liste des dossiers déposés.</div></details>
+
+  <div class="grid">
+    <section class="panel" aria-label="Communes par taille">
+      <div class="tabs" role="tablist" id="tabs" aria-label="Taille de commune"></div>
+      <div class="tp" role="tabpanel" id="tp" tabindex="0"></div>
+    </section>
+    <aside class="panel tray" aria-labelledby="trayh">
+      <h2 id="trayh">À contacter <span id="trayn">0</span></h2>
+      <p>Glissez une commune ici, ou utilisez le bouton <b style="color:var(--text);font-weight:500">+</b> de sa ligne.</p>
+      <div class="drop" id="drop" aria-live="polite"></div>
+      <button class="btn" id="copy" disabled>Copier la liste</button>
+    </aside>
+  </div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<div class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dtitle"></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="sr" id="live" aria-live="assertive"></div>
+
+<script>
+const STRATES=[{k:"<1000",l:"moins de 1 000 hab.",t:"Moins de 1 000",max:999,med:210},{k:"1000-3500",l:"1 000 à 3 500 hab.",t:"1 000 – 3 500",max:3499,med:150},{k:"3500-10000",l:"3 500 à 10 000 hab.",t:"3 500 – 10 000",max:9999,med:95},{k:">10000",l:"plus de 10 000 hab.",t:"Plus de 10 000",max:1e9,med:60}];
+const C=[
+ {n:"Villeneuve",p:24300,pj:[[2019,"DSIL","Rénovation thermique du groupe scolaire Jaurès",820000],[2021,"DETR","Voirie du quartier de la gare",410000],[2023,"Fonds vert","Renaturation des cours d'école",360000]]},
+ {n:"Saint-Aubin",p:11800,pj:[[2020,"DETR","Extension de la médiathèque",290000]]},
+ {n:"Les Ormes",p:6200,pj:[[2018,"DETR","Salle polyvalente",240000],[2022,"DSIL","Chaudière bois de l'école",180000],[2024,"Fonds vert","Éclairage public à LED",95000]]},
+ {n:"Bréval",p:4100,pj:[]},
+ {n:"Montfort",p:3900,pj:[[2023,"DETR","Accessibilité de la mairie",120000]]},
+ {n:"La Chapelle-sur-Vire",p:2650,pj:[[2019,"DETR","Cantine scolaire",310000],[2021,"DETR","Église : toiture",160000],[2024,"Fonds vert","Haies et mares",42000]]},
+ {n:"Garennes",p:1900,pj:[]},
+ {n:"Saint-Martin-des-Prés",p:1450,pj:[[2022,"DETR","Atelier municipal",95000]]},
+ {n:"Vernay",p:1120,pj:[[2020,"DETR","École : mise aux normes",190000],[2025,"DSIL","Maison de santé",260000]]},
+ {n:"Le Mesnil",p:780,pj:[]},
+ {n:"Ruelles",p:540,pj:[[2021,"DETR","Salle des fêtes",88000],[2024,"DETR","Voirie communale",64000]]},
+ {n:"Hautbois",p:390,pj:[]},
+ {n:"Foucarville",p:260,pj:[[2023,"Fonds vert","Désimperméabilisation de la place",58000]]},
+];
+const strate=p=>STRATES.find(s=>p<=s.max);
+C.forEach(c=>{c.st=strate(c.p);c.tot=c.pj.reduce((s,x)=>s+x[3],0);c.ph=c.tot/c.p;c.ratio=c.ph/c.st.med});
+const byName=n=>C.find(c=>c.n===n), eur=v=>nf(Math.round(v))+" €";
+const behind=c=>!c.pj.length||c.ratio<.5;
+const cls=c=>!c.pj.length?"z":c.ratio<.5?"lo":c.ratio>1.2?"hi":"";
+const say=c=>!c.pj.length?"aucun projet":c.ratio<.5?"moins de la moitié":c.ratio<=1.2?"autour de la médiane":"au-dessus";
+let tab=STRATES.findIndex(s=>s.k==="<1000"), list=[], lastFocus=null;
+
+function lead(){
+  const zero=C.filter(c=>!c.pj.length).length, low=C.filter(c=>c.pj.length&&c.ratio<.5).length;
+  $("#lead").innerHTML=`${zero} communes n'ont obtenu aucun financement depuis 2018, ${low} moins de la moitié de ce qu'obtiennent les communes de leur taille. <span>Chaque onglet compare une taille de commune à sa propre médiane départementale.</span>`;
+}
+function tabs(){
+  $("#tabs").innerHTML=STRATES.map((s,i)=>{const L=C.filter(c=>c.st===s),a=L.filter(behind).length;
+    return `<button class="tab" role="tab" id="t${i}" aria-controls="tp" aria-selected="${i===tab}" tabindex="${i===tab?0:-1}">${s.t}<span class="cnt">${L.length}</span>${a?`<span class="al" title="${a} en retrait">${a}</span>`:""}</button>`}).join("");
+  $("#tp").setAttribute("aria-labelledby","t"+tab);
+}
+function plot(L,s){
+  const W=Math.max(200,($("#tp").clientWidth||600)-40), max=Math.max(s.med,...L.map(c=>c.ph))*1.12, x=v=>v/max*100;
+  // étiquettes : regroupe les points confondus, puis répartit sur des couloirs sans chevauchement
+  const pts=[];[...L].sort((a,b)=>a.ph-b.ph).forEach(c=>{const last=pts[pts.length-1];if(last&&Math.abs(x(c.ph)-x(last.v))<1.5)last.cs.push(c);else pts.push({v:c.ph,cs:[c]})});
+  const lanes=[];pts.forEach(p=>{const txt=p.cs.map(c=>c.n).join(", ");p.w=txt.length*6.6+8;let left=x(p.v)/100*W;p.al=left+p.w>W?"r":"l";const a=p.al==="l"?left:left-p.w,b=a+p.w;
+    let k=lanes.findIndex(e=>a>e+10);if(k<0){k=lanes.length;lanes.push(-1e9)}lanes[k]=b;p.k=k});
+  const top=22, ax=top+10, H=ax+18+lanes.length*20;
+  return `<div class="plot" style="height:${H}px" role="img" aria-label="${L.map(c=>c.n+" "+eur(c.ph)).join(", ")} ; médiane ${s.med} €">
+    <span class="ax" style="top:${ax}px"></span><span class="md" style="left:${x(s.med)}%;top:${top-4}px;height:${H-top+4}px;opacity:.5"></span><span class="md" style="left:${x(s.med)}%;top:${top}px;height:22px;opacity:1"></span>
+    <span class="mdl" style="left:${x(s.med)}%;transform:translateX(${x(s.med)>80?"-100%":"-50%"})">médiane ${s.med} €</span>
+    ${pts.map(p=>p.cs.map((c,j)=>`<button class="pt ${cls(c)}" data-open="${esc(c.n)}" style="left:${x(c.ph)}%;top:${ax-6}px" aria-label="${esc(c.n)}" tabindex="-1"></button>`).join("")
+      +`<span class="tick" style="left:${x(p.v)}%;top:${ax+8}px;height:${6+p.k*20}px"></span><span class="lb" style="${p.al==="l"?"left":"right"}:${p.al==="l"?x(p.v):100-x(p.v)}%;top:${ax+10+p.k*20}px;padding-${p.al==="l"?"left":"right"}:4px">${p.cs.map(c=>esc(c.n)).join(", ")}</span>`).join("")}
+  </div><div class="scale"><span>0 €</span><span>${eur(max)} par habitant</span></div>`;
+}
+function panel(){
+  const s=STRATES[tab], L=C.filter(c=>c.st===s).sort((a,b)=>a.ratio-b.ratio||a.p-b.p);
+  $("#tp").innerHTML=`<div class="tp-h"><span>Communes de <b>${s.l}</b> · médiane départementale <b>${s.med} €</b> par habitant</span><span>${L.filter(behind).length} sur ${L.length} en retrait</span></div>
+   ${plot(L,s)}
+   <div class="rows">${L.map(c=>`<div class="r" draggable="true" data-n="${esc(c.n)}"><span class="grip" aria-hidden="true" title="Glisser vers « À contacter »"><svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="2.5" cy="2.5" r="1.3"/><circle cx="7.5" cy="2.5" r="1.3"/><circle cx="2.5" cy="7" r="1.3"/><circle cx="7.5" cy="7" r="1.3"/><circle cx="2.5" cy="11.5" r="1.3"/><circle cx="7.5" cy="11.5" r="1.3"/></svg></span>
+     <button class="open" data-open="${esc(c.n)}" aria-haspopup="dialog"><b>${esc(c.n)}</b><small>${nf(c.p)} hab. · ${say(c)}</small></button>
+     <span class="v"><span class="${cls(c)}">${eur(c.ph)}</span><small>${c.pj.length} projet${c.pj.length>1?"s":""}</small></span>
+     ${addBtn(c)}</div>`).join("")}</div>`;
+}
+const addBtn=c=>{const on=list.includes(c.n);return `<button class="add" data-add="${esc(c.n)}" aria-pressed="${on}" aria-label="${on?"Retirer "+esc(c.n)+" de":"Ajouter "+esc(c.n)+" à"} la liste à contacter" title="${on?"Retirer de":"Ajouter à"} la liste à contacter">${on?`<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8.5l3.2 3L13 4.5"/></svg>`:`<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 3v10M3 8h10"/></svg>`}</button>`};
+function tray(){
+  $("#trayn").textContent=list.length;
+  $("#drop").innerHTML=list.length?list.map(n=>{const c=byName(n);return `<div class="it"><span>${esc(n)} <small>· ${say(c)}</small></span><button data-rm="${esc(n)}" aria-label="Retirer ${esc(n)}">×</button></div>`}).join(""):`<div class="ph">Aucune commune pour l'instant</div>`;
+  $("#copy").disabled=!list.length;
+}
+function render(){tabs();panel();tray()}
+// toasts empilés (3 au plus), avec action Annuler
+function notify(msg,{undo,err}={}){
+  const box=$("#toasts");while(box.children.length>=3)box.firstElementChild.remove();
+  const t=document.createElement("div");t.className="ts"+(err?" err":"");t.setAttribute("role",err?"alert":"status");
+  t.innerHTML=`<span>${esc(msg)}</span>${undo?`<button>Annuler</button>`:""}`;box.append(t);
+  const kill=()=>{t.classList.add("out");setTimeout(()=>t.remove(),200)};
+  if(undo)t.querySelector("button").onclick=()=>{undo();kill()};
+  setTimeout(kill,err?6000:5000);
+}
+function add(n){
+  if(list.includes(n)){notify(`${n} est déjà dans la liste à contacter.`,{err:true});return}
+  list.push(n);render();refreshDrawer();notify(`${n} ajoutée à la liste à contacter.`,{undo:()=>{list=list.filter(x=>x!==n);render();refreshDrawer()}});
+}
+function remove(n){
+  const i=list.indexOf(n);if(i<0)return;list.splice(i,1);render();refreshDrawer();
+  notify(`${n} retirée de la liste.`,{undo:()=>{list.splice(Math.min(i,list.length),0,n);render();refreshDrawer()}});
+}
+// tiroir
+let cur=null;
+function openDrawer(n){
+  cur=byName(n);lastFocus=document.activeElement;refreshDrawer();
+  $("#drawer").classList.add("on");$("#scrim").classList.add("on");document.body.style.overflow="hidden";
+  setTimeout(()=>$("#drawer .x").focus(),30);
+}
+function refreshDrawer(){
+  const c=cur;if(!c)return;const on=list.includes(c.n);
+  const sayTxt=!c.pj.length?`<em>Aucun projet retenu</em> depuis 2018.`:`${eur(c.ph)} par habitant, soit ${c.ratio<.5?`<em>${nf(c.ratio*100)} %</em>`:nf(c.ratio*100)+" %"} de la médiane des communes de même taille.`;
+  $("#drawer").innerHTML=`<div class="dh"><div><h2 id="dtitle">${esc(c.n)}</h2><div class="sub">${nf(c.p)} habitants · ${c.st.l}</div></div><button class="x" data-close aria-label="Fermer">×</button></div>
+   <div class="db"><p class="say">${sayTxt}</p>
+    <div class="kv"><div><small>Obtenu</small><b>${eur(c.tot)}</b></div><div><small>Par habitant</small><b>${eur(c.ph)}</b></div><div><small>Médiane</small><b>${c.st.med} €</b></div></div>
+    <div class="sec" style="margin-left:0">Projets retenus</div>
+    ${c.pj.length?c.pj.map(p=>`<div class="pj"><span class="y">${p[0]}</span><span>${esc(p[2])}<small>${p[1]}</small></span><span class="m">${nf(p[3])} €</span></div>`).join(""):`<p style="font-size:13px;color:var(--muted);margin:4px 0">Aucun projet retenu depuis 2018.</p>`}
+    ${behind(c)?`<div class="note">La liste ne montre que les projets retenus : ${esc(c.n)} a peut-être déposé des dossiers refusés. À vérifier auprès de la préfecture avant d'appeler.</div>`:""}
+   </div>
+   <div class="df"><button class="btn ${on?"":"pri"}" data-${on?"rm":"add"}="${esc(c.n)}">${on?"Retirer de la liste à contacter":"Ajouter à la liste à contacter"}</button></div>`;
+}
+function closeDrawer(){
+  if(!cur)return;cur=null;$("#drawer").classList.remove("on");$("#scrim").classList.remove("on");document.body.style.overflow="";
+  if(lastFocus&&document.contains(lastFocus))lastFocus.focus();
+}
+document.addEventListener("click",e=>{
+  const t=e.target.closest(".tab");if(t){tab=+t.id.slice(1);render();t&&$("#t"+tab).focus();return}
+  const a=e.target.closest("[data-add]");if(a){add(a.dataset.add);return}
+  const r=e.target.closest("[data-rm]");if(r){remove(r.dataset.rm);return}
+  const o=e.target.closest("[data-open]");if(o){openDrawer(o.dataset.open);return}
+  if(e.target.closest("[data-close]")||e.target.id==="scrim"){closeDrawer();return}
+});
+$("#copy").onclick=async()=>{
+  const txt=list.map(n=>{const c=byName(n);return `${n} (${nf(c.p)} hab.) : ${eur(c.ph)} par habitant, médiane ${c.st.med} €`}).join("\n");
+  try{await navigator.clipboard.writeText(txt);notify(`Liste copiée (${list.length} commune${list.length>1?"s":""}).`)}
+  catch(err){notify("Le navigateur a refusé la copie. Sélectionnez les noms dans la liste et copiez-les à la main.",{err:true})}
+};
+// onglets au clavier (flèches, début, fin)
+$("#tabs").addEventListener("keydown",e=>{
+  const k={ArrowRight:1,ArrowLeft:-1}[e.key];let n=null;
+  if(k)n=(tab+k+STRATES.length)%STRATES.length;else if(e.key==="Home")n=0;else if(e.key==="End")n=STRATES.length-1;
+  if(n!==null){e.preventDefault();tab=n;render();$("#t"+tab).focus();$("#t"+tab).scrollIntoView({block:"nearest",inline:"nearest"})}
+});
+// tiroir : piège du focus et Échap
+document.addEventListener("keydown",e=>{
+  if(!cur)return;
+  if(e.key==="Escape"){e.preventDefault();closeDrawer();return}
+  if(e.key==="Tab"){const f=[...$("#drawer").querySelectorAll("button")];const i=f.indexOf(document.activeElement);
+    if(e.shiftKey&&i<=0){e.preventDefault();f[f.length-1].focus()}else if(!e.shiftKey&&i===f.length-1){e.preventDefault();f[0].focus()}}
+});
+// glisser-déposer (souris) ; au clavier et au tactile : bouton +
+document.addEventListener("dragstart",e=>{const r=e.target.closest&&e.target.closest(".r");if(!r)return;e.dataTransfer.setData("text/plain",r.dataset.n);e.dataTransfer.effectAllowed="copy";r.classList.add("drag")});
+document.addEventListener("dragend",e=>{$$(".r.drag").forEach(r=>r.classList.remove("drag"));$("#drop").classList.remove("over")});
+const drop=$("#drop");
+drop.addEventListener("dragover",e=>{e.preventDefault();e.dataTransfer.dropEffect="copy";drop.classList.add("over")});
+drop.addEventListener("dragleave",e=>{if(!drop.contains(e.relatedTarget))drop.classList.remove("over")});
+drop.addEventListener("drop",e=>{e.preventDefault();drop.classList.remove("over");const n=e.dataTransfer.getData("text/plain");if(byName(n))add(n)});
+let rz;addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(panel,120)});
+lead();render();
+</script>

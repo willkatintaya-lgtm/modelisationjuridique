@@ -1,0 +1,277 @@
+<title>Préparer un texte · structure</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+<style>
+/* Angle « structure » : trois objets (le texte, les amendements, le droit cité) au lieu de six sources à plat ;
+   un parcours en quatre temps, du numéro saisi jusqu'à l'atelier ; erreurs prévenues avant le chargement. */
+.wrap{max-width:980px}
+.idf{margin-top:16px;padding:12px;display:grid;gap:8px}
+.idf label{font-size:12.5px;color:var(--muted)}
+.idf-row{display:flex;gap:8px}
+.idf-row input{flex:1;min-width:0;font-size:14px;padding:9px 11px;background:var(--bg);border-color:var(--line2)}
+.idf-row input:focus{border-color:var(--accent)}
+.idf-row input[aria-invalid=true]{border-color:var(--err)}
+.hint{font-size:12.5px;color:var(--muted);min-height:1.55em;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.hint b{color:var(--fg);font-weight:500}
+.hint span{color:var(--muted)}
+.hint.err{color:#f19a9d}
+.hint.warn{color:#f0c27a}
+.hint .ghost{font-size:12px}
+.layout{display:grid;grid-template-columns:190px minmax(0,1fr);gap:28px;margin-top:6px}
+.toc{position:sticky;top:16px;align-self:start;display:grid;gap:2px;padding-top:12px}
+.toc a{display:flex;justify-content:space-between;gap:8px;color:var(--muted);text-decoration:none;font-size:13px;padding:6px 10px;border-radius:7px;border-left:2px solid transparent;transition:color .2s,background .2s}
+.toc a:hover{color:var(--fg);background:var(--s1)}
+.toc a.on{color:var(--fg);border-left-color:var(--accent);background:var(--s1)}
+.toc .n{color:var(--dim)}
+.toc .n.warn{color:var(--warn)}
+section.obj{scroll-margin-top:16px}
+.obj h2{margin:22px 2px 4px;font:600 14.5px/1.3 var(--f);color:var(--fg)}
+.obj .why{margin:0 2px 10px;font-size:12.5px;color:var(--muted)}
+.rows{list-style:none;margin:0;padding:2px 4px}
+.rows li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 14px;padding:10px 12px}
+.rows li+li{border-top:1px solid var(--line)}
+.rows b{color:var(--fg);font-weight:500;font-size:13.5px}
+.rows .n{font-size:13px;color:var(--fg);text-align:right;white-space:nowrap}
+.rows small{grid-column:1/-1;color:var(--muted);font-size:12.5px;display:flex;gap:7px;align-items:baseline}
+.rows small .dot{transform:translateY(-1px)}
+/* À trancher : une décision à la fois */
+.q{padding:16px;display:grid;gap:12px}
+.q-h{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.q-h b{color:var(--fg);font-weight:500}
+.q-h span{color:var(--muted);font-size:12.5px}
+.pager{display:flex;align-items:center;gap:4px;font-size:12.5px;color:var(--muted)}
+.pager button{width:32px;height:32px;border-radius:7px;border:1px solid var(--line2);background:none;cursor:pointer;color:var(--muted)}
+.pager button:hover:not(:disabled){color:var(--fg);background:var(--s2)}
+.pager button:disabled{opacity:.35;cursor:default}
+.quote{font-size:13px;padding:9px 11px;background:var(--s2);border-radius:7px;color:var(--text)}
+.quote mark{background:rgba(227,163,63,.18)}
+.cause{font-size:12.5px;color:var(--muted);margin:0}
+.cause b{color:var(--text);font-weight:500}
+fieldset{border:0;margin:0;padding:0;display:grid;gap:6px}
+legend{font-size:12.5px;color:var(--muted);padding:0;margin-bottom:6px}
+.opt{display:grid;grid-template-columns:18px auto minmax(0,1fr) auto;gap:10px;align-items:start;border:1px solid var(--line);border-radius:7px;padding:9px 11px;cursor:pointer;font-size:12.5px;color:var(--muted);transition:background .2s,border-color .2s}
+.opt:hover{background:var(--s2)}
+.opt:has(input:checked){border-color:var(--accent);background:var(--lit);color:var(--text)}
+.opt input{margin:2px 0 0;accent-color:var(--accent)}
+.opt .al{color:var(--fg);font-weight:500;white-space:nowrap}
+.opt .sim{color:var(--dim);white-space:nowrap}
+.opt.none{grid-template-columns:18px minmax(0,1fr)}
+.q-f{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+.q-f p{margin:0;font-size:12.5px;color:var(--muted)}
+.list{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:2px}
+.list li{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;padding:6px 12px;color:var(--muted);border-radius:7px}
+.list li button{border:0;background:none;color:var(--muted);text-decoration:underline;cursor:pointer;font-size:12.5px;padding:0}
+.list li.cur{background:var(--s1);color:var(--fg)}
+.list .st{white-space:nowrap}
+.list .st.ok{color:#7fd3a8} .list .st.out{color:#f0c27a}
+.end{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:26px;padding-top:16px;border-top:1px solid var(--line)}
+.end p{margin:0;font-size:12.5px;color:var(--muted);max-width:520px}
+.blank{padding:28px 16px;text-align:center;color:var(--muted);font-size:13px}
+.fade{animation:fade .25s var(--ease)}
+@keyframes fade{from{opacity:0;transform:translateY(3px)}}
+@media (max-width:760px){
+  .layout{grid-template-columns:minmax(0,1fr);gap:0}
+  .toc{grid-auto-flow:column;grid-auto-columns:max-content;overflow-x:auto;scrollbar-width:none;top:0;z-index:5;background:var(--bg);padding:8px 0;margin:0 -2px;mask-image:linear-gradient(90deg,#000 88%,transparent)}
+  .toc::-webkit-scrollbar{display:none}
+  .toc a{border-left:0;border-bottom:2px solid transparent;border-radius:6px 6px 0 0}
+  .toc a.on{border-bottom-color:var(--accent)}
+  .opt{grid-template-columns:18px minmax(0,1fr) auto}
+  .opt .t{grid-column:2/-1}
+}
+</style>
+
+<div class="wrap">
+  <div class="ctx">Brique de données · alimente l'atelier d'amendement</div>
+  <h1>Préparer un texte pour la séance</h1>
+
+  <form class="panel idf" id="f" novalidate>
+    <label for="num">Numéro du texte (commission ou projet initial)</label>
+    <div class="idf-row"><input type="text" id="num" value="512" inputmode="numeric" autocomplete="off" aria-describedby="hint"><button class="btn pri" id="go">Charger</button></div>
+    <div class="hint" id="hint" aria-live="polite"></div>
+  </form>
+
+  <p class="lead" id="lead"></p>
+  <div id="body"></div>
+</div>
+
+<script>
+// Textes connus de la simulation : la saisie est reconnue AVANT le chargement (prévention plutôt que message après coup).
+const TEXTS={
+  "512":{kind:"com",title:"Projet de loi relatif au logement abordable",meta:"texte de la commission · séance le 17 novembre"},
+  "412":{kind:"init",to:"512"},
+  "498":{kind:"old",title:"Proposition de loi sur la rénovation des copropriétés",meta:"adoptée le 3 octobre : plus d'amendements à déposer"}
+};
+// Trois objets, chacun répond à une question ; chaque ligne dit combien et d'où.
+const OBJ=[
+ {id:"texte",h:"Le texte discuté",why:"Ce sur quoi portent les amendements, et ce qu'il était avant la commission.",rows:[
+   {t:"Texte de la commission",n:"34 articles · 211 alinéas",src:"Site de l'Assemblée (absent des données ouvertes), découpé en alinéas ici",st:"ok"},
+   {t:"Texte initial",n:"29 articles · 176 alinéas",src:"Projet de loi n° 412 ; sert à suivre la renumérotation",st:"ok"}]},
+ {id:"amdts",h:"Les amendements",why:"Ceux de la séance, et le sort des vôtres en commission pour les redéposer.",rows:[
+   {t:"Amendements de séance",n:"486",src:"Données ouvertes de l'Assemblée, à jour il y a 12 minutes",st:"ok"},
+   {t:"Placés dans le texte",n:"",src:"Alinéa et mots visés retrouvés automatiquement",st:"warn",id:"place"},
+   {t:"Sort en commission",n:"1 204",src:"Adoptés, rejetés, retirés ; données ouvertes",st:"ok"}]},
+ {id:"droit",h:"Le droit cité",why:"Les articles de code que le texte modifie, pour lire le droit avant et après.",rows:[
+   {t:"Articles de code",n:"23",src:"Légifrance, version en vigueur au 10 novembre 2026",st:"ok"}]},
+];
+const TOTAL=486;
+const FIX=[
+ {id:233,g:"Union des territoires",art:"Article 4",cause:"<b>Mots introuvables.</b> L'alinéa a été réécrit en commission.",
+  q:"À l'alinéa 3, substituer aux mots : « <mark>de la remise en location</mark> » les mots : « de la remise sur le marché locatif ».",
+  c:[{al:3,t:"…d'une aide à la <mark>remise sur le marché</mark> dont le montant…",sim:"proche à 82 %"},{al:4,t:"…des aides <mark>mobilisables</mark> dans un délai…",sim:"proche à 31 %"}]},
+ {id:310,g:"Avenir rural",art:"Article 7",cause:"<b>Alinéa inexistant.</b> L'article compte désormais 8 alinéas, l'amendement vise le 9ᵉ.",
+  q:"À l'alinéa 9, après le mot : « <mark>communes</mark> », insérer les mots : « et établissements publics de coopération intercommunale ».",
+  c:[{al:8,t:"…les <mark>communes</mark> mentionnées au premier alinéa…",sim:"ancien alinéa 9"},{al:5,t:"…dans les <mark>communes</mark> de moins de 3 500 habitants…",sim:"même mot"}]},
+ {id:418,g:"Centre et progrès",art:"Article 12",cause:"<b>Mots en double.</b> Le mot visé figure deux fois dans l'alinéa.",
+  q:"À l'alinéa 2, substituer au mot : « <mark>annuel</mark> » le mot : « biennal ».",
+  c:[{al:2,t:"…un rapport <mark>annuel</mark> d'activité…",sim:"1ʳᵉ occurrence"},{al:2,t:"…le plafond <mark>annuel</mark> de ressources…",sim:"2ᵉ occurrence"}]},
+];
+const dec={};        // id → index du passage, ou -1 = hors de la cascade
+let cur=0, loaded=null, pick=null;
+const left=()=>FIX.filter(f=>dec[f.id]==null).length;
+const outs=()=>FIX.filter(f=>dec[f.id]===-1).length;
+const pl=(n,s,p)=>n>1?(p||s+"s"):s;
+
+function recognise(){
+  const raw=$("#num").value.trim(), n=(raw.match(/\d+/)||[""])[0], h=$("#hint"), inp=$("#num");
+  const t=TEXTS[n]; inp.removeAttribute("aria-invalid"); h.className="hint";
+  if(!raw){h.textContent="Saisissez le numéro qui figure sur le feuilleton, par exemple 512.";return null}
+  if(!n){h.className="hint err";inp.setAttribute("aria-invalid","true");h.textContent="Il faut un numéro : par exemple 512 pour le texte de la commission.";return null}
+  if(!t){h.className="hint err";inp.setAttribute("aria-invalid","true");h.innerHTML=`Aucun texte n° ${esc(n)} dans cette législature. Vérifiez le numéro sur le feuilleton ; le numéro du projet initial convient aussi.`;return null}
+  if(t.kind==="init"){h.className="hint warn";h.innerHTML=`N° ${n} : le projet initial. La séance porte sur le texte de la commission n° ${t.to}. <button type="button" class="ghost" id="use">Utiliser le n° ${t.to}</button>`;return null}
+  if(t.kind==="old"){h.className="hint warn";h.innerHTML=`<b>${t.title}</b><span>${t.meta}.</span>`;return null}
+  h.innerHTML=`<b>${t.title}</b><span>${t.meta}</span>`;return n;
+}
+function go(){
+  const n=recognise(); if(!n){$("#num").focus();return}
+  loaded=n; $("#body").innerHTML=`<div class="panel blank">Récupération des sources…</div>`; $("#lead").textContent="";
+  $("#go").disabled=true;
+  setTimeout(()=>{$("#go").disabled=false;render();},matchMedia("(prefers-reduced-motion:reduce)").matches?0:500);
+}
+function leadText(){
+  const l=left(), o=outs();
+  if(l) return `Prêt pour la séance, sauf ${l} ${pl(l,"amendement")} à placer à la main. <span>${TOTAL-FIX.length} sur ${TOTAL} ont été placés automatiquement ; la cascade et le texte résultant en dépendent.</span>`;
+  if(o) return `Prêt pour la séance. <span>${o} ${pl(o,"amendement")} ${pl(o,"reste","restent")} hors de la cascade, à votre demande ; ${pl(o,"il sera affiché","ils seront affichés")} à part dans l'atelier.</span>`;
+  return `Prêt pour la séance : les ${TOTAL} amendements sont placés. <span>Fichier enregistré sur ce poste, utilisable hors ligne.</span>`;
+}
+function render(){
+  const l=left();
+  $("#lead").innerHTML=leadText();
+  const placed=TOTAL-l-outs();
+  const toc=[...OBJ.map(o=>[o.id,o.h,o.id==="amdts"?TOTAL:o.id==="texte"?"34 art.":"23"]),["trancher","À trancher",l||"✓"]];
+  $("#body").innerHTML=`<div class="layout fade">
+   <nav class="toc" aria-label="Sommaire">${toc.map(([id,h,n],i)=>`<a href="#${id}" class="${i===0?"on":""}"><span>${h}</span><span class="n ${id==="trancher"&&l?"warn":""}">${n}</span></a>`).join("")}</nav>
+   <div>${OBJ.map(o=>`<section class="obj" id="${o.id}"><h2>${o.h}</h2><p class="why">${o.why}</p><ul class="panel rows">${o.rows.map(r=>{
+      const st=r.id==="place"?(l?"warn":"ok"):r.st, n=r.id==="place"?`${placed+outs()===TOTAL&&!outs()?TOTAL:placed} sur ${TOTAL}`:r.n;
+      return `<li><b>${r.t}</b><span class="n">${n}</span><small><span class="dot ${st}"></span><span>${r.src}${r.id==="place"&&l?`<span class="lk"> · <a href="#trancher" style="color:var(--warn)">${l} à placer</a></span>`:""}</span></small></li>`}).join("")}</ul></section>`).join("")}
+    <section class="obj" id="trancher"><h2>À trancher</h2><p class="why">Seulement ce que la machine n'a pas su décider seule : choisissez le passage visé, ou laissez l'amendement hors de la cascade.</p><div id="q"></div></section>
+    <div class="end"><p id="endp"></p><button class="btn" id="open">Ouvrir dans l'atelier</button></div>
+   </div></div>`;
+  renderQ(); spy();
+}
+function renderQ(){
+  const f=FIX[cur], d=dec[f.id], l=left();
+  if(pick==null) pick=d==null?null:d;
+  $("#q").innerHTML=`<div class="panel q fade" key="${f.id}">
+    <div class="q-h"><div><b>n° ${f.id}</b> <span>· ${f.g} · ${f.art}</span></div>
+     <div class="pager"><button id="prev" aria-label="Amendement précédent" ${cur?"":"disabled"}>‹</button><span>${cur+1} sur ${FIX.length}</span><button id="next" aria-label="Amendement suivant" ${cur<FIX.length-1?"":"disabled"}>›</button></div></div>
+    <div class="quote">${f.q}</div>
+    <p class="cause">${f.cause}</p>
+    <fieldset><legend>Passage visé dans le texte de la commission</legend>
+     ${f.c.map((c,i)=>`<label class="opt"><input type="radio" name="p" value="${i}" ${pick===i?"checked":""}><span class="al">Alinéa ${c.al}</span><span class="t">${c.t}</span><span class="sim">${c.sim}</span></label>`).join("")}
+     <label class="opt none"><input type="radio" name="p" value="-1" ${pick===-1?"checked":""}><span>Aucun de ces passages : laisser hors de la cascade</span></label>
+    </fieldset>
+    <div class="q-f"><p>${d==null?"Rien n'est enregistré tant que vous ne validez pas.":d===-1?"Laissé hors de la cascade.":`Placé à l'alinéa ${f.c[d].al}.`}</p>
+     <div style="display:flex;gap:8px">${d!=null?`<button class="btn" id="undo">Annuler la décision</button>`:""}<button class="btn pri" id="ok" ${pick==null||pick===d?"disabled":""}>${d==null?"Valider":"Modifier"}${cur<FIX.length-1&&d==null?" et passer au suivant":""}</button></div></div>
+  </div>
+  <ul class="list">${FIX.map((x,i)=>{const dx=dec[x.id];return `<li class="${i===cur?"cur":""}"><button data-go="${i}">n° ${x.id} · ${x.art}</button><span class="st ${dx==null?"":dx===-1?"out":"ok"}">${dx==null?"à placer":dx===-1?"hors cascade":"alinéa "+x.c[dx].al}</span></li>`}).join("")}</ul>`;
+  const o=outs();
+  $("#endp").textContent=l?`Si vous ouvrez maintenant, ${l} ${pl(l,"amendement")} ${pl(l,"restera","resteront")} hors de la cascade ; vous pourrez ${pl(l,"le","les")} placer plus tard depuis l'atelier.`
+    :o?`${o} ${pl(o,"amendement")} hors de la cascade, à votre demande. Une seule connexion a servi ; tout se fait désormais sur ce poste.`
+    :"Une seule connexion a servi ; tout se fait désormais sur ce poste.";
+  $("#open").classList.toggle("pri",!l);
+  const tn=$('.toc a[href="#trancher"] .n'); if(tn){tn.textContent=l||"✓";tn.classList.toggle("warn",!!l)}
+  const pr=document.querySelector("#amdts li:nth-child(2)"); if(pr){pr.querySelector(".n").textContent=`${TOTAL-l-o} sur ${TOTAL}`;pr.querySelector(".dot").className="dot "+(l?"warn":"ok");const a=pr.querySelector(".lk");if(a&&!l)a.remove();else if(a)a.querySelector("a").textContent=`${l} à placer`}
+  $("#lead").innerHTML=leadText();
+}
+function spy(){
+  const links=$$(".toc a"), secs=links.map(a=>document.querySelector(a.getAttribute("href")));
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+e.target.id))}})},{rootMargin:"-10% 0px -70% 0px"});
+  secs.forEach(s=>s&&io.observe(s));
+}
+$("#f").onsubmit=e=>{e.preventDefault();go()};
+$("#num").addEventListener("input",()=>{recognise();});
+document.addEventListener("change",e=>{if(e.target.name==="p"){pick=+e.target.value;$("#ok").disabled=pick===dec[FIX[cur].id]}});
+document.addEventListener("click",e=>{
+  const t=e.target;
+  if(t.id==="use"){$("#num").value=TEXTS["412"].to;recognise();go();return}
+  if(t.closest(".toc a")){e.preventDefault();const s=document.querySelector(t.closest("a").getAttribute("href"));s.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth"});return}
+  if(t.closest('a[href="#trancher"]')){e.preventDefault();$("#trancher").scrollIntoView({behavior:"smooth"});return}
+  if(t.id==="prev"){cur--;pick=null;renderQ();return}
+  if(t.id==="next"){cur++;pick=null;renderQ();return}
+  if(t.dataset.go!=null){cur=+t.dataset.go;pick=null;renderQ();return}
+  if(t.id==="ok"){const f=FIX[cur],was=dec[f.id];dec[f.id]=pick;
+    if(was==null){const nx=FIX.findIndex((x,i)=>i>cur&&dec[x.id]==null);const any=FIX.findIndex(x=>dec[x.id]==null);if(nx>=0)cur=nx;else if(any>=0)cur=any;}
+    pick=null;renderQ();toast(`n° ${f.id} : ${dec[f.id]===-1?"hors de la cascade":"placé à l'alinéa "+f.c[dec[f.id]].al}.`);return}
+  if(t.id==="undo"){delete dec[FIX[cur].id];pick=null;renderQ();return}
+  if(t.id==="open"){const l=left();toast(l?`Ouvert dans l'atelier ; ${l} ${pl(l,"amendement")} hors de la cascade pour l'instant (simulation).`:"Le texte s'ouvre dans l'atelier (simulation).");}
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"&&pick!=null&&document.activeElement.name==="p"){pick=null;renderQ();}
+});
+recognise(); loaded="512"; render();
+</script>

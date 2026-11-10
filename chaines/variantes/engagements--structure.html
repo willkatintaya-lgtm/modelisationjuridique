@@ -1,0 +1,401 @@
+<title>Engagements · structure</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
+  --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.narrow{max-width:780px}
+.ctx{font-size:12.5px;color:var(--dim)}
+h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
+.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
+.lead span{color:var(--muted)}
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
+.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.btn:hover:not(:disabled){background:#1f2227}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover:not(:disabled){background:#7b87f5}
+.btn:disabled{opacity:.4;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.ghost:hover{color:var(--fg);background:var(--s2)}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip:hover{color:var(--fg)}
+.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
+input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.open>.slide{grid-template-rows:1fr}
+.open>.slide>div{opacity:1;transition:opacity .2s .12s}
+.scrollx{overflow-x:auto;scrollbar-width:none}
+.scrollx::-webkit-scrollbar{display:none}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
+function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
+</script>
+<style>
+/* Variante « structure » : on range par ce qu'il faut faire, pas par l'âge.
+   Trois vues reliées : À faire (sections par action) · Par ministère · Tenus ; la fiche d'un engagement est une page à part, avec fil d'Ariane. */
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.nav{display:flex;gap:4px;margin:18px 0 0;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav button{border:0;background:none;color:var(--muted);padding:10px 12px;font-size:13.5px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:color .2s,border-color .2s}
+.nav button:hover{color:var(--fg)}
+.nav button[aria-current="page"]{color:var(--fg);border-color:var(--accent)}
+.nav small{color:var(--dim);margin-left:4px;font-size:12px}
+.view{animation:vin .22s var(--ease)}
+@keyframes vin{from{opacity:0;transform:translateY(4px)}}
+.filter{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:16px 2px 0;font-size:12.5px;color:var(--muted)}
+.filter .chip{cursor:default;color:var(--fg);padding-right:4px}
+.filter .chip button{border:0;background:none;color:var(--dim);width:22px;height:22px;border-radius:50%;cursor:pointer;display:grid;place-items:center}
+.filter .chip button:hover{color:var(--fg);background:var(--line)}
+.grp{margin-top:22px}
+.grp-h{display:flex;align-items:baseline;gap:10px;margin:0 2px 4px}
+.grp-h h2{margin:0;font:600 14.5px/1.4 var(--f);color:var(--fg)}
+.grp-h .n{font-size:12.5px;color:var(--dim)}
+.grp-p{margin:0 2px 10px;font-size:12.5px;color:var(--muted);max-width:720px}
+.rows{padding:4px}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 16px;align-items:center;width:100%;border:0;background:none;text-align:left;padding:11px 12px;border-radius:7px;cursor:pointer;transition:background .2s}
+.row:hover{background:var(--s2)}
+.row .tt{color:var(--fg);font-size:13.5px}
+.row .mt{font-size:12.5px;color:var(--muted)}
+.row .ag{grid-row:1/3;grid-column:2;display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);white-space:nowrap}
+.rows>*+*{border-top:1px solid var(--line)}
+.sub{display:flex;gap:8px;align-items:baseline;width:100%;border:0;background:none;text-align:left;cursor:pointer;padding:0 12px 11px 30px;margin-top:-6px;font-size:12.5px;color:var(--muted)}
+.rows>.sub{border-top:0}
+.sub:hover span{color:var(--fg);text-decoration:underline}
+.sub b{font-weight:500;color:#f2a7a9}
+.empty{padding:16px 14px;font-size:13px;color:var(--dim)}
+.more{margin:14px 2px 0;font-size:12.5px;color:var(--muted)}
+.lnk{border:0;background:none;padding:0;color:#b4bcff;cursor:pointer;font-size:inherit}
+.lnk:hover{text-decoration:underline}
+
+/* par ministère */
+.mt-t{width:100%;border-collapse:collapse}
+.mt-t th,.mt-t td{text-align:left;padding:10px 14px;font-weight:400;font-size:13.5px}
+.mt-t thead th{font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase;padding-top:12px}
+.mt-t tbody tr{border-top:1px solid var(--line);cursor:pointer;transition:background .2s}
+.mt-t tbody tr:hover{background:var(--s2)}
+.mt-t td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.mt-t .late{color:#f2a7a9}
+.mt-t .z{color:var(--dim)}
+.mt-t td small{color:var(--dim)}
+.mt-t button{border:0;background:none;padding:0;color:var(--fg);cursor:pointer;text-align:left;font-size:inherit}
+.foot{padding:10px 14px 12px;font-size:12px;color:var(--dim);border-top:1px solid var(--line)}
+
+/* fiche */
+.crumb{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:18px 0 0;font-size:12.5px;color:var(--dim)}
+.crumb button{border:0;background:none;padding:2px 0;color:var(--muted);cursor:pointer;font-size:inherit}
+.crumb button:hover{color:var(--fg);text-decoration:underline}
+.fh{margin:10px 0 0}
+.fh .k{font-size:12.5px;color:var(--dim)}
+.fh h2{margin:2px 0 0;font:600 18px/1.35 var(--f);color:var(--fg);text-wrap:balance;max-width:820px}
+.fgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;margin-top:16px;align-items:start}
+.card{padding:16px 18px 18px}
+.card>.sec:first-child{margin-top:0}
+.status{display:grid;gap:3px;font-size:13px}
+.status b{font-size:15px;color:var(--fg);font-weight:600}
+.status.late b{color:#f2a7a9}
+.status.ok b{color:#8fd6b0}
+.status small{color:var(--dim);font-size:12px}
+.trail{list-style:none;margin:0;padding:0}
+.trail li{display:grid;grid-template-columns:84px minmax(0,1fr);gap:12px;padding:8px 0;font-size:13px}
+.trail li+li{border-top:1px solid var(--line)}
+.trail .d{font-size:12px;color:var(--dim);padding-top:1px}
+.trail q{display:block;margin-top:4px;color:var(--muted);quotes:"« " " »";font-size:12.5px;line-height:1.6}
+.trail .miss{color:#f2a7a9}
+.near{display:grid;gap:6px}
+.nq{padding:9px 11px;border:1px solid var(--line);border-radius:8px;font-size:12.5px;color:var(--muted)}
+.nq b{color:var(--text);font-weight:500}
+.hint{font-size:12.5px;color:var(--muted);margin:0 0 8px}
+textarea{width:100%;min-height:190px;resize:vertical;line-height:1.6;padding:10px 12px}
+.acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.fld{display:grid;gap:4px;margin-top:8px}
+.fld label{font-size:12.5px;color:var(--muted)}
+.fld input{width:100%}
+.fld input[aria-invalid="true"]{border-color:var(--err)}
+.ferr{font-size:12.5px;color:#f2a7a9;margin:4px 0 0;display:none}
+.ferr.show{display:block}
+.warnmsg{display:flex;gap:8px;align-items:flex-start;padding:9px 11px;border-radius:8px;background:rgba(227,163,63,.1);border:1px solid rgba(227,163,63,.3);font-size:12.5px;color:#f0c987;margin-top:8px}
+.banner{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px;border-radius:8px;background:rgba(70,179,126,.1);border:1px solid rgba(70,179,126,.3);font-size:13px;color:#a9e2c4;margin-top:14px;animation:vin .22s var(--ease)}
+.banner .sp{flex:1}
+@media (max-width:820px){.fgrid{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:520px){
+  .row{grid-template-columns:minmax(0,1fr)} .row .ag{grid-row:auto;grid-column:1;margin-top:3px}
+  .mt-t .opt{display:none} .mt-t th,.mt-t td{padding:10px 8px}
+  .trail li{grid-template-columns:minmax(0,1fr);gap:2px}
+}
+</style>
+<div class="wrap">
+  <div class="ctx">Bureau de la députée · suivi au mardi 10 novembre 2026</div>
+  <h1>Ce que le Gouvernement nous doit</h1>
+  <p class="lead" id="lead"></p>
+  <nav class="nav" id="nav" aria-label="Vues"></nav>
+  <main id="main"></main>
+</div>
+<script>
+const NOW=new Date(2026,10,10);
+const MIN={LOG:"Logement",ECO:"Économie et finances",TE:"Transition écologique",SOL:"Solidarités",INT:"Intérieur"};
+const MINLONG={LOG:"le ministre chargé du logement",ECO:"le ministre de l'économie et des finances",TE:"la ministre de la transition écologique",SOL:"la ministre des solidarités",INT:"le ministre de l'intérieur"};
+// Taux de réponse aux questions écrites dans le délai de deux mois (législature en cours, toutes questions)
+const QE={LOG:[9,64],ECO:[22,131],TE:[11,58],SOL:[6,49],INT:[17,72]};
+const GROUPS={PR:{c:"#c07a00"},CP:{c:"#d8699a"},ECO:{c:"#2a9d63"},SOL:{c:"#d13a30"}};
+const TYPES={decret:"Décret attendu",rapport:"Rapport dû",qe:"Réponse attendue",eng:"Promesse faite en réponse",reco:"Recommandation"};
+const D=s=>{const [y,m,d]=s.split("-").map(Number);return new Date(y,m-1,d)};
+const fmt=d=>d.toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"});
+const E=[
+ {id:"d9",type:"decret",min:"LOG",title:"Décret sur la décence énergétique des logements loués",due:"2025-09-03",calc:"Promulgation le 3 mars 2025 + 6 mois (délai fixé par la circulaire sur l'application des lois)",
+  trail:[
+   {d:"12 févr. 2025",t:`Votre amendement n° 214 est adopté en séance.`},
+   {d:"3 mars 2025",t:`Il devient l'article 9 de la loi n° 2025-187 relative au logement décent.`,q:"Un <mark>décret en Conseil d'État fixe</mark> les conditions dans lesquelles le bailleur justifie de la décence énergétique du logement."},
+   {d:"mars 2025",t:"L'échéancier de mise en application annonce une publication au deuxième trimestre 2025."},
+   {d:"17 mars 2026",t:`Le Gouvernement promet le décret « avant la fin du premier semestre 2026 ».`,link:"e2611"},
+   {d:"aujourd'hui",t:`Aucun décret publié au Journal officiel.`,miss:true}],
+  near:[{n:2611,g:"PR",who:"votre bureau",date:"16 déc. 2025",st:"Répondue le 17 mars 2026, avec une promesse de date non tenue"},{n:3044,g:"ECO",who:"Écologie urbaine",date:"14 avril 2026",st:"Sans réponse depuis 6 mois"}],
+  draft:"attire l'attention de M. le ministre chargé du logement sur l'absence de publication du décret en Conseil d'État prévu à l'article 9 de la loi n° 2025-187 du 3 mars 2025 relative au logement décent, attendu depuis le 3 septembre 2025. En réponse à la question écrite n° 2611, le Gouvernement s'était engagé à le publier avant la fin du premier semestre 2026. Cet engagement n'a pas été tenu. Elle lui demande à quelle date ce décret sera publié et quelles difficultés en retardent l'adoption."},
+ {id:"e2611",type:"eng",min:"LOG",title:"Promesse : publier le décret de l'article 9 avant juillet 2026",due:"2026-06-30",calc:"« Avant la fin du premier semestre 2026 » : échéance lue dans la réponse",
+  trail:[
+   {d:"16 déc. 2025",t:"Vous déposez la question écrite n° 2611."},
+   {d:"17 mars 2026",t:"Réponse publiée au Journal officiel, trois mois après.",q:"Les travaux de concertation sont en voie d'achèvement. Le Gouvernement <mark>publiera le décret d'application avant la fin du premier semestre 2026</mark>."},
+   {d:"aujourd'hui",t:"Promesse non tenue.",miss:true}],
+  rel:"d9",action:"same"},
+ {id:"r84",type:"rapport",min:"ECO",title:"Rapport sur le coût du crédit d'impôt pour la rénovation locative",due:"2026-06-30",calc:"Promulgation le 30 décembre 2025 + 6 mois, délai écrit dans l'article",
+  trail:[
+   {d:"nov. 2025",t:"L'amendement n° I-1520 de votre groupe est adopté en première partie."},
+   {d:"30 déc. 2025",t:"Il devient l'article 84 de la loi de finances pour 2026.",q:"<mark>Dans un délai de six mois</mark> à compter de la promulgation de la présente loi, le Gouvernement <mark>remet au Parlement un rapport</mark> évaluant le coût du crédit d'impôt pour la rénovation des logements locatifs."},
+   {d:"aujourd'hui",t:"Aucun rapport déposé.",miss:true}],
+  near:[],draft:"attire l'attention de M. le ministre de l'économie et des finances sur le rapport prévu à l'article 84 de la loi n° 2025-1302 du 30 décembre 2025 de finances pour 2026, qui devait être remis au Parlement avant le 30 juin 2026. Ce rapport, qui doit éclairer le coût du crédit d'impôt pour la rénovation des logements locatifs, est indispensable à l'examen du projet de loi de finances pour 2027. Elle lui demande à quelle date il sera remis."},
+ {id:"q3187",type:"qe",min:"TE",title:"Question n° 3187 : retards de versement de MaPrimeRénov'",due:"2026-07-12",calc:"Publication le 12 mai 2026 + 2 mois (article 135 du Règlement)",
+  trail:[{d:"12 mai 2026",t:"Votre question écrite n° 3187 est publiée."},{d:"aujourd'hui",t:"Sans réponse.",miss:true}],action:"signal"},
+ {id:"q3402",type:"qe",min:"SOL",title:"Question n° 3402 : aides au logement des étudiants",due:"2026-11-01",calc:"Publication le 1er septembre 2026 + 2 mois",
+  trail:[{d:"1er sept. 2026",t:"Votre question écrite n° 3402 est publiée."},{d:"aujourd'hui",t:"Sans réponse.",miss:true}],action:"signal"},
+ {id:"q3520",type:"qe",min:"INT",title:"Question n° 3520 : réquisition des logements vacants",due:"2026-12-06",calc:"Publication le 6 octobre 2026 + 2 mois",
+  trail:[{d:"6 oct. 2026",t:"Votre question écrite n° 3520 est publiée."}]},
+ {id:"reco3",type:"reco",min:"LOG",title:"Recommandation 3 : instruction aux préfets sur la réquisition",due:"2026-12-31",calc:"Échéance fixée par la mission dans sa recommandation",
+  trail:[{d:"24 juin 2026",t:"Rapport d'information n° 1402 de la mission flash sur la vacance des logements, dont vous étiez corapporteure.",q:"Recommandation n° 3 : <mark>publier, avant la fin de l'année 2026, une instruction aux préfets</mark> précisant les conditions de mise en œuvre de la réquisition des logements vacants."}]},
+ {id:"r7",type:"rapport",min:"TE",title:"Rapport sur l'artificialisation liée aux résidences secondaires",due:"2025-06-12",calc:"Promulgation le 12 juin 2024 + 1 an, délai écrit dans l'article",
+  trail:[{d:"12 juin 2024",t:"Article 7 de la loi n° 2024-532 relative aux zones tendues.",q:"<mark>Dans un délai d'un an</mark> à compter de la promulgation de la présente loi, le Gouvernement <mark>remet au Parlement un rapport</mark> sur l'artificialisation des sols liée aux résidences secondaires."},{d:"aujourd'hui",t:"Aucun rapport déposé.",miss:true}],
+  near:[{n:1880,g:"SOL",who:"Solidarité et logement",date:"3 sept. 2025",st:"Répondue le 2 déc. 2025 : « le rapport est en cours de finalisation »"}],
+  draft:"attire l'attention de Mme la ministre de la transition écologique sur le rapport prévu à l'article 7 de la loi n° 2024-532 du 12 juin 2024, qui devait être remis au Parlement avant le 12 juin 2025. Interrogé en décembre 2025, le Gouvernement indiquait que ce rapport était en cours de finalisation. Elle lui demande à quelle date il sera remis."},
+ {id:"d3",type:"decret",min:"SOL",title:"Décret fixant le montant de l'aide à la caution étudiante",due:"2026-01-15",calc:"Promulgation le 15 juillet 2025 + 6 mois",
+  trail:[{d:"15 juil. 2025",t:"Article 3 de la loi n° 2025-650 pour le logement des jeunes.",q:"Un <mark>décret fixe le montant</mark> de l'aide et les conditions de ressources applicables."},{d:"aujourd'hui",t:"Aucun décret publié au Journal officiel.",miss:true}],
+  near:[],draft:"attire l'attention de Mme la ministre des solidarités sur l'absence de publication du décret prévu à l'article 3 de la loi n° 2025-650 du 15 juillet 2025 pour le logement des jeunes, attendu depuis le 15 janvier 2026. Faute de ce décret, l'aide à la caution étudiante ne peut être versée. Elle lui demande à quelle date ce décret sera publié."},
+ {id:"d12",type:"decret",min:"LOG",title:"Arrêté fixant le modèle de déclaration de vacance",due:"2025-09-03",calc:"Promulgation le 3 mars 2025 + 6 mois",done:"2026-01-28",proof:"Arrêté du 28 janvier 2026, JO du 30 janvier 2026",
+  trail:[{d:"3 mars 2025",t:"Article 12 de la loi n° 2025-187.",q:"Un <mark>arrêté du ministre chargé du logement fixe</mark> le modèle de déclaration."},{d:"30 janv. 2026",t:"Arrêté publié au Journal officiel, quatre mois après l’échéance."}]},
+ {id:"d112",type:"decret",min:"ECO",title:"Décret sur la déclaration des logements vacants aux impôts",due:"2026-06-30",calc:"Promulgation le 30 décembre 2025 + 6 mois",done:"2026-04-02",proof:"Décret n° 2026-311 du 2 avril 2026",
+  trail:[{d:"30 déc. 2025",t:"Article 112 de la loi de finances pour 2026."},{d:"2 avr. 2026",t:"Décret publié, dans les délais."}]},
+ {id:"reco5",type:"reco",min:"ECO",title:"Recommandation 5 : évaluer la taxe sur les logements vacants dans le PLF",due:"2026-10-01",calc:"Échéance : dépôt du projet de loi de finances pour 2027",done:"2026-10-01",proof:"PLF 2027, annexe « Évaluation des voies et moyens », tome II",
+  trail:[{d:"24 juin 2026",t:"Rapport d'information n° 1402, recommandation n° 5."},{d:"1er oct. 2026",t:"L'évaluation figure dans le projet de loi de finances pour 2027."}]},
+];
+const BUCKETS=[{k:0,l:"À venir",s:"À venir"},{k:1,l:"Moins de 3 mois",s:"< 3 mois"},{k:2,l:"3 à 12 mois",s:"3–12 mois"},{k:3,l:"Plus d'un an",s:"> 1 an"},{k:4,l:"Tenus",s:"Tenus"}];
+function months(a,b){return (b.getFullYear()-a.getFullYear())*12+(b.getMonth()-a.getMonth())-(b.getDate()<a.getDate()?1:0)}
+function bucket(e){ if(e.done) return 4; const due=D(e.due); if(due>=NOW) return 0; const m=months(due,NOW); return m<3?1:m<12?2:3; }
+function age(e){
+  const due=D(e.due);
+  if(e.done){const late=months(due,D(e.done)); return late>0?`Tenu, ${late} mois après l'échéance`:"Tenu dans les délais"}
+  const days=Math.round((due-NOW)/864e5);
+  if(days>=0) return days<=31?`Échéance dans ${days} jour${days>1?"s":""}`:`Échéance le ${fmt(due).replace(/ \d{4}$/,"")}`;
+  const m=months(due,NOW); if(m<1){const d=-days;return `${d} jour${d>1?"s":""} de retard`}
+  return m>=12?`${Math.floor(m/12)} an${m>=24?"s":""}${m%12?` et ${m%12} mois`:""} de retard`:`${m} mois de retard`;
+}
+// ——— Variante structure ———
+// Objets : un engagement appartient à un ministère et appelle UNE prochaine action.
+// La promesse faite en réponse (e2611) est rattachée au décret qu'elle concerne : un seul dossier, une seule relance.
+const S={view:"todo",min:null,id:null,from:"todo",undo:null,signaled:{},copyErr:false};
+const isOpen=e=>!e.done;
+const isLate=e=>!e.done&&D(e.due)<NOW;
+const parentOf=e=>e.rel?E.find(x=>x.id===e.rel):null;
+const childrenOf=e=>E.filter(x=>x.rel===e.id);
+// prochaine action, calculée
+function nextAction(e){
+  if(e.done) return "done";
+  if(!isLate(e)) return "watch";
+  if(e.type==="qe") return "signal";
+  if(e.rel) return "inherit";
+  return "ask";
+}
+const ACTIONS=[
+ {k:"ask",t:"Relancer par une question écrite",p:"L'échéance est passée. Une question écrite oblige le ministre à répondre publiquement ; le projet est déjà rédigé dans chaque fiche."},
+ {k:"signal",t:"Faire signaler par le groupe",p:"Nos questions restées sans réponse après deux mois. Signalées par le président de groupe, elles doivent obtenir une réponse sous dix jours."},
+ {k:"watch",t:"À surveiller",p:"Pas encore échus. Rien à faire avant l'échéance."},
+];
+const byDue=(a,b)=>D(a.due)-D(b.due);
+const inMin=e=>S.min==null||e.min===S.min;
+const lcFirst=s=>s.charAt(0).toLowerCase()+s.slice(1);
+function dotCls(e){const b=bucket(e);return b===4?"ok":b===0?"":b===1?"warn":"err"}
+
+function lead(){
+  const ask=E.filter(e=>nextAction(e)==="ask").length, sig=E.filter(e=>nextAction(e)==="signal").length, w=E.filter(e=>nextAction(e)==="watch").length;
+  const old=E.filter(isLate).sort(byDue)[0];
+  $("#lead").innerHTML=`${ask} engagement${ask>1?"s":""} à relancer par une question écrite, ${sig} question${sig>1?"s":""} à faire signaler, ${w} à surveiller. <span>Le plus ancien retard : ${old?lcFirst(old.title)+", "+age(old):"aucun"}.</span>`;
+}
+function nav(){
+  const done=E.filter(e=>e.done).length, open=E.filter(isOpen).length;
+  const tabs=[["todo","À faire",open],["min","Par ministère",""],["done","Tenus",done]];
+  const cur=S.view==="fiche"?S.from:S.view;
+  $("#nav").innerHTML=tabs.map(([k,l,n])=>`<button data-view="${k}" ${cur===k?'aria-current="page"':""}>${l}${n!==""?`<small>${n}</small>`:""}</button>`).join("");
+}
+function row(e){
+  const kids=childrenOf(e).filter(isOpen);
+  return `<button class="row" data-id="${e.id}"><span class="tt">${e.title}</span><span class="mt">${TYPES[e.type]} · ${MIN[e.min]}</span><span class="ag"><i class="dot ${dotCls(e)}"></i>${age(e)}</span></button>`+
+    kids.map(k=>`<button class="sub" data-id="${k.id}"><span>↳ Inclut la promesse faite en réponse : ${lcFirst(k.title.replace(/^Promesse : /,""))}</span> <b>non tenue</b></button>`).join("");
+}
+function filterBar(){
+  if(S.min==null) return "";
+  return `<div class="filter"><span class="chip">${MIN[S.min]}<button data-clrmin aria-label="Voir tous les ministères"><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></span><span>Échap pour tout revoir</span></div>`;
+}
+function vTodo(){
+  let h=filterBar();
+  for(const a of ACTIONS){
+    const L=E.filter(e=>nextAction(e)===a.k&&inMin(e)).sort(byDue);
+    h+=`<section class="grp"><div class="grp-h"><h2>${a.t}</h2><span class="n">${L.length}</span></div><p class="grp-p">${a.p}</p><div class="panel rows">${L.length?L.map(row).join(""):`<div class="empty">Rien ${S.min?"pour ce ministère":"ici"}.</div>`}</div></section>`;
+  }
+  const d=E.filter(e=>e.done&&inMin(e)).length;
+  h+=`<p class="more">${d} engagement${d>1?"s":""} tenu${d>1?"s":""}${S.min?" par ce ministère":""} : <button class="lnk" data-view="done">voir les preuves</button>.</p>`;
+  return h;
+}
+function vMin(){
+  const r=Object.keys(MIN).map(m=>{
+    const L=E.filter(e=>e.min===m), late=L.filter(isLate).length, up=L.filter(e=>isOpen(e)&&!isLate(e)).length, dn=L.filter(e=>e.done).length;
+    const [a,t]=QE[m];
+    return {m,late,up,dn,q:Math.round(100*a/t),a,t};
+  }).sort((x,y)=>y.late-x.late||x.q-y.q);
+  return `<section class="grp"><p class="grp-p">Qui tient ses engagements envers le bureau. Choisissez un ministère pour voir ce qu'il nous doit.</p><div class="panel"><table class="mt-t"><thead><tr><th>Ministère</th><th>En retard</th><th class="opt">À venir</th><th class="opt">Tenus</th><th>Réponses sous 2 mois</th></tr></thead><tbody>${
+    r.map(x=>`<tr data-min="${x.m}"><td><button data-min="${x.m}">${MIN[x.m]}</button></td><td class="num ${x.late?"late":"z"}">${x.late||"aucun"}</td><td class="num opt ${x.up?"":"z"}">${x.up||"·"}</td><td class="num opt ${x.dn?"":"z"}">${x.dn||"·"}</td><td class="num">${x.q} % <small class="opt">(${x.a} sur ${x.t})</small></td></tr>`).join("")
+  }</tbody></table><div class="foot">Retard compté depuis l'échéance écrite dans le texte, ou six mois après la promulgation pour un décret. Dernière colonne : toutes les questions écrites de la législature, pas seulement les nôtres.</div></div></section>`;
+}
+function vDone(){
+  const L=E.filter(e=>e.done&&inMin(e)).sort((a,b)=>D(b.done)-D(a.done));
+  return filterBar()+`<section class="grp"><p class="grp-p">Engagements clos, avec la référence qui le prouve. Une fiche peut être rouverte si la preuve est contestée.</p><div class="panel rows">${L.length?L.map(e=>`<button class="row" data-id="${e.id}"><span class="tt">${e.title}</span><span class="mt">${e.proof}</span><span class="ag"><i class="dot ok"></i>${age(e)}</span></button>`).join(""):`<div class="empty">Aucun engagement tenu${S.min?" par ce ministère":""} pour l'instant.</div>`}</div></section>`;
+}
+function vFiche(){
+  const e=E.find(x=>x.id===S.id);
+  if(!e) return `<div class="crumb"><button data-view="${S.from}">← Retour</button></div><p class="empty">Cet engagement n'est plus suivi. <button class="lnk" data-view="todo">Revenir à la liste</button>.</p>`;
+  const a=nextAction(e), due=D(e.due), par=parentOf(e);
+  const fromL={todo:"À faire",min:"Par ministère",done:"Tenus"}[S.from];
+  let h=`<div class="crumb"><button data-view="${S.from}">${fromL}</button><span>›</span>${par?`<button data-id="${par.id}">${par.title}</button><span>›</span>`:""}<span>${TYPES[e.type]}</span></div>
+  <div class="fh"><div class="k">${TYPES[e.type]} · ${MIN[e.min]}</div><h2>${e.title}</h2></div>`;
+  if(S.undo&&S.undo.id===e.id) h+=`<div class="banner" role="status"><span>Marqué comme tenu : ${esc(e.proof)}.${S.undo.kids.length?" La promesse rattachée est close avec la même preuve.":""}</span><span class="sp"></span><button class="btn" data-undo>Annuler</button></div>`;
+  // colonne 1 : statut + prochaine action
+  let c1=`<div class="sec">Statut</div><div class="status ${e.done?"ok":isLate(e)?"late":""}"><b>${age(e)}</b><span>Échéance : ${fmt(due)}</span><small>${e.calc}</small></div>`;
+  if(a==="ask"){
+    c1+=`<div class="sec">Prochaine étape : poser une question écrite</div><p class="hint">Rédigée à partir de l'origine ci-contre. Relisez, complétez le nom, puis copiez-la dans le formulaire de dépôt.</p>
+    <label class="hint" for="draft" style="display:none">Projet de question écrite</label>
+    <textarea id="draft">Mme [nom de la députée] ${e.draft}</textarea>
+    <div id="draftWarn"></div>
+    <div class="acts"><button class="btn pri" data-copy>Copier la question</button></div>`;
+  } else if(a==="signal"){
+    const s=S.signaled[e.id];
+    c1+=`<div class="sec">Prochaine étape : faire signaler la question</div>`+(s?`<p class="hint">Proposée au secrétariat du groupe le ${fmt(NOW)}. Le groupe choisit chaque semaine les questions qu'il signale.</p><div class="acts"><button class="btn" data-unsignal>Retirer la proposition</button></div>`:
+    `<p class="hint">Le délai de deux mois est dépassé. Le président du groupe peut la signaler : le ministre doit alors répondre sous dix jours.</p><div class="acts"><button class="btn pri" data-signal>Proposer au groupe de la signaler</button></div>`);
+  } else if(a==="inherit"){
+    c1+=`<div class="sec">Prochaine étape</div><p class="hint">Cette promesse porte sur le même texte que « ${par.title} ». Une seule question écrite couvre les deux : elle est rédigée dans ce dossier.</p><div class="acts"><button class="btn pri" data-id="${par.id}">Ouvrir le dossier du décret</button></div>`;
+  } else if(a==="watch"){
+    c1+=`<div class="sec">Prochaine étape</div><p class="hint">Rien à faire avant le ${fmt(due)}. L'engagement passera dans « À faire » le lendemain s'il n'est pas tenu.</p>`;
+  } else {
+    c1+=`<div class="sec">Preuve</div><p class="hint">${esc(e.proof)}</p><div class="acts"><button class="btn" data-reopen>Rouvrir l'engagement</button></div>`;
+  }
+  if(!e.done&&(isLate(e)||e.type==="reco")){
+    c1+=`<div class="sec">Clore : l'engagement a été tenu</div>
+    <div class="fld"><label for="proof">Référence de la publication</label><input type="text" id="proof" placeholder="Ex. : Décret n° 2026-412 du 3 novembre 2026, JO du 5 novembre" aria-describedby="proofErr"><p class="ferr" id="proofErr"></p></div>
+    <div class="fld"><label for="pdate">Date de publication</label><input type="text" id="pdate" inputmode="numeric" value="${NOW.toLocaleDateString("fr-FR")}" aria-describedby="dateErr" style="max-width:180px"><p class="ferr" id="dateErr"></p></div>
+    <div class="acts"><button class="btn" data-done>Marquer comme tenu</button></div>`;
+  }
+  // colonne 2 : origine + déjà demandé
+  let c2=`<div class="sec">D'où vient cet engagement</div><ol class="trail">${e.trail.filter(s=>!(e.userDone&&s.miss)).concat(e.userDone?[{d:fmt(D(e.done)).replace(/ \d{4}$/,""),t:"Publié : "+esc(e.proof)+"."}]:[]).map(s=>`<li><span class="d">${s.d}</span><span class="${s.miss&&!e.done?"miss":""}">${s.t}${s.link?` <button class="lnk" data-id="${s.link}">Voir la promesse</button>`:""}${s.q?`<q>${s.q}</q>`:""}</span></li>`).join("")}</ol>`;
+  const kids=childrenOf(e);
+  if(kids.length) c2+=`<div class="sec">Rattaché à ce dossier</div>${kids.map(k=>`<button class="row" data-id="${k.id}" style="padding-inline:0"><span class="tt">${k.title}</span><span class="mt">${TYPES[k.type]}</span><span class="ag"><i class="dot ${dotCls(k)}"></i>${age(k)}</span></button>`).join("")}`;
+  if(e.near) c2+=`<div class="sec">Déjà demandé</div>${e.near.length?`<div class="near">${e.near.map(q=>`<div class="nq"><span class="gp" style="background:${GROUPS[q.g].c}">${q.g}</span><b>n° ${q.n}</b> · ${q.who}, ${q.date}<br>${q.st}</div>`).join("")}</div>`:`<p class="hint">Aucune question écrite ne porte encore sur cet engagement.</p>`}`;
+  h+=`<div class="fgrid"><section class="panel card">${c1}</section><section class="panel card">${c2}</section></div>`;
+  return h;
+}
+function render(){
+  lead();nav();
+  const m=$("#main");
+  m.innerHTML=`<div class="view">${S.view==="todo"?vTodo():S.view==="min"?vMin():S.view==="done"?vDone():vFiche()}</div>`;
+  checkDraft();
+}
+function checkDraft(){
+  const t=$("#draft"); if(!t) return;
+  $("#draftWarn").innerHTML=t.value.includes("[nom de la députée]")?`<div class="warnmsg">Remplacez « [nom de la députée] » par le nom avant le dépôt : la question serait refusée en l'état.</div>`:"";
+}
+function go(view,opt={}){
+  if(view==="fiche"){ if(S.view!=="fiche") S.from=S.view; S.id=opt.id; }
+  else { S.view=view; S.id=null; }
+  if(view==="fiche") S.view="fiche";
+  if(opt.min!==undefined) S.min=opt.min;
+  if(!opt.keepUndo) S.undo=null;
+  render(); window.scrollTo({top:0,behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth"});
+  if(view==="fiche") $(".fh h2")?.setAttribute("tabindex","-1"), $(".fh h2")?.focus({preventScroll:true});
+}
+function parseFr(s){const m=s.trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/); if(!m) return null; const d=new Date(+m[3],+m[2]-1,+m[1]); return d.getMonth()===+m[2]-1?d:null}
+function setErr(inp,box,msg){inp.setAttribute("aria-invalid",msg?"true":"false"); box.textContent=msg||""; box.classList.toggle("show",!!msg)}
+document.addEventListener("input",ev=>{
+  if(ev.target.id==="draft") checkDraft();
+  if(ev.target.id==="proof") setErr(ev.target,$("#proofErr"),"");
+  if(ev.target.id==="pdate") setErr(ev.target,$("#dateErr"),"");
+});
+document.addEventListener("click",ev=>{
+  const t=ev.target;
+  const v=t.closest("[data-view]"); if(v){go(v.dataset.view);return}
+  const mn=t.closest("[data-min]"); if(mn){go("todo",{min:mn.dataset.min});return}
+  if(t.closest("[data-clrmin]")){S.min=null;render();return}
+  const r=t.closest("[data-id]"); if(r){go("fiche",{id:r.dataset.id});return}
+  if(t.closest("[data-copy]")){
+    const ta=$("#draft"), val=ta.value;
+    const fail=()=>{ta.focus();ta.select();toast("Le navigateur a refusé la copie : le texte est sélectionné, faites Ctrl+C (⌘C).")};
+    if(!navigator.clipboard) return fail();
+    navigator.clipboard.writeText(val).then(()=>toast(val.includes("[nom de la députée]")?"Question copiée. Pensez à remplacer le nom.":"Question copiée."),fail);return;
+  }
+  if(t.closest("[data-signal]")){S.signaled[S.id]=true;render();toast("Proposition transmise au secrétariat du groupe (simulation).");return}
+  if(t.closest("[data-unsignal]")){delete S.signaled[S.id];render();return}
+  if(t.closest("[data-done]")){
+    const e=E.find(x=>x.id===S.id), p=$("#proof"), dt=$("#pdate"); let ok=true;
+    const pv=p.value.trim();
+    if(!pv){setErr(p,$("#proofErr"),"Indiquez la référence publiée (numéro et date du texte, ou page du rapport) : sans elle, l'engagement reste ouvert.");ok=false}
+    else if(!/\d/.test(pv)){setErr(p,$("#proofErr"),"Ajoutez un numéro ou une date : « publié » ne suffit pas à retrouver la preuve.");ok=false}
+    const d=parseFr(dt.value);
+    if(!d){setErr(dt,$("#dateErr"),"Écrivez la date sous la forme jj/mm/aaaa, par exemple 05/11/2026.");ok=false}
+    else if(d>NOW){setErr(dt,$("#dateErr"),"La date ne peut pas être postérieure à aujourd'hui.");ok=false}
+    if(!ok){(p.getAttribute("aria-invalid")==="true"?p:dt).focus();return}
+    const iso=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+    const kids=childrenOf(e).filter(isOpen);
+    S.undo={id:e.id,kids:kids.map(k=>k.id)};
+    for(const x of [e,...kids]){x.done=iso;x.proof=pv;x.userDone=true}
+    go("fiche",{id:e.id,keepUndo:true});return;
+  }
+  if(t.closest("[data-undo]")){for(const id of [S.undo.id,...S.undo.kids]){const e=E.find(x=>x.id===id);delete e.done;delete e.proof;delete e.userDone}S.undo=null;render();toast("Retour en arrière : l'engagement est de nouveau ouvert.");return}
+  if(t.closest("[data-reopen]")){const e=E.find(x=>x.id===S.id);delete e.done;delete e.proof;delete e.userDone;render();toast("Engagement rouvert : il revient dans « À faire ».");return}
+});
+document.addEventListener("keydown",e=>{
+  if(e.key!=="Escape") return;
+  if(e.target.matches("textarea,input")){e.target.blur();return}
+  if(S.view==="fiche"){go(S.from);return}
+  if(S.min!=null){S.min=null;render();return}
+  if(S.view!=="todo") go("todo");
+});
+render();
+</script>
