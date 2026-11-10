@@ -18,6 +18,7 @@
 }
 @media (pointer:coarse){:root{--hit:44px}}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
 button,input,textarea,select{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
@@ -842,7 +843,9 @@ function vSeance(){
   const col=k=>{
     const items=sim.flat.filter(a=>sim.st.get(a.id).s===k);
     const groups=sim.groups.map(g=>{const it=g.items.filter(a=>sim.st.get(a.id).s===k); if(!it.length) return "";
-      return `<div class="grp" role="group" aria-label="${g.head?"Article entier":"Alinéa "+g.al}"><div class="gh" aria-hidden="true">${g.head?"Article entier":"Alinéa "+g.al}${g.items.length>1?" · discussion commune":""}</div>${it.map(card).join("")}</div>`}).join("");
+      const ref=g.items.find(a=>!a.mine&&a.op==="rep"), whole=g.items.some(a=>a.op==="delAl");
+      const gl=g.head?"Article entier":`Alinéa ${g.al}`+(ref&&!whole?` · « ${ref.w} »`:"");
+      return `<div class="grp" role="group" aria-label="${esc(gl)}"><div class="gh" aria-hidden="true">${esc(gl)}${g.items.length>1?" · discussion commune":""}</div>${it.map(card).join("")}</div>`}).join("");
     const empty={open:"Tout est tranché.",adopt:"Glissez un amendement ici, ou touchez « Adopter ».",fell:"Calculé : ce qui tombe du fait des adoptions."}[k];
     return `<section class="colm${k==="fell"?" nodrop":""}" data-col="${k}" aria-labelledby="h-${k}"><div class="colm-h"><span id="h-${k}">${CNAME[k]} · ${items.length}</span>${k==="adopt"&&items.length?`<button class="ghost" id="clearHyp">Tout retirer</button>`:""}</div><div class="zone">${groups}<div class="hint0">${empty}</div></div></section>`;
   };
