@@ -320,7 +320,7 @@ function load(){try{const v=JSON.parse(localStorage.getItem(KEYST)||"null");if(v
 const examined=()=>SIG.filter(s=>S.st[s.id]).length;
 function step(){if(S.sent)return 4;if(examined()<SIG.length)return 1;return S.order.length?3:2}
 function renderSteps(){const cur=step(),n=examined(),q=S.order.length;
-  const L=[["s1","Examiner",`${n} signal${n>1?"s":""} sur ${SIG.length}`,n===SIG.length],["s2","Relire",q?`${q} question${q>1?"s":""}`:"aucune question",q>0&&n===SIG.length],["s3","Envoyer",S.sent?"envoyé à "+time(S.sent.at):"pas encore envoyé",!!S.sent]];
+  const L=[["s1","Examiner",`${n} ${n>1?"signaux":"signal"} sur ${SIG.length}`,n===SIG.length],["s2","Relire",q?`${q} question${q>1?"s":""}`:"aucune question",q>0&&n===SIG.length],["s3","Envoyer",S.sent?"envoyé à "+time(S.sent.at):"pas encore envoyé",!!S.sent]];
   $("#steps").innerHTML=L.map(([id,t,s,d],i)=>`<li><a href="#${id}" class="${d?"done":""}" ${cur===i+1?'aria-current="step"':""}><span class="n">${d?"✓":i+1}</span><b>${t}</b><small>${s}</small></a></li>`).join("");
   $("#status").innerHTML=(ui.storeErr?`<span class="err">Brouillon non enregistré : le navigateur bloque le stockage. Gardez cet onglet ouvert.</span>`:S.saved?`<span>Brouillon enregistré à ${time(S.saved)}</span>`:"")+`<span>Données : RAP 2025 (juin 2026) · PAP 2027 (octobre 2026)${ui.stale?" · <b style='color:#f0c27a;font-weight:500'>périmées</b>":""}</span>`;
 }
@@ -353,7 +353,7 @@ function renderQs(){const q=S.order,n=examined(),locked=!!S.sent;
   if(!q.length){$("#qwrap").innerHTML=`<div class="empty">Aucune question retenue pour l'instant. Examinez un signal à l'étape 1 et retenez sa question.</div>`;return}
   $("#qwrap").innerHTML=`<ol class="qs">${q.map((id,i)=>{const s=SIG.find(x=>x.id===id);return `<li><div><div class="qt">${esc(S.txt[id])}</div><span class="src">Signal : ${s.t}</span></div>
     ${locked?"<span></span>":`<span class="tools"><button class="ib" data-mv="-1" data-id="${id}" ${i?"":"disabled"} aria-label="Monter">↑</button><button class="ib" data-mv="1" data-id="${id}" ${i<q.length-1?"":"disabled"} aria-label="Descendre">↓</button><button class="ib" data-edit="${id}" aria-label="Modifier">✎</button><button class="ib" data-rm="${id}" aria-label="Retirer">✕</button></span>`}</li>`}).join("")}</ol>
-    ${n<SIG.length&&!locked?`<p style="font-size:12.5px;color:var(--dim);margin:8px 2px 0">${SIG.length-n} signal${SIG.length-n>1?"s":""} pas encore examiné${SIG.length-n>1?"s":""} : vous pouvez envoyer quand même, ou les examiner d'abord.</p>`:""}`;
+    ${n<SIG.length&&!locked?`<p style="font-size:12.5px;color:var(--dim);margin:8px 2px 0">${SIG.length-n} ${SIG.length-n>1?"signaux":"signal"} pas encore examiné${SIG.length-n>1?"s":""} : vous pouvez envoyer quand même, ou les examiner d'abord.</p>`:""}`;
 }
 function renderSend(){const q=S.order.length,el=$("#send");
   if(S.sent){el.innerHTML=`<div class="okbox"><b>Envoyé le ${day(S.sent.at)} à ${time(S.sent.at)}</b><span>${S.sent.n} question${S.sent.n>1?"s":""} transmise${S.sent.n>1?"s":""} au secrétariat · accusé de réception n° ${S.sent.ref}. Les questions sont désormais figées ici.</span></div><div class="row"><button class="btn" data-act="new">Préparer une nouvelle audition</button></div>`;return}

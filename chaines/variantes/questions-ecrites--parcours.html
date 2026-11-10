@@ -238,7 +238,7 @@ function render(){
   // ligne d'état : fraîcheur des données, sauvegarde
   const A=S.archive,age=Math.round((NOW-D(A.date))/864e5);
   $("#status").innerHTML=`<span><span class="dot ${A.st==="loading"?"":age>7?"warn":"ok"}"></span>${A.st==="loading"?"Actualisation de l'archive…":`Archive du ${fd(A.date)}${age<=1?" · à jour":` · ${age} jours`}`}</span>
-   <span><span class="dot ${S.saved?"ok":""}"></span>${P==="done"?"Brouillon effacé après dépôt":S.saved?`Brouillon enregistré à ${hm(S.saved)}`:"Brouillon non enregistré"}</span>`;
+   <span><span class="dot ${S.saved?"ok":""}"></span>${P==="done"?"Brouillon effacé après dépôt":S.saved?`Brouillon enregistré à ${hm(S.saved)}`:"Brouillon enregistré dès la première modification"}</span>`;
   // bandeaux : reprise, données périmées, erreur d'actualisation
   let b="";
   if(S.resumed&&P==="edit")b+=bar("ok",`<b>Brouillon repris</b>, tel que vous l'aviez laissé à ${hm(S.saved)}.`,`<button class="ghost" data-a="example">Repartir de l'exemple</button><button class="ghost" data-a="hide-resume" aria-label="Masquer">×</button>`);
@@ -269,7 +269,7 @@ function render(){
   }
   // zone d'action selon la phase
   const Z=$("#act"),med=DEL[min.value].med,eta=new Date(NOW.getTime()+med*864e5).toLocaleDateString("fr-FR",{month:"long",year:"numeric"});
-  if(P==="edit"){const why=w<25?`Encore ${25-w} mots au moins.`:!hasAsk?"Terminez par la demande : « Elle lui demande … ».":needAck&&!acked?"Lisez la question proche et cochez la case, ou citez-la.":A.st==="loading"?"Attendez la fin de l'actualisation.":"";
+  if(P==="edit"){const why=w<25?`Encore ${25-w} mots au moins.`:!hasAsk?"Terminez par la demande : « Elle lui demande … ».":needAck&&!acked?(k==="vous"?"Cochez la case : vous redéposez en connaissance de cause.":"Lisez la question proche et cochez la case, ou citez-la."):A.st==="loading"?"Attendez la fin de l'actualisation.":"";
     Z.innerHTML=`<div class="row"><button class="btn pri" data-a="confirm"${ready?"":" disabled"}>Préparer le dépôt</button><span class="why">${why}</span></div>`}
   else if(P==="confirm"){Z.innerHTML=`<dl class="sum"><dt>Destinataire</dt><dd>Ministre ${minLabel(min.value)}</dd><dt>Antériorité</dt><dd>${k==="libre"?"sujet libre":T_short(k,dup)}</dd><dt>Réponse probable</dt><dd>vers ${eta} (délai médian ${medM(min.value)} mois)</dd><dt>Publication</dt><dd>Journal officiel du mardi 17 novembre 2026</dd></dl>
     <div class="irr">Le dépôt est définitif : une fois transmise, la question ne peut plus être modifiée.</div>
