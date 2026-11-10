@@ -12,317 +12,442 @@
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
-button,input,textarea,select{font:inherit;color:inherit}
+button,input{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.wrap.narrow{max-width:780px}
 .ctx{font-size:12.5px;color:var(--dim)}
 h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
-.lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
-.lead span{color:var(--muted)}
 .panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
-.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
-.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.sec{margin:26px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:0 16px;min-height:36px;font-size:13.5px;cursor:pointer;transition:background .2s,opacity .2s,border-color .2s;white-space:nowrap}
 .btn:hover:not(:disabled){background:#1f2227}
 .btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
 .btn.pri:hover:not(:disabled){background:#7b87f5}
-.btn:disabled{opacity:.4;cursor:default}
-.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
+.btn:disabled{opacity:.5;cursor:default}
+.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:0 10px;min-height:28px;font-size:12.5px;cursor:pointer;transition:color .2s,background .2s}
 .ghost:hover{color:var(--fg);background:var(--s2)}
-.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
-.chip:hover{color:var(--fg)}
-.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
 .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
-.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
-ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
-del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
-mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
-input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
-input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
-.gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
-.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
-@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
-.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
-.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
-.open>.slide{grid-template-rows:1fr}
-.open>.slide>div{opacity:1;transition:opacity .2s .12s}
-.scrollx{overflow-x:auto;scrollbar-width:none}
-.scrollx::-webkit-scrollbar{display:none}
+.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)}
+mark{background:rgba(227,163,63,.2);color:var(--fg);border-radius:3px;padding:0 1px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 @media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
-</style>
-<script>
-const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
-const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
-function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
-</script>
-<style>
-/* Angle « patterns » : squelette au chargement (forme du contenu), deux onglets (une tâche à la fois),
-   provenance en tiroir latéral (détail à la demande), placement par glisser-déposer avec équivalent clavier et clic,
-   dépliage d'un amendement à la fois, toasts empilés avec « Annuler ». */
-.wrap{max-width:860px}
-.ld{margin-top:14px;display:flex;gap:8px;align-items:stretch}
-.field{flex:1;min-width:0;display:flex;align-items:center;gap:8px;background:var(--s1);border:1px solid var(--line2);border-radius:9px;padding:0 4px 0 12px;min-height:48px;transition:border-color .2s}
-.field:focus-within{border-color:var(--accent)}
-.field label{color:var(--muted);font-size:13px;white-space:nowrap}
-.field input{flex:1;min-width:0;border:0;background:none;padding:0;font-size:15px;color:var(--fg);min-height:44px}
-.field input:focus{outline:none}
-.ld .btn{min-height:48px;padding:0 18px;font-size:14px}
-.err{margin:6px 2px 0;font-size:12.5px;color:#f19a9d;min-height:0}
-/* Onglets */
-.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-top:20px}
-.tab{border:0;background:none;color:var(--muted);padding:0 14px;min-height:44px;cursor:pointer;font-size:13.5px;border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;gap:8px;align-items:center;transition:color .2s,border-color .2s}
-.tab:hover{color:var(--fg)}
-.tab[aria-selected=true]{color:var(--fg);border-bottom-color:var(--accent)}
-.badge{min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--s2);color:var(--muted);font-size:11.5px;display:inline-grid;place-items:center}
-.badge.warn{background:rgba(227,163,63,.16);color:var(--warn)}
-.panelv{padding-top:14px}
-.panelv[hidden]{display:none}
-.sum{margin:0 2px 14px;color:var(--fg);font-size:15px;text-wrap:pretty}
-.sum span{color:var(--muted)}
-/* Squelette */
-.sk{display:grid;gap:10px;margin-top:20px}
-.sk i{display:block;height:12px;border-radius:6px;background:linear-gradient(90deg,var(--s1) 0,var(--s2) 40%,var(--s1) 80%);background-size:300% 100%;animation:shim 1.2s linear infinite}
-@keyframes shim{from{background-position:100% 0}to{background-position:-50% 0}}
-.sk .row{display:grid;grid-template-columns:minmax(0,1fr) 70px;gap:14px;padding:14px;border:1px solid var(--line);border-radius:9px}
-/* Sources : liste compacte, détail en tiroir */
-.srcs{list-style:none;margin:0;padding:0;display:grid;gap:6px}
-.srcs button{width:100%;display:grid;grid-template-columns:10px minmax(0,1fr) auto 14px;gap:12px;align-items:center;text-align:left;background:var(--s1);border:1px solid var(--line);border-radius:9px;padding:0 14px;min-height:52px;cursor:pointer;transition:background .2s,border-color .2s}
-.srcs button:hover{background:var(--s2);border-color:var(--line2)}
-.srcs b{font-weight:500;color:var(--fg);font-size:13.5px}
-.srcs .n{color:var(--muted);font-size:13px;white-space:nowrap}
-.srcs .chev{color:var(--dim)}
-.drawer-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .2s;z-index:40}
-.drawer{position:fixed;top:0;right:0;bottom:0;width:min(400px,100vw);background:var(--s1);border-left:1px solid var(--line2);z-index:41;transform:translateX(100%);transition:transform .3s var(--ease);padding:18px max(18px,env(safe-area-inset-right,0px)) 18px 18px;display:flex;flex-direction:column;gap:14px;overflow-y:auto}
-body.dr .drawer{transform:none} body.dr .drawer-bg{opacity:1;pointer-events:auto}
-.drawer h2{margin:0;font:600 16px/1.3 var(--f);color:var(--fg)}
-.drawer .x{position:absolute;top:10px;right:10px;width:44px;height:44px;border:0;background:none;color:var(--muted);font-size:22px;cursor:pointer;border-radius:8px}
-.drawer .x:hover{background:var(--s2);color:var(--fg)}
-.drawer dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 14px;font-size:13px}
-.drawer dt{color:var(--muted)} .drawer dd{margin:0;color:var(--fg)}
-.drawer p{margin:0;font-size:13px;color:var(--text)}
-/* Placement */
-.amd{border:1px solid var(--line);border-radius:10px;background:var(--s1);overflow:hidden}
-.amd+.amd{margin-top:8px}
-.amd-h{width:100%;display:grid;grid-template-columns:auto minmax(0,1fr) auto 14px;gap:12px;align-items:center;text-align:left;border:0;background:none;padding:0 14px;min-height:52px;cursor:pointer}
-.amd-h b{color:var(--fg);font-weight:500}
-.amd-h .g{color:var(--muted);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.amd-h .st{font-size:12.5px;color:var(--warn);white-space:nowrap}
-.amd-h .st.ok{color:#7fd3a8}
-.amd-h .chev{color:var(--dim);transition:transform .25s var(--ease)}
-.amd.open .chev{transform:rotate(90deg)}
-.amd-b{padding:2px 14px 14px;display:grid;gap:12px}
-.card{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;align-items:start;padding:10px 12px;border:1px dashed var(--line2);border-radius:8px;background:var(--s2);cursor:grab;touch-action:none;user-select:none;font-size:13px}
-.card:active{cursor:grabbing}
-.card.held{border-style:solid;border-color:var(--accent);box-shadow:0 0 0 3px var(--lit)}
-.grip{color:var(--dim);font-size:16px;line-height:1.3;letter-spacing:-2px}
-.card mark{background:rgba(227,163,63,.18)}
-.how{font-size:12px;color:var(--dim);margin:-4px 2px 0}
-.art{display:grid;gap:4px}
-.art .ah{font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase;margin:2px 2px 2px}
-.al{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:10px;align-items:start;padding:8px 10px;border-radius:8px;font-size:12.5px;color:var(--dim);border:1px solid transparent}
-.al .k{color:var(--dim);text-align:right}
-.al.cand{color:var(--text);border-color:var(--line2);cursor:pointer;min-height:44px;transition:background .15s,border-color .15s}
-.al.cand:hover,.al.cand.over{background:var(--lit);border-color:var(--accent)}
-.al.cand .k{color:var(--fg);font-weight:500}
-.al .sim{color:var(--muted);white-space:nowrap;font-size:12px}
-.al.cand mark{background:var(--lit)}
-.al.chosen{border-color:var(--ok);background:rgba(70,179,126,.08)}
-.ghostcard{position:fixed;z-index:50;pointer-events:none;padding:6px 10px;border-radius:7px;background:var(--accent);color:#fff;font-size:12.5px;box-shadow:0 6px 20px rgba(0,0,0,.4);transform:translate(-50%,-130%)}
-.done{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12.5px;color:#7fd3a8;flex-wrap:wrap}
-.foot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:18px}
-.foot p{margin:0;font-size:12.5px;color:var(--muted)}
-.foot .btn{min-height:44px;padding:0 16px}
-/* Toasts empilés */
-.toasts{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px;z-index:60;width:min(360px,calc(100vw - 32px))}
-.tst{display:flex;align-items:center;gap:10px;background:var(--s2);border:1px solid var(--line2);border-left:3px solid var(--ok);border-radius:8px;padding:8px 8px 8px 12px;font-size:13px;color:var(--fg);animation:tin .25s var(--ease);transition:opacity .2s}
+
+/* ---------- Page ---------- */
+.wrap{max-width:760px;margin:0 auto;padding-block:24px 72px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));transition:transform .3s var(--ease)}
+@media (min-width:1180px){body.dr .wrap{transform:translateX(-200px)}}
+
+/* Formulaire : étiquette au-dessus, aide liée, erreur sous le champ (validation à la sortie du champ) */
+.ld{margin-top:18px}
+.ld label{display:block;font-size:13px;font-weight:500;color:var(--fg);margin:0 2px 6px}
+.ld .row{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:8px}
+.ld input{grid-column:1;grid-row:1}
+.ld .hint,.ld .ferr{grid-column:1}
+.ld .row .btn{grid-column:2;grid-row:1}
+.ld input{flex:1;min-width:0;background:var(--s1);border:1px solid var(--line2);border-radius:8px;padding:0 12px;min-height:40px;font-size:15px;color:var(--fg);transition:border-color .2s}
+.ld input:focus{outline:none;border-color:var(--accent)}
+.ld input[aria-invalid=true]{border-color:var(--err)}
+.ld .btn{min-height:40px}
+.hint{margin:6px 2px 0;font-size:12.5px;color:var(--muted)}
+.ferr{margin:6px 2px 0;font-size:12.5px;color:#f19a9d}
+.ferr:empty{display:none}
+
+/* Bilan et progression */
+.lead:empty{display:none}
+.lead{margin:22px 2px 0;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty;min-height:1.55em}
+.lead span{color:var(--muted)}
+.prog{display:grid;gap:8px;margin:22px 2px 0}
+.prog[hidden]{display:none}
+.prog p{margin:0;font-size:13.5px;color:var(--fg)}
+.prog p span{color:var(--muted)}
+progress{appearance:none;-webkit-appearance:none;width:100%;height:4px;border:0;border-radius:2px;background:var(--s2);overflow:hidden}
+progress::-webkit-progress-bar{background:var(--s2)}
+progress::-webkit-progress-value{background:var(--accent);transition:width .25s var(--ease)}
+progress::-moz-progress-bar{background:var(--accent)}
+
+/* Squelettes : même forme que le contenu remplacé */
+.sk{display:block;border-radius:5px;background:linear-gradient(90deg,var(--s2) 0,#1d2025 40%,var(--s2) 80%);background-size:300% 100%;animation:pulse 1.3s linear infinite}
+@keyframes pulse{from{background-position:100% 0}to{background-position:-50% 0}}
+
+/* À placer : un groupe de boutons radio par amendement */
+.fx{margin:0;border:1px solid var(--line);border-radius:10px;background:var(--s1);padding:14px 16px;min-width:0;transition:border-color .25s}
+.fx+.fx{margin-top:10px}
+.fx.done{border-color:rgba(70,179,126,.45)}
+.fx legend{float:left;width:100%;padding:0;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.fx legend b{color:var(--fg);font-weight:600}
+.fx legend .g{color:var(--muted);font-size:12.5px}
+.fx legend .st{margin-left:auto;font-size:12.5px;color:var(--warn);white-space:nowrap}
+.fx.done legend .st{color:#7fd3a8}
+.fx .quote{clear:both;margin:10px 0 0;font-size:13px;color:var(--text);padding:9px 11px;background:var(--s2);border-radius:7px;text-wrap:pretty}
+.fx .why{margin:8px 2px 0;font-size:12.5px;color:var(--muted)}
+.fx.done .why{display:none}
+.opts{display:grid;gap:6px;margin-top:10px}
+.opt{display:grid;grid-template-columns:18px auto minmax(0,1fr) auto;gap:10px;align-items:center;min-height:44px;padding:6px 12px;border:1px solid var(--line);border-radius:8px;cursor:pointer;font-size:12.5px;color:var(--muted);transition:background .15s,border-color .15s}
+.opt:hover{background:var(--s2);border-color:var(--line2)}
+.opt input{margin:0;width:16px;height:16px;accent-color:var(--ok);cursor:pointer}
+.opt input:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.opt .al{color:var(--fg);font-weight:500;white-space:nowrap}
+.opt .t mark{background:var(--lit)}
+.opt .sim{color:var(--dim);white-space:nowrap;font-size:12px}
+.opt:has(input:checked){border-color:var(--ok);background:rgba(70,179,126,.07)}
+.opt:has(input:checked) .sim{color:#7fd3a8}
+.fx-f{display:flex;gap:8px;justify-content:space-between;align-items:center;margin-top:10px;flex-wrap:wrap}
+.fx-f .ghost[hidden]{display:none}
+
+/* Sources : dépliage (niveau 2), chaque ligne dépliable en place */
+.srcs{margin-top:22px}
+.srcs>summary{list-style:none;cursor:pointer;display:flex;gap:10px;align-items:center;min-height:44px;padding:0 14px;border-radius:10px;color:var(--fg);font-size:13.5px}
+.srcs>summary::-webkit-details-marker,.src>summary::-webkit-details-marker{display:none}
+.srcs>summary span{color:var(--muted);font-size:12.5px}
+.chev{color:var(--dim);transition:transform .25s var(--ease);flex:none;margin-left:auto}
+details[open]>summary>.chev{transform:rotate(90deg)}
+.srcs[open]>summary{border-bottom:1px solid var(--line);border-radius:10px 10px 0 0}
+.srcs ul{list-style:none;margin:0;padding:4px}
+.srcs li+li{border-top:1px solid var(--line)}
+.src>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:8px minmax(0,1fr) auto 12px;gap:12px;align-items:center;min-height:44px;padding:4px 10px;border-radius:7px;transition:background .15s}
+.src>summary:hover{background:var(--s2)}
+.src>summary b{color:var(--fg);font-weight:500;font-size:13.5px}
+.src>summary .n{color:var(--muted);font-size:13px;white-space:nowrap}
+.src>summary .chev{margin:0}
+.src .more{padding:2px 10px 12px 30px;display:grid;gap:8px;font-size:12.5px;animation:open .25s var(--ease)}
+@keyframes open{from{opacity:0;transform:translateY(-3px)}}
+.src dl{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px}
+.src dt{color:var(--dim)} .src dd{margin:0;color:var(--text)}
+.src .more p{margin:0;color:var(--muted)}
+.src .more .ghost{justify-self:start}
+.spin{display:inline-block;width:11px;height:11px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;vertical-align:-1px;margin-right:6px;animation:rot .7s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+
+/* Pied : action principale en bas à droite */
+.foot{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-top:24px}
+.foot p{margin:0;font-size:12.5px;color:var(--muted);max-width:52ch}
+.foot .btn{min-height:40px}
+
+/* Tiroir latéral non modal : l'article entier, la liste reste visible */
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,100vw);background:var(--s1);border-left:1px solid var(--line2);z-index:40;display:flex;flex-direction:column;visibility:hidden;transform:translateX(100%);box-shadow:-18px 0 40px rgba(0,0,0,.35)}
+.drawer.on{visibility:visible;transform:none;transition:transform .3s var(--ease)}
+.drawer.off{visibility:visible;transform:none;opacity:0;transition:opacity .2s}
+.dh{display:flex;align-items:flex-start;gap:10px;padding:16px max(14px,env(safe-area-inset-right,0px)) 12px 18px;border-bottom:1px solid var(--line)}
+.dh div{flex:1;min-width:0}
+.dh h2{margin:2px 0 0;font:600 16px/1.3 var(--f);color:var(--fg)}
+.dh .x{flex:none;width:40px;height:40px;border:0;background:none;color:var(--muted);font-size:22px;line-height:1;cursor:pointer;border-radius:8px}
+.dh .x:hover{background:var(--s2);color:var(--fg)}
+.db{overflow-y:auto;padding:14px max(18px,env(safe-area-inset-right,0px)) 24px 18px;display:grid;gap:4px;align-content:start;scrollbar-width:none}
+.db::-webkit-scrollbar{display:none}
+.db .q{font-size:12.5px;color:var(--muted);margin:0 0 10px;padding:8px 10px;border-radius:7px;background:var(--s2)}
+.dal{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;padding:8px 10px;border-radius:7px;font-size:13px;color:var(--muted);border:1px solid transparent}
+.dal .k{color:var(--dim);text-align:right}
+.dal.c{color:var(--text);border-color:var(--line2)}
+.dal.c .k{color:var(--fg);font-weight:500}
+.dal.sel{border-color:var(--ok);background:rgba(70,179,126,.07)}
+.dal small{display:block;margin-top:3px;color:var(--dim);font-size:11.5px}
+.dal.sel small{color:#7fd3a8}
+
+/* Toasts : en haut à droite sur grand écran, en bas au centre sur petit ; 3 au plus, le plus récent en haut */
+.toasts{position:fixed;top:16px;right:max(16px,env(safe-area-inset-right,0px));z-index:60;display:flex;flex-direction:column;gap:8px;width:min(360px,calc(100vw - 32px));pointer-events:none}
+.tst{pointer-events:auto;display:flex;align-items:center;gap:6px;background:var(--s2);border:1px solid var(--line2);border-left:3px solid var(--ok);border-radius:8px;padding:6px 6px 6px 12px;font-size:13px;color:var(--fg);box-shadow:0 8px 24px rgba(0,0,0,.35);animation:tin .25s var(--ease);transition:opacity .2s}
 .tst.info{border-left-color:var(--accent)}
-.tst span{flex:1}
-.tst button{border:0;background:none;color:var(--ins);cursor:pointer;min-height:36px;padding:0 8px;border-radius:6px;font-size:13px}
+.tst.out{opacity:0}
+.tst span{flex:1;min-width:0}
+.tst button{flex:none;border:0;background:none;cursor:pointer;min-height:32px;min-width:32px;padding:0 8px;border-radius:6px;font-size:13px}
+.tst .un{color:var(--ins)}
+.tst .tx{color:var(--muted);font-size:18px;line-height:1}
 .tst button:hover{background:#1f2227}
-.tst .tx{color:var(--muted);font-size:17px}
-@keyframes tin{from{opacity:0;transform:translateY(6px)}}
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-@media (max-width:520px){
-  .amd-h{grid-template-columns:auto minmax(0,1fr) 14px}
-  .amd-h .g{display:none}
+@media (min-width:641px){body.dr .toasts{right:436px}}
+@keyframes tin{from{opacity:0;transform:translateY(-6px)}}
+
+@media (max-width:640px){
+  .ld .row{grid-template-columns:minmax(0,1fr)}
+  .ld .row .btn{grid-column:1;grid-row:auto;margin-top:12px}
+  .ld input,.ld .btn{min-height:44px}
+  .opt{grid-template-columns:18px auto minmax(0,1fr);row-gap:2px}
+  .opt .sim{grid-column:3}
+  .ghost{min-height:44px;padding:0 14px}
+  .foot{flex-direction:column;align-items:stretch}
+  .foot .btn{min-height:44px;width:100%}
+  .dh .x{width:44px;height:44px}
+  .toasts{top:auto;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:50%;right:auto;transform:translateX(-50%)}
+  .tst{animation-name:tup}
+  .tst button{min-height:44px;min-width:44px}
+  @keyframes tup{from{opacity:0;transform:translateY(6px)}}
 }
 </style>
 
-<div class="wrap">
+<div class="wrap" id="wrap">
   <div class="ctx">Brique de données · alimente l'atelier d'amendement</div>
   <h1>Charger un texte</h1>
+
   <form class="ld" id="f" novalidate>
-    <div class="field"><label for="num">Texte n°</label><input id="num" value="512" inputmode="numeric" autocomplete="off" aria-describedby="err"></div>
-    <button class="btn pri" id="go">Charger</button>
+    <label for="num">Numéro du texte</label>
+    <div class="row">
+      <input id="num" type="text" value="512" inputmode="numeric" autocomplete="off" aria-describedby="num-hint">
+      <p class="hint" id="num-hint">Le numéro figure en tête du texte de la commission.</p>
+      <p class="ferr" id="num-err" role="alert"></p>
+      <button class="btn pri" id="go" type="submit">Charger</button>
+    </div>
   </form>
-  <p class="err" id="err" aria-live="polite"></p>
-  <div id="main"></div>
+
+  <div class="prog" id="prog" hidden>
+    <p id="prog-t"></p>
+    <progress id="prog-b" max="6" value="0" aria-labelledby="prog-t"></progress>
+  </div>
+  <p class="lead" id="lead"></p>
+
+  <details class="panel srcs" id="srcs">
+    <summary><span class="dot ok" id="srcdot"></span>Sources <span id="srcsum">· en attente</span><span class="chev" aria-hidden="true">›</span></summary>
+    <ul id="srclist" aria-busy="false"></ul>
+  </details>
+
+  <div id="fixzone" aria-live="off"></div>
+
+  <div class="foot" id="foot" hidden>
+    <p id="foot-p"></p>
+    <button class="btn" id="open" type="button">Ouvrir dans l'atelier</button>
+  </div>
 </div>
-<div class="drawer-bg" id="dbg"></div>
-<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dh" tabindex="-1"></aside>
-<div class="toasts" id="toasts" aria-live="polite"></div>
-<div class="sr" id="live" aria-live="assertive"></div>
+
+<aside class="drawer" id="drawer" aria-labelledby="dr-h" tabindex="-1">
+  <div class="dh"><div><div class="ctx">Texte de la commission</div><h2 id="dr-h"></h2></div><button class="x" id="dr-x" type="button" aria-label="Fermer le panneau">×</button></div>
+  <div class="db" id="dr-b"></div>
+</aside>
+<div class="toasts" id="toasts"></div>
+<div class="sr" id="live" aria-live="polite"></div>
 
 <script>
-const SRC=[
- {t:"Texte de la commission",n:"34 articles",o:"Site de l'Assemblée",d:"Il y a 12 minutes",m:"Absent des données ouvertes : page du site reprise, puis découpée en articles et alinéas (211).",st:"ok"},
- {t:"Texte initial",n:"29 articles",o:"Données ouvertes de l'Assemblée",d:"Déposé le 4 septembre",m:"Projet de loi n° 412. Sert à comparer et à suivre la renumérotation des articles.",st:"ok"},
- {t:"Amendements de séance",n:"486",o:"Données ouvertes de l'Assemblée",d:"Il y a 12 minutes",m:"Tous les amendements déposés en séance, avec leur exposé sommaire.",st:"ok"},
- {t:"Place de chaque amendement",n:"",o:"Calculée sur ce poste",d:"À l'instant",m:"Alinéa et mots visés retrouvés dans le texte de la commission. Ceux qu'on n'a pas su placer sont dans l'onglet « À placer ».",st:"warn",id:"place"},
- {t:"Sort en commission",n:"1 204",o:"Données ouvertes de l'Assemblée",d:"Arrêté au 5 novembre",m:"Adoptés, rejetés, retirés : pour reprendre les vôtres en séance.",st:"ok"},
- {t:"Articles de code cités",n:"23",o:"Légifrance",d:"Version en vigueur au 10 novembre 2026",m:"Pour lire le droit avant et après chaque article du texte.",st:"ok"},
-];
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const TOTAL=486;
-// Chaque amendement à placer, avec l'extrait d'article où les passages candidats sont des cibles de dépôt.
-const FIX=[
- {id:233,g:"Union des territoires",art:"Article 4",why:"Les mots cités ne figurent plus dans le texte de la commission : l'alinéa a été réécrit.",
-  q:"À l'alinéa 3, substituer aux mots : « <mark>de la remise en location</mark> » les mots : « de la remise sur le marché locatif ».",
-  al:[{k:2,t:"Le représentant de l'État dans le département établit chaque année la liste des logements vacants…"},
-      {k:3,t:"Le propriétaire bénéficie d'une aide à la <mark>remise sur le marché</mark> dont le montant est fixé par décret…",sim:"82 %"},
-      {k:4,t:"Le maire informe le propriétaire des aides <mark>mobilisables</mark> dans un délai de deux mois…",sim:"31 %"},
-      {k:5,t:"Un décret en Conseil d'État précise les modalités d'application du présent article."}]},
- {id:310,g:"Avenir rural",art:"Article 7",why:"L'alinéa 9 n'existe plus : l'article compte désormais 8 alinéas.",
-  q:"À l'alinéa 9, après le mot : « <mark>communes</mark> », insérer les mots : « et établissements publics de coopération intercommunale ».",
-  al:[{k:5,t:"…dans les <mark>communes</mark> de moins de 3 500 habitants, le seuil est abaissé…",sim:"même mot"},
-      {k:6,t:"…le conseil municipal peut, par délibération motivée, déroger…"},
-      {k:7,t:"…la convention est transmise au représentant de l'État…"},
-      {k:8,t:"…les <mark>communes</mark> mentionnées au premier alinéa peuvent instituer…",sim:"ancien 9"}]},
- {id:418,g:"Centre et progrès",art:"Article 12",why:"Le mot visé figure deux fois dans l'alinéa ; l'amendement ne dit pas lequel.",
-  q:"À l'alinéa 2, substituer au mot : « <mark>annuel</mark> » le mot : « biennal ».",
-  al:[{k:"2a",lab:"2",t:"L'organisme remet un rapport <mark>annuel</mark> d'activité au ministre chargé du logement…",sim:"1ʳᵉ fois"},
-      {k:"2b",lab:"2",t:"…au-delà du plafond <mark>annuel</mark> de ressources fixé par arrêté.",sim:"2ᵉ fois"},
-      {k:3,t:"Ce rapport est rendu public."}]},
+const SRC=[
+ {t:"Texte de la commission",s:"Absent des données ouvertes de l'Assemblée : repris du site, puis découpé",n:"34 articles · 211 alinéas",o:"Site de l'Assemblée",d:"il y a 12 minutes",st:"ok"},
+ {t:"Texte initial",s:"Projet de loi n° 412, pour comparer et suivre la renumérotation",n:"29 articles · 176 alinéas",o:"Données ouvertes de l'Assemblée",d:"déposé le 4 septembre",st:"ok"},
+ {t:"Amendements de séance",s:"Mis à jour il y a 12 minutes",n:"486",o:"Données ouvertes de l'Assemblée",d:"il y a 12 minutes",st:"ok"},
+ {t:"Place de chaque amendement",s:"Alinéa et mots visés, retrouvés dans le texte de la commission",n:"",o:"Calculée sur ce poste",d:"à l'instant",st:"warn",id:"place"},
+ {t:"Sort des amendements de commission",s:"Adoptés, rejetés, retirés : pour reprendre les vôtres en séance",n:"1 204",o:"Données ouvertes de l'Assemblée",d:"arrêté au 5 novembre",st:"ok"},
+ {t:"Articles de code cités",s:"Version en vigueur au 10 novembre 2026, pour le droit avant et après",n:"23 articles",o:"Légifrance",d:"version du 10 novembre 2026",st:"ok"},
 ];
-const placed={}; let openId=233, tabSel="fix", held=null;
-const left=()=>FIX.filter(f=>placed[f.id]==null).length;
+// Amendements dont le passage visé n'a pas été retrouvé : la machine propose, l'utilisateur tranche.
+const FIX=[
+ {id:233,g:"Union des territoires",art:"Article 4",why:"Les mots cités ne figurent plus dans le texte de la commission : l'alinéa a été réécrit en commission.",
+  q:"À l'alinéa 3, substituer aux mots : « <mark>de la remise en location</mark> » les mots : « de la remise sur le marché locatif ».",
+  c:[{al:3,t:"…d'une aide à la <mark>remise sur le marché</mark> dont le montant…",sim:"proche à 82 %"},{al:4,t:"…des aides <mark>mobilisables</mark> dans un délai…",sim:"proche à 31 %"}],
+  text:["I. – Le code de la construction et de l'habitation est ainsi modifié :",
+   "Le représentant de l'État dans le département établit chaque année la liste des logements vacants depuis plus de deux ans.",
+   "Le propriétaire bénéficie d'une aide à la <mark>remise sur le marché</mark> dont le montant est fixé par décret, dans la limite de 5 000 euros par logement.",
+   "Le maire informe le propriétaire des aides <mark>mobilisables</mark> dans un délai de deux mois à compter de l'inscription sur la liste.",
+   "Un décret en Conseil d'État précise les modalités d'application du présent article."]},
+ {id:310,g:"Avenir rural",art:"Article 7",why:"L'alinéa cité (alinéa 9) n'existe plus : l'article compte désormais 8 alinéas.",
+  q:"À l'alinéa 9, après le mot : « <mark>communes</mark> », insérer les mots : « et établissements publics de coopération intercommunale ».",
+  c:[{al:8,t:"…les <mark>communes</mark> mentionnées au premier alinéa…",sim:"ancien alinéa 9"},{al:5,t:"…dans les <mark>communes</mark> de moins de 3 500 habitants…",sim:"même mot"}],
+  text:["Le code général des collectivités territoriales est ainsi modifié :",
+   "1° L'article L. 2224-1 est complété par un alinéa ainsi rédigé :",
+   "« La compétence peut être exercée en commun par voie de convention. » ;",
+   "2° Après l'article L. 2224-2, il est inséré un article L. 2224-2-1 ainsi rédigé :",
+   "« Art. L. 2224-2-1. – Dans les <mark>communes</mark> de moins de 3 500 habitants, le seuil est abaissé à cinquante logements.",
+   "« Le conseil municipal peut, par délibération motivée, déroger au premier alinéa.",
+   "« La convention est transmise au représentant de l'État dans le département. » ;",
+   "3° Les <mark>communes</mark> mentionnées au premier alinéa peuvent instituer une taxe sur les logements vacants."]},
+ {id:418,g:"Centre et progrès",art:"Article 12",why:"Les mots cités figurent deux fois dans l'alinéa ; l'amendement ne dit pas laquelle.",
+  q:"À l'alinéa 2, substituer au mot : « <mark>annuel</mark> » le mot : « biennal ».",
+  c:[{al:2,t:"…un rapport <mark>annuel</mark> d'activité…",sim:"1ʳᵉ occurrence"},{al:2,t:"…le plafond <mark>annuel</mark> de ressources…",sim:"2ᵉ occurrence"}],
+  text:["L'article L. 411-3 du code de la construction et de l'habitation est ainsi modifié :",
+   "L'organisme remet un rapport <mark>annuel</mark> d'activité au ministre chargé du logement, qui précise notamment les attributions réalisées au-delà du plafond <mark>annuel</mark> de ressources fixé par arrêté.",
+   "Ce rapport est rendu public."]},
+];
 const pl=(n,s,p)=>n>1?(p||s+"s"):s;
-const fast=()=>matchMedia("(prefers-reduced-motion:reduce)").matches;
-const say=m=>{$("#live").textContent="";setTimeout(()=>$("#live").textContent=m,30)};
+const store={get(){try{return JSON.parse(sessionStorage.getItem("chargeur-512")||"{}")}catch(e){return {}}},set(v){try{sessionStorage.setItem("chargeur-512",JSON.stringify(v))}catch(e){}}};
+const placed=store.get();          // choix mémorisés pendant la session (reprise après rechargement)
+let loaded=false, loading=false;
+const left=()=>FIX.filter(f=>placed[f.id]==null).length;
 
-/* ---------- Toasts empilés (3 au plus) ---------- */
-function note(msg,undo,kind=""){
-  const box=$("#toasts"), t=document.createElement("div"); t.className="tst "+kind;
-  t.innerHTML=`<span>${msg}</span>${undo?`<button class="un">Annuler</button>`:""}<button class="tx" aria-label="Fermer">×</button>`;
-  box.append(t); while(box.children.length>3) box.firstChild.remove();
-  const kill=()=>{t.style.opacity=0;setTimeout(()=>t.remove(),200)};
-  t.querySelector(".tx").onclick=kill; if(undo) t.querySelector(".un").onclick=()=>{undo();kill()};
-  let tm=setTimeout(kill,6000); t.onmouseenter=()=>clearTimeout(tm); t.onmouseleave=()=>tm=setTimeout(kill,3000);
+/* ---------- Toasts ---------- */
+function note(msg,{kind="ok",undo=null,key=null}={}){
+  const box=$("#toasts");
+  if(key) $$(`.tst[data-key="${key}"]`).forEach(t=>t.remove());
+  const t=document.createElement("div");
+  t.className="tst "+kind; if(key) t.dataset.key=key;
+  const isErr=kind==="err";
+  t.setAttribute("role",isErr?"alert":"status"); t.setAttribute("aria-live",isErr?"assertive":"polite");
+  t.innerHTML=`<span>${msg}</span>${undo?`<button class="un" type="button">Annuler</button>`:""}<button class="tx" type="button" aria-label="Fermer la notification">×</button>`;
+  box.prepend(t);
+  while(box.children.length>3) box.lastElementChild.remove();
+  let tm=null;
+  const kill=()=>{clearTimeout(tm);t.classList.add("out");setTimeout(()=>t.remove(),200)};
+  const arm=ms=>{if(!isErr){clearTimeout(tm);tm=setTimeout(kill,ms)}};
+  arm(5000);
+  t.addEventListener("mouseenter",()=>clearTimeout(tm));
+  t.addEventListener("mouseleave",()=>arm(5000));
+  t.addEventListener("focusin",()=>clearTimeout(tm));
+  t.addEventListener("keydown",e=>{if(e.key==="Escape"){e.stopPropagation();kill()}});
+  t.querySelector(".tx").onclick=kill;
+  if(undo) t.querySelector(".un").onclick=()=>{undo();kill()};
 }
 
-/* ---------- Chargement : squelette ---------- */
+/* ---------- Formulaire ---------- */
+function check(v,full){
+  if(!v) return "Le numéro du texte est vide : saisissez le numéro, par exemple 512.";
+  if(!/^\d+$/.test(v)) return "Le numéro du texte ne contient que des chiffres : saisissez par exemple 512.";
+  if(full&&v!=="512"&&v!=="412") return `Nous ne trouvons pas de texte n° ${v} en discussion : vérifiez le numéro ; le texte de la commission en cours porte le n° 512.`;
+  return "";
+}
+function showErr(m){
+  const i=$("#num"); $("#num-err").textContent=m;
+  i.setAttribute("aria-invalid",m?"true":"false");
+  i.setAttribute("aria-describedby",m?"num-err num-hint":"num-hint");
+}
+$("#num").addEventListener("blur",()=>{showErr(check($("#num").value.trim(),false))});   // à la sortie du champ, jamais pendant la frappe
+$("#num").addEventListener("input",()=>{if($("#num-err").textContent)showErr("")});
+$("#f").addEventListener("submit",e=>{
+  e.preventDefault(); if(loading) return;
+  const v=$("#num").value.trim(), m=check(v,true);
+  showErr(m); if(m){$("#num").focus();return}
+  if(v==="412") note("Le n° 412 est le projet de loi initial : on charge le texte de la commission n° 512 qui en est issu.",{kind:"info"});
+  $("#num").value="512"; load();
+});
+
+/* ---------- Chargement : progression déterminée + squelettes ---------- */
+const skSrc=()=>`<li><div style="display:grid;grid-template-columns:8px minmax(0,1fr) 70px 12px;gap:12px;align-items:center;min-height:44px;padding:4px 10px"><i class="sk" style="width:8px;height:8px;border-radius:50%"></i><i class="sk" style="height:12px;width:${45+Math.random()*30|0}%"></i><i class="sk" style="height:10px"></i><span></span></div></li>`;
+const skFix=()=>`<div class="fx" aria-hidden="true"><i class="sk" style="height:13px;width:40%"></i><i class="sk" style="height:38px;margin-top:12px"></i><i class="sk" style="height:10px;width:70%;margin-top:10px"></i><i class="sk" style="height:44px;margin-top:10px"></i><i class="sk" style="height:44px;margin-top:6px"></i></div>`;
 function load(){
-  const v=$("#num").value.trim();
-  if(!/^\d+$/.test(v)){$("#err").textContent="Saisissez seulement le numéro, par exemple 512.";$("#num").focus();return}
-  if(v!=="512"&&v!=="412"){$("#err").textContent=`Aucun texte n° ${v} en discussion. Essayez 512 (texte de la commission).`;$("#num").focus();return}
-  $("#err").textContent= v==="412"?"N° 412 est le projet initial : on charge le texte de la commission n° 512 qui en est issu.":"";
-  $("#go").disabled=true;
-  $("#main").innerHTML=`<div class="sk" aria-busy="true" aria-label="Chargement"><i style="width:70%;height:16px"></i><i style="width:45%"></i>${SRC.map(()=>`<div class="row"><div style="display:grid;gap:8px"><i style="width:${40+Math.random()*35|0}%"></i><i style="width:${55+Math.random()*30|0}%;height:10px"></i></div><i></i></div>`).join("")}</div>`;
-  setTimeout(()=>{$("#go").disabled=false;render();},fast()?0:1100);
+  loading=true; loaded=false;
+  $("#go").disabled=true; $("#go").innerHTML=`<span class="spin" aria-hidden="true"></span>Chargement`;
+  $("#lead").textContent=""; $("#foot").hidden=true;
+  const prog=$("#prog"); prog.hidden=false; setProg(0);
+  // La zone a une forme connue : squelettes immédiats (charge > 1 s), autant que d'éléments attendus
+  $("#srcs").open=true; $("#srcsum").textContent="· récupération…"; $("#srcdot").className="dot";
+  const ul=$("#srclist"); ul.setAttribute("aria-busy","true"); ul.innerHTML=SRC.map(skSrc).join("");
+  $("#fixzone").innerHTML=`<div class="sec">À placer à la main</div><div aria-busy="true">${FIX.map(skFix).join("")}</div>`;
+  let i=0;
+  const guard=setTimeout(()=>{if(loading)fail()},30000);   // jamais d'attente sans fin
+  const step=()=>{
+    ul.children[i].outerHTML=srcRow(i);
+    i++; setProg(i);
+    if(i===4) renderFix(true);                // la place des amendements est connue : la zone se remplit
+    if(i<SRC.length) setTimeout(step,260);
+    else{clearTimeout(guard);done()}
+  };
+  setTimeout(step,260);
 }
-function render(){
-  const l=left();
-  $("#main").innerHTML=`<div class="tabs" role="tablist">
-     <button class="tab" role="tab" id="t-fix" aria-controls="p-fix" aria-selected="${tabSel==="fix"}">À placer <span class="badge ${l?"warn":""}" id="bfix">${l||"✓"}</span></button>
-     <button class="tab" role="tab" id="t-src" aria-controls="p-src" aria-selected="${tabSel==="src"}">Sources <span class="badge">6</span></button></div>
-   <div class="panelv" role="tabpanel" id="p-fix" aria-labelledby="t-fix" ${tabSel==="fix"?"":"hidden"}></div>
-   <div class="panelv" role="tabpanel" id="p-src" aria-labelledby="t-src" ${tabSel==="src"?"":"hidden"}></div>
-   <div class="foot"><p id="fp"></p><button class="btn" id="open">Ouvrir dans l'atelier</button></div>`;
-  renderSrc(); renderFix();
+function setProg(k){
+  $("#prog-b").value=k;
+  $("#prog-t").innerHTML=`Récupération des sources : ${k} sur ${SRC.length} <span>(${Math.round(k/SRC.length*100)} %)</span>`;
 }
-function renderSrc(){
-  const l=left();
-  $("#p-src").innerHTML=`<p class="sum">Six sources récupérées en une connexion. <span>Touchez une ligne pour savoir d'où elle vient.</span></p>
-   <ul class="srcs">${SRC.map((s,i)=>{const st=s.id==="place"?(l?"warn":"ok"):s.st, n=s.id==="place"?`${TOTAL-l} sur ${TOTAL}`:s.n;
-     return `<li><button data-src="${i}"><span class="dot ${st}"></span><b>${s.t}</b><span class="n">${n}</span><span class="chev">›</span></button></li>`}).join("")}</ul>`;
+function fail(){
+  loading=false; $("#go").disabled=false; $("#go").textContent="Réessayer";
+  $("#prog").hidden=true; $("#srclist").setAttribute("aria-busy","false");
+  note("Le chargement n'a pas abouti au bout de 30 secondes : le site de l'Assemblée ne répond pas. Réessayez dans un instant.",{kind:"err"});
 }
-function renderFix(){
+function done(){
+  loading=false; loaded=true;
+  $("#srclist").setAttribute("aria-busy","false");
+  $("#go").disabled=false; $("#go").textContent="Charger"; $("#go").classList.remove("pri");   // une seule action principale à la fois
+  $("#prog").hidden=true;
+  $("#srcs").open=false;                       // le détail se demande ; le résumé reste visible
+  $("#foot").hidden=false;
+  update();
+  $("#live").textContent=`Texte chargé. ${left()} amendements à placer à la main.`;
+}
+
+/* ---------- Sources ---------- */
+function srcRow(i){
+  const s=SRC[i], l=left(), place=s.id==="place";
+  const st=place?(l?"warn":"ok"):s.st, n=place?`${TOTAL-l} sur ${TOTAL}`:s.n;
+  return `<li><details class="src" data-src="${i}"><summary><span class="dot ${st}"></span><b>${s.t}</b><span class="n" ${place?'id="placen"':""}>${n}</span><span class="chev" aria-hidden="true">›</span></summary>
+   <div class="more"><p>${s.s}.</p><dl><dt>Origine</dt><dd>${s.o}</dd><dt>Date</dt><dd>${s.d}</dd></dl>
+   ${place?"":`<button class="ghost" type="button" data-refresh="${i}">Vérifier s'il y a du nouveau</button>`}</div></details></li>`;
+}
+
+/* ---------- À placer ---------- */
+function renderFix(first){
+  $("#fixzone").innerHTML=`<div class="sec" id="fixh">À placer à la main</div>`+FIX.map(f=>{
+    const p=placed[f.id];
+    return `<fieldset class="fx ${p!=null?"done":""}" data-id="${f.id}" aria-describedby="why-${f.id}">
+     <legend><b>n° ${f.id}</b><span class="g">${f.g} · ${f.art}</span><span class="st" id="st-${f.id}">${p!=null?`placé à l'alinéa ${f.c[p].al}`:"à placer"}</span></legend>
+     <p class="quote">${f.q}</p>
+     <p class="why" id="why-${f.id}">${f.why}</p>
+     <div class="opts">${f.c.map((c,i)=>`<label class="opt"><input type="radio" name="fx${f.id}" value="${i}" ${p===i?"checked":""}><span class="al">Alinéa ${c.al}</span><span class="t">${c.t}</span><span class="sim">${c.sim}</span></label>`).join("")}</div>
+     <div class="fx-f"><button class="ghost" type="button" data-art="${f.id}" aria-controls="drawer" aria-expanded="false">Lire l'${f.art.toLowerCase()} en entier</button><button class="ghost" type="button" data-clear="${f.id}" ${p!=null?"":"hidden"}>Remettre à placer</button></div>
+    </fieldset>`}).join("");
+}
+function update(){
   const l=left();
-  $("#bfix").textContent=l||"✓"; $("#bfix").classList.toggle("warn",!!l);
-  $("#fp").textContent=l?`${l} non ${pl(l,"placé")} : ${pl(l,"il restera","ils resteront")} hors de la cascade.`:"Tout est placé. Fichier enregistré sur ce poste.";
+  if(loaded) $("#lead").innerHTML=l?`Le texte est prêt, sauf ${l} amendement${l>1?"s":""} à placer à la main. <span>Les ${TOTAL-l} autres sont placés ; la cascade et le texte résultant en dépendent.</span>`
+    :`Le texte est prêt : les ${TOTAL} amendements sont placés. <span>Fichier local enregistré, utilisable hors ligne.</span>`;
+  $("#srcsum").textContent=`· ${SRC.length} récupérées il y a 12 minutes`;
+  $("#srcdot").className="dot "+(l?"warn":"ok");
+  const pr=$(`[data-src="3"]`); if(pr){pr.querySelector(".dot").className="dot "+(l?"warn":"ok");$("#placen").textContent=`${TOTAL-l} sur ${TOTAL}`}
+  $("#foot-p").textContent=l?`Vous pouvez ouvrir le texte dès maintenant : ${l>1?`les ${l} amendements non placés resteront`:"l'amendement non placé restera"} hors de la cascade jusqu'à ce que vous les placiez.`:"Une seule connexion, au moment du chargement. Ensuite, tout se fait sur ce poste.";
   $("#open").classList.toggle("pri",!l);
-  $("#p-fix").innerHTML=`<p class="sum">${l?`${TOTAL-FIX.length} amendements placés seuls${FIX.length-l?`, ${FIX.length-l} par vous`:""} ; ${l} à placer à la main.`:`Les ${TOTAL} amendements sont placés.`} <span>${l?"Glissez la carte sur le bon alinéa, ou touchez l'alinéa.":"Vous pouvez encore revenir sur un choix."}</span></p>
-   ${FIX.map(f=>{const p=placed[f.id], op=openId===f.id, a=p!=null?f.al.find(x=>x.k===p):null;
-    return `<div class="amd ${op?"open":""}" data-amd="${f.id}">
-     <button class="amd-h" aria-expanded="${op}" data-tog="${f.id}"><b>n° ${f.id}</b><span class="g">${f.g} · ${f.art}</span><span class="st ${p!=null?"ok":""}">${p!=null?"alinéa "+(a.lab||a.k):"à placer"}</span><span class="chev">›</span></button>
-     <div class="slide"><div><div class="amd-b">
-      <div class="card ${held===f.id?"held":""}" tabindex="0" role="button" aria-roledescription="carte déplaçable" aria-describedby="how-${f.id}" data-card="${f.id}"><span class="grip" aria-hidden="true">⋮⋮</span><span>${f.q}</span></div>
-      <p class="how" id="how-${f.id}">${f.why} Au clavier : Espace pour prendre, flèches pour choisir, Espace pour déposer, Échap pour annuler.</p>
-      <div class="art"><div class="ah">${f.art} · texte de la commission</div>
-       ${f.al.map(x=>`<div class="al ${x.sim?"cand":""} ${p===x.k?"chosen":""}" ${x.sim?`data-drop="${f.id}" data-k="${x.k}" role="button" tabindex="-1"`:""}><span class="k">${x.lab||x.k}</span><span>${x.t}</span><span class="sim">${x.sim?(p===x.k?"placé ici":x.sim):""}</span></div>`).join("")}
-      </div>
-     </div></div></div></div>`}).join("")}`;
+  FIX.forEach(f=>{
+    const fs=$(`.fx[data-id="${f.id}"]`); if(!fs) return; const p=placed[f.id];
+    fs.classList.toggle("done",p!=null);
+    $("#st-"+f.id).textContent=p!=null?`placé à l'alinéa ${f.c[p].al}`:"à placer";
+    fs.querySelector("[data-clear]").hidden=p==null;
+    fs.querySelectorAll("input").forEach(r=>r.checked=(+r.value===p));
+  });
+  if(drawerId) fillDrawer(drawerId);
+  store.set(placed);
 }
-function place(id,k){
-  const f=FIX.find(x=>x.id==id), was=placed[id]; k=isNaN(+k)?k:+k; placed[id]=k; held=null;
-  const nx=FIX.find(x=>placed[x.id]==null); openId=nx?nx.id:null;
-  renderFix(); renderSrc();
-  const lab=(f.al.find(x=>x.k===k)||{}).lab||k;
-  note(`n° ${id} placé à l'alinéa ${lab}.`,()=>{if(was==null)delete placed[id];else placed[id]=was;openId=+id;renderFix();renderSrc();});
-  say(`Amendement ${id} placé à l'alinéa ${lab}.`);
-  if(nx) setTimeout(()=>{const c=document.querySelector(`[data-card="${nx.id}"]`);c&&c.focus({preventScroll:true})},320);
+const toastTm={};
+function setPlace(id,val,{silent=false}={}){
+  const f=FIX.find(x=>x.id==id), was=placed[id];
+  if(val==null) delete placed[id]; else placed[id]=val;
+  update();                                   // mise à jour optimiste : effet visible à 0 ms
+  if(silent) return;
+  clearTimeout(toastTm[id]);                  // les flèches parcourent les options : on n'annonce que le choix arrêté
+  toastTm[id]=setTimeout(()=>{
+    const msg=val==null?`n° ${id} remis à placer.`:`n° ${id} placé à l'alinéa ${f.c[val].al}${f.c[val].sim.includes("occurrence")?` (${f.c[val].sim})`:""}.`;
+    note(msg,{key:"p"+id,undo:()=>{setPlace(id,was,{silent:true});$("#live").textContent=`Annulé : n° ${id} ${was==null?"de nouveau à placer":"revenu à l'alinéa "+f.c[was].al}.`}});
+  },450);
 }
 
-/* ---------- Glisser-déposer (souris, doigt) ---------- */
-let drag=null;
-document.addEventListener("pointerdown",e=>{
-  const c=e.target.closest(".card"); if(!c||e.button>0)return;
-  drag={id:c.dataset.card,x:e.clientX,y:e.clientY,on:false};
-});
-document.addEventListener("pointermove",e=>{
-  if(!drag)return;
-  if(!drag.on&&Math.hypot(e.clientX-drag.x,e.clientY-drag.y)>6){drag.on=true;drag.g=document.createElement("div");drag.g.className="ghostcard";drag.g.textContent=`n° ${drag.id}`;document.body.append(drag.g)}
-  if(!drag.on)return; e.preventDefault();
-  drag.g.style.left=e.clientX+"px";drag.g.style.top=e.clientY+"px";
-  $$(".al.over").forEach(a=>a.classList.remove("over"));
-  const t=document.elementFromPoint(e.clientX,e.clientY), z=t&&t.closest(`[data-drop="${drag.id}"]`); if(z)z.classList.add("over");
-});
-document.addEventListener("pointerup",e=>{
-  if(!drag)return; const d=drag; drag=null;
-  if(!d.on)return; d.g.remove();
-  const z=document.querySelector(".al.over"); $$(".al.over").forEach(a=>a.classList.remove("over"));
-  if(z) place(z.dataset.drop,z.dataset.k); else say("Déposé hors d'un alinéa : rien n'a changé.");
-});
-
-/* ---------- Clavier : prendre / choisir / déposer ---------- */
-let kIdx=0;
-function hl(){const zs=$$(`[data-drop="${held}"]`);zs.forEach((z,i)=>z.classList.toggle("over",i===kIdx));return zs}
-document.addEventListener("keydown",e=>{
-  if(document.body.classList.contains("dr")){if(e.key==="Escape")closeDrawer();return}
-  const c=e.target.closest&&e.target.closest(".card");
-  if(c&&(e.key===" "||e.key==="Enter")){e.preventDefault();
-    if(held===c.dataset.card){const z=hl()[kIdx];place(held,z.dataset.k);return}
-    held=c.dataset.card;kIdx=0;c.classList.add("held");const zs=hl();say(`Amendement ${held} pris. ${zs.length} alinéas possibles. Flèches pour choisir.`);return}
-  if(held&&(e.key==="ArrowDown"||e.key==="ArrowUp")){e.preventDefault();const n=$$(`[data-drop="${held}"]`).length;kIdx=(kIdx+(e.key==="ArrowDown"?1:n-1))%n;const z=hl()[kIdx];say(`Alinéa ${z.querySelector(".k").textContent}, ${z.querySelector(".sim").textContent}.`);return}
-  if(held&&e.key==="Escape"){$$(".al.over").forEach(a=>a.classList.remove("over"));document.querySelector(`[data-card="${held}"]`).classList.remove("held");say("Annulé, rien n'a changé.");held=null;return}
-  const tab=e.target.closest&&e.target.closest(".tab");
-  if(tab&&(e.key==="ArrowRight"||e.key==="ArrowLeft")){e.preventDefault();tabSel=tabSel==="fix"?"src":"fix";render();$("#t-"+tabSel).focus()}
-});
-
-/* ---------- Tiroir de provenance ---------- */
-let lastFocus=null;
-function openDrawer(i){
-  const s=SRC[i], l=left(); lastFocus=document.activeElement;
-  $("#drawer").innerHTML=`<button class="x" aria-label="Fermer">×</button><div class="ctx">Source</div><h2 id="dh">${s.t}</h2>
-   <dl><dt>Origine</dt><dd>${s.o}</dd><dt>Date</dt><dd>${s.d}</dd><dt>Volume</dt><dd>${s.id==="place"?`${TOTAL-l} sur ${TOTAL}`:s.n}</dd></dl>
-   <p>${s.m}</p>${s.id==="place"&&l?`<button class="btn" id="goFix" style="align-self:start;min-height:44px">Voir les ${l} à placer</button>`:s.o==="Calculée sur ce poste"?"":`<button class="btn" id="refresh" style="align-self:start;min-height:44px">Mettre à jour cette source</button>`}`;
-  document.body.classList.add("dr"); setTimeout(()=>$("#drawer").focus(),50);
+/* ---------- Tiroir de l'article ---------- */
+let drawerId=null, drawerTrigger=null;
+function fillDrawer(id){
+  const f=FIX.find(x=>x.id==id), p=placed[id];
+  $("#dr-h").textContent=f.art;
+  $("#dr-b").innerHTML=`<p class="q">n° ${f.id} · ${f.q}</p>`+f.text.map((t,i)=>{
+    const k=i+1, opts=f.c.map((c,j)=>c.al===k?j:-1).filter(j=>j>=0);
+    const sel=opts.includes(p);
+    const lab=opts.length?opts.map(j=>f.c[j].sim+(p===j?" · choisi":"")).join(" ; "):"";
+    return `<div class="dal ${opts.length?"c":""} ${sel?"sel":""}"><span class="k">${k}</span><span>${t}${lab?`<small>Option : ${lab}</small>`:""}</span></div>`}).join("");
 }
-function closeDrawer(){document.body.classList.remove("dr");lastFocus&&lastFocus.focus()}
+function openDrawer(id,trigger){
+  drawerId=id; drawerTrigger=trigger; fillDrawer(id);
+  $$("[data-art]").forEach(b=>b.setAttribute("aria-expanded",String(b===trigger)));
+  const d=$("#drawer"); d.classList.remove("off"); d.setAttribute("role","complementary");
+  void d.offsetWidth; d.classList.add("on");
+  document.body.classList.add("dr");
+  $("#dr-b").scrollTop=0;
+  setTimeout(()=>$("#dr-x").focus({preventScroll:true}),30);
+}
+function closeDrawer(){
+  if(!drawerId) return;
+  const d=$("#drawer"); d.classList.add("off"); document.body.classList.remove("dr");
+  setTimeout(()=>{d.classList.remove("on","off");d.removeAttribute("role")},200);
+  $$("[data-art]").forEach(b=>b.setAttribute("aria-expanded","false"));
+  drawerId=null; drawerTrigger&&document.contains(drawerTrigger)&&drawerTrigger.focus();
+}
 
+/* ---------- Événements ---------- */
+document.addEventListener("change",e=>{
+  const r=e.target.closest(".opt input"); if(!r) return;
+  setPlace(+r.closest(".fx").dataset.id,+r.value);
+});
 document.addEventListener("click",e=>{
   const t=e.target;
-  if(t.closest(".tab")){tabSel=t.closest(".tab").id.slice(2);render();return}
-  const tg=t.closest("[data-tog]"); if(tg){const id=+tg.dataset.tog;openId=openId===id?null:id;held=null;
-    $$(".amd").forEach(a=>{const o=+a.dataset.amd===openId;a.classList.toggle("open",o);a.querySelector(".amd-h").setAttribute("aria-expanded",o)});return}
-  const dz=t.closest("[data-drop]"); if(dz){place(dz.dataset.drop,dz.dataset.k);return}
-  const s=t.closest("[data-src]"); if(s){openDrawer(+s.dataset.src);return}
-  if(t.closest(".x")||t.id==="dbg"){closeDrawer();return}
-  if(t.id==="goFix"){closeDrawer();tabSel="fix";render();return}
-  if(t.id==="refresh"){t.disabled=true;t.textContent="Mise à jour…";setTimeout(()=>{closeDrawer();note("Source à jour : rien de nouveau depuis 12 minutes.",null,"info")},fast()?0:700);return}
-  if(t.id==="open"){const l=left();note(l?`Ouvert dans l'atelier ; ${l} hors de la cascade (simulation).`:"Ouvert dans l'atelier (simulation).",null,"info");}
+  const a=t.closest("[data-art]"); if(a){const id=+a.dataset.art; drawerId===id?closeDrawer():openDrawer(id,a); return}
+  const c=t.closest("[data-clear]"); if(c){const id=+c.dataset.clear; setPlace(id,null); $(`.fx[data-id="${id}"] input`).focus(); return}
+  if(t.closest("#dr-x")){closeDrawer();return}
+  const rf=t.closest("[data-refresh]"); if(rf&&!rf.disabled){
+    rf.disabled=true; rf.setAttribute("aria-busy","true"); rf.innerHTML=`<span class="spin" aria-hidden="true"></span>Vérification…`;
+    setTimeout(()=>{rf.disabled=false;rf.removeAttribute("aria-busy");rf.textContent="Vérifier s'il y a du nouveau";note(`${SRC[+rf.dataset.refresh].t} : rien de nouveau depuis le chargement.`,{kind:"info"})},700);
+    return}
+  if(t.closest("#open")){const l=left(); note(l?`Texte ouvert dans l'atelier (simulation) ; ${l} amendement${l>1?"s":""} hors de la cascade.`:"Texte ouvert dans l'atelier (simulation).",{kind:"info"});}
 });
-$("#f").onsubmit=e=>{e.preventDefault();load()};
-$("#num").addEventListener("input",()=>{$("#err").textContent=""});
-render();
+document.addEventListener("keydown",e=>{
+  // Flèches haut/bas entre les lignes de sources (accordéon groupé)
+  const sm=e.target.closest&&e.target.closest(".src>summary");
+  if(sm&&(e.key==="ArrowDown"||e.key==="ArrowUp")){
+    const all=$$(".src>summary"), i=all.indexOf(sm), n=all[i+(e.key==="ArrowDown"?1:-1)];
+    if(n){e.preventDefault();n.focus()} return}
+  if(e.key==="Escape"&&drawerId){e.preventDefault();closeDrawer()}
+});
+load();
 </script>

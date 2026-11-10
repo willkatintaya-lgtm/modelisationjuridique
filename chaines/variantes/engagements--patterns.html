@@ -6,70 +6,56 @@
   --bg:#0a0b0d; --s1:#111316; --s2:#171a1e; --line:#22252a; --line2:#2d3137;
   --fg:#f3f5f7; --text:#cfd5dd; --muted:#8a919b; --dim:#5d636c;
   --ins:#8ab4ff; --del:#e5484d; --accent:#6e7bf2; --lit:rgba(110,123,242,.16);
-  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d;
+  --ok:#46b37e; --warn:#e3a33f; --err:#e5484d; --a2:#e8774a;
   --f:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  --tap:32px; /* cible minimale : 24 px exigés au bureau, 32 retenus ; 44 px au tactile (voir plus bas) */
   color-scheme:dark;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 var(--f);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;transition:padding-right .3s var(--ease)}
 button,input,textarea,select{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .wrap{max-width:1180px;margin:0 auto;padding-block:20px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.wrap.narrow{max-width:780px}
 .ctx{font-size:12.5px;color:var(--dim)}
 h1{margin:3px 0 0;font:600 19px/1.3 var(--f);color:var(--fg);letter-spacing:-.012em;text-wrap:balance}
 .lead{margin:14px 0 18px;max-width:780px;color:var(--fg);font-size:15.5px;line-height:1.55;text-wrap:pretty}
 .lead span{color:var(--muted)}
 .panel{background:var(--s1);border:1px solid var(--line);border-radius:10px}
-.sec{margin:18px 2px 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
-.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
+.sec{margin:18px 0 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.btn{border:1px solid var(--line2);background:var(--s2);color:var(--fg);border-radius:7px;min-height:var(--tap);padding:0 14px;font-size:13px;cursor:pointer;transition:background .2s,opacity .2s;white-space:nowrap}
 .btn:hover:not(:disabled){background:#1f2227}
 .btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
 .btn.pri:hover:not(:disabled){background:#7b87f5}
-.btn:disabled{opacity:.4;cursor:default}
-.ghost{border:1px solid var(--line2);background:none;color:var(--muted);border-radius:6px;padding:3px 9px;font-size:12px;cursor:pointer;transition:color .2s,background .2s}
-.ghost:hover{color:var(--fg);background:var(--s2)}
-.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;padding:3px 10px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.btn:disabled{opacity:.5;cursor:default}
+.lnk{border:0;background:none;color:#b4bcff;padding:0 2px;min-height:var(--tap);font-size:12.5px;cursor:pointer;border-radius:5px}
+.lnk:hover{text-decoration:underline}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:999px;min-height:var(--tap);padding:0 12px;color:var(--muted);font-size:12.5px;background:none;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
 .chip:hover{color:var(--fg)}
-.chip.on{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.chip[aria-pressed="true"]{color:var(--fg);border-color:var(--accent);background:var(--lit)}
+.chip .n{color:var(--dim)}
 .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
-.dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.err{background:var(--err)}
-ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
-del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+.dot.warn{background:var(--warn)} .dot.a2{background:var(--a2)} .dot.err{background:var(--err)} .dot.ok{background:var(--ok)}
 mark{background:var(--lit);color:var(--fg);border-radius:3px;padding:0 1px}
-input[type=text],input[type=number],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:13px}
-input:focus,textarea:focus,select:focus{outline:none;border-color:var(--line2)}
+input[type=text],textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:7px;padding:7px 10px;color:var(--fg);font-size:14px}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 .gp{display:inline-grid;place-items:center;min-width:24px;height:16px;padding:0 4px;border-radius:4px;color:#fff;font-size:9.5px;font-weight:600;vertical-align:1px;margin-right:4px}
-.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:9px 14px;border-radius:8px;font-size:13px;z-index:30;max-width:calc(100vw - 32px);animation:rise .2s var(--ease)}
-@keyframes rise{from{opacity:0;transform:translate(-50%,4px)}}
-.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
-.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
-.open>.slide{grid-template-rows:1fr}
-.open>.slide>div{opacity:1;transition:opacity .2s .12s}
-.scrollx{overflow-x:auto;scrollbar-width:none}
-.scrollx::-webkit-scrollbar{display:none}
-@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
-</style>
-<script>
-const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
-const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
-function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
-</script>
-<style>
-/* Variante « patterns » : onglets de statut (3) + filtre ministère en puces (6) au lieu du tableau croisé ;
-   engagements en accordéon (divulgation progressive, en place) ; rédaction de la question dans un tiroir latéral (overlay) ;
-   squelette pour la recherche des questions déjà posées (> 400 ms) ; toasts empilés avec « Annuler ». */
-.tabs{display:flex;gap:2px;margin-top:18px;border-bottom:1px solid var(--line)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:16px;top:-60px;z-index:60;background:var(--accent);color:#fff;padding:10px 14px;border-radius:7px;text-decoration:none;font-size:13px}
+.skip:focus{top:10px}
+
+/* ── Onglets de statut (3 : sous le seuil de 5 ; pas de débordement à gérer) ── */
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line)}
 .tab{border:0;background:none;color:var(--muted);min-height:44px;padding:0 14px;font-size:14px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .2s,border-color .2s;white-space:nowrap}
 .tab:hover{color:var(--fg)}
 .tab[aria-selected="true"]{color:var(--fg);border-color:var(--accent)}
 .tab .c{display:inline-grid;place-items:center;min-width:20px;height:18px;padding:0 5px;margin-left:6px;border-radius:9px;background:var(--s2);font-size:11.5px;color:var(--muted)}
 .tab[aria-selected="true"] .c{background:var(--lit);color:var(--fg)}
-.chips{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 4px}
-.chips .chip{min-height:36px;padding:0 12px}
-.rates{margin:6px 2px 0;font-size:12.5px;color:var(--muted)}
-.rates summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:6px;min-height:32px;color:var(--muted)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 0;padding:0;border:0}
+.chips legend{padding:0;float:left;margin-right:4px;font-size:12.5px;color:var(--dim);line-height:var(--tap)}
+
+/* ── Divulgation niveau 2 : délais de réponse des ministères ── */
+.rates{margin:8px 0 0;font-size:12.5px;color:var(--muted)}
+.rates summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:6px;min-height:var(--tap);border-radius:5px}
 .rates summary::-webkit-details-marker{display:none}
 .rates summary:hover{color:var(--fg)}
 .rates summary svg{transition:transform .2s var(--ease)}
@@ -77,11 +63,14 @@ function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createEle
 .rt{display:grid;grid-template-columns:minmax(120px,170px) minmax(0,1fr) 92px;gap:6px 12px;align-items:center;padding:8px 0 4px;max-width:620px}
 .rt .bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
 .rt .bar i{display:block;height:100%;background:var(--muted);border-radius:3px}
-.rt small{color:var(--dim)}
-.bk{margin:20px 2px 6px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.rt small,.rnote{color:var(--dim)}
+.rnote{font-size:12px;margin:2px 0 6px}
+
+/* ── Liste en accordéon (dépliage en place) ── */
+.bk{margin:20px 2px 6px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.bk span{letter-spacing:0}
 .acc{padding:4px}
 .acc>.e+.e{border-top:1px solid var(--line)}
-.e{border-radius:7px}
 .eh{display:grid;grid-template-columns:18px minmax(0,1fr) auto;gap:2px 12px;align-items:center;width:100%;min-height:56px;border:0;background:none;text-align:left;padding:10px 12px;border-radius:7px;cursor:pointer;transition:background .2s}
 .eh:hover{background:var(--s2)}
 .eh .chev{grid-row:1/3;color:var(--dim);transition:transform .25s var(--ease)}
@@ -89,6 +78,10 @@ function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createEle
 .eh .tt{color:var(--fg);font-size:13.5px}
 .eh .mt{grid-column:2;font-size:12.5px;color:var(--muted)}
 .eh .ag{grid-row:1/3;grid-column:3;display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);white-space:nowrap}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.slide>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.e.open>.slide{grid-template-rows:1fr}
+.e.open>.slide>div{opacity:1;transition:opacity .2s .12s}
 .eb{padding:2px 14px 16px 42px}
 .due{display:flex;gap:4px 14px;flex-wrap:wrap;align-items:baseline;font-size:13px;padding:10px 12px;border-radius:8px;background:var(--s2)}
 .due b{color:var(--fg);font-weight:500}
@@ -99,71 +92,101 @@ function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createEle
 .trail .d{font-size:12px;color:var(--dim);padding-top:1px}
 .trail q{display:block;margin-top:4px;color:var(--muted);quotes:"« " " »";font-size:12.5px;line-height:1.6}
 .trail .miss{color:#f2a7a9}
-.more{border:0;background:none;color:#b4bcff;padding:6px 0;font-size:12.5px;cursor:pointer;min-height:32px}
-.more:hover{text-decoration:underline}
-.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-.acts .btn{min-height:40px;padding:0 14px}
+.acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px}
 .hint{font-size:12.5px;color:var(--muted);margin:10px 0 0}
-.form{margin-top:14px;padding:14px;border:1px solid var(--line2);border-radius:9px;display:grid;gap:12px;animation:fin .25s var(--ease)}
+.empty{padding:18px 14px;color:var(--dim);font-size:13px}
+
+/* ── Formulaire de preuve (en place : 2 champs, pas besoin d'overlay) ── */
+.form{margin:14px 0 0;padding:14px;border:1px solid var(--line2);border-radius:9px;display:grid;gap:12px;animation:fin .25s var(--ease)}
+.form legend{padding:0 4px;font-size:12.5px;color:var(--fg);font-weight:500}
 @keyframes fin{from{opacity:0;transform:translateY(-4px)}}
 .fl{display:grid;gap:5px}
-.fl label{font-size:12.5px;color:var(--text)}
-.fl select,.fl input{min-height:44px;width:100%;font-size:14px}
+.fl label{font-size:12.5px;color:var(--text);font-weight:500}
+.fl select,.fl input{min-height:40px;width:100%}
 .fl .help{font-size:12px;color:var(--dim)}
 .fl .msg{font-size:12.5px;color:#f2a7a9}
-.empty{padding:18px 14px;color:var(--dim);font-size:13px}
-/* tiroir */
-.scrim{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:20;opacity:0;transition:opacity .25s;pointer-events:none}
-.scrim.show{opacity:1;pointer-events:auto}
-.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--s1);border-left:1px solid var(--line2);z-index:21;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s var(--ease),visibility 0s .3s;visibility:hidden}
+.fl [aria-invalid="true"]{border-color:var(--err)}
+.facts{display:flex;justify-content:flex-end;align-items:center;gap:10px;flex-wrap:wrap}
+.facts .lnk{color:var(--muted);font-size:13px;padding:0 8px}
+
+/* ── Tiroir latéral non modal (rédaction d'une question) ── */
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(480px,100vw);background:var(--s1);border-left:1px solid var(--line2);z-index:21;display:flex;flex-direction:column;transform:translateX(100%);visibility:hidden;transition:transform .3s var(--ease),visibility 0s .3s;box-shadow:-12px 0 32px rgba(0,0,0,.35)}
 .drawer.show{transform:none;visibility:visible;transition:transform .3s var(--ease)}
 .dh{display:flex;gap:10px;align-items:flex-start;padding:calc(16px + env(safe-area-inset-top,0px)) 18px 12px;border-bottom:1px solid var(--line)}
 .dh .k{font-size:12px;color:var(--dim)}
-.dh h2{margin:2px 0 0;font:600 15.5px/1.35 var(--f);color:var(--fg)}
+.dh h2{margin:2px 0 0;font:600 15.5px/1.35 var(--f);color:var(--fg);text-wrap:balance}
 .dh .sp{flex:1}
-.x{flex:none;width:44px;height:44px;margin:-8px -10px 0 0;border:0;border-radius:8px;background:none;color:var(--muted);cursor:pointer;display:grid;place-items:center}
+.x{flex:none;width:36px;height:36px;margin:-6px -8px 0 0;border:0;border-radius:8px;background:none;color:var(--muted);cursor:pointer;display:grid;place-items:center}
 .x:hover{color:var(--fg);background:var(--s2)}
 .db{flex:1;overflow-y:auto;padding:4px 18px 18px}
-.df{padding:12px 18px calc(12px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
-.df .btn{min-height:44px;padding:0 16px}
+.df{padding:12px 18px calc(12px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
 .near{display:grid;gap:6px}
-.nq{padding:9px 11px;border:1px solid var(--line);border-radius:8px;font-size:12.5px;color:var(--muted);min-height:58px}
+.nq{padding:9px 11px;border:1px solid var(--line);border-radius:8px;font-size:12.5px;color:var(--muted);min-height:60px}
 .nq b{color:var(--text);font-weight:500}
-.sk{display:block;height:10px;border-radius:5px;background:linear-gradient(90deg,var(--s2),#1f2328,var(--s2));background-size:200% 100%;animation:sh 1.2s linear infinite;margin:5px 0}
-@keyframes sh{to{background-position:-200% 0}}
+.sk{display:block;height:10px;border-radius:5px;background:var(--line);margin:6px 0;animation:pulse 1.6s ease-in-out infinite}
+.sk.g{width:24px;height:16px;border-radius:4px;display:inline-block;vertical-align:-3px;margin:0 6px 0 0}
+@keyframes pulse{50%{opacity:.45}}
 textarea{width:100%;min-height:220px;resize:vertical;line-height:1.6;padding:10px 12px}
-/* toasts empilés */
-.toasts{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:40;display:flex;flex-direction:column-reverse;gap:8px;width:min(380px,calc(100vw - 32px))}
-.ts{display:flex;align-items:center;gap:10px;padding:10px 8px 10px 14px;border-radius:9px;background:var(--s2);border:1px solid var(--line2);font-size:13px;color:var(--fg);box-shadow:0 8px 24px rgba(0,0,0,.4);animation:tin .25s var(--ease)}
+.dlbl{display:block;margin:18px 0 8px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+
+/* ── Confirmation modale native (envoi au groupe : effet hors de l'application) ── */
+dialog{background:var(--s1);color:var(--text);border:1px solid var(--line2);border-radius:12px;padding:20px;width:min(440px,calc(100vw - 32px));box-shadow:0 20px 50px rgba(0,0,0,.5)}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+dialog[open]{animation:fin .2s var(--ease)}
+dialog h2{margin:0;font:600 16px/1.35 var(--f);color:var(--fg)}
+dialog p{margin:10px 0 0;font-size:13.5px;color:var(--text)}
+dialog p small{color:var(--muted);font-size:12.5px}
+dialog .facts{margin-top:18px}
+
+/* ── Toasts : haut-droite au bureau, bas-centre au mobile ; 3 au plus, le plus récent en haut ── */
+.toasts{position:fixed;top:16px;right:max(16px,env(safe-area-inset-right,0px));z-index:40;display:flex;flex-direction:column;gap:8px;width:min(380px,calc(100vw - 32px));transition:right .3s var(--ease)}
+.ts{display:flex;align-items:center;gap:10px;padding:8px 6px 8px 14px;border-radius:9px;background:var(--s2);border:1px solid var(--line2);font-size:13px;color:var(--fg);box-shadow:0 8px 24px rgba(0,0,0,.4);animation:tin .25s var(--ease)}
 .ts.out{opacity:0;transition:opacity .2s}
-.ts.err{border-color:rgba(229,72,77,.45)}
-.ts .dot{margin-right:-2px}
+.ts.err{border-color:rgba(229,72,77,.55)}
 .ts span{flex:1}
-.ts button{border:0;background:none;color:#b4bcff;font-size:13px;cursor:pointer;min-height:36px;padding:0 8px;border-radius:6px}
+.ts button{border:0;background:none;color:#b4bcff;font-size:13px;cursor:pointer;min-height:var(--tap);padding:0 8px;border-radius:6px}
 .ts button:hover{background:var(--line)}
-.ts .tx{color:var(--dim);width:36px;padding:0;display:grid;place-items:center}
-@keyframes tin{from{opacity:0;transform:translateY(8px)}}
+.ts .tx{color:var(--muted);width:var(--tap);padding:0;display:grid;place-items:center}
+@keyframes tin{from{opacity:0;transform:translateY(-6px)}}
+
+@media (min-width:1100px){
+  body.has-drawer{padding-right:480px} /* le tiroir pousse la page au lieu de la masquer : la liste reste lisible */
+  body.has-drawer .toasts{right:496px}
+}
+@media (max-width:560px),(pointer:coarse){ :root{--tap:44px} .fl select,.fl input{min-height:44px} .tab{min-height:44px} .x{width:44px;height:44px} }
 @media (max-width:560px){
+  .toasts{top:auto;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:50%;right:auto;transform:translateX(-50%)}
+  @keyframes tin{from{opacity:0;transform:translateY(6px)}}
   .eh{grid-template-columns:18px minmax(0,1fr)} .eh .ag{grid-row:auto;grid-column:2;margin-top:3px}
   .eb{padding-left:14px}
   .trail li{grid-template-columns:minmax(0,1fr);gap:2px}
   .tab{padding:0 10px;font-size:13.5px}
+  .chips legend{width:100%}
   .rt{grid-template-columns:minmax(0,1fr) 84px} .rt .bar{display:none}
-  .drawer{top:auto;height:92vh;width:100vw;border-left:0;border-top:1px solid var(--line2);border-radius:14px 14px 0 0;transform:translateY(100%)}
+  .drawer{top:auto;height:92vh;height:92dvh;width:100vw;border-left:0;border-top:1px solid var(--line2);border-radius:14px 14px 0 0;transform:translateY(100%)}
+  .facts .btn.pri{flex:1}
 }
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
 </style>
+
+<a class="skip" href="#panel">Aller à la liste des engagements</a>
 <div class="wrap">
   <div class="ctx">Bureau de la députée · suivi au mardi 10 novembre 2026</div>
   <h1>Ce que le Gouvernement nous doit</h1>
   <p class="lead" id="lead"></p>
-  <div class="tabs" role="tablist" aria-label="Statut" id="tabs"></div>
-  <div class="chips" role="group" aria-label="Ministère" id="chips"></div>
-  <details class="rates" id="rates"><summary><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3l5 5-5 5"/></svg>Délais de réponse des ministères aux questions écrites</summary><div id="rt"></div></details>
-  <div role="tabpanel" id="panel"></div>
+  <div class="tabs" role="tablist" aria-label="Statut des engagements" id="tabs"></div>
+  <fieldset class="chips" id="chips"></fieldset>
+  <details class="rates"><summary><svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>Délais de réponse des ministères aux questions écrites</summary><div id="rt"></div></details>
+  <div role="tabpanel" id="panel" tabindex="-1"></div>
+  <div class="sr" aria-live="polite" id="live"></div>
 </div>
-<div class="scrim" id="scrim"></div>
-<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dtitle"></aside>
-<div class="toasts" id="toasts" aria-live="polite"></div>
+<aside class="drawer" id="drawer" role="complementary" aria-labelledby="dtitle"></aside>
+<dialog id="confirm" aria-labelledby="ctitle"></dialog>
+<div class="toasts" id="toasts"></div>
+<script>
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/"/g,"&quot;");
+</script>
 <script>
 const NOW=new Date(2026,10,10);
 const MIN={LOG:"Logement",ECO:"Économie et finances",TE:"Transition écologique",SOL:"Solidarités",INT:"Intérieur"};
@@ -229,28 +252,40 @@ function age(e){
   const m=months(due,NOW); if(m<1){const d=-days;return `${d} jour${d>1?"s":""} de retard`}
   return m>=12?`${Math.floor(m/12)} an${m>=24?"s":""}${m%12?` et ${m%12} mois`:""} de retard`:`${m} mois de retard`;
 }
-// ——— Variante patterns ———
+
+// ——— Variante « patterns » (skill interaction-patterns) ———
+// Onglets de statut (3) + filtre ministère (6 puces) au lieu du tableau croisé ; accordéon en place pour le détail ;
+// tiroir non modal pour rédiger ; <dialog> natif seulement pour l'envoi au groupe ; formulaire en place ; toasts accessibles.
 const TABS=[{k:"late",l:"En retard"},{k:"soon",l:"À venir"},{k:"done",l:"Tenus"}];
 const P={tab:"late",min:null,open:null,form:null,full:{},drawer:null,signaled:{}};
 const status=e=>e.done?"done":D(e.due)<NOW?"late":"soon";
 const byDue=(a,b)=>D(a.due)-D(b.due);
 const lc=s=>s.charAt(0).toLowerCase()+s.slice(1);
-const dotCls=e=>({0:"",1:"warn",2:"err",3:"err",4:"ok"})[bucket(e)];
-const chev=`<svg class="chev" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3l5 5-5 5"/></svg>`;
-const xIcon=`<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4l8 8M12 4l-8 8"/></svg>`;
+const dotCls=e=>["","warn","a2","err","ok"][bucket(e)];
 const reduce=()=>matchMedia("(prefers-reduced-motion:reduce)").matches;
+const chev=`<svg class="chev" width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>`;
+const xIcon=`<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg>`;
+const plural=(n,s)=>`${n} ${s}${n>1?"s":""}`;
+const find=id=>E.find(x=>x.id===id);
+function announce(m){const l=$("#live");l.textContent="";setTimeout(()=>l.textContent=m,30)}
 
-// ——— toasts empilés (3 au plus), pause au survol, « Annuler » quand l'action se défait ———
-function notify(msg,{kind="ok",undo=null,ms=6000}={}){
-  const box=$("#toasts"); while(box.children.length>=3) box.firstElementChild.remove();
-  const t=document.createElement("div"); t.className="ts"+(kind==="err"?" err":"");
-  t.innerHTML=`<i class="dot ${kind==="err"?"err":"ok"}"></i><span></span>${undo?`<button data-u>Annuler</button>`:""}<button class="tx" aria-label="Fermer la notification">${xIcon}</button>`;
-  t.querySelector("span").textContent=msg; box.append(t);
-  let left=ms, start=Date.now(), timer;
-  const close=()=>{clearTimeout(timer);t.classList.add("out");setTimeout(()=>t.remove(),200)};
-  const run=()=>{start=Date.now();timer=setTimeout(close,left)};
-  t.addEventListener("mouseenter",()=>{clearTimeout(timer);left-=Date.now()-start});
-  t.addEventListener("mouseleave",run);
+// ——— Toasts : role="status" (polite) pour les succès, role="alert" (assertive) pour les erreurs.
+// Succès retirés après 5 s (pause au survol et au focus) ; erreurs jamais retirées seules ; 3 au plus, le plus récent en haut.
+function notify(msg,{kind="ok",undo=null}={}){
+  const box=$("#toasts");
+  const t=document.createElement("div"); const err=kind==="err";
+  t.className="ts"+(err?" err":""); t.setAttribute("role",err?"alert":"status"); t.setAttribute("aria-live",err?"assertive":"polite"); t.setAttribute("aria-atomic","true");
+  t.innerHTML=`<i class="dot ${err?"err":"ok"}" aria-hidden="true"></i><span></span>${undo?`<button type="button" data-u>Annuler</button>`:""}<button type="button" class="tx" aria-label="Fermer la notification">${xIcon}</button>`;
+  box.prepend(t);
+  while(box.children.length>3) box.lastElementChild.remove();
+  setTimeout(()=>t.querySelector("span").textContent=msg,30); // texte injecté après insertion : lu par les lecteurs d'écran
+  let left=5000,start=0,timer=null;
+  const close=()=>{clearTimeout(timer);const had=t.contains(document.activeElement);t.classList.add("out");setTimeout(()=>t.remove(),200);if(had)$("#panel").focus({preventScroll:true})};
+  const run=()=>{if(err)return;start=Date.now();timer=setTimeout(close,left)};
+  const pause=()=>{if(err)return;clearTimeout(timer);left-=Date.now()-start};
+  t.addEventListener("mouseenter",pause); t.addEventListener("mouseleave",run);
+  t.addEventListener("focusin",pause); t.addEventListener("focusout",e=>{if(!t.contains(e.relatedTarget))run()});
+  t.addEventListener("keydown",e=>{if(e.key==="Escape"){e.stopPropagation();close()}});
   t.querySelector(".tx").onclick=close;
   if(undo) t.querySelector("[data-u]").onclick=()=>{undo();close()};
   run();
@@ -258,129 +293,205 @@ function notify(msg,{kind="ok",undo=null,ms=6000}={}){
 
 function lead(){
   const open=E.filter(e=>!e.done), late=open.filter(e=>status(e)==="late").sort(byDue), o=late[0];
-  $("#lead").innerHTML=`${open.length} engagements restent ouverts, dont ${late.length} en retard. <span>${o?`Le plus ancien : ${lc(o.title)}, ${age(o)}.`:""}</span>`;
+  $("#lead").innerHTML=`${open.length} engagements restent ouverts, dont ${late.length} en retard.${o?` <span>Le plus ancien : ${lc(o.title)}, ${age(o)}.</span>`:""}`;
+}
+function pool(){return E.filter(e=>status(e)===P.tab)}
+function visible(){
+  let L=pool().filter(e=>P.min==null||e.min===P.min);
+  return P.tab==="done"?L.sort((a,b)=>D(b.done)-D(a.done)):L.sort(byDue);
 }
 function tabs(){
-  $("#tabs").innerHTML=TABS.map(t=>{const n=E.filter(e=>status(e)===t.k&&(P.min==null||e.min===P.min)).length;
-    return `<button class="tab" role="tab" id="tab-${t.k}" aria-controls="panel" aria-selected="${P.tab===t.k}" tabindex="${P.tab===t.k?0:-1}" data-tab="${t.k}">${t.l}<span class="c">${n}</span></button>`}).join("");
+  $("#tabs").innerHTML=TABS.map(t=>{const n=E.filter(e=>status(e)===t.k&&(P.min==null||e.min===P.min)).length, on=P.tab===t.k;
+    return `<button type="button" class="tab" role="tab" id="tab-${t.k}" aria-controls="panel" aria-selected="${on}" tabindex="${on?0:-1}" data-tab="${t.k}">${t.l}<span class="c" aria-label="${plural(n,"engagement")}">${n}</span></button>`}).join("");
   $("#panel").setAttribute("aria-labelledby","tab-"+P.tab);
-  const pool=E.filter(e=>status(e)===P.tab);
-  $("#chips").innerHTML=`<button class="chip${P.min==null?" on":""}" aria-pressed="${P.min==null}" data-min="">Tous</button>`+Object.keys(MIN).map(m=>{const n=pool.filter(e=>e.min===m).length;return (!n&&P.min!==m)?"":`<button class="chip${P.min===m?" on":""}" aria-pressed="${P.min===m}" data-min="${m}">${MIN[m]} <span style="color:var(--dim)">${n}</span></button>`}).join("");
+  const pl=pool();
+  $("#chips").innerHTML=`<legend>Ministère</legend><button type="button" class="chip" aria-pressed="${P.min==null}" data-min="">Tous</button>`+
+    Object.keys(MIN).map(m=>{const n=pl.filter(e=>e.min===m).length; return (!n&&P.min!==m)?"":`<button type="button" class="chip" aria-pressed="${P.min===m}" data-min="${m}">${MIN[m]} <span class="n">${n}</span></button>`}).join("");
 }
 function rates(){
-  $("#rt").innerHTML=`<div class="rt">${Object.keys(MIN).map(m=>{const[r,t]=QE[m],p=Math.round(100*r/t);return `<span>${MIN[m]}</span><span class="bar"><i style="width:${p}%"></i></span><span>${p} % <small>(${r}/${t})</small></span>`}).join("")}</div><div style="font-size:12px;color:var(--dim);margin:2px 0 6px">Part des questions écrites de la législature (toutes, pas seulement les nôtres) qui ont reçu une réponse dans les deux mois.</div>`;
+  $("#rt").innerHTML=`<div class="rt">${Object.keys(MIN).map(m=>{const[r,t]=QE[m],p=Math.round(100*r/t);return `<span>${MIN[m]}</span><span class="bar" aria-hidden="true"><i style="width:${p}%"></i></span><span>${p} % <small>(${r} sur ${t})</small></span>`}).join("")}</div><p class="rnote">Part des questions écrites de la législature (toutes, pas seulement les nôtres) qui ont reçu une réponse dans le délai de deux mois.</p>`;
 }
+
+// ——— Contenu déplié d'un engagement ———
 function body(e){
   const st=status(e), steps=e.trail.filter(x=>!(e.done&&x.miss)), full=P.full[e.id]||steps.length<=3;
   const shown=full?steps:[steps[0],steps[steps.length-1]];
   let h=`<div class="due"><b>${age(e)}</b><span>Échéance : ${fmt(D(e.due))}</span><small>${e.calc}</small></div>
-  <div class="sec">D'où vient cet engagement</div><ol class="trail">${shown.map((s,i)=>`<li><span class="d">${s.d}</span><span class="${s.miss?"miss":""}">${s.t}${s.q?`<q>${s.q}</q>`:""}</span></li>`).join("")}</ol>
-  ${full?"":`<button class="more" data-full="${e.id}">Voir les ${steps.length} étapes</button>`}`;
-  let acts=[];
-  if(st==="done"){h+=`<p class="hint">Preuve : ${esc(e.proof)}</p>`; acts.push(`<button class="btn" data-reopen="${e.id}">Rouvrir</button>`)}
-  else if(e.action==="same"){const r=E.find(x=>x.id===e.rel); h+=`<p class="hint">Même décret que « ${r.title} » : une seule question couvre les deux.</p>`; acts.push(`<button class="btn pri" data-goto="${r.id}">Aller au décret attendu</button>`)}
-  else if(e.action==="signal"&&st==="late"){h+=`<p class="hint">Délai de deux mois dépassé. Signalée par le président de groupe, la question doit obtenir une réponse sous dix jours.</p>`; acts.push(P.signaled[e.id]?`<button class="btn" disabled>Proposée au groupe</button>`:`<button class="btn pri" data-signal="${e.id}">Proposer au groupe de la signaler</button>`)}
-  else if(e.draft&&st==="late") acts.push(`<button class="btn pri" data-draft="${e.id}">Rédiger une question écrite</button>`);
-  if(st!=="done"&&(st==="late"||e.type==="reco")) acts.push(`<button class="btn" data-form="${e.id}" aria-expanded="${P.form===e.id}">Marquer comme tenu</button>`);
+  <div class="sec">D'où vient cet engagement</div><ol class="trail" id="tr-${e.id}">${shown.map(s=>`<li><span class="d">${s.d}</span><span class="${s.miss?"miss":""}">${s.t}${s.q?`<q>${s.q}</q>`:""}</span></li>`).join("")}</ol>
+  ${full?"":`<button type="button" class="lnk" data-full="${e.id}" aria-controls="tr-${e.id}" aria-expanded="false">Voir les ${steps.length} étapes</button>`}`;
+  const acts=[];
+  if(st==="done"){h+=`<p class="hint">Preuve : ${esc(e.proof)}</p>`; acts.push(`<button type="button" class="btn" data-reopen="${e.id}">Rouvrir</button>`)}
+  else if(e.action==="same"){const r=find(e.rel); h+=`<p class="hint">Même décret que « ${r.title} » : une seule question couvre les deux.</p>`; acts.push(`<button type="button" class="btn pri" data-goto="${r.id}">Aller au décret attendu</button>`)}
+  else if(e.action==="signal"&&st==="late"){
+    h+=`<p class="hint">Délai de deux mois dépassé. Signalée par le président de groupe, la question doit obtenir une réponse sous dix jours.</p>`;
+    acts.push(P.signaled[e.id]?`<span class="hint" style="margin:0">Proposée au groupe le ${P.signaled[e.id]}.</span><button type="button" class="lnk" data-unsignal="${e.id}">Retirer la proposition</button>`:`<button type="button" class="btn pri" data-signal="${e.id}">Proposer au groupe de la signaler</button>`)}
+  else if(e.draft&&st==="late") acts.push(`<button type="button" class="btn pri" data-draft="${e.id}" aria-controls="drawer" aria-expanded="${P.drawer===e.id}">Rédiger une question écrite</button>`);
+  if(st!=="done"&&(st==="late"||e.type==="reco")) acts.push(`<button type="button" class="btn" data-form="${e.id}" aria-expanded="${P.form===e.id}" aria-controls="f-${e.id}">Marquer comme tenu</button>`);
   if(acts.length) h+=`<div class="acts">${acts.join("")}</div>`;
   if(P.form===e.id){
     const def=e.type==="rapport"?"depot":e.type==="qe"?"jo-qe":e.type==="reco"?"autre":"jo";
-    h+=`<form class="form" data-submit="${e.id}" novalidate>
-      <div class="fl"><label for="ptype">Où l'engagement a-t-il été tenu ?</label><select id="ptype">
-        <option value="jo" ${def==="jo"?"selected":""}>Journal officiel (décret, arrêté)</option>
-        <option value="depot" ${def==="depot"?"selected":""}>Dépôt d'un rapport au Parlement</option>
-        <option value="jo-qe" ${def==="jo-qe"?"selected":""}>Réponse publiée au Journal officiel</option>
-        <option value="autre" ${def==="autre"?"selected":""}>Autre document public</option></select><span class="help">Choix proposé d'après le type d'engagement.</span></div>
+    const o=(v,l)=>`<option value="${v}"${def===v?" selected":""}>${l}</option>`;
+    h+=`<form id="f-${e.id}" data-submit="${e.id}" novalidate><fieldset class="form"><legend>Preuve que l'engagement est tenu</legend>
+      <div class="fl"><label for="ptype">Où a-t-il été tenu ?</label><select id="ptype" aria-describedby="ptypeh">${o("jo","Journal officiel (décret, arrêté)")}${o("depot","Dépôt d'un rapport au Parlement")}${o("jo-qe","Réponse publiée au Journal officiel")}${o("autre","Autre document public")}</select><span class="help" id="ptypeh">Proposé d'après le type d'engagement.</span></div>
       <div class="fl"><label for="pref">Référence</label><input type="text" id="pref" autocomplete="off" aria-describedby="prefh"><span class="help" id="prefh">Numéro et date, par exemple « Décret n° 2026-412 du 3 novembre 2026 ».</span></div>
-      <div class="acts" style="margin-top:0"><button class="btn pri" type="submit">Enregistrer la preuve</button><button class="btn" type="button" data-cancel>Annuler</button></div></form>`;
+      <div class="facts"><button type="button" class="lnk" data-cancel>Annuler</button><button type="submit" class="btn pri">Enregistrer la preuve</button></div></fieldset></form>`;
   }
   return h;
 }
-function item(e){
+function item(e,pos,size){
   const o=P.open===e.id;
-  return `<div class="e${o?" open":""}" id="e-${e.id}"><button class="eh" aria-expanded="${o}" aria-controls="b-${e.id}" data-acc="${e.id}">${chev}<span class="tt">${e.title}</span><span class="mt">${TYPES[e.type]} · ${MIN[e.min]}</span><span class="ag"><i class="dot ${dotCls(e)}"></i>${age(e)}</span></button>
-  <div class="slide" id="b-${e.id}"><div>${o?`<div class="eb">${body(e)}</div>`:""}</div></div></div>`;
+  return `<div class="e${o?" open":""}" id="e-${e.id}"><button type="button" class="eh" id="h-${e.id}" aria-expanded="${o}" aria-controls="b-${e.id}" data-acc="${e.id}">${chev}<span class="tt">${e.title}</span><span class="mt">${TYPES[e.type]} · ${MIN[e.min]}</span><span class="ag"><i class="dot ${dotCls(e)}" aria-hidden="true"></i>${age(e)}</span></button>
+  <div class="slide" id="b-${e.id}" role="region" aria-labelledby="h-${e.id}"><div>${o?`<div class="eb">${body(e)}</div>`:""}</div></div></div>`;
 }
 function panel(){
-  let L=E.filter(e=>status(e)===P.tab&&(P.min==null||e.min===P.min));
-  L=P.tab==="done"?L.sort((a,b)=>D(b.done)-D(a.done)):L.sort(byDue);
-  if(!L.length){$("#panel").innerHTML=`<div class="panel empty">Rien dans cet onglet${P.min?" pour ce ministère":""}.</div>`;return}
+  const L=visible();
+  if(!L.length){$("#panel").innerHTML=`<div class="panel empty" style="margin-top:14px">Rien dans cet onglet${P.min?" pour ce ministère":""}.</div>`;return}
   if(P.tab!=="late"){$("#panel").innerHTML=`<div class="panel acc" style="margin-top:14px">${L.map(item).join("")}</div>`;return}
-  // en retard : regroupé par ancienneté (3 groupes au plus)
-  $("#panel").innerHTML=[3,2,1].map(k=>{const G=L.filter(e=>bucket(e)===k);return G.length?`<div class="bk">${BUCKETS[k].l} de retard<span style="letter-spacing:0">· ${G.length}</span></div><div class="panel acc">${G.map(item).join("")}</div>`:""}).join("").replace("Moins de 3 mois de retard","Moins de 3 mois de retard").replace("3 à 12 mois de retard","De 3 à 12 mois de retard");
+  // en retard : regroupé par ancienneté (3 groupes au plus, 7 engagements au total : sous le seuil de Miller)
+  const lab={3:"Plus d'un an de retard",2:"De 3 à 12 mois de retard",1:"Moins de 3 mois de retard"};
+  $("#panel").innerHTML=[3,2,1].map(k=>{const G=L.filter(e=>bucket(e)===k);return G.length?`<h2 class="bk">${lab[k]} <span>· ${G.length}</span></h2><div class="panel acc">${G.map(item).join("")}</div>`:""}).join("");
 }
 function render(){lead();tabs();panel()}
-// ouverture d'un accordéon : le contenu glisse (grille 0fr → 1fr)
-function setOpen(id){
-  const prev=P.open, closing=prev&&$("#e-"+prev);
-  P.open=prev===id?null:id; P.form=null;
-  const after=()=>{render(); if(P.open){const el=$("#e-"+P.open); el.classList.remove("open"); el.offsetHeight; el.classList.add("open");}};
-  // ce qui se ferme s'efface d'abord (grille 1fr → 0fr), puis la liste est redessinée
-  if(closing&&!reduce()){closing.classList.remove("open"); setTimeout(after,280)} else after();
+
+// ——— Accordéon : ce qui s'ouvre glisse (grille 0fr → 1fr), ce qui se ferme s'efface ———
+function openItem(id){
+  const el=$("#e-"+id); if(!el) return;
+  el.querySelector(".slide>div").innerHTML=`<div class="eb">${body(find(id))}</div>`;
+  el.offsetHeight; el.classList.add("open"); el.querySelector(".eh").setAttribute("aria-expanded","true");
 }
-// ——— tiroir ———
-let lastFocus=null;
-function openDrawer(id){
-  const e=E.find(x=>x.id===id); P.drawer=id; lastFocus=document.activeElement;
+function closeItem(id){
+  const el=$("#e-"+id); if(!el) return;
+  el.classList.remove("open"); el.querySelector(".eh").setAttribute("aria-expanded","false");
+  setTimeout(()=>{if(P.open!==id){const d=el.querySelector(".slide>div"); if(d) d.innerHTML=""}},reduce()?0:300);
+}
+function toggle(id){
+  P.form=null;
+  if(P.open===id){P.open=null;closeItem(id);return}
+  if(P.open) closeItem(P.open);
+  P.open=id; openItem(id);
+}
+function refresh(id){const el=$("#e-"+id); if(el) el.querySelector(".slide>div").innerHTML=`<div class="eb">${body(find(id))}</div>`}
+
+function selectTab(k,focus){
+  P.tab=k;P.open=null;P.form=null;
+  if(P.min&&!E.some(e=>status(e)===k&&e.min===P.min))P.min=null;
+  render(); if(focus) $("#tab-"+k).focus();
+  announce(`${plural(visible().length,"engagement")} · ${TABS.find(t=>t.k===k).l}${P.min?" · "+MIN[P.min]:""}`);
+}
+
+// ——— Tiroir non modal : la page reste utilisable (Tab peut en sortir), Échap ou × le ferme, le focus revient au bouton d'origine ———
+let drawerTrigger=null, nearTimers=[];
+function openDrawer(id,trigger){
+  const e=find(id); P.drawer=id; drawerTrigger=trigger||null;
+  nearTimers.forEach(clearTimeout); nearTimers=[];
   const dr=$("#drawer");
-  dr.innerHTML=`<div class="dh"><div><div class="k">Question écrite · ${MIN[e.min]}</div><h2 id="dtitle">${e.title}</h2></div><span class="sp"></span><button class="x" data-close aria-label="Fermer">${xIcon}</button></div>
-  <div class="db"><div class="sec">Questions déjà posées sur ce sujet</div><div class="near" id="near">${[0,1].map(()=>`<div class="nq" aria-hidden="true"><span class="sk" style="width:45%"></span><span class="sk" style="width:80%"></span></div>`).join("")}</div>
-  <div class="sec"><label for="draft">Projet de question</label></div><textarea id="draft">Mme [nom de la députée] ${e.draft}</textarea>
-  <p class="hint" style="margin-top:6px">Rédigé à partir des faits de l'engagement. Remplacez le nom entre crochets avant le dépôt.</p></div>
-  <div class="df"><button class="btn" data-close>Fermer</button><button class="btn pri" data-copy>Copier la question</button></div>`;
-  $("#scrim").classList.add("show"); dr.classList.add("show"); document.body.style.overflow="hidden";
-  setTimeout(()=>dr.querySelector(".x").focus(),reduce()?0:300);
-  // la base des questions répond en ~700 ms : au-delà de 400 ms, on montre la forme du résultat
-  setTimeout(()=>{ if(P.drawer!==id) return; const n=$("#near");
-    n.innerHTML=e.near.length?e.near.map(q=>`<div class="nq"><span class="gp" style="background:${GROUPS[q.g].c}">${q.g}</span><b>n° ${q.n}</b> · ${q.who}, ${q.date}<br>${q.st}</div>`).join(""):`<p class="hint" style="margin:0">Aucune question écrite ne porte encore sur cet engagement : la vôtre sera la première.</p>`;},700);
+  dr.innerHTML=`<div class="dh"><div><div class="k">Question écrite · ${MIN[e.min]}</div><h2 id="dtitle">${e.title}</h2></div><span class="sp"></span><button type="button" class="x" data-close aria-label="Fermer le panneau">${xIcon}</button></div>
+  <div class="db"><div class="sec" id="nearh">Questions déjà posées sur ce sujet</div><div class="near" id="near" aria-busy="true" aria-labelledby="nearh"></div>
+  <label class="dlbl" for="draft">Projet de question</label><textarea id="draft" aria-describedby="drafth">Mme [nom de la députée] ${e.draft}</textarea>
+  <p class="hint" id="drafth" style="margin-top:6px">Rédigé à partir des faits de l'engagement. Remplacez le nom entre crochets avant le dépôt.</p></div>
+  <div class="df"><button type="button" class="btn" data-close>Fermer</button><button type="button" class="btn pri" data-copy>Copier la question</button></div>`;
+  dr.classList.add("show"); document.body.classList.add("has-drawer");
+  $$("[data-draft]").forEach(b=>b.setAttribute("aria-expanded",String(b.dataset.draft===id)));
+  dr.querySelector(".x").focus({preventScroll:true});
+  // La base des questions répond en ~700 ms (seuil de Doherty dépassé) : squelette de la forme du résultat,
+  // affiché seulement après 200 ms pour éviter le clignotement, autant de cartes que de résultats attendus.
+  const n=$("#near");
+  nearTimers.push(setTimeout(()=>{ if(P.drawer!==id||n.getAttribute("aria-busy")!=="true") return;
+    n.innerHTML=Array.from({length:Math.max(1,e.near.length)},()=>`<div class="nq" aria-hidden="true"><span class="sk g"></span><span class="sk" style="width:42%;display:inline-block"></span><span class="sk" style="width:78%"></span></div>`).join("");},200));
+  nearTimers.push(setTimeout(()=>{ if(P.drawer!==id) return;
+    n.innerHTML=e.near.length?e.near.map(q=>`<div class="nq"><span class="gp" style="background:${GROUPS[q.g].c}">${q.g}</span><b>n° ${q.n}</b> · ${q.who}, ${q.date}<br>${q.st}</div>`).join(""):`<p class="hint" style="margin:0">Aucune question écrite ne porte encore sur cet engagement : la vôtre sera la première.</p>`;
+    n.setAttribute("aria-busy","false");},700));
 }
 function closeDrawer(){
-  if(!P.drawer) return; P.drawer=null;
-  $("#drawer").classList.remove("show"); $("#scrim").classList.remove("show"); document.body.style.overflow="";
-  lastFocus?.focus?.();
+  if(!P.drawer) return; P.drawer=null; nearTimers.forEach(clearTimeout);
+  $("#drawer").classList.remove("show"); document.body.classList.remove("has-drawer");
+  $$("[data-draft]").forEach(b=>b.setAttribute("aria-expanded","false"));
+  if(drawerTrigger&&document.contains(drawerTrigger)) drawerTrigger.focus(); else $("#panel").focus({preventScroll:true});
 }
-// piège du focus dans le tiroir
-document.addEventListener("keydown",ev=>{
-  if(ev.key==="Tab"&&P.drawer){const f=[...$("#drawer").querySelectorAll("button,textarea,input,select")].filter(x=>!x.disabled); const a=f[0],z=f[f.length-1];
-    if(ev.shiftKey&&document.activeElement===a){ev.preventDefault();z.focus()} else if(!ev.shiftKey&&document.activeElement===z){ev.preventDefault();a.focus()}}
-  if(ev.key==="Escape"){
-    if(P.drawer){closeDrawer();return}
-    if(P.form){const id=P.form;P.form=null;render();$("#e-"+id+" .eh")?.focus();return}
-    if(P.open){const id=P.open;P.open=null;render();$("#e-"+id+" .eh")?.focus();return}
-  }
-  // onglets : flèches gauche/droite
-  if(ev.target.matches(".tab")&&(ev.key==="ArrowRight"||ev.key==="ArrowLeft")){
-    const i=TABS.findIndex(t=>t.k===P.tab), j=(i+(ev.key==="ArrowRight"?1:-1)+TABS.length)%TABS.length;
-    selectTab(TABS[j].k); $("#tab-"+TABS[j].k).focus();
-  }
-});
-function selectTab(k){P.tab=k;P.open=null;P.form=null;if(P.min&&!E.some(e=>status(e)===k&&e.min===P.min))P.min=null;render()}
+
+// ——— Confirmation : <dialog> natif, réservé à l'envoi au groupe (effet hors de l'application) ———
+let dlgTrigger=null;
+function askSignal(id,trigger){
+  const e=find(id), d=$("#confirm"); dlgTrigger=trigger;
+  d.innerHTML=`<form method="dialog"><h2 id="ctitle">Proposer au groupe de signaler la question ?</h2>
+  <p>${e.title.replace(/^Question n° (\d+) : /,"Question n° $1, ")}.</p>
+  <p><small>Le secrétariat du groupe recevra la proposition ; le président de groupe décide du signalement. Vous pourrez la retirer tant qu'il ne l'a pas transmise.</small></p>
+  <div class="facts"><button class="btn" value="cancel" autofocus>Annuler</button><button class="btn pri" value="ok">Envoyer la proposition</button></div></form>`;
+  d.onclose=()=>{
+    if(d.returnValue==="ok"){
+      P.signaled[id]=NOW.toLocaleDateString("fr-FR",{day:"numeric",month:"long"}); refresh(id);
+      $("#e-"+id+" [data-unsignal]")?.focus();
+      notify("Proposition envoyée au secrétariat du groupe (simulation).");
+    } else dlgTrigger?.focus();
+  };
+  d.returnValue=""; d.showModal(); d.querySelector("[value=cancel]").focus();
+}
+
+// ——— Formulaire : validation à la sortie du champ et à l'envoi, jamais à la frappe ———
+function checkRef(inp,onSubmit){
+  const v=inp.value.trim(), fl=inp.parentElement;
+  fl.querySelector(".msg")?.remove(); inp.removeAttribute("aria-invalid"); inp.setAttribute("aria-describedby","prefh");
+  let m="";
+  if(!v){ if(onSubmit) m="Référence manquante : sans elle l'engagement reste ouvert. Collez le numéro ou la date du texte qui le tient."; }
+  else if(!/\d/.test(v)) m="Nous ne trouvons ni numéro ni date dans cette référence : ajoutez-en un pour pouvoir retrouver la preuve.";
+  if(!m) return !!v;
+  inp.setAttribute("aria-invalid","true"); inp.setAttribute("aria-describedby","prefh pref-err");
+  fl.insertAdjacentHTML("beforeend",`<p class="msg" id="pref-err" role="alert">${m}</p>`);
+  return false;
+}
+document.addEventListener("focusout",ev=>{if(ev.target.id==="pref") checkRef(ev.target,false)});
+document.addEventListener("input",ev=>{if(ev.target.id==="pref"&&ev.target.getAttribute("aria-invalid")){ev.target.removeAttribute("aria-invalid");ev.target.setAttribute("aria-describedby","prefh");ev.target.parentElement.querySelector(".msg")?.remove()}});
 document.addEventListener("submit",ev=>{
   const f=ev.target.closest("[data-submit]"); if(!f) return; ev.preventDefault();
-  const e=E.find(x=>x.id===f.dataset.submit), inp=$("#pref"), v=inp.value.trim();
-  f.querySelector(".msg")?.remove();
-  if(!v||!/\d/.test(v)){inp.setAttribute("aria-invalid","true");inp.insertAdjacentHTML("afterend",`<span class="msg">${v?"Ajoutez un numéro ou une date pour retrouver la preuve.":"Indiquez la référence : sans elle, l'engagement reste ouvert."}</span>`);inp.focus();return}
-  e.done=NOW.toISOString().slice(0,10); e.proof=v; P.open=null; P.form=null; render();
-  notify(`« ${e.title} » est passé dans Tenus.`,{undo:()=>{delete e.done;delete e.proof;P.open=e.id;render();$("#e-"+e.id)?.classList.add("open")}});
+  const e=find(f.dataset.submit), inp=$("#pref");
+  if(!checkRef(inp,true)){inp.focus();return}
+  // mise à jour optimiste à 0 ms, avec retour arrière
+  const ids=visible().map(x=>x.id), next=ids[ids.indexOf(e.id)+1]||ids[ids.indexOf(e.id)-1];
+  e.done=NOW.toISOString().slice(0,10); e.proof=inp.value.trim(); P.open=null; P.form=null; render();
+  (next&&$("#h-"+next)||$("#panel")).focus();
+  notify(`« ${e.title} » est passé dans Tenus.`,{undo:()=>{delete e.done;delete e.proof;P.tab="late";P.open=e.id;render();$("#h-"+e.id)?.focus()}});
 });
+
 document.addEventListener("click",ev=>{
   const t=ev.target;
-  if(t.closest("#scrim")||t.closest("[data-close]")){closeDrawer();return}
+  if(t.closest("[data-close]")){closeDrawer();return}
   const tb=t.closest("[data-tab]"); if(tb){selectTab(tb.dataset.tab);return}
-  const ch=t.closest("[data-min]"); if(ch&&!ch.disabled){P.min=ch.dataset.min||null;P.open=null;render();return}
-  const a=t.closest("[data-acc]"); if(a){setOpen(a.dataset.acc);return}
-  const fu=t.closest("[data-full]"); if(fu){P.full[fu.dataset.full]=true;render();$("#e-"+P.open).classList.add("open");return}
-  const fo=t.closest("[data-form]"); if(fo){P.form=P.form===fo.dataset.form?null:fo.dataset.form;render();$("#e-"+P.open).classList.add("open");if(P.form)$("#pref").focus();return}
-  if(t.closest("[data-cancel]")){P.form=null;render();$("#e-"+P.open).classList.add("open");return}
-  const dr=t.closest("[data-draft]"); if(dr){openDrawer(dr.dataset.draft);return}
-  const go=t.closest("[data-goto]"); if(go){P.tab=status(E.find(x=>x.id===go.dataset.goto));P.min=null;P.open=null;setOpen(go.dataset.goto);$("#e-"+go.dataset.goto).scrollIntoView({block:"center",behavior:reduce()?"auto":"smooth"});return}
-  const sg=t.closest("[data-signal]"); if(sg){const id=sg.dataset.signal;P.signaled[id]=true;render();$("#e-"+id).classList.add("open");notify("Proposition transmise au secrétariat du groupe (simulation).",{undo:()=>{delete P.signaled[id];render();$("#e-"+P.open)?.classList.add("open")}});return}
-  const ro=t.closest("[data-reopen]"); if(ro){const e=E.find(x=>x.id===ro.dataset.reopen),bak={done:e.done,proof:e.proof};delete e.done;delete e.proof;P.open=null;render();notify(`« ${e.title} » est revenu dans les engagements ouverts.`,{undo:()=>{Object.assign(e,bak);render()}});return}
-  if(t.closest("[data-copy]")){const v=$("#draft").value; const fail=()=>{const d=$("#draft");d.focus();d.select();notify("Copie refusée par le navigateur : le texte est sélectionné, faites Ctrl+C.",{kind:"err"})};
-    navigator.clipboard?navigator.clipboard.writeText(v).then(()=>notify("Question copiée dans le presse-papiers."),fail):fail();return}
+  const ch=t.closest("[data-min]"); if(ch){P.min=ch.dataset.min||null;P.open=null;P.form=null;render();$(`[data-min="${P.min||""}"]`)?.focus();announce(`${plural(visible().length,"engagement")}${P.min?" · "+MIN[P.min]:""}`);return}
+  const a=t.closest("[data-acc]"); if(a){toggle(a.dataset.acc);return}
+  const fu=t.closest("[data-full]"); if(fu){const id=fu.dataset.full;P.full[id]=true;refresh(id);$(`#tr-${id} li:nth-child(2)`)?.setAttribute("tabindex","-1");$(`#tr-${id} li:nth-child(2)`)?.focus();return}
+  const fo=t.closest("[data-form]"); if(fo){const id=fo.dataset.form;P.form=P.form===id?null:id;refresh(id);(P.form?$("#pref"):$(`#e-${id} [data-form]`))?.focus();return}
+  const ca=t.closest("[data-cancel]"); if(ca){const id=P.form;P.form=null;refresh(id);$(`#e-${id} [data-form]`)?.focus();return}
+  const dr=t.closest("[data-draft]"); if(dr){P.drawer===dr.dataset.draft?closeDrawer():openDrawer(dr.dataset.draft,dr);return}
+  const go=t.closest("[data-goto]"); if(go){const id=go.dataset.goto;P.tab=status(find(id));P.min=null;P.open=id;P.form=null;render();const h=$("#h-"+id);h.scrollIntoView({block:"center",behavior:reduce()?"auto":"smooth"});h.focus({preventScroll:true});return}
+  const sg=t.closest("[data-signal]"); if(sg){askSignal(sg.dataset.signal,sg);return}
+  const us=t.closest("[data-unsignal]"); if(us){const id=us.dataset.unsignal;delete P.signaled[id];refresh(id);$(`#e-${id} [data-signal]`)?.focus();notify("Proposition retirée.");return}
+  const ro=t.closest("[data-reopen]"); if(ro){const e=find(ro.dataset.reopen),bak={done:e.done,proof:e.proof};delete e.done;delete e.proof;P.open=null;render();$("#panel").focus({preventScroll:true});
+    notify(`« ${e.title} » est revenu dans les engagements ouverts.`,{undo:()=>{Object.assign(e,bak);render()}});return}
+  if(t.closest("[data-copy]")){const d=$("#draft"),v=d.value; const fail=()=>{d.focus();d.select();notify("Le navigateur a refusé la copie : le texte est sélectionné, faites Ctrl+C (ou ⌘+C).",{kind:"err"})};
+    try{navigator.clipboard.writeText(v).then(()=>notify("Question copiée dans le presse-papiers."),fail)}catch(_){fail()} return}
 });
-document.addEventListener("input",ev=>{if(ev.target.id==="pref"){ev.target.removeAttribute("aria-invalid");ev.target.parentElement.querySelector(".msg")?.remove()}});
+
+document.addEventListener("keydown",ev=>{
+  const k=ev.key, tg=ev.target;
+  // Onglets (APG) : flèches, Début, Fin ; la sélection suit le focus
+  if(tg.matches?.(".tab")&&["ArrowRight","ArrowLeft","Home","End"].includes(k)){
+    ev.preventDefault(); const i=TABS.findIndex(t=>t.k===P.tab);
+    const j=k==="Home"?0:k==="End"?TABS.length-1:(i+(k==="ArrowRight"?1:-1)+TABS.length)%TABS.length;
+    selectTab(TABS[j].k,true); return;
+  }
+  // Accordéon groupé : flèches haut/bas, Début, Fin entre les en-têtes
+  if(tg.matches?.(".eh")&&["ArrowDown","ArrowUp","Home","End"].includes(k)){
+    ev.preventDefault(); const hs=$$("#panel .eh"), i=hs.indexOf(tg);
+    const j=k==="Home"?0:k==="End"?hs.length-1:Math.min(hs.length-1,Math.max(0,i+(k==="ArrowDown"?1:-1)));
+    hs[j].focus(); return;
+  }
+  if(k!=="Escape"||$("#confirm").open) return;
+  if(P.drawer){closeDrawer();return}
+  if(P.form){const id=P.form;P.form=null;refresh(id);$(`#e-${id} [data-form]`)?.focus();return}
+  if(P.open){const id=P.open;P.open=null;closeItem(id);$("#h-"+id)?.focus();return}
+});
+
 rates();
-// À l'ouverture, l'engagement le plus en retard est déplié
-P.open=E.filter(e=>status(e)==="late").sort(byDue)[0].id; render(); $("#e-"+P.open).classList.add("open");
+// À l'ouverture : l'engagement le plus en retard est déplié
+P.open=E.filter(e=>status(e)==="late").sort(byDue)[0].id; render();
 </script>

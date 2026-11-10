@@ -58,261 +58,369 @@ function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createEle
 </script>
 
 <style>
-/* Angle « patterns » : onglets pour les trois lectures (mois, personnes, cumul), dépliage en place pour le détail d'un mois
-   et le réglage d'un changement, interrupteurs à grandes cibles, toasts empilés avec « Annuler », tiroir latéral pour l'équipe. */
-.head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
-.kpi{display:flex;gap:10px 22px;flex-wrap:wrap;margin:14px 0 18px;align-items:baseline}
-.kpi div{display:grid}
-.kpi b{color:var(--fg);font-size:20px;font-weight:600;letter-spacing:-.01em}
+/* Variante « patterns » (skill interaction-patterns, appliquée règle par règle) :
+   - divulgation progressive : niveau 1 = trois chiffres, le graphique, les quatre changements ; niveau 2 = <details> natifs (réglages, hypothèses) ;
+   - en place plutôt qu'en surcouche : détail d'un mois déplié sous le graphique, réglages dépliés dans leur carte (matrice modale / tiroir / en place) ;
+   - onglets ARIA (3 ≤ 5) à tabindex itinérant, flèches de défilement seulement en cas de débordement ;
+   - formulaires : libellés au-dessus, valeurs par défaut, listes fermées, validation à la sortie du champ, message « champ — cause — correctif » ;
+   - toasts : en haut à droite (bureau), en bas au centre (mobile), role status, 5 s, bouton ×, trois au plus, « Annuler ». */
+:root{interpolate-size:allow-keywords}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.skip{position:absolute;left:16px;top:-60px;z-index:60;background:var(--accent);color:#fff;padding:10px 14px;border-radius:7px;text-decoration:none;transition:top .2s var(--ease)}
+.skip:focus{top:12px}
+.kpi{display:grid;grid-template-columns:repeat(3,minmax(0,max-content));gap:10px 28px;margin:16px 0 18px}
+.kpi div{display:grid;min-width:0}
+.kpi b{color:var(--fg);font-size:21px;font-weight:600;letter-spacing:-.01em;line-height:1.25}
 .kpi span{font-size:12px;color:var(--dim)}
 .kpi .pos b{color:#7fd3a8} .kpi .neg b{color:#f2a7a9}
 .layout{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:18px;align-items:start}
 .layout>*{min-width:0}
-.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:12px}
+.main{padding:0 16px 14px}
+/* onglets */
+.tabw{position:relative;border-bottom:1px solid var(--line);margin:0 -16px 14px;padding:0 16px}
+.tabs{display:flex;gap:2px}
 .tab{border:0;background:none;color:var(--muted);padding:10px 12px;min-height:44px;font-size:13.5px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .2s,border-color .2s;white-space:nowrap}
 .tab:hover{color:var(--fg)}
 .tab[aria-selected=true]{color:var(--fg);border-color:var(--accent)}
-.view{padding:14px}
-.view[hidden]{display:none}
+.arr{position:absolute;top:0;bottom:1px;width:44px;border:0;color:var(--fg);cursor:pointer;z-index:2;font-size:16px}
+.arr.l{left:0;background:linear-gradient(90deg,var(--s1) 55%,transparent)}
+.arr.r{right:0;background:linear-gradient(270deg,var(--s1) 55%,transparent)}
+.arr[hidden]{display:none}
+[role=tabpanel]:focus-visible{outline-offset:6px;border-radius:4px}
+/* graphique mensuel */
 .key{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted)}
 .key i{width:18px;border-top:1px dashed var(--muted)}
 .bars{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:5px;align-items:end;height:210px;position:relative;margin-top:12px}
-.col{display:flex;flex-direction:column-reverse;height:100%;border:0;padding:0;background:none;cursor:pointer;border-radius:3px}
+.col{display:flex;flex-direction:column-reverse;height:100%;border:0;padding:0;background:none;cursor:pointer;border-radius:4px;min-width:24px}
 .col i{display:block;transition:height .35s var(--ease)}
 .col i:last-child{border-radius:3px 3px 0 0}
-.col:hover,.col[aria-expanded=true]{background:rgba(255,255,255,.04)}
-.col[aria-expanded=true]{outline:1px solid var(--line2);outline-offset:2px}
+.col:hover{background:rgba(255,255,255,.035)}
+.col.over i:last-child{box-shadow:0 -2px 0 #f2a7a9}
+.col[aria-pressed=true]{background:rgba(255,255,255,.06);outline:1px solid var(--line2);outline-offset:2px}
 .lim{position:absolute;left:0;right:0;border-top:1px dashed var(--muted);pointer-events:none}
 .mo{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:5px;margin-top:6px;font-size:11px;color:var(--dim);text-align:center}
 .mo .over{color:#f2a7a9}
-.det .in{padding-top:12px;margin-top:12px;border-top:1px solid var(--line);font-size:13px}
-.row{display:flex;justify-content:space-between;gap:10px;padding:2px 0}
+.mo .on{color:var(--fg)}
+.hint{margin:10px 0 0;font-size:12px;color:var(--dim)}
+.det{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.det>div{min-height:0;overflow:hidden;opacity:0;transition:opacity .15s}
+.det.open{grid-template-rows:1fr}
+.det.open>div{opacity:1;transition:opacity .2s .12s}
+.dbox{margin-top:12px;padding-top:6px;border-top:1px solid var(--line);font-size:13px}
+.dhead{display:flex;align-items:center;gap:4px;margin-bottom:4px}
+.dhead h3{flex:1;margin:0;font:500 13.5px/1.4 var(--f);color:var(--fg)}
+.ib{width:36px;height:36px;border:0;background:none;color:var(--muted);border-radius:8px;cursor:pointer;display:grid;place-items:center;font-size:16px;flex:none}
+.ib:hover{background:var(--s2);color:var(--fg)}
+.row{display:flex;justify-content:space-between;gap:10px;padding:3px 0}
 .row span:first-child{display:flex;gap:8px;align-items:center;min-width:0}
 .row i{width:8px;height:8px;border-radius:2px;flex:none}
-.row b{color:var(--fg);font-weight:500}
-.hint{margin:10px 0 0;font-size:12px;color:var(--dim)}
+.row.t{border-top:1px solid var(--line);margin-top:4px;padding-top:6px;color:var(--fg)}
+.row.ch{color:var(--muted)}
+.row.bad{color:#f2a7a9}
+/* tableau par collaborateur */
 table{width:100%;border-collapse:collapse;font-size:13px}
 th{font-weight:500;color:var(--dim);font-size:12px;text-align:right;padding:6px 8px;border-bottom:1px solid var(--line)}
-td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;vertical-align:top}
 th:first-child,td:first-child{text-align:left;white-space:normal}
+td small{display:block;color:var(--dim);font-size:12px}
 td i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:8px}
 tfoot td{color:var(--fg);font-weight:500;border-bottom:0}
+/* cumul */
 .cum svg{display:block;width:100%;height:auto}
 .leg{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:8px}
 .leg i{display:inline-block;width:16px;height:0;border-top:2px solid;vertical-align:3px;margin-right:6px}
-.side h2{margin:0 0 10px;font:500 13.5px/1.4 var(--f);color:var(--fg)}
+/* <details> natifs : glissent à l'ouverture */
+details::details-content{block-size:0;overflow:hidden;transition:block-size .3s var(--ease),content-visibility .3s allow-discrete}
+details[open]::details-content{block-size:auto}
+summary{cursor:pointer;list-style:none}
+summary::-webkit-details-marker{display:none}
+.chev{transition:transform .25s var(--ease)}
+details[open]>summary .chev{transform:rotate(180deg)}
+.notes{margin-top:14px;border-top:1px solid var(--line)}
+.notes summary{display:flex;align-items:center;gap:8px;min-height:44px;font-size:12.5px;color:var(--muted)}
+.notes summary:hover{color:var(--fg)}
+.notes p{margin:0 0 6px;font-size:12.5px;color:var(--dim);max-width:70ch}
+/* changements */
 .side{padding:14px}
-.sw{border:1px solid var(--line);border-radius:9px;margin-bottom:8px;transition:border-color .2s,background .2s}
+.side h2{margin:0 0 10px;font:500 13.5px/1.4 var(--f);color:var(--fg)}
+.sw{position:relative;border:1px solid var(--line);border-radius:9px;margin-bottom:8px;transition:border-color .2s,background .2s}
 .sw.on{border-color:var(--accent);background:var(--lit)}
-.swr{display:grid;grid-template-columns:minmax(0,1fr) 44px;align-items:center;min-height:56px}
-.tog{display:grid;grid-template-columns:38px minmax(0,1fr);gap:10px;align-items:center;text-align:left;border:0;background:none;padding:8px 4px 8px 12px;min-height:56px;cursor:pointer;color:var(--text);font-size:13px}
+.tog{display:grid;grid-template-columns:34px minmax(0,1fr);gap:10px;align-items:center;width:100%;text-align:left;border:0;background:none;padding:10px 54px 10px 12px;min-height:56px;cursor:pointer;color:var(--text);font-size:13px;border-radius:9px}
 .tog small{display:block;color:var(--dim);font-size:12px}
+.tog .cost{display:block;font-size:12px;color:var(--muted);margin-top:2px}
 .knob{width:34px;height:20px;border-radius:999px;background:var(--line2);position:relative;transition:background .2s}
 .knob::after{content:"";position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:var(--fg);transition:transform .2s var(--ease)}
 .on .knob{background:var(--accent)} .on .knob::after{transform:translateX(14px)}
-.cost{display:block;font-size:12px;color:var(--muted);margin-top:2px}
-.more{width:44px;height:44px;border:0;background:none;color:var(--muted);cursor:pointer;border-radius:8px;display:grid;place-items:center}
-.more:hover{color:var(--fg);background:var(--s2)}
-.more svg{transition:transform .25s var(--ease)}
-.sw.open .more svg{transform:rotate(180deg)}
-.form{display:grid;gap:10px;padding:2px 12px 14px}
-.f{display:grid;gap:4px;font-size:12.5px;color:var(--muted)}
-.f input,.f select{min-height:44px;width:100%}
-.f.bad input{border-color:var(--err)}
-.err{color:#f2a7a9;font-size:12px;min-height:0}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.reset{justify-self:start}
-.toasts{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));display:grid;gap:8px;z-index:40;width:min(360px,calc(100vw - 32px))}
-.tst{display:flex;align-items:center;gap:10px;background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:8px 8px 8px 14px;border-radius:9px;font-size:13px;animation:up .2s var(--ease);box-shadow:0 8px 24px rgba(0,0,0,.4)}
-.tst span{flex:1;min-width:0}
+.sw summary{position:absolute;top:6px;right:6px;width:44px;height:44px;display:grid;place-items:center;border-radius:8px;color:var(--muted)}
+.sw summary:hover{background:var(--s2);color:var(--fg)}
+.form{display:grid;gap:12px;padding:4px 12px 14px;border-top:1px solid var(--line);margin:0 0 0;padding-top:12px}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+legend{padding:0;margin-bottom:6px;font-size:12.5px;color:var(--text)}
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.f{display:grid;gap:4px;min-width:0}
+.f label{font-size:12.5px;color:var(--text)}
+.f input,.f select{width:100%;min-height:36px}
+.f .hn{font-size:12px;color:var(--dim)}
+.f input[aria-invalid=true]{border-color:var(--err)}
+.f .er{font-size:12px;color:#f2a7a9}
+.f .er:empty{display:none}
+.fa{display:flex;justify-content:flex-start}
+/* toasts */
+.toasts{position:fixed;top:calc(16px + env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:8px;z-index:40;width:min(380px,calc(100vw - 32px));pointer-events:none}
+.tst{pointer-events:auto;display:flex;align-items:center;gap:6px;background:var(--s2);border:1px solid var(--line2);color:var(--fg);padding:6px 6px 6px 14px;border-radius:9px;font-size:13px;animation:tin .22s var(--ease);box-shadow:0 8px 24px rgba(0,0,0,.45)}
+.tst.err{border-color:var(--err)}
+.tst>span{flex:1;min-width:0}
 .tst .btn{min-height:36px}
+.tst .ib{width:36px;height:36px}
 .tst.out{opacity:0;transition:opacity .2s}
-@keyframes up{from{opacity:0;transform:translateY(6px)}}
-.scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;opacity:0;transition:opacity .2s}
-.drawer{position:fixed;top:0;right:0;bottom:0;width:min(380px,100vw);background:var(--s1);border-left:1px solid var(--line);z-index:51;transform:translateX(100%);transition:transform .28s var(--ease);padding:calc(16px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 16px 18px;overflow:auto}
-body.dr .scrim{opacity:1} body.dr .drawer{transform:none}
-.drawer h2{margin:0;font:500 15px/1.4 var(--f);color:var(--fg)}
-.dh{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.x{width:44px;height:44px;border:0;background:none;color:var(--muted);font-size:22px;cursor:pointer;border-radius:8px}
-.x:hover{background:var(--s2);color:var(--fg)}
-.tm{display:grid;grid-template-columns:10px minmax(0,1fr) auto;gap:10px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px}
-.tm i{width:10px;height:10px;border-radius:2px;align-self:center}
-.tm small{display:block;color:var(--dim);font-size:12px}
-.foot{font-size:12px;color:var(--dim);margin-top:14px}
+@keyframes tin{from{opacity:0;transform:translateY(-6px)}}
 @media (max-width:960px){.layout{grid-template-columns:minmax(0,1fr)}}
-@media (max-width:480px){th:nth-child(2),td:nth-child(2){display:none}th,td{padding:8px 5px}.bars,.mo{gap:2px}.bars{height:170px}.mo{font-size:9.5px}.tab{padding:10px 8px;font-size:13px}}
+@media (max-width:640px),(pointer:coarse){
+  .f input,.f select,.btn{min-height:44px}
+  .ib,.tst .ib{width:44px;height:44px}
+  .tst .btn{min-height:44px}
+  .toasts{top:auto;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:50%;right:auto;transform:translateX(-50%);flex-direction:column-reverse}
+  @keyframes tin{from{opacity:0;transform:translateY(6px)}}
+}
+@media (max-width:520px){
+  .kpi{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 12px}
+  .kpi b{font-size:17px}
+  th:nth-child(2),td:nth-child(2){display:none} th,td{padding:8px 5px}
+  .bars,.mo{gap:2px}.bars{height:170px}.mo{font-size:9.5px}
+  .tab{padding:10px 9px;font-size:13px}
+  .two{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:360px){th:nth-child(3),td:nth-child(3){display:none}}
 </style>
 
+<a class="skip" href="#h-sc">Aller aux changements à essayer</a>
 <div class="wrap">
-  <div class="head">
-    <div><div class="ctx">Gestion du bureau · exercice 2027 · montants fictifs, salaires bruts</div>
-    <h1>Crédit collaborateurs 2027</h1></div>
-    <button class="btn" id="openTeam" aria-haspopup="dialog">Voir l'équipe</button>
-  </div>
-  <div class="kpi" id="kpi" aria-live="polite"></div>
+  <div class="ctx">Gestion du bureau · exercice 2027 · montants fictifs, salaires bruts</div>
+  <h1>Crédit collaborateurs 2027</h1>
+  <div class="kpi" id="kpi"></div>
 
   <div class="layout">
-    <section class="panel" style="padding:0 14px 14px">
-      <div class="tabs scrollx" role="tablist" aria-label="Lectures">
-        <button class="tab" role="tab" id="t-mois" aria-controls="v-mois">Par mois</button>
-        <button class="tab" role="tab" id="t-pers" aria-controls="v-pers">Par collaborateur</button>
-        <button class="tab" role="tab" id="t-cum" aria-controls="v-cum">Cumul annuel</button>
+    <section class="panel main" aria-label="Masse salariale 2027">
+      <div class="tabw">
+        <button class="arr l" id="arrL" tabindex="-1" aria-label="Faire défiler les onglets vers la gauche" hidden>‹</button>
+        <div class="tabs scrollx" role="tablist" aria-label="Lectures de la masse salariale" id="tabs">
+          <button class="tab" role="tab" id="t-mois" aria-controls="v-mois">Par mois</button>
+          <button class="tab" role="tab" id="t-pers" aria-controls="v-pers">Par collaborateur</button>
+          <button class="tab" role="tab" id="t-cum" aria-controls="v-cum">Cumul annuel</button>
+        </div>
+        <button class="arr r" id="arrR" tabindex="-1" aria-label="Faire défiler les onglets vers la droite" hidden>›</button>
       </div>
-      <div class="view" role="tabpanel" id="v-mois" aria-labelledby="t-mois" style="padding:0">
+
+      <div role="tabpanel" id="v-mois" aria-labelledby="t-mois" tabindex="0">
         <div class="key"><i></i>moyenne mensuelle du crédit · 11&#8239;100&nbsp;€</div>
-        <div class="bars" id="bars"></div>
+        <div class="bars" id="bars" role="group" aria-label="Mois de 2027 ; flèches pour changer de mois"></div>
         <div class="mo" id="mo" aria-hidden="true"></div>
-        <div class="det" id="detw"><div class="slide"><div><div class="in" id="det"></div></div></div></div>
-        <p class="hint" id="hint">Choisissez un mois pour voir sa composition (flèches gauche et droite au clavier).</p>
+        <div class="det" id="det"><div><div class="dbox" id="dbox"></div></div></div>
+        <p class="hint" id="hint">Touchez un mois pour voir qui le compose.</p>
       </div>
-      <div class="view" role="tabpanel" id="v-pers" aria-labelledby="t-pers" style="padding:0" hidden>
-        <div class="scrollx"><table><thead><tr><th>Collaborateur</th><th>Salaire mensuel</th><th>dont changements</th><th>Coût 2027</th></tr></thead><tbody id="tb"></tbody><tfoot id="tf"></tfoot></table></div>
+
+      <div role="tabpanel" id="v-pers" aria-labelledby="t-pers" tabindex="0" hidden>
+        <table><thead><tr><th scope="col">Collaborateur</th><th scope="col">Salaire mensuel</th><th scope="col">dont changements</th><th scope="col">Coût 2027</th></tr></thead><tbody id="tb"></tbody><tfoot id="tf"></tfoot></table>
       </div>
-      <div class="view cum" role="tabpanel" id="v-cum" aria-labelledby="t-cum" style="padding:0" hidden>
+
+      <div role="tabpanel" id="v-cum" class="cum" aria-labelledby="t-cum" tabindex="0" hidden>
         <div class="leg"><span><i style="border-color:var(--accent)"></i>masse salariale cumulée</span><span><i style="border-color:var(--muted);border-top-style:dashed"></i>crédit cumulé</span></div>
         <div id="cum"></div>
-        <div class="mo" aria-hidden="true"></div>
+        <div class="mo" id="mo2" aria-hidden="true"></div>
         <p class="hint" id="cumtxt"></p>
       </div>
+
+      <details class="notes">
+        <summary><svg class="chev" width="12" height="12" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>Hypothèses de calcul</summary>
+        <p>Treizième mois versé pour moitié en juin et pour moitié en décembre, hors prime et hors contrat court.</p>
+        <p>Le crédit est apprécié ici sur l'année ; les règles exactes de lissage et de report sont à vérifier pour 2027.</p>
+      </details>
     </section>
 
     <aside class="panel side" aria-labelledby="h-sc">
-      <h2 id="h-sc">Changements à essayer</h2>
+      <h2 id="h-sc" tabindex="-1">Changements à essayer</h2>
       <div id="sc"></div>
-      <p class="foot">Treizième mois versé pour moitié en juin et pour moitié en décembre, hors prime et hors CDD. Crédit apprécié sur l'année ; règles de lissage et de report à vérifier pour 2027.</p>
     </aside>
   </div>
 </div>
 
-<div class="toasts" id="toasts" aria-live="polite"></div>
-<div class="scrim" id="scrim" hidden></div>
-<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="h-team" hidden>
-  <div class="dh"><h2 id="h-team">Équipe en 2027</h2><button class="x" id="closeTeam" aria-label="Fermer">×</button></div>
-  <div id="team"></div>
-</aside>
+<div class="toasts" id="toasts"></div>
+<div class="sr" aria-live="polite" id="live"></div>
 
 <script>
 const CREDIT=11100, cap=CREDIT*12, R=n=>nf(Math.round(n));
 const MOIS=["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."];
 const MOISL=["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+const cap1=s=>s[0].toUpperCase()+s.slice(1);
+const de=m=>(/^[aeiou]/.test(MOISL[m])?"d’":"de ")+MOISL[m]; // élision : d’avril, d’août, d’octobre
 const TEAM=[
  {k:"a",n:"Attachée parlementaire",w:"Paris · temps plein",sal:3650,c:"#6e7bf2"},
  {k:"b",n:"Collaborateur en circonscription",w:"temps plein",sal:2780,c:"#2bb3b1"},
  {k:"c",n:"Assistante en circonscription",w:"mi-temps",sal:1420,c:"#c07a00"},
 ];
+// Valeurs par défaut = scénario de la maquette d'origine (même moteur, rendu réglable)
 const DEF={augPct:6,augFrom:0,recFrom:2,recTo:5,recSal:1550,tpsFrom:8,prime:1000};
 let P={...DEF};
 const ON={aug:false,rec:true,tps:false,prime:false};
 const SC=[
- {k:"aug",t:()=>`Augmenter l'attachée de ${nf(P.augPct,P.augPct%1?1:0)} %`,s:()=>`à partir de ${MOISL[P.augFrom]}`,apply:(m,p)=>p.k==="a"&&m>=P.augFrom?p.sal*P.augPct/100:0},
- {k:"rec",t:()=>"Recruter un renfort à mi-temps (CDD)",s:()=>`de ${MOISL[P.recFrom]} à ${MOISL[P.recTo]} · ${R(P.recSal)} € par mois`},
- {k:"tps",t:()=>"Passer l'assistante à temps plein",s:()=>`à partir de ${MOISL[P.tpsFrom]}`,apply:(m,p)=>p.k==="c"&&m>=P.tpsFrom?p.sal:0},
+ {k:"aug",t:()=>`Augmenter l'attachée de ${nf(P.augPct,P.augPct%1?1:0)} %`,s:()=>`à partir ${de(P.augFrom)}`,apply:(m,p)=>p.k==="a"&&m>=P.augFrom?p.sal*P.augPct/100:0},
+ {k:"rec",t:()=>"Recruter un renfort à mi-temps",s:()=>P.recFrom===P.recTo?`contrat court, en ${MOISL[P.recFrom]}`:`contrat court, ${de(P.recFrom)} à ${MOISL[P.recTo]}`},
+ {k:"tps",t:()=>"Passer l'assistante à temps plein",s:()=>`à partir ${de(P.tpsFrom)}`,apply:(m,p)=>p.k==="c"&&m>=P.tpsFrom?p.sal:0},
  {k:"prime",t:()=>"Prime exceptionnelle de fin d'année",s:()=>`${R(P.prime)} € par collaborateur, en décembre`,apply:(m,p)=>m===11&&p.k!=="d"?P.prime:0},
 ];
-const extra=()=>({k:"d",n:"Renfort (CDD)",w:`mi-temps · ${MOIS[P.recFrom]} à ${MOIS[P.recTo]}`,sal:P.recSal,c:"#d8699a",from:P.recFrom,to:P.recTo});
+const extra=()=>({k:"d",n:"Renfort (contrat court)",w:`mi-temps · ${P.recFrom===P.recTo?MOIS[P.recFrom]:MOIS[P.recFrom]+" à "+MOIS[P.recTo]}`,sal:P.recSal,c:"#d8699a",from:P.recFrom,to:P.recTo});
 const team=()=>ON.rec?[...TEAM,extra()]:[...TEAM];
 function month(m){
   return team().map(p=>{
     if(p.from!=null&&(m<p.from||m>p.to)) return {p,v:0};
     let v=p.sal; for(const s of SC) if(ON[s.k]&&s.apply) v+=s.apply(m,p);
-    if((m===5||m===11)&&p.from==null) v+=(v-(m===11&&ON.prime?P.prime:0))/2;
+    if((m===5||m===11)&&p.from==null) v+=(v-(m===11&&ON.prime?P.prime:0))/2; // 13e mois, hors prime
     return {p,v};
   });
 }
 function calc(){const M=MOIS.map((_,m)=>month(m)),tot=M.map(x=>x.reduce((s,y)=>s+y.v,0));return {M,tot,year:tot.reduce((a,b)=>a+b,0)}}
-function cost(k){const w=ON[k];ON[k]=false;const a=calc().year;ON[k]=true;const b=calc().year;ON[k]=w;return b-a}
-function baseOf(k){const w={...ON};for(const x in ON)ON[x]=x==="rec"&&k==="d";const r=calc().M.reduce((t,x)=>t+(x.find(y=>y.p.k===k)?.v||0),0);Object.assign(ON,w);return r}
+function withON(o,f){const w={...ON};Object.assign(ON,o);const r=f();Object.assign(ON,w);return r}
+const cost=k=>withON({[k]:true},()=>calc().year)-withON({[k]:false},()=>calc().year);
+const NONE={aug:false,rec:false,tps:false,prime:false};
 
-let sel=null, open=new Set();
-const chev=`<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>`;
-const opts=(v,from=0)=>MOISL.map((m,i)=>i<from?"":`<option value="${i}" ${i===v?"selected":""}>${m}</option>`).join("");
+/* ---------- cartes de changement (construites une fois ; mises à jour sans perdre le focus ni l'état des <details>) ---------- */
+const chev=`<svg class="chev" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>`;
+const opts=(v,from=0)=>MOISL.map((m,i)=>i<from?"":`<option value="${i}"${i===v?" selected":""}>${m}</option>`).join("");
+const num=(id,lab,hint,min,max,step)=>`<div class="f"><label for="${id}">${lab}</label><input type="number" id="${id}" inputmode="decimal" min="${min}" max="${max}" step="${step}" value="${P[id]}" aria-describedby="${id}-h"><span class="hn" id="${id}-h">${hint}</span><span class="er" id="${id}-e"></span></div>`;
+const sel=(id,lab,from=0)=>`<div class="f"><label for="${id}">${lab}</label><select id="${id}">${opts(P[id],from)}</select></div>`;
 const FORMS={
- aug:()=>`<div class="two"><label class="f">Taux (%)<input type="number" id="augPct" inputmode="decimal" step="0.5" min="0.5" max="15" value="${P.augPct}"></label><label class="f">À partir de<select id="augFrom">${opts(P.augFrom)}</select></label></div><div class="err" id="e-augPct"></div>`,
- rec:()=>`<div class="two"><label class="f">Début<select id="recFrom">${opts(P.recFrom)}</select></label><label class="f">Fin<select id="recTo">${opts(P.recTo)}</select></label></div><div class="err" id="e-recTo"></div><label class="f">Salaire mensuel brut (€)<input type="number" id="recSal" inputmode="numeric" step="50" min="500" max="4000" value="${P.recSal}"></label><div class="err" id="e-recSal"></div>`,
- tps:()=>`<label class="f">À partir de<select id="tpsFrom">${opts(P.tpsFrom)}</select></label>`,
- prime:()=>`<label class="f">Montant par collaborateur (€)<input type="number" id="prime" inputmode="numeric" step="100" min="0" max="3000" value="${P.prime}"></label><div class="err" id="e-prime"></div>`,
+ aug:()=>`<div class="two">${num("augPct","Taux d'augmentation (%)","de 0,5 à 15 %",.5,15,.5)}${sel("augFrom","À partir de")}</div>`,
+ rec:()=>`<fieldset><legend>Période du contrat</legend><div class="two">${sel("recFrom","Début")}${sel("recTo","Fin",P.recFrom)}</div><span class="hn" id="recTo-h" style="font-size:12px;color:var(--dim)"></span></fieldset>${num("recSal","Salaire mensuel brut (€)","mi-temps, de 500 à 4 000 €",500,4000,50)}`,
+ tps:()=>sel("tpsFrom","À partir de"),
+ prime:()=>num("prime","Montant par collaborateur (€)","de 0 à 3 000 €, hors renfort",0,3000,100),
 };
 const KEYS={aug:["augPct","augFrom"],rec:["recFrom","recTo","recSal"],tps:["tpsFrom"],prime:["prime"]};
-function renderSC(){
-  $("#sc").innerHTML=SC.map(s=>`<div class="sw ${ON[s.k]?"on":""} ${open.has(s.k)?"open":""}" data-s="${s.k}">
-   <div class="swr"><button class="tog" role="switch" aria-checked="${ON[s.k]}" data-t="${s.k}"><span class="knob"></span><span>${esc(s.t())}<small>${esc(s.s())}</small><span class="cost" data-c="${s.k}"></span></span></button>
-   <button class="more" data-o="${s.k}" aria-expanded="${open.has(s.k)}" aria-controls="f-${s.k}" aria-label="Régler : ${esc(s.t())}">${chev}</button></div>
-   <div class="slide"><div><form class="form" id="f-${s.k}" data-f="${s.k}" novalidate>${FORMS[s.k]()}${KEYS[s.k].some(x=>P[x]!==DEF[x])?`<button type="button" class="ghost reset" data-r="${s.k}">Revenir aux valeurs par défaut</button>`:""}</form></div></div></div>`).join("");
+function buildSC(){
+  $("#sc").innerHTML=SC.map(s=>`<div class="sw" data-s="${s.k}">
+    <button class="tog" role="switch" aria-checked="false" data-t="${s.k}" aria-describedby="c-${s.k}"><span class="knob" aria-hidden="true"></span><span><span class="tt"></span><small class="ss"></small><span class="cost" id="c-${s.k}"></span></span></button>
+    <details data-d="${s.k}"><summary aria-label="Régler : ${esc(s.t().replace(/ de [\d,]+ %/,""))}">${chev}</summary>
+      <form class="form" data-f="${s.k}" novalidate><div class="fields">${FORMS[s.k]()}</div><div class="fa"><button type="button" class="ghost" data-r="${s.k}" hidden>Revenir aux valeurs par défaut</button></div></form>
+    </details></div>`).join("");
 }
+function updSC(){
+  SC.forEach(s=>{const w=$(`.sw[data-s="${s.k}"]`);w.classList.toggle("on",ON[s.k]);
+    const t=w.querySelector(".tog");t.setAttribute("aria-checked",ON[s.k]);
+    t.querySelector(".tt").textContent=s.t(); t.querySelector(".ss").textContent=s.s();
+    const c=cost(s.k); t.querySelector(".cost").textContent=`${ON[s.k]?"compté":"coûterait"} +${R(c)} € sur l'année`;
+    w.querySelector("[data-r]").hidden=!KEYS[s.k].some(x=>P[x]!==DEF[x]);
+  });
+}
+
+/* ---------- rendu ---------- */
+let mSel=null, focusM=5;
 function render(){
-  const {M,tot,year}=calc(), over=year>cap, pk=tot.filter(v=>v>CREDIT).length;
-  $("#kpi").innerHTML=`<div><b>${R(year)} €</b><span>masse salariale 2027</span></div><div class="${over?"neg":"pos"}"><b>${over?"−":"+"}${R(Math.abs(cap-year))} €</b><span>${over?"dépassement":"marge"} sur ${R(cap)} €</span></div><div><b>${pk}</b><span>mois au-dessus de la moyenne</span></div>`;
+  const {M,tot,year}=calc(), over=year>cap, pk=tot.map((v,i)=>[v,i]).filter(([v])=>v>CREDIT);
+  $("#kpi").innerHTML=`<div><b>${R(year)} €</b><span>masse salariale 2027</span></div><div class="${over?"neg":"pos"}"><b>${over?"−":"+"}${R(Math.abs(cap-year))} €</b><span>${over?"dépassement":"marge"} sur ${R(cap)} €</span></div><div><b>${pk.length?pk.map(([,i])=>MOIS[i]).join(", "):"aucun"}</b><span>${pk.length>1?"mois au-dessus":"mois au-dessus"} de la moyenne</span></div>`;
   const mx=Math.max(CREDIT*1.25,...tot);
-  $("#bars").innerHTML=M.map((x,i)=>`<button class="col" data-m="${i}" tabindex="${(sel??5)===i?0:-1}" aria-expanded="${sel===i}" aria-controls="detw" aria-label="${MOISL[i]} : ${R(tot[i])} €">${x.filter(y=>y.v).map(y=>`<i style="height:${100*y.v/mx}%;background:${y.p.c}"></i>`).join("")}</button>`).join("")+`<div class="lim" style="bottom:${100*CREDIT/mx}%"></div>`;
-  $("#mo").innerHTML=MOIS.map((m,i)=>`<span class="${tot[i]>CREDIT?"over":""}">${m}</span>`).join("");
-  $("#detw").classList.toggle("open",sel!=null); $("#hint").hidden=sel!=null;
-  if(sel!=null){const d=tot[sel]-CREDIT;
-    $("#det").innerHTML=`<div class="row"><b>${MOISL[sel][0].toUpperCase()+MOISL[sel].slice(1)}${sel===5||sel===11?" · avec le demi-treizième mois":""}</b><b>${R(tot[sel])} €</b></div>`+M[sel].filter(y=>y.v).map(y=>`<div class="row"><span><i style="background:${y.p.c}"></i>${esc(y.p.n)}</span><span>${R(y.v)} €</span></div>`).join("")+`<div class="row" style="color:${d>0?"#f2a7a9":"var(--muted)"}"><span>${d>0?"Au-dessus de":"Sous"} la moyenne du crédit</span><span>${d>0?"+":"−"}${R(Math.abs(d))} €</span></div>`;}
+  $("#bars").innerHTML=M.map((x,i)=>`<button class="col${tot[i]>CREDIT?" over":""}" data-m="${i}" tabindex="${focusM===i?0:-1}" aria-pressed="${mSel===i}" aria-controls="det" aria-label="${MOISL[i]} : ${R(tot[i])} €${tot[i]>CREDIT?", au-dessus de la moyenne":""}">${x.filter(y=>y.v).map(y=>`<i style="height:${100*y.v/mx}%;background:${y.p.c}"></i>`).join("")}</button>`).join("")+`<div class="lim" style="bottom:${100*CREDIT/mx}%"></div>`;
+  $("#mo").innerHTML=MOIS.map((m,i)=>`<span class="${tot[i]>CREDIT?"over":""}${mSel===i?" on":""}">${m}</span>`).join("");
+  $("#det").classList.toggle("open",mSel!=null); $("#hint").hidden=mSel!=null;
+  if(mSel!=null){
+    const i=mSel,d=tot[i]-CREDIT, base=withON(NONE,()=>calc().tot[i]), ch=tot[i]-base;
+    $("#dbox").innerHTML=`<div class="dhead"><button class="ib" data-step="-1" aria-label="Mois précédent">‹</button><h3>${cap1(MOISL[i])}${i===5||i===11?" · avec le demi-treizième mois":""}</h3><button class="ib" data-step="1" aria-label="Mois suivant">›</button><button class="ib" data-close aria-label="Fermer le détail du mois">×</button></div>`
+      +M[i].filter(y=>y.v).map(y=>`<div class="row"><span><i style="background:${y.p.c}"></i>${esc(y.p.n)}</span><span>${R(y.v)} €</span></div>`).join("")
+      +`<div class="row t"><span>Total</span><b>${R(tot[i])} €</b></div>`
+      +(ch?`<div class="row ch"><span>dont changements retenus</span><span>+${R(ch)} €</span></div>`:"")
+      +`<div class="row ${d>0?"bad":"ch"}"><span>${d>0?"Au-dessus de":"Sous"} la moyenne du crédit</span><span>${d>0?"+":"−"}${R(Math.abs(d))} €</span></div>`;
+  }
   // par collaborateur
-  const rows=team().map(p=>{const y=M.reduce((t,x)=>t+(x.find(z=>z.p.k===p.k)?.v||0),0), b=p.k==="d"?0:baseOf(p.k);return {p,y,ch:y-b}});
-  $("#tb").innerHTML=rows.map(r=>`<tr><td><i style="background:${r.p.c}"></i>${esc(r.p.n)}</td><td>${R(r.p.sal)} €</td><td>${r.p.k==="d"?"nouveau poste":r.ch?"+"+R(r.ch)+" €":"—"}</td><td>${R(r.y)} €</td></tr>`).join("");
+  const rows=team().map(p=>{const y=M.reduce((t,x)=>t+(x.find(z=>z.p.k===p.k)?.v||0),0), b=p.k==="d"?0:withON(NONE,()=>calc().M.reduce((t,x)=>t+(x.find(z=>z.p.k===p.k)?.v||0),0));return {p,y,ch:y-b}});
+  $("#tb").innerHTML=rows.map(r=>`<tr><td><i style="background:${r.p.c}"></i>${esc(r.p.n)}<small>${esc(r.p.w)}</small></td><td>${R(r.p.sal)} €</td><td>${r.p.k==="d"?"nouveau poste":r.ch?"+"+R(r.ch)+" €":"—"}</td><td>${R(r.y)} €</td></tr>`).join("");
   $("#tf").innerHTML=`<tr><td>Total</td><td></td><td></td><td>${R(year)} €</td></tr>`;
   // cumul
   const W=600,H=220,pad=8; let c=0; const cu=tot.map(v=>c+=v); const top=Math.max(cap,cu[11])*1.05;
   const X=i=>(i+.5)/12*W, Y=v=>H-v/top*(H-10);
-  const path=cu.map((v,i)=>`${i?"L":"M"}${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join("");
   const cross=cu.findIndex((v,i)=>v>CREDIT*(i+1));
-  $("#cum").innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Masse salariale cumulée face au crédit cumulé"><line x1="${pad}" y1="${H}" x2="${W-pad}" y2="${H}" stroke="var(--line2)"/><path d="M${X(0)},${Y(CREDIT)} L${X(11)},${Y(cap)}" fill="none" stroke="var(--muted)" stroke-dasharray="4 4" stroke-width="1.5"/><path d="${path}" fill="none" stroke="var(--accent)" stroke-width="2.2"/>${cu.map((v,i)=>`<circle cx="${X(i)}" cy="${Y(v)}" r="${i===11?4:2.5}" fill="${i===11?"var(--fg)":"var(--accent)"}"/>`).join("")}</svg>`;
-  $("#cumtxt").textContent=`Fin décembre : ${R(year)} € engagés sur ${R(cap)} €. `+(cross<0?"La masse cumulée reste sous le crédit cumulé toute l'année.":`La masse cumulée passe au-dessus du crédit cumulé en ${MOISL[cross]}${over?" et y reste.":", puis repasse dessous."}`);
-  $("#v-cum .mo").innerHTML=MOIS.map(m=>`<span>${m}</span>`).join("");
-  // coûts des changements
-  SC.forEach(s=>{const el=$(`[data-c="${s.k}"]`);if(el)el.textContent="+"+R(cost(s.k))+" €/an"});
-  // tiroir
-  $("#team").innerHTML=team().map(p=>`<div class="tm"><i style="background:${p.c}"></i><span>${esc(p.n)}<small>${esc(p.w)}</small></span><span>${R(p.sal)} €/mois</span></div>`).join("")+`<p class="foot">Salaires mensuels bruts hors changements. Le renfort n'apparaît que s'il est retenu.</p>`;
+  $("#cum").innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Masse salariale cumulée face au crédit cumulé"><line x1="${pad}" y1="${H}" x2="${W-pad}" y2="${H}" stroke="var(--line2)"/><path d="M${X(0)},${Y(CREDIT)} L${X(11)},${Y(cap)}" fill="none" stroke="var(--muted)" stroke-dasharray="4 4" stroke-width="1.5"/><path d="${cu.map((v,i)=>`${i?"L":"M"}${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join("")}" fill="none" stroke="var(--accent)" stroke-width="2.2"/>${cu.map((v,i)=>`<circle cx="${X(i)}" cy="${Y(v)}" r="${i===11?4:2.5}" fill="${i===11?"var(--fg)":"var(--accent)"}"/>`).join("")}</svg>`;
+  $("#mo2").innerHTML=MOIS.map(m=>`<span>${m}</span>`).join("");
+  $("#cumtxt").textContent=`Fin décembre : ${R(year)} € engagés sur ${R(cap)} €. `+(cross<0?"La masse cumulée reste sous le crédit cumulé toute l'année.":`La masse cumulée passe au-dessus du crédit cumulé en ${MOISL[cross]}${cu.slice(cross).every((v,j)=>v>CREDIT*(cross+j+1))?" et y reste.":", puis repasse dessous."}`);
+  updSC();
+  return {year,over};
 }
-function all(){renderSC();render()}
 
-// toasts empilés, au plus trois, avec annulation
-function note(msg,undo){
-  const box=$("#toasts"), t=document.createElement("div"); t.className="tst"; t.setAttribute("role","status");
-  t.innerHTML=`<span>${esc(msg)}</span>${undo?`<button class="btn">Annuler</button>`:""}`;
-  box.append(t); while(box.children.length>3) box.firstChild.remove();
-  let tm; const go=()=>{t.classList.add("out");setTimeout(()=>t.remove(),200)}, arm=()=>tm=setTimeout(go,5000);
-  t.addEventListener("mouseenter",()=>clearTimeout(tm)); t.addEventListener("mouseleave",arm); t.addEventListener("focusin",()=>clearTimeout(tm));
-  if(undo) t.querySelector(".btn").onclick=()=>{undo();go()};
+/* ---------- toasts : status / alert, 5 s (jamais pour une erreur), ×, trois au plus, plus récent en tête ---------- */
+function note(msg,{type="status",undo}={}){
+  const box=$("#toasts"), t=document.createElement("div"); const err=type==="error";
+  t.className="tst"+(err?" err":""); t.setAttribute("role",err?"alert":"status"); t.setAttribute("aria-live",err?"assertive":"polite");
+  t.innerHTML=`<span>${esc(msg)}</span>${undo?`<button class="btn" data-u>Annuler</button>`:""}<button class="ib" data-x aria-label="Fermer la notification">×</button>`;
+  box.prepend(t); while(box.children.length>3) box.lastElementChild.remove();
+  let tm; const go=()=>{clearTimeout(tm);t.classList.add("out");setTimeout(()=>t.remove(),200)};
+  const arm=()=>{if(!err){clearTimeout(tm);tm=setTimeout(go,5000)}};
+  t.addEventListener("mouseenter",()=>clearTimeout(tm)); t.addEventListener("mouseleave",arm);
+  t.addEventListener("focusin",()=>clearTimeout(tm)); t.addEventListener("focusout",e=>{if(!t.contains(e.relatedTarget))arm()});
+  t.addEventListener("keydown",e=>{if(e.key==="Escape"){e.stopPropagation();go();$("#h-sc").focus()}});
+  t.querySelector("[data-x]").onclick=go;
+  if(undo) t.querySelector("[data-u]").onclick=()=>{undo();go()};
   arm();
 }
-const snap=()=>({P:{...P},ON:{...ON}}), restore=s=>{P=s.P;Object.assign(ON,s.ON);all()};
+function say({year,over}){$("#live").textContent=`Masse salariale 2027 : ${R(year)} €, ${over?"dépassement":"marge"} de ${R(Math.abs(cap-year))} €.`}
+function syncFields(){Object.keys(P).forEach(id=>{const el=$("#"+id);if(!el)return;
+  if(id==="recTo"){el.innerHTML=opts(P.recTo,P.recFrom)} el.value=P[id]; el.removeAttribute("aria-invalid"); const e=$("#"+id+"-e"); if(e) e.textContent="";
+  if(el.type==="number") el.setAttribute("aria-describedby",id+"-h");});}
 
+/* ---------- interactions ---------- */
 document.addEventListener("click",e=>{
-  const t=e.target.closest("[data-t]"); if(t){const k=t.dataset.t,b=snap();ON[k]=!ON[k];const s=SC.find(x=>x.k===k);all();$(`[data-t="${k}"]`).focus();note(`${ON[k]?"Ajouté":"Retiré"} : ${s.t()} (${ON[k]?"+":"−"}${R(cost(k))} €/an)`,()=>restore(b));return}
-  const o=e.target.closest("[data-o]"); if(o){const k=o.dataset.o;open.has(k)?open.delete(k):open.add(k);const w=o.closest(".sw");w.classList.toggle("open");o.setAttribute("aria-expanded",open.has(k));return}
-  const r=e.target.closest("[data-r]"); if(r){const k=r.dataset.r,b=snap();KEYS[k].forEach(x=>P[x]=DEF[x]);all();note("Valeurs par défaut rétablies",()=>restore(b));return}
-  const c=e.target.closest(".col"); if(c){const m=+c.dataset.m;sel=sel===m?null:m;render();$(`.col[data-m="${m}"]`).focus();return}
+  const t=e.target.closest("[data-t]"); if(t){const k=t.dataset.t,wasOver=calc().year>cap;ON[k]=!ON[k];const r=render();
+    const s=SC.find(x=>x.k===k), eff=r.over!==wasOver?(r.over?" L'année passe en dépassement.":" L'année repasse sous le crédit."):"";
+    note(`${ON[k]?"Ajouté":"Retiré"} : ${s.t().replace(/^./,c=>c.toLowerCase())} (${ON[k]?"+":"−"}${R(cost(k))} €).${eff}`,{undo:()=>{ON[k]=!ON[k];say(render())}});return}
+  const r=e.target.closest("[data-r]"); if(r){const k=r.dataset.r,b={};KEYS[k].forEach(x=>{b[x]=P[x];P[x]=DEF[x]});syncFields();render();$(`.sw[data-s="${k}"] summary`).focus();note("Valeurs par défaut rétablies.",{undo:()=>{Object.assign(P,b);syncFields();say(render())}});return}
+  const c=e.target.closest(".col"); if(c){const m=+c.dataset.m;mSel=mSel===m?null:m;focusM=m;render();$(`.col[data-m="${m}"]`).focus();return}
+  const st=e.target.closest("[data-step]"); if(st){mSel=focusM=(mSel+ +st.dataset.step+12)%12;render();$(`[data-step="${st.dataset.step}"]`).focus();return}
+  if(e.target.closest("[data-close]")){const m=mSel;mSel=null;render();$(`.col[data-m="${m}"]`).focus()}
 });
-$("#bars").addEventListener("keydown",e=>{const d={ArrowLeft:-1,ArrowRight:1}[e.key];if(!d)return;e.preventDefault();const m=((sel??5)+d+12)%12;sel=m;render();$(`.col[data-m="${m}"]`).focus()});
-// réglages : on n'applique qu'une valeur valide ; sinon message qui dit quoi saisir, et la dernière valeur valide reste en vigueur
-const RULES={augPct:[.5,15,"Saisissez un taux entre 0,5 et 15 %."],recSal:[500,4000,"Saisissez un salaire mensuel entre 500 et 4 000 €."],prime:[0,3000,"Saisissez un montant entre 0 et 3 000 €."]};
+// mois : groupe à tabindex itinérant ; ← → changent de mois (et suivent le détail s'il est ouvert), Début / Fin, Entrée / Espace ouvre
+$("#bars").addEventListener("keydown",e=>{
+  const n={ArrowLeft:focusM-1,ArrowRight:focusM+1,Home:0,End:11}[e.key]; if(n==null)return; e.preventDefault();
+  focusM=(n+12)%12; if(mSel!=null) mSel=focusM; render(); $(`.col[data-m="${focusM}"]`).focus();
+});
+
+// réglages : application immédiate d'une valeur valide (seuil de Doherty), message d'erreur seulement à la sortie du champ
+const RULES={
+ augPct:[.5,15,"Taux d'augmentation — le calcul accepte de 0,5 à 15 % — saisissez par exemple 6 ; en attendant, le dernier taux valide reste compté."],
+ recSal:[500,4000,"Salaire du renfort — le calcul accepte de 500 à 4 000 € par mois — saisissez par exemple 1 550 ; en attendant, le dernier montant valide reste compté."],
+ prime:[0,3000,"Montant de la prime — le calcul accepte de 0 à 3 000 € — saisissez par exemple 1 000 ; en attendant, le dernier montant valide reste compté."],
+};
+const parse=el=>el.type==="number"?parseFloat(String(el.value).replace(",",".")):+el.value;
+const ok=(id,v)=>!RULES[id]||(v>=RULES[id][0]&&v<=RULES[id][1]);
+function clearErr(el){el.removeAttribute("aria-invalid");el.setAttribute("aria-describedby",el.id+"-h");const e=$("#"+el.id+"-e");if(e)e.textContent=""}
+let liveT;
 document.addEventListener("input",e=>{
-  const id=e.target.id; if(!(id in P)) return; const f=e.target.closest(".f"), k=e.target.closest("[data-f]").dataset.f;
-  let v=e.target.type==="number"?parseFloat(String(e.target.value).replace(",",".")):+e.target.value, msg="";
-  if(RULES[id]){const [lo,hi,m]=RULES[id]; if(!(v>=lo&&v<=hi)) msg=m;}
-  if(id==="recFrom"&&v>P.recTo||id==="recTo"&&v<P.recFrom) msg="La fin du contrat doit venir après son début.";
-  const err=$("#e-"+(id==="recFrom"?"recTo":id)); if(f) f.classList.toggle("bad",!!msg); if(err) err.textContent=msg;
-  if(msg) return; P[id]=v;
-  const sw=e.target.closest(".sw"); sw.querySelector(".tog>span:last-child").innerHTML=`${esc(SC.find(s=>s.k===k).t())}<small>${esc(SC.find(s=>s.k===k).s())}</small><span class="cost" data-c="${k}"></span>`;
-  render();
+  const el=e.target, id=el.id; if(!(id in P)) return;
+  const v=parse(el); if(!ok(id,v)) return; // pas de message pendant la frappe
+  if(el.getAttribute("aria-invalid")) clearErr(el);
+  P[id]=v;
+  if(id==="recFrom"){const to=$("#recTo"), h=$("#recTo-h"); if(P.recTo<v){P.recTo=v; h.textContent=`Fin placée en ${MOISL[v]} pour suivre le début.`} else h.textContent=""; to.innerHTML=opts(P.recTo,v);}
+  const r=render(); clearTimeout(liveT); liveT=setTimeout(()=>say(r),600);
+});
+document.addEventListener("focusout",e=>{
+  const el=e.target; if(!(el.id in RULES)) return;
+  const v=parse(el);
+  if(ok(el.id,v)){clearErr(el);return}
+  const er=$("#"+el.id+"-e"); er.setAttribute("role","alert"); er.textContent=RULES[el.id][2];
+  el.setAttribute("aria-invalid","true"); el.setAttribute("aria-describedby",`${el.id}-e ${el.id}-h`);
 });
 document.addEventListener("submit",e=>e.preventDefault());
+document.addEventListener("keydown",e=>{
+  if(e.key!=="Escape") return;
+  const d=e.target.closest&&e.target.closest("details[open]"); if(d){d.open=false;d.querySelector("summary").focus();return}
+  if(mSel!=null){const m=mSel;mSel=null;render();$(`.col[data-m="${m}"]`).focus()}
+});
 
-// onglets : flèches, Début/Fin ; l'onglet choisi est retenu dans ce navigateur
-const TABS=$$(".tab");
-function pick(t,focus){TABS.forEach(x=>{const on=x===t;x.setAttribute("aria-selected",on);x.tabIndex=on?0:-1;$("#"+x.getAttribute("aria-controls")).hidden=!on});if(focus)t.focus();try{localStorage.setItem("cc-tab",t.id)}catch(_){}}
-TABS.forEach((t,i)=>{t.onclick=()=>pick(t);t.onkeydown=e=>{const n={ArrowRight:i+1,ArrowLeft:i-1,Home:0,End:TABS.length-1}[e.key];if(n==null)return;e.preventDefault();pick(TABS[(n+TABS.length)%TABS.length],true)}});
-let st=null;try{st=localStorage.getItem("cc-tab")}catch(_){}
+/* ---------- onglets (WAI-ARIA, activation automatique) ---------- */
+const TABS=$$(".tab"), TL=$("#tabs");
+function pick(t,focus){TABS.forEach(x=>{const on=x===t;x.setAttribute("aria-selected",on);x.tabIndex=on?0:-1;$("#"+x.getAttribute("aria-controls")).hidden=!on});
+  if(focus){t.focus();t.scrollIntoView({block:"nearest",inline:"nearest"})} try{localStorage.setItem("cc-tab-p",t.id)}catch(_){}}
+TABS.forEach((t,i)=>{t.onclick=()=>pick(t);t.onkeydown=e=>{const n={ArrowRight:(i+1)%TABS.length,ArrowLeft:(i-1+TABS.length)%TABS.length,Home:0,End:TABS.length-1}[e.key];if(n==null)return;e.preventDefault();pick(TABS[n],true)}});
+function arrows(){$("#arrL").hidden=!(TL.scrollLeft>0);$("#arrR").hidden=!(TL.scrollLeft+TL.clientWidth<TL.scrollWidth-1)}
+TL.addEventListener("scroll",arrows,{passive:true}); addEventListener("resize",arrows);
+$("#arrL").onclick=()=>TL.scrollBy({left:-200,behavior:"smooth"}); $("#arrR").onclick=()=>TL.scrollBy({left:200,behavior:"smooth"});
+let st=null;try{st=localStorage.getItem("cc-tab-p")}catch(_){}
 pick($("#"+st)||TABS[0]);
 
-// tiroir de l'équipe : × ou Échap ou clic sur le voile, le focus revient au bouton
-let last;
-function dOpen(){last=document.activeElement;$("#scrim").hidden=false;$("#drawer").hidden=false;requestAnimationFrame(()=>requestAnimationFrame(()=>document.body.classList.add("dr")));setTimeout(()=>$("#closeTeam").focus(),50)}
-function dClose(){document.body.classList.remove("dr");setTimeout(()=>{$("#scrim").hidden=true;$("#drawer").hidden=true},280);last&&last.focus()}
-$("#openTeam").onclick=dOpen; $("#closeTeam").onclick=dClose; $("#scrim").onclick=dClose;
-document.addEventListener("keydown",e=>{if(e.key!=="Escape")return; if(document.body.classList.contains("dr"))dClose(); else if(sel!=null){sel=null;render()}});
-$("#drawer").addEventListener("keydown",e=>{if(e.key==="Tab"){e.preventDefault();$("#closeTeam").focus()}});
-all();
+buildSC(); render(); arrows();
 </script>

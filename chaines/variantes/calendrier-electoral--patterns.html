@@ -56,227 +56,292 @@ const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
 const nf=(n,d=0)=>n.toLocaleString("fr-FR",{maximumFractionDigits:d,minimumFractionDigits:d});
 function toast(m){$$(".toast").forEach(e=>e.remove());const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),3200)}
 </script>
-
 <style>
-/* Angle « patterns » : onglets de moments (loi de Hick : 5 choix), tableau à trois colonnes par régime
-   (loi de Miller : jamais plus de 7 cartes par colonne), tiroir latéral pour le détail, toasts empilés pour ce qui vient de changer. */
-.form{padding:14px 16px;display:grid;gap:12px;margin-bottom:14px}
-.fl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 14px;align-items:center}
-.fl label{font-size:13px;color:var(--muted)}
-.fl input[type=date]{min-height:44px;padding:8px 12px;font-size:14px;width:min(100%,240px)}
-.fl input[aria-invalid=true]{border-color:var(--err)}
-.hint{grid-column:2;font-size:12.5px;color:var(--dim);margin:0}
-.hint.err{color:#f08a8d}
-.tabs{display:flex;gap:4px;padding:4px;background:var(--s2);border:1px solid var(--line);border-radius:10px}
-.tab{flex:1 1 0;min-height:44px;border:0;border-radius:7px;background:none;color:var(--muted);font-size:13px;cursor:pointer;padding:6px 8px;line-height:1.25;transition:background .2s,color .2s}
+/* Angle « patterns » (skill interaction-patterns appliquée règle par règle) :
+   onglets de moments (5 au plus, défilants avec flèches s'ils débordent), groupes par régime en dépliage natif
+   (Permis replié : divulgation progressive), lignes dépliables en place pour le détail (pas de tiroir : trois champs courts),
+   formulaire de date validé à la sortie du champ, toast d'annulation après changement de scrutin. */
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.setup{padding:14px 16px;display:grid;gap:6px;margin-bottom:16px}
+.f label{display:block;font-size:13px;font-weight:500;color:var(--fg);margin-bottom:5px}
+.f input[type=date]{min-height:36px;padding:7px 11px;font-size:14px;width:min(100%,220px);background:var(--s2);border:1px solid var(--line);border-radius:7px;color:var(--fg)}
+.f input[aria-invalid=true]{border-color:var(--err)}
+.f .hint{margin:5px 0 0;font-size:12.5px;color:var(--muted)}
+.f .error{margin:5px 0 0;font-size:12.5px;color:#f08a8d}
+.f .error:empty{display:none}
+/* onglets */
+.tabsbar{position:relative;margin-bottom:12px}
+.tablist{position:relative;display:flex;gap:4px;padding:4px;background:var(--s2);border:1px solid var(--line);border-radius:10px;overflow-x:auto;scrollbar-width:none;scroll-behavior:smooth}
+.tablist::-webkit-scrollbar{display:none}
+.tab{flex:1 0 auto;min-height:36px;border:0;border-radius:7px;background:none;color:var(--muted);font-size:13px;cursor:pointer;padding:6px 12px;line-height:1.25;white-space:nowrap;transition:background .2s,color .2s}
 .tab small{display:block;font-size:11.5px;color:var(--dim)}
 .tab:hover{color:var(--fg)}
 .tab[aria-selected=true]{background:var(--s1);color:var(--fg);box-shadow:0 0 0 1px var(--line2)}
 .tab[aria-selected=true] small{color:var(--muted)}
-.tab:disabled{opacity:.35;cursor:default}
-.other{display:none;gap:10px;align-items:center;flex-wrap:wrap}
-.other.on{display:flex}
-.other input{min-height:44px}
-.board{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.col{padding:8px;min-width:0}
-.col h2{margin:4px 6px 8px;display:flex;align-items:center;gap:8px;font:500 13px/1.3 var(--f);color:var(--fg)}
-.col h2 .n{margin-left:auto;color:var(--dim);font-weight:400}
-.col h2 button{all:unset;display:flex;align-items:center;gap:8px;width:100%;cursor:default}
-.col .slide{grid-template-rows:1fr}
-.col .slide>div{opacity:1}
-.fl input[type=date],.other input[type=date]{background:var(--s2);border:1px solid var(--line);border-radius:7px;color:var(--fg)}
-.calm{margin:12px 2px 0;font-size:13px;color:var(--muted);display:flex;gap:8px;align-items:flex-start}
-.calm .dot{margin-top:6px}
-.list{display:grid;gap:6px;min-height:52px}
-.empty{font-size:12.5px;color:var(--dim);padding:14px 8px;text-align:center;border:1px dashed var(--line);border-radius:8px}
-.card{text-align:left;width:100%;min-height:44px;background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;cursor:pointer;display:grid;gap:3px;transition:border-color .2s,background .2s}
-.card:hover{border-color:var(--line2);background:#1b1e23}
-.card b{color:var(--fg);font-weight:500;font-size:13px;line-height:1.4}
-.card i{font-style:normal;font-size:12px;color:var(--dim)}
-.card.moved{border-color:var(--accent)}
+.arr{position:absolute;top:1px;bottom:1px;width:40px;border:0;color:var(--fg);font-size:16px;cursor:pointer;display:none;z-index:2}
+.arr.on{display:block}
+.arr.l{left:1px;border-radius:10px 0 0 10px;background:linear-gradient(90deg,var(--s2) 55%,transparent)}
+.arr.r{right:1px;border-radius:0 10px 10px 0;background:linear-gradient(270deg,var(--s2) 55%,transparent)}
+/* panneau */
+.sum{margin:2px 2px 12px;font-size:14px;color:var(--fg);line-height:1.5}
+.sum span{color:var(--muted)}
+.other{padding:12px 14px;margin-bottom:12px}
+.grp{margin-bottom:10px;overflow:hidden}
+.grp>summary{list-style:none;display:flex;align-items:center;gap:9px;padding:0 14px;min-height:44px;cursor:pointer;font-weight:500;font-size:13.5px;color:var(--fg);border-radius:10px}
+.grp>summary::-webkit-details-marker{display:none}
+.grp>summary .n{color:var(--dim);font-weight:400}
+.grp>summary::after{content:"";margin-left:auto;width:6px;height:6px;border-right:1.5px solid var(--dim);border-bottom:1.5px solid var(--dim);transform:rotate(45deg);transition:transform .25s var(--ease)}
+.grp[open]>summary::after{transform:rotate(-135deg)}
+.grp>summary:hover{background:var(--s2)}
+.rows{border-top:1px solid var(--line)}
+.row+.row{border-top:1px solid var(--line)}
+.sub{padding:10px 14px 4px;font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase}
+.row+.sub{border-top:1px solid var(--line);margin-top:0}
+.rh{all:unset;box-sizing:border-box;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 14px;align-items:center;width:100%;padding:11px 14px;min-height:44px;cursor:pointer;transition:background .2s}
+.rh:hover{background:var(--s2)}
+.rh:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.rh b{color:var(--fg);font-weight:500;font-size:13.5px;line-height:1.4}
+.rh i{grid-column:1;font-style:normal;font-size:12px;color:var(--dim)}
+.rh .tag{color:var(--ins)}
+.rh .chev{grid-row:1/span 2;grid-column:2;width:6px;height:6px;border-right:1.5px solid var(--dim);border-bottom:1.5px solid var(--dim);transform:rotate(45deg);transition:transform .25s var(--ease);margin-right:4px}
+.row.open .rh .chev{transform:rotate(-135deg)}
+.det{padding:0 14px 0 14px;display:grid;gap:10px}
+.det>div:last-child{padding-bottom:14px}
+.det .k{font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase;margin-bottom:2px}
+.det p{margin:0;line-height:1.55;font-size:13px}
+.det .todo{color:var(--fg)}
 .how{margin:14px 2px 0;font-size:12.5px;color:var(--muted)}
-.how summary{cursor:pointer;color:var(--muted);width:max-content;max-width:100%}
+.how summary{cursor:pointer;width:max-content;max-width:100%;min-height:24px}
 .how summary:hover{color:var(--fg)}
 .how ol{margin:8px 0 0;padding-left:20px;color:var(--text);display:grid;gap:3px}
 .foot{margin:12px 2px 0;font-size:12px;color:var(--dim)}
-/* tiroir */
-.scrim{position:fixed;inset:0;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .25s;z-index:20}
-.scrim.on{opacity:1;pointer-events:auto}
-.drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,100vw);background:var(--s1);border-left:1px solid var(--line2);z-index:21;transform:translateX(100%);transition:transform .3s var(--ease),visibility 0s .3s;visibility:hidden;display:flex;flex-direction:column;padding-right:env(safe-area-inset-right,0px)}
-.drawer.on{transform:none;visibility:visible;transition:transform .3s var(--ease)}
-.dh{display:flex;align-items:flex-start;gap:12px;padding:18px 18px 12px;border-bottom:1px solid var(--line)}
-.dh h3{margin:0;font:600 15px/1.4 var(--f);color:var(--fg);flex:1}
-.x{width:44px;height:44px;margin:-10px -10px 0 0;border:0;background:none;color:var(--muted);font-size:22px;border-radius:8px;cursor:pointer;flex:none}
-.x:hover{color:var(--fg);background:var(--s2)}
-.db{padding:16px 18px;overflow:auto;display:grid;gap:16px;align-content:start}
-.db p{margin:0;line-height:1.55}
-.db .k{font-size:11.5px;color:var(--dim);letter-spacing:.04em;text-transform:uppercase;margin-bottom:4px}
-.steps{display:grid;gap:0;margin:0;padding:0;list-style:none}
-.steps li{display:grid;grid-template-columns:14px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 0;border-top:1px solid var(--line);font-size:13px}
-.steps li:first-child{border-top:0}
-.steps li.now{color:var(--fg)}
-.steps li span:last-child{color:var(--muted)}
-.steps li.now span:last-child{color:var(--fg)}
-/* toasts empilés */
-.toasts{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));display:grid;gap:8px;z-index:30;width:min(360px,calc(100vw - 32px))}
-.ts{display:flex;gap:10px;align-items:flex-start;background:var(--s2);border:1px solid var(--line2);border-radius:9px;padding:10px 6px 10px 12px;font-size:13px;color:var(--fg);box-shadow:0 8px 24px rgba(0,0,0,.35);animation:tin .25s var(--ease)}
-.ts .dot{margin-top:6px}
-.ts p{margin:0;flex:1;line-height:1.45}
-.ts button{border:0;background:none;color:var(--muted);width:32px;height:32px;border-radius:6px;cursor:pointer;flex:none;font-size:17px;margin-top:-5px}
-.ts button:hover{color:var(--fg);background:#20242a}
+/* toasts : en haut à droite sur grand écran, en bas au centre sur petit */
+.toasts{position:fixed;top:16px;right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:8px;z-index:30;width:min(360px,calc(100vw - 32px))}
+.ts{display:flex;gap:8px;align-items:center;background:var(--s2);border:1px solid var(--line2);border-radius:9px;padding:6px 6px 6px 12px;font-size:13px;color:var(--fg);box-shadow:0 8px 24px rgba(0,0,0,.35);animation:tin .25s var(--ease)}
+.ts p{margin:0;flex:1;line-height:1.45;padding:4px 0}
+.ts .act{border:1px solid var(--line2);background:none;color:var(--fg);border-radius:6px;min-height:28px;padding:0 10px;cursor:pointer;font-size:12.5px}
+.ts .act:hover{background:#20242a}
+.ts .x{border:0;background:none;color:var(--muted);width:28px;height:28px;border-radius:6px;cursor:pointer;flex:none;font-size:17px}
+.ts .x:hover{color:var(--fg);background:#20242a}
 .ts.out{opacity:0;transition:opacity .2s}
-@keyframes tin{from{opacity:0;transform:translateY(6px)}}
-@media (max-width:760px){
-  .board{grid-template-columns:minmax(0,1fr)}
-  .col h2 button{cursor:pointer;min-height:36px}
-  .col h2 button::after{content:"";width:6px;height:6px;border-right:1.5px solid var(--dim);border-bottom:1.5px solid var(--dim);transform:rotate(45deg);margin:0 4px 3px 4px;transition:transform .25s var(--ease)}
-  .col.shut h2 button::after{transform:rotate(-135deg);margin-bottom:-3px}
-  .col.shut .slide{grid-template-rows:0fr}
-  .col.shut .slide>div{opacity:0}
-}
-@media (max-width:560px){
-  .fl{grid-template-columns:minmax(0,1fr)} .hint{grid-column:1}
-  .tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
-  .tab:last-child{grid-column:1/-1}
+@keyframes tin{from{opacity:0;transform:translateY(-6px)}}
+@media (max-width:640px){
+  .toasts{top:auto;right:16px;left:16px;width:auto;bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+  @keyframes tin{from{opacity:0;transform:translateY(6px)}}
+  /* cibles tactiles : 44 px au moins */
+  .f input[type=date],.tab{min-height:44px}
+  .f input[type=date]{width:100%}
+  .ts .act{min-height:44px} .ts .x{width:44px;height:44px}
+  .how summary{min-height:44px;display:flex;align-items:center}
+  .tab{flex:0 0 auto}
 }
 </style>
 
-<div class="wrap">
+<div class="wrap narrow">
   <div class="ctx">Déontologie et droit électoral · moyens du mandat et moyens de campagne</div>
-  <h1>Ce que vous pouvez faire, moment par moment</h1>
+  <h1>Avant l'élection</h1>
+  <p class="lead" id="lead"></p>
 
-  <section class="panel form" aria-label="Dates">
-    <div class="fl">
+  <section class="panel setup" aria-label="Scrutin">
+    <div class="f">
       <label for="el">Date du scrutin</label>
-      <input type="date" id="el" value="2027-06-13" aria-describedby="elh">
+      <input type="date" id="el" value="2027-06-13" aria-describedby="elh ele">
       <p class="hint" id="elh"></p>
+      <p class="error" id="ele" role="alert"></p>
     </div>
-    <div class="tabs" role="tablist" aria-label="Moment examiné" id="tabs"></div>
-    <div class="other" id="other"><label for="dx" style="font-size:13px;color:var(--muted)">Date précise</label><input type="date" id="dx"><span class="hint" id="dxh" style="grid-column:auto"></span></div>
   </section>
 
-  <div class="board" id="board" role="tabpanel" aria-live="off"></div>
+  <div class="tabsbar">
+    <button class="arr l" id="al" aria-label="Faire défiler les moments vers la gauche" tabindex="-1">‹</button>
+    <div class="tablist" role="tablist" aria-label="Moment examiné" id="tabs"></div>
+    <button class="arr r" id="ar" aria-label="Faire défiler les moments vers la droite" tabindex="-1">›</button>
+  </div>
 
-  <p class="calm"><span class="dot ok"></span>L'activité parlementaire courante (questions, amendements, interventions) reste permise jusqu'au scrutin.</p>
+  <div role="tabpanel" id="panel" aria-labelledby="">
+    <div class="panel other f" id="other" hidden>
+      <label for="dx">Date à examiner</label>
+      <input type="date" id="dx" aria-describedby="dxh dxe">
+      <p class="hint" id="dxh"></p>
+      <p class="error" id="dxe" role="alert"></p>
+    </div>
+    <p class="sum" id="sum"></p>
+    <div id="groups"></div>
+  </div>
+
   <details class="how"><summary>Comment la période des six mois est-elle calculée ?</summary><ol id="how"></ol></details>
   <p class="foot">Repères simplifiés tirés du code électoral et des avis du déontologue. Ils ne remplacent ni le guide du candidat ni une saisine du déontologue.</p>
 </div>
-
-<div class="scrim" id="scrim"></div>
-<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="dt" tabindex="-1">
-  <div class="dh"><h3 id="dt"></h3><button class="x" id="dx-close" aria-label="Fermer">×</button></div>
-  <div class="db" id="db"></div>
-</aside>
-<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="sr" aria-live="polite" id="live"></div>
+<div class="toasts" id="toasts"></div>
 
 <script>
 const TODAY=new Date(2026,10,10), DAY=864e5;
 const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 const fs=d=>d.toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"}).replace(/^1 /,"1er ");
-const fsy=d=>d.toLocaleDateString("fr-FR",{day:"numeric",month:"short"}).replace(/^1 /,"1er ");
-const LAB={ok:"Permis",warn:"À encadrer",err:"Interdit"};
+const fsh=d=>d.toLocaleDateString("fr-FR",{day:"numeric",month:"short"}).replace(/^1 /,"1er ");
 const MONTHS=["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+const LAB={ok:"Permis",warn:"À encadrer",err:"Interdit"};
+const PL={ok:"permises",warn:"à encadrer",err:"interdites"};
+// moteur de la maquette d'origine : chaque règle donne la date à laquelle le régime change
 function rules(E){
   const six=new Date(E.getFullYear(),E.getMonth()-6,1), veille=new Date(E-DAY);
   return {six,veille,list:[
-   {t:"Publications sponsorisées et encarts publicitaires",n:"publicités payantes",s:"Toute publicité commerciale à des fins de propagande électorale.",todo:`Arrêtez les campagnes payantes avant le ${fs(six)}. Les publications non sponsorisées restent possibles jusqu'à la veille.`,ref:"Code électoral, art. L. 52-1",at:[[six,"err"]]},
-   {t:"Lettre d'information payée par l'avance de frais de mandat",n:"lettre d'information",s:"Elle peut être requalifiée en dépense électorale si elle promeut le candidat.",todo:"Contenu informatif sur le travail parlementaire, sans appel au vote. En cas de doute, faites-la payer par le mandataire.",ref:"Avis du déontologue",at:[[six,"warn"]]},
-   {t:"Bilan de mandat imprimé et diffusé",n:"bilan de mandat",s:"Même risque ; un bilan neutre, déjà habituel, reste possible.",todo:"Gardez le format et le rythme des années précédentes.",ref:"Code électoral, art. L. 52-1, al. 2 ; avis du déontologue",at:[[six,"warn"]]},
-   {t:"Numéro d'appel gratuit",n:"numéro vert",s:"Interdit au profit d'un candidat pendant la même période.",todo:"Suspendez-le, ou réservez-le aux demandes adressées à la permanence.",ref:"Code électoral, art. L. 50-1",at:[[six,"err"]]},
-   {t:"Dépenses servant la campagne",n:"dépenses de campagne",s:"Elles entrent dans le compte de campagne.",todo:"Faites-les régler par le mandataire et gardez les justificatifs.",ref:"Code électoral, art. L. 52-4",at:[[six,"warn"]]},
-   {t:"Messages et publications de propagande",n:"propagande",s:"Plus aucun message de propagande, y compris sur les réseaux sociaux.",todo:`Programmez la dernière publication avant le ${fs(veille)} à zéro heure.`,ref:"Code électoral, art. L. 49",at:[[veille,"err"]]},
-   {t:"Publication de sondages",n:"sondages",s:"Interdite la veille et le jour du scrutin.",todo:"Ne relayez aucun sondage à partir de la veille, même publié ailleurs.",ref:"Loi du 19 juillet 1977, art. 11",at:[[veille,"err"]]},
-   {t:"Activité parlementaire courante",n:"activité parlementaire",s:"Questions, amendements, interventions : rien ne change.",todo:"Rien à changer.",ref:"",at:[]},
+   {t:"Publications sponsorisées et encarts publicitaires",s:"Toute publicité commerciale à des fins de propagande électorale.",todo:`Arrêtez les campagnes payantes avant le ${fs(six)}. Les publications non sponsorisées restent possibles jusqu'à la veille.`,ref:"Code électoral, art. L. 52-1",at:[[six,"err"]]},
+   {t:"Lettre d'information payée par l'avance de frais de mandat",s:"Elle peut être requalifiée en dépense électorale si elle promeut le candidat.",todo:"Contenu informatif sur le travail parlementaire, sans appel au vote. En cas de doute, faites-la payer par le mandataire.",ref:"Avis du déontologue",at:[[six,"warn"]]},
+   {t:"Bilan de mandat imprimé et diffusé",s:"Même risque ; un bilan neutre, déjà habituel, reste possible.",todo:"Gardez le format et le rythme des années précédentes.",ref:"Code électoral, art. L. 52-1, al. 2 ; avis du déontologue",at:[[six,"warn"]]},
+   {t:"Numéro d'appel gratuit",s:"Interdit au profit d'un candidat pendant la même période.",todo:"Suspendez-le, ou réservez-le aux demandes adressées à la permanence.",ref:"Code électoral, art. L. 50-1",at:[[six,"err"]]},
+   {t:"Dépenses servant la campagne",s:"Elles entrent dans le compte de campagne, à payer par le mandataire.",todo:"Faites-les régler par le mandataire et gardez les justificatifs.",ref:"Code électoral, art. L. 52-4",at:[[six,"warn"]]},
+   {t:"Messages et publications de propagande",s:"Plus aucun message de propagande, y compris sur les réseaux sociaux.",todo:`Programmez la dernière publication avant le ${fs(veille)} à zéro heure.`,ref:"Code électoral, art. L. 49",at:[[veille,"err"]]},
+   {t:"Publication de sondages",s:"Interdite la veille et le jour du scrutin.",todo:"Ne relayez aucun sondage à partir de la veille, même publié ailleurs.",ref:"Loi du 19 juillet 1977, art. 11",at:[[veille,"err"]]},
+   {t:"Activité parlementaire courante",s:"Questions, amendements, interventions : rien ne change.",todo:"Rien à changer.",ref:"",at:[]},
   ]};
 }
 const regime=(r,d)=>{let s="ok";for(const [dt,st] of r.at) if(d>=dt) s=st; return s};
-const parse=v=>{const d=new Date(v+"T00:00");return isNaN(d)?null:d};
-let E=parse($("#el").value), R=rules(E), tab="today", X=new Date(TODAY), prevX=null;
+const parse=v=>{if(!v) return null;const d=new Date(v+"T00:00");return isNaN(d)?null:d};
+const store={get(k){try{return sessionStorage.getItem(k)}catch(e){return null}},set(k,v){try{sessionStorage.setItem(k,v)}catch(e){}}};
 
+let E=parse(store.get("ce-el"))||new Date(2027,5,13); if(E<=TODAY) E=new Date(2027,5,13);
+let R=rules(E), tab=store.get("ce-tab")||"today", custom=parse(store.get("ce-dx"));
+const opened=new Set(); // lignes dépliées (par index)
+const userOpen={};     // groupes ouverts ou fermés par l'utilisateur
+$("#el").value=iso(E);
+
+// moments : aujourd'hui, ouverture des six mois (si à venir), veille, jour du scrutin, autre date — 5 onglets au plus
 function moments(){
-  return [
-    {k:"today",l:"Aujourd'hui",d:TODAY},
-    {k:"six",l:"Six mois ouverts",d:R.six},
-    {k:"veille",l:"Veille",d:R.veille},
-    {k:"jour",l:"Jour du scrutin",d:E},
-    {k:"other",l:"Autre date",d:null},
-  ];
+  const m=[{k:"today",l:"Aujourd'hui",d:TODAY,ref:null}];
+  if(R.six>TODAY) m.push({k:"six",l:"Six mois",d:R.six,ref:"today"});
+  m.push({k:"veille",l:"Veille",d:R.veille,ref:R.six>TODAY?"six":"today"});
+  m.push({k:"jour",l:"Scrutin",d:E,ref:"veille"});
+  m.push({k:"other",l:"Autre date",d:null,ref:"today"});
+  return m;
 }
+const mom=k=>moments().find(m=>m.k===k);
+function dateOf(k){const m=mom(k);if(!m) return TODAY;if(k==="other") return custom&&custom>=TODAY&&custom<=E?custom:TODAY;return m.d}
+
 function renderTabs(){
-  $("#tabs").innerHTML=moments().map(m=>{const past=m.d&&m.d<TODAY&&m.k!=="today";
-    return `<button class="tab" role="tab" data-k="${m.k}" aria-selected="${tab===m.k}" tabindex="${tab===m.k?0:-1}" ${past?"disabled":""}>${m.l}<small>${m.d?(m.k==="today"?fsy(m.d):fsy(m.d)):"choisir…"}</small></button>`}).join("");
-  $("#other").classList.toggle("on",tab==="other");
+  if(!mom(tab)) tab="today";
+  $("#tabs").innerHTML=moments().map(m=>`<button class="tab" role="tab" id="tab-${m.k}" data-k="${m.k}" aria-selected="${tab===m.k}" aria-controls="panel" tabindex="${tab===m.k?0:-1}">${m.l}<small>${m.d?fsh(m.d):(custom?fsh(dateOf("other")):"choisir")}</small></button>`).join("");
+  $("#panel").setAttribute("aria-labelledby","tab-"+tab);
+  updateArrows();
 }
-function renderBoard(){
+function renderPanel(){
+  const m=mom(tab), X=dateOf(tab), refD=m.ref?dateOf(m.ref):null;
+  $("#other").hidden=tab!=="other";
+  if(tab==="other"){const dx=$("#dx");dx.min=iso(TODAY);dx.max=iso(E);if(!dx.value) dx.value=iso(X);
+    $("#dxh").textContent=`Entre le ${fs(TODAY)} et le ${fs(E)}.`}
   const groups={err:[],warn:[],ok:[]};
-  R.list.forEach((r,i)=>{if(r.at.length)groups[regime(r,X)].push(i)});
-  const shut=new Set($$(".col.shut").map(c=>c.dataset.s));
-  $("#board").innerHTML=["err","warn","ok"].map(s=>`<section class="panel col ${shut.has(s)?"shut":""}" data-s="${s}">
-    <h2><button aria-expanded="${!shut.has(s)}"><span class="dot ${s}"></span>${LAB[s]}<span class="n">${groups[s].length}</span></button></h2>
-    <div class="slide"><div><div class="list">${groups[s].length?groups[s].map(i=>{const r=R.list[i], nx=r.at.find(([dt])=>dt>X), moved=prevX&&regime(r,prevX)!==s;
-      return `<button class="card ${moved?"moved":""}" data-i="${i}"><b>${r.t}</b><i>${nx?`${LAB[nx[1]].toLowerCase()} dès le ${fs(nx[0])}`:moved?`était ${LAB[regime(r,prevX)].toLowerCase()}`:"sans changement d'ici le scrutin"}</i></button>`}).join(""):`<div class="empty">Aucune activité</div>`}</div></div></div></section>`).join("");
-  $("#how").innerHTML=`<li>Le scrutin a lieu en ${MONTHS[E.getMonth()]} ${E.getFullYear()}.</li><li>On remonte de six mois : ${MONTHS[R.six.getMonth()]} ${R.six.getFullYear()}.</li><li>La période s'ouvre le premier jour de ce mois : le ${fs(R.six)}, quel que soit le jour du scrutin dans son mois.</li>`;
+  R.list.forEach((r,i)=>groups[regime(r,X)].push(i));
+  const changed=refD?R.list.filter(r=>regime(r,refD)!==regime(r,X)).length:0;
+  const refLab=m.ref==="today"?"aujourd'hui":m.ref==="six"?"l'ouverture des six mois":"la veille";
+  $("#sum").innerHTML=`Au ${fs(X)}. <span>${refD&&+refD!==+X?(changed?`${changed} activité${changed>1?"s changent":" change"} de régime par rapport à ${refLab}.`:`Rien ne change par rapport à ${refLab}.`):"Point de départ."}</span>`;
+  // Permis replié par défaut (divulgation progressive) ; l'utilisateur garde ses choix d'ouverture
+  // groupes vides omis ; Permis replié sauf s'il est seul
+  const shown=["err","warn","ok"].filter(s=>groups[s].length);
+  $("#groups").innerHTML=shown.map(s=>{const ids=groups[s], isOpen=shown.length===1||(s in userOpen?userOpen[s]:s!=="ok");
+    return `<details class="panel grp" data-s="${s}" ${isOpen?"open":""}><summary><span class="dot ${s}"></span>${LAB[s]} <span class="n">${ids.length}</span></summary>
+      <div class="rows">${chunks(ids,X).map(([lab,is],_,all)=>(all.length>1||lab!==UNTIL?`<div class="sub">${lab}</div>`:"")+is.map(i=>row(i,X,refD)).join("")).join("")}</div></details>`}).join("");
+  $("#how").innerHTML=`<li>Le scrutin a lieu en ${MONTHS[E.getMonth()]} ${E.getFullYear()}.</li><li>On remonte de six mois : ${MONTHS[R.six.getMonth()]} ${R.six.getFullYear()}.</li><li>La période s'ouvre le premier jour de ce mois, le ${fs(R.six)}, quel que soit le jour du scrutin.</li>`;
+  $("#live").textContent=`${fs(X)} : ${groups.err.length} ${PL.err}, ${groups.warn.length} ${PL.warn}, ${groups.ok.length} ${PL.ok}.`;
 }
-function announce(){
-  if(!prevX) return;
-  const ch=R.list.filter(r=>regime(r,prevX)!==regime(r,X));
-  if(!ch.length){pushToast("ok",`Rien ne change entre le ${fs(prevX)} et le ${fs(X)}.`);return}
-  const by={};ch.forEach(r=>{const s=regime(r,X);(by[s]=by[s]||[]).push(r)});
-  Object.entries(by).forEach(([s,rs])=>pushToast(s,`${rs.length} activité${rs.length>1?"s passent":" passe"} à « ${LAB[s].toLowerCase()} » : ${rs.map(r=>r.n).join(", ")}.`));
+// loi de Miller : au plus 7 lignes d'affilée ; on sous-groupe par date du prochain changement
+const UNTIL="Jusqu'au scrutin";
+const nextAt=(r,X)=>r.at.find(([dt])=>dt>X);
+function chunks(ids,X){const m=new Map();
+  ids.forEach(i=>{const nx=nextAt(R.list[i],X), k=nx?+nx[0]:Infinity;(m.get(k)||m.set(k,[]).get(k)).push(i)});
+  return [...m.entries()].sort((a,b)=>a[0]-b[0]).map(([k,is])=>[k===Infinity?UNTIL:`Change le ${fs(new Date(k))}`,is]);
 }
-function pushToast(s,m){
+function row(i,X,refD){
+  const r=R.list[i], s=regime(r,X), nx=r.at.find(([dt])=>dt>X), was=refD?regime(r,refD):s, op=opened.has(i);
+  const parts=[];if(refD&&was!==s) parts.push(`<span class="tag">Nouveau</span> · était ${LAB[was].toLowerCase()}`);
+  if(nx) parts.push(`devient ${LAB[nx[1]].toLowerCase()}`);
+  const line=parts.join(" · ");
+  return `<div class="row ${op?"open":""}" data-i="${i}">
+    <button class="rh" aria-expanded="${op}" aria-controls="d${i}"><b>${r.t}</b><span class="chev" aria-hidden="true"></span>${line?`<i>${line}</i>`:""}</button>
+    <div class="slide" id="d${i}"><div><div class="det">
+      <div><div class="k">Pourquoi</div><p>${r.s}</p></div>
+      <div><div class="k">Que faire</div><p class="todo">${r.todo}</p></div>
+      ${r.ref?`<div><div class="k">Référence</div><p style="color:var(--muted)">${r.ref}</p></div>`:""}
+    </div></div></div></div>`;
+}
+function renderLead(){
+  const toSix=Math.round((R.six-TODAY)/DAY);
+  $("#lead").innerHTML=toSix>0?`Dans ${toSix} jours, le ${fs(R.six)}, la période des six mois s'ouvre. <span>Choisissez un moment pour voir ce qui reste permis.</span>`
+    :`La période des six mois est ouverte depuis le ${fs(R.six)}. <span>Choisissez un moment pour voir ce qui reste permis.</span>`;
+  $("#elh").textContent=E.getDay()?`Le ${fs(E)} n'est pas un dimanche : vérifiez le décret de convocation.`:`Dimanche ${fs(E)}.`;
+}
+function renderAll(){renderLead();renderTabs();renderPanel();revealTab($("#tab-"+tab))}
+
+// onglets : flèches gauche/droite, Début/Fin, activation automatique, tabindex itinérant
+function selectTab(k,focus){
+  tab=k;store.set("ce-tab",k);renderTabs();renderPanel();
+  const b=$(`#tab-${k}`);if(focus) b.focus({preventScroll:true});revealTab(b);
+}
+$("#tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(b) selectTab(b.dataset.k)});
+$("#tabs").addEventListener("keydown",e=>{
+  if(!["ArrowLeft","ArrowRight","Home","End"].includes(e.key)) return;
+  e.preventDefault();const ks=moments().map(m=>m.k),i=ks.indexOf(tab);
+  const j=e.key==="Home"?0:e.key==="End"?ks.length-1:(i+(e.key==="ArrowRight"?1:-1)+ks.length)%ks.length;
+  selectTab(ks[j],true);
+});
+// garde l'onglet actif entièrement visible, hors des flèches (40 px)
+function revealTab(b){const el=$("#tabs"),pad=44,l=b.offsetLeft,r=l+b.offsetWidth;
+  if(l<el.scrollLeft+pad) el.scrollLeft=Math.max(0,l-pad); else if(r>el.scrollLeft+el.clientWidth-pad) el.scrollLeft=r-el.clientWidth+pad}
+function updateArrows(){const el=$("#tabs");$("#al").classList.toggle("on",el.scrollLeft>0);$("#ar").classList.toggle("on",el.scrollLeft+el.clientWidth<el.scrollWidth-1)}
+$("#tabs").addEventListener("scroll",updateArrows,{passive:true});
+addEventListener("resize",updateArrows);
+$("#al").onclick=()=>$("#tabs").scrollBy({left:-200,behavior:"smooth"});
+$("#ar").onclick=()=>$("#tabs").scrollBy({left:200,behavior:"smooth"});
+
+// lignes dépliables en place : Entrée/Espace (bouton natif), flèches haut/bas entre les en-têtes, Échap replie
+function heads(){return $$("#groups summary, #groups .rh").filter(h=>h.offsetParent)}
+$("#groups").addEventListener("click",e=>{const sm=e.target.closest("summary");if(sm){const g=sm.parentElement;userOpen[g.dataset.s]=!g.open;return}
+  const h=e.target.closest(".rh");if(!h) return;
+  const rw=h.closest(".row"),i=+rw.dataset.i,op=!rw.classList.contains("open");
+  rw.classList.toggle("open",op);h.setAttribute("aria-expanded",op);op?opened.add(i):opened.delete(i)});
+$("#groups").addEventListener("keydown",e=>{
+  const h=e.target.closest("summary,.rh");
+  if(h&&(e.key==="ArrowDown"||e.key==="ArrowUp")){e.preventDefault();const hs=heads(),i=hs.indexOf(h);const n=hs[i+(e.key==="ArrowDown"?1:-1)];n&&n.focus()}
+  if(e.key==="Escape"){const rw=e.target.closest(".row.open");if(rw){e.stopPropagation();rw.querySelector(".rh").click();rw.querySelector(".rh").focus()}}
+});
+
+// formulaires : validation à la sortie du champ (jamais à la frappe), message « champ — cause — correction »
+function fieldError(inp,errEl,msg){inp.toggleAttribute("aria-invalid",!!msg);if(msg) inp.setAttribute("aria-invalid","true");errEl.textContent=msg||""}
+function commitScrutin(){
+  const inp=$("#el"),v=parse(inp.value);
+  if(!v){fieldError(inp,$("#ele"),"Date du scrutin incomplète : saisissez le jour, le mois et l'année.");return}
+  if(v<=TODAY){fieldError(inp,$("#ele"),`Date du scrutin déjà passée : choisissez une date après le ${fs(TODAY)}.`);return}
+  fieldError(inp,$("#ele"),"");
+  if(+v===+E) return;
+  const before=E;setScrutin(v);
+  pushToast(`Scrutin du ${fs(E)} : période ouverte le ${fs(R.six)}.`,{label:"Annuler",run:()=>{setScrutin(before);$("#el").value=iso(before);fieldError($("#el"),$("#ele"),"");$("#el").focus()}});
+}
+function setScrutin(v){E=v;R=rules(E);store.set("ce-el",iso(E));$("#dx").value="";renderAll()}
+$("#el").addEventListener("blur",commitScrutin);
+$("#el").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();commitScrutin()}});
+$("#el").addEventListener("input",()=>{if($("#ele").textContent&&parse($("#el").value)>TODAY) fieldError($("#el"),$("#ele"),"")});
+function commitOther(){
+  const inp=$("#dx"),v=parse(inp.value);
+  if(!v){fieldError(inp,$("#dxe"),"Date à examiner incomplète : saisissez le jour, le mois et l'année.");return}
+  if(v<TODAY||v>E){fieldError(inp,$("#dxe"),`Date à examiner hors période : choisissez entre le ${fs(TODAY)} et le ${fs(E)}.`);return}
+  fieldError(inp,$("#dxe"),"");custom=v;store.set("ce-dx",iso(v));renderTabs();renderPanel();
+}
+$("#dx").addEventListener("blur",commitOther);
+$("#dx").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();commitOther()}});
+
+// toasts : role=status (succès), 5 s puis disparition, 3 au plus, bouton de fermeture visible, Échap ferme le toast focalisé
+function pushToast(msg,action){
   const box=$("#toasts");while(box.children.length>=3) box.firstElementChild.remove();
-  const t=document.createElement("div");t.className="ts";t.innerHTML=`<span class="dot ${s}"></span><p>${esc(m)}</p><button aria-label="Fermer la notification">×</button>`;
+  const t=document.createElement("div");t.className="ts";t.setAttribute("role","status");t.setAttribute("aria-live","polite");
+  t.innerHTML=`<p>${esc(msg)}</p>${action?`<button class="act">${action.label}</button>`:""}<button class="x" aria-label="Fermer la notification">×</button>`;
   const kill=()=>{t.classList.add("out");setTimeout(()=>t.remove(),200)};
-  t.querySelector("button").onclick=kill;let tm=setTimeout(kill,5000);
-  t.onmouseenter=()=>clearTimeout(tm);t.onmouseleave=()=>{tm=setTimeout(kill,2500)};
+  t.querySelector(".x").onclick=kill;
+  if(action) t.querySelector(".act").onclick=()=>{action.run();kill()};
+  t.addEventListener("keydown",e=>{if(e.key==="Escape"){e.stopPropagation();kill();$("#el").focus()}});
+  let tm=setTimeout(kill,5000);
+  const hold=()=>clearTimeout(tm), go=()=>{clearTimeout(tm);tm=setTimeout(kill,5000)};
+  t.addEventListener("mouseenter",hold);t.addEventListener("mouseleave",go);t.addEventListener("focusin",hold);t.addEventListener("focusout",go);
   box.append(t);
 }
-function setX(d){prevX=X;X=d;renderBoard();announce();$$(".card.moved").length&&setTimeout(()=>$$(".card.moved").forEach(c=>c.classList.remove("moved")),1600)}
-function selectTab(k,focus){
-  tab=k;renderTabs();
-  if(focus) $(`.tab[data-k="${k}"]`).focus();
-  if(k==="other"){const v=parse($("#dx").value);$("#dx").min=iso(TODAY);$("#dx").max=iso(E);if(!v){$("#dx").value=iso(X)};$("#dx").focus();return}
-  const m=moments().find(m=>m.k===k);setX(m.d);
-}
-$("#tabs").addEventListener("click",e=>{const b=e.target.closest(".tab");if(b&&!b.disabled)selectTab(b.dataset.k)});
-$("#tabs").addEventListener("keydown",e=>{
-  if(!["ArrowLeft","ArrowRight","Home","End"].includes(e.key))return;e.preventDefault();
-  const ts=$$(".tab:not(:disabled)"),i=ts.findIndex(t=>t.dataset.k===tab);
-  const j=e.key==="Home"?0:e.key==="End"?ts.length-1:(i+(e.key==="ArrowRight"?1:-1)+ts.length)%ts.length;selectTab(ts[j].dataset.k,true)});
-$("#dx").addEventListener("change",()=>{const v=parse($("#dx").value),h=$("#dxh");h.className="hint";h.textContent="";$("#dx").removeAttribute("aria-invalid");
-  if(!v||v<TODAY||v>E){h.className="hint err";h.textContent=`Choisissez une date entre le ${fs(TODAY)} et le ${fs(E)}.`;$("#dx").setAttribute("aria-invalid","true");return}
-  setX(v)});
-$("#el").addEventListener("change",()=>{const v=parse($("#el").value),h=$("#elh");h.className="hint";$("#el").removeAttribute("aria-invalid");
-  if(!v||v<=TODAY){h.className="hint err";h.textContent=v?`Cette date est passée : choisissez un scrutin après le ${fs(TODAY)}.`:"Date incomplète : saisissez jour, mois et année.";$("#el").setAttribute("aria-invalid","true");return}
-  E=v;R=rules(E);h.textContent=v.getDay()?`Le ${fs(v)} n'est pas un dimanche : vérifiez le décret de convocation.`:`Période des six mois ouverte le ${fs(R.six)}.`;
-  if(X>E) X=new Date(E);
-  const m=moments().find(m=>m.k===tab);prevX=null;
-  if(m&&m.d&&m.d>=TODAY) X=m.d; else if(m&&m.d){tab="today";X=new Date(TODAY)}
-  renderTabs();renderBoard();pushToast("ok",`Scrutin du ${fs(E)} : période des six mois ouverte le ${fs(R.six)}.`)});
-// dépliage des colonnes (écran étroit)
-$("#board").addEventListener("click",e=>{
-  const h=e.target.closest("h2 button");if(h&&matchMedia("(max-width:760px)").matches){const c=h.closest(".col");c.classList.toggle("shut");h.setAttribute("aria-expanded",!c.classList.contains("shut"));return}
-  const c=e.target.closest(".card");if(c)openDrawer(+c.dataset.i,c)});
-// tiroir latéral
-let opener=null;
-function openDrawer(i,from){
-  opener=from;const r=R.list[i], now=regime(r,X);
-  const pts=[[TODAY,"Aujourd'hui"],...r.at.filter(([d])=>d>TODAY).map(([d])=>[d,`Dès le ${fs(d)}`])];
-  $("#dt").textContent=r.t;
-  $("#db").innerHTML=`<div><div class="k">Au ${fs(X)}</div><p style="display:flex;gap:8px;align-items:center;color:var(--fg)"><span class="dot ${now}"></span>${LAB[now]}</p></div>
-   <div><div class="k">Pourquoi</div><p>${r.s}</p></div>
-   <div><div class="k">Que faire</div><p style="color:var(--fg)">${r.todo}</p></div>
-   <div><div class="k">Régime d'ici le scrutin</div><ul class="steps">${pts.map(([d,l],j)=>{const s=regime(r,d), nxt=pts[j+1];const isNow=X>=d&&(!nxt||X<nxt[0]);return `<li class="${isNow?"now":""}"><span class="dot ${s}"></span><span>${l}</span><span>${LAB[s]}</span></li>`}).join("")}</ul></div>
-   ${r.ref?`<div><div class="k">Référence</div><p style="color:var(--muted)">${r.ref}</p></div>`:""}`;
-  $("#scrim").classList.add("on");$("#drawer").classList.add("on");setTimeout(()=>$("#dx-close").focus(),50);
-}
-function closeDrawer(){if(!$("#drawer").classList.contains("on"))return;$("#scrim").classList.remove("on");$("#drawer").classList.remove("on");opener&&opener.focus()}
-$("#scrim").onclick=closeDrawer;$("#dx-close").onclick=closeDrawer;
-document.addEventListener("keydown",e=>{
-  if(e.key==="Escape"){if($("#drawer").classList.contains("on"))closeDrawer();else $$(".ts").forEach(t=>t.remove())}
-  if(e.key==="Tab"&&$("#drawer").classList.contains("on")){e.preventDefault();$("#dx-close").focus()}
-});
-$("#elh").textContent=`Période des six mois ouverte le ${fs(R.six)}.`;
-renderTabs();renderBoard();
+
+renderAll();
 </script>
