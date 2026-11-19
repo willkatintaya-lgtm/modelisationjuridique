@@ -180,6 +180,9 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 .ev-row .t{display:block;color:var(--dim)}
 .ev-row:hover{color:var(--text)}
 .ev-row:hover .ico{color:var(--text)}
+/* la ligne porte seule l'identité de l'amendement ; ouverte, elle fonce un peu */
+.ev.open > .ev-row{color:var(--text)}
+.fiche>:first-child{margin-top:0}
 .ev.open > .ev-row .ico{color:var(--fg);transform:rotate(45deg)}
 .fiche{margin:2px 0 10px 8px;padding:12px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px}
 .fiche .head{display:flex;align-items:center;gap:8px;color:var(--dim);flex-wrap:wrap}
@@ -519,7 +522,6 @@ function evHTML(a,prevV,stage){
     <button class="ev-row" type="button"><span class="ico">${PLUS}</span>
       <span><span class="lg" style="--g:${g.color}">${g.name[0]}</span><b>${g.name}</b> ${what}<span class="t">${second}</span></span></button>
     <div class="slide"><div class="inner"><div class="fiche">
-      <div class="head"><span class="lg" style="--g:${g.color}">${g.name[0]}</span><b>${g.name}</b><span>${a.num} · ${a.who}</span></div>
       ${body}
     </div></div></div>
   </div>`;
