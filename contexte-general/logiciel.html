@@ -129,10 +129,10 @@ button{font-family:inherit}
 .sheet .who{color:var(--fg);font-weight:500}
 /* toutes les cartes ont la taille de « Dépôt au Sénat » : titre en haut (deux lignes au plus), date en bas, près de l'arête */
 .sheet:not(.open){height:var(--ch,106px)}
-.sheet .meta{position:absolute;left:44px;bottom:10px;line-height:26px;color:var(--dim)}
+.sheet .meta{display:block;margin-top:2px;color:var(--dim)} /* essai : date juste sous le titre */
 .sheet.now .who{color:var(--now)}
 .sheet .meta.live,.c.h .meta.live,.pk .t.live{color:var(--now);font-weight:400;opacity:.5}
-.sheet .meta.live{right:44px;line-height:16px;bottom:15px}
+.sheet .meta.live{line-height:1.35}
 .sheet.future:hover{border-color:var(--border)}
 .sheet .hd{padding-right:30px}
 .cmpbtn{position:absolute;right:10px;top:8px;width:26px;height:26px;border-radius:6px;border:1px solid var(--border-2);background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:color .2s,background .2s}
@@ -213,9 +213,8 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 /* en-têtes et pieds collés : les cartes restent fermées pendant que le texte défile entre eux */
 .cg .c.h{position:sticky;top:0;z-index:2}
 .cg .c.f{position:sticky;bottom:0;z-index:2}
-/* un seul filet, toujours le même : juste sous l'en-tête (titre et date), dans toutes les comparaisons */
-.cg .c.h{border-bottom:1px solid var(--border)}
-.cg .c.h+.c.a,.cg .c.h+.c.h+.c.a,.cg .c.h+.c.h+.c.a+.c.a{padding-top:10px}
+.cg.ov .c.h{border-bottom:1px solid var(--border)}
+.cg.ov .c.f{border-top:1px solid var(--border)}
 @keyframes rise{from{opacity:0;transform:translateY(6px)}}
 .c{background:var(--card-2);border-left:1px solid var(--border);border-right:1px solid var(--border);padding:0 16px;min-width:0}
 .c.h{position:relative;border-top:1px solid var(--border);border-radius:8px 8px 0 0;padding-top:12px;padding-bottom:12px;display:flex;align-items:flex-start;gap:10px;padding-right:46px}
