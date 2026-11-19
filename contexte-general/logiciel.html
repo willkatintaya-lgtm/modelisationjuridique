@@ -129,10 +129,10 @@ button{font-family:inherit}
 .sheet .who{color:var(--fg);font-weight:500}
 /* toutes les cartes ont la taille de « Dépôt au Sénat » : titre en haut (deux lignes au plus), date en bas, près de l'arête */
 .sheet:not(.open){height:var(--ch,106px)}
-.sheet .meta{display:block;margin-top:2px;color:var(--dim)} /* essai : date juste sous le titre */
+.sheet .meta{position:absolute;left:44px;bottom:10px;line-height:26px;color:var(--dim)}
 .sheet.now .who{color:var(--now)}
 .sheet .meta.live,.c.h .meta.live,.pk .t.live{color:var(--now);font-weight:400;opacity:.5}
-.sheet .meta.live{line-height:1.35}
+.sheet .meta.live{right:44px;line-height:16px;bottom:15px}
 .sheet.future:hover{border-color:var(--border)}
 .sheet .hd{padding-right:30px}
 .cmpbtn{position:absolute;right:10px;top:8px;width:26px;height:26px;border-radius:6px;border:1px solid var(--border-2);background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:color .2s,background .2s}
