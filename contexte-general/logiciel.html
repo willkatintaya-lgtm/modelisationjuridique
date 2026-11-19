@@ -144,7 +144,9 @@ button{font-family:inherit}
 .sheet.open .toggle svg{transform:rotate(180deg)}
 .txt{position:relative;overflow:hidden;max-height:var(--h,0px);transition:max-height .42s var(--ease);margin:0 0 0 30px;scrollbar-width:none;font-size:13.5px;line-height:1.65}
 .txt::-webkit-scrollbar{display:none}
-.sheet.open .txt{margin-top:10px;-webkit-mask-image:linear-gradient(transparent 0,#000 12px,#000 calc(100% - 22px),transparent);mask-image:linear-gradient(transparent 0,#000 12px,#000 calc(100% - 22px),transparent)}
+.sheet.open .txt{margin-top:10px;margin-left:0;padding-left:30px}
+/* texte plus long que la carte : bords nets (pas de fondu), un filet en haut et en bas, défilement à l'intérieur */
+.sheet.open:not(.fits) .txt{border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
 .sheet.open.fits .txt{-webkit-mask-image:none;mask-image:none}
 .sheet.scrolling .txt{overflow-y:auto}
 .al{display:grid;grid-template-columns:18px 1fr;gap:0 6px;margin:0 0 .6em;padding:2px 6px 2px 0;border-radius:4px;transition:background .3s}
@@ -206,7 +208,13 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 .cmp::-webkit-scrollbar{display:none}
 .page.cmping .cmp{opacity:1;pointer-events:auto}
 .cmp-in{display:flex;align-items:center;justify-content:center;gap:14px;min-height:100%;width:max-content;min-width:100%;margin:0 auto}
-.cg{--cw:min(460px,calc((100cqw - 120px)/var(--n)));display:grid;grid-template-columns:repeat(var(--n),var(--cw));column-gap:18px;align-self:center}
+.cg{--cw:min(460px,calc((100cqw - 120px)/var(--n)));display:grid;grid-template-columns:repeat(var(--n),var(--cw));column-gap:18px;align-self:center;max-height:calc(100cqh - 96px);overflow-y:auto;scrollbar-width:none}
+.cg::-webkit-scrollbar{display:none}
+/* en-têtes et pieds collés : les cartes restent fermées pendant que le texte défile entre eux */
+.cg .c.h{position:sticky;top:0;z-index:2}
+.cg .c.f{position:sticky;bottom:0;z-index:2}
+.cg.ov .c.h{border-bottom:1px solid var(--border)}
+.cg.ov .c.f{border-top:1px solid var(--border)}
 @keyframes rise{from{opacity:0;transform:translateY(6px)}}
 .c{background:var(--card-2);border-left:1px solid var(--border);border-right:1px solid var(--border);padding:0 16px;min-width:0}
 .c.h{position:relative;border-top:1px solid var(--border);border-radius:8px 8px 0 0;padding-top:12px;padding-bottom:12px;display:flex;align-items:flex-start;gap:10px;padding-right:46px}
@@ -609,7 +617,7 @@ edges(); centerAll(); if(document.fonts) document.fonts.ready.then(()=>{ edges()
 document.querySelectorAll(".frise").forEach(fr=>{ fades(fr); fr.addEventListener("scroll",()=>fades(fr),{passive:true}); });
 
 
-const canScroll=(el,dy)=>{ for(let n=el;n&&n!==stage;n=n.parentElement){ if(n.matches&&n.matches(".list,.sheet.scrolling .txt,.cmp")&&n.scrollHeight>n.clientHeight+1){ if(dy>0?n.scrollTop+n.clientHeight<n.scrollHeight-1:n.scrollTop>0) return true; } } return false; };
+const canScroll=(el,dy)=>{ for(let n=el;n&&n!==stage;n=n.parentElement){ if(n.matches&&n.matches(".list,.sheet.scrolling .txt,.cmp,.cg")&&n.scrollHeight>n.clientHeight+1){ if(dy>0?n.scrollTop+n.clientHeight<n.scrollHeight-1:n.scrollTop>0) return true; } } return false; };
 let wy=0,wt=0,wlock=0;
 stage.addEventListener("wheel",e=>{
   if(e.ctrlKey) return;
@@ -713,6 +721,7 @@ function renderCmp(k,src){
     html+=`<div class="pickl"><div class="list">${others.map(j=>`<div class="ev"><button class="ev-row pk${STEPS[j].now?" now":""}" type="button" data-pick="${j}" aria-label="Comparer avec ${STEPS[j].stage}"><span class="ico">${CMPS}</span><span><b>${STEPS[j].stage}</b>${metaOf(STEPS[j],"t")}</span></button></div>`).join("")}</div></div>`;
   }
   box.innerHTML=html+`</div>`; box.scrollTop=0;
+  const cg=box.querySelector(".cg"); if(cg) cg.classList.toggle("ov",cg.scrollHeight>cg.clientHeight+1);
   animateCmp(box,before,listBefore,src);
 }
 const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
