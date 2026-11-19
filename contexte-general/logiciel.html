@@ -106,10 +106,13 @@ button{font-family:inherit}
 #stage{position:absolute;inset:0;overflow:hidden;touch-action:pan-x;container-type:size}
 #track{position:absolute;inset:0;transition:transform .5s var(--ease)}
 .page{position:absolute;left:0;right:0;height:100%}
-.frise{position:absolute;inset:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;scroll-behavior:smooth;
-  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 40px,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(90deg,transparent 0,#000 40px,#000 calc(100% - 40px),transparent)}
+.frise{position:absolute;inset:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;scroll-behavior:smooth}
+/* fondu seulement du côté où il reste quelque chose à voir : au bout, la première carte n'est pas estompée */
+.frise.fl{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 40px);mask-image:linear-gradient(90deg,transparent 0,#000 40px)}
+.frise.fr{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 40px),transparent)}
+.frise.fl.fr{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 40px,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(90deg,transparent 0,#000 40px,#000 calc(100% - 40px),transparent)}
 .frise::-webkit-scrollbar{display:none}
-.row{position:relative;display:flex;align-items:flex-start;width:max-content;min-height:100%;padding:24px calc(50cqw - var(--cardw) / 2) 24px} /* butées symétriques : au bout, la première ou la dernière carte s'arrête au centre, comme la carte en cours à l'ouverture */
+.row{position:relative;display:flex;align-items:flex-start;width:max-content;min-height:100%;padding:24px var(--edge,18px) 24px} /* butées : la première carte s'arrête sur l'aplomb du « A » du fil d'Ariane, la dernière à la même distance du bord droit */
 
 
 /* --- cartes d'étape --- */
@@ -567,7 +570,15 @@ function centerNow(page,smooth){
   fr.scrollLeft=s.offsetLeft+s.offsetWidth/2-fr.clientWidth/2;
   fr.style.scrollBehavior="";
 }
+// marge des butées = position du début du fil d'Ariane dans la zone principale (suit le panneau masqué ou non)
+function edges(){
+  const st=document.getElementById("stage"), cr=document.querySelector(".crumb");
+  const x=Math.round(cr.getBoundingClientRect().left-st.getBoundingClientRect().left);
+  st.style.setProperty("--edge",Math.max(16,x)+"px");
+}
+function fades(fr){ const m=fr.scrollWidth-fr.clientWidth; fr.classList.toggle("fl",fr.scrollLeft>2); fr.classList.toggle("fr",fr.scrollLeft<m-2); }
 function sizes(){
+  edges(); document.querySelectorAll(".frise").forEach(fades);
   const H=document.getElementById("stage").clientHeight;
   document.documentElement.style.setProperty("--lh",Math.max(160,H-190)+"px");
   document.querySelectorAll(".sheet.open").forEach(fit);
@@ -591,7 +602,8 @@ document.getElementById("prev").onclick=()=>go(cur-1);
 document.getElementById("next").onclick=()=>go(cur+1);
 go(1); sizes();
 const centerAll=()=>pages.forEach(p=>centerNow(p,false));
-centerAll(); if(document.fonts) document.fonts.ready.then(centerAll);
+edges(); centerAll(); if(document.fonts) document.fonts.ready.then(()=>{ edges(); centerAll(); document.querySelectorAll(".frise").forEach(fades); });
+document.querySelectorAll(".frise").forEach(fr=>{ fades(fr); fr.addEventListener("scroll",()=>fades(fr),{passive:true}); });
 
 
 const canScroll=(el,dy)=>{ for(let n=el;n&&n!==stage;n=n.parentElement){ if(n.matches&&n.matches(".list,.sheet.scrolling .txt,.cmp")&&n.scrollHeight>n.clientHeight+1){ if(dy>0?n.scrollTop+n.clientHeight<n.scrollHeight-1:n.scrollTop>0) return true; } } return false; };
