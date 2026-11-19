@@ -42,6 +42,8 @@ button{font-family:inherit}
 .nav{flex:none;width:30px;height:30px;border-radius:7px;border:1px solid var(--border-2);background:var(--card);color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:color .2s,background .2s,opacity .2s}
 .nav:hover:not(:disabled){color:var(--fg);background:var(--hover)}
 .theme{position:fixed;top:calc(16px + env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px));z-index:6;width:30px;height:30px;border-radius:7px;border:1px solid var(--border-2);background:var(--card);color:var(--muted);display:grid;place-items:center;cursor:pointer}
+/* changement de thème instantané : aucune transition pendant la bascule */
+:root.swap *,:root.swap *::before,:root.swap *::after{transition:none!important}
 .theme:hover{color:var(--fg);background:var(--hover)}
 .nav:disabled{opacity:.3;cursor:default}
 .ttl{flex:1;min-width:0;text-align:center}
@@ -75,7 +77,7 @@ button{font-family:inherit}
 .sheet:not(.open){height:var(--ch,106px)}
 .sheet .meta{position:absolute;left:44px;bottom:10px;line-height:26px;color:var(--dim)}
 .sheet.now .who{color:var(--now)}
-.sheet .meta.live,.c.h .meta.live,.pk .t.live{color:var(--now);font-weight:400;opacity:.3}
+.sheet .meta.live,.c.h .meta.live,.pk .t.live{color:var(--now);font-weight:400;opacity:.5}
 .sheet .meta.live{right:44px;line-height:16px;bottom:15px}
 .sheet.future:hover{border-color:var(--border)}
 .sheet .hd{padding-right:30px}
@@ -340,7 +342,7 @@ function alsHTML(art,i,r){
   const btn=document.getElementById("theme");
   const MOON='<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 9.5A5.5 5.5 0 0 1 6.5 3a5.5 5.5 0 1 0 6.5 6.5z"/></svg>';
   const SUN='<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="3"/><path d="M8 1.5v1.5M8 13v1.5M1.5 8H3M13 8h1.5M3.4 3.4l1 1M11.6 11.6l1 1M3.4 12.6l1-1M11.6 4.4l1-1"/></svg>';
-  const set=d=>{ document.documentElement.classList.toggle("dark",d); btn.innerHTML=d?SUN:MOON;
+  const set=d=>{ const r=document.documentElement; r.classList.add("swap"); r.classList.toggle("dark",d); void r.offsetWidth; requestAnimationFrame(()=>requestAnimationFrame(()=>r.classList.remove("swap"))); btn.innerHTML=d?SUN:MOON;
     btn.setAttribute("aria-label",d?"Passer en thème clair":"Passer en thème sombre"); btn.title=d?"Thème clair":"Thème sombre";
     try{ localStorage.setItem("frise-theme",d?"dark":"light"); }catch(e){} };
   let d=false; try{ d=localStorage.getItem("frise-theme")==="dark"; }catch(e){}
