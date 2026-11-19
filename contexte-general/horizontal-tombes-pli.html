@@ -1,0 +1,672 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Tombés en pli</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Frise horizontale de l'histoire d'un article, dans le design de Linear.
+   Le temps va de gauche à droite : une carte par étape, posée sur un fil horizontal ;
+   entre deux cartes, un interstice qui porte les deux plis (adoptés, rejetés ou retirés).
+   Déplier un pli élargit l'interstice et pousse les étapes suivantes vers la droite (le repli de Linear, tourné de 90°).
+   Haut / bas (flèches, molette, glisser vertical) : article précédent / suivant. Gauche / droite : parcourir la frise. */
+:root{
+  /* thème clair (par défaut) : blanc lumineux, cartes blanches sur fond à peine gris, mêmes rôles qu'en sombre */
+  --bg:#f6f6f7; --card:#ffffff; --card-2:#ffffff; --border:#e3e4e8; --border-2:#d3d5db;
+  --fg:#16171a; --text:#2c2e33; --muted:#5f636b; --dim:#8b8f97;
+  --ins:#2453c7; --del:#d1343b; --accent:#5e6ad2; --now:#7a45d1;
+  --hover:#eef0f3; --av:#eceef2; --av-now:#efe6fc; --lit:rgba(94,106,210,.13); --shadow:0 1px 2px rgba(16,18,24,.05);
+  --f:"Inter",system-ui,-apple-system,sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  --bar:92px; --rail:30px; --cardw:280px; --gap:232px; --gapw:392px;
+  color-scheme:light;
+}
+/* thème sombre, au choix (bouton en haut à droite) */
+:root.dark{
+  --bg:#08090a; --card:#121315; --card-2:#17181b; --border:#1f2023; --border-2:#2a2b2f;
+  --fg:#f7f8f8; --text:#d0d6e0; --muted:#8a8f98; --dim:#62666d;
+  --ins:#8ab4ff; --del:#e5484d; --accent:#5e6ad2; --now:#c9a8ff;
+  --hover:#1f2023; --av:#2a2c31; --av-now:#2a2540; --lit:rgba(94,106,210,.16); --shadow:none;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--text);font:13px/1.5 var(--f);-webkit-font-smoothing:antialiased;overflow:hidden}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* --- barre du haut --- */
+.bar{position:fixed;top:0;left:0;right:0;z-index:5;padding:env(safe-area-inset-top,0px) max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));height:calc(var(--bar) + env(safe-area-inset-top,0px));
+  display:flex;align-items:center;justify-content:center}
+.bar-in{display:flex;align-items:center;gap:14px;width:100%;max-width:760px}
+.nav{flex:none;width:30px;height:30px;border-radius:7px;border:1px solid var(--border-2);background:var(--card);color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:color .2s,background .2s,opacity .2s}
+.nav:hover:not(:disabled){color:var(--fg);background:var(--hover)}
+.theme{position:fixed;bottom:calc(14px + env(safe-area-inset-bottom,0px));right:max(16px,env(safe-area-inset-right,0px));z-index:6;width:30px;height:30px;border-radius:7px;border:1px solid var(--border-2);background:var(--card);color:var(--muted);display:grid;place-items:center;cursor:pointer}
+/* changement de thème instantané : aucune transition pendant la bascule */
+:root.swap *,:root.swap *::before,:root.swap *::after{transition:none!important}
+.theme:hover{color:var(--fg);background:var(--hover)}
+.nav:disabled{opacity:.3;cursor:default}
+.ttl{flex:1;min-width:0;text-align:center}
+.ttl .k{font-size:12px;color:var(--dim)}
+.ttl h1{margin:2px 0 0;font:500 16px/1.35 var(--f);color:var(--fg);letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dots{display:flex;justify-content:center;gap:5px;margin-top:7px}
+.dots i{width:5px;height:5px;border-radius:50%;background:var(--border-2);transition:background .2s}
+.dots i.on{background:var(--muted)}
+
+/* --- articles empilés verticalement ; chacun est une frise horizontale --- */
+#stage{position:fixed;inset:calc(var(--bar) + env(safe-area-inset-top,0px)) 0 0 0;overflow:hidden;touch-action:pan-x}
+#track{position:absolute;inset:0;transition:transform .5s var(--ease)}
+.page{position:absolute;left:0;right:0;height:100%}
+.frise{position:absolute;inset:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;scroll-behavior:smooth;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 28px,#000 calc(100% - 48px),transparent);mask-image:linear-gradient(90deg,transparent 0,#000 28px,#000 calc(100% - 48px),transparent)}
+.frise::-webkit-scrollbar{display:none}
+.row{position:relative;display:flex;align-items:flex-start;width:max-content;min-height:100%;padding:8px max(48px,calc(50vw - 380px)) 24px}
+
+
+/* --- cartes d'étape --- */
+.sheet{position:relative;z-index:1;flex:none;width:var(--cardw);background:var(--card);border:1px solid var(--border);border-radius:8px;box-shadow:var(--shadow);padding:12px 14px 44px;
+  transition:width .42s var(--ease),border-color .2s,background .2s}
+.sheet:hover{border-color:var(--border-2)}
+.sheet.open{width:min(480px,calc(100vw - 72px));background:var(--card-2)}
+.sheet.pulse{border-color:var(--accent)}
+.sheet .hd{display:flex;align-items:flex-start;gap:10px}
+.sheet .av{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:var(--av);color:var(--muted);margin-top:-1px}
+.sheet.now .av{background:var(--av-now);color:var(--now)}
+.sheet .who{color:var(--fg);font-weight:500}
+/* toutes les cartes ont la taille de « Dépôt au Sénat » : titre en haut (deux lignes au plus), date en bas, près de l'arête */
+.sheet:not(.open){height:var(--ch,106px)}
+.sheet .meta{position:absolute;left:44px;bottom:10px;line-height:26px;color:var(--dim)}
+.sheet.now .who{color:var(--now)}
+.sheet .meta.live,.c.h .meta.live,.pk .t.live{color:var(--now);font-weight:400;opacity:.5}
+.sheet .meta.live{right:44px;line-height:16px;bottom:15px}
+.sheet.future:hover{border-color:var(--border)}
+.sheet .hd{padding-right:30px}
+.cmpbtn{position:absolute;right:10px;top:8px;width:26px;height:26px;border-radius:6px;border:1px solid var(--border-2);background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:color .2s,background .2s}
+.cmpbtn:hover{color:var(--fg);background:var(--hover)}
+.gap.empty{padding:0}
+.toggle{position:absolute;right:10px;bottom:10px;width:26px;height:26px;border-radius:6px;border:1px solid var(--border-2);background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:color .2s,background .2s}
+.toggle:hover{color:var(--fg);background:var(--hover)}
+.toggle svg{transition:transform .35s var(--ease)}
+.sheet.open .toggle svg{transform:rotate(180deg)}
+.txt{position:relative;overflow:hidden;max-height:var(--h,0px);transition:max-height .42s var(--ease);margin:0 0 0 30px;scrollbar-width:none;font-size:13.5px;line-height:1.65}
+.txt::-webkit-scrollbar{display:none}
+.sheet.open .txt{margin-top:10px;-webkit-mask-image:linear-gradient(transparent 0,#000 12px,#000 calc(100% - 22px),transparent);mask-image:linear-gradient(transparent 0,#000 12px,#000 calc(100% - 22px),transparent)}
+.sheet.open.fits .txt{-webkit-mask-image:none;mask-image:none}
+.sheet.scrolling .txt{overflow-y:auto}
+.al{display:grid;grid-template-columns:18px 1fr;gap:0 6px;margin:0 0 .6em;padding:2px 6px 2px 0;border-radius:4px;transition:background .3s}
+.al:first-child{padding-top:6px}
+.al .n{font-size:11px;line-height:2.1;color:var(--dim);text-align:right}
+.al.lit{background:var(--lit)}
+.al.same{color:var(--dim)}
+.sheet:not(.open) .al.same{display:none}
+ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
+del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none}
+/* --- interstice entre deux cartes : le fil et les deux plis --- */
+.gap{position:relative;min-width:0;flex:0 0 var(--gap);padding:calc(var(--rail) + 14px) 18px 0;transition:flex-basis .38s var(--ease)}
+.gap.wide{flex-basis:var(--gapw)}
+/* le fil : un segment par interstice, qui s'arrête à 8 px de chaque carte */
+.gap::before{content:"";position:absolute;left:8px;right:8px;top:var(--rail);height:1px;background:var(--border-2)}
+.fold{position:relative}
+.fold + .fold{margin-top:2px}
+.fold-head,.fold-none{display:flex;align-items:center;gap:22px;width:100%;background:none;border:0;padding:5px 0;color:var(--muted);font:400 12.5px var(--f);text-align:left;cursor:pointer;white-space:nowrap}
+.fold-none{cursor:default;color:var(--dim)}
+.fold-head .pin,.fold-none .pin{flex:none;width:16px;height:16px;display:grid;place-items:center;color:var(--dim)}
+.fold-head .pin svg{transition:transform .3s var(--ease)}
+.fold.open > .fold-head .pin svg{transform:rotate(90deg)}
+.fold-head:hover,.fold.open > .fold-head{color:var(--text)}
+.fold-head:hover .pin{color:var(--text)}
+.slide{display:grid;grid-template-rows:0fr;transition:grid-template-rows .32s var(--ease)}
+.slide > .inner{min-height:0;overflow:hidden;opacity:0;transition:opacity .12s}
+.open > .slide{grid-template-rows:1fr}
+.open > .slide > .inner{opacity:1;transition:opacity .22s .16s}
+.list{max-height:var(--lh,50vh);overflow-y:auto;scrollbar-width:none;padding:2px 0 6px;margin-left:7px;border-left:1px solid var(--border)}
+.list::-webkit-scrollbar{display:none}
+.ev-row{display:flex;align-items:flex-start;gap:8px;width:100%;background:none;border:0;padding:5px 0;cursor:pointer;text-align:left;color:var(--muted);font:400 12.5px/1.5 var(--f)}
+.ev-row .ico{flex:none;width:16px;height:16px;margin-left:6px;margin-top:1px;display:grid;place-items:center;background:var(--bg);color:var(--dim);transition:transform .3s var(--ease),color .2s}
+.ev-row .lg{display:inline-grid;place-items:center;width:14px;height:14px;border-radius:4px;background:var(--g);color:#fff;font-size:8.5px;font-weight:700;margin-right:5px;vertical-align:-2px}
+.ev-row b{color:var(--fg);font-weight:500}
+.ev-row .t{display:block;color:var(--dim)}
+.ev-row:hover{color:var(--text)}
+.ev-row:hover .ico{color:var(--text)}
+.ev.open > .ev-row .ico{color:var(--fg);transform:rotate(45deg)}
+.fiche{margin:2px 0 10px 8px;padding:12px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px}
+.fiche .head{display:flex;align-items:center;gap:8px;color:var(--dim);flex-wrap:wrap}
+.fiche .head b{color:var(--fg);font-weight:500}
+.fiche .head .lg{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:4px;background:var(--g);color:#fff;font-size:9px;font-weight:700}
+.fiche .amd{font-size:13px;line-height:1.6;margin:8px 0 6px;color:var(--text)}
+.fiche .expo{margin:0 0 8px;color:var(--muted)}
+.fiche dl{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:0;font-size:12px;color:var(--dim)}
+.fell{margin-top:10px;padding-top:8px;border-top:1px solid var(--border)}
+.fell .fk{font-size:12px;color:var(--dim);margin:0 0 4px}
+.fell .list{max-height:none}
+.fell .fiche{background:var(--bg)}
+.fiche dd{margin:0;color:var(--muted)}
+.hint{position:fixed;left:0;right:0;bottom:calc(14px + env(safe-area-inset-bottom,0px));text-align:center;font-size:11.5px;color:var(--dim);pointer-events:none}
+/* --- mode comparer : la frise s'efface, un ou deux textes ouverts, et la liste des étapes à comparer --- */
+.frise{transition:opacity .3s,transform .4s var(--ease)}
+.page.cmping .frise{opacity:0;transform:scale(.97);pointer-events:none}
+.cmp{position:absolute;inset:0;overflow:auto;scrollbar-width:none;padding:8px 16px 48px;opacity:0;pointer-events:none;transition:opacity .25s}
+.cmp::-webkit-scrollbar{display:none}
+.page.cmping .cmp{opacity:1;pointer-events:auto}
+.cmp-in{display:flex;align-items:center;justify-content:center;gap:14px;min-height:100%;width:max-content;min-width:100%;margin:0 auto}
+.cg{--cw:min(460px,calc((100vw - 120px)/var(--n)));display:grid;grid-template-columns:repeat(var(--n),var(--cw));column-gap:18px;align-self:center}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}}
+.c{background:var(--card-2);border-left:1px solid var(--border);border-right:1px solid var(--border);padding:0 16px;min-width:0}
+.c.h{position:relative;border-top:1px solid var(--border);border-radius:8px 8px 0 0;padding-top:12px;padding-bottom:12px;display:flex;align-items:flex-start;gap:10px;padding-right:46px}
+.c.h .av{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:var(--av);color:var(--muted);margin-top:-1px}
+.c.h.now .av{background:var(--av-now);color:var(--now)}
+.c.h .who{color:var(--fg);font-weight:500}
+.c.h .meta{display:block;color:var(--dim)}
+.c.h.now .who{color:var(--now)}
+
+.c .n.add{color:var(--ins);font-weight:700}
+.c .n.rem{text-decoration:line-through 1px var(--del)}
+.al .n.add{color:var(--ins);font-weight:700}
+.al .n.rem{text-decoration:line-through 1px var(--del)}
+.c.f{border-bottom:1px solid var(--border);border-radius:0 0 8px 8px;height:14px}
+.c.a{display:grid;grid-template-columns:18px 1fr;gap:0 6px;padding-top:3px;padding-bottom:5px;font-size:13.5px;line-height:1.65}
+.c.a .n{font-size:11px;line-height:2.1;color:var(--dim);text-align:right}
+.c.a.same p{color:var(--dim)}
+.c.a .none{color:var(--dim);font-style:italic}
+.x{position:absolute;right:10px;top:10px;width:26px;height:26px;border-radius:6px;border:1px solid var(--border-2);background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer}
+.x:hover{color:var(--fg);background:var(--hover)}
+.pickl{flex:none;width:250px;align-self:center}
+.pk.now b{color:var(--now)}
+
+.pickl .list{max-height:none;margin-left:7px}
+.pk .t{display:block;color:var(--dim)}
+@media (max-width:520px){ .cg{--cw:calc(100vw - 56px)} .cmp-in{flex-direction:column;align-items:flex-start;justify-content:flex-start;padding-top:8px} .pickl{align-self:flex-start} }
+/* numéro d'un alinéa ajouté : comme un ajout (bleu, gras, souligné) ; d'un alinéa supprimé : barré */
+.al .n.add,.c.a .n.add{color:var(--ins);font-weight:700;text-decoration:underline 1px;text-underline-offset:3px}
+.al .n.rem,.c.a .n.rem{text-decoration:line-through 1px var(--del)}
+@media (max-width:520px){ :root{--ch:126px} .hint{display:none} :root{--cardw:min(270px,calc(100vw - 110px));--gap:178px;--gapw:min(340px,calc(100vw - 40px))} .row{padding-left:24px;padding-right:48px} }
+@media (prefers-reduced-motion:reduce){ *{transition-duration:.01ms!important;scroll-behavior:auto!important} }
+</style>
+</head>
+<body>
+<header class="bar"><div class="bar-in">
+  <button class="nav" id="prev" type="button" aria-label="Article précédent"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 10l5-5 5 5"/></svg></button>
+  <div class="ttl"><div class="k">Projet de loi pour l'accès au logement · Historique</div><h1 id="title"></h1><div class="dots" id="dots"></div></div>
+  <button class="nav" id="next" type="button" aria-label="Article suivant"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6l5 5 5-5"/></svg></button>
+</div></header>
+<button class="theme" id="theme" type="button" aria-label="Passer en thème sombre" title="Thème sombre"></button>
+<div id="stage"><div id="track"></div></div>
+<div class="hint" id="hint">← → parcourir les étapes · ↑ ↓ changer d'article</div>
+<script>
+const GROUPS={
+  RAP:{name:"Rapporteur",color:"#b89a5a"}, SOL:{name:"Solidarité et logement",color:"#d13a30"}, ECO:{name:"Écologie urbaine",color:"#2a9d63"},
+  UT:{name:"Union des territoires",color:"#3b82d6"}, LL:{name:"Libertés locales",color:"#e0671d"}, RC:{name:"Rassemblement des communes",color:"#7c5cd6"},
+  GOUV:{name:"Gouvernement",color:"#9aa3b2"}, DC:{name:"Démocratie communale",color:"#2bb3b1"}, AR:{name:"Avenir rural",color:"#8fae3a"},
+  CP:{name:"Centre et progrès",color:"#d8699a"}, PR:{name:"Progrès républicain",color:"#c07a00"}
+};
+const R=(g,num,who,al,text,sort,expo,avis,vote,mode)=>({g,num,who,al,text,sort,expo,avis,vote,mode});
+const STEPS=[
+  {short:"le dépôt au Sénat",stage:"Dépôt au Sénat",date:"4 mars 2026",h:"Texte du Gouvernement",chip:"texte initial"},
+  {short:"la commission du Sénat",stage:"Commission des affaires économiques du Sénat",date:"25 mars 2026",h:"Texte adopté par la commission"},
+  {short:"la séance du Sénat",stage:"Séance publique du Sénat",date:"8 avril 2026",h:"Texte adopté par le Sénat"},
+  {stage:"Commission des affaires économiques de l'Assemblée",date:"depuis le 13 mai 2026",h:"Examen en commission",now:true}
+];
+const DEF="Commission : défavorable · Gouvernement : défavorable";
+
+// ---------- Article 3 (fictif) ----------
+const A3v0={1:"L'article 17 de la loi n° 89-462 du 6 juillet 1989 est ainsi modifié :",
+ 2:"Dans les zones d'urbanisation continue de plus de 50 000 habitants, le loyer de référence est fixé chaque année par arrêté préfectoral.",
+ 3:"Le loyer de base des logements mis en location ne peut excéder le loyer de référence majoré de 20 %.",
+ 4:"Le dispositif est applicable pour une durée de cinq ans."};
+const A3v1={...A3v0, 2:A3v0[2].replace("arrêté préfectoral.","arrêté préfectoral, après avis de l'observatoire local des loyers."), 4:A3v0[4].replace("cinq ans","huit ans")};
+const A3v2={...A3v1};
+const A3v3={...A3v2, 3:A3v2[3].replace("20 %","15 %")};
+// ---------- Article 4 ----------
+const CHAPEAU="Le chapitre II du titre préliminaire du livre III du code de la construction et de l'habitation est ainsi modifié :";
+const V0={1:CHAPEAU,
+ 2:"Les communes de plus de 3 500 habitants doivent compter au moins 20 % de logements sociaux parmi les résidences principales d'ici 2032. En cas de manquement, le préfet peut prononcer un prélèvement sur les ressources fiscales de la commune.",
+ 3:"Le prélèvement mentionné à l'alinéa précédent est plafonné à 5 % des dépenses réelles de fonctionnement de la commune.",
+ 4:"Les communes nouvellement soumises à l'obligation disposent d'un délai de deux ans pour adopter un programme local de l'habitat compatible avec cet objectif.",
+ 5:"Le préfet peut exempter les communes dont plus de la moitié du territoire urbanisé est inconstructible."};
+const V1={...V0,
+ 2:V0[2].replace("20 %","25 %").replace("2032","2030"),
+ 3:V0[3].replace(" de la commune."," de la commune et affecté au fonds national des aides à la pierre."),
+ 4:V0[4].replace("deux ans","trois ans"),
+ 5:"Le préfet peut, après avis du comité régional de l'habitat, exempter les communes dont plus de la moitié du territoire urbanisé est inconstructible.",
+ 6:"Les logements locatifs intermédiaires sont décomptés comme logements sociaux dans la limite de 10 % de l'objectif."};
+const V2={...V1, 5:V1[5].replace("après avis du","après avis conforme du"), 6:V1[6].replace("10 %","15 %")};
+const V3={...V2, 3:V2[3].replace("à l'alinéa précédent","au deuxième alinéa"), 6:V2[6].replace("15 %","10 %")};
+// ---------- Article 5 (fictif) ----------
+const A5v0={1:"Le fonds national des aides à la pierre publie chaque année un rapport sur l'emploi de ses ressources.",
+ 2:"Ce rapport est transmis au Parlement avant le 1er octobre."};
+const A5v1={...A5v0, 2:A5v0[2].replace("1er octobre","1er juillet"), 3:"Il détaille la répartition des aides par région et par type de logement."};
+const A5v2={...A5v1, 3:A5v1[3].replace("par région et","par région, par commune et")};
+const A5v3={...A5v2};
+
+const ARTICLES=[
+ {n:3, t:"Encadrement des loyers", v:[A3v0,A3v1,A3v2,A3v3], chips:[null,"adopté modifié","adopté conforme",null], amds:[null,
+  [R("RAP","COM-60","M. Delorme",2,A3v1[2],"adopté","Associer l'observatoire local à la fixation du loyer de référence.","Gouvernement : favorable","Adopté à main levée"),
+   R("UT","COM-71","Mme Garnier",4,A3v1[4],"adopté","Laisser au dispositif le temps de produire ses effets.","Rapporteur : favorable · Gouvernement : sagesse","Adopté à main levée, après décompte : 20 pour, 18 contre"),
+   R("LL","COM-62","M. Perrin",3,null,"rejeté","Supprimer le plafonnement des loyers.",DEF,"Rejeté à main levée","supprimer"),
+   R("SOL","COM-65","M. Ferrand",3,A3v0[3].replace("20 %","10 %"),"rejeté","Resserrer la majoration autorisée.",DEF,"Rejeté à main levée"),
+   R("ECO","COM-66","Mme Laurent",2,A3v0[2].replace("50 000","20 000"),"retiré","Étendre le dispositif aux agglomérations moyennes.","Rapporteur : demande de retrait","Retiré par son auteur avant le vote")],
+  [R("SOL","n° 140","M. Ferrand",3,A3v1[3].replace("20 %","10 %"),"rejeté","Resserrer la majoration autorisée.",DEF,"Rejeté par scrutin public : 101 pour, 230 contre"),
+   R("LL","n° 141","M. Perrin",3,null,"rejeté","Supprimer le plafonnement des loyers.",DEF,"Rejeté à main levée","supprimer"),
+   R("RC","n° 150","Mme Aubert",4,A3v1[4].replace("huit ans","trois ans"),"rejeté","Limiter l'expérimentation à trois ans.",DEF,"Rejeté à main levée"),
+   R("ECO","n° 152","Mme Laurent",2,A3v1[2].replace("50 000","20 000"),"retiré","Étendre le dispositif aux agglomérations moyennes.","Commission : demande de retrait","Retiré par son auteur avant le vote")],
+  [R("SOL","CE-30","Mme Diallo",3,A3v3[3],"adopté","Réduire l'écart toléré au-dessus du loyer de référence.","Rapporteure : sagesse · Gouvernement : défavorable","Adopté à main levée, après décompte : 36 pour, 33 contre"),
+   R("LL","CE-31","M. Caron",3,null,"rejeté","Supprimer le plafonnement des loyers.",DEF,"Rejeté à main levée","supprimer")]]},
+ {n:4, t:"Obligation de logements sociaux", v:[V0,V1,V2,V3], chips:[null,"adopté modifié","adopté modifié",null], amds:[null,
+  [R("RAP","COM-14","M. Delorme",2,V0[2].replace("20 %","25 %"),"adopté","Aligner le taux sur l'objectif national déjà applicable aux communes les plus tendues.","Gouvernement : sagesse","Adopté à main levée"),
+   R("ECO","COM-31","Mme Laurent",2,V0[2].replace("2032","2030"),"adopté","Avancer l'échéance pour la faire coïncider avec la fin du prochain programme local de l'habitat.","Rapporteur : favorable · Gouvernement : défavorable","Adopté à main levée, après décompte : 21 pour, 17 contre"),
+   R("SOL","COM-7","M. Ferrand",3,V1[3],"adopté","Flécher le produit du prélèvement vers la construction.","Rapporteur : favorable · Gouvernement : favorable","Adopté à l'unanimité","completer"),
+   R("UT","COM-52","Mme Garnier",4,V1[4],"adopté","Deux ans ne suffisent pas pour élaborer un programme local de l'habitat.","Rapporteur : favorable · Gouvernement : sagesse","Adopté à main levée"),
+   R("DC","COM-23","M. Royer",5,V1[5],"adopté","Associer les acteurs locaux du logement avant toute exemption.","Rapporteur : favorable · Gouvernement : favorable","Adopté à main levée"),
+   R("CP","COM-40","Mme Vasseur",6,V1[6],"adopté","Tenir compte du logement intermédiaire, sans qu'il se substitue au logement social.","Rapporteur : sagesse · Gouvernement : favorable","Adopté à main levée, après décompte : 19 pour, 16 contre","ajouter"),
+   R("LL","COM-3","M. Perrin",2,null,"rejeté","Laisser aux communes la maîtrise de leur politique de logement.",DEF,"Rejeté à main levée","supprimer"),
+   R("RC","COM-18","Mme Aubert",2,V0[2].replace("3 500","10 000"),"rejeté","Épargner les petites communes.",DEF,"Rejeté à main levée"),
+   R("SOL","COM-8","M. Ferrand",2,V0[2].replace("20 %","30 %"),"rejeté","Répondre à l'ampleur de la demande de logement social.",DEF,"Rejeté à main levée"),
+   R("PR","COM-27","M. Lemaire",2,V0[2].replace(" de la commune."," de la commune, après mise en demeure."),"retiré","Prévoir une mise en demeure avant tout prélèvement.","Rapporteur : demande de retrait","Retiré par son auteur avant le vote"),
+   R("AR","COM-61","Mme Blanc",5,null,"rejeté","L'exemption crée une inégalité entre communes.",DEF,"Rejeté à main levée","supprimer"),
+   R("ECO","COM-33","Mme Laurent",4,V0[4].replace("deux ans","dix-huit mois"),"retiré","Raccourcir le délai d'adoption du programme.","Rapporteur : demande de retrait","Retiré par son auteur avant le vote"),
+   R("LL","COM-4","M. Perrin",3,null,"rejeté","Supprimer le prélèvement.",DEF,"Rejeté à main levée","supprimer")],
+  [R("AR","n° 203","Mme Blanc",5,V2[5],"adopté","Un avis simple ne protège pas assez contre les exemptions de complaisance.","Commission : favorable · Gouvernement : sagesse","Adopté par scrutin public : 172 pour, 160 contre"),
+   R("RC","n° 118","Mme Aubert",6,V2[6],"adopté","Mieux reconnaître l'effort des communes qui développent le logement intermédiaire.","Commission : sagesse · Gouvernement : défavorable","Adopté par scrutin public : 168 pour, 165 contre"),
+   R("SOL","n° 212","M. Ferrand",2,V1[2].replace("25 %","30 %").replace("2030","2028"),"rejeté","Accélérer le rattrapage dans les communes carencées.",DEF,"Rejeté par scrutin public : 98 pour, 236 contre"),
+   R("ECO","n° 87","Mme Laurent",2,V1[2].replace("25 %","30 %"),"rejeté","Porter le taux à 30 %.",DEF,"Rejeté à main levée"),
+   R("UT","n° 340","Mme Garnier",2,V1[2].replace("25 %","20 %").replace("2030","2035"),"rejeté","Tenir compte de la disponibilité foncière.",DEF,"Rejeté à main levée"),
+   R("LL","n° 15","M. Perrin",2,null,"rejeté","Supprimer l'obligation.",DEF,"Rejeté à main levée","supprimer"),
+   R("PR","n° 198","M. Lemaire",2,V1[2].replace("2030","2032"),"retiré","Reporter l'échéance à 2032.","Commission : demande de retrait","Retiré par son auteur avant le vote"),
+   R("DC","n° 77","M. Royer",3,V1[3].replace("5 %","3 %"),"rejeté","Abaisser le plafond du prélèvement.",DEF,"Rejeté à main levée"),
+   R("GOUV","n° 301","Gouvernement",6,null,"rejeté","Ne pas affaiblir l'objectif de logement social.","Commission : défavorable","Rejeté par scrutin public : 150 pour, 184 contre","supprimer")],
+  [R("UT","CE-88","Mme Garnier",6,V3[6],"adopté","Revenir à la limite de 10 % retenue par la commission du Sénat.","Rapporteure : favorable · Gouvernement : favorable","Adopté à main levée"),
+   R("RAP","CE-301","Mme Henry",3,V3[3],"adopté","Amendement rédactionnel.","Gouvernement : favorable","Adopté à main levée"),
+   R("SOL","CE-12","Mme Diallo",2,V2[2].replace("25 %","30 %"),"rejeté","Porter le taux à 30 %.",DEF,"Rejeté à main levée"),
+   R("LL","CE-40","M. Caron",5,null,"rejeté","Supprimer l'avis conforme.",DEF,"Rejeté à main levée","supprimer"),
+   R("AR","CE-55","M. Noël",4,V2[4].replace("trois ans","cinq ans"),"retiré","Allonger le délai pour les communes rurales.","Rapporteure : demande de retrait","Retiré par son auteur avant le vote"),
+   R("ECO","CE-70","M. Weber",6,null,"rejeté","Ne pas décompter le logement intermédiaire.",DEF,"Rejeté à main levée","supprimer")]]},
+ {n:5, t:"Rapport du fonds national des aides à la pierre", v:[A5v0,A5v1,A5v2,A5v3], chips:[null,"adopté modifié","adopté modifié",null], amds:[null,
+  [R("DC","COM-80","M. Royer",2,A5v1[2],"adopté","Disposer du rapport avant l'examen du projet de loi de finances.","Rapporteur : favorable · Gouvernement : favorable","Adopté à main levée"),
+   R("ECO","COM-81","Mme Laurent",3,A5v1[3],"adopté","Rendre visible la répartition territoriale des aides.","Rapporteur : favorable · Gouvernement : sagesse","Adopté à main levée","ajouter"),
+   R("LL","COM-82","M. Perrin",1,null,"rejeté","Un rapport de plus, sans effet.",DEF,"Rejeté à main levée","supprimer")],
+  [R("CP","n° 230","Mme Vasseur",3,A5v2[3],"adopté","Descendre jusqu'à l'échelle communale.","Commission : favorable · Gouvernement : sagesse","Adopté à main levée"),
+   R("RC","n° 231","Mme Aubert",2,A5v1[2].replace("1er juillet","1er septembre"),"retiré","Laisser plus de temps au fonds.","Commission : demande de retrait","Retiré par son auteur avant le vote"),
+   R("LL","n° 232","M. Perrin",1,null,"rejeté","Un rapport de plus, sans effet.",DEF,"Rejeté à main levée","supprimer")],
+  [R("AR","CE-90","M. Noël",3,A5v2[3]+" Il distingue les communes rurales.","rejeté","Isoler les communes rurales.",DEF,"Rejeté à main levée","completer")]]}
+];
+
+// --- différence mot à mot (portée sur la rédaction la plus récente) ---
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;");
+function diff(a,b){
+  if(a==null&&b==null) return "";
+  if(a==null) return `<ins>${esc(b)}</ins>`;
+  if(b==null) return `<del>${esc(a)}</del>`;
+  const sp=x=>x.split(/(\s+|[.,;:])/).filter(Boolean);
+  const A=sp(a),B=sp(b),n=A.length,m=B.length,L=Array.from({length:n+1},()=>new Int32Array(m+1));
+  for(let i=n-1;i>=0;i--)for(let j=m-1;j>=0;j--)L[i][j]=A[i]===B[j]?L[i+1][j+1]+1:Math.max(L[i+1][j],L[i][j+1]);
+  const out=[];let i=0,j=0;const push=(t,s)=>{const l=out[out.length-1];if(l&&l.t===t)l.s+=s;else out.push({t,s});};
+  while(i<n&&j<m){if(A[i]===B[j]){push("=",A[i]);i++;j++;}else if(L[i+1][j]>=L[i][j+1])push("-",A[i++]);else push("+",B[j++]);}
+  while(i<n)push("-",A[i++]);while(j<m)push("+",B[j++]);
+  // regroupe les changements voisins (séparés par un simple blanc) : « à l'alinéa précédent » → « au deuxième alinéa » en un seul bloc
+  const res=[];let k=0;
+  while(k<out.length){
+    if(out[k].t==="="){res.push(esc(out[k].s));k++;continue;}
+    let d="",ins="",e=k;
+    while(e<out.length&&(out[e].t!=="="||(/^\s+$/.test(out[e].s)&&e+1<out.length&&out[e+1].t!=="="))){
+      if(out[e].t==="-")d+=out[e].s;else if(out[e].t==="+")ins+=out[e].s;else{d+=out[e].s;ins+=out[e].s;}e++;}
+    res.push((d.trim()?`<del>${esc(d)}</del>`:"")+(ins.trim()?`<ins>${esc(ins)}</ins>`:(d.trim()?"":esc(d))));k=e;
+  }
+  return res.join("");
+}
+const VERB={rediger:"réécrit",completer:"complète",supprimer:"supprime",ajouter:"ajoute"};
+const PLUS='<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 3v10M3 8h10"/></svg>';
+const CHECK='<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 8.5l3 3 7-7"/></svg>';
+const DOTS='<svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><circle cx="3.5" cy="8" r="1.4"/><circle cx="8" cy="8" r="1.4"/><circle cx="12.5" cy="8" r="1.4"/></svg>';
+const CHEV='<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M3.5 4.5L6 2l2.5 2.5M3.5 7.5L6 10l2.5-2.5"/></svg>';
+const DOWN='<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3.5 6l4.5 4.5L12.5 6"/></svg>';
+const plural=(n,s,p)=>`${n} ${n>1?p:s}`;
+
+function alsHTML(art,i,r){
+  const v=art.v[i], prev=r==null?null:art.v[r];
+  const keys=[...new Set([...Object.keys(prev||{}),...Object.keys(v)])].map(Number).sort((a,b)=>a-b);
+  return keys.map(k=>{
+    const a=prev?prev[k]:undefined,b=v[k],same=prev&&a===b;
+    return `<div class="al${same?" same":""}" data-al="${k}"><span class="n">${k}</span><p style="margin:0">${prev?diff(a??null,b??null):esc(b)}</p></div>`;
+  }).join("");
+}
+
+
+// numéro d'alinéa : un alinéa ajouté porte un numéro en bleu gras, un alinéa supprimé un numéro barré
+const numCls=(a,b,hasPrev)=>!hasPrev?"":(a==null&&b!=null?" add":(a!=null&&b==null?" rem":""));
+function alsHTML(art,i,r){
+  const v=art.v[i], prev=r==null?null:art.v[r];
+  const keys=[...new Set([...Object.keys(prev||{}),...Object.keys(v)])].map(Number).sort((a,b)=>a-b);
+  return keys.map(k=>{
+    const a=prev?prev[k]:undefined,b=v[k],same=prev&&a===b;
+    return `<div class="al${same?" same":""}" data-al="${k}"><span class="n${numCls(a,b,!!prev)}">${k}</span><p style="margin:0">${prev?diff(a??null,b??null):esc(b)}</p></div>`;
+  }).join("");
+}
+
+// ---------- amendements irrecevables et tombés (données fictives) ----------
+// MODE : "pli" = les tombés ont leur propre pli ; "fiche" = ils apparaissent dans la fiche de l'amendement adopté qui les a fait tomber
+const MODE="pli";
+const IRR={
+  "40":{label:"article 40 de la Constitution",short:"article 40"},
+  "45":{label:"article 45, alinéa 1, de la Constitution",short:"article 45"}
+};
+// irrecevable : IR(groupe, n°, auteur, alinéa ou null pour un article additionnel, texte ou null si non publié, motif, raison, prononcé par)
+const IR=(g,num,who,al,text,code,why,by,expo)=>({g,num,who,al,text,sort:"irrecevable",code,why,by,expo,mode:al==null?"additionnel":(text==null?"rediger":undefined)});
+// tombé : T(groupe, n°, auteur, alinéa, texte, n° de l'amendement adopté qui l'a fait tomber)
+const T=(g,num,who,al,text,par,expo)=>({g,num,who,al,text,sort:"tombé",par,expo});
+const PFIN="président de la commission des affaires économiques, sur avis de la commission des finances";
+const EXTRA={
+  4:{1:[T("SOL","COM-9","M. Ferrand",2,V0[2].replace("20 %","27 %"),"COM-14","Porter le taux à 27 %."),
+        T("ECO","COM-32","Mme Laurent",2,V0[2].replace("2032","2031"),"COM-31","Avancer l'échéance à 2031."),
+        IR("LL","COM-5","M. Perrin",3,null,"40","crée une charge publique : compensation par l'État du prélèvement",PFIN),
+        IR("RC","COM-20","Mme Aubert",null,"Le maire réglemente le stationnement des véhicules de location dans le centre-ville.","45","sans lien, même indirect, avec le texte","président de la commission des affaires économiques","Mieux encadrer le stationnement en centre-ville.")],
+     2:[T("ECO","n° 88","Mme Laurent",5,V1[5].replace("du comité régional de l'habitat","du comité régional de l'habitat et du conseil municipal"),"n° 203","Associer aussi le conseil municipal."),
+        IR("PR","n° 199","M. Lemaire",2,null,"40","crée une charge publique : aide de l'État aux communes carencées","commission des finances du Sénat"),
+        IR("SOL","n° 215","M. Ferrand",null,"Les loyers des logements étudiants sont plafonnés dans les villes universitaires.","45","sans lien, même indirect, avec le texte","président de la commission des affaires économiques","Protéger les étudiants face à la hausse des loyers.")],
+     3:[IR("LL","CE-41","M. Caron",3,null,"40","diminue une ressource publique : réduction du prélèvement sans gage","présidente de la commission des affaires économiques"),
+        IR("AR","CE-57","M. Noël",null,"Les communes rurales peuvent créer un label « village accueillant ».","45","sans lien, même indirect, avec le texte","présidente de la commission des affaires économiques","Valoriser l'accueil dans les communes rurales.")]},
+  3:{1:[T("ECO","COM-67","Mme Laurent",4,A3v0[4].replace("cinq ans","dix ans"),"COM-71","Porter la durée à dix ans."),
+        IR("RC","COM-63","Mme Aubert",2,null,"40","crée une charge publique : indemnisation des propriétaires par l'État",PFIN)],
+     3:[IR("LL","CE-33","M. Caron",null,"Les diagnostics de performance énergétique sont valables quinze ans.","45","sans lien, même indirect, avec le texte","présidente de la commission des affaires économiques","Alléger les obligations de diagnostic.")]},
+  5:{1:[IR("SOL","COM-84","M. Ferrand",3,null,"40","crée une charge publique : nouveau fonds d'aide aux communes",PFIN)]}
+};
+ARTICLES.forEach(a=>{ const e=EXTRA[a.n]; if(e) Object.entries(e).forEach(([k,l])=>a.amds[+k].push(...l)); });
+
+// thème : clair par défaut, sombre au choix (mémorisé dans ce navigateur si possible)
+(function(){
+  const btn=document.getElementById("theme");
+  const MOON='<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 9.5A5.5 5.5 0 0 1 6.5 3a5.5 5.5 0 1 0 6.5 6.5z"/></svg>';
+  const SUN='<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="3"/><path d="M8 1.5v1.5M8 13v1.5M1.5 8H3M13 8h1.5M3.4 3.4l1 1M11.6 11.6l1 1M3.4 12.6l1-1M11.6 4.4l1-1"/></svg>';
+  const set=d=>{ const r=document.documentElement; r.classList.add("swap"); r.classList.toggle("dark",d); void r.offsetWidth; requestAnimationFrame(()=>requestAnimationFrame(()=>r.classList.remove("swap"))); btn.innerHTML=d?SUN:MOON;
+    btn.setAttribute("aria-label",d?"Passer en thème clair":"Passer en thème sombre"); btn.title=d?"Thème clair":"Thème sombre";
+    try{ localStorage.setItem("frise-theme",d?"dark":"light"); }catch(e){} };
+  let d=false; try{ d=localStorage.getItem("frise-theme")==="dark"; }catch(e){}
+  set(d); btn.onclick=()=>set(!document.documentElement.classList.contains("dark"));
+})();
+// étapes à venir : un titre, rien d'autre
+STEPS.push({stage:"Séance publique de l'Assemblée nationale",future:true},{stage:"Commission mixte paritaire",future:true},{stage:"Promulgation",future:true});
+const DONE=4; // nombre d'étapes qui ont un texte (la dernière est en cours)
+const RIGHT='<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 3.5l4.5 4.5L6 12.5"/></svg>';
+const CMPS='<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5.5 2v12M10.5 2v12M2 5h3.5M10.5 11H14"/></svg>';
+const CMPI='<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5.5 2v12M10.5 2v12M2 5h3.5M10.5 11H14"/></svg>';
+const X='<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 4l8 8M12 4l-8 8"/></svg>';
+const dateOf=st=>st.now?"":st.date;
+// l'étape en cours : à la place de la date, ce qui s'y passe et depuis quand, en violet estompé
+const LIVE="En cours d'examen depuis\u00a0le\u00a013\u00a0mai"; // espaces insécables : la coupure tombe avant « depuis »
+const metaOf=(st,cls="meta")=>st.now?`<span class="${cls} live">${LIVE}</span>`:`<span class="${cls}">${st.date}</span>`;
+
+function sheetHTML(art,i){
+  const st=STEPS[i];
+  if(st.future) return `<article class="sheet future" data-i="${i}"><div class="hd"><span class="av"></span><span><span class="who">${st.stage}</span></span></div></article>`;
+  return `<article class="sheet${st.now?" now":""}" data-i="${i}">
+    <div class="hd"><span class="av">${st.now?DOTS:CHECK}</span><span><span class="who">${st.stage}</span>${metaOf(st)}</span></div>
+    <button class="cmpbtn" type="button" aria-label="Comparer cette version" title="Comparer">${CMPI}</button>
+    <div class="txt">${alsHTML(art,i,i?i-1:null)}</div>
+    <button class="toggle" type="button" aria-label="Ouvrir l'article">${DOWN}</button>
+  </article>`;
+}
+function evHTML(a,prevV,stage){
+  const mode=a.mode||(a.text==null?"supprimer":"rediger"), g=GROUPS[a.g];
+  const what=mode==="additionnel"?"propose un article additionnel":`${VERB[mode]} l'alinéa ${a.al}`;
+  const second=a.sort==="irrecevable"?`${a.num} · ${a.who} · ${IRR[a.code].short}`:a.sort==="tombé"&&MODE==="pli"?`${a.num} · ${a.who} · après ${a.par.replace("-","\u2011")}`:`${a.num} · ${a.who}`;
+  let body;
+  if(a.sort==="irrecevable"){
+    body=(a.text==null?`<p class="expo">Texte non publié : un amendement irrecevable au titre de l'article 40 est écarté avant son dépôt et n'est pas mis en distribution.</p>`
+      :`<div class="amd">${mode==="additionnel"?`<ins>${esc(a.text)}</ins>`:diff(prevV[a.al]??null,a.text)}</div><p class="expo">${esc(a.expo||"")}</p>`)
+      +`<dl><dt>Irrecevable</dt><dd>${IRR[a.code].label} : ${a.why}</dd><dt>Prononcé par</dt><dd>${a.by}</dd></dl>`;
+  } else if(a.sort==="tombé"){
+    body=`<div class="amd">${diff(prevV[a.al]??null,a.text)}</div><p class="expo">${esc(a.expo)}</p><dl><dt>Tombé</dt><dd>sans objet après l'adoption de ${a.par.replace("-","\u2011")}, qui réécrivait le même passage</dd></dl>`;
+  } else {
+    const amd=mode==="ajouter"?`<ins>${esc(a.text)}</ins>`:diff(prevV[a.al]??null,a.text);
+    body=`<div class="amd">${amd}</div><p class="expo">${esc(a.expo)}</p>
+      <dl>${a.avis.split(" · ").map(x=>{const [k,...v]=x.split(" : ");return `<dt>${k}</dt><dd>${v.join(" : ")}</dd>`;}).join("")}<dt>Vote</dt><dd>${a.vote}</dd></dl>`;
+    // variante « fiche » : les amendements que cet adopté a fait tomber, dans sa fiche
+    const fell=MODE==="fiche"&&a.sort==="adopté"&&stage?stage.filter(t=>t.sort==="tombé"&&t.par===a.num):[];
+    if(fell.length) body+=`<div class="fell"><div class="fk">${plural(fell.length,"amendement tombé","amendements tombés")} après son adoption</div><div class="list">${fell.map(t=>evHTML(t,prevV,null)).join("")}</div></div>`;
+  }
+  return `<div class="ev" data-al="${a.al??""}" data-sort="${a.sort}">
+    <button class="ev-row" type="button"><span class="ico">${PLUS}</span>
+      <span><span class="lg" style="--g:${g.color}">${g.name[0]}</span><b>${g.name}</b> ${what}<span class="t">${second}</span></span></button>
+    <div class="slide"><div class="inner"><div class="fiche">
+      <div class="head"><span class="lg" style="--g:${g.color}">${g.name[0]}</span><b>${g.name}</b><span>${a.num} · ${a.who}</span></div>
+      ${body}
+    </div></div></div>
+  </div>`;
+}
+function foldHTML(list,label,prevV,stage){
+  if(!list.length) return "";
+  return `<div class="fold"><button class="fold-head" type="button"><span class="pin">${RIGHT}</span><span>${label}</span></button>
+    <div class="slide"><div class="inner"><div class="list">${list.map(a=>evHTML(a,prevV,stage)).join("")}</div></div></div></div>`;
+}
+function pageHTML(art,k){
+  return `<section class="page" style="top:${k*100}%"><div class="frise"><div class="row">`+STEPS.map((_,i)=>{
+    let h=sheetHTML(art,i);
+    if(i===STEPS.length-1) return h;
+    const nx=art.amds[i+1];
+    if(nx){
+      const by=t=>nx.filter(a=>a.sort===t);
+      const kinds=[["adopté","amendement adopté","amendements adoptés"],["rejeté","amendement rejeté","amendements rejetés"],["retiré","amendement retiré","amendements retirés"]];
+      if(MODE==="pli") kinds.push(["tombé","amendement tombé","amendements tombés"]);
+      kinds.push(["irrecevable","amendement irrecevable","amendements irrecevables"]);
+      const folds=kinds.map(([t,one,many])=>{ const l=by(t); return foldHTML(l,plural(l.length,one,many),art.v[i],nx); }).join("");
+      h+=folds?`<div class="gap">${folds}</div>`:`<div class="gap empty"></div>`;
+    } else h+=`<div class="gap empty"></div>`;
+    return h;
+  }).join("")+`</div></div><div class="cmp"></div></section>`;
+}
+let cur=1;
+const track=document.getElementById("track");
+track.innerHTML=ARTICLES.map(pageHTML).join("");
+const pages=[...track.children];
+const CMP=pages.map(()=>[]);
+const inCmp=()=>CMP[cur].length>0;
+document.getElementById("dots").innerHTML=ARTICLES.map(()=>"<i></i>").join("");
+
+// à l'arrivée, la frise est centrée sur l'étape en cours
+function centerNow(page,smooth){
+  const fr=page.querySelector(".frise"), s=page.querySelector(".sheet.now"); if(!s) return;
+  fr.style.scrollBehavior=smooth?"":"auto";
+  fr.scrollLeft=s.offsetLeft+s.offsetWidth/2-fr.clientWidth/2;
+  fr.style.scrollBehavior="";
+}
+function sizes(){
+  const H=document.getElementById("stage").clientHeight;
+  document.documentElement.style.setProperty("--lh",Math.max(160,H-190)+"px");
+  document.querySelectorAll(".sheet.open").forEach(fit);
+}
+addEventListener("resize",sizes);
+
+// --- changer d'article : haut / bas ---
+function go(k){
+  const n=Math.max(0,Math.min(ARTICLES.length-1,k)); if(n===cur&&track.style.transform) return;
+  cur=n; track.style.transform=`translateY(${-cur*100}%)`;
+  const a=ARTICLES[cur];
+  document.getElementById("title").textContent=`Article ${a.n} — ${a.t}`;
+  document.querySelectorAll("#dots i").forEach((d,i)=>d.classList.toggle("on",i===cur));
+  hint();
+}
+document.getElementById("prev").onclick=()=>go(cur-1);
+document.getElementById("next").onclick=()=>go(cur+1);
+go(1); sizes();
+const centerAll=()=>pages.forEach(p=>centerNow(p,false));
+centerAll(); if(document.fonts) document.fonts.ready.then(centerAll);
+
+const stage=document.getElementById("stage");
+const canScroll=(el,dy)=>{ for(let n=el;n&&n!==stage;n=n.parentElement){ if(n.matches&&n.matches(".list,.sheet.scrolling .txt,.cmp")&&n.scrollHeight>n.clientHeight+1){ if(dy>0?n.scrollTop+n.clientHeight<n.scrollHeight-1:n.scrollTop>0) return true; } } return false; };
+let wy=0,wt=0,wlock=0;
+stage.addEventListener("wheel",e=>{
+  if(e.ctrlKey) return;
+  const fr=pages[cur].querySelector(".frise");
+  if(Math.abs(e.deltaX)>Math.abs(e.deltaY)) return;
+  const now=Date.now();
+  if(canScroll(e.target,e.deltaY)){ zoneAt=now; return; }
+  e.preventDefault();
+  if(e.shiftKey&&!inCmp()){ fr.scrollLeft+=e.deltaY; return; }
+  if(!atRest()||inZone(e.target)){ zoneAt=now; wy=0; return; }
+  if(now-zoneAt<500){ wy=0; return; }
+  if(now<wlock) return; if(now-wt>250) wy=0; wt=now; wy+=e.deltaY;
+  if(Math.abs(wy)>90){ go(cur+(wy>0?1:-1)); wy=0; wlock=now+650; }
+},{passive:false});
+let t0=null;
+stage.addEventListener("touchstart",e=>{ const t=e.touches[0]; t0={x:t.clientX,y:t.clientY,el:e.target}; },{passive:true});
+stage.addEventListener("touchend",e=>{
+  if(!t0) return; const t=e.changedTouches[0], dx=t.clientX-t0.x, dy=t.clientY-t0.y, el=t0.el; t0=null;
+  if(atRest()&&!inZone(el)&&Math.abs(dy)>70&&Math.abs(dy)>Math.abs(dx)*1.4&&!canScroll(el,-dy)) go(cur+(dy<0?1:-1));
+},{passive:true});
+let grab=null, moved=false;
+stage.addEventListener("pointerdown",e=>{ if(e.pointerType!=="mouse"||e.button!==0||inCmp()||e.target.closest("button,select,.txt,.list")) return; grab={x:e.clientX,l:pages[cur].querySelector(".frise").scrollLeft}; moved=false; });
+addEventListener("pointermove",e=>{ if(!grab) return; const dx=e.clientX-grab.x; if(Math.abs(dx)>4){ moved=true; const fr=pages[cur].querySelector(".frise"); fr.style.scrollBehavior="auto"; fr.scrollLeft=grab.l-dx; } });
+addEventListener("pointerup",()=>{ if(grab){ pages[cur].querySelector(".frise").style.scrollBehavior=""; } grab=null; });
+
+// --- les plis ---
+function syncGap(gap){ gap.classList.toggle("wide",!!gap.querySelector(".fold.open")); }
+function reveal(el,pad=36){
+  const fr=el.closest(".frise"), r=el.getBoundingClientRect(), fx=fr.getBoundingClientRect();
+  if(r.right>fx.right-pad) fr.scrollTo({left:fr.scrollLeft+(r.right-fx.right)+pad,behavior:"smooth"});
+  else if(r.left<fx.left+pad) fr.scrollTo({left:fr.scrollLeft-(fx.left-r.left)-pad,behavior:"smooth"});
+}
+
+// --- ouvrir l'article dans la frise ---
+const PEEK=56;
+function openSheet(sheet){
+  const fr=sheet.closest(".frise");
+  fr.querySelectorAll(".sheet.open").forEach(s=>{ if(s!==sheet) closeSheet(s); });
+  sheet.classList.add("open"); fit(sheet);
+  sheet.querySelector(".toggle").setAttribute("aria-label","Refermer l'article");
+  setTimeout(()=>{ if(sheet.classList.contains("open")){ sheet.classList.add("scrolling");
+    const g=sheet.nextElementSibling, target=sheet.offsetLeft-28, after=g?g.offsetWidth+PEEK:0;
+    const w=Math.min(480,innerWidth-72); fr.scrollTo({left:Math.max(0,Math.min(target,target+w+after-fr.clientWidth+28)),behavior:"smooth"}); } },60);
+}
+function fit(sheet){
+  const txt=sheet.querySelector(".txt"), H=document.getElementById("stage").clientHeight;
+  const chrome=sheet.offsetHeight-txt.offsetHeight+10;
+  const avail=H-16-chrome-40, full=txt.scrollHeight, h=Math.max(140,Math.min(full,avail));
+  sheet.classList.toggle("fits",full<=h); txt.style.setProperty("--h",h+"px");
+}
+function closeSheet(sheet){
+  const txt=sheet.querySelector(".txt");
+  sheet.classList.remove("open","scrolling","fits"); txt.scrollTop=0; txt.style.removeProperty("--h");
+  sheet.querySelector(".toggle").setAttribute("aria-label","Ouvrir l'article");
+}
+
+// --- comparer ---
+// Un texte seul : la liste des étapes à comparer se tient à sa droite.
+// Deux textes : toujours dans l'ordre chronologique, l'antérieur à gauche (vierge),
+// le postérieur à droite avec ses corrections apparentes par rapport à l'antérieur.
+// Fermer l'un : l'autre reste, à gauche, et la liste revient à sa droite. Fermer le dernier : retour à la frise.
+// Règles du geste vertical (changer d'article) :
+// 1. il ne marche que sur les espaces vides, jamais sur une zone qu'on manipule : une carte, ou l'interstice qui porte les plis ;
+// 2. en mode comparer, il ne marche pas du tout : on referme d'abord.
+function atRest(){ return !inCmp(); }
+const inZone=el=>!!(el&&el.closest&&el.closest(".sheet,.gap:not(.empty)"));
+var zoneAt=0; // dernier geste dans une zone : son élan ne déborde pas sur l'espace vide
+function hint(){
+  const r=atRest();
+  document.getElementById("hint").textContent=r?"← → parcourir les étapes · ↑ ↓ changer d'article (sur les espaces vides)":"";
+  document.getElementById("prev").disabled=!r||cur===0;
+  document.getElementById("next").disabled=!r||cur===ARTICLES.length-1;
+}
+function cmpHead(i){
+  const st=STEPS[i];
+  return `<div class="c h${st.now?" now":""}" data-col="${i}"><span class="av">${st.now?DOTS:CHECK}</span><span><span class="who">${st.stage}</span>${metaOf(st)}</span>
+    <button class="x" type="button" data-close="${i}" aria-label="Fermer ce texte">${X}</button></div>`;
+}
+function renderCmp(k,src){
+  const page=pages[k], box=page.querySelector(".cmp"), items=CMP[k], art=ARTICLES[k];
+  const before={}; box.querySelectorAll(".c.h[data-col]").forEach(h=>before[h.dataset.col]=h.getBoundingClientRect());
+  const lb=box.querySelector(".pickl"); const listBefore=lb?lb.getBoundingClientRect():null;
+  page.classList.toggle("cmping",items.length>0); hint();
+  if(!items.length){ box.innerHTML=""; return; }
+  let cells=items.map(cmpHead).join("");
+  const keys=[...new Set(items.flatMap(i=>Object.keys(art.v[i])))].map(Number).sort((a,b)=>a-b);
+  if(items.length===1){
+    const i=items[0], prev=i?art.v[i-1]:null;
+    keys.forEach(n=>{ const a=prev?prev[n]:undefined, b=art.v[i][n];
+      cells+=`<div class="c a${prev&&a===b?" same":""}" data-col="${i}"><span class="n${numCls(a,b,!!prev)}">${n}</span><p style="margin:0">${prev?diff(a??null,b??null):esc(b)}</p></div>`; });
+  } else {
+    const [l,r]=items, L=art.v[l], Rv=art.v[r];
+    keys.forEach(n=>{ const a=L[n], b=Rv[n], same=a===b;
+      cells+=`<div class="c a${same?" same":""}" data-col="${l}"><span class="n">${a!=null?n:""}</span><p style="margin:0">${a!=null?esc(a):""}</p></div>`;
+      cells+=`<div class="c a${same?" same":""}" data-col="${r}"><span class="n${numCls(a,b,true)}">${n}</span><p style="margin:0">${diff(a??null,b??null)}</p></div>`; });
+  }
+  cells+=items.map(i=>`<div class="c f" data-col="${i}"></div>`).join("");
+  let html=`<div class="cmp-in"><div class="cg" style="--n:${items.length}">${cells}</div>`;
+  if(items.length===1){
+    const i=items[0], others=STEPS.map((s,j)=>j).filter(j=>j<DONE&&j!==i);
+    html+=`<div class="pickl"><div class="list">${others.map(j=>`<div class="ev"><button class="ev-row pk${STEPS[j].now?" now":""}" type="button" data-pick="${j}" aria-label="Comparer avec ${STEPS[j].stage}"><span class="ico">${CMPS}</span><span><b>${STEPS[j].stage}</b>${metaOf(STEPS[j],"t")}</span></button></div>`).join("")}</div></div>`;
+  }
+  box.innerHTML=html+`</div>`; box.scrollTop=0;
+  animateCmp(box,before,listBefore,src);
+}
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+function animateCmp(box,before,listBefore,src){
+  if(reduce) return;
+  const E="cubic-bezier(.25,.8,.25,1)";
+  const cols=[...new Set([...box.querySelectorAll("[data-col]")].map(c=>c.dataset.col))];
+  cols.forEach((c,ci)=>{
+    const head=box.querySelector(`.c.h[data-col="${c}"]`), now=head.getBoundingClientRect();
+    const from=before[c]||(src&&String(src.i)===c?src.r:null)||(listBefore?{left:listBefore.left,top:now.top}:null);
+    const cells=box.querySelectorAll(`[data-col="${c}"]`);
+    if(from){
+      const dx=from.left-now.left, dy=from.top-now.top, fresh=!before[c];
+      cells.forEach((el,k)=>el.animate([{transform:`translate(${dx}px,${dy}px)`,opacity:fresh?(k?0:.6):1},{transform:"none",opacity:1}],{duration:fresh?420:380,easing:E,delay:fresh&&k?Math.min(k*18,140):0,fill:"backwards"}));
+    } else cells.forEach(el=>el.animate([{opacity:0,transform:"translateY(8px)"},{opacity:1,transform:"none"}],{duration:320,easing:E}));
+  });
+  const pl=box.querySelector(".pickl");
+  if(pl) pl.animate([{opacity:0,transform:"translateX(-12px)"},{opacity:1,transform:"none"}],{duration:360,delay:listBefore?60:200,easing:E,fill:"backwards"});
+}
+document.addEventListener("click",e=>{
+  if(moved){ moved=false; e.stopPropagation(); e.preventDefault(); return; }
+  const cb=e.target.closest(".cmpbtn");
+  if(cb){ const s=cb.closest(".sheet"); CMP[cur]=[+s.dataset.i]; renderCmp(cur,{i:+s.dataset.i,r:s.getBoundingClientRect()}); return; }
+  const pk=e.target.closest("[data-pick]");
+  if(pk){ CMP[cur]=[...CMP[cur],+pk.dataset.pick].sort((a,b)=>a-b); renderCmp(cur); return; }
+  const x=e.target.closest("[data-close]");
+  if(x){ CMP[cur]=CMP[cur].filter(i=>i!==+x.dataset.close); renderCmp(cur); return; }
+  const tg=e.target.closest(".toggle");
+  if(tg){ const s=tg.closest(".sheet"); s.classList.contains("open")?closeSheet(s):openSheet(s); hint(); return; }
+  const fh=e.target.closest(".fold-head");
+  if(fh){
+    const f=fh.parentElement, gap=f.closest(".gap");
+    const was=f.classList.contains("open");
+    // accordéon : un seul pli ouvert par interstice
+    gap.querySelectorAll(".fold.open").forEach(o=>{ o.classList.remove("open"); o.querySelectorAll(".ev.open").forEach(x=>x.classList.remove("open")); });
+    if(!was) f.classList.add("open");
+    clearLit(); syncGap(gap); hint();
+    if(f.classList.contains("open")) setTimeout(()=>reveal(gap),390);
+    return;
+  }
+  const row=e.target.closest(".ev-row");
+  if(row){
+    const ev=row.parentElement, was=ev.classList.contains("open");
+    ev.classList.toggle("open",!was); relight(ev.closest(".gap"));
+    if(!was) setTimeout(()=>ev.scrollIntoView({block:"nearest",behavior:"smooth"}),340);
+  }
+},true);
+function clearLit(){ document.querySelectorAll(".al.lit").forEach(x=>x.classList.remove("lit")); document.querySelectorAll(".sheet.pulse").forEach(x=>x.classList.remove("pulse")); }
+// tous les amendements adoptés ouverts allument leur alinéa dans la carte suivante
+function relight(gap){
+  clearLit(); const next=gap&&gap.nextElementSibling; if(!next) return;
+  const evs=[...gap.querySelectorAll(".ev.open")].filter(x=>x.dataset.sort==="adopté"); if(!evs.length) return;
+  evs.forEach(x=>{ const p=next.querySelector(`.al[data-al="${x.dataset.al}"]`); if(p) p.classList.add("lit"); });
+  next.classList.add("pulse"); setTimeout(()=>next.classList.remove("pulse"),900);
+}
+function light(ev){
+  if(ev.dataset.sort!=="adopté") return;
+  const next=ev.closest(".gap").nextElementSibling; if(!next) return;
+  const p=next.querySelector(`.al[data-al="${ev.dataset.al}"]`); if(p) p.classList.add("lit");
+  next.classList.add("pulse"); setTimeout(()=>next.classList.remove("pulse"),900);
+}
+document.addEventListener("keydown",e=>{
+  const fr=pages[cur].querySelector(".frise");
+  if(e.key==="ArrowDown"||e.key==="ArrowUp"){ if(atRest()){ e.preventDefault(); go(cur+(e.key==="ArrowDown"?1:-1)); } return; }
+  if(!inCmp()&&e.key==="ArrowRight"){ e.preventDefault(); fr.scrollBy({left:320,behavior:"smooth"}); return; }
+  if(!inCmp()&&e.key==="ArrowLeft"){ e.preventDefault(); fr.scrollBy({left:-320,behavior:"smooth"}); return; }
+  if(e.key!=="Escape") return;
+  if(inCmp()){ CMP[cur]=[]; renderCmp(cur); return; }
+  const ev=document.querySelector(".ev.open"); if(ev){ ev.classList.remove("open"); clearLit(); return; }
+  const s=document.querySelector(".sheet.open"); if(s){ closeSheet(s); hint(); return; }
+  const f=document.querySelector(".fold.open"); if(f){ f.classList.remove("open"); syncGap(f.closest(".gap")); hint(); }
+});
+</script>
+</body>
+</html>
