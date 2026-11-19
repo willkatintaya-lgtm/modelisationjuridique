@@ -184,8 +184,12 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 .ev-row .t{display:block;color:var(--dim)}
 .ev-row:hover{color:var(--text)}
 .ev-row:hover .ico{color:var(--text)}
-/* la ligne porte seule l'identité de l'amendement ; ouverte, elle fonce un peu */
-.ev.open > .ev-row{color:var(--text)}
+/* amendement ouvert : sa ligne (logo, groupe, numéro, auteur) entre dans la carte avec son texte — un seul module */
+.ev{border:1px solid transparent;border-radius:8px;transition:background .2s,border-color .2s}
+.ev.open{background:var(--card);border-color:var(--border);margin:4px 0 10px 8px;box-shadow:var(--shadow)}
+.ev.open > .ev-row{color:var(--text);padding:9px 12px 2px 0}
+.ev.open > .ev-row .ico{margin-left:9px;background:transparent}
+.ev.open .fiche{margin:0;border:0;background:none;box-shadow:none;padding:6px 14px 12px 33px}
 .fiche>:first-child{margin-top:0}
 .ev.open > .ev-row .ico{color:var(--fg);transform:rotate(45deg)}
 .fiche{margin:2px 0 10px 8px;padding:12px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px}
