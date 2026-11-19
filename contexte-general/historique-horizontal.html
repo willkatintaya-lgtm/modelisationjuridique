@@ -12,11 +12,21 @@
    Déplier un pli élargit l'interstice et pousse les étapes suivantes vers la droite (le repli de Linear, tourné de 90°).
    Haut / bas (flèches, molette, glisser vertical) : article précédent / suivant. Gauche / droite : parcourir la frise. */
 :root{
+  /* thème clair (par défaut) : blanc lumineux, cartes blanches sur fond à peine gris, mêmes rôles qu'en sombre */
+  --bg:#f6f6f7; --card:#ffffff; --card-2:#ffffff; --border:#e3e4e8; --border-2:#d3d5db;
+  --fg:#16171a; --text:#2c2e33; --muted:#5f636b; --dim:#8b8f97;
+  --ins:#2453c7; --del:#d1343b; --accent:#5e6ad2; --now:#7a45d1;
+  --hover:#eef0f3; --av:#eceef2; --av-now:#efe6fc; --lit:rgba(94,106,210,.13); --shadow:0 1px 2px rgba(16,18,24,.05);
+  --f:"Inter",system-ui,-apple-system,sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
+  --bar:92px; --rail:30px; --cardw:280px; --gap:232px; --gapw:392px;
+  color-scheme:light;
+}
+/* thème sombre, au choix (bouton en haut à droite) */
+:root.dark{
   --bg:#08090a; --card:#121315; --card-2:#17181b; --border:#1f2023; --border-2:#2a2b2f;
   --fg:#f7f8f8; --text:#d0d6e0; --muted:#8a8f98; --dim:#62666d;
   --ins:#8ab4ff; --del:#e5484d; --accent:#5e6ad2; --now:#c9a8ff;
-  --f:"Inter",system-ui,-apple-system,sans-serif; --ease:cubic-bezier(.25,.8,.25,1);
-  --bar:92px; --rail:30px; --cardw:280px; --gap:232px; --gapw:392px;
+  --hover:#1f2023; --av:#2a2c31; --av-now:#2a2540; --lit:rgba(94,106,210,.16); --shadow:none;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -30,7 +40,9 @@ button{font-family:inherit}
   display:flex;align-items:center;justify-content:center}
 .bar-in{display:flex;align-items:center;gap:14px;width:100%;max-width:760px}
 .nav{flex:none;width:30px;height:30px;border-radius:7px;border:1px solid var(--border-2);background:var(--card);color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:color .2s,background .2s,opacity .2s}
-.nav:hover:not(:disabled){color:var(--fg);background:#1f2023}
+.nav:hover:not(:disabled){color:var(--fg);background:var(--hover)}
+.theme{position:fixed;top:calc(16px + env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px));z-index:6;width:30px;height:30px;border-radius:7px;border:1px solid var(--border-2);background:var(--card);color:var(--muted);display:grid;place-items:center;cursor:pointer}
+.theme:hover{color:var(--fg);background:var(--hover)}
 .nav:disabled{opacity:.3;cursor:default}
 .ttl{flex:1;min-width:0;text-align:center}
 .ttl .k{font-size:12px;color:var(--dim)}
@@ -50,14 +62,14 @@ button{font-family:inherit}
 
 
 /* --- cartes d'étape --- */
-.sheet{position:relative;z-index:1;flex:none;width:var(--cardw);background:var(--card);border:1px solid var(--border);border-radius:8px;padding:12px 14px 44px;
+.sheet{position:relative;z-index:1;flex:none;width:var(--cardw);background:var(--card);border:1px solid var(--border);border-radius:8px;box-shadow:var(--shadow);padding:12px 14px 44px;
   transition:width .42s var(--ease),border-color .2s,background .2s}
 .sheet:hover{border-color:var(--border-2)}
 .sheet.open{width:min(480px,calc(100vw - 72px));background:var(--card-2)}
 .sheet.pulse{border-color:var(--accent)}
 .sheet .hd{display:flex;align-items:flex-start;gap:10px}
-.sheet .av{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:#2a2c31;color:var(--muted);margin-top:-1px}
-.sheet.now .av{background:#2a2540;color:var(--now)}
+.sheet .av{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:var(--av);color:var(--muted);margin-top:-1px}
+.sheet.now .av{background:var(--av-now);color:var(--now)}
 .sheet .who{color:var(--fg);font-weight:500}
 /* toutes les cartes ont la taille de « Dépôt au Sénat » : titre en haut (deux lignes au plus), date en bas, près de l'arête */
 .sheet:not(.open){height:var(--ch,106px)}
@@ -68,10 +80,10 @@ button{font-family:inherit}
 .sheet.future:hover{border-color:var(--border)}
 .sheet .hd{padding-right:30px}
 .cmpbtn{position:absolute;right:10px;top:8px;width:26px;height:26px;border-radius:6px;border:1px solid var(--border-2);background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:color .2s,background .2s}
-.cmpbtn:hover{color:var(--fg);background:#1f2023}
+.cmpbtn:hover{color:var(--fg);background:var(--hover)}
 .gap.empty{padding:0}
 .toggle{position:absolute;right:10px;bottom:10px;width:26px;height:26px;border-radius:6px;border:1px solid var(--border-2);background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:color .2s,background .2s}
-.toggle:hover{color:var(--fg);background:#1f2023}
+.toggle:hover{color:var(--fg);background:var(--hover)}
 .toggle svg{transition:transform .35s var(--ease)}
 .sheet.open .toggle svg{transform:rotate(180deg)}
 .txt{position:relative;overflow:hidden;max-height:var(--h,0px);transition:max-height .42s var(--ease);margin:0 0 0 30px;scrollbar-width:none;font-size:13.5px;line-height:1.65}
@@ -82,7 +94,7 @@ button{font-family:inherit}
 .al{display:grid;grid-template-columns:18px 1fr;gap:0 6px;margin:0 0 .6em;padding:2px 6px 2px 0;border-radius:4px;transition:background .3s}
 .al:first-child{padding-top:6px}
 .al .n{font-size:11px;line-height:2.1;color:var(--dim);text-align:right}
-.al.lit{background:rgba(94,106,210,.16)}
+.al.lit{background:var(--lit)}
 .al.same{color:var(--dim)}
 .sheet:not(.open) .al.same{display:none}
 ins{color:var(--ins);text-decoration:underline 1px;text-underline-offset:3px;font-weight:500;background:none}
@@ -135,8 +147,8 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 @keyframes rise{from{opacity:0;transform:translateY(6px)}}
 .c{background:var(--card-2);border-left:1px solid var(--border);border-right:1px solid var(--border);padding:0 16px;min-width:0}
 .c.h{position:relative;border-top:1px solid var(--border);border-radius:8px 8px 0 0;padding-top:12px;padding-bottom:12px;display:flex;align-items:flex-start;gap:10px;padding-right:46px}
-.c.h .av{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:#2a2c31;color:var(--muted);margin-top:-1px}
-.c.h.now .av{background:#2a2540;color:var(--now)}
+.c.h .av{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:var(--av);color:var(--muted);margin-top:-1px}
+.c.h.now .av{background:var(--av-now);color:var(--now)}
 .c.h .who{color:var(--fg);font-weight:500}
 .c.h .meta{display:block;color:var(--dim)}
 .c.h.now .who{color:var(--now)}
@@ -151,7 +163,7 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 .c.a.same p{color:var(--dim)}
 .c.a .none{color:var(--dim);font-style:italic}
 .x{position:absolute;right:10px;top:10px;width:26px;height:26px;border-radius:6px;border:1px solid var(--border-2);background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer}
-.x:hover{color:var(--fg);background:#1f2023}
+.x:hover{color:var(--fg);background:var(--hover)}
 .pickl{flex:none;width:250px;align-self:center}
 .pk.now b{color:var(--now)}
 
@@ -161,7 +173,7 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 /* numéro d'un alinéa ajouté : comme un ajout (bleu, gras, souligné) ; d'un alinéa supprimé : barré */
 .al .n.add,.c.a .n.add{color:var(--ins);font-weight:700;text-decoration:underline 1px;text-underline-offset:3px}
 .al .n.rem,.c.a .n.rem{text-decoration:line-through 1px var(--del)}
-@media (max-width:520px){ :root{--ch:126px} .hint{display:none} :root{--cardw:min(270px,calc(100vw - 110px));--gap:178px;--gapw:min(340px,calc(100vw - 40px))} .row{padding-left:24px;padding-right:48px} }
+@media (max-width:520px){ .theme{top:auto;bottom:calc(16px + env(safe-area-inset-bottom,0px))} :root{--ch:126px} .hint{display:none} :root{--cardw:min(270px,calc(100vw - 110px));--gap:178px;--gapw:min(340px,calc(100vw - 40px))} .row{padding-left:24px;padding-right:48px} }
 @media (prefers-reduced-motion:reduce){ *{transition-duration:.01ms!important;scroll-behavior:auto!important} }
 </style>
 </head>
@@ -171,6 +183,7 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
   <div class="ttl"><div class="k">Projet de loi pour l'accès au logement · Historique</div><h1 id="title"></h1><div class="dots" id="dots"></div></div>
   <button class="nav" id="next" type="button" aria-label="Article suivant"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6l5 5 5-5"/></svg></button>
 </div></header>
+<button class="theme" id="theme" type="button" aria-label="Passer en thème sombre" title="Thème sombre"></button>
 <div id="stage"><div id="track"></div></div>
 <div class="hint" id="hint">← → parcourir les étapes · ↑ ↓ changer d'article</div>
 <script>
@@ -322,6 +335,17 @@ function alsHTML(art,i,r){
     return `<div class="al${same?" same":""}" data-al="${k}"><span class="n${numCls(a,b,!!prev)}">${k}</span><p style="margin:0">${prev?diff(a??null,b??null):esc(b)}</p></div>`;
   }).join("");
 }
+// thème : clair par défaut, sombre au choix (mémorisé dans ce navigateur si possible)
+(function(){
+  const btn=document.getElementById("theme");
+  const MOON='<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 9.5A5.5 5.5 0 0 1 6.5 3a5.5 5.5 0 1 0 6.5 6.5z"/></svg>';
+  const SUN='<svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="3"/><path d="M8 1.5v1.5M8 13v1.5M1.5 8H3M13 8h1.5M3.4 3.4l1 1M11.6 11.6l1 1M3.4 12.6l1-1M11.6 4.4l1-1"/></svg>';
+  const set=d=>{ document.documentElement.classList.toggle("dark",d); btn.innerHTML=d?SUN:MOON;
+    btn.setAttribute("aria-label",d?"Passer en thème clair":"Passer en thème sombre"); btn.title=d?"Thème clair":"Thème sombre";
+    try{ localStorage.setItem("frise-theme",d?"dark":"light"); }catch(e){} };
+  let d=false; try{ d=localStorage.getItem("frise-theme")==="dark"; }catch(e){}
+  set(d); btn.onclick=()=>set(!document.documentElement.classList.contains("dark"));
+})();
 // étapes à venir : un titre, rien d'autre
 STEPS.push({stage:"Séance publique de l'Assemblée nationale",future:true},{stage:"Commission mixte paritaire",future:true},{stage:"Promulgation",future:true});
 const DONE=4; // nombre d'étapes qui ont un texte (la dernière est en cours)
