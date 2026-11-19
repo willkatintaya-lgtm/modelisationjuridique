@@ -41,7 +41,7 @@ button{font-family:inherit}
 .bar-in{display:flex;align-items:center;gap:14px;width:100%;max-width:760px}
 .nav{flex:none;width:30px;height:30px;border-radius:7px;border:1px solid var(--border-2);background:var(--card);color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:color .2s,background .2s,opacity .2s}
 .nav:hover:not(:disabled){color:var(--fg);background:var(--hover)}
-.theme{position:fixed;top:calc(16px + env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px));z-index:6;width:30px;height:30px;border-radius:7px;border:1px solid var(--border-2);background:var(--card);color:var(--muted);display:grid;place-items:center;cursor:pointer}
+.theme{position:fixed;bottom:calc(14px + env(safe-area-inset-bottom,0px));right:max(16px,env(safe-area-inset-right,0px));z-index:6;width:30px;height:30px;border-radius:7px;border:1px solid var(--border-2);background:var(--card);color:var(--muted);display:grid;place-items:center;cursor:pointer}
 /* changement de thème instantané : aucune transition pendant la bascule */
 :root.swap *,:root.swap *::before,:root.swap *::after{transition:none!important}
 .theme:hover{color:var(--fg);background:var(--hover)}
@@ -175,7 +175,7 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 /* numéro d'un alinéa ajouté : comme un ajout (bleu, gras, souligné) ; d'un alinéa supprimé : barré */
 .al .n.add,.c.a .n.add{color:var(--ins);font-weight:700;text-decoration:underline 1px;text-underline-offset:3px}
 .al .n.rem,.c.a .n.rem{text-decoration:line-through 1px var(--del)}
-@media (max-width:520px){ .theme{top:auto;bottom:calc(16px + env(safe-area-inset-bottom,0px))} :root{--ch:126px} .hint{display:none} :root{--cardw:min(270px,calc(100vw - 110px));--gap:178px;--gapw:min(340px,calc(100vw - 40px))} .row{padding-left:24px;padding-right:48px} }
+@media (max-width:520px){ :root{--ch:126px} .hint{display:none} :root{--cardw:min(270px,calc(100vw - 110px));--gap:178px;--gapw:min(340px,calc(100vw - 40px))} .row{padding-left:24px;padding-right:48px} }
 @media (prefers-reduced-motion:reduce){ *{transition-duration:.01ms!important;scroll-behavior:auto!important} }
 </style>
 </head>
