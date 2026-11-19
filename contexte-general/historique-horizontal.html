@@ -60,10 +60,11 @@ button{font-family:inherit}
 .sheet.now .av{background:#2a2540;color:var(--now)}
 .sheet .who{color:var(--fg);font-weight:500}
 /* toutes les cartes ont la taille de « Dépôt au Sénat » : titre en haut (deux lignes au plus), date en bas, près de l'arête */
-.sheet:not(.open){height:var(--ch,96px)}
+.sheet:not(.open){height:var(--ch,106px)}
 .sheet .meta{position:absolute;left:44px;bottom:10px;line-height:26px;color:var(--dim)}
 .sheet.now .who{color:var(--now)}
-.sheet.now .meta{color:var(--now);font-weight:600}
+.sheet .meta.live,.c.h .meta.live,.pk .t.live{color:var(--now);font-weight:400;opacity:.6}
+.sheet .meta.live{right:44px;line-height:16px;bottom:15px}
 .sheet.future:hover{border-color:var(--border)}
 .sheet .hd{padding-right:30px}
 .cmpbtn{position:absolute;right:10px;top:8px;width:26px;height:26px;border-radius:6px;border:1px solid var(--border-2);background:transparent;color:var(--muted);display:grid;place-items:center;cursor:pointer;transition:color .2s,background .2s}
@@ -139,7 +140,7 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 .c.h .who{color:var(--fg);font-weight:500}
 .c.h .meta{display:block;color:var(--dim)}
 .c.h.now .who{color:var(--now)}
-.c.h.now .meta{color:var(--now);font-weight:600}
+
 .c .n.add{color:var(--ins);font-weight:700}
 .c .n.rem{text-decoration:line-through 1px var(--del)}
 .al .n.add{color:var(--ins);font-weight:700}
@@ -153,14 +154,14 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 .x:hover{color:var(--fg);background:#1f2023}
 .pickl{flex:none;width:250px;align-self:center}
 .pk.now b{color:var(--now)}
-.pk.now .t{color:var(--now);font-weight:600}
+
 .pickl .list{max-height:none;margin-left:7px}
 .pk .t{display:block;color:var(--dim)}
 @media (max-width:520px){ .cg{--cw:calc(100vw - 56px)} .cmp-in{flex-direction:column;align-items:flex-start;justify-content:flex-start;padding-top:8px} .pickl{align-self:flex-start} }
 /* numéro d'un alinéa ajouté : comme un ajout (bleu, gras, souligné) ; d'un alinéa supprimé : barré */
 .al .n.add,.c.a .n.add{color:var(--ins);font-weight:700;text-decoration:underline 1px;text-underline-offset:3px}
 .al .n.rem,.c.a .n.rem{text-decoration:line-through 1px var(--del)}
-@media (max-width:520px){ :root{--ch:116px} .hint{display:none} :root{--cardw:min(270px,calc(100vw - 110px));--gap:178px;--gapw:min(340px,calc(100vw - 40px))} .row{padding-left:24px;padding-right:48px} }
+@media (max-width:520px){ :root{--ch:126px} .hint{display:none} :root{--cardw:min(270px,calc(100vw - 110px));--gap:178px;--gapw:min(340px,calc(100vw - 40px))} .row{padding-left:24px;padding-right:48px} }
 @media (prefers-reduced-motion:reduce){ *{transition-duration:.01ms!important;scroll-behavior:auto!important} }
 </style>
 </head>
@@ -329,7 +330,9 @@ const CMPS='<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="
 const CMPI='<svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5.5 2v12M10.5 2v12M2 5h3.5M10.5 11H14"/></svg>';
 const X='<svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 4l8 8M12 4l-8 8"/></svg>';
 const dateOf=st=>st.now?"":st.date;
-const metaOf=(st,cls="meta")=>st.now?"":`<span class="${cls}">${st.date}</span>`;
+// l'étape en cours : à la place de la date, ce qui s'y passe et depuis quand, en violet estompé
+const LIVE="En cours d'examen depuis\u00a0le\u00a013\u00a0mai"; // espaces insécables : la coupure tombe avant « depuis »
+const metaOf=(st,cls="meta")=>st.now?`<span class="${cls} live">${LIVE}</span>`:`<span class="${cls}">${st.date}</span>`;
 
 function sheetHTML(art,i){
   const st=STEPS[i];
