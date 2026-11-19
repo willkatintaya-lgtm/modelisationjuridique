@@ -221,7 +221,9 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 .c.h .av{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:var(--av);color:var(--muted);margin-top:-1px}
 .c.h.now .av{background:var(--av-now);color:var(--now)}
 .c.h .who{color:var(--fg);font-weight:500}
-.c.h .meta{display:block;color:var(--dim)}
+/* la date en bas de l'en-tête, à la même hauteur dans les deux colonnes, comme sur les cartes de la frise */
+.c.h .meta{position:absolute;left:44px;right:46px;bottom:11px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cg .c.h{padding-bottom:36px}
 .c.h.now .who{color:var(--now)}
 
 .c .n.add{color:var(--ins);font-weight:700}
