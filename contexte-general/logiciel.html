@@ -213,8 +213,9 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 /* en-têtes et pieds collés : les cartes restent fermées pendant que le texte défile entre eux */
 .cg .c.h{position:sticky;top:0;z-index:2}
 .cg .c.f{position:sticky;bottom:0;z-index:2}
-.cg.ov .c.h{border-bottom:1px solid var(--border)}
-.cg.ov .c.f{border-top:1px solid var(--border)}
+/* pas de filet sous l'en-tête ni au-dessus du pied : l'espace reste, la ligne disparaît */
+.cg .c.h{border-bottom:1px solid transparent}
+.cg .c.f{border-top:1px solid transparent}
 @keyframes rise{from{opacity:0;transform:translateY(6px)}}
 .c{background:var(--card-2);border-left:1px solid var(--border);border-right:1px solid var(--border);padding:0 16px;min-width:0}
 .c.h{position:relative;border-top:1px solid var(--border);border-radius:8px 8px 0 0;padding-top:12px;padding-bottom:12px;display:flex;align-items:flex-start;gap:10px;padding-right:46px}
