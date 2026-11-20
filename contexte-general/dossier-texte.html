@@ -385,6 +385,18 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 .hnav .dots i.on.now{background:var(--now)}
 .hist-in.from-l .hlab,.hist-in.from-l .hc{animation:hin-l .32s var(--ease)}
 .hist-in.from-r .hlab,.hist-in.from-r .hc{animation:hin-r .32s var(--ease)}
+/* Historique en fenêtre fixe : seule la colonne des cartes défile, entre la bande du haut (l'étape) et celle du bas (‹ › et points) */
+#doc.hmode{overflow:hidden}
+#doc.hmode .hist-in{height:100%;min-height:0;padding:0!important;display:block}
+.hlist{position:absolute;top:84px;bottom:76px;left:0;right:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;overscroll-behavior:contain}
+.hlist::-webkit-scrollbar{display:none}
+.hlist.ft{-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 28px);mask-image:linear-gradient(180deg,transparent 0,#000 28px)}
+.hlist.fb{-webkit-mask-image:linear-gradient(180deg,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(180deg,#000 calc(100% - 28px),transparent)}
+.hlist.ft.fb{-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 28px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(180deg,transparent 0,#000 28px,#000 calc(100% - 28px),transparent)}
+.hlist-in{min-height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:10px;padding:8px 122px 8px 18px}
+.hist-in.hx .hlist-in{align-items:flex-start;padding-left:var(--hx);padding-right:18px}
+@media (max-width:520px){ .hlist-in{padding:8px 18px} }
+
 </style>
 <div class="win">
   <div class="tb">
@@ -1113,7 +1125,8 @@ histHTML=function(){
     <span class="dots" aria-hidden="true">${STEPS.slice(0,DONE).map((s,i)=>`<i class="${i===step?"on":""}${s.now?" now":""}"></i>`).join("")}</span></div>`;
   const cards=ARTICLES.map((a,k)=>{ const [m,cls]=cardMeta(a,k), live=step===CUR&&cls==="live";
     return `<button class="hc${live?" live":""}" type="button" data-open="${k}" title="Ouvrir l'historique de l'article"><div class="hd"><span class="av">${a.n}</span><span class="tx"><span class="who">Article ${a.n}</span><span class="tt">${a.t}</span></span></div><span class="go">${ICONS.arrow}</span><span class="meta${cls?" "+cls:""}">${m}</span></button>`; }).join("");
-  return `<div class="hist-in${hdir?" from-"+hdir:""}">${band}${cards}</div>`;
+  const ph=n=>`<button class="hc ph" type="button" disabled title="Module vide (pour l'essai du défilement)"><div class="hd"><span class="av">${n}</span><span class="tx"><span class="who">Article ${n}</span></span></div></button>`;
+  return `<div class="hist-in${hdir?" from-"+hdir:""}">${band}<div class="hlist"><div class="hlist-in">${ph(1)}${ph(2)}${cards}${ph(6)}${ph(7)}</div></div></div>`;
 };
 function hstep(d){
   const n=Math.max(0,Math.min(DONE-1,step+d)); if(n===step) return;
@@ -1137,5 +1150,13 @@ docEl.addEventListener("pointerup",e=>{ if(px==null) return; const dx=e.clientX-
   if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5){ hstep(dx<0?1:-1); docEl.dataset.swiped="1"; setTimeout(()=>delete docEl.dataset.swiped,0); } });
 docEl.addEventListener("click",e=>{ if(docEl.dataset.swiped){ e.stopPropagation(); e.preventDefault(); } },true);
 docEl.style.touchAction="pan-y";
+if(view==="hist"){ renderDossier(); alignH(); }
+
+// fenêtre fixe : le défilement vertical de la colonne, avec fondus là où il reste des cartes
+function hfades(){ const l=docEl.querySelector(".hlist"); if(!l) return; const m=l.scrollHeight-l.clientHeight; l.classList.toggle("ft",l.scrollTop>2); l.classList.toggle("fb",l.scrollTop<m-2); }
+const renderD2=renderDossier;
+renderDossier=function(){ const l=docEl.querySelector(".hlist"), y=l?l.scrollTop:null; renderD2(); docEl.classList.toggle("hmode",view==="hist");
+  const n=docEl.querySelector(".hlist"); if(n){ if(y!=null) n.scrollTop=y; n.addEventListener("scroll",hfades,{passive:true}); hfades(); } };
+addEventListener("resize",hfades);
 if(view==="hist"){ renderDossier(); alignH(); }
 </script>
