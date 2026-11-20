@@ -212,14 +212,14 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 .cmp::-webkit-scrollbar{display:none}
 .page.cmping .cmp{opacity:1;pointer-events:auto}
 .cmp-in{display:flex;align-items:center;justify-content:center;gap:14px;min-height:100%;width:max-content;min-width:100%;margin:0 auto}
-.cg{--cw:min(460px,calc((100cqw - 120px)/var(--n)));display:grid;grid-template-columns:repeat(var(--n),var(--cw));column-gap:18px;align-self:center;max-height:calc(100cqh - 96px);overflow-y:auto;scrollbar-width:none}
-.cg::-webkit-scrollbar{display:none}
+.cg{--cw:min(460px,calc((100cqw - 120px)/var(--n)));display:flex;gap:18px;align-self:center;align-items:flex-start}
+.colc{flex:none;width:var(--cw);display:flex;flex-direction:column;max-height:calc(100cqh - 96px);min-height:0}
+.colc .cbody{flex:1 1 auto;min-height:0;overflow-y:auto;scrollbar-width:none}
+.colc .cbody::-webkit-scrollbar{display:none}
 /* en-têtes et pieds collés : les cartes restent fermées pendant que le texte défile entre eux */
-.cg .c.h{position:sticky;top:0;z-index:2}
-.cg .c.f{position:sticky;bottom:0;z-index:2}
 /* pas de filet sous l'en-tête ni au-dessus du pied : l'espace reste, la ligne disparaît */
-.cg .c.h{border-bottom:1px solid transparent}
-.cg .c.f{border-top:1px solid transparent}
+.colc .c.h{border-bottom:1px solid transparent}
+.colc .c.f{border-top:1px solid transparent}
 @keyframes rise{from{opacity:0;transform:translateY(6px)}}
 .c{background:var(--card-2);border-left:1px solid var(--border);border-right:1px solid var(--border);padding:0 16px;min-width:0}
 .c.h{position:relative;border-top:1px solid var(--border);border-radius:8px 8px 0 0;padding-top:12px;padding-bottom:12px;display:flex;align-items:flex-start;gap:10px;padding-right:46px}
@@ -228,7 +228,7 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 .c.h .who{color:var(--fg);font-weight:500}
 /* la date en bas de l'en-tête, à la même hauteur dans les deux colonnes, comme sur les cartes de la frise */
 .c.h .meta{position:absolute;left:46px;right:46px;bottom:11px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cg .c.h{padding-bottom:36px}
+.colc .c.h{padding-bottom:36px}
 /* date des en-têtes comparés : plus petite et estompée, pour laisser l'œil au texte */
 .c.h .meta{font-size:12px;opacity:.5}
 .c.h.now .who{color:var(--now)}
@@ -598,7 +598,7 @@ function edges(){
 }
 function fades(fr){ const m=fr.scrollWidth-fr.clientWidth; fr.classList.toggle("fl",fr.scrollLeft>2); fr.classList.toggle("fr",fr.scrollLeft<m-2); }
 function sizes(){
-  edges(); document.querySelectorAll(".frise").forEach(fades);
+  edges(); document.querySelectorAll(".frise").forEach(fades); document.querySelectorAll(".cmp").forEach(alignCmp);
   const H=document.getElementById("stage").clientHeight;
   document.documentElement.style.setProperty("--lh",Math.max(160,H-190)+"px");
   document.querySelectorAll(".sheet.open").forEach(fit);
@@ -626,7 +626,7 @@ edges(); centerAll(); if(document.fonts) document.fonts.ready.then(()=>{ edges()
 document.querySelectorAll(".frise").forEach(fr=>{ fades(fr); fr.addEventListener("scroll",()=>fades(fr),{passive:true}); });
 
 
-const canScroll=(el,dy)=>{ for(let n=el;n&&n!==stage;n=n.parentElement){ if(n.matches&&n.matches(".list,.sheet.scrolling .txt,.cmp,.cg")&&n.scrollHeight>n.clientHeight+1){ if(dy>0?n.scrollTop+n.clientHeight<n.scrollHeight-1:n.scrollTop>0) return true; } } return false; };
+const canScroll=(el,dy)=>{ for(let n=el;n&&n!==stage;n=n.parentElement){ if(n.matches&&n.matches(".list,.sheet.scrolling .txt,.cmp,.cbody")&&n.scrollHeight>n.clientHeight+1){ if(dy>0?n.scrollTop+n.clientHeight<n.scrollHeight-1:n.scrollTop>0) return true; } } return false; };
 let wy=0,wt=0,wlock=0;
 stage.addEventListener("wheel",e=>{
   if(e.ctrlKey) return;
@@ -707,45 +707,49 @@ function cmpHead(i){
 }
 function renderCmp(k,src){
   const page=pages[k], box=page.querySelector(".cmp"), items=CMP[k], art=ARTICLES[k];
-  const before={}; box.querySelectorAll(".c.h[data-col]").forEach(h=>before[h.dataset.col]=h.getBoundingClientRect());
+  const before={}; box.querySelectorAll(".colc[data-col]").forEach(h=>before[h.dataset.col]=h.getBoundingClientRect());
   const lb=box.querySelector(".pickl"); const listBefore=lb?lb.getBoundingClientRect():null;
   page.classList.toggle("cmping",items.length>0); hint();
   if(!items.length){ box.innerHTML=""; return; }
-  let cells=items.map(cmpHead).join("");
   const keys=[...new Set(items.flatMap(i=>Object.keys(art.v[i])))].map(Number).sort((a,b)=>a-b);
+  const rows={}; items.forEach(i=>rows[i]="");
   if(items.length===1){
     const i=items[0], prev=i?art.v[i-1]:null;
     keys.forEach(n=>{ const a=prev?prev[n]:undefined, b=art.v[i][n];
-      cells+=`<div class="c a${prev&&a===b?" same":""}" data-col="${i}"><span class="n${numCls(a,b,!!prev)}">${n}</span><p style="margin:0">${prev?diff(a??null,b??null):esc(b)}</p></div>`; });
+      rows[i]+=`<div class="c a${prev&&a===b?" same":""}"><span class="n${numCls(a,b,!!prev)}">${n}</span><p style="margin:0">${prev?diff(a??null,b??null):esc(b)}</p></div>`; });
   } else {
     const [l,r]=items, L=art.v[l], Rv=art.v[r];
     keys.forEach(n=>{ const a=L[n], b=Rv[n], same=a===b;
-      cells+=`<div class="c a${same?" same":""}" data-col="${l}"><span class="n">${a!=null?n:""}</span><p style="margin:0">${a!=null?esc(a):""}</p></div>`;
-      cells+=`<div class="c a${same?" same":""}" data-col="${r}"><span class="n${numCls(a,b,true)}">${n}</span><p style="margin:0">${diff(a??null,b??null)}</p></div>`; });
+      rows[l]+=`<div class="c a${same?" same":""}"><span class="n">${a!=null?n:""}</span><p style="margin:0">${a!=null?esc(a):""}</p></div>`;
+      rows[r]+=`<div class="c a${same?" same":""}"><span class="n${numCls(a,b,true)}">${n}</span><p style="margin:0">${diff(a??null,b??null)}</p></div>`; });
   }
-  cells+=items.map(i=>`<div class="c f" data-col="${i}"></div>`).join("");
-  let html=`<div class="cmp-in"><div class="cg" style="--n:${items.length}">${cells}</div>`;
+  // chaque texte dans sa propre colonne, qui défile seule ; les alinéas restent alignés tant que les deux sont à la même hauteur
+  const cols=items.map(i=>`<div class="colc" data-col="${i}">${cmpHead(i)}<div class="cbody">${rows[i]}</div><div class="c f"></div></div>`).join("");
+  let html=`<div class="cmp-in"><div class="cg" style="--n:${items.length}">${cols}</div>`;
   if(items.length===1){
     const i=items[0], others=STEPS.map((s,j)=>j).filter(j=>j<DONE&&j!==i);
     html+=`<div class="pickl"><div class="list">${others.map(j=>`<div class="ev"><button class="ev-row pk${STEPS[j].now?" now":""}" type="button" data-pick="${j}" aria-label="Comparer avec ${STEPS[j].stage}"><span class="ico">${CMPS}</span><span><b>${STEPS[j].stage}</b>${metaOf(STEPS[j],"t")}</span></button></div>`).join("")}</div></div>`;
   }
   box.innerHTML=html+`</div>`; box.scrollTop=0;
-  const cg=box.querySelector(".cg"); if(cg) cg.classList.toggle("ov",cg.scrollHeight>cg.clientHeight+1);
+  alignCmp(box);
   animateCmp(box,before,listBefore,src);
+}
+// même hauteur pour les alinéas de même rang dans les deux colonnes
+function alignCmp(box){
+  const bodies=[...box.querySelectorAll(".cbody")]; if(bodies.length<2) return;
+  const cols=bodies.map(b=>[...b.children]); cols.flat().forEach(c=>c.style.minHeight="");
+  cols[0].forEach((_,i)=>{ const h=Math.max(...cols.map(c=>c[i]?c[i].offsetHeight:0)); cols.forEach(c=>{ if(c[i]) c[i].style.minHeight=h+"px"; }); });
 }
 const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
 function animateCmp(box,before,listBefore,src){
   if(reduce) return;
   const E="cubic-bezier(.25,.8,.25,1)";
-  const cols=[...new Set([...box.querySelectorAll("[data-col]")].map(c=>c.dataset.col))];
-  cols.forEach((c,ci)=>{
-    const head=box.querySelector(`.c.h[data-col="${c}"]`), now=head.getBoundingClientRect();
+  box.querySelectorAll(".colc[data-col]").forEach(col=>{
+    const c=col.dataset.col, now=col.getBoundingClientRect();
     const from=before[c]||(src&&String(src.i)===c?src.r:null)||(listBefore?{left:listBefore.left,top:now.top}:null);
-    const cells=box.querySelectorAll(`[data-col="${c}"]`);
-    if(from){
-      const dx=from.left-now.left, dy=from.top-now.top, fresh=!before[c];
-      cells.forEach((el,k)=>el.animate([{transform:`translate(${dx}px,${dy}px)`,opacity:fresh?(k?0:.6):1},{transform:"none",opacity:1}],{duration:fresh?420:380,easing:E,delay:fresh&&k?Math.min(k*18,140):0,fill:"backwards"}));
-    } else cells.forEach(el=>el.animate([{opacity:0,transform:"translateY(8px)"},{opacity:1,transform:"none"}],{duration:320,easing:E}));
+    if(from){ const fresh=!before[c];
+      col.animate([{transform:`translate(${from.left-now.left}px,${from.top-now.top}px)`,opacity:fresh?.4:1},{transform:"none",opacity:1}],{duration:fresh?420:380,easing:E,fill:"backwards"}); }
+    else col.animate([{opacity:0,transform:"translateY(8px)"},{opacity:1,transform:"none"}],{duration:320,easing:E});
   });
   const pl=box.querySelector(".pickl");
   if(pl) pl.animate([{opacity:0,transform:"translateX(-12px)"},{opacity:1,transform:"none"}],{duration:360,delay:listBefore?60:200,easing:E,fill:"backwards"});
