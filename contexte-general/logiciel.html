@@ -248,7 +248,7 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 .pk.now b{color:var(--now)}
 
 .pickl .list{max-height:none;margin-left:7px}
-.pk .t{display:block;color:var(--dim)}
+.pk .t{display:block;color:var(--dim);padding-left:0} /* pas de logo dans cette liste : la date part sous la première lettre de l'étape */
 @media (max-width:520px){ .cg{--cw:calc(100cqw - 56px)} .cmp-in{flex-direction:column;align-items:flex-start;justify-content:flex-start;padding-top:8px} .pickl{align-self:flex-start} }
 /* numéro d'un alinéa ajouté : comme un ajout (bleu, gras, souligné) ; d'un alinéa supprimé : barré */
 .al .n.add,.c.a .n.add{color:var(--ins);font-weight:700;text-decoration:underline 1px;text-underline-offset:3px}
