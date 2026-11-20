@@ -321,6 +321,8 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 /* colonne au milieu de la zone, horizontalement et verticalement ; la carte (pas son trait) fait le centre */
 .hist-in{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-height:100%;padding:24px 122px 24px 18px} /* décalé à gauche de la moitié du trait (8 + 96 px) : c'est l'ensemble carte + trait qui est centré */
 @media (max-width:520px){ .hist-in{padding:24px 18px} }
+/* bord gauche des cartes à l'aplomb du « H » de « Historique » dans la barre (quand ce maillon est visible) */
+.hist-in.hx{align-items:flex-start;padding-left:var(--hx);padding-right:18px}
 /* le fil, comme sur la frise : un trait léger à droite de chaque carte, à la hauteur du fil de la frise, à 8 px de la carte */
 .hc::after{content:"";position:absolute;left:calc(100% + 8px);top:calc(var(--rail) - 1px);width:96px;height:1px;background:var(--border-2);pointer-events:none}
 .hc:disabled::after{opacity:.5}
@@ -1017,7 +1019,15 @@ function renderDossier(){
 }
 const showDocOrig=showDoc;
 showDoc=function(rec=true){ view="doc"; content.classList.add("docmode"); renderDossier(); header(); sideSync(); if(rec) H2.push("d"); };
-function showHist(rec=true){ view="hist"; content.classList.add("docmode"); renderDossier(); header(); sideSync(); docEl.scrollTop=0; if(rec) H2.push("h"); }
+function showHist(rec=true){ view="hist"; content.classList.add("docmode"); renderDossier(); header(); sideSync(); alignH(); docEl.scrollTop=0; if(rec) H2.push("h"); }
+function alignH(){
+  const box=docEl.querySelector(".hist-in"), h=crumb.querySelector(".c1"); if(!box) return;
+  const ok=view==="hist"&&h&&h.offsetParent; box.classList.toggle("hx",!!ok);
+  if(ok) docEl.style.setProperty("--hx",Math.round(h.getBoundingClientRect().left-docEl.getBoundingClientRect().left)+"px");
+}
+addEventListener("resize",alignH);
+document.querySelector(".wb").addEventListener("transitionend",e=>{ if(e.propertyName==="grid-template-columns") alignH(); });
+if(document.fonts) document.fonts.ready.then(alignH);
 const headerOrig=header;
 header=function(){
   document.querySelector(".mh").classList.toggle("dmode",view==="doc");
