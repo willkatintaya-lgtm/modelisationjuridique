@@ -214,7 +214,7 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 .cmp-in{display:flex;align-items:center;justify-content:center;gap:14px;min-height:100%;width:max-content;min-width:100%;margin:0 auto}
 .cg{--cw:min(460px,calc((100cqw - 120px)/var(--n)));display:flex;gap:18px;align-self:center;align-items:flex-start}
 .colc{flex:none;width:var(--cw);display:flex;flex-direction:column;max-height:calc(100cqh - 96px);min-height:0}
-.colc .cbody{flex:1 1 auto;min-height:0;overflow-y:auto;scrollbar-width:none}
+.colc .cbody{flex:1 1 auto;min-height:0;overflow-y:auto;scrollbar-width:none;overscroll-behavior:contain}
 .colc .cbody::-webkit-scrollbar{display:none}
 /* en-têtes et pieds collés : les cartes restent fermées pendant que le texte défile entre eux */
 /* pas de filet sous l'en-tête ni au-dessus du pied : l'espace reste, la ligne disparaît */
@@ -738,7 +738,10 @@ function renderCmp(k,src){
 function alignCmp(box){
   const bodies=[...box.querySelectorAll(".cbody")]; if(bodies.length<2) return;
   const cols=bodies.map(b=>[...b.children]); cols.flat().forEach(c=>c.style.minHeight="");
+  cols.flat().forEach(c=>c.style.display="");
   cols[0].forEach((_,i)=>{ const h=Math.max(...cols.map(c=>c[i]?c[i].offsetHeight:0)); cols.forEach(c=>{ if(c[i]) c[i].style.minHeight=h+"px"; }); });
+  // pas de vide en bas : les cases vides qui terminent une colonne (alinéas absents de ce texte) sont retirées
+  cols.forEach(c=>{ for(let i=c.length-1;i>=0&&!c[i].textContent.trim();i--) c[i].style.display="none"; });
 }
 const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
 function animateCmp(box,before,listBefore,src){
