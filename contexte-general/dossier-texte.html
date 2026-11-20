@@ -349,6 +349,26 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 .mh.dmode{overflow-x:auto;scrollbar-width:none}
 .mh.dmode::-webkit-scrollbar{display:none}
 .mh.dmode .tabs{display:flex}
+/* Historique : le bandeau d'étape en tête de colonne ; ‹ › ou glisser à gauche / à droite pour changer d'étape */
+.hstep{position:relative;flex:none;width:var(--cardw);display:flex;align-items:center;gap:8px;margin-bottom:8px;padding:8px 8px 8px 12px;border-radius:8px;border:1px solid var(--border);background:transparent}
+.hstep .lab{flex:1;min-width:0;display:flex;flex-direction:column}
+.hstep .k{font-size:11.5px;color:var(--dim)}
+.hstep .nm{color:var(--fg);font-weight:500;line-height:1.35}
+.hstep.now .nm{color:var(--now)}
+.hstep .dt{font-size:12px;color:var(--dim)}
+.hstep.now .dt{color:var(--now);opacity:.5}
+.hstep .sb{flex:none;width:26px;height:26px;border-radius:6px;border:1px solid var(--border-2);background:var(--card);color:var(--muted);display:grid;place-items:center;cursor:pointer}
+.hstep .sb:hover:not(:disabled){color:var(--fg);background:var(--hover)}
+.hstep .sb:disabled{opacity:.3;cursor:default}
+.hstep .dots{position:absolute;left:12px;bottom:-12px;display:flex;gap:5px}
+.hstep .dots i{width:5px;height:5px;border-radius:50%;background:var(--border-2)}
+.hstep .dots i.on{background:var(--muted)}
+.hstep .dots i.on.now{background:var(--now)}
+@keyframes hin-l{from{opacity:0;transform:translateX(14px)}}
+@keyframes hin-r{from{opacity:0;transform:translateX(-14px)}}
+.hist-in.from-l .hc,.hist-in.from-l .hstep .lab{animation:hin-l .32s var(--ease)}
+.hist-in.from-r .hc,.hist-in.from-r .hstep .lab{animation:hin-r .32s var(--ease)}
+.hc .meta.frozen{color:var(--dim)}
 </style>
 <div class="win">
   <div class="tb">
@@ -999,7 +1019,7 @@ const atRestOrig=atRest; atRest=()=>view==="art"&&atRestOrig();
 document.addEventListener("keydown",e=>{
   if(view==="art") return;
   if(e.key==="Escape"){ document.querySelector(".mh .stsel")?.classList.remove("open"); e.stopImmediatePropagation(); }
-  if(e.key==="ArrowLeft"||e.key==="ArrowRight") e.stopImmediatePropagation();
+  if(view==="doc"&&(e.key==="ArrowLeft"||e.key==="ArrowRight")) e.stopImmediatePropagation();
 },true);
 H2.list=[]; H2.at=-1; showDoc();
 // ===== onglet « Historique » du dossier (essai) =====
@@ -1057,4 +1077,49 @@ document.addEventListener("click",e=>{
 // dans le dossier (Texte ou Historique), le clavier ne change pas d'article
 const atRest2=atRest; atRest=()=>view==="art"&&atRest2();
 H2.list=[]; H2.at=-1; showHist();
+// ===== Historique : une étape à la fois =====
+// Le bandeau dit de quelle étape on parle (par défaut, celle en cours) ; ‹ ›, les flèches du clavier
+// ou un glissé horizontal passent à l'étape voisine. Les cartes disent ce que chaque article est devenu à cette étape.
+// Ouvrir un article ouvre sa frise centrée sur cette étape. L'étape est la même que celle du sélecteur de l'onglet Texte.
+const LEFT='<svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M10 3.5L5.5 8l4.5 4.5"/></svg>';
+const cap=s=>s[0].toUpperCase()+s.slice(1);
+const plur=n=>`${n} amendement${n>1?"s":""}`;
+function cardMeta(a,k){
+  if(step===CUR){ const [lab,cls]=HSTATE[STATE[k]]; return [`${lab} · ${plur(a.amds[CUR].length)}`,cls]; }
+  if(step===0) return ["Texte déposé","frozen"];
+  return [`${cap(a.chips[step]||"adopté")} · ${plur(a.amds[step].length)}`,"frozen"];
+}
+let hdir="";
+histHTML=function(){
+  const st=STEPS[step], last=DONE-1;
+  const band=`<div class="hstep${st.now?" now":""}"><div class="lab"><span class="nm">${st.stage}</span><span class="dt">${st.now?"En cours d'examen depuis le 13 mai":st.date}</span></div>
+    <button class="sb" type="button" data-hs="-1" aria-label="Étape précédente"${step===0?" disabled":""}>${LEFT}</button><button class="sb" type="button" data-hs="1" aria-label="Étape suivante"${step===last?" disabled":""}>${RIGHT}</button>
+    <span class="dots" aria-hidden="true">${STEPS.slice(0,DONE).map((s,i)=>`<i class="${i===step?"on":""}${s.now?" now":""}"></i>`).join("")}</span></div>`;
+  const cards=ARTICLES.map((a,k)=>{ const [m,cls]=cardMeta(a,k), live=step===CUR&&cls==="live";
+    return `<button class="hc${live?" live":""}" type="button" data-open="${k}" title="Ouvrir l'historique de l'article"><div class="hd"><span class="av">${a.n}</span><span class="tx"><span class="who">Article ${a.n}</span><span class="tt">${a.t}</span></span></div><span class="go">${ICONS.arrow}</span><span class="meta${cls?" "+cls:""}">${m}</span></button>`; }).join("");
+  return `<div class="hist-in${hdir?" from-"+hdir:""}">${band}${cards}</div>`;
+};
+function hstep(d){
+  const n=Math.max(0,Math.min(DONE-1,step+d)); if(n===step) return;
+  hdir=d>0?"l":"r"; step=n; renderDossier(); alignH(); hdir="";
+}
+// ouvrir un article depuis l'Historique : sa frise, centrée sur l'étape choisie
+function centerOn(k,i){ const page=pages[k], fr=page.querySelector(".frise"), s=page.querySelector(`.sheet[data-i="${i}"]`); if(!s) return;
+  fr.style.scrollBehavior="auto"; fr.scrollLeft=s.offsetLeft+s.offsetWidth/2-fr.clientWidth/2; fr.style.scrollBehavior=""; fades(fr); }
+const showArt2=showArt;
+showArt=function(k,rec=true){ const fromHist=view==="hist"; showArt2(k,rec); if(fromHist){ centerOn(cur,step); const s=pages[cur].querySelector(`.sheet[data-i="${step}"]`); if(s&&step!==CUR){ s.classList.add("pulse"); setTimeout(()=>s.classList.remove("pulse"),900); } } };
+document.addEventListener("click",e=>{ const b=e.target.closest("[data-hs]"); if(b&&!b.disabled){ e.stopImmediatePropagation(); hstep(+b.dataset.hs); } },true);
+document.addEventListener("keydown",e=>{ if(view!=="hist") return; if(e.key==="ArrowLeft"||e.key==="ArrowRight"){ e.preventDefault(); e.stopImmediatePropagation(); hstep(e.key==="ArrowRight"?1:-1); } },true);
+// glisser : pavé tactile (horizontal cumulé, un cran par geste) et doigt / souris
+let hx0=0,hlock=0,hwT=0;
+docEl.addEventListener("wheel",e=>{ if(view!=="hist"||Math.abs(e.deltaX)<=Math.abs(e.deltaY)) return; e.preventDefault();
+  const t=performance.now(); if(t-hwT>220){ hx0=0; hlock=0; } hwT=t; if(hlock) return;
+  hx0+=e.deltaX; if(Math.abs(hx0)>90){ hlock=1; hstep(hx0>0?1:-1); } },{passive:false});
+let px=null,py=null;
+docEl.addEventListener("pointerdown",e=>{ if(view==="hist"){ px=e.clientX; py=e.clientY; } });
+docEl.addEventListener("pointerup",e=>{ if(px==null) return; const dx=e.clientX-px, dy=e.clientY-py; px=null;
+  if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5){ hstep(dx<0?1:-1); docEl.dataset.swiped="1"; setTimeout(()=>delete docEl.dataset.swiped,0); } });
+docEl.addEventListener("click",e=>{ if(docEl.dataset.swiped){ e.stopPropagation(); e.preventDefault(); } },true);
+docEl.style.touchAction="pan-y";
+if(view==="hist"){ renderDossier(); alignH(); }
 </script>
