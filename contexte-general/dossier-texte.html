@@ -317,6 +317,30 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 .crumb .lk:hover{background:var(--hover);color:var(--fg)}
 .tabs button.on{cursor:default}
 @media (max-width:820px){ .doc-in{padding-top:18px} .da{padding:14px 18px 12px} .stm{min-width:260px;left:auto;right:0} }
+/* ===== onglet « Historique » du dossier (essai) : une petite carte par article, en colonne ===== */
+.hist-in{display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:24px var(--edge,18px) 64px}
+.hc{position:relative;flex:none;width:var(--cardw);height:78px;padding:12px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;box-shadow:var(--shadow);color:var(--text);font:400 13px/1.5 var(--f);text-align:left;cursor:pointer;transition:border-color .2s}
+.hc:hover{border-color:var(--border-2)}
+.hc .hd{display:flex;align-items:flex-start;gap:10px;padding-right:22px}
+.hc .av{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:var(--av);color:var(--muted);font-size:10.5px;font-weight:500;margin-top:-1px}
+.hc .who{color:var(--fg);font-weight:500;white-space:nowrap}
+.hc .tt{color:var(--muted);margin-left:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.hc .meta{position:absolute;left:44px;right:14px;bottom:10px;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hc .meta.live{color:var(--now);opacity:.5}
+.hc.live .av{background:var(--av-now);color:var(--now)}
+.hc .go{position:absolute;right:12px;top:12px;color:var(--dim);opacity:0;transition:opacity .2s}
+.hc:hover .go{opacity:1}
+.hc:disabled{cursor:default;box-shadow:none;background:transparent;border-style:dashed}
+.hc:disabled .who,.hc:disabled .tt{color:var(--dim)}
+.hc:disabled:hover{border-color:var(--border)}
+.hc{display:block;height:var(--ch,106px)}
+.hc .hd .tx{display:flex;flex-direction:column;min-width:0}
+.hc .tt{margin-left:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hc .hd{position:absolute;top:12px;left:14px;right:14px}
+/* dans le dossier, les onglets restent visibles même sur écran étroit (la barre défile si besoin) */
+.mh.dmode{overflow-x:auto;scrollbar-width:none}
+.mh.dmode::-webkit-scrollbar{display:none}
+.mh.dmode .tabs{display:flex}
 </style>
 <div class="win">
   <div class="tb">
@@ -946,7 +970,7 @@ function showArt(k,rec=true){
   view="art"; content.classList.remove("docmode"); header(); go(k); header(); sideSync(); sizes(); if(rec) H2.push(cur);
 }
 const goOrig=go;
-go=function(k){ if(view==="doc") return; goOrig(k); if(view==="art"){ header(); sideSync(); H2.push(cur); } };
+go=function(k){ if(view!=="art") return; goOrig(k); if(view==="art"){ header(); sideSync(); H2.push(cur); } };
 const nav=e=>e==="d"?showDoc(false):showArt(e,false);
 document.getElementById("hback").onclick=()=>{ if(H2.at>0){ H2.at--; nav(H2.list[H2.at]); H2.ui(); } };
 document.getElementById("hfwd").onclick=()=>{ if(H2.at<H2.list.length-1){ H2.at++; nav(H2.list[H2.at]); H2.ui(); } };
@@ -965,9 +989,52 @@ document.addEventListener("click",e=>{
 // au clavier : dans le dossier, haut/bas font défiler le texte (pas de changement d'article) ; Échap ferme le menu
 const atRestOrig=atRest; atRest=()=>view==="art"&&atRestOrig();
 document.addEventListener("keydown",e=>{
-  if(view!=="doc") return;
+  if(view==="art") return;
   if(e.key==="Escape"){ document.querySelector(".mh .stsel")?.classList.remove("open"); e.stopImmediatePropagation(); }
   if(e.key==="ArrowLeft"||e.key==="ArrowRight") e.stopImmediatePropagation();
 },true);
 H2.list=[]; H2.at=-1; showDoc();
+// ===== onglet « Historique » du dossier (essai) =====
+// Une petite carte par article, en colonne ; un clic ouvre la frise de l'article.
+const PLACE=[{n:1,t:"Objet de la loi"},{n:2,t:"Définitions"}]; // articles sans données : visibles, non remplis
+const HSTATE={done:["Examiné",""],live:["En cours d'examen","live"],todo:["À examiner",""]};
+function histHTML(){
+  const ph=PLACE.map(a=>`<button class="hc" type="button" disabled title="Exemple non rempli"><div class="hd"><span class="av">${a.n}</span><span class="tx"><span class="who">Article ${a.n}</span><span class="tt">${a.t}</span></span></div><span class="meta">Adopté conforme</span></button>`).join("");
+  const real=ARTICLES.map((a,k)=>{ const [lab,cls]=HSTATE[STATE[k]], nb=a.amds.reduce((s,l)=>s+(l?l.length:0),0);
+    return `<button class="hc${cls?" live":""}" type="button" data-open="${k}" title="Ouvrir l'historique de l'article"><div class="hd"><span class="av">${a.n}</span><span class="tx"><span class="who">Article ${a.n}</span><span class="tt">${a.t}</span></span></div><span class="go">${ICONS.arrow}</span><span class="meta${cls?" live":""}">${lab} · ${nb} amendements</span></button>`; }).join("");
+  return `<div class="hist-in">${ph}${real}</div>`;
+}
+let artFrom="h"; // onglet d'où l'on a ouvert l'article : "d" (Texte) ou "h" (Historique)
+function renderDossier(){
+  docEl.style.setProperty("--edge",getComputedStyle(document.getElementById("stage")).getPropertyValue("--edge")||"18px");
+  docEl.innerHTML=view==="doc"?docHTML():histHTML();
+}
+const showDocOrig=showDoc;
+showDoc=function(rec=true){ view="doc"; content.classList.add("docmode"); renderDossier(); header(); sideSync(); if(rec) H2.push("d"); };
+function showHist(rec=true){ view="hist"; content.classList.add("docmode"); renderDossier(); header(); sideSync(); docEl.scrollTop=0; if(rec) H2.push("h"); }
+const headerOrig=header;
+header=function(){
+  document.querySelector(".mh").classList.toggle("dmode",view!=="art");
+  if(view==="art"){ headerOrig();
+    const from=artFrom==="d"?"Texte":"Historique";
+    crumb.querySelector(".c1").outerHTML=`<button class="lk c1" type="button" data-tab="${artFrom}">${from}</button>`;
+    return; }
+  const v=view; view="doc"; headerOrig(); view=v;
+  if(v==="hist") document.querySelectorAll(".mh .stsel").forEach(x=>x.remove());
+  tabs.innerHTML=`<button type="button" data-tab="d" class="${v==="doc"?"on":""}">Texte</button><button type="button" data-tab="h" class="${v==="hist"?"on":""}">Historique</button><button type="button" title="À venir">Amendements</button><button type="button" title="À venir">Documents</button>`;
+};
+const sideOrig=sideSync;
+sideSync=function(){ const v=view; if(v==="hist") view="doc"; sideOrig(); view=v; };
+const showArtOrig=showArt;
+showArt=function(k,rec=true){ if(view==="doc"||view==="hist") artFrom=view==="doc"?"d":"h"; showArtOrig(k,rec); };
+const nav2=e=>e==="d"?showDoc(false):e==="h"?showHist(false):showArt(e,false);
+document.getElementById("hback").onclick=()=>{ if(H2.at>0){ H2.at--; nav2(H2.list[H2.at]); H2.ui(); } };
+document.getElementById("hfwd").onclick=()=>{ if(H2.at<H2.list.length-1){ H2.at++; nav2(H2.list[H2.at]); H2.ui(); } };
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-tab]"); if(!t) return;
+  e.stopImmediatePropagation(); t.dataset.tab==="d"?showDoc():showHist();
+},true);
+// dans le dossier (Texte ou Historique), le clavier ne change pas d'article
+const atRest2=atRest; atRest=()=>view==="art"&&atRest2();
+H2.list=[]; H2.at=-1; showHist();
 </script>
