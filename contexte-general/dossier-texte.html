@@ -341,7 +341,8 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 .hc:disabled{cursor:default;box-shadow:none;background:transparent;border-style:dashed}
 .hc:disabled .who,.hc:disabled .tt{color:var(--dim)}
 .hc:disabled:hover{border-color:var(--border)}
-.hc{display:block;height:var(--ch,106px)}
+.hc{display:block;height:84px} /* plus compacte que les cartes d'étape (106 px) : titre, intitulé, puis l'état juste dessous */
+.hc .meta{bottom:9px}
 .hc .hd .tx{display:flex;flex-direction:column;min-width:0}
 .hc .tt{margin-left:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hc .hd{position:absolute;top:12px;left:14px;right:14px}
