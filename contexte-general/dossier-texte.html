@@ -1019,7 +1019,11 @@ showDoc=function(rec=true){ view="doc"; content.classList.add("docmode"); render
 function showHist(rec=true){ view="hist"; content.classList.add("docmode"); renderDossier(); header(); sideSync(); docEl.scrollTop=0; if(rec) H2.push("h"); }
 const headerOrig=header;
 header=function(){
-  document.querySelector(".mh").classList.toggle("dmode",view!=="art");
+  document.querySelector(".mh").classList.toggle("dmode",view==="doc");
+  // Historique : exactement la barre de l'article, sans son dernier maillon (l'article, « replié »)
+  if(view==="hist"){ document.querySelectorAll(".mh .stsel").forEach(x=>x.remove()); crumb.classList.remove("dcr");
+    crumb.innerHTML=`<button class="lk" type="button" data-up title="Revenir au texte">Accès au logement</button>${ICONS.sep}<span class="c1">Historique</span>`;
+    tabs.innerHTML=ART_TABS; return; }
   if(view==="art"){ headerOrig();
     const from=artFrom==="d"?"Texte":"Historique";
     crumb.querySelector(".c1").outerHTML=`<button class="lk c1" type="button" data-tab="${artFrom}">${from}</button>`;
