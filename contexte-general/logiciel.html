@@ -148,7 +148,7 @@ button{font-family:inherit}
 /* texte plus long que la carte : bords nets, sans filet (l'espace est gardé), défilement à l'intérieur */
 .sheet.open:not(.fits) .txt{border-top:1px solid transparent;border-bottom:1px solid transparent}
 /* carte ouverte : la date passe entre parenthèses à droite du titre, estompée ; plus de date en bas */
-.sheet .mt2{display:none;white-space:nowrap;margin-left:5px;color:var(--dim);opacity:.6;font-weight:400}
+.sheet .mt2{display:none;white-space:nowrap;margin-left:8px;color:var(--dim);opacity:.6;font-weight:400}
 .sheet .mt2.live{color:var(--now);opacity:.5}
 .sheet.open .mt2{display:inline}
 .sheet.open .meta{display:none}
@@ -516,7 +516,7 @@ function sheetHTML(art,i){
   const st=STEPS[i];
   if(st.future) return `<article class="sheet future" data-i="${i}"><div class="hd"><span class="av"></span><span><span class="who">${st.stage}</span></span></div></article>`;
   return `<article class="sheet${st.now?" now":""}" data-i="${i}">
-    <div class="hd"><span class="av">${st.now?DOTS:CHECK}</span><span><span class="who">${st.stage}</span><span class="mt2${st.now?" live":""}">(${st.now?"depuis le 13\u00a0mai":st.date})</span>${metaOf(st)}</span></div>
+    <div class="hd"><span class="av">${st.now?DOTS:CHECK}</span><span><span class="who">${st.stage}</span><span class="mt2${st.now?" live":""}">${st.now?"depuis le 13\u00a0mai":st.date}</span>${metaOf(st)}</span></div>
     <button class="cmpbtn" type="button" aria-label="Comparer cette version" title="Comparer">${CMPI}</button>
     <div class="txt">${alsHTML(art,i,i?i-1:null)}</div>
     <button class="toggle" type="button" aria-label="Ouvrir l'article">${DOWN}</button>
