@@ -369,6 +369,22 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 .hist-in.from-l .hc,.hist-in.from-l .hstep .lab{animation:hin-l .32s var(--ease)}
 .hist-in.from-r .hc,.hist-in.from-r .hstep .lab{animation:hin-r .32s var(--ease)}
 .hc .meta.frozen{color:var(--dim)}
+/* Historique : l'étape en haut à gauche (à l'aplomb du « A » du fil d'Ariane), ‹ › en bas au milieu, les points d'étape juste dessous ;
+   bandes réservées en haut et en bas : les cartes ne peuvent pas y entrer */
+.hist-in{position:relative;padding-top:92px!important;padding-bottom:84px!important}
+.hlab{position:absolute;left:var(--edge,18px);top:24px;right:18px;display:flex;flex-direction:column;gap:1px}
+.hlab .nm{color:var(--fg);font-weight:500;font-size:14px;line-height:1.35}
+.hlab.now .nm{color:var(--now)}
+.hlab .dt{color:var(--dim)}
+.hlab.now .dt{color:var(--now);opacity:.5}
+.hnav{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:9px}
+.hbtn{display:flex;gap:8px}
+.hnav .dots{display:flex;gap:5px}
+.hnav .dots i{width:5px;height:5px;border-radius:50%;background:var(--border-2)}
+.hnav .dots i.on{background:var(--muted)}
+.hnav .dots i.on.now{background:var(--now)}
+.hist-in.from-l .hlab,.hist-in.from-l .hc{animation:hin-l .32s var(--ease)}
+.hist-in.from-r .hlab,.hist-in.from-r .hc{animation:hin-r .32s var(--ease)}
 </style>
 <div class="win">
   <div class="tb">
@@ -1092,8 +1108,8 @@ function cardMeta(a,k){
 let hdir="";
 histHTML=function(){
   const st=STEPS[step], last=DONE-1;
-  const band=`<div class="hstep${st.now?" now":""}"><div class="lab"><span class="nm">${st.stage}</span><span class="dt">${st.now?"En cours d'examen depuis le 13 mai":st.date}</span></div>
-    <button class="sb" type="button" data-hs="-1" aria-label="Étape précédente"${step===0?" disabled":""}>${LEFT}</button><button class="sb" type="button" data-hs="1" aria-label="Étape suivante"${step===last?" disabled":""}>${RIGHT}</button>
+  const band=`<div class="hlab${st.now?" now":""}"><span class="nm">${st.stage}</span><span class="dt">${st.now?"En cours d'examen depuis le 13\u00a0mai":st.date}</span></div>
+    <div class="hnav"><div class="hbtn"><button class="nav" type="button" data-hs="-1" aria-label="Étape précédente"${step===0?" disabled":""}>${LEFT}</button><button class="nav" type="button" data-hs="1" aria-label="Étape suivante"${step===last?" disabled":""}>${RIGHT}</button></div>
     <span class="dots" aria-hidden="true">${STEPS.slice(0,DONE).map((s,i)=>`<i class="${i===step?"on":""}${s.now?" now":""}"></i>`).join("")}</span></div>`;
   const cards=ARTICLES.map((a,k)=>{ const [m,cls]=cardMeta(a,k), live=step===CUR&&cls==="live";
     return `<button class="hc${live?" live":""}" type="button" data-open="${k}" title="Ouvrir l'historique de l'article"><div class="hd"><span class="av">${a.n}</span><span class="tx"><span class="who">Article ${a.n}</span><span class="tt">${a.t}</span></span></div><span class="go">${ICONS.arrow}</span><span class="meta${cls?" "+cls:""}">${m}</span></button>`; }).join("");
