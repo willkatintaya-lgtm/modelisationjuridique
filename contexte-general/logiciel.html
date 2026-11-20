@@ -181,6 +181,10 @@ del{color:var(--dim);text-decoration:line-through 1px var(--del);background:none
 .ev-row .ico{flex:none;width:16px;height:16px;margin-left:6px;margin-top:1px;display:grid;place-items:center;background:var(--bg);color:var(--dim);transition:transform .3s var(--ease),color .2s}
 .ev-row .lg{display:inline-grid;place-items:center;width:14px;height:14px;border-radius:4px;background:var(--g);color:#fff;font-size:8.5px;font-weight:700;margin-right:5px;vertical-align:2px} /* centre du logo = centre du nom du groupe */
 .ev-row b{color:var(--fg);font-weight:500}
+/* titre d'amendement sur deux lignes : la suite (« l'alinéa 2 ») repart sous la première lettre du groupe, comme le numéro en dessous */
+.ev-row:not(.pk) > span:not(.ico){padding-left:19px;text-indent:-19px}
+.ev-row:not(.pk) > span:not(.ico) .t,.ev-row:not(.pk) .lg{text-indent:0}
+.ev-row:not(.pk) > span:not(.ico) .t{padding-left:0}
 .ev-row .t{display:block;color:var(--dim);padding-left:19px;margin-top:.6px} /* sous la première lettre du groupe, pas sous le logo (14 px + 5 px) */
 .ev-row:hover{color:var(--text)}
 .ev-row:hover .ico{color:var(--text)}
@@ -595,10 +599,21 @@ function edges(){
   st.style.setProperty("--edge",Math.max(16,x)+"px");
 }
 function fades(fr){ const m=fr.scrollWidth-fr.clientWidth; fr.classList.toggle("fl",fr.scrollLeft>2); fr.classList.toggle("fr",fr.scrollLeft<m-2); }
+// bande réservée en bas : une liste dépliée (et les plis qui la suivent) s'arrête au-dessus des boutons ˄˅
+const BAND=56;
+function fitList(f){
+  const gap=f.closest(".gap"), list=f.querySelector(":scope > .slide .list"); if(!gap||!list) return;
+  const H=document.getElementById("stage").clientHeight, folds=[...gap.querySelectorAll(":scope > .fold")], i=folds.indexOf(f);
+  // les plis au-dessus sont fermés (accordéon) : leur hauteur est celle de leur titre
+  let top=parseFloat(getComputedStyle(gap).paddingTop)+24;
+  folds.forEach((o,k)=>{ const hh=o.querySelector(":scope > .fold-head").offsetHeight+(k?2:0); if(k<=i) top+=hh; else top+=hh; });
+  list.style.maxHeight=Math.max(120,H-BAND-top)+"px";
+}
 function sizes(){
   edges(); document.querySelectorAll(".frise").forEach(fades); document.querySelectorAll(".cmp").forEach(alignCmp);
   const H=document.getElementById("stage").clientHeight;
   document.documentElement.style.setProperty("--lh",Math.max(160,H-190)+"px");
+  document.querySelectorAll(".gap > .fold").forEach(fitList);
   document.querySelectorAll(".sheet.open").forEach(fit);
 }
 addEventListener("resize",sizes);
@@ -771,7 +786,7 @@ document.addEventListener("click",e=>{
     const was=f.classList.contains("open");
     // accordéon : un seul pli ouvert par interstice
     gap.querySelectorAll(".fold.open").forEach(o=>{ o.classList.remove("open"); o.querySelectorAll(".ev.open").forEach(x=>x.classList.remove("open")); });
-    if(!was) f.classList.add("open");
+    if(!was){ fitList(f); f.classList.add("open"); }
     clearLit(); syncGap(gap); hint();
     if(f.classList.contains("open")) setTimeout(()=>reveal(gap),390);
     return;
