@@ -997,7 +997,7 @@ H2.list=[]; H2.at=-1; showDoc();
 // ===== onglet « Historique » du dossier (essai) =====
 // Une petite carte par article, en colonne ; un clic ouvre la frise de l'article.
 const PLACE=[{n:1,t:"Objet de la loi"},{n:2,t:"Définitions"}]; // articles sans données : visibles, non remplis
-const HSTATE={done:["Examiné",""],live:["En cours d'examen","live"],todo:["À examiner",""]};
+const HSTATE={done:["Examiné",""],live:["En cours","live"],todo:["À examiner",""]};
 function histHTML(){
   const ph=PLACE.map(a=>`<button class="hc" type="button" disabled title="Exemple non rempli"><div class="hd"><span class="av">${a.n}</span><span class="tx"><span class="who">Article ${a.n}</span><span class="tt">${a.t}</span></span></div><span class="meta">Adopté conforme</span></button>`).join("");
   const real=ARTICLES.map((a,k)=>{ const [lab,cls]=HSTATE[STATE[k]], nb=a.amds.reduce((s,l)=>s+(l?l.length:0),0);
